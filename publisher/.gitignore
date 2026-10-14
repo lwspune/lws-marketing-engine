@@ -1,0 +1,10 @@
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+
+# Secrets: never commit. Copy .env.example → .env.local and fill it in.
+.env
+.env.local
+.env.*.local

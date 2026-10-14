@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-005-area",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "Q67 |sin x| over 8π, slices build the area (dark visual format)",
+  "video": "nda-maths-005-area.mp4",
+  "cover": "nda-maths-005-area-cover.png",
+  "captions": {
+    "instagram": "NDA 2023 (II) · Maths · Q67. ∫ from 0 to 8π of |sin x|. Don't integrate 8π of anything 👀\n\nOne hump of |sin x| has area 2. The graph repeats every π, so 0 to 8π is 8 humps → 8 × 2 = 16 (d).\nTrap: (c) 8 uses period 2π. The modulus makes it π.\n\nSave this 📌 Follow @lws.pune for one real NDA PYQ every day.\nPractise every Definite Integration PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #MathsTricks #LWSPune #Calculus",
+    "facebook": "NDA 2023 (II) · Maths · Q67. ∫ from 0 to 8π of |sin x|. Don't integrate 8π of anything 👀\n\nOne hump of |sin x| has area 2. The graph repeats every π, so 0 to 8π is 8 humps → 8 × 2 = 16 (d).\nTrap: (c) 8 uses period 2π. The modulus makes it π.\n\nPractise every Definite Integration PYQ free: https://www.pyqvault.com/questions/nda/mathematics/definite-integration\n\n#NDA #NDAMaths #NDA2027",
+    "youtube": {
+      "title": "NDA Maths PYQ: ∫ |sin x| from 0 to 8π in 10 seconds #shorts",
+      "description": "NDA 2023 (II) Maths Q67. One hump of |sin x| has area 2, and |sin x| repeats every π, so 0 to 8π is 8 humps: 8 × 2 = 16. Trap: (c) 8 uses period 2π.\n\nPractise NDA Maths PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #NDA2027 #Shorts"
+    }
+  }
+}

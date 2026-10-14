@@ -1,0 +1,91 @@
+import "server-only";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Captions, Platform, PostKind, Publication, PublicationStatus } from "@/lib/domain/types";
+import type { PublicationEvent } from "@/lib/domain/workflow";
+import type { PublishContext, PublisherRepo } from "./worker";
+
+// PublisherRepo backed by Supabase (service role). All state changes go through the database
+// functions in migration 0002, which enforce the transitions and settle the post atomically.
+
+interface PublicationRow {
+  id: string; post_id: string; platform: Platform; status: PublicationStatus; scheduled_at: string | null;
+  attempts: number; external_ref: string | null; external_id: string | null; permalink: string | null; error: string | null;
+}
+
+export const toPublication = (r: PublicationRow): Publication => ({
+  id: r.id, postId: r.post_id, platform: r.platform, status: r.status,
+  scheduledAt: r.scheduled_at ? new Date(r.scheduled_at) : null, attempts: r.attempts,
+  externalRef: r.external_ref, externalId: r.external_id, permalink: r.permalink, error: r.error,
+});
+
+const STATUS_OF: Record<PublicationEvent["type"], PublicationStatus | null> = {
+  started: "processing", published: "published", failed: "failed", retry: null,
+};
+
+export function supabaseRepo(db: SupabaseClient): PublisherRepo {
+  return {
+    async claimDue(limit) {
+      const { data, error } = await db.rpc("claim_due_publications", { p_limit: limit });
+      if (error) throw new Error(`claim_due_publications: ${error.message}`);
+      return ((data ?? []) as PublicationRow[]).map(toPublication);
+    },
+
+    async loadContext(pub): Promise<PublishContext | null> {
+      const { data: post, error } = await db
+        .from("posts")
+        .select("id, project_id, kind, captions, video_path, cover_path, slide_paths")
+        .eq("id", pub.postId)
+        .single();
+      if (error || !post) throw new Error(`post ${pub.postId}: ${error?.message ?? "missing"}`);
+
+      const { data: channel } = await db
+        .from("project_channels")
+        .select("account_id, connected_accounts!inner(id, external_id, platform)")
+        .eq("project_id", post.project_id)
+        .eq("platform", pub.platform)
+        .maybeSingle();
+      if (!channel) return null;
+      const account = channel.connected_accounts as unknown as { id: string; external_id: string; platform: Platform };
+
+      const { data: token, error: tokenError } = await db.rpc("get_account_token", { p_account: account.id });
+      if (tokenError || !token) return null;
+
+      return {
+        post: {
+          id: post.id, kind: post.kind as PostKind, captions: (post.captions ?? {}) as Captions,
+          videoPath: post.video_path, coverPath: post.cover_path, slidePaths: post.slide_paths ?? [],
+        },
+        account: { platform: account.platform, externalId: account.external_id, token: token as string },
+      };
+    },
+
+    async signUrls(paths, ttlSeconds) {
+      const { data, error } = await db.storage.from("media").createSignedUrls(paths, ttlSeconds);
+      if (error || !data) throw new Error(`signing media URLs: ${error?.message ?? "no data"}`);
+      return paths.map((p) => {
+        const hit = data.find((d) => d.path === p);
+        if (!hit?.signedUrl) throw new Error(`no signed URL for ${p}`);
+        return hit.signedUrl;
+      });
+    },
+
+    async record(publicationId, ev) {
+      const status = STATUS_OF[ev.type];
+      if (!status) throw new Error(`the worker never records "${ev.type}"`);
+      const { error } = await db.rpc("record_publication_event", {
+        p_publication: publicationId,
+        p_status: status,
+        p_external_ref: ev.type === "started" ? ev.externalRef : null,
+        p_external_id: ev.type === "published" ? ev.externalId ?? null : null,
+        p_permalink: ev.type === "published" ? ev.permalink ?? null : null,
+        p_error: ev.type === "failed" ? ev.error : null,
+      });
+      if (error) throw new Error(`record_publication_event: ${error.message}`);
+    },
+
+    async release(publicationId) {
+      const { error } = await db.rpc("release_publication", { p_publication: publicationId });
+      if (error) throw new Error(`release_publication: ${error.message}`);
+    },
+  };
+}

@@ -1,0 +1,15 @@
+{
+  "slug": "nda-maths-003-carousel",
+  "project": "pyq-vault",
+  "kind": "carousel",
+  "title": "Q42 binomial, 4 slides (format test day 3)",
+  "slides": [
+    "nda-maths-003-carousel-1.png",
+    "nda-maths-003-carousel-2.png",
+    "nda-maths-003-carousel-3.png",
+    "nda-maths-003-carousel-4.png"
+  ],
+  "captions": {
+    "instagram": "NDA 2026 (II) · Maths · Q42. Looks like a long binomial expansion. It's one line.\n\nSwipe for the hint, the solution and the trap 👉\nThe pattern: (1 + 1/x)ⁿ = (1 + x)ⁿ / xⁿ. Save it for revision 📌\n\nFollow @lws.pune for one real NDA PYQ every day.\nPractise every Binomial Theorem PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #MathsTricks #LWSPune #BinomialTheorem"
+  }
+}

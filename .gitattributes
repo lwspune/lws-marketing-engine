@@ -1,0 +1,5 @@
+# Keep LF line endings in the working copy (files are written with LF; avoids CRLF churn on Windows)
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.mp4 binary

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carousel 003 Binomial</title>
+<link rel="stylesheet" href="render.css">
+</head>
+<body>
+<canvas id="c" aria-label="Slide preview"></canvas>
+<div class="bar" id="bar"></div>
+<div id="status" role="status"></div>
+<script src="engine.js"></script>
+<script>
+// Carousel 003 — NDA 2026 (II) Maths Q42 (Binomial Theorem), answer (a) 1.
+// (1 + 1/x)^2n = (1 + x)^2n / x^2n, so the product is (1 + x)^4n / x^2n and the x^2n term needs
+// x^4n on top: coefficient C(4n, 4n) = 1. Four 1080×1350 slides: hook → hint → solution → answer.
+const RED = '#d22f27', CAP = { y: 170, size: 52 };
+const sup = s => ({ sup: s }), sub = s => ({ sub: s });
+
+function ctaPanel(ctx, api) {
+  const { W } = api, y = 1010, h = 220;
+  ctx.save();
+  ctx.fillStyle = '#0c1018'; ctx.beginPath(); ctx.roundRect(110, y, W - 220, h, 30); ctx.fill();
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#cfd8e3'; ctx.font = `400 44px ${api.UI}`; ctx.fillText('Save this for revision', W / 2, y + 62);
+  ctx.fillStyle = '#4fd1a5'; ctx.font = `800 72px ${api.UI}`; ctx.fillText('Follow @lwspune', W / 2, y + 148);
+  ctx.restore();
+}
+
+Reel.mount({
+  name: 'nda-maths-003-carousel',
+  size: [1080, 1350],
+  slides: [
+    { // 1 — hook
+      captions: [{ ...CAP, text: "Looks like a 5-minute expansion.\nIt's one line." }],
+      lines: [
+        { y: 345, size: 44, t0: -1, dur: 0, color: RED, tokens: ['NDA 2026 (II)  ·  Maths  ·  Q42'] },
+        { y: 450, size: 62, t0: -1, dur: 0, tokens: ['Coefficient of x', sup('2n'), ' in'] },
+        { y: 575, size: 80, t0: -1, dur: 0, tokens: ['(1 + x)', sup('2n'), ' (1 + 1/x)', sup('2n'), ' = ?'] },
+        { y: 700, size: 48, t0: -1, dur: 0, tokens: ['(a)  1'] },
+        { y: 785, size: 48, t0: -1, dur: 0, tokens: ['(b)  2n(2n − 1)(2n − 2) … (n + 1)n'] },
+        { y: 870, size: 48, t0: -1, dur: 0, tokens: ['(c)  4n(4n − 1)(4n − 2) … (2n + 1)(2n)'] },
+        { y: 955, size: 48, t0: -1, dur: 0, tokens: ['(d)  Such term does not exist'] },
+        { y: 1100, size: 46, t0: -1, dur: 0, color: RED, tokens: ['Try it first. Answer on slide 4.'] },
+      ],
+    },
+    { // 2 — hint
+      captions: [{ ...CAP, text: "Hint: don't expand anything." }],
+      lines: [
+        { y: 400, size: 76, t0: -1, dur: 0, tokens: ['1 + 1/x  =  (x + 1) / x'] },
+        { y: 560, size: 64, t0: -1, dur: 0, tokens: [{ mark: 'a' }, '(1 + 1/x)', sup('2n'), '  =  (1 + x)', sup('2n'), ' / x', sup('2n'), { mark: 'b' }] },
+        { y: 740, size: 52, t0: -1, dur: 0, tokens: ['The second bracket is the first'] },
+        { y: 820, size: 52, t0: -1, dur: 0, tokens: ['one divided by x', sup('2n'), '.'] },
+      ],
+      notes: [{ t0: 0, dur: 0, kind: 'box', from: 'a', to: 'b' }],
+    },
+    { // 3 — solution
+      captions: [{ ...CAP, text: "Now it's one line." }],
+      lines: [
+        { y: 380, size: 64, t0: -1, dur: 0, tokens: ['Product  =  (1 + x)', sup('4n'), ' / x', sup('2n')] },
+        { y: 530, size: 58, t0: -1, dur: 0, tokens: ['To get x', sup('2n'), ', the top needs x', sup('4n'), ':'] },
+        { y: 620, size: 58, t0: -1, dur: 0, tokens: ['x', sup('4n'), ' / x', sup('2n'), '  =  x', sup('2n')] },
+        { y: 770, size: 58, t0: -1, dur: 0, tokens: ['Coefficient of x', sup('4n'), ' in (1 + x)', sup('4n')] },
+        { y: 900, size: 76, t0: -1, dur: 0, tokens: ['=  ', sup('4n'), 'C', sub('4n'), '  =    ', { mark: 'a' }, '1', { mark: 'b' }] },
+      ],
+      notes: [{ t0: 0, dur: 0, kind: 'ring', from: 'a', to: 'b' }],
+    },
+    { // 4 — answer, trap, pattern, CTA
+      captions: [{ ...CAP, size: 60, text: 'Answer: (a) 1' }],
+      lines: [
+        { y: 350, size: 50, t0: -1, dur: 0, color: RED, tokens: ['Trap: option (d)'] },
+        { y: 430, size: 48, t0: -1, dur: 0, tokens: ['x', sup('2n'), ' is the highest power in'] },
+        { y: 505, size: 48, t0: -1, dur: 0, tokens: ['(1 + x)', sup('4n'), ' / x', sup('2n'), ', so the term'] },
+        { y: 580, size: 48, t0: -1, dur: 0, tokens: ['does exist.'] },
+        { y: 700, size: 50, t0: -1, dur: 0, color: RED, tokens: ['Pattern to remember'] },
+        { y: 820, size: 62, t0: -1, dur: 0, tokens: [{ mark: 'a' }, '(1 + 1/x)', sup('n'), '  =  (1 + x)', sup('n'), ' / x', sup('n'), { mark: 'b' }] },
+      ],
+      notes: [{ t0: 0, dur: 0, kind: 'box', from: 'a', to: 'b' }],
+      draw: (ctx, t, api) => { ctaPanel(ctx, api); return null; },
+    },
+  ],
+});
+</script>
+</body>
+</html>

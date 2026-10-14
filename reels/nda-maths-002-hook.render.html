@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reel 002 Hook</title>
+<link rel="stylesheet" href="render.css">
+</head>
+<body>
+<canvas id="c" aria-label="Reel preview"></canvas>
+<div class="bar" id="bar"></div>
+<div id="status" role="status"></div>
+<script src="engine.js"></script>
+<script>
+// Reel 002 — hook only. Same question as reel 001 (NDA 2026 (II) Q74, answer (b) 3), shown with a
+// 10-second countdown. Asks for answers in the comments; reel 001 is the "solution tomorrow".
+const TIMER = { cx: 540, cy: 1080, r: 190, secs: 10 };
+
+Reel.mount({
+  name: 'nda-maths-002-hook',
+  size: [1080, 1920],
+  duration: 13.5,
+  captions: [{ t0: 0, t1: 10.4, text: 'NDA 2026 asked this.\nSolve it in 10 seconds.' }],
+  lines: [
+    { y: 455, size: 44, t0: -1, dur: 0, color: '#d22f27', tokens: ['NDA 2026 (II)  ·  Maths  ·  Q74'] },
+    { y: 590, size: 92, t0: -1, dur: 0, tokens: [{ int: ['1', '2'] }, ' ', 'x', { sup: 'x' }, '(1 + ln x) dx = ?'] },
+    { y: 715, size: 66, t0: -1, dur: 0, tokens: ['(a) 4    (b) 3    (c) 2    (d) 1'] },
+  ],
+  draw(ctx, t, api, isCover) {
+    if (isCover) return null;
+    const { cx, cy, r, secs } = TIMER, left = Math.max(0, secs - t), urgent = left <= 3;
+    const color = urgent ? api.RED : api.INK;
+    ctx.save();
+    ctx.lineWidth = 26; ctx.lineCap = 'round';
+    ctx.strokeStyle = 'rgba(27, 42, 107, 0.10)'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
+    if (left > 0) {
+      ctx.strokeStyle = color; ctx.beginPath();
+      ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (left / secs)); ctx.stroke();
+    }
+    // Number pulses at each new second.
+    const pulse = 1 + 0.08 * Math.max(0, 1 - (t % 1) / 0.25);
+    ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.font = `800 ${Math.round(150 * pulse)}px ${api.UI}`;
+    ctx.fillText(left > 0 ? String(Math.ceil(left)) : '0', cx, cy + 6);
+    ctx.font = `600 38px ${api.UI}`; ctx.fillStyle = 'rgba(27, 42, 107, 0.6)';
+    ctx.fillText('seconds', cx, cy + r + 70);
+    ctx.restore();
+    return null;
+  },
+  end: { t0: 10.4, y: 700, lines: [
+    { at: 0.0, size: 76, weight: 800, color: '#ffffff', text: "Time's up." },
+    { at: 0.5, size: 50, weight: 400, color: '#cfd8e3', text: 'Comment your answer below' },
+    { at: 0.8, size: 56, weight: 700, color: '#ffffff', text: '(a), (b), (c) or (d)?' },
+    { at: 1.4, size: 50, weight: 400, color: '#cfd8e3', text: 'Full solution in the next reel' },
+    { at: 1.9, size: 84, weight: 800, color: '#4fd1a5', text: 'Follow @lwspune' },
+  ] },
+  music: { ticks: [1, 2, 3, 4, 5, 6, 7, 8, 9], ding: 10 },
+  cover: { t: 0, text: 'CAN YOU SOLVE THIS\nIN 10 SECONDS?', y: 1080, size: 80 },
+});
+</script>
+</body>
+</html>

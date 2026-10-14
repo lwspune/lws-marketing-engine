@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LWS Marketing Engine</title>
+<style>
+  :root {
+    --bg: #0f1115; --panel: #161a21; --panel-2: #1c212a; --line: #2a313c;
+    --text: #d7dce3; --muted: #8b95a3; --accent: #4fd1a5; --accent-ink: #062018;
+    --danger: #e5715f; --warn: #e0b453; --focus: #8fe6c8;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.5 ui-monospace, "Cascadia Mono", Consolas, Menlo, monospace; }
+  body { padding: 16px; max-width: 1280px; margin: 0 auto; }
+  h1 { font-size: 16px; margin: 0; letter-spacing: .04em; }
+  h2 { font-size: 14px; margin: 0 0 10px; color: var(--accent); text-transform: uppercase; letter-spacing: .08em; }
+  a { color: var(--accent); }
+  header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid var(--line); margin-bottom: 12px; }
+  .topbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+  label { color: var(--muted); font-size: 12px; display: block; margin-bottom: 2px; }
+  input, select, textarea, button { font: inherit; color: var(--text); background: var(--panel-2); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; }
+  input, select, textarea { width: 100%; }
+  textarea { min-height: 72px; resize: vertical; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  button { cursor: pointer; white-space: nowrap; }
+  button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+  button.danger { border-color: var(--danger); color: var(--danger); }
+  button:disabled { opacity: .5; cursor: not-allowed; }
+  nav[role=tablist] { display: flex; gap: 4px; margin-bottom: 12px; }
+  nav button[role=tab] { background: transparent; border: 1px solid var(--line); border-bottom: none; padding: 8px 14px; color: var(--muted); }
+  nav button[role=tab][aria-selected=true] { background: var(--panel); color: var(--accent); border-color: var(--accent); }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px; }
+  .grid { display: grid; gap: 12px; }
+  .cols-2 { grid-template-columns: 1fr 1fr; }
+  .cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .sidebar-layout { display: grid; grid-template-columns: 260px 1fr; gap: 12px; }
+  @media (max-width: 820px) { .cols-2, .cols-3, .sidebar-layout { grid-template-columns: 1fr; } }
+  .field { margin-bottom: 10px; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .list button.item { display: block; width: 100%; text-align: left; background: transparent; margin-bottom: 4px; }
+  .list button.item[aria-current=true] { border-color: var(--accent); color: var(--accent); }
+  .badge { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 3px; border: 1px solid var(--line); color: var(--muted); margin-left: 6px; }
+  .badge.ok { border-color: var(--accent); color: var(--accent); }
+  .badge.warn { border-color: var(--warn); color: var(--warn); }
+  .badge.bad { border-color: var(--danger); color: var(--danger); }
+  .card { background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px; padding: 12px; margin-bottom: 10px; }
+  .card.ungrounded { border-color: var(--danger); }
+  .card .title { font-weight: 600; }
+  .card .hook { color: var(--accent); margin: 4px 0; }
+  .card .meta { color: var(--muted); font-size: 12px; }
+  .card pre { white-space: pre-wrap; margin: 8px 0; font: inherit; }
+  .muted { color: var(--muted); }
+  .status { margin-top: 10px; min-height: 22px; color: var(--muted); }
+  .status.err { color: var(--danger); }
+  .status.ok { color: var(--accent); }
+  table.problems { width: 100%; border-collapse: collapse; }
+  table.problems th, table.problems td { padding: 4px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+  table.problems input { padding: 4px 6px; }
+  table.problems th { color: var(--muted); font-weight: normal; font-size: 12px; }
+  .checks { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+  .checks label { display: inline-flex; gap: 6px; align-items: center; color: var(--text); font-size: 13px; }
+  .checks input { width: auto; }
+  .hidden { display: none !important; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .spinner::after { content: " …"; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>LWS MARKETING ENGINE</h1>
+    <div class="muted" style="font-size:12px">Profiles → ideas → drafts → you approve → export. Nothing ships without you.</div>
+  </div>
+  <div class="topbar">
+    <div>
+      <label for="product-select">Product</label>
+      <select id="product-select" aria-label="Active product"></select>
+    </div>
+    <div>
+      <label for="api-key">Anthropic API key</label>
+      <input id="api-key" type="password" autocomplete="off" placeholder="sk-ant-…" aria-describedby="api-key-help">
+      <span id="api-key-help" class="sr-only">Stored only in this browser's local storage.</span>
+    </div>
+  </div>
+</header>
+
+<nav role="tablist" aria-label="Sections">
+  <button role="tab" id="tab-products" aria-controls="view-products" aria-selected="true">1 Products</button>
+  <button role="tab" id="tab-ideas" aria-controls="view-ideas" aria-selected="false">2 Ideas</button>
+  <button role="tab" id="tab-queue" aria-controls="view-queue" aria-selected="false">3 Review queue</button>
+</nav>
+
+<!-- ============================== PRODUCTS ============================== -->
+<section id="view-products" role="tabpanel" aria-labelledby="tab-products" class="sidebar-layout">
+  <div class="panel">
+    <h2>Products</h2>
+    <div id="product-list" class="list" role="list"></div>
+    <div class="row" style="margin-top:10px">
+      <button id="btn-new-product">+ New product</button>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button id="btn-export-profiles">Export all (JSON)</button>
+      <label for="import-profiles" class="sr-only">Import profiles JSON file</label>
+      <input id="import-profiles" type="file" accept="application/json" style="width:auto" aria-label="Import profiles from JSON file">
+    </div>
+    <p class="muted" style="font-size:12px;margin-top:10px">A product is "ready" when it has a buyer, at least one real problem in the buyer's words, and at least one real asset. The app refuses to generate for a product that isn't ready. That is the no-slop rule.</p>
+  </div>
+
+  <div class="panel">
+    <h2>Profile <span id="ready-badge" class="badge"></span></h2>
+    <form id="profile-form" autocomplete="off">
+      <div class="grid cols-2">
+        <div class="field"><label for="f-name">Name</label><input id="f-name" required></div>
+        <div class="field"><label for="f-id">Id (letters, digits, dashes)</label><input id="f-id" pattern="[a-z0-9-]+" required></div>
+      </div>
+      <div class="field"><label for="f-tagline">One-line what it is</label><input id="f-tagline"></div>
+      <div class="field"><label for="f-buyer">Buyer: who pays, what they're trying to get, how they talk</label><textarea id="f-buyer"></textarea></div>
+
+      <div class="field">
+        <label>Real problems, in the buyer's own words (from comments, DMs, classes). Never invented.</label>
+        <table class="problems" aria-label="Problems">
+          <thead><tr><th style="width:12%">id</th><th style="width:34%">problem (their words)</th><th style="width:18%">evidence</th><th style="width:18%">asset that answers it</th><th style="width:14%">gap</th><th></th></tr></thead>
+          <tbody id="problem-rows"></tbody>
+        </table>
+        <button type="button" id="btn-add-problem" style="margin-top:6px">+ Add problem</button>
+      </div>
+
+      <div class="field"><label for="f-assets">Assets you already have (one per line)</label><textarea id="f-assets"></textarea></div>
+
+      <div class="grid cols-3">
+        <div class="field"><label for="f-offer-name">Offer name</label><input id="f-offer-name"></div>
+        <div class="field"><label for="f-offer-price">Price</label><input id="f-offer-price" placeholder="₹…"></div>
+        <div class="field"><label for="f-offer-link">Link</label><input id="f-offer-link"></div>
+      </div>
+      <div class="field"><label for="f-voice">Voice (how you actually write)</label><textarea id="f-voice"></textarea></div>
+      <div class="field">
+        <label>Channels</label>
+        <div class="checks" id="f-channels">
+          <label><input type="checkbox" value="youtube"> youtube</label>
+          <label><input type="checkbox" value="instagram"> instagram</label>
+          <label><input type="checkbox" value="telegram"> telegram</label>
+          <label><input type="checkbox" value="whatsapp"> whatsapp</label>
+          <label><input type="checkbox" value="linkedin"> linkedin (founder only)</label>
+        </div>
+      </div>
+      <div class="field"><label for="f-notes">Context notes</label><textarea id="f-notes"></textarea></div>
+      <div class="row">
+        <button type="submit" class="primary">Save profile</button>
+        <button type="button" id="btn-delete-product" class="danger">Delete product</button>
+      </div>
+      <div id="profile-status" class="status" role="status" aria-live="polite"></div>
+    </form>
+  </div>
+</section>
+
+<!-- ============================== IDEAS ============================== -->
+<section id="view-ideas" role="tabpanel" aria-labelledby="tab-ideas" class="hidden">
+  <div class="panel" style="margin-bottom:12px">
+    <h2>Generate ideas for <span id="ideas-product-name"></span></h2>
+    <div class="grid cols-3">
+      <div class="field"><label for="i-count">How many</label><input id="i-count" type="number" min="1" max="10" value="5"></div>
+      <div class="field"><label for="i-segment">Audience segment</label><select id="i-segment"></select></div>
+      <div class="field"><label for="i-tone">Tone</label><select id="i-tone"></select></div>
+    </div>
+    <div class="field">
+      <label>Focus on these problems (none checked = all)</label>
+      <div class="checks" id="i-problems"></div>
+    </div>
+    <div class="row">
+      <button id="btn-generate" class="primary">Generate ideas</button>
+      <span class="muted" style="font-size:12px">Each idea must name a real problem and a real asset. Red cards failed that check.</span>
+    </div>
+    <div id="ideas-status" class="status" role="status" aria-live="polite"></div>
+  </div>
+  <div id="ideas-list"></div>
+</section>
+
+<!-- ============================== QUEUE ============================== -->
+<section id="view-queue" role="tabpanel" aria-labelledby="tab-queue" class="hidden">
+  <div class="panel" style="margin-bottom:12px">
+    <h2>Review queue for <span id="queue-product-name"></span></h2>
+    <div class="row">
+      <label for="q-filter" style="margin:0">Show</label>
+      <select id="q-filter" style="width:auto">
+        <option value="pending">pending</option>
+        <option value="approved">approved</option>
+        <option value="killed">killed</option>
+        <option value="all">all</option>
+      </select>
+      <button id="btn-export-batch" class="primary">Copy approved batch</button>
+      <button id="btn-download-batch">Download approved batch (.txt)</button>
+      <button id="btn-clear-killed" class="danger">Clear killed</button>
+    </div>
+    <div id="queue-status" class="status" role="status" aria-live="polite"></div>
+  </div>
+  <div id="queue-list"></div>
+</section>
+
+<script src="core.js"></script>
+<script>
+(function () {
+  "use strict";
+  const C = window.MarketingCore;
+  const $ = (id) => document.getElementById(id);
+
+  // ---------- state ----------
+  const store = C.createStore({
+    getItem: (k) => window.localStorage.getItem(k),
+    setItem: (k, v) => window.localStorage.setItem(k, v),
+  });
+  let state = store.load();
+  let editingId = state.settings.activeProductId;
+  let lastIdeas = [];
+
+  function persist() {
+    if (!store.save(state)) setStatus("profile-status", "Could not save to this browser's storage. Export your profiles to keep them.", "err");
+  }
+  function activeProfile() { return state.profiles.find((p) => p.id === state.settings.activeProductId) || state.profiles[0]; }
+  function editingProfile() { return state.profiles.find((p) => p.id === editingId) || activeProfile(); }
+
+  // ---------- api key (local only) ----------
+  const KEY_STORAGE = "lws-marketing-engine.apikey";
+  function loadKey() { try { return window.localStorage.getItem(KEY_STORAGE) || ""; } catch (e) { return ""; } }
+  function saveKey(v) { try { window.localStorage.setItem(KEY_STORAGE, v); } catch (e) { /* storage blocked; key stays in memory */ } }
+  $("api-key").value = loadKey();
+  $("api-key").addEventListener("change", (e) => saveKey(e.target.value.trim()));
+
+  // ---------- helpers ----------
+  function el(tag, attrs, children) {
+    const n = document.createElement(tag);
+    if (attrs) for (const k of Object.keys(attrs)) {
+      if (k === "class") n.className = attrs[k];
+      else if (k === "text") n.textContent = attrs[k];
+      else if (k.startsWith("on")) n.addEventListener(k.slice(2), attrs[k]);
+      else n.setAttribute(k, attrs[k]);
+    }
+    (children || []).forEach((c) => n.appendChild(typeof c === "string" ? document.createTextNode(c) : c));
+    return n;
+  }
+  function clear(node) { while (node.firstChild) node.removeChild(node.firstChild); }
+  function setStatus(id, msg, kind) { const n = $(id); n.textContent = msg || ""; n.className = "status" + (kind ? " " + kind : ""); }
+  function download(name, text) {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([text], { type: "text/plain" }));
+    a.download = name; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+  async function copyText(text) {
+    try { await navigator.clipboard.writeText(text); return true; } catch (e) { return false; }
+  }
+
+  // ---------- API boundary ----------
+  async function callApi(req, opts) {
+    const key = $("api-key").value.trim();
+    if (!key) throw new Error("Paste your Anthropic API key at the top first.");
+    let res;
+    try {
+      res = await fetch(C.API_URL, { method: "POST", headers: C.apiHeaders(key), body: JSON.stringify(C.buildRequestBody(req, opts)) });
+    } catch (e) {
+      console.error("API network error", e);
+      throw new Error("Network error (" + e.message + "). If this page is not opened as a local file, the browser may be blocking the call.");
+    }
+    let data;
+    try { data = await res.json(); } catch (e) { data = null; }
+    if (res.status === 401) throw new Error("Invalid API key (401).");
+    if (res.status === 429) throw new Error("Rate limited (429). Wait a minute and retry.");
+    if (!res.ok) {
+      console.error("API error", res.status, data);
+      throw new Error("API error " + res.status + ": " + ((data && data.error && data.error.message) || "unknown"));
+    }
+    const text = C.extractText(data);
+    if (!text.ok) { console.error("API response not usable", data); throw new Error(text.error); }
+    const parsed = C.parseJson(text.text);
+    if (!parsed.ok) { console.error("API JSON parse failed", text.text); throw new Error(parsed.error); }
+    return parsed.data;
+  }
+
+  // ---------- tabs ----------
+  const tabs = ["products", "ideas", "queue"];
+  function showTab(name) {
+    tabs.forEach((t) => {
+      const on = t === name;
+      $("tab-" + t).setAttribute("aria-selected", on ? "true" : "false");
+      $("tab-" + t).tabIndex = on ? 0 : -1;
+      $("view-" + t).classList.toggle("hidden", !on);
+    });
+    if (name === "ideas") renderIdeasControls();
+    if (name === "queue") renderQueue();
+  }
+  tabs.forEach((t) => $("tab-" + t).addEventListener("click", () => showTab(t)));
+  document.querySelector("nav[role=tablist]").addEventListener("keydown", (e) => {
+    const i = tabs.indexOf(document.activeElement.id.replace("tab-", ""));
+    if (i < 0) return;
+    if (e.key === "ArrowRight") { showTab(tabs[(i + 1) % tabs.length]); $("tab-" + tabs[(i + 1) % tabs.length]).focus(); }
+    if (e.key === "ArrowLeft") { showTab(tabs[(i + tabs.length - 1) % tabs.length]); $("tab-" + tabs[(i + tabs.length - 1) % tabs.length]).focus(); }
+  });
+
+  // ---------- product selector ----------
+  function renderProductSelect() {
+    const sel = $("product-select"); clear(sel);
+    state.profiles.forEach((p) => sel.appendChild(el("option", { value: p.id, text: p.name + (C.isProfileReady(p) ? "" : " (not ready)") })));
+    sel.value = activeProfile().id;
+    $("ideas-product-name").textContent = activeProfile().name;
+    $("queue-product-name").textContent = activeProfile().name;
+  }
+  $("product-select").addEventListener("change", (e) => {
+    state.settings.activeProductId = e.target.value; editingId = e.target.value; lastIdeas = []; clear($("ideas-list"));
+    persist(); renderAll();
+  });
+
+  // ---------- products view ----------
+  function renderProductList() {
+    const list = $("product-list"); clear(list);
+    state.profiles.forEach((p) => {
+      const ready = C.isProfileReady(p);
+      const b = el("button", { type: "button", class: "item", role: "listitem", "aria-current": p.id === editingId ? "true" : "false", onclick: () => { editingId = p.id; renderProductList(); renderProfileForm(); } },
+        [p.name, el("span", { class: "badge " + (ready ? "ok" : "warn"), text: ready ? "ready" : "incomplete" })]);
+      list.appendChild(b);
+    });
+  }
+
+  function problemRow(pr) {
+    const tr = el("tr");
+    const mk = (field, ph) => { const td = el("td"); const inp = el("input", { "aria-label": field, placeholder: ph || "" }); inp.value = pr[field] || ""; inp.dataset.field = field; td.appendChild(inp); return td; };
+    tr.appendChild(mk("id", "short-id"));
+    tr.appendChild(mk("problem", "what they say"));
+    tr.appendChild(mk("evidence", "where/how often"));
+    tr.appendChild(mk("asset", "what answers it"));
+    tr.appendChild(mk("gap", "GAP: …"));
+    tr.appendChild(el("td", null, [el("button", { type: "button", "aria-label": "Remove problem", onclick: () => tr.remove() }, ["×"])]));
+    return tr;
+  }
+  $("btn-add-problem").addEventListener("click", () => { const tr = problemRow({}); $("problem-rows").appendChild(tr); tr.querySelector("input").focus(); });
+
+  function renderProfileForm() {
+    const p = editingProfile(); if (!p) return;
+    $("f-name").value = p.name; $("f-id").value = p.id; $("f-tagline").value = p.tagline || "";
+    $("f-buyer").value = p.buyer || ""; $("f-assets").value = (p.assets || []).join("\n");
+    $("f-offer-name").value = (p.offer && p.offer.name) || ""; $("f-offer-price").value = (p.offer && p.offer.price) || ""; $("f-offer-link").value = (p.offer && p.offer.link) || "";
+    $("f-voice").value = p.voice || ""; $("f-notes").value = p.notes || "";
+    $("f-channels").querySelectorAll("input").forEach((c) => { c.checked = (p.channels || []).includes(c.value); });
+    const rows = $("problem-rows"); clear(rows); (p.problems || []).forEach((pr) => rows.appendChild(problemRow(pr)));
+    const v = C.validateProfile(p);
+    const badge = $("ready-badge"); badge.textContent = v.ok ? "ready" : "incomplete"; badge.className = "badge " + (v.ok ? "ok" : "warn");
+    setStatus("profile-status", v.ok ? "" : v.errors.join(" "));
+  }
+
+  function readProfileForm() {
+    const p = C.blankProfile($("f-id").value.trim().toLowerCase(), $("f-name").value.trim());
+    p.tagline = $("f-tagline").value.trim(); p.buyer = $("f-buyer").value.trim();
+    p.assets = $("f-assets").value.split("\n").map((s) => s.trim()).filter(Boolean);
+    p.offer = { name: $("f-offer-name").value.trim(), price: $("f-offer-price").value.trim(), link: $("f-offer-link").value.trim() };
+    p.voice = $("f-voice").value.trim(); p.notes = $("f-notes").value.trim();
+    p.channels = Array.from($("f-channels").querySelectorAll("input:checked")).map((c) => c.value);
+    p.problems = Array.from($("problem-rows").querySelectorAll("tr")).map((tr) => {
+      const o = {}; tr.querySelectorAll("input").forEach((i) => { o[i.dataset.field] = i.value.trim(); }); return o;
+    }).filter((o) => o.id || o.problem);
+    return p;
+  }
+
+  $("profile-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const p = readProfileForm();
+    if (!p.id || !/^[a-z0-9-]+$/.test(p.id)) { setStatus("profile-status", "Id must be letters, digits and dashes only.", "err"); return; }
+    if (!p.name) { setStatus("profile-status", "Name is required.", "err"); return; }
+    const clash = state.profiles.find((x) => x.id === p.id && x.id !== editingId);
+    if (clash) { setStatus("profile-status", "Another product already uses that id.", "err"); return; }
+    const idx = state.profiles.findIndex((x) => x.id === editingId);
+    if (idx >= 0) {
+      state.profiles[idx] = p;
+      state.queue = state.queue.map((q) => (q.productId === editingId ? Object.assign({}, q, { productId: p.id }) : q));
+      if (state.settings.activeProductId === editingId) state.settings.activeProductId = p.id;
+    } else state.profiles.push(p);
+    editingId = p.id; persist(); renderAll();
+    const v = C.validateProfile(p);
+    setStatus("profile-status", v.ok ? "Saved. Ready to generate." : "Saved, but not ready: " + v.errors.join(" "), v.ok ? "ok" : "");
+  });
+
+  $("btn-new-product").addEventListener("click", () => {
+    editingId = "__new__";
+    const p = C.blankProfile("", "");
+    state.profiles = state.profiles.filter((x) => x.id !== "__new__");
+    clear($("problem-rows")); $("problem-rows").appendChild(problemRow({}));
+    $("f-name").value = ""; $("f-id").value = ""; $("f-tagline").value = ""; $("f-buyer").value = ""; $("f-assets").value = "";
+    $("f-offer-name").value = ""; $("f-offer-price").value = ""; $("f-offer-link").value = ""; $("f-voice").value = ""; $("f-notes").value = "";
+    $("f-channels").querySelectorAll("input").forEach((c) => { c.checked = false; });
+    $("ready-badge").textContent = "new"; $("ready-badge").className = "badge";
+    setStatus("profile-status", "Fill in the profile and save. Id becomes the product's permanent key.");
+    renderProductList(); $("f-name").focus();
+    void p;
+  });
+
+  $("btn-delete-product").addEventListener("click", () => {
+    const p = editingProfile(); if (!p || editingId === "__new__") return;
+    if (state.profiles.length <= 1) { setStatus("profile-status", "Keep at least one product.", "err"); return; }
+    if (!window.confirm("Delete " + p.name + " and its queued drafts? This cannot be undone.")) return;
+    state.profiles = state.profiles.filter((x) => x.id !== p.id);
+    state.queue = state.queue.filter((q) => q.productId !== p.id);
+    if (state.settings.activeProductId === p.id) state.settings.activeProductId = state.profiles[0].id;
+    editingId = state.settings.activeProductId; persist(); renderAll();
+    setStatus("profile-status", "Deleted.");
+  });
+
+  $("btn-export-profiles").addEventListener("click", () => download("lws-profiles-" + new Date().toISOString().slice(0, 10) + ".json", C.exportProfiles(state.profiles)));
+  $("import-profiles").addEventListener("change", (e) => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      const res = C.importProfiles(String(r.result));
+      if (!res.ok) { setStatus("profile-status", "Import failed: " + res.error, "err"); return; }
+      res.profiles.forEach((np) => { const i = state.profiles.findIndex((x) => x.id === np.id); if (i >= 0) state.profiles[i] = np; else state.profiles.push(np); });
+      persist(); renderAll(); setStatus("profile-status", "Imported " + res.profiles.length + " profile(s).", "ok");
+    };
+    r.readAsText(f); e.target.value = "";
+  });
+
+  // ---------- ideas view ----------
+  function renderIdeasControls() {
+    const p = activeProfile();
+    $("ideas-product-name").textContent = p.name;
+    const seg = $("i-segment"); if (!seg.options.length) C.SEGMENTS.forEach((s) => seg.appendChild(el("option", { value: s, text: s })));
+    const tone = $("i-tone"); if (!tone.options.length) C.TONES.forEach((s) => tone.appendChild(el("option", { value: s, text: s })));
+    const box = $("i-problems"); clear(box);
+    (p.problems || []).forEach((pr) => box.appendChild(el("label", null, [el("input", { type: "checkbox", value: pr.id }), pr.id + ": " + pr.problem])));
+    const ready = C.isProfileReady(p);
+    $("btn-generate").disabled = !ready;
+    setStatus("ideas-status", ready ? "" : p.name + " is not ready. Fill in its profile first (Products tab).", ready ? "" : "err");
+  }
+
+  $("btn-generate").addEventListener("click", async () => {
+    const p = activeProfile();
+    const opts = {
+      count: $("i-count").value, segment: $("i-segment").value, tone: $("i-tone").value,
+      problemIds: Array.from($("i-problems").querySelectorAll("input:checked")).map((c) => c.value),
+    };
+    let req;
+    try { req = C.buildIdeasPrompt(p, opts); } catch (e) { setStatus("ideas-status", e.message, "err"); return; }
+    $("btn-generate").disabled = true; setStatus("ideas-status", "Generating"); $("ideas-status").classList.add("spinner");
+    try {
+      const data = await callApi(req);
+      lastIdeas = C.groundIdeas(data.ideas || [], p);
+      renderIdeas();
+      const bad = lastIdeas.filter((i) => !i.grounded).length;
+      setStatus("ideas-status", lastIdeas.length + " ideas." + (bad ? " " + bad + " failed the grounding check and are marked red." : ""), bad ? "" : "ok");
+    } catch (e) {
+      setStatus("ideas-status", e.message, "err");
+    } finally {
+      $("btn-generate").disabled = false; $("ideas-status").classList.remove("spinner");
+    }
+  });
+
+  function renderIdeas() {
+    const list = $("ideas-list"); clear(list);
+    lastIdeas.forEach((idea, n) => {
+      const kindSel = el("select", { "aria-label": "Draft format for idea " + (n + 1), style: "width:auto" });
+      C.DRAFT_KINDS.forEach((k) => kindSel.appendChild(el("option", { value: k, text: k })));
+      if (C.DRAFT_KINDS.includes(idea.format)) kindSel.value = idea.format;
+      const status = el("span", { class: "muted", role: "status", "aria-live": "polite" });
+      const draftBtn = el("button", { type: "button", class: "primary", onclick: () => draftIdea(idea, kindSel.value, draftBtn, status) }, ["Draft →"]);
+      const card = el("div", { class: "card" + (idea.grounded ? "" : " ungrounded") }, [
+        el("div", { class: "title" }, [idea.idea_title || "(untitled)", el("span", { class: "badge " + (idea.grounded ? "ok" : "bad"), text: idea.grounded ? "grounded" : "not grounded" }), el("span", { class: "badge", text: "effort: " + (idea.effort || "?") })]),
+        el("div", { class: "hook", text: idea.hook || "" }),
+        el("div", { class: "meta", text: "problem [" + (idea.problem_id || "?") + "] " + (idea.problem_text || "") }),
+        el("div", { class: "meta", text: "asset: " + (idea.asset || "") }),
+        el("div", { class: "meta", text: idea.why_it_works || "" }),
+        idea.grounded ? el("div") : el("div", { class: "meta", style: "color:var(--danger)", text: idea.grounding_error }),
+        el("div", { class: "row", style: "margin-top:8px" }, [kindSel, draftBtn, status]),
+      ]);
+      list.appendChild(card);
+    });
+  }
+
+  async function draftIdea(idea, kind, btn, statusNode) {
+    const p = activeProfile();
+    let req;
+    try { req = C.buildDraftPrompt(p, idea, kind); } catch (e) { statusNode.textContent = e.message; return; }
+    btn.disabled = true; statusNode.textContent = "Drafting…";
+    try {
+      const d = await callApi(req);
+      state.queue = C.addToQueue(state.queue, { productId: p.id, kind, title: d.title, body: d.body, problem_id: d.problem_id || idea.problem_id, asset: d.asset || idea.asset });
+      persist();
+      statusNode.textContent = "Added to review queue.";
+    } catch (e) {
+      statusNode.textContent = e.message;
+    } finally { btn.disabled = false; }
+  }
+
+  // ---------- queue view ----------
+  function renderQueue() {
+    const p = activeProfile();
+    $("queue-product-name").textContent = p.name;
+    const filter = $("q-filter").value;
+    const items = state.queue.filter((q) => q.productId === p.id && (filter === "all" || q.status === filter)).slice().reverse();
+    const list = $("queue-list"); clear(list);
+    if (!items.length) { list.appendChild(el("p", { class: "muted", text: "Nothing " + (filter === "all" ? "" : filter) + " for " + p.name + ". Draft something from the Ideas tab." })); return; }
+    items.forEach((q) => {
+      const ta = el("textarea", { "aria-label": "Draft body: " + q.title, style: "min-height:160px" }); ta.value = q.body;
+      const title = el("input", { "aria-label": "Draft title", style: "margin-bottom:6px" }); title.value = q.title;
+      const act = (action, edits) => { try { state.queue = C.transition(state.queue, q.id, action, edits); persist(); renderQueue(); setStatus("queue-status", action === "tweak" ? "Tweak saved. Still pending." : (action === "approve" ? "Approved." : "Killed."), "ok"); } catch (e) { setStatus("queue-status", e.message, "err"); } };
+      const card = el("div", { class: "card" }, [
+        el("div", { class: "meta" }, [el("span", { class: "badge ok", text: q.kind }), el("span", { class: "badge " + (q.status === "approved" ? "ok" : q.status === "killed" ? "bad" : ""), text: q.status }), " problem [" + (q.problem_id || "?") + "] · asset: " + (q.asset || "?") + " · " + q.createdAt.slice(0, 10)]),
+        title, ta,
+        el("div", { class: "row", style: "margin-top:8px" }, [
+          el("button", { type: "button", class: "primary", onclick: () => { act("tweak", { body: ta.value, title: title.value }); act("approve"); } }, ["Approve"]),
+          el("button", { type: "button", onclick: () => act("tweak", { body: ta.value, title: title.value }) }, ["Save tweak"]),
+          el("button", { type: "button", class: "danger", onclick: () => act("kill") }, ["Kill"]),
+          el("button", { type: "button", onclick: async () => { const ok = await copyText(ta.value); setStatus("queue-status", ok ? "Copied." : "Clipboard blocked; select and copy manually.", ok ? "ok" : "err"); } }, ["Copy"]),
+        ]),
+      ]);
+      list.appendChild(card);
+    });
+  }
+  $("q-filter").addEventListener("change", renderQueue);
+  $("btn-export-batch").addEventListener("click", async () => {
+    const p = activeProfile(); const text = C.exportBatch(state.queue, { productId: p.id, productName: p.name });
+    const ok = await copyText(text); setStatus("queue-status", ok ? "Approved batch copied to clipboard." : "Clipboard blocked; use Download instead.", ok ? "ok" : "err");
+  });
+  $("btn-download-batch").addEventListener("click", () => {
+    const p = activeProfile(); download("lws-" + p.id + "-batch-" + new Date().toISOString().slice(0, 10) + ".txt", C.exportBatch(state.queue, { productId: p.id, productName: p.name }));
+  });
+  $("btn-clear-killed").addEventListener("click", () => {
+    const p = activeProfile(); const n = state.queue.filter((q) => q.productId === p.id && q.status === "killed").length;
+    if (!n) { setStatus("queue-status", "Nothing killed to clear."); return; }
+    if (!window.confirm("Remove " + n + " killed draft(s) permanently?")) return;
+    state.queue = state.queue.filter((q) => !(q.productId === p.id && q.status === "killed")); persist(); renderQueue(); setStatus("queue-status", "Cleared.", "ok");
+  });
+
+  // ---------- boot ----------
+  function renderAll() { renderProductSelect(); renderProductList(); renderProfileForm(); renderIdeasControls(); renderQueue(); }
+  renderAll();
+})();
+</script>
+</body>
+</html>

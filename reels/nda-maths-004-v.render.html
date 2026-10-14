@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reel 004 V Explains</title>
+<link rel="stylesheet" href="render.css">
+</head>
+<body>
+<canvas id="c" aria-label="Reel preview"></canvas>
+<div class="bar" id="bar"></div>
+<div id="status" role="status"></div>
+<script src="engine.js"></script>
+<script>
+// Reel 004 — V (the PYQ Vault mascot) explains NDA 2026 (II) Maths Q13: sin(tan⁻¹ 0.75) = 3/5.
+// tan θ = 3/4 → right triangle 3 (opposite), 4 (adjacent), hypotenuse 5 → sin θ = 3/5.
+// Trap: 4/5 is cos θ. Silent-first: V speaks only in bubbles.
+const RED = '#d22f27', sup = s => ({ sup: s });
+
+// Triangle: right angle at B. A–B = 4 units (adjacent), B–C = 3 units (opposite).
+const U = 70, A = [180, 1215], B = [180 + 4 * U, 1215], C = [180 + 4 * U, 1215 - 3 * U];
+const EDGES = [
+  { from: A, to: B, t0: 8.0, dur: 0.9, label: '4', at: [(A[0] + B[0]) / 2, 1262] },
+  { from: B, to: C, t0: 9.0, dur: 0.8, label: '3', at: [B[0] + 40, (B[1] + C[1]) / 2 + 18] },
+  { from: C, to: A, t0: 12.8, dur: 0.9, label: '5', at: [(A[0] + C[0]) / 2 - 40, (A[1] + C[1]) / 2 - 18] },
+];
+
+// V's script: pose + what the bubble says.
+const V = { x: 30, y: 1330, w: 270 };
+const SAYS = [
+  { t0: 0.0,  t1: 3.0,  pose: 'think', text: "Inverse trig? Don't panic." },
+  { t0: 3.0,  t1: 7.0,  pose: 'talk',  text: 'Call the angle θ.\nThen tan θ = 3/4.' },
+  { t0: 7.0,  t1: 12.5, pose: 'talk',  text: 'tan = opposite ÷ adjacent.\nSo draw it: 3 up, 4 across.' },
+  { t0: 12.5, t1: 17.5, pose: 'think', text: 'Hypotenuse? It’s a\n3-4-5 triangle, so 5.' },
+  { t0: 17.5, t1: 21.5, pose: 'talk',  text: 'sin = opposite ÷ hypotenuse\n= 3/5' },
+  { t0: 21.5, t1: 25.5, pose: 'laugh', text: 'Trap: 4/5 is cos θ,\nnot sin θ!' },
+];
+
+function drawTriangle(ctx, t, api) {
+  let pen = null;
+  for (const e of EDGES) {
+    const p = api.prog(t, e.t0, e.dur);
+    const end = api.strokePartial([e.from, e.to], p, 6, api.INK);
+    if (p > 0 && p < 1) pen = { x: end[0], y: end[1] };
+    if (p >= 1) {
+      ctx.save(); ctx.fillStyle = api.INK; ctx.font = api.hand(58); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(e.label, ...e.at); ctx.restore();
+    }
+  }
+  if (t >= 9.8) { // right-angle mark at B
+    ctx.save(); ctx.strokeStyle = api.INK; ctx.lineWidth = 4;
+    ctx.strokeRect(B[0] - 28, B[1] - 28, 28, 28); ctx.restore();
+  }
+  const pa = api.prog(t, 10.2, 0.5); // θ arc at A
+  if (pa > 0) {
+    const ang = Math.atan2(C[1] - A[1], C[0] - A[0]);
+    ctx.save(); ctx.strokeStyle = RED; ctx.lineWidth = 5; ctx.beginPath(); ctx.arc(A[0], A[1], 70, 0, ang * pa, true); ctx.stroke();
+    if (pa >= 1) { ctx.fillStyle = RED; ctx.font = api.hand(46); ctx.fillText('θ', A[0] + 82, A[1] - 16); }
+    ctx.restore();
+  }
+  return pen;
+}
+
+function drawV(ctx, t, api, isCover) {
+  const say = SAYS.find(s => t >= s.t0 && t < s.t1) ?? SAYS.at(-1);
+  const im = api.img(say.pose), h = V.w * im.height / im.width;
+  const talking = say.pose === 'talk', bob = Math.sin(t * 2.4) * 7, squash = talking ? 1 + 0.025 * Math.sin(t * 14) : 1;
+  ctx.drawImage(im, V.x, V.y + bob - h * (squash - 1), V.w, h * squash);
+  if (isCover || t >= SAYS.at(-1).t1) return;
+  const pop = api.clamp01((t - say.t0) / 0.18);
+  api.bubble(say.text, V.x + V.w + 16, V.y - 6, 680, pop, V.x + V.w - 30, V.y + h * 0.45, 44);
+}
+
+Reel.mount({
+  name: 'nda-maths-004-v',
+  watermarkY: null, // V is the branding here; the watermark would sit behind it
+  size: [1080, 1920],
+  duration: 29,
+  images: { think: 'assets/v-think.png', talk: 'assets/v-talk.png', laugh: 'assets/v-laugh.png' },
+  captions: [
+    { t0: 0,    t1: 3,    text: 'NDA 2026 asked this.' },
+    { t0: 3,    t1: 12.5, text: 'Turn tan⁻¹ into a triangle.' },
+    { t0: 12.5, t1: 21.5, text: '3-4-5. Then just read it off.' },
+    { t0: 21.5, t1: 25.5, text: 'Answer: (c) 3/5' },
+  ],
+  lines: [
+    { y: 455, size: 44, t0: -1, dur: 0, color: RED, tokens: ['NDA 2026 (II)  ·  Maths  ·  Q13'] },
+    { y: 585, size: 92, t0: -1, dur: 0, tokens: ['sin(tan', sup('−1'), ' 0.75)  =  ?'] },
+    { y: 710, size: 60, t0: -1, dur: 0, tokens: ['(a) 1    (b) 4/5    ', { mark: 'cS' }, '(c) 3/5', { mark: 'cE' }, '    (d) 1/2'] },
+    { y: 840, size: 64, t0: 3.3, dur: 1.6, tokens: ['Let  θ = tan', sup('−1'), '(3/4)'] },
+    { y: 945, size: 64, t0: 5.2, dur: 1.4, tokens: ['tan θ = 3/4 = opp / adj'] },
+    { x: 560, y: 1070, size: 56, t0: 13.8, dur: 1.6, tokens: ['hyp = √(3', sup('2'), ' + 4', sup('2'), ')'] },
+    { x: 560, y: 1160, size: 56, t0: 15.6, dur: 1.2, tokens: ['      = √25 = 5'] },
+    { x: 560, y: 1260, size: 64, t0: 18.3, dur: 1.4, tokens: ['sin θ =   ', { mark: 'sS' }, '3/5', { mark: 'sE' }] },
+  ],
+  notes: [
+    { t0: 20.0, dur: 0.6, kind: 'ring', from: 'sS', to: 'sE' },
+    { t0: 21.7, dur: 0.9, kind: 'ring', from: 'cS', to: 'cE' },
+  ],
+  draw(ctx, t, api, isCover) {
+    const pen = drawTriangle(ctx, t, api);
+    drawV(ctx, t, api, isCover);
+    return pen;
+  },
+  end: { t0: 25.5, y: 900, image: 'laugh', lines: [
+    { at: 0.3, size: 50, weight: 400, color: '#cfd8e3', text: 'Inverse trig? Draw the triangle.' },
+    { at: 0.6, size: 62, weight: 700, color: '#ffffff', text: 'Then just read it off.' },
+    { at: 1.3, size: 84, weight: 800, color: '#4fd1a5', text: 'Follow @lwspune' },
+  ] },
+  music: { chime: 21.7 },
+  cover: { t: 1.5, text: 'THE TRIANGLE TRICK\nFOR INVERSE TRIG', y: 1060, size: 80 },
+});
+</script>
+</body>
+</html>

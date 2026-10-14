@@ -1,0 +1,22 @@
+# Dependencies and build output
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+
+# Secrets: never commit (the publisher's .env.example is the template)
+.env
+.env.*
+!.env.example
+
+# Rendered videos are large and re-made from their page:
+#   node reels/tools/record.mjs reels/<name>.render.html
+reels/*.mp4
+
+# Personal Claude Code settings
+.claude/settings.local.json
+
+# OS clutter
+Thumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reel 005 Slices Build Area</title>
+<link rel="stylesheet" href="render.css">
+</head>
+<body>
+<canvas id="c" aria-label="Reel preview"></canvas>
+<div class="bar" id="bar"></div>
+<div id="status" role="status"></div>
+<script src="engine.js"></script>
+<script>
+// Reel 005 — white "visual" format. NDA 2023 (II) Maths Q67: ∫₀^8π |sin x| dx = 16.
+// |sin x| repeats every π and one hump has area ∫₀^π sin x dx = [−cos x]₀^π = 2, so 8 humps × 2 = 16.
+// Traps: (a) 2 counts one hump; (c) 8 takes the period as 2π (4 periods × 2).
+const { blue: BLUE, green: GREEN, amber: AMBER, fill: FILL, grid: GRID, axis: AXIS, ink: INK, muted: MUTED } = Reel.WHITE, PI = Math.PI;
+
+// Graph: x from 0 to xmax maps onto GX0..GX1; the baseline is GY.
+const GX0 = 130, GX1 = 920, GY = 1230;
+
+function view(t, api) {
+  const z = api.prog(t, 10.2, 1.2) - api.prog(t, 16.0, 1.0); // 0 = all 8 humps, 1 = zoomed on the first
+  const xmax = 8 * PI * Math.pow(1 / 8, z), amp = 210 + 80 * z;
+  return { z, xmax, amp, px: x => GX0 + x / xmax * (GX1 - GX0), py: y => GY - y * amp };
+}
+// sin x while the dips fold up: fold 0 = sin x, fold 1 = |sin x|.
+const f = (x, fold) => { const s = Math.sin(x); return s < 0 ? s * (1 - 2 * fold) : s; };
+
+function fillUnder(ctx, V, a, b, fold, alpha) {
+  if (alpha <= 0) return;
+  const p = new Path2D(); p.moveTo(V.px(a), GY);
+  for (let i = 0; i <= 60; i++) { const x = a + (b - a) * i / 60; p.lineTo(V.px(x), V.py(f(x, fold))); }
+  p.lineTo(V.px(b), GY); p.closePath();
+  ctx.save(); ctx.globalAlpha = alpha; ctx.fillStyle = FILL; ctx.fill(p); ctx.restore();
+}
+
+function drawAxes(ctx, t, api, V) {
+  ctx.save();
+  // Faint dot grid: every π/4 across, every quarter unit up and down.
+  ctx.fillStyle = GRID;
+  for (let k = 1; k * PI / 4 <= V.xmax + 1e-6; k++) for (const y of [-1, -0.75, -0.5, -0.25, 0.25, 0.5, 0.75, 1, 1.25]) {
+    ctx.beginPath(); ctx.arc(V.px(k * PI / 4), V.py(y), 2.6, 0, 7); ctx.fill();
+  }
+  // Axes with arrowheads.
+  ctx.strokeStyle = AXIS; ctx.fillStyle = AXIS; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(GX0 - 20, GY); ctx.lineTo(GX1 + 30, GY); ctx.moveTo(GX0, GY + 230); ctx.lineTo(GX0, GY - 330); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(GX1 + 42, GY); ctx.lineTo(GX1 + 24, GY - 9); ctx.lineTo(GX1 + 24, GY + 9); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(GX0, GY - 342); ctx.lineTo(GX0 - 9, GY - 324); ctx.lineTo(GX0 + 9, GY - 324); ctx.fill();
+  ctx.font = api.hand(36); ctx.textAlign = 'center'; ctx.fillText('x', GX1 + 32, GY - 22); ctx.fillText('y', GX0 - 30, GY - 320);
+  // Multiples of π, once the dips are out of the way.
+  ctx.globalAlpha = api.prog(t, 8.8, 0.5); ctx.fillStyle = MUTED; ctx.font = api.hand(32);
+  for (let k = 0; k <= 8 && k * PI <= V.xmax * 1.001; k++) {
+    const x = V.px(k * PI);
+    ctx.fillText(k === 0 ? '0' : k === 1 ? 'π' : k + 'π', x + (k === 0 ? -18 : 0), GY + 46);
+    ctx.beginPath(); ctx.moveTo(x, GY - 8); ctx.lineTo(x, GY + 8); ctx.strokeStyle = AXIS; ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function drawCurve(ctx, t, api, V) {
+  const fold = api.prog(t, 6.6, 2.0), end = Math.min(8 * PI * api.prog(t, 1.0, 4.0), V.xmax);
+  if (end <= 0) return;
+  // Two passes so the dips can be dimmer than the humps until they fold up.
+  for (const below of [false, true]) {
+    const p = new Path2D(); let pen = false;
+    for (let i = 0; i <= 480; i++) {
+      const x = end * i / 480, isBelow = Math.sin(x) < -1e-9 || (Math.sin(x) <= 1e-9 && Math.sin(x + 1e-3) < 0);
+      if (isBelow !== below) { pen = false; continue; }
+      const X = V.px(x), Y = V.py(f(x, fold));
+      pen ? p.lineTo(X, Y) : p.moveTo(X, Y); pen = true;
+    }
+    ctx.save(); ctx.globalAlpha = below ? 0.5 + 0.5 * fold : 1; api.softStroke(p, BLUE, 6); ctx.restore();
+  }
+  // A glowing dot leads the curve while it draws.
+  if (end < 8 * PI - 1e-6 && end < V.xmax) {
+    ctx.save(); ctx.fillStyle = BLUE; ctx.shadowColor = BLUE; ctx.shadowBlur = 18;
+    ctx.beginPath(); ctx.arc(V.px(end), V.py(f(end, fold)), 9, 0, 7); ctx.fill(); ctx.restore();
+  }
+  // y = sin x  →  y = |sin x|
+  ctx.save(); ctx.font = api.hand(46); ctx.textAlign = 'right'; ctx.fillStyle = BLUE;
+  // Swap one label for the other (out, then in) so they never overlap mid-fold.
+  ctx.globalAlpha = api.prog(t, 1.0, 0.5) * (1 - api.clamp01(fold * 2)); ctx.fillText('y = sin x', GX1, 940);
+  ctx.globalAlpha = api.clamp01(fold * 2 - 1); ctx.fillText('y = |sin x|', GX1, 940);
+  ctx.restore();
+}
+
+// The first hump: midpoint slices grow in, then melt into one smooth area. Then humps 2–8 fill in turn.
+const N = 16, SLICE0 = 11.6, SLICE_GAP = 0.14, MERGE = 14.1, FILL0 = 17.2, FILL_GAP = 0.45;
+function humpAlpha(t, api, k) { return k === 1 ? api.prog(t, MERGE, 0.6) : api.prog(t, FILL0 + (k - 2) * FILL_GAP, 0.3); }
+
+function drawArea(ctx, t, api, V) {
+  const merge = api.prog(t, MERGE, 0.6);
+  if (t >= SLICE0 && merge < 1) {
+    ctx.save(); ctx.globalAlpha = 1 - merge; ctx.lineWidth = 1.5; ctx.strokeStyle = GREEN; ctx.fillStyle = FILL;
+    for (let i = 0; i < N; i++) {
+      const g = api.prog(t, SLICE0 + i * SLICE_GAP, 0.3); if (g <= 0) continue;
+      const a = i * PI / N, b = (i + 1) * PI / N, h = Math.sin((a + b) / 2) * V.amp * g;
+      ctx.beginPath(); ctx.rect(V.px(a), GY - h, V.px(b) - V.px(a), h); ctx.fill(); ctx.stroke();
+    }
+    ctx.restore();
+  }
+  for (let k = 1; k <= 8; k++) {
+    const a = humpAlpha(t, api, k); if (a <= 0 || (k - 1) * PI > V.xmax) continue;
+    fillUnder(ctx, V, (k - 1) * PI, k * PI, 1, a);
+    // "2" inside each hump: big while zoomed, small when all eight are on screen.
+    const la = k === 1 ? api.prog(t, 14.6, 0.4) : a;
+    ctx.save(); ctx.globalAlpha = la; ctx.fillStyle = GREEN; ctx.font = `800 ${Math.round(40 + 56 * V.z)}px ${api.UI}`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('2', V.px((k - 0.5) * PI), V.py(0.4)); ctx.restore();
+  }
+}
+
+function drawWorking(ctx, t, api) {
+  const a = api.prog(t, 12.2, 0.5) * (1 - api.prog(t, 16.0, 0.4));
+  if (a > 0) {
+    ctx.save(); ctx.globalAlpha = a;
+    api.math([{ int: ['0', 'π'], color: BLUE }, { text: ' sin x dx', color: BLUE }, ' = [−cos x]', { limits: ['0', 'π'] }, ' = 1 + 1 = ', { text: '2', color: GREEN }],
+      { y: 1525, size: 54, cx: 540 });
+    ctx.restore();
+  }
+  const c = api.prog(t, 16.8, 0.4);
+  if (c > 0) {
+    let n = 1; for (let k = 2; k <= 8; k++) if (humpAlpha(t, api, k) > 0.5) n++;
+    ctx.save(); ctx.globalAlpha = c;
+    api.math([`${n} hump${n > 1 ? 's' : ''}  ×  2  =  `, { text: String(2 * n), color: GREEN }], { y: 1525, size: 64, cx: 540 });
+    ctx.restore();
+  }
+}
+
+// Trap (c): the period of |sin x| is π, not 2π. A brace under the first hump says so.
+function drawPeriod(ctx, t, api, V) {
+  const p = api.prog(t, 25.2, 0.6); if (p <= 0) return;
+  const x0 = V.px(0) + 4, x1 = V.px(PI) - 4, xm = (x0 + x1) / 2, y = GY + 74;
+  const brace = [[x0, y - 14], [x0 + 8, y], [xm - 10, y], [xm, y + 14], [xm + 10, y], [x1 - 8, y], [x1, y - 14]];
+  api.strokePartial(brace, p, 4, AMBER);
+  ctx.save(); ctx.globalAlpha = p; ctx.fillStyle = AMBER; ctx.font = api.hand(40); ctx.textAlign = 'left';
+  ctx.fillText('repeats every π', GX0 - 10, y + 62); ctx.restore();
+}
+
+// The question on a floating card: source line, the integral, and the options as chips (answer at 21.8 s).
+function drawQuestionCard(ctx, t, api) {
+  api.card(110, 460, 860, 380);
+  ctx.save(); ctx.fillStyle = MUTED; ctx.font = `600 34px ${api.SOFT_UI}`; ctx.textAlign = 'center';
+  ctx.fillText('NDA 2023 (II)  ·  Maths  ·  Q67', 540, 525); ctx.restore();
+  api.math([{ int: ['0', '  8π'], color: BLUE }, { text: ' |sin x|', color: BLUE }, ' dx  =  ?'], { y: 655, size: 80, cx: 540 });
+  api.chips(t, { labels: ['(a) 2', '(b) 4', '(c) 8', '(d) 16'], y: 735, answer: 3, at: 21.8 });
+}
+
+Reel.mount({
+  name: 'nda-maths-005-area',
+  theme: 'white',
+  size: [1080, 1920],
+  duration: 31.5,
+  captions: [
+    { t0: 0,    t1: 3.2,  text: '8π looks scary.\nWatch the area.' },
+    { t0: 3.2,  t1: 6.4,  text: 'Draw sin x from 0 to 8π.' },
+    { t0: 6.4,  t1: 10.0, text: 'The modulus flips\nevery dip up.' },
+    { t0: 10.0, t1: 13.0, text: 'Zoom in on one hump.' },
+    { t0: 13.0, t1: 16.4, text: 'Slices build its area: 2' },
+    { t0: 16.4, t1: 21.6, text: 'Same hump, 8 times.' },
+    { t0: 21.6, t1: 25.0, text: 'Answer: (d) 16' },
+    { t0: 25.0, t1: 28.5, size: 48, text: 'Trap (a) 2: that is one hump.\nTrap (c) 8: period is π, not 2π.' },
+  ],
+  lines: [],
+  draw(ctx, t, api) {
+    drawQuestionCard(ctx, t, api);
+    const V = view(t, api);
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 870, api.W, 590); ctx.clip();
+    drawAxes(ctx, t, api, V);
+    drawArea(ctx, t, api, V);
+    drawCurve(ctx, t, api, V);
+    drawPeriod(ctx, t, api, V);
+    ctx.restore();
+    drawWorking(ctx, t, api);
+    return null;
+  },
+  end: { t0: 28.5, lines: [
+    { at: 0.3, size: 50, weight: 400, color: MUTED, text: 'Graph keeps repeating?' },
+    { at: 0.6, size: 62, weight: 600, color: INK, text: 'Find one hump. Multiply.' },
+    { at: 1.3, size: 80, weight: 700, color: GREEN, text: 'Follow for more' },
+  ] },
+  music: { chime: 21.8 },
+  cover: { t: 9.6, text: 'Area over 8π?\nCount the humps.', y: 1440, size: 76 },
+});
+</script>
+</body>
+</html>
