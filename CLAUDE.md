@@ -116,6 +116,14 @@ on Done cards against `LWS_BASELINE` (src/lib/domain/metrics.ts, the median @lws
 (0005):** `/insights` lists every reel on the account (hand-posted too, `account_media`) against the
 typical reel computed live (`typicalReel`, median); refreshed nightly at 03:00 IST by pg_cron →
 `/api/cron/insights`, by the tab's Refresh button, or by `npm run insights` (same sync code).
+**Daily quiz Stories (0006/0007):** post kind `story` = one 1080×1920 **JPEG** card in `cover_path`
+(the Instagram API rejects PNG: code 9004), no caption, Instagram only, no scorecard, plus the
+`quiz` it shows (from PYQ Vault `/api/quiz/today?date=`, with per-place tagged `links`) so the
+story-reply DM and Telegram post link the same quiz. Saturdays 18:00 IST pg_cron → `/api/cron/stories`
+(or `npm run stories:plan`) queues next Mon–Sun as Ready; "Approve all stories" schedules each for
+07:30 IST on its day (`storyApproval`: posts now if its day started, refused once it's over). Card:
+`storyCard.ts` (satori + sharp, bundled Noto Sans in `assets/fonts`). `STORY_CTA=reply` switches the
+card from "link in bio" to "Reply QUIZ" once the reply DM exists.
 
 **Reels:** rendered in Edge from `*.render.html` (MediaRecorder → H.264 + AAC MP4, 1080×1920; carousels
 1080×1350 PNG). Text in Cambria (legible, "ln" ≠ "In"). Music is generated in code, never a
