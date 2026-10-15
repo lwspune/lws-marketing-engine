@@ -1,10 +1,13 @@
 // Upload ready-made posts and put them in the dashboard's Ready tab.
 //
 //   npm run queue:add -- --org=lws-pune ../reels/nda-maths-002-hook.post.json [more.post.json …]
+//   npm run queue:add -- --org=lws-pune --replace ../reels/nda-maths-004-v.post.json
 //
 // Each manifest sits next to its media files (see src/lib/domain/manifest.ts). Files go to the
 // private `media` bucket under <org_id>/<post_id>/. If saving the post fails, the uploaded files
-// are removed again so nothing is left half-done. A slug already queued in the project is skipped.
+// are removed again so nothing is left half-done. A slug already queued in the project is skipped,
+// unless --replace is given AND that post is still "ready": then its files, title and captions are
+// swapped for the new ones (a remade reel). Approved/published/rejected posts are never replaced.
 import { randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -16,6 +19,7 @@ const TYPE: Record<string, string> = { ".mp4": "video/mp4", ".png": "image/png",
 run(async () => {
   const f = flags();
   const orgSlug = need(f, "org");
+  const replace = "replace" in f;
   const files = process.argv.slice(2).filter((a) => !a.startsWith("--"));
   if (!files.length) throw new Error("Give at least one .post.json file.");
   const db = admin();
@@ -27,12 +31,35 @@ run(async () => {
     const m = parseManifest(JSON.parse(readFileSync(file, "utf8")));
     const { data: project } = await db.from("projects").select("id").eq("org_id", org.id).eq("slug", m.project).single();
     if (!project) throw new Error(`${m.slug}: no project "${m.project}" in ${orgSlug}.`);
-    const { data: existing } = await db.from("posts").select("id, status").eq("project_id", project.id).eq("slug", m.slug).maybeSingle();
-    if (existing) { console.log(`- ${m.slug}: already queued (${existing.status}), skipped`); continue; }
+    const { data: existing } = await db.from("posts").select("id, status, kind").eq("project_id", project.id).eq("slug", m.slug).maybeSingle();
+    const names = [m.video, m.cover, ...(m.slides ?? [])].filter((x): x is string => !!x);
+
+    if (existing && !(replace && existing.status === "ready")) {
+      console.log(`- ${m.slug}: already queued (${existing.status}), skipped${replace ? " (only a ready post can be replaced)" : ""}`);
+      continue;
+    }
+    if (existing) {
+      // Remade reel: overwrite its files in place, then point the post at them. The DB only allows
+      // media/caption edits while the post is ready, so this can't touch anything approved.
+      if (existing.kind !== m.kind) throw new Error(`${m.slug}: can't replace a ${existing.kind} with a ${m.kind}.`);
+      const key = (name: string) => `${org.id}/${existing.id}/${name}`;
+      for (const name of names) {
+        const { error } = await db.storage.from("media").upload(key(name), readFileSync(path.join(dir, name)), {
+          contentType: TYPE[path.extname(name).toLowerCase()], upsert: true,
+        });
+        if (error) throw new Error(`${m.slug}: uploading ${name}: ${error.message}`);
+      }
+      const { error } = await db.from("posts").update({
+        title: m.title, captions: m.captions,
+        video_path: m.video ? key(m.video) : null, cover_path: m.cover ? key(m.cover) : null, slide_paths: (m.slides ?? []).map(key),
+      }).eq("id", existing.id).eq("status", "ready");
+      if (error) throw new Error(`${m.slug}: updating the post: ${error.message}`);
+      console.log(`✓ ${m.slug} replaced with the new version (${names.length} files), still Ready`);
+      continue;
+    }
 
     const postId = randomUUID();
     const key = (name: string) => `${org.id}/${postId}/${name}`;
-    const names = [m.video, m.cover, ...(m.slides ?? [])].filter((x): x is string => !!x);
     const uploaded: string[] = [];
     try {
       for (const name of names) {
