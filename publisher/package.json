@@ -13,7 +13,8 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "seed": "tsx scripts/seed.ts",
     "connect:meta": "tsx scripts/connect-meta.ts",
-    "queue:add": "tsx scripts/queue-add.ts"
+    "queue:add": "tsx scripts/queue-add.ts",
+    "insights": "tsx scripts/insights.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
