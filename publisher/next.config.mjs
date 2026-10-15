@@ -2,6 +2,13 @@
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+  // The Story card is drawn with the bundled Noto Sans (Vercel's servers have no fonts); it is read
+  // from disk at run time, so ship the files with the job that draws it.
+  experimental: {
+    outputFileTracingIncludes: { "/api/cron/stories": ["./assets/fonts/**"] },
+    // satori loads its own .wasm files from its package folder; bundled, it can't find them.
+    serverComponentsExternalPackages: ["satori"],
+  },
   async headers() {
     return [
       {
