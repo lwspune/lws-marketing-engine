@@ -2,6 +2,8 @@ import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { PostCard, type PostView } from "@/components/PostCard";
 import { Nav } from "@/components/Nav";
+import { ApproveStoriesButton } from "@/components/ApproveStoriesButton";
+import type { StoryQuiz } from "@/lib/domain/story";
 import type { Platform } from "@/lib/domain/types";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +27,7 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
 
   let postsQuery = supabase
     .from("posts")
-    .select("id, project_id, slug, kind, title, status, captions, video_path, cover_path, slide_paths, scheduled_at, created_at, reject_reason, publications(id, platform, status, scheduled_at, attempts, permalink, error, published_at, publication_metrics(snapshot, views, reach, saves, shares, avg_watch_ms, error))")
+    .select("id, project_id, slug, kind, title, status, captions, video_path, cover_path, slide_paths, scheduled_at, planned_for, quiz, created_at, reject_reason, publications(id, platform, status, scheduled_at, attempts, permalink, error, published_at, publication_metrics(snapshot, views, reach, saves, shares, avg_watch_ms, error))")
     .in("status", statuses as unknown as string[])
     .order("created_at", { ascending: false })
     .limit(50);
@@ -50,6 +52,7 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
   const views: PostView[] = (posts ?? []).map((p) => ({
     id: p.id, title: p.title, slug: p.slug, kind: p.kind, status: p.status, captions: p.captions ?? {},
     scheduledAt: p.scheduled_at, rejectReason: p.reject_reason,
+    plannedFor: p.planned_for, quiz: (p.quiz ?? null) as StoryQuiz | null,
     projectName: projects?.find((x) => x.id === p.project_id)?.name ?? "",
     videoUrl: p.video_path ? signed.get(p.video_path) ?? null : null,
     coverUrl: p.cover_path ? signed.get(p.cover_path) ?? null : null,
@@ -66,6 +69,8 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
       })),
     })),
   }));
+
+  const readyStories = tab === "ready" ? views.filter((v) => v.kind === "story").length : 0;
 
   const href = (next: { tab?: string; project?: string | null }) => {
     const q = new URLSearchParams();
@@ -107,6 +112,8 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
               </Link>
             ))}
           </nav>
+
+          {readyStories > 0 && <ApproveStoriesButton count={readyStories} projectId={projectId} />}
 
           {views.length === 0 ? (
             <p className="py-10 text-center text-sm text-muted">Nothing here.</p>

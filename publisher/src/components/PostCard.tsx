@@ -1,16 +1,19 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import { approvePost, rejectPost, retryPublication, saveCaptions, unapprovePost } from "@/app/actions";
+import { approvePost, approveStory, rejectPost, retryPublication, saveCaptions, unapprovePost } from "@/app/actions";
 import { captionErrors } from "@/lib/domain/captions";
 import { supportedPlatforms } from "@/lib/domain/workflow";
 import { compareToBaseline, LWS_BASELINE, type PostMetrics, type Verdict } from "@/lib/domain/metrics";
 import { PLATFORM_LABEL, type Captions, type Platform, type PostKind } from "@/lib/domain/types";
 import type { Result } from "@/lib/publishing/result";
+import type { StoryQuiz } from "@/lib/domain/story";
 
 export interface PostView {
   id: string; title: string; slug: string; kind: PostKind; status: string; captions: Captions;
   scheduledAt: string | null; rejectReason: string | null; projectName: string;
+  /** Stories only: the morning it's meant for and the quiz its card shows. */
+  plannedFor: string | null; quiz: StoryQuiz | null;
   videoUrl: string | null; coverUrl: string | null; slideUrls: string[];
   channels: { platform: Platform; name: string }[];
   publications: {
@@ -39,6 +42,7 @@ const STATUS_LABEL: Record<string, string> = {
 
 export function PostCard({ post }: { post: PostView }) {
   const ready = post.status === "ready";
+  const story = post.kind === "story";
   const usable = useMemo(
     () => post.channels.filter((c) => supportedPlatforms(post.kind).includes(c.platform)),
     [post.channels, post.kind],
@@ -53,7 +57,7 @@ export function PostCard({ post }: { post: PostView }) {
   const [pending, start] = useTransition();
 
   const dirty = JSON.stringify(captions) !== JSON.stringify(post.captions);
-  const problems = platforms.flatMap((p) => captionErrors(p, captions));
+  const problems = story ? [] : platforms.flatMap((p) => captionErrors(p, captions));
 
   const run = (fn: () => Promise<Result<unknown>>, success: string) =>
     start(async () => {
@@ -62,6 +66,7 @@ export function PostCard({ post }: { post: PostView }) {
     });
 
   const approve = () => {
+    if (story) return run(() => approveStory({ postId: post.id }), "Approved. It posts at its time.");
     const scheduledAt = mode === "later" && at ? new Date(at).toISOString() : null;
     if (mode === "later" && !at) return setMessage({ kind: "err", text: "Pick a date and time, or choose Publish now." });
     run(async () => {
@@ -80,7 +85,10 @@ export function PostCard({ post }: { post: PostView }) {
     <article className="overflow-hidden rounded-lg border border-line bg-panel" aria-labelledby={`t-${post.id}`}>
       <div className="flex flex-col gap-4 p-4 sm:flex-row">
         <div className="w-full shrink-0 sm:w-48">
-          {post.kind === "reel" && post.videoUrl ? (
+          {story && post.coverUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={post.coverUrl} alt={`Story card: ${post.quiz?.title ?? post.title}`} className="aspect-[9/16] w-full rounded-md object-cover" />
+          ) : post.kind === "reel" && post.videoUrl ? (
             <video src={post.videoUrl} poster={post.coverUrl ?? undefined} controls preload="metadata" playsInline
               className="aspect-[9/16] w-full rounded-md bg-black" aria-label={`Preview of ${post.title}`} />
           ) : post.slideUrls.length ? (
@@ -105,41 +113,58 @@ export function PostCard({ post }: { post: PostView }) {
             </div>
             <h2 id={`t-${post.id}`} className="mt-1 font-medium">{post.title}</h2>
             {post.scheduledAt && post.status === "approved" && <p className="text-xs text-warn">Scheduled for {when(post.scheduledAt)}</p>}
+            {story && post.quiz && (
+              <p className="text-sm text-muted">
+                Quiz: {post.quiz.title}{" "}
+                <a href={`https://www.pyqvault.com/quiz/${encodeURIComponent(post.quiz.publicSlug)}`} target="_blank" rel="noopener noreferrer"
+                  className="text-accent underline">Check the quiz<span className="sr-only"> (opens in a new tab)</span></a>
+              </p>
+            )}
             {post.rejectReason && <p className="text-xs text-muted">Rejected: {post.rejectReason}</p>}
           </div>
 
           {ready ? (
             <>
-              <CaptionFields kind={post.kind} captions={captions} onChange={setCaptions} id={post.id} />
+              {story ? (
+                <p className="text-sm">
+                  Instagram Story · posts {post.plannedFor ? when(post.plannedFor) : "when approved"}
+                  <span className="block text-xs text-muted">Approving later on its day posts it straight away; after its day it can only be rejected.</span>
+                </p>
+              ) : (
+                <>
+                  <CaptionFields kind={post.kind} captions={captions} onChange={setCaptions} id={post.id} />
 
-              <fieldset>
-                <legend className="label">Publish to</legend>
-                {usable.length === 0 ? (
-                  <p className="text-sm text-danger">No accounts are connected for this project yet.</p>
-                ) : (
-                  <div className="flex flex-wrap gap-3">
-                    {usable.map((c) => (
-                      <label key={c.platform} className="flex items-center gap-2 text-sm">
-                        <input type="checkbox" checked={platforms.includes(c.platform)} onChange={() => toggle(c.platform)}
-                          className="h-4 w-4 accent-[#4fd1a5]" />
-                        {PLATFORM_LABEL[c.platform]} <span className="text-muted">({c.name})</span>
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </fieldset>
+                  <fieldset>
+                    <legend className="label">Publish to</legend>
+                    {usable.length === 0 ? (
+                      <p className="text-sm text-danger">No accounts are connected for this project yet.</p>
+                    ) : (
+                      <div className="flex flex-wrap gap-3">
+                        {usable.map((c) => (
+                          <label key={c.platform} className="flex items-center gap-2 text-sm">
+                            <input type="checkbox" checked={platforms.includes(c.platform)} onChange={() => toggle(c.platform)}
+                              className="h-4 w-4 accent-[#4fd1a5]" />
+                            {PLATFORM_LABEL[c.platform]} <span className="text-muted">({c.name})</span>
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                  </fieldset>
 
-              <fieldset>
-                <legend className="label">When</legend>
-                <div className="flex flex-wrap items-center gap-3 text-sm">
-                  <label className="flex items-center gap-2"><input type="radio" name={`when-${post.id}`} checked={mode === "now"} onChange={() => setMode("now")} className="accent-[#4fd1a5]" />Publish now</label>
-                  <label className="flex items-center gap-2"><input type="radio" name={`when-${post.id}`} checked={mode === "later"} onChange={() => setMode("later")} className="accent-[#4fd1a5]" />Schedule</label>
-                  {mode === "later" && (
-                    <input type="datetime-local" value={at} onChange={(e) => setAt(e.target.value)} className="field w-auto"
-                      aria-label="Publish date and time (your time zone)" />
-                  )}
-                </div>
-              </fieldset>
+                  <fieldset>
+                    <legend className="label">When</legend>
+                    <div className="flex flex-wrap items-center gap-3 text-sm">
+                      <label className="flex items-center gap-2"><input type="radio" name={`when-${post.id}`} checked={mode === "now"} onChange={() => setMode("now")} className="accent-[#4fd1a5]" />Publish now</label>
+                      <label className="flex items-center gap-2"><input type="radio" name={`when-${post.id}`} checked={mode === "later"} onChange={() => setMode("later")} className="accent-[#4fd1a5]" />Schedule</label>
+                      {mode === "later" && (
+                        <input type="datetime-local" value={at} onChange={(e) => setAt(e.target.value)} className="field w-auto"
+                          aria-label="Publish date and time (your time zone)" />
+                      )}
+                    </div>
+                  </fieldset>
+
+                </>
+              )}
 
               {problems.length > 0 && (
                 <ul className="space-y-1 text-sm text-danger" aria-live="polite">{problems.map((p) => <li key={p}>{p}</li>)}</ul>
@@ -147,8 +172,8 @@ export function PostCard({ post }: { post: PostView }) {
 
               <div className="flex flex-wrap gap-2">
                 <button type="button" className="btn btn-primary" onClick={approve}
-                  disabled={pending || platforms.length === 0 || problems.length > 0}>
-                  {mode === "later" ? "Approve & schedule" : "Approve & publish"}
+                  disabled={pending || (!story && (platforms.length === 0 || problems.length > 0))}>
+                  {story ? "Approve story" : mode === "later" ? "Approve & schedule" : "Approve & publish"}
                 </button>
                 {dirty && (
                   <button type="button" className="btn" disabled={pending}
@@ -170,7 +195,7 @@ export function PostCard({ post }: { post: PostView }) {
             </>
           ) : (
             <>
-              <CaptionPreview captions={post.captions} />
+              {!story && <CaptionPreview captions={post.captions} />}
               {post.publications.length > 0 && (
                 <ul className="space-y-2" aria-label="Platforms">
                   {post.publications.map((p) => (
