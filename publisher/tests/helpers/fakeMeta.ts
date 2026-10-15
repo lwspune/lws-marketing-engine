@@ -11,6 +11,10 @@ export interface FakeMetaOptions {
   containerStatuses?: string[];
   /** FB reel status payloads on each poll, in order (last one repeats). */
   fbStatuses?: object[];
+  /** Payload for GET /{ig-media-id}/insights. */
+  igInsights?: object;
+  /** Payload for GET /{fb-video-id}/video_insights. */
+  fbInsights?: object;
   /** Force an error response for the first call whose path matches. */
   failOn?: { path: RegExp; status: number; message: string; once?: boolean };
 }
@@ -44,6 +48,12 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
       return send(200, { status_code: s, status: s === "ERROR" ? "Error: video too short" : s, id: p.split("/").pop() });
     }
     if (req.method === "GET" && /^\/v[\d.]+\/m\d+$/.test(p)) return send(200, { permalink: "https://www.instagram.com/reel/FAKE/", id: p.split("/").pop() });
+    if (req.method === "GET" && /^\/v[\d.]+\/m\d+\/insights$/.test(p)) {
+      return send(200, opts.igInsights ?? { data: [{ name: "views", values: [{ value: 1500 }] }, { name: "saved", values: [{ value: 9 }] }] });
+    }
+    if (req.method === "GET" && /^\/v[\d.]+\/v\d+\/video_insights$/.test(p)) {
+      return send(200, opts.fbInsights ?? { data: [{ name: "fb_reels_total_plays", values: [{ value: 300 }] }] });
+    }
     // --- Facebook Page reels
     if (req.method === "POST" && /^\/v[\d.]+\/page1\/video_reels$/.test(p)) {
       if (params.upload_phase === "start") return send(200, { video_id: `v${id()}`, upload_url: "unused" });

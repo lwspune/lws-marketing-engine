@@ -109,7 +109,10 @@ publisher/               # HOSTED approve → publish app (Next.js 14 + Supabase
 typecheck`, `npm run lint`, `npm run build`. Writes only through the 0002 database functions; the
 worker uses the service role. Tokens live in Supabase Vault, never in code or the browser. Every
 response uses `{ ok, data | error: { code, message } }`. YouTube isn't wired yet (phase 3): approving
-it records a clear "not available yet" failure.
+it records a clear "not available yet" failure. **Scorecard (0004):** the same per-minute tick
+takes write-once snapshots of each published post at 48 h and 7 d (`publication_metrics`), shown
+on Done cards against `LWS_BASELINE` (src/lib/domain/metrics.ts, the median @lws.pune reel).
+`npm run insights -- --org=lws-pune` exports every reel's numbers to `../analytics/`.
 
 **Reels:** rendered in Edge from `*.render.html` (MediaRecorder → H.264 + AAC MP4, 1080×1920; carousels
 1080×1350 PNG). Text in Cambria (legible, "ln" ≠ "In"). Music is generated in code, never a

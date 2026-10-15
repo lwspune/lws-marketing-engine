@@ -3,6 +3,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Captions, Platform, PostKind, Publication, PublicationStatus } from "@/lib/domain/types";
 import type { PublicationEvent } from "@/lib/domain/workflow";
 import type { PublishContext, PublisherRepo } from "./worker";
+import type { MetricsRepo } from "./metrics";
+import type { SnapshotLabel } from "@/lib/domain/metrics";
 
 // PublisherRepo backed by Supabase (service role). All state changes go through the database
 // functions in migration 0002, which enforce the transitions and settle the post atomically.
@@ -86,6 +88,39 @@ export function supabaseRepo(db: SupabaseClient): PublisherRepo {
     async release(publicationId) {
       const { error } = await db.rpc("release_publication", { p_publication: publicationId });
       if (error) throw new Error(`release_publication: ${error.message}`);
+    },
+  };
+}
+
+interface DueRow {
+  publication_id: string; post_id: string; platform: Platform; external_ref: string | null; external_id: string | null;
+  published_at: string; snapshot: SnapshotLabel;
+}
+
+export function supabaseMetricsRepo(db: SupabaseClient): MetricsRepo {
+  const base = supabaseRepo(db);
+  return {
+    async metricsDue(limit) {
+      const { data, error } = await db.rpc("metrics_due", { p_limit: limit });
+      if (error) throw new Error(`metrics_due: ${error.message}`);
+      return ((data ?? []) as DueRow[]).map((r) => ({
+        snapshot: r.snapshot,
+        publication: {
+          id: r.publication_id, postId: r.post_id, platform: r.platform, status: "published", scheduledAt: null,
+          attempts: 0, externalRef: r.external_ref, externalId: r.external_id, permalink: null, error: null,
+        },
+      }));
+    },
+    loadContext: base.loadContext,
+    async recordMetrics(publicationId, snapshot, m, raw) {
+      const rawObject = raw && typeof raw === "object" && !Array.isArray(raw) ? raw : { value: raw ?? null };
+      const { error } = await db.rpc("record_publication_metrics", {
+        p_publication: publicationId, p_snapshot: snapshot,
+        p_views: m?.views ?? null, p_reach: m?.reach ?? null, p_saves: m?.saves ?? null, p_shares: m?.shares ?? null,
+        p_likes: m?.likes ?? null, p_comments: m?.comments ?? null, p_avg_watch_ms: m?.avgWatchMs ?? null,
+        p_error: (rawObject as { error?: string }).error ?? null, p_raw: rawObject,
+      });
+      if (error) throw new Error(`record_publication_metrics: ${error.message}`);
     },
   };
 }

@@ -1,13 +1,11 @@
 import { timingSafeEqual } from "node:crypto";
 import { fail, ok } from "./result";
-import type { TickSummary } from "./worker";
-
 // The /api/cron/publish handler, kept free of Next and Supabase so it can be tested directly.
 // Only Supabase pg_cron knows the secret (stored in Vault, see migration 0003).
 
 export interface CronDeps {
   secret: string;
-  tick: () => Promise<TickSummary>;
+  tick: () => Promise<unknown>;
   logger?: { error: (...args: unknown[]) => void };
 }
 

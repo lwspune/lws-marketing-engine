@@ -83,6 +83,9 @@ async function call(
 
 const graph = (cfg: MetaConfig, path: string) => `${cfg.graphBase}/${cfg.version}/${path}`;
 
+/** Shared with metaInsights.ts: one Graph request with token redaction and typed errors. */
+export { call as metaCall, graph as graphUrl };
+
 /** Turn an API failure into the event to record: temporary → try again next tick, otherwise fail. */
 function onError(e: unknown, token: string): PublicationEvent | null {
   if (e instanceof MetaApiError) return e.temporary ? null : { type: "failed", error: e.message };

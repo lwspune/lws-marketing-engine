@@ -4,6 +4,7 @@ import { useMemo, useState, useTransition } from "react";
 import { approvePost, rejectPost, retryPublication, saveCaptions, unapprovePost } from "@/app/actions";
 import { captionErrors } from "@/lib/domain/captions";
 import { supportedPlatforms } from "@/lib/domain/workflow";
+import { compareToBaseline, LWS_BASELINE, type PostMetrics, type Verdict } from "@/lib/domain/metrics";
 import { PLATFORM_LABEL, type Captions, type Platform, type PostKind } from "@/lib/domain/types";
 import type { Result } from "@/lib/publishing/result";
 
@@ -12,7 +13,15 @@ export interface PostView {
   scheduledAt: string | null; rejectReason: string | null; projectName: string;
   videoUrl: string | null; coverUrl: string | null; slideUrls: string[];
   channels: { platform: Platform; name: string }[];
-  publications: { id: string; platform: Platform; status: string; scheduledAt: string | null; attempts: number; permalink: string | null; error: string | null; publishedAt: string | null }[];
+  publications: {
+    id: string; platform: Platform; status: string; scheduledAt: string | null; attempts: number; permalink: string | null;
+    error: string | null; publishedAt: string | null; metrics: Snapshot[];
+  }[];
+}
+
+export interface Snapshot {
+  snapshot: string; views: number | null; reach: number | null; saves: number | null; shares: number | null;
+  avgWatchMs: number | null; error: string | null;
 }
 
 const IST = new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", dateStyle: "medium", timeStyle: "short" });
@@ -175,6 +184,7 @@ export function PostCard({ post }: { post: PostView }) {
                           onClick={() => run(() => retryPublication({ publicationId: p.id }), "Retrying within a minute.")}>Retry</button>
                       )}
                       {p.error && <p className="w-full text-xs text-danger">{p.error}</p>}
+                      {p.status === "published" && <Scorecard snapshots={p.metrics} />}
                     </li>
                   ))}
                 </ul>
@@ -222,6 +232,41 @@ function CaptionFields({ kind, captions, onChange, id }: { kind: PostKind; capti
         </>
       )}
     </div>
+  );
+}
+
+const VERDICT: Record<Verdict, { mark: string; cls: string; text: string }> = {
+  above: { mark: "▲", cls: "text-accent", text: "above your typical reel" },
+  even: { mark: "=", cls: "text-muted", text: "same as your typical reel" },
+  below: { mark: "▼", cls: "text-danger", text: "below your typical reel" },
+  "n/a": { mark: "", cls: "text-muted", text: "not available" },
+};
+
+/** Latest snapshot (7 days, else 48 hours) against the account's typical reel. */
+function Scorecard({ snapshots }: { snapshots: Snapshot[] }) {
+  const s = snapshots.find((x) => x.snapshot === "7d") ?? snapshots.find((x) => x.snapshot === "48h");
+  if (!s) return <p className="w-full text-xs text-muted">Scorecard appears 48 hours after going live.</p>;
+  if (s.error) return <p className="w-full text-xs text-muted">{s.snapshot} stats unavailable: {s.error}</p>;
+  const m: PostMetrics = { views: s.views, reach: s.reach, saves: s.saves, shares: s.shares, likes: null, comments: null, avgWatchMs: s.avgWatchMs };
+  const v = compareToBaseline(m, LWS_BASELINE);
+  const n = (x: number | null) => (x === null ? "–" : Number(x).toLocaleString("en-IN"));
+  const cell = (label: string, value: string, verdict?: Verdict) => (
+    <span className="whitespace-nowrap">
+      {value} {label}
+      {verdict && verdict !== "n/a" && (
+        <span className={`ml-0.5 ${VERDICT[verdict].cls}`} title={VERDICT[verdict].text} aria-label={VERDICT[verdict].text}>{VERDICT[verdict].mark}</span>
+      )}
+    </span>
+  );
+  return (
+    <p className="flex w-full flex-wrap gap-x-3 gap-y-1 text-xs text-fg">
+      <span className="text-muted">{s.snapshot === "7d" ? "7 days" : "48 h"}:</span>
+      {cell("views", n(s.views), v.views)}
+      {cell("saves", n(s.saves), v.saves)}
+      {cell("shares", n(s.shares))}
+      {cell("watched", s.avgWatchMs === null ? "–" : `${(s.avgWatchMs / 1000).toFixed(1)} s`, v.avgWatchMs)}
+      <span className="text-muted">vs typical {LWS_BASELINE.views} views · {LWS_BASELINE.saves} save · {(LWS_BASELINE.avgWatchMs / 1000).toFixed(1)} s</span>
+    </p>
   );
 }
 

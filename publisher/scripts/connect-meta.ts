@@ -2,6 +2,10 @@
 //
 //   npm run connect:meta -- --org=lws-pune --projects=pyq-vault,lws-coaching [--page="LWS Pune"]
 //
+// Permissions on the token: pages_show_list, pages_read_engagement, pages_manage_posts,
+// instagram_basic, instagram_content_publish, business_management, and the read-only statistics
+// pair instagram_manage_insights + read_insights. Re-running only refreshes the stored tokens.
+//
 // It asks for a short-lived USER token from Graph API Explorer (never pass tokens on the command
 // line; they end up in shell history), swaps it for a long-lived one, then reads the Page's own
 // token. A Page token minted from a long-lived user token does not expire. Tokens are stored
