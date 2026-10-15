@@ -47,7 +47,7 @@ function supabaseStoryRepo(db: SupabaseClient, orgId: string, projectId: string)
   };
 }
 
-export async function runStoryPlanner(db: SupabaseClient, cfg: StoryRunConfig, now = new Date()): Promise<PlanResult> {
+export async function runStoryPlanner(db: SupabaseClient, cfg: StoryRunConfig, now = new Date(), dates?: string[]): Promise<PlanResult> {
   const { data: org } = await db.from("organizations").select("id").eq("slug", cfg.orgSlug).maybeSingle();
   if (!org) throw new Error(`No organisation "${cfg.orgSlug}".`);
   const { data: project } = await db.from("projects").select("id").eq("org_id", org.id).eq("slug", cfg.projectSlug).maybeSingle();
@@ -58,5 +58,6 @@ export async function runStoryPlanner(db: SupabaseClient, cfg: StoryRunConfig, n
     render: renderStoryCard,
     now,
     cta: cfg.cta,
+    dates,
   });
 }

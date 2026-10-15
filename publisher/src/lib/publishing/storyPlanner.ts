@@ -37,8 +37,10 @@ export async function planStories(opts: {
   render: (text: StoryCardText) => Promise<Buffer>;
   now: Date;
   cta: StoryCta;
+  /** Plan these YYYY-MM-DD days instead of next Monday to Sunday. */
+  dates?: string[];
 }): Promise<PlanResult> {
-  const dates = weekAhead(opts.now);
+  const dates = opts.dates ?? weekAhead(opts.now);
   const existing = new Set(await opts.repo.existingSlugs(dates.map(storySlug)));
   const result: PlanResult = { planned: [], skipped: [], failed: [] };
 

@@ -53,6 +53,17 @@ describe("planStories", () => {
   });
 });
 
+describe("planStories — chosen days", () => {
+  it("plans just the days asked for (e.g. today, or a day whose card was rejected)", async () => {
+    const m = memoryRepo();
+    const res = await planStories({
+      repo: m.repo, quizzes: { quizFor: async (d) => quizFor(d) }, render, now: NOW, cta: "bio", dates: ["2026-10-17"],
+    });
+    expect(res.planned).toEqual(["2026-10-17"]);
+    expect(m.saved[0]).toMatchObject({ slug: "daily-quiz-2026-10-17", plannedFor: new Date("2026-10-17T02:00:00Z") });
+  });
+});
+
 describe("pyqVaultQuizSource", () => {
   const ok = {
     ok: true,
