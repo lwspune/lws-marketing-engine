@@ -1,23 +1,38 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
-// Email magic link. `shouldCreateUser: false` means only people already invited in Supabase can
-// sign in; nobody can sign themselves up.
+// Email + password, with an email magic link as a fallback. Logins are created only by
+// `npm run seed` (sign-ups are off in Supabase), and `shouldCreateUser: false` keeps the
+// magic link from creating accounts either.
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
-  const [state, setState] = useState<{ kind: "idle" | "sending" | "sent" | "error"; message?: string }>({ kind: "idle" });
+  const [password, setPassword] = useState("");
+  const [state, setState] = useState<{ kind: "idle" | "busy" | "sent" | "error"; message?: string }>({ kind: "idle" });
 
-  async function send(e: React.FormEvent) {
+  async function signIn(e: React.FormEvent) {
     e.preventDefault();
-    setState({ kind: "sending" });
+    setState({ kind: "busy" });
+    const { error } = await createSupabaseBrowserClient().auth.signInWithPassword({ email: email.trim(), password });
+    if (error) return setState({ kind: "error", message: "Wrong email or password." });
+    router.replace("/");
+    router.refresh();
+  }
+
+  async function sendLink() {
+    if (!email.trim()) return setState({ kind: "error", message: "Enter your email first." });
+    setState({ kind: "busy" });
     const { error } = await createSupabaseBrowserClient().auth.signInWithOtp({
       email: email.trim(),
       options: { shouldCreateUser: false, emailRedirectTo: `${window.location.origin}/auth/callback` },
     });
     setState(error ? { kind: "error", message: "That email isn't invited, or sign-in is busy. Try again in a minute." } : { kind: "sent" });
   }
+
+  const busy = state.kind === "busy";
 
   return (
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-4">
@@ -28,14 +43,25 @@ export default function LoginPage() {
           Check <strong>{email}</strong> for a sign-in link.
         </p>
       ) : (
-        <form onSubmit={send} className="mt-8 space-y-3">
-          <label htmlFor="email" className="label">Email</label>
-          <input id="email" type="email" required autoComplete="email" value={email}
-            onChange={(e) => setEmail(e.target.value)} className="field" placeholder="you@example.com" />
-          <button type="submit" className="btn btn-primary w-full" disabled={state.kind === "sending"}>
-            {state.kind === "sending" ? "Sending…" : "Email me a sign-in link"}
+        <form onSubmit={signIn} className="mt-8 space-y-3">
+          <div>
+            <label htmlFor="email" className="label">Email</label>
+            <input id="email" type="email" required autoComplete="email" value={email}
+              onChange={(e) => setEmail(e.target.value)} className="field" placeholder="you@example.com" />
+          </div>
+          <div>
+            <label htmlFor="password" className="label">Password</label>
+            <input id="password" type="password" required autoComplete="current-password" value={password}
+              onChange={(e) => setPassword(e.target.value)} className="field" />
+          </div>
+          <button type="submit" className="btn btn-primary w-full" disabled={busy}>
+            {busy ? "Signing in…" : "Sign in"}
           </button>
           {state.kind === "error" && <p role="alert" className="text-sm text-danger">{state.message}</p>}
+          <button type="button" onClick={sendLink} disabled={busy}
+            className="w-full text-center text-sm text-muted underline hover:text-fg">
+            Forgot it? Email me a sign-in link instead
+          </button>
         </form>
       )}
     </main>
