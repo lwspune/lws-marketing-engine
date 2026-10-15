@@ -69,6 +69,19 @@ export const LWS_BASELINE: Baseline = {
   note: "median of 171 @lws.pune reels (analytics/lwspune-reels-2026-10-15.csv)",
 };
 
+/** Median of the known values (upper middle for an even count); null when there are none. */
+export function median(values: (number | null)[]): number | null {
+  const v = values.filter((x): x is number => typeof x === "number").sort((a, b) => a - b);
+  return v.length ? v[Math.floor(v.length / 2)] : null;
+}
+
+/** The account's typical reel, computed live from its reels; the stored baseline if there are none. */
+export function typicalReel(rows: PostMetrics[], now: Date): Baseline {
+  const views = median(rows.map((r) => r.views)), saves = median(rows.map((r) => r.saves)), watch = median(rows.map((r) => r.avgWatchMs));
+  if (views === null || saves === null || watch === null) return LWS_BASELINE;
+  return { views, saves, avgWatchMs: watch, measuredOn: now.toISOString().slice(0, 10), note: `median of ${rows.length} reels` };
+}
+
 export type Verdict = "above" | "even" | "below" | "n/a";
 
 export function compareToBaseline(m: PostMetrics, b: Baseline): { views: Verdict; saves: Verdict; avgWatchMs: Verdict } {

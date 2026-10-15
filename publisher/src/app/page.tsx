@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { PostCard, type PostView } from "@/components/PostCard";
+import { Nav } from "@/components/Nav";
 import type { Platform } from "@/lib/domain/types";
 
 export const dynamic = "force-dynamic";
@@ -78,12 +79,8 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
 
   return (
     <main className="mx-auto max-w-3xl px-4 pb-16">
-      <header className="flex items-center justify-between gap-3 py-4">
-        <h1 className="font-mono text-lg font-semibold">LWS Publisher</h1>
-        <form action="/auth/signout" method="post">
-          <button type="submit" className="btn px-3 py-1.5 text-xs">Sign out</button>
-        </form>
-      </header>
+      <Nav current="queue" />
+      <h1 className="sr-only">Post queue</h1>
 
       {!projects?.length ? (
         <p className="rounded-md border border-line bg-panel p-4 text-sm text-muted">

@@ -11,6 +11,9 @@ export interface FakeMetaOptions {
   containerStatuses?: string[];
   /** FB reel status payloads on each poll, in order (last one repeats). */
   fbStatuses?: object[];
+  /** Items for GET /{ig-user-id}/media (the account's posts), served in pages. */
+  igMedia?: object[];
+  igMediaPageSize?: number;
   /** Payload for GET /{ig-media-id}/insights. */
   igInsights?: object;
   /** Payload for GET /{fb-video-id}/video_insights. */
@@ -42,6 +45,11 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
     // --- Instagram
     if (req.method === "POST" && /^\/v[\d.]+\/ig1\/media$/.test(p)) return send(200, { id: `c${id()}` });
     if (req.method === "POST" && /^\/v[\d.]+\/ig1\/media_publish$/.test(p)) return send(200, { id: `m${id()}` });
+    if (req.method === "GET" && /^\/v[\d.]+\/ig1\/media$/.test(p)) {
+      const all = opts.igMedia ?? [], size = opts.igMediaPageSize ?? 100, from = Number(params.after ?? 0);
+      const page = all.slice(from, from + size), next = from + size < all.length;
+      return send(200, { data: page, paging: next ? { cursors: { after: String(from + size) }, next: "more" } : {} });
+    }
     if (req.method === "GET" && /^\/v[\d.]+\/c\d+$/.test(p)) {
       const list = opts.containerStatuses ?? ["FINISHED"];
       const s = list[Math.min(containerPoll++, list.length - 1)];

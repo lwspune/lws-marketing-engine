@@ -85,7 +85,9 @@ accident). For each new Page:
 - New reel → its `*.post.json` next to the files → `npm run queue:add` → approve on your phone.
 - Something failed? The card shows the platform's reason, with a **Retry** button (3 attempts).
 - Scorecard: 48 hours and 7 days after a post goes live, its views, saves, shares and watch time
-  appear on its Done card (▲/▼ against the typical reel). For the whole account:
-  `npm run insights -- --org=lws-pune` writes `../analytics/lwspune-reels-<date>.csv`.
+  appear on its Done card (▲/▼ against the typical reel).
+- **Insights tab:** every reel on the account (including hand-posted ones) with ▲/▼ against your
+  typical reel; refreshes nightly at 3 am IST, or tap **Refresh now**. `npm run insights --
+  --org=lws-pune` does the same refresh and also writes `../analytics/lwspune-reels-<date>.csv`.
 - Tokens: the Page token doesn't expire, but it stops working if you change your Facebook password
   or remove the app. Run `connect:meta` again to reconnect.

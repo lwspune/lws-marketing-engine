@@ -1,7 +1,30 @@
 import { describe, expect, it } from "vitest";
 import {
-  compareToBaseline, dueSnapshots, LWS_BASELINE, normalizeFacebookInsights, normalizeInstagramInsights, SNAPSHOTS,
+  compareToBaseline, dueSnapshots, LWS_BASELINE, median, normalizeFacebookInsights, normalizeInstagramInsights, SNAPSHOTS, typicalReel,
 } from "@/lib/domain/metrics";
+
+describe("median", () => {
+  it("ignores nulls and handles odd/even counts", () => {
+    expect(median([3, null, 1, 2])).toBe(2);
+    expect(median([4, 1, 3, 2])).toBe(3); // upper middle, like the spreadsheet summary
+    expect(median([null, null])).toBeNull();
+    expect(median([])).toBeNull();
+  });
+});
+
+describe("typicalReel", () => {
+  const row = (views: number | null, saves: number | null, avgWatchMs: number | null) =>
+    ({ views, saves, avgWatchMs, reach: null, shares: null, likes: null, comments: null });
+
+  it("is the median reel, labelled with the date and count", () => {
+    const b = typicalReel([row(100, 1, 5000), row(800, 0, 7000), row(5000, 9, 9000)], new Date("2026-10-16T05:00:00Z"));
+    expect(b).toEqual({ views: 800, saves: 1, avgWatchMs: 7000, measuredOn: "2026-10-16", note: "median of 3 reels" });
+  });
+
+  it("falls back to the stored baseline when there are no numbers yet", () => {
+    expect(typicalReel([], new Date())).toEqual(LWS_BASELINE);
+  });
+});
 
 const H = 3600_000;
 const PUBLISHED = new Date("2026-10-15T14:00:00Z");

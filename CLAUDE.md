@@ -112,7 +112,10 @@ response uses `{ ok, data | error: { code, message } }`. YouTube isn't wired yet
 it records a clear "not available yet" failure. **Scorecard (0004):** the same per-minute tick
 takes write-once snapshots of each published post at 48 h and 7 d (`publication_metrics`), shown
 on Done cards against `LWS_BASELINE` (src/lib/domain/metrics.ts, the median @lws.pune reel).
-`npm run insights -- --org=lws-pune` exports every reel's numbers to `../analytics/`.
+`npm run insights -- --org=lws-pune` exports every reel's numbers to `../analytics/`. **Insights tab
+(0005):** `/insights` lists every reel on the account (hand-posted too, `account_media`) against the
+typical reel computed live (`typicalReel`, median); refreshed nightly at 03:00 IST by pg_cron →
+`/api/cron/insights`, by the tab's Refresh button, or by `npm run insights` (same sync code).
 
 **Reels:** rendered in Edge from `*.render.html` (MediaRecorder → H.264 + AAC MP4, 1080×1920; carousels
 1080×1350 PNG). Text in Cambria (legible, "ln" ≠ "In"). Music is generated in code, never a
