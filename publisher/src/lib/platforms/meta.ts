@@ -11,6 +11,7 @@ import type { PostKind, Publication } from "@/lib/domain/types";
 //
 // Flows:
 //   Instagram reel      POST /{ig}/media (REELS, video_url, cover_url) → poll container → POST /{ig}/media_publish
+//   Instagram story     POST /{ig}/media (STORIES, image_url, no caption) → same
 //   Instagram carousel  POST /{ig}/media per slide (is_carousel_item) → POST /{ig}/media (CAROUSEL) → same
 //   Facebook Page reel  POST /{page}/video_reels start → rupload file_url → finish (PUBLISHED) → poll status
 
@@ -33,6 +34,8 @@ export interface MetaPostMedia {
   videoUrl?: string;
   coverUrl?: string;
   slideUrls?: string[];
+  /** A story's card (JPEG: Instagram rejects PNG). */
+  imageUrl?: string;
 }
 
 export interface StepContext<A> {
@@ -109,6 +112,13 @@ export async function stepInstagram(pub: Publication, ctx: StepContext<Instagram
         };
         if (media.coverUrl) params.cover_url = media.coverUrl;
         const res = await call(graph(cfg, `${account.igUserId}/media`), { method: "POST", params, token });
+        return { type: "started", externalRef: String(res.id) };
+      }
+      if (media.kind === "story") {
+        if (!media.imageUrl) return { type: "failed", error: "Story has no image." };
+        const res = await call(graph(cfg, `${account.igUserId}/media`), {
+          method: "POST", params: { media_type: "STORIES", image_url: media.imageUrl, access_token: token }, token,
+        });
         return { type: "started", externalRef: String(res.id) };
       }
       const slides = media.slideUrls ?? [];

@@ -36,7 +36,22 @@ const silent = { error: () => {} };
 let fake: Awaited<ReturnType<typeof startFakeMeta>> | undefined;
 afterEach(async () => { await fake?.close(); fake = undefined; });
 
+const storyContext = (): PublishContext => ({
+  post: { id: "p1", kind: "story", videoPath: null, coverPath: "o1/p1/card.jpg", slidePaths: [], captions: {} },
+  account: { platform: "instagram", externalId: "ig1", token: "TOKEN" },
+});
+
 describe("runTick", () => {
+  it("starts a pending story from a signed link to its card", async () => {
+    fake = await startFakeMeta();
+    const m = memoryRepo([pub()], storyContext());
+    await runTick({ repo: m.repo, metaConfig: fake.config, logger: silent });
+    expect(m.recorded[0].ev).toMatchObject({ type: "started" });
+    expect(m.signed[0]).toEqual({ paths: ["o1/p1/card.jpg"], ttl: 7200 });
+    const create = fake.calls.find((c) => c.path.endsWith("/ig1/media"))!;
+    expect(create.params).toMatchObject({ media_type: "STORIES", image_url: "https://signed.example/o1/p1/card.jpg?t=1" });
+  });
+
   it("starts a pending Instagram reel using signed URLs for the video and cover", async () => {
     fake = await startFakeMeta();
     const m = memoryRepo([pub()], reelContext());

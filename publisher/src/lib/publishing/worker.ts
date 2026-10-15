@@ -45,6 +45,10 @@ async function mediaFor(pub: Publication, ctx: PublishContext, repo: PublisherRe
     const [videoUrl, coverUrl] = await repo.signUrls(paths, SIGNED_URL_TTL_SECONDS);
     return { ...media, videoUrl, coverUrl };
   }
+  if (post.kind === "story" && post.coverPath) {
+    const [imageUrl] = await repo.signUrls([post.coverPath], SIGNED_URL_TTL_SECONDS);
+    return { ...media, imageUrl };
+  }
   return { ...media, slideUrls: await repo.signUrls(post.slidePaths, SIGNED_URL_TTL_SECONDS) };
 }
 

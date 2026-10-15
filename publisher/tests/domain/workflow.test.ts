@@ -31,6 +31,25 @@ describe("supportedPlatforms", () => {
     expect(supportedPlatforms("reel")).toEqual(["instagram", "facebook", "youtube"]);
     expect(supportedPlatforms("carousel")).toEqual(["instagram"]);
   });
+
+  it("stories are Instagram-only", () => {
+    expect(supportedPlatforms("story")).toEqual(["instagram"]);
+  });
+});
+
+describe("planApproval — story", () => {
+  it("needs no caption (a story has none)", () => {
+    const plan = planApproval(post({ kind: "story", captions: {} }), {
+      platforms: ["instagram"], scheduledAt: null, now: NOW, connected: [...ALL],
+    });
+    expect(plan.publications).toEqual([{ platform: "instagram", scheduledAt: null }]);
+  });
+
+  it("can't go to Facebook", () => {
+    expect(codeOf(() => planApproval(post({ kind: "story", captions: {} }), {
+      platforms: ["facebook"], scheduledAt: null, now: NOW, connected: [...ALL],
+    }))).toBe("unsupported_platform");
+  });
 });
 
 describe("planApproval", () => {

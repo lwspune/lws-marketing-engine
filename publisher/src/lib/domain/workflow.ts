@@ -39,7 +39,8 @@ export function planApproval(post: Post, input: ApprovalInput): ApprovalPlan {
     if (!connected.includes(p)) throw new DomainError("not_connected", `${PLATFORM_LABEL[p]} isn't connected for this project.`);
   }
 
-  const problems = platforms.flatMap((p) => captionErrors(p, post.captions));
+  // A story has no caption; everything else needs one per platform.
+  const problems = post.kind === "story" ? [] : platforms.flatMap((p) => captionErrors(p, post.captions));
   if (problems.length) throw new DomainError("invalid_caption", problems.join("; "));
 
   if (scheduledAt) {

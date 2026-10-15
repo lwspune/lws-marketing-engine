@@ -16,6 +16,7 @@ const carousel: MetaPostMedia = {
   kind: "carousel", caption: "Q42 #NDA",
   slideUrls: ["https://files.example/1.png", "https://files.example/2.png", "https://files.example/3.png"],
 };
+const story: MetaPostMedia = { kind: "story", caption: "", imageUrl: "https://files.example/card.jpg" };
 const ig = { igUserId: "ig1", token: "TOKEN-IG" };
 const fb = { pageId: "page1", token: "TOKEN-PAGE" };
 
@@ -141,5 +142,30 @@ describe("stepFacebook — Page reel", () => {
     const ev = await stepFacebook(fbPub(), { config: fake.config, account: fb, media: carousel });
     expect(ev).toEqual({ type: "failed", error: expect.stringMatching(/carousel/i) });
     expect(fake.calls).toHaveLength(0);
+  });
+});
+
+describe("stepInstagram — story", () => {
+  it("pending: creates a STORIES container from the image, with no caption", async () => {
+    fake = await startFakeMeta();
+    const ev = await stepInstagram(pub(), { config: fake.config, account: ig, media: story });
+    expect(ev).toEqual({ type: "started", externalRef: expect.stringMatching(/^c\d+$/) });
+    const create = fake.calls.find((c) => c.path.endsWith("/ig1/media"))!;
+    expect(create.params).toMatchObject({ media_type: "STORIES", image_url: story.imageUrl, access_token: "TOKEN-IG" });
+    expect(create.params).not.toHaveProperty("caption");
+  });
+
+  it("fails clearly when the story has no image", async () => {
+    fake = await startFakeMeta();
+    const ev = await stepInstagram(pub(), { config: fake.config, account: ig, media: { ...story, imageUrl: undefined } });
+    expect(ev).toEqual({ type: "failed", error: "Story has no image." });
+    expect(fake.calls).toHaveLength(0);
+  });
+
+  it("processing + FINISHED: publishes once, like a reel", async () => {
+    fake = await startFakeMeta({ containerStatuses: ["FINISHED"] });
+    const ev = await stepInstagram(pub({ status: "processing", externalRef: "c1" }), { config: fake.config, account: ig, media: story });
+    expect(ev).toMatchObject({ type: "published" });
+    expect(fake.calls.filter((c) => c.path.endsWith("/ig1/media_publish"))).toHaveLength(1);
   });
 });

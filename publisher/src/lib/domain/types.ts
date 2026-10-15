@@ -10,7 +10,7 @@ export const PLATFORM_LABEL: Record<Platform, string> = {
   youtube: "YouTube",
 };
 
-export type PostKind = "reel" | "carousel";
+export type PostKind = "reel" | "carousel" | "story";
 
 export type PostStatus = "ready" | "approved" | "published" | "partially_published" | "failed" | "rejected";
 
