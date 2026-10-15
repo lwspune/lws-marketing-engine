@@ -64,6 +64,19 @@ npm run queue:add -- --org=lws-pune ../reels/nda-maths-002-hook.post.json ../ree
 
 Open the app, check a card, then press **Approve & publish** or **Reject**.
 
+## Adding another Facebook Page later
+
+The app is granted **current Pages only** (by choice, so a new Page never gets connected by
+accident). For each new Page:
+
+1. (If it's a new product) add a project: `npm run seed -- --org=lws-pune --org-name="LWS Pune"
+   --projects="crack-ssb:Crack SSB" --owner=connect.lwspune@gmail.com` (re-running is safe).
+2. Graph API Explorer → same app → Get User Access Token → same six permissions → Generate. In the
+   pop-up choose **current Pages only** and tick **every Page the app should keep, plus the new
+   one**. Unticking an existing Page revokes the app's access to it.
+3. `npm run connect:meta -- --org=lws-pune --page="New Page Name" --projects=crack-ssb` and paste the
+   token. Existing connections are left as they are.
+
 ## Day-to-day
 
 - New reel → its `*.post.json` next to the files → `npm run queue:add` → approve on your phone.
