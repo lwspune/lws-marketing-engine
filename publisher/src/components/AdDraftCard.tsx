@@ -145,7 +145,8 @@ export function AdDraftCard({ ad }: { ad: AdDraftView }) {
         </form>
       )}
 
-      {message && <p role={message.kind === "ok" ? "status" : "alert"} className={`text-sm ${message.kind === "ok" ? "text-accent" : "text-danger"}`}>{message.text}</p>}
+      {/* a failed create is already shown above as the card's saved error; don't repeat it */}
+      {message && !(message.kind === "err" && message.text === ad.error) && <p role={message.kind === "ok" ? "status" : "alert"} className={`text-sm ${message.kind === "ok" ? "text-accent" : "text-danger"}`}>{message.text}</p>}
     </article>
   );
 }
