@@ -13,6 +13,7 @@
     "db:migrate": "tsx scripts/migrate.ts",
     "seed": "tsx scripts/seed.ts",
     "connect:meta": "tsx scripts/connect-meta.ts",
+    "connect:ads": "tsx scripts/connect-ads.ts",
     "queue:add": "tsx scripts/queue-add.ts",
     "insights": "tsx scripts/insights.ts",
     "stories:plan": "tsx scripts/stories-plan.ts"
