@@ -155,4 +155,4 @@ accident). For each new Page:
   cost per chat (Good ≤ ₹60 · Watch ≤ ₹100 · above that change the poster, not the budget). Every
   Monday type last week's **tests booked** and **NDA leads** from your WhatsApp labels into it, for
   cost per booked test. `npm run insights` also writes `../analytics/lwspune-ads-<date>.csv`. Meta's
-  days follow the ad account's clock (US Pacific): a day starts about 12:30 pm IST.
+  days follow the ad account's clock (LWS Pune's is India time).

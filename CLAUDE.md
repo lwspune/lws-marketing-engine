@@ -133,7 +133,7 @@ story-reply DM and Telegram post link the same quiz. Saturdays 18:00 IST pg_cron
 card from "link in bio" to "Reply QUIZ" once the reply DM exists.
 **Ads (0008):** the ad account is a `meta_ads` connected account (System User token, `npm run
 connect:ads`). Results (`ad_entities`, `ad_daily`: spend + WhatsApp chats per ad per day, in the ad
-account's own time zone, US Pacific) sync with the nightly insights job and show in the Insights
+account's own time zone: Asia/Kolkata for LWS Pune `act_570714718754453`) sync with the nightly insights job and show in the Insights
 tab's Ads box; weekly tests booked / NDA leads are typed in there (`ad_outcomes`). Ads are made from
 an `.ad.json` next to the poster (`npm run ads:add`, fields in `src/lib/domain/ads.ts`) → Ads tab:
 Approve creates campaign/ad set/creative/ad PAUSED (each Meta id write-once, so Retry resumes) →

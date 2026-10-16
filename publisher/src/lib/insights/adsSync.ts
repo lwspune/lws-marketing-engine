@@ -4,8 +4,8 @@ import { fetchAdAccount, readAdAccount, type AdDailyRow } from "@/lib/platforms/
 
 // Ad results for the Insights tab: every campaign / ad set / ad with its status, and one row per
 // ad per day for the last 30 days. Meta's days are in the AD ACCOUNT's time zone (LWS Pune's is
-// US Pacific), so "today" is worked out there; asking Meta for a day that hasn't started yet
-// there would be refused. All or nothing: if any read fails, nothing is stored.
+// Asia/Kolkata; others may differ), so "today" is worked out there; asking Meta for a day that
+// hasn't started yet there would be refused. All or nothing: if any read fails, nothing is stored.
 
 export const AD_WINDOW_DAYS = 30;
 

@@ -91,7 +91,7 @@ export function AdsSummary({ accountId, campaigns, weekStart, thisWeek, lastSync
 
       <p className="text-xs text-muted">
         Per chat: Good ≤ ₹{COST_PER_CHAT.good} · Watch ≤ ₹{COST_PER_CHAT.watch} · above that, change the poster or hook, not the budget.
-        Meta counts days on the ad account&apos;s clock (US Pacific), so a day starts about 12:30 pm in India.
+        Days are India time (the ad account&apos;s clock).
         {lastSync ? ` Updated ${new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "numeric", minute: "2-digit" }).format(new Date(lastSync))}.` : ""}
       </p>
     </section>
