@@ -67,6 +67,63 @@ npm run queue:add -- --org=lws-pune ../reels/nda-maths-002-hook.post.json ../ree
 
 Open the app, check a card, then press **Approve & publish** or **Reject**.
 
+## 7. Connect the ad account (Meta ads, ~15 min)
+
+Lets the Insights tab show ad results, and the Ads tab create ads (paused until you press Launch).
+
+1. developers.facebook.com → the publisher's app → **Use cases** → add **Create & manage ads with
+   Marketing API**. Development mode is enough for LWS's own ad account.
+2. business.facebook.com → Settings → Users → **System users** → Add (name `lws-publisher`, role
+   **Admin**). Then **Assign assets**: the ad account `779905330977080` (Manage campaigns), the
+   **LWS Pune** Page and the **@lws.pune** Instagram account (full control).
+3. Same system user → **Generate new token** → choose the publisher app → expiry **Never** → tick
+   `ads_read, ads_management, business_management, pages_show_list, pages_read_engagement`.
+4. `npm run connect:ads -- --org=lws-pune --account=779905330977080` and paste the token when it asks.
+   It checks the token can see the account (INR, active, can read campaigns) before saving it,
+   encrypted in Supabase Vault.
+5. `npm run insights -- --org=lws-pune` to pull the first results (afterwards: nightly at 3 am IST).
+
+The `lws-coaching` project (or whichever project an ad belongs to) needs its Facebook Page and
+Instagram connected (step 3), because the ad is published as the Page and @lws.pune.
+
+### Making an ad
+
+Put an `.ad.json` next to its poster, e.g. `reels/spi-mock-parents.ad.json`:
+
+```json
+{
+  "slug": "spi-mock-parents-nov",
+  "project": "lws-coaching",
+  "title": "SPI Mock Test – parents, Nov week 1",
+  "image": "spi-mock-poster.png",
+  "campaign": "SPI Mock Test – Pune – Nov 2026",
+  "adset": "Parents 35–55 – Pune",
+  "ad": "Poster – English",
+  "primaryText": "Is your child in 10th and aiming for NDA? …",
+  "headline": "SPI Mock Test – Every Sunday, FC Road",
+  "description": "Sagar Arcade, FC Road · Every Sunday 10 AM–1 PM",
+  "whatsapp": {
+    "phone": "919156310546",
+    "greeting": "Hi! 👋 Tap send to get the SPI mock test schedule and fees.",
+    "prefilled": "Hi, please send details of the SPI Sunday mock test."
+  },
+  "audience": { "latitude": 18.52, "longitude": 73.84, "radiusKm": 20, "ageMin": 35, "ageMax": 55, "place": "FC Road, Pune" },
+  "dailyBudgetInr": 150,
+  "start": "2026-11-01T13:00:00+05:30",
+  "end": "2026-11-08T13:00:00+05:30",
+  "music": false
+}
+```
+
+Then `npm run ads:add -- --org=lws-pune ../reels/spi-mock-parents.ad.json` and open the **Ads** tab:
+**Approve** creates it on Meta, paused → **Check the preview in Ads Manager** → **Launch** (asks
+"start spending?") → **Pause** any time. Rules the file and the database both enforce: at most
+₹1,000/day, an end date 1–30 days after the start, times with `+05:30`. Fixed settings: WhatsApp
+chats as the goal, people **living** within the radius, strict ages, automatic placements, Meta's
+AI changes off (poster and text run exactly as written; `music` is the only optional one),
+Multi-advertiser ads off. Under-18 audiences are fine: Meta only allows age + location for them,
+which is all this uses.
+
 ## Adding another Facebook Page later
 
 The app is granted **current Pages only** (by choice, so a new Page never gets connected by
@@ -91,3 +148,8 @@ accident). For each new Page:
   --org=lws-pune` does the same refresh and also writes `../analytics/lwspune-reels-<date>.csv`.
 - Tokens: the Page token doesn't expire, but it stops working if you change your Facebook password
   or remove the app. Run `connect:meta` again to reconnect.
+- **Ads:** the Insights tab's **Ads** box shows each campaign's last 30 days: spend, WhatsApp chats,
+  cost per chat (Good ≤ ₹60 · Watch ≤ ₹100 · above that change the poster, not the budget). Every
+  Monday type last week's **tests booked** and **NDA leads** from your WhatsApp labels into it, for
+  cost per booked test. `npm run insights` also writes `../analytics/lwspune-ads-<date>.csv`. Meta's
+  days follow the ad account's clock (US Pacific): a day starts about 12:30 pm IST.

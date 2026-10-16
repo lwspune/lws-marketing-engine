@@ -73,6 +73,13 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   project per product, e.g. PYQ Vault, Crack SSB) so other teams *could* use it later. Nothing is
   built for other organisations yet (no invites, billing or onboarding): LWS Pune is org #1.
 - **Scheduling runs on Supabase pg_cron**, not Vercel Cron (Hobby only allows daily jobs).
+- **First paid ads, and ads in the publisher (2026-10-16, founder-approved).** The "₹0 ads" rule
+  was for the online products' funnel. A local paid offer (SPI Mock Test, ₹499, Sagar Arcade FC
+  Road) is the exception: rupees spent vs. tests booked is directly measurable, and the test is
+  really lead generation for the NDA course. Format: Click-to-WhatsApp, parents 35–55 within 20 km,
+  ₹150/day test weeks. The publisher reads results and creates ads, but **two gates**: Approve
+  creates everything PAUSED on Meta, a separate Launch (with confirmation) starts spending. Budget
+  guardrails (≤ ₹1,000/day, 1–30 days, end date required) are database constraints.
 
 ## File structure
 
@@ -124,6 +131,17 @@ story-reply DM and Telegram post link the same quiz. Saturdays 18:00 IST pg_cron
 07:30 IST on its day (`storyApproval`: posts now if its day started, refused once it's over). Card:
 `storyCard.ts` (satori + sharp, bundled Noto Sans in `assets/fonts`). `STORY_CTA=reply` switches the
 card from "link in bio" to "Reply QUIZ" once the reply DM exists.
+**Ads (0008):** the ad account is a `meta_ads` connected account (System User token, `npm run
+connect:ads`). Results (`ad_entities`, `ad_daily`: spend + WhatsApp chats per ad per day, in the ad
+account's own time zone, US Pacific) sync with the nightly insights job and show in the Insights
+tab's Ads box; weekly tests booked / NDA leads are typed in there (`ad_outcomes`). Ads are made from
+an `.ad.json` next to the poster (`npm run ads:add`, fields in `src/lib/domain/ads.ts`) → Ads tab:
+Approve creates campaign/ad set/creative/ad PAUSED (each Meta id write-once, so Retry resumes) →
+Launch. Meta's AI creative changes and Multi-advertiser ads are opted out per feature. Untested
+against the live API until the first real Approve: if Meta rejects a field, the card shows its
+reason; fix `src/lib/domain/ads.ts` and Retry.
+**Note:** `TEST_DATABASE_URL` is the same database as `DATABASE_URL` (tests roll back), so
+`db:migrate` changes the live schema; dry-run a new migration in a rolled-back transaction first.
 
 **Reels:** rendered in Edge from `*.render.html` (MediaRecorder → H.264 + AAC MP4, 1080×1920; carousels
 1080×1350 PNG). Text in Cambria (legible, "ln" ≠ "In"). Music is generated in code, never a
