@@ -73,8 +73,8 @@ Lets the Insights tab show ad results, and the Ads tab create ads (paused until 
 
 1. developers.facebook.com → the publisher's app → **Use cases** → add **Create & manage ads with
    Marketing API**. Then **publish the app (Live mode)**: App settings → Basic needs a Privacy
-   Policy URL (`https://www.pyqvault.com/privacy`), Terms (`https://www.pyqvault.com/terms`), data
-   deletion (same privacy URL), an icon and a category; then **Publish**. Reading results works in
+   Policy URL (`https://lwspune.in/privacy-policy/`), Terms (`https://lwspune.in/terms-conditions/`),
+   data deletion (same privacy URL), an icon and a category; then **Publish**. Reading results works in
    Development mode, but Meta refuses to put a post made by an unpublished app into an ad
    ("…created by an app that is in development mode. It must be in public", subcode 1885183).
 2. business.facebook.com → Settings → Users → **System users** → LWS uses **Digi Publisher**
