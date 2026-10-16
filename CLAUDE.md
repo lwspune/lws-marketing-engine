@@ -142,6 +142,12 @@ against the live API until the first real Approve: if Meta rejects a field, the 
 reason; fix `src/lib/domain/ads.ts` and Retry.
 **Note:** `TEST_DATABASE_URL` is the same database as `DATABASE_URL` (tests roll back), so
 `db:migrate` changes the live schema; dry-run a new migration in a rolled-back transaction first.
+**Deploys (2026-10-16):** Vercel (Hobby, owner `thefableisland`) now BLOCKS git-push deploys
+because the commit author (GitHub `lwspune`) isn't on the Vercel account. Until the founder links
+GitHub `lwspune` in Vercel → Account Settings → Login Connections, deploy with the owner's token:
+`POST https://api.vercel.com/v13/deployments` with `VERCEL_TOKEN` from `.env.local`, body
+`{name:"lws-marketing-engine", project:VERCEL_PROJECT_ID, target:"production", gitSource:{type:"github",
+repoId:1418874769, ref:"main", sha:<pushed sha>}}`, then poll `/v13/deployments/<id>` until READY.
 **Phone screenshots:** headless Edge won't make a window narrower than ~500 px, so `--window-size=390,…`
 crops a wider layout and fakes an overflow. Use DevTools `Emulation.setDeviceMetricsOverride`
 (`mobile: true`) and compare `document.documentElement.scrollWidth` to the viewport.
