@@ -142,6 +142,9 @@ against the live API until the first real Approve: if Meta rejects a field, the 
 reason; fix `src/lib/domain/ads.ts` and Retry.
 **Note:** `TEST_DATABASE_URL` is the same database as `DATABASE_URL` (tests roll back), so
 `db:migrate` changes the live schema; dry-run a new migration in a rolled-back transaction first.
+**Phone screenshots:** headless Edge won't make a window narrower than ~500 px, so `--window-size=390,…`
+crops a wider layout and fakes an overflow. Use DevTools `Emulation.setDeviceMetricsOverride`
+(`mobile: true`) and compare `document.documentElement.scrollWidth` to the viewport.
 
 **Reels:** rendered in Edge from `*.render.html` (MediaRecorder → H.264 + AAC MP4, 1080×1920; carousels
 1080×1350 PNG). Text in Cambria (legible, "ln" ≠ "In"). Music is generated in code, never a
