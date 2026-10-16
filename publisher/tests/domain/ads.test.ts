@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  adParams, adsetParams, campaignParams, chatVerdict, conversationsFrom, creativeParams, OPTED_OUT_FEATURES, parseAdSpec,
+  adParams, adsetParams, adsManagerUrl, campaignParams, chatVerdict, draftActions, conversationsFrom, creativeParams, OPTED_OUT_FEATURES, parseAdSpec,
   summariseCampaigns, weekStartIst, type AdSpec,
 } from "@/lib/domain/ads";
 import { DomainError } from "@/lib/domain/types";
@@ -63,6 +63,13 @@ describe("parseAdSpec (.ad.json files)", () => {
     expect(codeOf(() => parseAdSpec({ ...spec, image: "poster.gif" }))).toBe("invalid_ad");
     expect(codeOf(() => parseAdSpec({ ...spec, whatsapp: { ...spec.whatsapp, phone: "+91 91563 10546" } }))).toBe("invalid_ad");
     expect(codeOf(() => parseAdSpec({ ...spec, whatsapp: { ...spec.whatsapp, phone: "9156310546" } }))).toBe("invalid_ad");
+  });
+
+  it("an optional place name is for people reading the Ads tab only (Meta gets the pin)", () => {
+    expect(parseAdSpec({ ...spec, audience: { ...spec.audience, place: "FC Road, Pune" } }).audience.place).toBe("FC Road, Pune");
+    expect(codeOf(() => parseAdSpec({ ...spec, audience: { ...spec.audience, place: "x".repeat(81) } }))).toBe("invalid_ad");
+    const p = adsetParams(parseAdSpec({ ...spec, audience: { ...spec.audience, place: "FC Road, Pune" } }), { campaignId: "c1", pageId: "page1" });
+    expect(p.targeting).not.toContain("FC Road");
   });
 
   it("texts are required and within Meta's limits", () => {
@@ -215,5 +222,23 @@ describe("results", () => {
     const out = summariseCampaigns([row("old", "2026-09-01"), row("new", "2026-10-17")], [], []);
     expect(out.map((c) => c.campaignId)).toEqual(["new", "old"]);
     expect(out[0]).toMatchObject({ booked: null, costPerBooked: null });
+  });
+});
+
+describe("ad drafts on the Ads tab", () => {
+  it("each status offers only its next step: approve/reject → (create) → launch ⇄ pause; retry after a failure", () => {
+    expect(draftActions("ready")).toEqual(["approve", "reject"]);
+    expect(draftActions("approved")).toEqual([]);            // being created on Meta right now
+    expect(draftActions("failed")).toEqual(["retry"]);
+    expect(draftActions("created")).toEqual(["launch"]);
+    expect(draftActions("live")).toEqual(["pause"]);
+    expect(draftActions("paused")).toEqual(["launch"]);
+    expect(draftActions("rejected")).toEqual([]);
+  });
+
+  it("links to the campaign in Ads Manager to check the preview before launching", () => {
+    expect(adsManagerUrl("act_779905330977080", "120200000000001"))
+      .toBe("https://adsmanager.facebook.com/adsmanager/manage/ads?act=779905330977080&selected_campaign_ids=120200000000001");
+    expect(adsManagerUrl("act_779905330977080", null)).toBe("https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=779905330977080");
   });
 });

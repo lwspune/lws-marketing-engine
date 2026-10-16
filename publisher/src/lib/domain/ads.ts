@@ -45,6 +45,8 @@ const AdSpecSchema = z
         radiusKm: z.number().min(1, "must be at least 1 km").max(80, "must be at most 80 km"),
         ageMin: z.number().int().min(13).max(65),
         ageMax: z.number().int().min(13).max(65),
+        /** Shown on the Ads tab only; Meta targets the pin. */
+        place: text(80).optional(),
       })
       .refine((a) => a.ageMin <= a.ageMax, { message: "ageMin must not be above ageMax", path: ["ageMin"] }),
     dailyBudgetInr: z.number().int("must be whole rupees").min(1).max(MAX_DAILY_BUDGET_INR, `must be at most ₹${MAX_DAILY_BUDGET_INR} a day`),
@@ -244,4 +246,30 @@ export function summariseCampaigns(daily: DailyRow[], entities: EntityRow[], out
   }
   // no results yet = newest
   return out.sort((a, b) => (b.lastDay ?? "9999").localeCompare(a.lastDay ?? "9999"));
+}
+
+// ---------------------------------------------------------------------------------------------
+// Drafts (the Ads tab). Mirrors the transitions the database allows (migration 0008).
+
+export type DraftStatus = "ready" | "approved" | "failed" | "created" | "live" | "paused" | "rejected";
+export type DraftAction = "approve" | "reject" | "retry" | "launch" | "pause";
+
+const NEXT: Record<DraftStatus, DraftAction[]> = {
+  ready: ["approve", "reject"],
+  approved: [], // being created on Meta right now
+  failed: ["retry"],
+  created: ["launch"],
+  live: ["pause"],
+  paused: ["launch"],
+  rejected: [],
+};
+
+export const draftActions = (status: DraftStatus): DraftAction[] => NEXT[status] ?? [];
+
+/** Where to check the real preview before pressing Launch. */
+export function adsManagerUrl(actId: string, campaignId: string | null): string {
+  const act = actId.replace(/^act_/, "");
+  return campaignId
+    ? `https://adsmanager.facebook.com/adsmanager/manage/ads?act=${act}&selected_campaign_ids=${campaignId}`
+    : `https://adsmanager.facebook.com/adsmanager/manage/campaigns?act=${act}`;
 }
