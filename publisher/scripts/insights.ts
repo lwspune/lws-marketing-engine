@@ -6,11 +6,15 @@
 // Writes ../analytics/<handle>-reels-<YYYY-MM-DD>.csv (opens in Excel / Google Sheets): posted time
 // (IST), views, reach, likes, comments, saves, shares, average watch time, link, caption start.
 // Read-only on Instagram: uses the stored Page token's instagram_manage_insights permission.
+// With an ad account connected (npm run connect:ads) it also refreshes the ad results and writes
+// ../analytics/<handle>-ads-<YYYY-MM-DD>.csv: one row per ad per day, spend and WhatsApp chats.
 import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { typicalReel } from "../src/lib/domain/metrics";
 import { metaConfigFromEnv } from "../src/lib/platforms/meta";
 import { syncInstagramAccount, toDbRow, type AccountMediaRow } from "../src/lib/insights/sync";
+import { syncAdAccount } from "../src/lib/insights/adsSync";
+import type { AdDailyRow } from "../src/lib/platforms/metaAds";
 import { admin, flags, need, run } from "./lib";
 
 run(async () => {
@@ -51,4 +55,27 @@ run(async () => {
   const t = typicalReel(rows.filter((r) => r.metrics).map((r) => r.metrics!), new Date());
   console.log(`✓ ${s.withInsights}/${s.reels} reels with numbers (of ${s.media} posts) → dashboard Insights tab + ${out}`);
   console.log(`  typical reel now: ${t.views} views · ${t.saves} saves · ${(t.avgWatchMs / 1000).toFixed(1)} s watched (${t.note})`);
+
+  // Ads: the last 30 days, one row per ad per day (days in the ad account's time zone).
+  const { data: adAcct } = await db.from("connected_accounts").select("id, external_id, display_name").eq("org_id", org.id).eq("platform", "meta_ads").maybeSingle();
+  if (!adAcct) return console.log("  (no ad account connected; run npm run connect:ads to add ad results)");
+  const { data: adToken } = await db.rpc("get_account_token", { p_account: adAcct.id });
+  if (!adToken) throw new Error("Couldn't read the ad account token.");
+  let adRows: AdDailyRow[] = [];
+  const a = await syncAdAccount({
+    config: metaConfigFromEnv(), actId: adAcct.external_id, token: adToken as string, now: new Date(),
+    store: async (entities, daily) => {
+      adRows = daily;
+      const { error } = await db.rpc("upsert_ad_sync", { p_account: adAcct.id, p_entities: entities, p_daily: daily });
+      if (error) throw new Error(`saving ad results: ${error.message}`);
+    },
+  });
+  const adLines = ["day,campaign,ad_set,ad,spend_inr,impressions,reach,clicks,whatsapp_chats"];
+  for (const r of [...adRows].sort((x, y) => x.day.localeCompare(y.day))) {
+    adLines.push([r.day, q(r.campaign_name), q(r.adset_name), q(r.ad_name), r.spend.toFixed(2), r.impressions, val(r.reach), val(r.clicks), r.conversations].join(","));
+  }
+  const adOut = path.join(dir, `${handle}-ads-${new Date().toISOString().slice(0, 10)}.csv`);
+  writeFileSync(adOut, "﻿" + adLines.join("\n"), "utf8");
+  const per = a.chats ? ` · ₹${(a.spend / a.chats).toFixed(0)} per chat` : "";
+  console.log(`✓ ads: ${a.campaigns} campaigns, ₹${a.spend.toFixed(0)} spent, ${a.chats} WhatsApp chats${per} (last 30 days) → Insights tab + ${adOut}`);
 });

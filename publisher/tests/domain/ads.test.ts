@@ -198,6 +198,18 @@ describe("results", () => {
     ]);
   });
 
+  it("a running or in-review campaign shows before it has any results; old finished ones without results don't", () => {
+    const out = summariseCampaigns([], [
+      { level: "campaign", external_id: "c2", name: "SPI students", parent_id: null, effective_status: "PENDING_REVIEW", daily_budget_minor: null },
+      { level: "adset", external_id: "as2", name: "Students 15–17", parent_id: "c2", effective_status: "PENDING_REVIEW", daily_budget_minor: 10000 },
+      { level: "campaign", external_id: "c0", name: "Old boost", parent_id: null, effective_status: "PAUSED", daily_budget_minor: null },
+    ], []);
+    expect(out).toEqual([expect.objectContaining({
+      campaignId: "c2", status: "PENDING_REVIEW", spend: 0, chats: 0, verdict: "early", firstDay: null, lastDay: null,
+      adsets: [expect.objectContaining({ adsetId: "as2", name: "Students 15–17", dailyBudgetInr: 100, spend: 0, verdict: "early" })],
+    })]);
+  });
+
   it("newest campaign first; no bookings typed in means no cost per booked test", () => {
     const row = (c: string, d: string) => ({ ad_id: `a${c}`, day: d, adset_id: `s${c}`, adset_name: "", campaign_id: c, campaign_name: c, spend: 10, conversations: 1, impressions: 1 });
     const out = summariseCampaigns([row("old", "2026-09-01"), row("new", "2026-10-17")], [], []);

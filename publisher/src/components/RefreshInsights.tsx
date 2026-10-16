@@ -12,7 +12,9 @@ export function RefreshInsights({ label = "Refresh now" }: { label?: string }) {
         onClick={() => start(async () => {
           setMsg(null);
           const r = await refreshInsights();
-          setMsg(r.ok ? { ok: true, text: `Updated ${r.data.reels} reels.` } : { ok: false, text: r.error.message });
+          setMsg(r.ok
+            ? { ok: true, text: `Updated ${r.data.reels} reels${r.data.adCampaigns ? ` and ${r.data.adCampaigns} ad campaigns` : ""}.` }
+            : { ok: false, text: r.error.message });
         })}>
         {pending ? "Reading Instagram… (about 20 s)" : label}
       </button>

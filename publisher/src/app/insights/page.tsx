@@ -3,6 +3,8 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Nav } from "@/components/Nav";
 import { RefreshInsights } from "@/components/RefreshInsights";
 import { compareToBaseline, median, typicalReel, type PostMetrics, type Verdict } from "@/lib/domain/metrics";
+import { AdsSummary, type AdsSummaryProps } from "@/components/AdsSummary";
+import { summariseCampaigns, weekStartIst, type DailyRow, type EntityRow, type OutcomeRow } from "@/lib/domain/ads";
 
 export const dynamic = "force-dynamic";
 
@@ -37,8 +39,35 @@ function Mark({ v }: { v: Verdict }) {
   return <span className={`ml-0.5 ${MARK[v].cls}`} title={MARK[v].text} aria-label={MARK[v].text}>{MARK[v].m}</span>;
 }
 
+type Db = ReturnType<typeof createSupabaseServerClient>;
+
+/** Ad results for the Ads section (RLS: only the member's own org). */
+async function loadAds(supabase: Db, now: Date): Promise<AdsSummaryProps> {
+  const weekStart = weekStartIst(now);
+  const { data: acct } = await supabase.from("connected_accounts").select("id").eq("platform", "meta_ads").limit(1).maybeSingle();
+  if (!acct) return { accountId: null, campaigns: [], weekStart, thisWeek: {}, lastSync: null };
+  const since = new Date(now.getTime() - 31 * 86_400_000).toISOString().slice(0, 10);
+  const [{ data: daily }, { data: entities }, { data: outcomes }] = await Promise.all([
+    supabase.from("ad_daily").select("ad_id, day, adset_id, adset_name, campaign_id, campaign_name, spend, conversations, impressions, refreshed_at")
+      .eq("account_id", acct.id).gte("day", since).limit(5000),
+    supabase.from("ad_entities").select("level, external_id, name, parent_id, effective_status, daily_budget_minor, refreshed_at")
+      .eq("account_id", acct.id).limit(2000),
+    supabase.from("ad_outcomes").select("campaign_id, week_start, tests_booked, nda_leads").eq("account_id", acct.id).limit(2000),
+  ]);
+  const outs = (outcomes ?? []) as OutcomeRow[];
+  const thisWeek = Object.fromEntries(outs.filter((o) => o.week_start === weekStart).map((o) => [o.campaign_id, { booked: o.tests_booked, leads: o.nda_leads }]));
+  const stamps = [...(entities ?? []), ...(daily ?? [])].map((r) => r.refreshed_at as string);
+  return {
+    accountId: acct.id,
+    campaigns: summariseCampaigns((daily ?? []) as DailyRow[], (entities ?? []) as EntityRow[], outs),
+    weekStart, thisWeek,
+    lastSync: stamps.length ? stamps.reduce((m, t) => (t > m ? t : m)) : null,
+  };
+}
+
 export default async function InsightsPage({ searchParams }: { searchParams: { sort?: string } }) {
   const supabase = createSupabaseServerClient();
+  const ads = await loadAds(supabase, new Date());
   const sort: SortId = (SORTS.find((s) => s.id === searchParams.sort)?.id ?? "new") as SortId;
   const { data } = await supabase
     .from("account_media")
@@ -66,6 +95,7 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
     <main className="mx-auto max-w-3xl px-4 pb-16">
       <Nav current="insights" />
       <h1 className="sr-only">Insights</h1>
+      <div className="mb-4"><AdsSummary {...ads} /></div>
 
       {rows.length === 0 ? (
         <section className="space-y-3 rounded-lg border border-line bg-panel p-4">

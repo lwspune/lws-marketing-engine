@@ -188,7 +188,7 @@ export interface AdsetSummary {
   spend: number; chats: number; costPerChat: number | null; verdict: ChatVerdict;
 }
 export interface CampaignSummary {
-  campaignId: string; name: string; status: string | null; firstDay: string; lastDay: string;
+  campaignId: string; name: string; status: string | null; firstDay: string | null; lastDay: string | null;
   spend: number; chats: number; costPerChat: number | null; verdict: ChatVerdict;
   booked: number | null; leads: number | null; costPerBooked: number | null;
   adsets: AdsetSummary[];
@@ -196,10 +196,17 @@ export interface CampaignSummary {
 
 const round2 = (x: number) => Math.round(x * 100) / 100;
 
+/** Statuses worth showing even before any results: running, waiting for review, or needing attention. */
+const LIVE_STATUSES = new Set(["ACTIVE", "PENDING_REVIEW", "IN_PROCESS", "WITH_ISSUES", "PENDING_BILLING_INFO", "DISAPPROVED"]);
+
 export function summariseCampaigns(daily: DailyRow[], entities: EntityRow[], outcomes: OutcomeRow[]): CampaignSummary[] {
   const ent = new Map(entities.map((e) => [e.external_id, e]));
   const byCampaign = new Map<string, DailyRow[]>();
   for (const r of daily) byCampaign.set(r.campaign_id, [...(byCampaign.get(r.campaign_id) ?? []), r]);
+
+  for (const e of entities) {
+    if (e.level === "campaign" && LIVE_STATUSES.has(e.effective_status) && !byCampaign.has(e.external_id)) byCampaign.set(e.external_id, []);
+  }
 
   const out: CampaignSummary[] = [];
   for (const [campaignId, rows] of byCampaign) {
@@ -212,12 +219,16 @@ export function summariseCampaigns(daily: DailyRow[], entities: EntityRow[], out
 
     const byAdset = new Map<string, DailyRow[]>();
     for (const r of rows) byAdset.set(r.adset_id, [...(byAdset.get(r.adset_id) ?? []), r]);
+    // ad sets that are running or in review but have no results yet
+    for (const e of entities) {
+      if (e.level === "adset" && e.parent_id === campaignId && LIVE_STATUSES.has(e.effective_status) && !byAdset.has(e.external_id)) byAdset.set(e.external_id, []);
+    }
     const adsets: AdsetSummary[] = [...byAdset].map(([adsetId, ar]) => {
       const e = ent.get(adsetId);
       const s = round2(ar.reduce((t, r) => t + Number(r.spend), 0));
       const c = ar.reduce((t, r) => t + Number(r.conversations), 0);
       return {
-        adsetId, name: e?.name ?? ar[ar.length - 1].adset_name, status: e?.effective_status ?? null,
+        adsetId, name: e?.name ?? ar[ar.length - 1]?.adset_name ?? "", status: e?.effective_status ?? null,
         dailyBudgetInr: e?.daily_budget_minor != null ? Number(e.daily_budget_minor) / 100 : null,
         spend: s, chats: c, costPerChat: c ? round2(s / c) : null, verdict: chatVerdict(s, c),
       };
@@ -225,11 +236,12 @@ export function summariseCampaigns(daily: DailyRow[], entities: EntityRow[], out
 
     const e = ent.get(campaignId);
     out.push({
-      campaignId, name: e?.name ?? rows[rows.length - 1].campaign_name, status: e?.effective_status ?? null,
-      firstDay: days[0], lastDay: days[days.length - 1],
+      campaignId, name: e?.name ?? rows[rows.length - 1]?.campaign_name ?? "", status: e?.effective_status ?? null,
+      firstDay: days[0] ?? null, lastDay: days[days.length - 1] ?? null,
       spend, chats, costPerChat: chats ? round2(spend / chats) : null, verdict: chatVerdict(spend, chats),
       booked, leads, costPerBooked: booked ? round2(spend / booked) : null, adsets,
     });
   }
-  return out.sort((a, b) => b.lastDay.localeCompare(a.lastDay));
+  // no results yet = newest
+  return out.sort((a, b) => (b.lastDay ?? "9999").localeCompare(a.lastDay ?? "9999"));
 }
