@@ -20,6 +20,10 @@ export interface FakeMetaOptions {
   fbInsights?: object;
   /** Force an error response for the first call whose path matches. */
   failOn?: { path: RegExp; status: number; message: string; once?: boolean };
+  /** Ad account act_1: its campaigns / ad sets / ads (GET lists) and daily insights rows, served in pages. */
+  adLists?: { campaigns?: object[]; adsets?: object[]; ads?: object[] };
+  adInsights?: object[];
+  adPageSize?: number;
 }
 
 export async function startFakeMeta(opts: FakeMetaOptions = {}) {
@@ -68,6 +72,26 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
       if (params.upload_phase === "finish") return send(200, { success: true });
     }
     if (req.method === "POST" && /^\/video-upload\/v[\d.]+\/v\d+$/.test(p)) return send(200, { success: true });
+    // --- Ads (account act_1)
+    if (req.method === "GET" && /^\/v[\d.]+\/act_1$/.test(p)) {
+      return send(200, { id: "act_1", name: "LWS Pune ads", currency: "INR", timezone_name: "America/Los_Angeles", account_status: 1 });
+    }
+    const adList = p.match(/^\/v[\d.]+\/act_1\/(campaigns|adsets|ads|insights)$/);
+    if (req.method === "GET" && adList) {
+      const all = (adList[1] === "insights" ? opts.adInsights : opts.adLists?.[adList[1] as "campaigns" | "adsets" | "ads"]) ?? [];
+      const size = opts.adPageSize ?? 100, from = Number(params.after ?? 0);
+      const next = from + size < all.length;
+      return send(200, { data: all.slice(from, from + size), paging: next ? { cursors: { after: String(from + size) }, next: "more" } : { cursors: {} } });
+    }
+    if (req.method === "POST" && /^\/v[\d.]+\/act_1\/adimages$/.test(p)) {
+      return send(200, { images: { bytes: { hash: `hash${id()}`, url: "https://scontent.example/img.png" } } });
+    }
+    const adCreate = p.match(/^\/v[\d.]+\/act_1\/(campaigns|adsets|adcreatives|ads)$/);
+    if (req.method === "POST" && adCreate) {
+      const prefix = { campaigns: "camp", adsets: "adset", adcreatives: "cr", ads: "ad" }[adCreate[1] as "campaigns"];
+      return send(200, { id: `${prefix}${id()}` });
+    }
+    if (req.method === "POST" && /^\/v[\d.]+\/(camp|adset|ad)\d+$/.test(p) && params.status) return send(200, { success: true });
     if (req.method === "GET" && /^\/v[\d.]+\/v\d+$/.test(p)) {
       if ((params.fields ?? "").includes("permalink_url")) return send(200, { permalink_url: "/reel/987654321/", id: p.split("/").pop() });
       const list = opts.fbStatuses ?? [{ video_status: "ready", publishing_phase: { status: "complete" } }];
