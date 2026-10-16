@@ -72,7 +72,11 @@ Open the app, check a card, then press **Approve & publish** or **Reject**.
 Lets the Insights tab show ad results, and the Ads tab create ads (paused until you press Launch).
 
 1. developers.facebook.com → the publisher's app → **Use cases** → add **Create & manage ads with
-   Marketing API**. Development mode is enough for LWS's own ad account.
+   Marketing API**. Then **publish the app (Live mode)**: App settings → Basic needs a Privacy
+   Policy URL (`https://www.pyqvault.com/privacy`), Terms (`https://www.pyqvault.com/terms`), data
+   deletion (same privacy URL), an icon and a category; then **Publish**. Reading results works in
+   Development mode, but Meta refuses to put a post made by an unpublished app into an ad
+   ("…created by an app that is in development mode. It must be in public", subcode 1885183).
 2. business.facebook.com → Settings → Users → **System users** → LWS uses **Digi Publisher**
    (Admin). **Assign assets**: the business's ad account **LWS Pune `570714718754453`** with
    **Manage campaigns (ads)** only (not "Manage ad accounts": the tool never needs payments or

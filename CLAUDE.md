@@ -137,7 +137,7 @@ account's own time zone: Asia/Kolkata for LWS Pune `act_570714718754453`) sync w
 tab's Ads box; weekly tests booked / NDA leads are typed in there (`ad_outcomes`). Ads are made from
 an `.ad.json` next to the poster (`npm run ads:add`, fields in `src/lib/domain/ads.ts`) → Ads tab:
 Approve creates campaign/ad set/creative/ad PAUSED (each Meta id write-once, so Retry resumes) →
-Launch. Meta's AI creative changes and Multi-advertiser ads are opted out per feature. Untested
+Launch. The Meta app must be **Live** (published) or Meta refuses the creative (subcode 1885183). Meta's AI creative changes and Multi-advertiser ads are opted out per feature. Untested
 against the live API until the first real Approve: if Meta rejects a field, the card shows its
 reason; fix `src/lib/domain/ads.ts` and Retry.
 **Note:** `TEST_DATABASE_URL` is the same database as `DATABASE_URL` (tests roll back), so
