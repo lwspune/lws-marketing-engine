@@ -1,11 +1,11 @@
 // Connect a Meta ad account, so the dashboard can read ad results and create ads (paused until Launch).
 //
-//   npm run connect:ads -- --org=lws-pune --account=779905330977080
+//   npm run connect:ads -- --org=lws-pune --account=570714718754453
 //
 // Token: a SYSTEM USER token (Business settings → Users → System users → Generate new token, for
 // the publisher's Meta app) with ads_read, ads_management, business_management, pages_show_list,
-// pages_read_engagement. The system user needs the ad account, the Page and the Instagram account
-// assigned to it. System user tokens don't expire. Never pass it on the command line (it would
+// pages_read_engagement. The system user needs the ad account (Manage campaigns), the Page and the
+// Instagram account assigned to it; only ad accounts in the business portfolio can be assigned. System user tokens don't expire. Never pass it on the command line (it would
 // end up in shell history); it's asked for here and stored encrypted in Supabase Vault.
 import { createInterface } from "node:readline/promises";
 import { metaConfigFromEnv, metaCall, graphUrl } from "../src/lib/platforms/meta";
@@ -16,7 +16,7 @@ run(async () => {
   const f = flags();
   const orgSlug = need(f, "org");
   const actId = `act_${need(f, "account").replace(/^act_/, "")}`;
-  if (!/^act_\d{5,30}$/.test(actId)) throw new Error("--account should be the ad account number, e.g. 779905330977080.");
+  if (!/^act_\d{5,30}$/.test(actId)) throw new Error("--account should be the ad account number, e.g. 570714718754453.");
 
   const rl = createInterface({ input: process.stdin, output: process.stdout });
   const token = (await rl.question("Paste the System User access token: ")).trim();

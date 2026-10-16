@@ -73,12 +73,15 @@ Lets the Insights tab show ad results, and the Ads tab create ads (paused until 
 
 1. developers.facebook.com → the publisher's app → **Use cases** → add **Create & manage ads with
    Marketing API**. Development mode is enough for LWS's own ad account.
-2. business.facebook.com → Settings → Users → **System users** → Add (name `lws-publisher`, role
-   **Admin**). Then **Assign assets**: the ad account `779905330977080` (Manage campaigns), the
-   **LWS Pune** Page and the **@lws.pune** Instagram account (full control).
+2. business.facebook.com → Settings → Users → **System users** → LWS uses **Digi Publisher**
+   (Admin). **Assign assets**: the business's ad account **LWS Pune `570714718754453`** with
+   **Manage campaigns (ads)** only (not "Manage ad accounts": the tool never needs payments or
+   permissions), the **LWS Pune** Page and the **@lws.pune** Instagram account (full control).
+   Only ad accounts *in the business portfolio* work; `779905330977080` (personal, another
+   Facebook login) is deliberately not used. The ad account needs a payment method before Launch.
 3. Same system user → **Generate new token** → choose the publisher app → expiry **Never** → tick
    `ads_read, ads_management, business_management, pages_show_list, pages_read_engagement`.
-4. `npm run connect:ads -- --org=lws-pune --account=779905330977080` and paste the token when it asks.
+4. `npm run connect:ads -- --org=lws-pune --account=570714718754453` and paste the token when it asks.
    It checks the token can see the account (INR, active, can read campaigns) before saving it,
    encrypted in Supabase Vault.
 5. `npm run insights -- --org=lws-pune` to pull the first results (afterwards: nightly at 3 am IST).
