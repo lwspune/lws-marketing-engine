@@ -19,7 +19,7 @@ export interface FakeMetaOptions {
   /** Payload for GET /{fb-video-id}/video_insights. */
   fbInsights?: object;
   /** Force an error response for the first call whose path matches. */
-  failOn?: { path: RegExp; status: number; message: string; once?: boolean };
+  failOn?: { path: RegExp; status: number; message: string; once?: boolean; userTitle?: string; userMsg?: string };
   /** Ad account act_1: its campaigns / ad sets / ads (GET lists) and daily insights rows, served in pages. */
   adLists?: { campaigns?: object[]; adsets?: object[]; ads?: object[] };
   adInsights?: object[];
@@ -42,7 +42,8 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
     const f = opts.failOn;
     if (f && f.path.test(url.pathname) && !(f.once && failUsed)) {
       failUsed = true;
-      return send(f.status, { error: { message: f.message, type: "OAuthException", code: 190, fbtrace_id: "trace" } });
+      return send(f.status, { error: { message: f.message, type: "OAuthException", code: 190, fbtrace_id: "trace",
+        ...(f.userTitle ? { error_user_title: f.userTitle } : {}), ...(f.userMsg ? { error_user_msg: f.userMsg } : {}) } });
     }
 
     const p = url.pathname;

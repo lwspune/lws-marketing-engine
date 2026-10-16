@@ -80,6 +80,16 @@ describe("createAdOnMeta", () => {
     expect(fake.calls.some((c) => c.path.endsWith("/adcreatives"))).toBe(false);
   });
 
+  it("shows Meta's own explanation, not just \"Invalid parameter\"", async () => {
+    fake = await startFakeMeta({ failOn: {
+      path: /\/adcreatives$/, status: 400, message: "Invalid parameter",
+      userTitle: "Ads creative post was created by an app that is in development mode",
+      userMsg: "Ads creative post was created by an app that is in development mode. It must be in public to create this ad.",
+    } });
+    const r = await createAdOnMeta(fake.config, { ...base, existing: {}, ...recorder() });
+    expect(r).toEqual({ ok: false, error: expect.stringMatching(/creative: Meta API 400.*Invalid parameter.*It must be in public to create this ad\./) });
+  });
+
   it("if the poster can't be read, nothing is created on Meta", async () => {
     fake = await startFakeMeta();
     const r = await createAdOnMeta(fake.config, {

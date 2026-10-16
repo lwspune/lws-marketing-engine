@@ -77,8 +77,10 @@ async function call(
   }
   const json = (await res.json().catch(() => ({}))) as Record<string, unknown>;
   if (!res.ok) {
-    const err = (json.error ?? {}) as { message?: string; code?: number };
-    const msg = `Meta API ${res.status}${err.code ? ` (code ${err.code})` : ""}: ${err.message ?? res.statusText}`;
+    const err = (json.error ?? {}) as { message?: string; code?: number; error_user_msg?: string };
+    // `message` is often just "Invalid parameter"; Meta's real explanation is in error_user_msg.
+    const detail = err.error_user_msg && err.error_user_msg !== err.message ? ` — ${err.error_user_msg}` : "";
+    const msg = `Meta API ${res.status}${err.code ? ` (code ${err.code})` : ""}: ${err.message ?? res.statusText}${detail}`;
     throw new MetaApiError(redact(msg, init.token), res.status);
   }
   return json;
