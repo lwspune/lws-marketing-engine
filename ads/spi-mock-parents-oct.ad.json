@@ -1,0 +1,22 @@
+{
+  "slug": "spi-mock-parents-oct",
+  "project": "lws-coaching",
+  "title": "SPI Mock Test – parents, 17–24 Oct",
+  "image": "spi-mock-poster.png",
+  "campaign": "SPI Mock Test – Pune – Oct 2026",
+  "adset": "Parents 35–55 – Pune",
+  "ad": "Poster – English",
+  "primaryText": "Is your child in 10th and aiming for NDA? SPI entrance practice should start now, not in the last month.\n\n✅ Full 3-hour mock test every Sunday, 10 AM–1 PM\n✅ Exam-pattern questions + a detailed performance report after every test\n✅ See speed and accuracy improve week by week\n\n📍 LWS Pune Defence Academy, Sagar Arcade, FC Road, Pune\n\nTap \"Send message\" to get the schedule and fees on WhatsApp.",
+  "headline": "SPI Mock Test – Every Sunday, FC Road",
+  "description": "Sagar Arcade, FC Road · Every Sunday 10 AM–1 PM",
+  "whatsapp": {
+    "phone": "919156310546",
+    "greeting": "Hi! 👋 Tap send to get the SPI mock test schedule and fees.",
+    "prefilled": "Hi, please send details of the SPI Sunday mock test."
+  },
+  "audience": { "latitude": 18.52, "longitude": 73.84, "radiusKm": 20, "ageMin": 35, "ageMax": 55, "place": "central Pune (FC Road)" },
+  "dailyBudgetInr": 150,
+  "start": "2026-10-17T13:00:00+05:30",
+  "end": "2026-10-24T13:00:00+05:30",
+  "music": false
+}
