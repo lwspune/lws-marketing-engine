@@ -5,7 +5,7 @@
 //
 // A page defines its content and calls Reel.mount(config). Config fields:
 //   name, size: [W, H], duration (s)          — reels only
-//   theme:    'white'                          — optional: premium soft-white board for animated graphs:
+//   theme:    'white' | 'lab'                  — optional: premium soft board for animated graphs ('lab' = dark):
 //                                                warm gradient, floating white caption cards, no pen,
 //                                                soft end card; colours in Reel.WHITE; api.card / chips /
 //                                                softStroke for the look (default: ruled paper, house look)
@@ -39,6 +39,15 @@
     blue: '#3f56a0', green: '#2a736e', amber: '#a94f28', red: '#a94f28',
     fill: 'rgba(42, 115, 110, 0.16)', grid: 'rgba(35, 48, 74, 0.16)', axis: 'rgba(35, 48, 74, 0.45)',
   };
+  // Lab theme (2026-10-18): the dark look for @pyqvault_, A/B-tested against the white board. Same colour
+  // roles as WHITE (tests/reel-theme.test.js), plus the card fill and the shadow/vignette colour.
+  const LAB = {
+    board: '#121822', edge: '#0a0e15', ink: '#e6ebf3', muted: '#a3adbd',
+    blue: '#86a8ff', green: '#4fd1a5', amber: '#ffb35c', red: '#ffb35c',
+    fill: 'rgba(79, 209, 165, 0.16)', grid: 'rgba(230, 235, 243, 0.14)', axis: 'rgba(230, 235, 243, 0.42)',
+    card: '#1b2330', shadow: '#000000',
+  };
+  const palette = theme => (theme === 'lab' ? LAB : WHITE);
   const tint = (hex, a) => `rgba(${[1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)).join(', ')}, ${a})`;
 
   const clamp01 = v => Math.max(0, Math.min(1, v));
@@ -64,8 +73,9 @@
     const images = {};
     let LAID = [], MARKS = {};
     // White theme: same layout on a soft-white board (no ruled lines), slate ink, terracotta pen.
-    const white = config.theme === 'white';
-    const ink = white ? WHITE.ink : INK, red = white ? WHITE.red : RED;
+    // 'white' and 'lab' share the soft-board layout; only the palette differs.
+    const P = palette(config.theme), white = config.theme === 'white' || config.theme === 'lab';
+    const ink = white ? P.ink : INK, red = white ? P.red : RED;
 
     // ---- layout -----------------------------------------------------------
     function layout(line) {
@@ -109,17 +119,17 @@
     function board(mark = true) {
       // Warm paper-white, a touch darker towards the edges: calmer than a flat fill.
       const g = ctx.createRadialGradient(W / 2, H * 0.42, 100, W / 2, H * 0.42, H * 0.75);
-      g.addColorStop(0, WHITE.board); g.addColorStop(1, WHITE.edge);
+      g.addColorStop(0, P.board); g.addColorStop(1, P.edge);
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
       // Opt-in premium edge shade (config.vignette, reel 009 on): a soft slate falloff towards the frame's
       // boundary that pulls the eye to the centre. Part of the board, so the end card keeps it too.
       if (config.vignette) {
         const v = ctx.createRadialGradient(W / 2, H * 0.46, H * 0.30, W / 2, H * 0.46, H * 0.80);
-        v.addColorStop(0, tint(WHITE.ink, 0)); v.addColorStop(1, tint(WHITE.ink, 0.17));
+        v.addColorStop(0, tint(P.shadow ?? P.ink, 0)); v.addColorStop(1, tint(P.shadow ?? P.ink, P.shadow ? 0.45 : 0.17));
         ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
       }
       if (!mark || config.watermarkY === null) return;
-      ctx.fillStyle = tint(WHITE.muted, 0.55); ctx.font = `600 34px ${UI}`; ctx.textAlign = 'left';
+      ctx.fillStyle = tint(P.muted, 0.55); ctx.font = `600 34px ${UI}`; ctx.textAlign = 'left';
       ctx.fillText('LWS Pune  ·  NDA Maths', LEFT, config.watermarkY ?? (H > 1500 ? 1600 : H - 60));
     }
     function paper() {
@@ -240,7 +250,7 @@
       if (white) {
         // A floating white card with a soft shadow, not a black slab.
         card(W / 2 - bw / 2, y - bh / 2, bw, bh, 34, 0.14);
-        ctx.fillStyle = WHITE.ink; lines.forEach((l, i) => ctx.fillText(l, W / 2, y - (lines.length - 1) * lh / 2 + i * lh));
+        ctx.fillStyle = P.ink; lines.forEach((l, i) => ctx.fillText(l, W / 2, y - (lines.length - 1) * lh / 2 + i * lh));
         ctx.restore(); return;
       }
       ctx.fillStyle = 'rgba(0,0,0,0.18)'; ctx.beginPath(); ctx.roundRect(W / 2 - bw / 2 + 6, y - bh / 2 + 8, bw, bh, 24); ctx.fill();
@@ -251,8 +261,8 @@
     }
     // White theme building blocks: a floating card, answer-option chips and a softly shadowed stroke.
     function card(x, y, w, h, r = 32, shade = 0.10) {
-      ctx.save(); ctx.shadowColor = tint(WHITE.ink, shade); ctx.shadowBlur = 48; ctx.shadowOffsetY = 16;
-      ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill(); ctx.restore();
+      ctx.save(); ctx.shadowColor = tint(P.shadow ?? P.ink, P.shadow ? shade * 3 : shade); ctx.shadowBlur = 48; ctx.shadowOffsetY = 16;
+      ctx.fillStyle = P.card ?? '#ffffff'; ctx.beginPath(); ctx.roundRect(x, y, w, h, r); ctx.fill(); ctx.restore();
     }
     // Options as pills, centred on the page. From `at`, the answer chip fills with the accent and pulses once.
     function chips(t, { labels, y, answer, at, size = 44, w = 180, h = 72, gap = 20 }) {
@@ -262,9 +272,9 @@
         const hit = i === answer && on > 0, s = hit ? 1 + 0.07 * pulse : 1;
         ctx.save(); ctx.translate(x0 + i * (w + gap) + w / 2, y + h / 2); ctx.scale(s, s);
         ctx.beginPath(); ctx.roundRect(-w / 2, -h / 2, w, h, h / 2);
-        if (hit) { ctx.fillStyle = tint(WHITE.amber, 0.12 * on); ctx.fill(); }
-        ctx.strokeStyle = hit ? tint(WHITE.amber, 0.25 + 0.6 * on) : tint(WHITE.ink, 0.14); ctx.lineWidth = hit ? 2 + on : 2; ctx.stroke();
-        ctx.fillStyle = hit && on > 0.5 ? WHITE.amber : ink; ctx.font = hand(size); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        if (hit) { ctx.fillStyle = tint(P.amber, 0.12 * on); ctx.fill(); }
+        ctx.strokeStyle = hit ? tint(P.amber, 0.25 + 0.6 * on) : tint(P.ink, 0.14); ctx.lineWidth = hit ? 2 + on : 2; ctx.stroke();
+        ctx.fillStyle = hit && on > 0.5 ? P.amber : ink; ctx.font = hand(size); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         ctx.fillText(label, 0, 2); ctx.restore();
       });
     }
@@ -274,7 +284,7 @@
     }
     // A light running round a card's edge: bright head, fading tail, soft bloom. Draws attention without
     // moving or scaling anything (a slow zoom on text shimmers). Constant speed; fades in from t0, out at the end.
-    function glowRing(t, { x, y, w, h, r = 32, t0 = 0, dur = 2.6, laps = 1.25, color = WHITE.blue, alpha = 1 }) {
+    function glowRing(t, { x, y, w, h, r = 32, t0 = 0, dur = 2.6, laps = 1.25, color = P.blue, alpha = 1 }) {
       if (t < t0 || t > t0 + dur || alpha <= 0) return;
       const k = (t - t0) / dur, fade = alpha * Math.min(1, (t - t0) / 0.3 + 0.35, (1 - k) / 0.18);
       const g = ctx.createConicGradient(-Math.PI / 2 + k * laps * 2 * Math.PI, x + w / 2, y + h / 2);
@@ -283,6 +293,42 @@
       ctx.globalAlpha = fade * 0.5; ctx.strokeStyle = tint(color, 0.14); ctx.lineWidth = 2; ctx.stroke();
       ctx.globalAlpha = fade * 0.3; ctx.strokeStyle = g; ctx.lineWidth = 14; ctx.stroke();
       ctx.globalAlpha = fade; ctx.lineWidth = 4; ctx.shadowColor = tint(color, 0.7); ctx.shadowBlur = 20; ctx.stroke();
+      ctx.restore();
+    }
+    // ---- simple 3D (drawn in 2D with perspective + light from the upper left) -------------------------
+    const rgbOf = hex => [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16));
+    const mix = (hex, to, k) => `rgb(${rgbOf(hex).map((c, i) => Math.round(c + (to[i] - c) * k)).join(', ')})`;
+    // A shaded ball: highlight up-left, darker rim. Reads as 3D on both boards.
+    function sphere3d(x, y, r, color) {
+      const g = ctx.createRadialGradient(x - r * 0.35, y - r * 0.4, r * 0.08, x, y, r);
+      g.addColorStop(0, mix(color, [255, 255, 255], 0.55)); g.addColorStop(0.55, color); g.addColorStop(1, mix(color, [0, 0, 0], 0.35));
+      ctx.save(); ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill(); ctx.restore();
+    }
+    // An upright glass jar (cylinder) seen slightly from above. drawInside(clip) runs between the back and the
+    // front of the glass, clipped to the jar's inside, so contents sit "in" it. tilt = ellipse height / width.
+    function jar({ cx, top, bottom, r, tilt = 0.26 }, drawInside) {
+      const ry = r * tilt, edge = P.ink;
+      ctx.save();
+      // back of the rim and the floor
+      ctx.strokeStyle = tint(edge, 0.18); ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.ellipse(cx, top, r, ry, 0, Math.PI, 2 * Math.PI); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(cx, bottom, r, ry, 0, Math.PI, 2 * Math.PI); ctx.stroke();
+      // contents, clipped to the inside
+      ctx.save(); ctx.beginPath();
+      ctx.ellipse(cx, top, r, ry, 0, Math.PI, 0, false); ctx.lineTo(cx + r, bottom); ctx.ellipse(cx, bottom, r, ry, 0, 0, Math.PI, false); ctx.closePath();
+      ctx.clip(); if (drawInside) drawInside(); ctx.restore();
+      // glass: thicker (darker) towards the edges, a soft highlight streak, crisp outline and front rim
+      const g = ctx.createLinearGradient(cx - r, 0, cx + r, 0);
+      g.addColorStop(0, tint(edge, 0.16)); g.addColorStop(0.12, tint(edge, 0.04)); g.addColorStop(0.5, tint(edge, 0));
+      g.addColorStop(0.88, tint(edge, 0.05)); g.addColorStop(1, tint(edge, 0.18));
+      ctx.fillStyle = g; ctx.fillRect(cx - r, top, 2 * r, bottom - top);
+      const hl = ctx.createLinearGradient(cx - r * 0.72, 0, cx - r * 0.5, 0);
+      hl.addColorStop(0, 'rgba(255, 255, 255, 0)'); hl.addColorStop(0.5, 'rgba(255, 255, 255, 0.35)'); hl.addColorStop(1, 'rgba(255, 255, 255, 0)');
+      ctx.fillStyle = hl; ctx.fillRect(cx - r * 0.72, top + ry, r * 0.22, bottom - top - 2 * ry);
+      ctx.strokeStyle = tint(edge, 0.55); ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(cx - r, top); ctx.lineTo(cx - r, bottom); ctx.moveTo(cx + r, top); ctx.lineTo(cx + r, bottom); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(cx, bottom, r, ry, 0, 0, Math.PI); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(cx, top, r, ry, 0, 0, Math.PI); ctx.stroke();
       ctx.restore();
     }
     // Speech bubble with a tail pointing at (tx, ty). Text in UI font, dark on white.
@@ -322,7 +368,7 @@
       ctx.restore();
     }
 
-    const api = { ctx, W, H, INK: ink, RED: red, UI, SOFT_UI, card, chips, softStroke, glowRing, hand, prog, ease, clamp01, strokePartial, roundedPath, arrowHead, bubble, caption,
+    const api = { ctx, W, H, INK: ink, RED: red, UI, SOFT_UI, P, card, chips, softStroke, glowRing, sphere3d, jar, hand, prog, ease, clamp01, strokePartial, roundedPath, arrowHead, bubble, caption,
       math, wrap, marks: () => MARKS, img: k => images[k] };
 
     // ---- frames -----------------------------------------------------------
@@ -541,5 +587,5 @@
     window.prepare = () => prepare(config.lines);
   }
 
-  window.Reel = { mount, WHITE, toneCurve };
+  window.Reel = { mount, WHITE, LAB, palette, toneCurve };
 })();

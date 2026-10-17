@@ -56,3 +56,41 @@ test("white theme: restrained palette, one maths colour, one area colour, one ac
   assert.equal(hues.size, 3);
   assert.equal(W.red.toLowerCase(), W.amber.toLowerCase(), "the pen uses the single accent colour");
 });
+
+// Lab theme (2026-10-18): the dark look for @pyqvault_, A/B-tested against the white board. Same colour
+// roles as WHITE, so one render page can draw either theme from Reel.palette(theme).
+test("lab theme: a deep, near-black board that darkens further at the edges", () => {
+  const L = loadReel().LAB;
+  assert.ok(L, "Reel.LAB palette is exported");
+  assert.match(L.board, HEX);
+  assert.match(L.edge, HEX);
+  assert.notEqual(L.board.toLowerCase(), "#000000", "soft dark, not pure black");
+  assert.ok(luminance(L.board) < 0.03, "reads as dark");
+  assert.ok(luminance(L.edge) < luminance(L.board), "the edge is the darker end of the gradient");
+});
+
+test("lab theme: text colours meet WCAG AA (4.5:1) on the whole board and on its cards", () => {
+  const L = loadReel().LAB;
+  assert.match(L.card, HEX);
+  for (const key of ["ink", "muted", "blue", "green", "amber"]) {
+    assert.match(L[key], HEX, key);
+    for (const bg of [L.board, L.edge, L.card]) {
+      const c = contrast(L[key], bg);
+      assert.ok(c >= 4.5, `${key} ${L[key]} is only ${c.toFixed(2)}:1 on ${bg}`);
+    }
+  }
+});
+
+test("lab theme: restrained palette with the same roles as white", () => {
+  const { LAB: L, WHITE: W } = loadReel();
+  assert.deepEqual(Object.keys(L).filter(k => k !== "card" && k !== "shadow").sort(), Object.keys(W).sort());
+  assert.equal(new Set([L.blue, L.green, L.amber].map(c => c.toLowerCase())).size, 3);
+  assert.equal(L.red.toLowerCase(), L.amber.toLowerCase(), "the pen uses the single accent colour");
+});
+
+test("palette(theme) picks the theme's colours, white by default", () => {
+  const R = loadReel();
+  assert.equal(R.palette("lab"), R.LAB);
+  assert.equal(R.palette("white"), R.WHITE);
+  assert.equal(R.palette(undefined), R.WHITE);
+});
