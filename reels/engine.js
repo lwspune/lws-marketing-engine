@@ -62,6 +62,21 @@
     }
     return out;
   }
+  // 16-bit PCM WAV from rendered channels (interleaved, clipped to ±1), for reels made outside the engine
+  // (remotion/) that use this music: reels/tools/music.mjs (tests/reel-wav.test.js).
+  function wav(channels, sampleRate) {
+    const n = channels[0].length, k = channels.length, b = new Uint8Array(44 + n * k * 2), v = new DataView(b.buffer);
+    const str = (at, s) => { for (let i = 0; i < s.length; i++) b[at + i] = s.charCodeAt(i); };
+    str(0, 'RIFF'); v.setUint32(4, b.length - 8, true); str(8, 'WAVE'); str(12, 'fmt ');
+    v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, k, true); v.setUint32(24, sampleRate, true);
+    v.setUint32(28, sampleRate * k * 2, true); v.setUint16(32, k * 2, true); v.setUint16(34, 16, true);
+    str(36, 'data'); v.setUint32(40, n * k * 2, true);
+    for (let i = 0, at = 44; i < n; i++) for (let c = 0; c < k; c++, at += 2) {
+      const s = Math.max(-1, Math.min(1, channels[c][i]));
+      v.setInt16(at, Math.round(s < 0 ? s * 32768 : s * 32767), true);
+    }
+    return b;
+  }
   const prog = (t, t0, dur) => dur <= 0 ? (t >= t0 ? 1 : 0) : ease(clamp01((t - t0) / dur));
   const hand = size => `600 ${size}px ${TEXT_FONT}`;
   const wob = (i, a = 3) => Math.sin(i * 1.7) * a;
@@ -542,6 +557,13 @@
       await new Promise(r => setTimeout(r, 300)); rec.stop(); await stopped; ac.close();
       return new Blob(chunks, { type: 'video/mp4' });
     }
+    // The music alone, rendered offline (faster than real time, sample-exact, starting at t = 0).
+    async function musicWav() {
+      const sr = 48000, ac = new OfflineAudioContext(2, Math.ceil(config.duration * sr), sr);
+      if (config.music !== null) music(ac, ac.destination, 0);
+      const out = await ac.startRendering();
+      return new Blob([wav([out.getChannelData(0), out.getChannelData(1)], sr)], { type: 'audio/wav' });
+    }
     const pngBlob = () => new Promise(r => cv.toBlob(r, 'image/png'));
     function coverBlob() { prepare(config.lines); frame(config.cover.t, config.cover); return pngBlob(); }
     function slideBlob(i) { slide(i); return pngBlob(); }
@@ -581,11 +603,12 @@
       if (config.cover) button('Download cover PNG', async () => download(await coverBlob(), `${config.name}-cover.png`));
       window.renderReel = async () => toBase64(await record());
       window.renderCover = async () => toBase64(await coverBlob());
+      window.renderMusic = async () => toBase64(await musicWav());
       window.renderFrame = t => { frame(t); return cv.toDataURL('image/png').split(',')[1]; };
       window.frame = frame;
     }
     window.prepare = () => prepare(config.lines);
   }
 
-  window.Reel = { mount, WHITE, LAB, palette, toneCurve };
+  window.Reel = { mount, WHITE, LAB, palette, toneCurve, wav };
 })();
