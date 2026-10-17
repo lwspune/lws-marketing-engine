@@ -143,6 +143,10 @@ Approve creates campaign/ad set/creative/ad PAUSED (each Meta id write-once, so 
 Launch. The Meta app must be **Live** (published) or Meta refuses the creative (subcode 1885183). Meta's AI creative changes and Multi-advertiser ads are opted out per feature. Untested
 against the live API until the first real Approve: if Meta rejects a field, the card shows its
 reason; fix `src/lib/domain/ads.ts` and Retry.
+**Projects (0009, founder 2026-10-18): LWS Pune first, PYQ Vault second.** Names follow the Instagram account:
+slug `pyq-vault` is shown as **LWS Pune** (@lws.pune: NDA reels, daily stories), `pyqvault-insta` as **PYQ Vault**
+(@pyqvault_), `lws-coaching` as **LWS Pune ads** (ads only; the Queue hides projects with no posts). Slugs never
+change: manifests and the story planner name projects by slug.
 **Note:** `TEST_DATABASE_URL` is the same database as `DATABASE_URL` (tests roll back), so
 `db:migrate` changes the live schema; dry-run a new migration in a rolled-back transaction first.
 **Deploys (2026-10-16):** Vercel (Hobby, owner `thefableisland`) now BLOCKS git-push deploys

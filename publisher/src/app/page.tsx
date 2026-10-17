@@ -4,6 +4,7 @@ import { PostCard, type PostView } from "@/components/PostCard";
 import { Nav, PageHeader } from "@/components/Nav";
 import { ApproveStoriesButton } from "@/components/ApproveStoriesButton";
 import type { StoryQuiz } from "@/lib/domain/story";
+import { queueProjects } from "@/lib/domain/projects";
 import type { Platform } from "@/lib/domain/types";
 
 export const dynamic = "force-dynamic";
@@ -34,10 +35,11 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
   if (projectId) postsQuery = postsQuery.eq("project_id", projectId);
   const { data: posts } = await postsQuery;
 
-  let countsQuery = supabase.from("posts").select("status");
-  if (projectId) countsQuery = countsQuery.eq("project_id", projectId);
-  const { data: allStatuses } = await countsQuery;
-  const counts = Object.fromEntries(TABS.map((t) => [t.id, (allStatuses ?? []).filter((r) => (t.statuses as readonly string[]).includes(r.status)).length]));
+  // Every post's project and status: the tab counts, and which projects get a button.
+  const { data: allPosts } = await supabase.from("posts").select("project_id, status");
+  const inView = (allPosts ?? []).filter((r) => !projectId || r.project_id === projectId);
+  const counts = Object.fromEntries(TABS.map((t) => [t.id, inView.filter((r) => (t.statuses as readonly string[]).includes(r.status)).length]));
+  const projectButtons = queueProjects(projects ?? [], (allPosts ?? []).map((r) => r.project_id as string), projectId);
 
   const { data: channels } = await supabase.from("project_channels").select("project_id, platform, connected_accounts(display_name)");
 
@@ -94,11 +96,11 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
           </p>
         ) : (
           <>
-            {projects.length > 1 && (
+            {projectButtons.length > 1 && (
               <nav aria-label="Projects" className="mb-4 flex flex-wrap gap-2">
                 <Link href={href({ project: null })} aria-current={!projectId ? "page" : undefined}
                   className={`chip py-1 ${!projectId ? "chip-accent" : "chip-muted hover:text-fg"}`}>All projects</Link>
-                {projects.map((p) => (
+                {projectButtons.map((p) => (
                   <Link key={p.id} href={href({ project: p.id })} aria-current={projectId === p.id ? "page" : undefined}
                     className={`chip py-1 ${projectId === p.id ? "chip-accent" : "chip-muted hover:text-fg"}`}>{p.name}</Link>
                 ))}
