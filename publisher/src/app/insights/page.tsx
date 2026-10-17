@@ -5,6 +5,7 @@ import { RefreshInsights } from "@/components/RefreshInsights";
 import { compareToBaseline, median, typicalReel, type PostMetrics, type Verdict } from "@/lib/domain/metrics";
 import { AdsSummary, type AdsSummaryProps } from "@/components/AdsSummary";
 import { summariseCampaigns, weekStartIst, type DailyRow, type EntityRow, type OutcomeRow } from "@/lib/domain/ads";
+import { pickInstagramAccount, type InstagramAccount } from "@/lib/domain/accounts";
 
 export const dynamic = "force-dynamic";
 
@@ -65,16 +66,31 @@ async function loadAds(supabase: Db, now: Date): Promise<AdsSummaryProps> {
   };
 }
 
-export default async function InsightsPage({ searchParams }: { searchParams: { sort?: string } }) {
+export default async function InsightsPage({ searchParams }: { searchParams: { sort?: string; account?: string } }) {
   const supabase = createSupabaseServerClient();
   const ads = await loadAds(supabase, new Date());
   const sort: SortId = (SORTS.find((s) => s.id === searchParams.sort)?.id ?? "new") as SortId;
-  const { data } = await supabase
-    .from("account_media")
-    .select("external_id, permalink, caption, posted_at, likes, comments, views, reach, saves, shares, avg_watch_ms, insights_error, refreshed_at")
-    .order("posted_at", { ascending: false })
-    .limit(2000);
+  // One Instagram account at a time (RLS: only the member's own org), so two audiences never blend.
+  const { data: igRows } = await supabase.from("connected_accounts").select("id, display_name, created_at").eq("platform", "instagram");
+  const accounts: InstagramAccount[] = (igRows ?? []).map((a) => ({ id: a.id, displayName: a.display_name, createdAt: a.created_at }));
+  const account = pickInstagramAccount(accounts, searchParams.account);
+  const { data } = account
+    ? await supabase
+      .from("account_media")
+      .select("external_id, permalink, caption, posted_at, likes, comments, views, reach, saves, shares, avg_watch_ms, insights_error, refreshed_at")
+      .eq("account_id", account.id)
+      .order("posted_at", { ascending: false })
+      .limit(2000)
+    : { data: [] };
   const rows = (data ?? []) as Row[];
+  const qs = (next: { sort?: SortId; account?: string }) => {
+    const p = new URLSearchParams();
+    const s = next.sort ?? sort, a = next.account ?? account?.id;
+    if (s !== "new") p.set("sort", s);
+    if (a && accounts.length > 1) p.set("account", a);
+    const str = p.toString();
+    return str ? `/insights?${str}` : "/insights";
+  };
 
   const now = new Date();
   const typical = typicalReel(rows.filter((r) => r.views !== null).map(metricsOf), now);
@@ -97,6 +113,15 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
       <h1 className="sr-only">Insights</h1>
       <div className="mb-4"><AdsSummary {...ads} /></div>
 
+      {accounts.length > 1 && (
+        <nav aria-label="Instagram account" className="mb-4 flex flex-wrap gap-2">
+          {[...accounts].sort((a, b) => a.createdAt.localeCompare(b.createdAt)).map((a) => (
+            <Link key={a.id} href={qs({ account: a.id })} aria-current={account?.id === a.id ? "page" : undefined}
+              className={`chip ${account?.id === a.id ? "border-accent text-accent" : "border-line text-muted"}`}>{a.displayName}</Link>
+          ))}
+        </nav>
+      )}
+
       {rows.length === 0 ? (
         <section className="space-y-3 rounded-lg border border-line bg-panel p-4">
           <p className="text-sm text-muted">No reels read yet. They refresh every night at 3 am; you can read them now.</p>
@@ -105,7 +130,7 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
       ) : (
         <>
           <section aria-labelledby="summary" className="space-y-3 rounded-lg border border-line bg-panel p-4">
-            <h2 id="summary" className="font-medium">Your typical reel</h2>
+            <h2 id="summary" className="font-medium">Your typical reel{accounts.length > 1 && account ? ` on ${account.displayName}` : ""}</h2>
             <p className="text-sm">
               <strong>{n(typical.views)}</strong> views · <strong>{n(typical.saves)}</strong> {typical.saves === 1 ? "save" : "saves"} ·{" "}
               <strong>{sec(typical.avgWatchMs)}</strong> watched <span className="text-muted">({typical.note})</span>
@@ -124,7 +149,7 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
 
           <nav aria-label="Sort reels" className="my-4 flex flex-wrap gap-2">
             {SORTS.map((s) => (
-              <Link key={s.id} href={s.id === "new" ? "/insights" : `/insights?sort=${s.id}`} aria-current={sort === s.id ? "page" : undefined}
+              <Link key={s.id} href={qs({ sort: s.id })} aria-current={sort === s.id ? "page" : undefined}
                 className={`chip ${sort === s.id ? "border-accent text-accent" : "border-line text-muted"}`}>{s.label}</Link>
             ))}
           </nav>

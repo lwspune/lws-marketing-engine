@@ -22,39 +22,46 @@ run(async () => {
   const db = admin();
   const { data: org } = await db.from("organizations").select("id").eq("slug", orgSlug).single();
   if (!org) throw new Error(`No organisation "${orgSlug}".`);
-  const { data: acct } = await db.from("connected_accounts").select("id, external_id, display_name").eq("org_id", org.id).eq("platform", "instagram").single();
-  if (!acct) throw new Error("No Instagram account connected. Run npm run connect:meta first.");
-  const { data: token } = await db.rpc("get_account_token", { p_account: acct.id });
-  if (!token) throw new Error("Couldn't read the Instagram token.");
-
-  console.log(`${acct.display_name}: reading every reel's numbers…`);
-  let rows: AccountMediaRow[] = [];
-  const s = await syncInstagramAccount({
-    config: metaConfigFromEnv(), igUserId: acct.external_id, token: token as string,
-    store: async (r) => {
-      rows = r;
-      const { error } = await db.rpc("upsert_account_media", { p_account: acct.id, p_rows: r.map(toDbRow) });
-      if (error) throw new Error(`saving to the dashboard: ${error.message}`);
-    },
-  });
-
   const ist = (t: string) => new Date(new Date(t).getTime() + 5.5 * 3_600_000).toISOString().slice(0, 16).replace("T", " ");
   const q = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""').replace(/\r?\n/g, " ")}"`;
   const val = (x: number | null | undefined) => (x ?? "");
-  const lines = ["posted_ist,views,reach,likes,comments,saves,shares,avg_watch_sec,permalink,caption"];
-  for (const r of rows) {
-    lines.push([ist(r.postedAt), val(r.metrics?.views), val(r.metrics?.reach), val(r.likes), val(r.comments), val(r.metrics?.saves),
-      val(r.metrics?.shares), r.metrics?.avgWatchMs != null ? (r.metrics.avgWatchMs / 1000).toFixed(1) : "", r.permalink, q(r.caption)].join(","));
-  }
-  const handle = String(acct.display_name).replace(/[^a-z0-9]/gi, "").toLowerCase();
+  const slug = (displayName: string) => String(displayName).replace(/[^a-z0-9]/gi, "").toLowerCase();
   const dir = path.resolve(process.cwd(), "..", "analytics");
   mkdirSync(dir, { recursive: true });
-  const out = path.join(dir, `${handle}-reels-${new Date().toISOString().slice(0, 10)}.csv`);
-  writeFileSync(out, "﻿" + lines.join("\n"), "utf8");
 
-  const t = typicalReel(rows.filter((r) => r.metrics).map((r) => r.metrics!), new Date());
-  console.log(`✓ ${s.withInsights}/${s.reels} reels with numbers (of ${s.media} posts) → dashboard Insights tab + ${out}`);
-  console.log(`  typical reel now: ${t.views} views · ${t.saves} saves · ${(t.avgWatchMs / 1000).toFixed(1)} s watched (${t.note})`);
+  // Every Instagram account of the org (@lws.pune, @pyqvault_, …): one spreadsheet each.
+  const { data: igAccounts } = await db.from("connected_accounts").select("id, external_id, display_name")
+    .eq("org_id", org.id).eq("platform", "instagram").order("created_at");
+  if (!igAccounts?.length) throw new Error("No Instagram account connected. Run npm run connect:meta first.");
+  for (const acct of igAccounts) {
+    const { data: token } = await db.rpc("get_account_token", { p_account: acct.id });
+    if (!token) throw new Error(`Couldn't read the Instagram token for ${acct.display_name}.`);
+
+    console.log(`${acct.display_name}: reading every reel's numbers…`);
+    let rows: AccountMediaRow[] = [];
+    const s = await syncInstagramAccount({
+      config: metaConfigFromEnv(), igUserId: acct.external_id, token: token as string,
+      store: async (r) => {
+        rows = r;
+        const { error } = await db.rpc("upsert_account_media", { p_account: acct.id, p_rows: r.map(toDbRow) });
+        if (error) throw new Error(`saving to the dashboard: ${error.message}`);
+      },
+    });
+
+    const lines = ["posted_ist,views,reach,likes,comments,saves,shares,avg_watch_sec,permalink,caption"];
+    for (const r of rows) {
+      lines.push([ist(r.postedAt), val(r.metrics?.views), val(r.metrics?.reach), val(r.likes), val(r.comments), val(r.metrics?.saves),
+        val(r.metrics?.shares), r.metrics?.avgWatchMs != null ? (r.metrics.avgWatchMs / 1000).toFixed(1) : "", r.permalink, q(r.caption)].join(","));
+    }
+    const out = path.join(dir, `${slug(acct.display_name)}-reels-${new Date().toISOString().slice(0, 10)}.csv`);
+    writeFileSync(out, "﻿" + lines.join("\n"), "utf8");
+
+    const t = typicalReel(rows.filter((r) => r.metrics).map((r) => r.metrics!), new Date());
+    console.log(`✓ ${s.withInsights}/${s.reels} reels with numbers (of ${s.media} posts) → dashboard Insights tab + ${out}`);
+    console.log(`  typical reel now: ${t.views} views · ${t.saves} saves · ${(t.avgWatchMs / 1000).toFixed(1)} s watched (${t.note})`);
+  }
+  // The ad account is LWS Pune's: its spreadsheet keeps the first (original) account's name.
+  const handle = slug(igAccounts[0].display_name);
 
   // Ads: the last 30 days, one row per ad per day (days in the ad account's time zone).
   const { data: adAcct } = await db.from("connected_accounts").select("id, external_id, display_name").eq("org_id", org.id).eq("platform", "meta_ads").maybeSingle();
