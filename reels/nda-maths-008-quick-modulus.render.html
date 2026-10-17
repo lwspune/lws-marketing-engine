@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reel 008 Quick Modulus</title>
+<link rel="stylesheet" href="render.css">
+</head>
+<body>
+<canvas id="c" aria-label="Reel preview"></canvas>
+<div class="bar" id="bar"></div>
+<div id="status" role="status"></div>
+<script src="engine.js"></script>
+<script>
+// Reel 008 — "quick" reach-test format (2026-10-17): ~20 s, question on screen at t = 0 with the
+// countdown already moving, pause-and-solve, the trick one line at a time, the answer at the END,
+// then a share prompt. NDA 2026 (II) Maths Q45: x² − 2x cos θ + 1 = 0 → |x| = 1 (c).
+// D = 4cos²θ − 4 ≤ 0, so the roots are a conjugate pair x, x̄; product of roots = 1 = x·x̄ = |x|².
+const { blue: BLUE, green: GREEN, ink: INK, muted: MUTED } = Reel.WHITE;
+
+const COUNT0 = 0.5, COUNT = 6.0, ANSWER = 13.0, END_AT = 15.6;
+
+function drawQuestion(ctx, t, api) {
+  api.card(110, 440, 860, 470);
+  ctx.save(); ctx.fillStyle = MUTED; ctx.font = `600 34px ${api.SOFT_UI}`; ctx.textAlign = 'center';
+  ctx.fillText('NDA 2026 (II)  ·  Maths  ·  Q45', 540, 506); ctx.restore();
+  api.math([{ text: 'x', color: BLUE }, { sup: '2', color: BLUE }, { text: ' − 2x cos θ + 1 = 0', color: BLUE }], { y: 630, size: 68, cx: 540 });
+  api.math([{ text: 'Then  |x|  = ?', color: INK }], { y: 740, size: 64, cx: 540 });
+  api.chips(t, { labels: ['(a) −1', '(b) 0', '(c) 1', '(d) √2'], y: 800, answer: 2, at: ANSWER, size: 44, w: 176, h: 76, gap: 16 });
+}
+
+// A calm countdown under the card: moving from frame 0 (motion in the first second).
+function drawCountdown(ctx, t, api) {
+  const fade = 1 - api.prog(t, COUNT0 + COUNT, 0.4); if (fade <= 0) return;
+  const cx = 540, cy = 1200, r = 130;
+  const left = Math.max(0, COUNT0 + COUNT - Math.max(t, COUNT0)), full = Math.min(1, left / COUNT);
+  ctx.save(); ctx.globalAlpha = fade; ctx.lineCap = 'round';
+  ctx.lineWidth = 16; ctx.strokeStyle = 'rgba(35, 48, 74, 0.10)'; ctx.beginPath(); ctx.arc(cx, cy, r, 0, 7); ctx.stroke();
+  ctx.strokeStyle = BLUE; ctx.beginPath(); ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * full); ctx.stroke();
+  const n = t < COUNT0 ? 6 : Math.max(1, Math.ceil(left));
+  const pulse = 1 + 0.06 * Math.max(0, 1 - ((t - COUNT0) % 1) / 0.25);
+  ctx.fillStyle = INK; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.font = `700 ${Math.round(120 * pulse)}px ${api.SOFT_UI}`; ctx.fillText(String(n), cx, cy + 4);
+  ctx.font = `600 36px ${api.SOFT_UI}`; ctx.fillStyle = MUTED; ctx.fillText('pause and solve', cx, cy + r + 62);
+  ctx.restore();
+}
+
+// The trick, one line at a time; every line stays until the end card.
+function drawTrick(ctx, t, api) {
+  const out = 1 - api.prog(t, END_AT, 0.4);
+  const lines = [
+    [7.0,  ['D = 4cos', { sup: '2' }, 'θ − 4  ≤  0'], 52, INK],
+    [8.8, ['so the roots are a pair  ', { text: 'x', color: BLUE }, ' and its conjugate'], 46, INK],
+    [10.6, ['product of roots  =  x · x̄  =  |x|', { sup: '2' }, '  =  ', { text: '1', color: GREEN }], 52, INK],
+  ];
+  lines.forEach(([t0, tokens, size, color], i) => {
+    const a = api.prog(t, t0, 0.5) * out; if (a <= 0) return;
+    ctx.save(); ctx.globalAlpha = a; api.math(tokens, { y: 1070 + i * 120 + (1 - a) * 14, size, cx: 540, color }); ctx.restore();
+  });
+  const res = api.prog(t, 11.8, 0.5) * out;
+  if (res > 0) { ctx.save(); ctx.globalAlpha = res; api.math([{ text: '|x|  =  1', color: GREEN }], { y: 1450, size: 76, cx: 540 }); ctx.restore(); }
+}
+
+Reel.mount({
+  name: 'nda-maths-008-quick-modulus',
+  theme: 'white',
+  size: [1080, 1920],
+  duration: 18.6,
+  watermarkY: null,
+  captions: [
+    { t0: 0,    t1: 2.6, text: 'A 5-second NDA question.' },
+    { t0: 2.6, t1: 7.0, text: 'Pause the reel. Solve it.' },
+    { t0: 7.0,  t1: ANSWER, text: 'No quadratic formula.\nOne line.' },
+    { t0: ANSWER, t1: END_AT, text: 'Answer: (c) 1' },
+  ],
+  lines: [],
+  draw(ctx, t, api) {
+    drawQuestion(ctx, t, api);
+    drawCountdown(ctx, t, api);
+    drawTrick(ctx, t, api);
+    return null;
+  },
+  end: { t0: END_AT, y: 860, lines: [
+    { at: 0.2, size: 48, weight: 400, color: MUTED, text: 'Know someone who\'d use the formula?' },
+    { at: 0.5, size: 64, weight: 600, color: INK, text: 'Send them this.' },
+    { at: 1.1, size: 78, weight: 700, color: GREEN, text: 'Follow for more' },
+  ] },
+  music: { ticks: [1.5, 2.5, 3.5, 4.5, 5.5, 6.5], chime: ANSWER },
+  cover: { t: 1.2, text: 'Can you do it\nin 5 seconds?', y: 1440, size: 76 },
+});
+</script>
+</body>
+</html>

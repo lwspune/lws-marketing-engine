@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reel 013 Why Spoon</title>
+<link rel="stylesheet" href="render.css">
+</head>
+<body>
+<canvas id="c" aria-label="Reel preview"></canvas>
+<div class="bar" id="bar"></div>
+<div id="status" role="status"></div>
+<script src="engine.js"></script>
+<script>
+// Reel 013 — "Why? #5: why does a spoon show you upside down?" (2026-10-17). The first physics "Why?" (L19, L20).
+// The inside of a spoon is a concave mirror (f = 20 cm here, C = 40 cm). A little person walks from 100 cm to
+// 10 cm while two rays update live: beyond F the reflected rays cross → the image is real and upside down
+// (small near F, same size at C, bigger between C and F); at F no image; inside F the rays never cross →
+// upright and bigger, behind the mirror. Live readout: you / image distance / size.
+// Payoff: the real NDA 2026 (I) GAT Q64: an object far beyond C accelerating towards the mirror → the image
+// accelerates towards C (a). Music: the "calm" loop (one style per reel).
+const { blue: BLUE, green: GREEN, ink: INK, muted: MUTED, amber: AMBER } = Reel.WHITE;
+const lerp = (a, b, k) => a + (b - a) * k;
+const tint = (hex, a) => `rgba(${[1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)).join(', ')}, ${a})`;
+const show = (api, t, t0, t1, f = 0.35) => api.prog(t, t0, f) * (1 - api.prog(t, t1 - f, f));
+
+const PAY0 = 33.4, ANSWER = 42.0, END_AT = 45.0;
+const F_CM = 20, PX = 6.4, XM = 760, AY = 980, H = 90;     // focal length, px per cm, mirror x, axis y, person height
+const XF = XM - F_CM * PX, XC = XM - 2 * F_CM * PX;
+
+// Where the person stands (cm in front of the mirror) over time.
+function uAt(t, api) {
+  if (t < 12) return 100;
+  if (t < 17) return lerp(100, 40, api.prog(t, 12, 5));
+  if (t < 18.6) return 40;
+  if (t < 23) return lerp(40, 25, api.prog(t, 18.6, 4.4));
+  return lerp(25, 10, api.prog(t, 23, 5.4));
+}
+
+// ---- title: held still on a card with a light running round its edge, then it glides up ----
+const TITLE_CARD = { x: 80, y: 620, w: 920, h: 360 };
+function drawTitle(ctx, t, api) {
+  const k = api.prog(t, 2.6, 1.0), ca = 1 - api.prog(t, 2.5, 0.5);
+  if (ca > 0) {
+    ctx.save(); ctx.globalAlpha = ca; api.card(TITLE_CARD.x, TITLE_CARD.y, TITLE_CARD.w, TITLE_CARD.h); ctx.restore();
+    api.glowRing(t, { ...TITLE_CARD, t0: 0, dur: 2.8, laps: 1.25, alpha: ca });
+  }
+  const s = lerp(1, 0.72, k), cy = lerp(847, 350, k);   // 847: the title block (label + 2 lines) centred on the card
+  ctx.save(); ctx.translate(540, cy); ctx.scale(s, s);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = MUTED; ctx.font = `700 50px ${api.SOFT_UI}`; ctx.fillText('WHY?  #5', 0, -150);
+  ctx.fillStyle = INK; ctx.font = api.hand(78);
+  ctx.fillText('Why does a spoon show', 0, -60); ctx.fillText('you upside down?', 0, 40);
+  ctx.restore();
+}
+
+// ---- the optics ----
+// A little person: a line with a round head. m < 0 draws them upside down (head below the axis).
+function person(ctx, x, m, color, dashed = false) {
+  const h = m * H, head = Math.max(7, Math.min(22, Math.abs(h) * 0.17));
+  ctx.save(); ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 6; ctx.lineCap = 'round';
+  if (dashed) ctx.setLineDash([10, 9]);
+  ctx.beginPath(); ctx.moveTo(x, AY); ctx.lineTo(x, AY - h + Math.sign(h) * head); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.beginPath(); ctx.arc(x, AY - h + Math.sign(h) * head, head, 0, 7);
+  if (dashed) { ctx.lineWidth = 4; ctx.stroke(); } else ctx.fill();
+  ctx.restore();
+}
+// Line through p with direction d, clipped to the drawing box (left of the mirror).
+function ray(ctx, p, d, color, w = 3, dash = null) {
+  const s = (60 - p[0]) / d[0];                  // run to x = 60
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = w; if (dash) ctx.setLineDash(dash);
+  ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(p[0] + d[0] * s, p[1] + d[1] * s); ctx.stroke(); ctx.restore();
+}
+function seg(ctx, a, b, color, w = 3, dash = null) {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = w; if (dash) ctx.setLineDash(dash);
+  ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke(); ctx.restore();
+}
+function drawOptics(ctx, t, api) {
+  const out = 1 - api.prog(t, PAY0 - 0.6, 0.6); if (out <= 0) return;
+  const g = api.prog(t, 3.4, 0.6) * out; if (g <= 0) return;
+  ctx.save(); ctx.globalAlpha = g;
+  ctx.beginPath(); ctx.rect(40, 560, 1000, 790); ctx.clip();   // stop above the live readout
+  // principal axis, the mirror (a shallow arc, opening to the left) with hatching behind it, F and C
+  ctx.strokeStyle = Reel.WHITE.axis; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(60, AY); ctx.lineTo(XM + 200, AY); ctx.stroke();
+  const mk = api.prog(t, 3.6, 0.8), ext = 300 * mk;
+  ctx.strokeStyle = INK; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.beginPath();
+  for (let y = -ext; y <= ext; y += 6) { const x = XM - 30 * (y / 300) ** 2; y === -ext ? ctx.moveTo(x, AY + y) : ctx.lineTo(x, AY + y); }
+  ctx.stroke();
+  ctx.strokeStyle = 'rgba(35, 48, 74, 0.35)'; ctx.lineWidth = 2;
+  for (let y = -ext + 10; y <= ext; y += 26) { const x = XM - 30 * (y / 300) ** 2; ctx.beginPath(); ctx.moveTo(x + 4, AY + y); ctx.lineTo(x + 22, AY + y - 16); ctx.stroke(); }
+  const fc = api.prog(t, 4.4, 0.5);
+  ctx.globalAlpha = g * fc; ctx.fillStyle = MUTED; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = api.hand(40);
+  for (const [x, l] of [[XF, 'F'], [XC, 'C']]) { ctx.beginPath(); ctx.arc(x, AY, 7, 0, 7); ctx.fill(); ctx.fillText(l, x, AY + 40); }
+  ctx.font = `600 34px ${api.SOFT_UI}`; ctx.fillText('inside of a spoon = concave mirror', 540, 610);
+  // the person, the two rays, the image
+  const pa = api.prog(t, 6.2, 0.5);
+  if (pa > 0) {
+    const u = uAt(t, api), xo = XM - u * PX, tip = [xo, AY - H];
+    ctx.globalAlpha = g * pa; person(ctx, xo, 1, INK);
+    const ra = api.prog(t, 8.2, 0.8);
+    if (ra > 0) {
+      ctx.globalAlpha = g * ra;
+      const hit1 = [XM, AY - H], P = [XM, AY];
+      const d1 = [XF - XM, AY - (AY - H)];                 // ray 1 reflects through F
+      const d2 = [-(XM - xo), H];                          // ray 2 hits the pole, reflects at the same angle
+      seg(ctx, tip, hit1, tint(BLUE, 0.8)); seg(ctx, tip, P, tint(BLUE, 0.8));
+      ray(ctx, hit1, d1, tint(BLUE, 0.8)); ray(ctx, P, d2, tint(BLUE, 0.8));
+      // the image tip = where the two reflected lines meet (in front: real; behind, by extending them: virtual)
+      const den = d1[0] * d2[1] - d1[1] * d2[0];
+      if (Math.abs(den) > 1e-6) {
+        const s = ((P[0] - hit1[0]) * d2[1] - (P[1] - hit1[1]) * d2[0]) / den;
+        const xi = hit1[0] + d1[0] * s, yi = hit1[1] + d1[1] * s, m = (AY - yi) / H;
+        const ia = api.prog(t, 9.0, 0.6);
+        if (Math.abs(xi - XM) < 110 * PX && Math.abs(m) < 6 && ia > 0) {
+          ctx.globalAlpha = g * ia;
+          if (xi > XM) {                                    // virtual: dashed extensions behind the mirror
+            ctx.restore(); ctx.save(); ctx.globalAlpha = g * ia;   // drop the clip so the image behind shows
+            seg(ctx, hit1, [xi, yi], tint(MUTED, 0.7), 2, [8, 8]); seg(ctx, P, [xi, yi], tint(MUTED, 0.7), 2, [8, 8]);
+            person(ctx, xi, m, GREEN, true);
+          } else person(ctx, xi, m, GREEN);
+        }
+      }
+    }
+  }
+  ctx.restore();
+}
+
+// ---- words + live numbers ----
+function drawWords(ctx, t, api, isCover) {
+  if (isCover) return;
+  const say = (a, tokens, y, size, color = INK) => { if (a <= 0) return; ctx.save(); ctx.globalAlpha = a; api.math(tokens, { y, size, cx: 540, color }); ctx.restore(); };
+  // live: where you stand, where the image is, how big and which way up
+  const lv = show(api, t, 9.4, PAY0 - 0.3);
+  if (lv > 0) {
+    const u = uAt(t, api), v = u * F_CM / (u - F_CM), m = -v / u;
+    const img = Math.abs(u - F_CM) < 0.8 || Math.abs(v) > 110 ? 'image: far away'
+      : `image ${Math.abs(v).toFixed(0)} cm${v < 0 ? ' behind' : ''}  ·  ×${Math.abs(m).toFixed(1)} ${m < 0 ? 'upside down' : 'upright'}`;
+    say(lv, ['you ' + u.toFixed(0) + ' cm   ·   ', { text: img, color: GREEN }], 1400, 42);
+  }
+  say(show(api, t, 6.4, 12.0), ['you, far from the spoon'], 1490, 50);
+  say(show(api, t, 9.0, 12.0), ['the rays cross  →  ', { text: 'upside down', color: GREEN }], 1570, 50);
+  say(show(api, t, 12.0, 17.0), ['walk closer: the image moves from F towards C'], 1500, 44);
+  say(show(api, t, 17.0, 21.0), ['at C: same size, still upside down'], 1500, 48);
+  say(show(api, t, 21.0, 24.6), ['between C and F: bigger, still upside down'], 1500, 46);
+  say(show(api, t, 24.6, 26.8), ['at F: the rays come out parallel  →  no image'], 1500, 44);
+  say(show(api, t, 26.8, 30.4), ['closer than F: the rays never cross'], 1500, 48);
+  say(show(api, t, 27.6, 30.4), ['→  ', { text: 'upright', color: GREEN }, ' and bigger. That\'s the flip!'], 1580, 48);
+  say(show(api, t, 30.4, PAY0 - 0.3), ['beyond F: rays cross  →  ', { text: 'upside down', color: GREEN }], 1500, 48);
+  say(show(api, t, 31.0, PAY0 - 0.3), ['inside F: no crossing  →  ', { text: 'upright', color: GREEN }], 1580, 48);
+}
+
+// ---- payoff: the real NDA question ----
+const CARD = { x: 90, y: 560, w: 900, h: 470 }, CARD_CY = CARD.y + CARD.h / 2;
+const OPTS = ['(a)  the image accelerates towards C', '(b)  the image accelerates towards F', '(c)  the image accelerates towards the pole', '(d)  the image moves at constant speed towards F'];
+function drawPayoff(ctx, t, api) {
+  const a = api.prog(t, PAY0, 0.6) * (1 - api.prog(t, END_AT, 0.4)); if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = MUTED; ctx.font = `600 40px ${api.SOFT_UI}`; ctx.textAlign = 'center';
+  ctx.fillText('NDA asked exactly this:', 540, 520); ctx.restore();
+  const s = lerp(1.14, 1, api.prog(t, PAY0, 1.0));
+  ctx.save(); ctx.globalAlpha = a; ctx.translate(540, CARD_CY); ctx.scale(s, s); ctx.translate(-540, -CARD_CY);
+  api.card(CARD.x, CARD.y, CARD.w, CARD.h);
+  ctx.fillStyle = MUTED; ctx.font = `600 34px ${api.SOFT_UI}`; ctx.textAlign = 'center'; ctx.fillText('NDA 2026 (I)  ·  GAT (Physics)  ·  Q64', 540, 616);
+  api.math(['An object far beyond C of a concave mirror'], { y: 684, size: 38, cx: 540, color: INK });
+  api.math(['accelerates towards the mirror. Which is correct?'], { y: 740, size: 38, cx: 540, color: INK });
+  const on = api.prog(t, ANSWER, 0.6), pulse = Math.sin(Math.PI * api.clamp01((t - ANSWER) / 0.7));
+  OPTS.forEach((o, i) => {
+    const y = 808 + i * 54, hit = i === 0 && on > 0;
+    if (hit) {
+      ctx.save(); ctx.translate(540, y); ctx.scale(1 + 0.03 * pulse, 1 + 0.03 * pulse);
+      ctx.beginPath(); ctx.roundRect(-420, -26, 840, 52, 26); ctx.fillStyle = tint(AMBER, 0.12 * on); ctx.fill();
+      ctx.strokeStyle = tint(AMBER, 0.25 + 0.6 * on); ctx.lineWidth = 2 + on; ctx.stroke(); ctx.restore();
+    }
+    ctx.fillStyle = hit && on > 0.5 ? AMBER : INK; ctx.font = api.hand(36); ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(o, 140, y + 2);
+  });
+  ctx.restore();
+  const say = (t0, tokens, y, size, color = INK) => {
+    const b = api.prog(t, t0, 0.5) * a; if (b <= 0) return;
+    ctx.save(); ctx.globalAlpha = b; api.math(tokens, { y, size, cx: 540, color }); ctx.restore();
+  };
+  say(PAY0 + 2.2, ['far away: the image sits near F'], 1120, 48);
+  say(PAY0 + 3.8, ['object → C:  image moves  F → C'], 1210, 48);
+  say(PAY0 + 5.4, ['image speed = (v/u)² × object speed: it grows'], 1300, 42, MUTED);
+  say(PAY0 + 7.0, ['→  accelerates towards C:  (a)'], 1410, 60, GREEN);
+}
+
+Reel.mount({
+  name: 'nda-physics-013-why-spoon',
+  theme: 'white',
+  vignette: true,
+  size: [1080, 1920],
+  duration: 48.4,
+  watermarkY: null,
+  captions: [],
+  lines: [],
+  draw(ctx, t, api, isCover) {
+    drawTitle(ctx, t, api);
+    drawOptics(ctx, t, api);
+    drawWords(ctx, t, api, isCover);
+    drawPayoff(ctx, t, api);
+    return null;
+  },
+  end: { t0: END_AT, y: 860, lines: [
+    { at: 0.2, size: 48, weight: 400, color: MUTED, text: 'Rays cross: upside down.' },
+    { at: 0.5, size: 64, weight: 600, color: INK, text: 'That\'s the why.' },
+    { at: 1.1, size: 78, weight: 700, color: GREEN, text: 'Follow for Why? #6' },
+  ] },
+  music: { style: 'calm', chime: ANSWER },
+  // Cover: you just inside C, the rays crossing, your image about your size and upside down.
+  cover: { t: 20.8, text: 'Why a spoon flips you', y: 1500, size: 66 },
+});
+</script>
+</body>
+</html>

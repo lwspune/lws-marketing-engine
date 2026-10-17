@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reel 010 Why Seven</title>
+<link rel="stylesheet" href="render.css">
+</head>
+<body>
+<canvas id="c" aria-label="Reel preview"></canvas>
+<div class="bar" id="bar"></div>
+<div id="status" role="status"></div>
+<script src="engine.js"></script>
+<script>
+// Reel 010 — "Why? #2: why does 7 come up most with two dice?" (2026-10-17).
+// The 36 outcomes as a 6×6 grid, the sum in each cell: every sum is one diagonal, and 7's is the longest (6 ways).
+// The cells drop into a pyramid of ways per sum. Payoff: the real NDA 2026 (II) Maths Q111: P(neither 5 nor 7)
+// = (36 − 4 − 6)/36 = 26/36 = 13/18 (c). NDA asked two-dice sums 3 times (24-II Q116, 25-I Q117, 26-II Q111).
+// Tests (reels/learnings.md): L11 · L12 · L13 something always moving · L14 numbered series "Why? #2".
+const { blue: BLUE, green: GREEN, ink: INK, muted: MUTED } = Reel.WHITE;
+const lerp = (a, b, k) => a + (b - a) * k;
+const tint = (hex, a) => `rgba(${[1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)).join(', ')}, ${a})`;
+// fade in at t0, out at t1
+const show = (api, t, t0, t1, f = 0.35) => api.prog(t, t0, f) * (1 - api.prog(t, t1 - f, f));
+
+const T = { slots: 2.9, labels: 3.4, fill: 4.2, sweep: 10.0, seven: 16.4, fly: 19.4, rule: 23.8 };
+const SWEEP = 0.55;                        // each sum's diagonal lights for this long, 2 → 12
+const PAY0 = 29.6, ANSWER = 37.8, END_AT = 40.8;
+const WAYS = s => 6 - Math.abs(s - 7);
+
+// The 36 outcomes. a = first die (column), b = second die (row), k = its place in the sum's pyramid column.
+const CELLS = [];
+for (let b = 1; b <= 6; b++) for (let a = 1; a <= 6; a++) CELLS.push({ a, b, s: a + b, idx: CELLS.length });
+CELLS.forEach(c => { c.k = CELLS.filter(d => d.s === c.s && d.a < c.a).length; });
+
+// Grid, big pyramid, and the small pyramid under the NDA card: pitch, cell size, centre/base.
+const GP = 108, GX = 246, GY = 700;
+const BIG = { p: 88, base: 1340 }, SMALL = { p: 54, base: 1282 };
+
+// ---- title ----
+// Held still at the centre on a card with a light running round its edge (a slow push-in shimmered), then
+// the card fades as the title glides up into the header.
+const TITLE_CARD = { x: 80, y: 620, w: 920, h: 360 };
+function drawTitle(ctx, t, api) {
+  const k = api.prog(t, 2.6, 1.0), ca = 1 - api.prog(t, 2.5, 0.5);
+  if (ca > 0) {
+    ctx.save(); ctx.globalAlpha = ca; api.card(TITLE_CARD.x, TITLE_CARD.y, TITLE_CARD.w, TITLE_CARD.h); ctx.restore();
+    api.glowRing(t, { ...TITLE_CARD, t0: 0, dur: 2.8, laps: 1.25, alpha: ca });
+  }
+  const s = lerp(1, 0.72, k), cy = lerp(847, 350, k);   // 847: the title block (label + 2 lines) centred on the card
+  ctx.save(); ctx.translate(540, cy); ctx.scale(s, s);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = MUTED; ctx.font = `700 50px ${api.SOFT_UI}`; ctx.fillText('WHY?  #2', 0, -150);
+  ctx.fillStyle = INK; ctx.font = api.hand(78);
+  ctx.fillText('Why does 7 come up', 0, -60); ctx.fillText('most with two dice?', 0, 40);
+  ctx.restore();
+}
+
+// ---- the 36 cells: grid → pyramid → small pyramid ----
+function drawCells(ctx, t, api) {
+  const kp = api.ease(api.prog(t, PAY0 - 0.9, 1.1)), out = 1 - api.prog(t, END_AT, 0.4);
+  const pitch = lerp(BIG.p, SMALL.p, kp), base = lerp(BIG.base, SMALL.base, kp);
+  const lit = api.prog(t, PAY0 + 2.2, 0.4), gone = api.prog(t, PAY0 + 3.6, 0.5), left = api.prog(t, PAY0 + 4.4, 0.5);
+  ctx.save(); ctx.globalAlpha = out;
+  for (const c of CELLS) {
+    const slot = api.prog(t, T.slots + c.idx * 0.025, 0.3); if (slot <= 0) continue;
+    const num = api.prog(t, T.fill + c.idx * 0.15, 0.3);
+    const kf = api.ease(api.prog(t, T.fly + (c.s - 2) * 0.10 + c.k * 0.06, 1.1));
+    // centre + size
+    const gx = GX + (c.a - 1) * GP + GP / 2, gy = GY + (c.b - 1) * GP + GP / 2;
+    const px = 540 + (c.s - 7) * pitch, py = base - (c.k + 0.5) * pitch;
+    const cx = lerp(gx, px, kf), cy = lerp(gy, py, kf), w = lerp(GP - 8, pitch - 8, kf) * (0.86 + 0.14 * api.ease(num));
+    // states
+    const sa = T.sweep + (c.s - 2) * SWEEP;
+    const hl = t < T.seven ? api.prog(t, sa, 0.12) * (1 - api.prog(t, sa + SWEEP - 0.06, 0.12)) : 0;
+    const seven = c.s === 7 ? api.prog(t, T.seven, 0.4) * (1 - kp) : 0;
+    const out57 = c.s === 5 || c.s === 7, rem = out57 ? gone : 0;
+    ctx.beginPath(); ctx.roundRect(cx - w / 2, cy - w / 2, w, w, Math.min(16, w * 0.16));
+    if (num <= 0) {   // empty slot before its sum arrives
+      ctx.globalAlpha = out * 0.35 * slot; ctx.strokeStyle = tint(INK, 0.5); ctx.lineWidth = 2; ctx.stroke();
+      ctx.globalAlpha = out; continue;
+    }
+    ctx.fillStyle = tint('#ffffff', (1 - rem)); ctx.fill();
+    if (hl > 0) { ctx.fillStyle = tint(BLUE, 0.2 * hl); ctx.fill(); }
+    if (seven > 0) { ctx.fillStyle = tint(BLUE, 0.85 * seven); ctx.fill(); }
+    if (out57 && lit > 0 && rem < 1) { ctx.fillStyle = tint(BLUE, 0.3 * lit * (1 - rem)); ctx.fill(); }
+    if (!out57 && left > 0) { ctx.fillStyle = tint(GREEN, 0.28 * left); ctx.fill(); }
+    if (rem > 0) {   // ruled out: dashed outline only
+      ctx.save(); ctx.setLineDash([6, 6]); ctx.strokeStyle = tint(MUTED, 0.75 * rem); ctx.lineWidth = 2; ctx.stroke(); ctx.restore();
+    } else {
+      ctx.strokeStyle = hl > 0.5 || seven > 0.5 ? tint(BLUE, 0.6) : tint(INK, 0.16); ctx.lineWidth = 2; ctx.stroke();
+    }
+    const na = num * (1 - kf);
+    if (na > 0) {
+      ctx.globalAlpha = out * na; ctx.fillStyle = seven > 0.5 ? '#ffffff' : hl > 0.5 ? BLUE : INK;
+      ctx.font = api.hand(46); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(String(c.s), cx, cy + 2);
+      ctx.globalAlpha = out;
+    }
+  }
+  ctx.restore();
+
+  // grid labels: the two dice
+  const gl = api.prog(t, T.labels, 0.5) * (1 - api.prog(t, T.fly, 0.5));
+  if (gl > 0) {
+    ctx.save(); ctx.globalAlpha = gl; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillStyle = MUTED; ctx.font = `600 36px ${api.SOFT_UI}`; ctx.fillText('first die', 540 + 30, 606);
+    ctx.font = api.hand(40);
+    for (let i = 1; i <= 6; i++) { ctx.fillText(String(i), GX + (i - 1) * GP + GP / 2, 660); ctx.fillText(String(i), GX - 34, GY + (i - 1) * GP + GP / 2); }
+    ctx.translate(150, GY + 3 * GP); ctx.rotate(-Math.PI / 2); ctx.font = `600 36px ${api.SOFT_UI}`; ctx.fillText('second die', 0, 0);
+    ctx.restore();
+  }
+  // pyramid labels: the sum under each column, the number of ways above it
+  const pl = api.prog(t, T.fly + 2.2, 0.5) * out;
+  if (pl > 0) {
+    ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    for (let s = 2; s <= 12; s++) {
+      const x = 540 + (s - 7) * pitch, key = s === 7 || (kp > 0 && s === 5);
+      ctx.globalAlpha = pl; ctx.fillStyle = key ? BLUE : MUTED; ctx.font = key ? `700 36px ${api.SOFT_UI}` : `600 34px ${api.SOFT_UI}`;
+      ctx.fillText(String(s), x, base + 34);
+      const ca = s === 5 || s === 7 ? pl : pl * (1 - kp);
+      if (ca > 0) {
+        ctx.globalAlpha = ca; ctx.fillStyle = key ? BLUE : INK; ctx.font = api.hand(38);
+        ctx.fillText(String(WAYS(s)), x, base - WAYS(s) * pitch - 26);
+      }
+    }
+    ctx.restore();
+  }
+}
+
+// ---- words under the picture ----
+function drawWords(ctx, t, api, isCover) {
+  if (isCover) return;
+  const say = (a, tokens, y, size, color = INK) => { if (a <= 0) return; ctx.save(); ctx.globalAlpha = a; api.math(tokens, { y, size, cx: 540, color }); ctx.restore(); };
+  say(show(api, t, T.fill + 0.4, T.sweep), ['36 equally likely outcomes'], 1460, 50);
+  const sw = show(api, t, T.sweep, T.seven - 0.05, 0.2);
+  if (sw > 0) {
+    const s = Math.min(12, 2 + Math.floor((t - T.sweep) / SWEEP)), n = WAYS(s);
+    say(sw, ['sum ' + s + '  →  ', { text: n + (n === 1 ? ' way' : ' ways'), color: BLUE }], 1460, 56);
+  }
+  const sv = show(api, t, T.seven, T.fly + 0.4);
+  say(sv, ['sum 7  →  ', { text: '6 ways', color: BLUE }], 1440, 58);
+  say(show(api, t, T.seven + 0.8, T.fly + 0.4), ['the longest diagonal'], 1530, 46, MUTED);
+  say(show(api, t, T.rule, PAY0 - 0.3), ['7 sits in the middle:  ', { text: '6 of 36', color: BLUE }, ' ways'], 1470, 52);
+  say(show(api, t, T.rule + 2.0, PAY0 - 0.3), ['every other sum has fewer'], 1556, 46, MUTED);
+}
+
+// ---- payoff: the real NDA question, solved on the pyramid ----
+const CARD = { x: 110, y: 560, w: 860, h: 340 }, CARD_CY = CARD.y + CARD.h / 2;
+function drawPayoff(ctx, t, api) {
+  const a = api.prog(t, PAY0, 0.6) * (1 - api.prog(t, END_AT, 0.4)); if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = MUTED; ctx.font = `600 40px ${api.SOFT_UI}`; ctx.textAlign = 'center';
+  ctx.fillText('NDA asked exactly this:', 540, 520); ctx.restore();
+  const s = lerp(1.16, 1, api.prog(t, PAY0, 1.0));
+  ctx.save(); ctx.globalAlpha = a; ctx.translate(540, CARD_CY); ctx.scale(s, s); ctx.translate(-540, -CARD_CY);
+  api.card(CARD.x, CARD.y, CARD.w, CARD.h);
+  ctx.fillStyle = MUTED; ctx.font = `600 34px ${api.SOFT_UI}`; ctx.textAlign = 'center'; ctx.fillText('NDA 2026 (II)  ·  Maths  ·  Q111', 540, 616);
+  api.math(['Two fair dice are tossed.'], { y: 690, size: 48, cx: 540, color: INK });
+  api.math(['P(sum is neither ', { text: '5', color: BLUE }, ' nor ', { text: '7', color: BLUE }, ')  =  ?'], { y: 766, size: 56, cx: 540, color: INK });
+  api.chips(t, { labels: ['(a) 11/18', '(b) 2/3', '(c) 13/18', '(d) 5/6'], y: 806, answer: 2, at: ANSWER, size: 40, w: 190, h: 72, gap: 14 });
+  ctx.restore();
+  const say = (t0, tokens, y, size, color = INK) => {
+    const b = api.prog(t, t0, 0.5) * a; if (b <= 0) return;
+    ctx.save(); ctx.globalAlpha = b; api.math(tokens, { y, size, cx: 540, color }); ctx.restore();
+  };
+  say(PAY0 + 2.2, ['sum 5:  ', { text: '4 ways', color: BLUE }, '    sum 7:  ', { text: '6 ways', color: BLUE }], 1404, 48);
+  say(PAY0 + 4.4, ['36 − 4 − 6  =  ', { text: '26', color: GREEN }, ' ways left'], 1490, 52);
+  say(PAY0 + 6.4, ['P  =  26/36  =  13/18'], 1580, 68, GREEN);
+}
+
+Reel.mount({
+  name: 'nda-maths-010-why-seven',
+  theme: 'white',
+  vignette: true,
+  size: [1080, 1920],
+  duration: 44.2,
+  watermarkY: null,
+  captions: [],
+  lines: [],
+  draw(ctx, t, api, isCover) {
+    drawTitle(ctx, t, api);
+    drawCells(ctx, t, api);
+    drawWords(ctx, t, api, isCover);
+    drawPayoff(ctx, t, api);
+    return null;
+  },
+  end: { t0: END_AT, y: 860, lines: [
+    { at: 0.2, size: 48, weight: 400, color: MUTED, text: '7 has the most ways to land.' },
+    { at: 0.5, size: 64, weight: 600, color: INK, text: 'That\'s the why.' },
+    { at: 1.1, size: 78, weight: 700, color: GREEN, text: 'Follow for Why? #3' },
+  ] },
+  music: { chime: ANSWER },
+  // Cover: the full grid with 7's diagonal lit; the header already has the title.
+  cover: { t: 18.0, text: '7 has 6 ways out of 36', y: 1500, size: 66 },
+});
+</script>
+</body>
+</html>

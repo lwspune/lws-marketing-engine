@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-007-cancel",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "Q74 odd function on [−1, 1], the areas cancel to 0 (white visual format)",
+  "video": "nda-maths-007-cancel.mp4",
+  "cover": "nda-maths-007-cancel-cover.png",
+  "captions": {
+    "instagram": "NDA 2024 (I) · Maths · Q74. Three lines of integration… or one picture? 👀\n\n3 sin x − sin 3x = 4 sin³x, so the integrand is 4 sin³x cos²x: an odd function. From −1 to 1 the area above the axis cancels the area below → 0 (b).\nNDA has used this trick 3 times since 2024. Odd function + limits −a to a = 0, no integration.\n\nSave this 📌 Follow @lws.pune for one real NDA PYQ every day.\nPractise every Definite Integration PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #MathsTricks #LWSPune #Calculus",
+    "facebook": "NDA 2024 (I) · Maths · Q74. Three lines of integration… or one picture? 👀\n\n3 sin x − sin 3x = 4 sin³x, so the integrand is 4 sin³x cos²x: an odd function. From −1 to 1 the area above the axis cancels the area below → 0 (b).\nNDA has used this trick 3 times since 2024. Odd function + limits −a to a = 0, no integration.\n\nPractise every Definite Integration PYQ free: https://www.pyqvault.com/questions/nda/mathematics/definite-integration\n\n#NDA #NDAMaths #NDA2027",
+    "youtube": {
+      "title": "NDA Maths PYQ: this integral is 0 without integrating #shorts",
+      "description": "NDA 2024 (I) Maths Q74. 3 sin x − sin 3x = 4 sin³x, so the integrand 4 sin³x cos²x is odd. From −1 to 1 the area above the axis cancels the area below: the answer is 0 (b). NDA has used this trick 3 times since 2024.\n\nPractise NDA Maths PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #NDA2027 #Shorts"
+    }
+  }
+}

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reel 009 Why Odd Squares</title>
+<link rel="stylesheet" href="render.css">
+</head>
+<body>
+<canvas id="c" aria-label="Reel preview"></canvas>
+<div class="bar" id="bar"></div>
+<div id="status" role="status"></div>
+<script src="engine.js"></script>
+<script>
+// Reel 009 — "Why? #1: why do odd numbers add up to a square?" (2026-10-17, replaces the dropped quick 009).
+// An n×n square grows by an L of 2n − 1 tiles: 1, +3, +5, … so 1 + 3 + … + (2n − 1) = n². Payoff: the real
+// NDA 2026 (I) Maths Q20: |M_k| = k² − (k−1)² = 2k − 1, so |M₁| + … + |M₅₀| = 50² = 2500 (c).
+// Tests (reels/learnings.md): L11 title zooms at the centre then glides up · L12 edge vignette · L13 something
+// always moving, ~40 s · L14 numbered series "Why? #1" · in-frame text instead of caption boxes (towards L16).
+const { blue: BLUE, green: GREEN, ink: INK, muted: MUTED } = Reel.WHITE;
+const lerp = (a, b, k) => a + (b - a) * k;
+const BLUE_SOFT = 'rgba(63, 86, 160, 0.16)', BLUE_EDGE = 'rgba(63, 86, 160, 0.35)';
+
+// n-th square starts at STEP[n-1]: slow for 1–6 (read each sum), then fast to 10.
+const STEP = [0.3, 3.1, 5.9, 8.7, 11.5, 14.3, 17.1, 17.8, 18.5, 19.2];
+const GEN0 = 20.4, PAY0 = 27.0, ANSWER = 36.6, END_AT = 39.8;
+
+// ---- title: centred and pushing in from frame 0, then glides up into a slim header ----
+// Held still at the centre on a card with a light running round its edge (a slow push-in shimmered), then
+// the card fades as the title glides up into the header.
+const TITLE_CARD = { x: 80, y: 620, w: 920, h: 360 };
+function drawTitle(ctx, t, api) {
+  const k = api.prog(t, 2.6, 1.0), ca = 1 - api.prog(t, 2.5, 0.5);
+  if (ca > 0) {
+    ctx.save(); ctx.globalAlpha = ca; api.card(TITLE_CARD.x, TITLE_CARD.y, TITLE_CARD.w, TITLE_CARD.h); ctx.restore();
+    api.glowRing(t, { ...TITLE_CARD, t0: 0, dur: 2.8, laps: 1.25, alpha: ca });
+  }
+  const s = lerp(1, 0.72, k), cy = lerp(847, 350, k);   // 847: the title block (label + 2 lines) centred on the card
+  ctx.save(); ctx.translate(540, cy); ctx.scale(s, s);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  // Series label stays readable in the header: 50 px × 0.72 ≈ 36 px.
+  ctx.fillStyle = MUTED; ctx.font = `700 50px ${api.SOFT_UI}`; ctx.fillText('WHY?  #1', 0, -150);
+  ctx.fillStyle = INK; ctx.font = api.hand(78);
+  ctx.fillText('Why do odd numbers', 0, -60); ctx.fillText('add up to a square?', 0, 40);
+  ctx.restore();
+}
+
+// ---- the growing square ----
+const tileFor = n => Math.min(118, 700 / n);
+function stateAt(t) {
+  let n = 0; for (let i = 0; i < STEP.length; i++) if (t >= STEP[i]) n = i + 1;
+  return n;
+}
+function drawSquares(ctx, t, api) {
+  const n = stateAt(t); if (!n) return;
+  const fade = 1 - api.prog(t, PAY0 - 0.6, 0.6), dim = 1 - 0.55 * api.prog(t, GEN0, 0.6);
+  if (fade <= 0) return;
+  const stepDur = n < 7 ? 1.4 : 0.55, p = api.prog(t, STEP[n - 1], stepDur);
+  const tile = lerp(tileFor(Math.max(1, n - 1)), tileFor(n), p);
+  const S = n * tile, x0 = 540 - S / 2, cy = 1060, y0 = cy - S / 2, gap = Math.max(3, tile * 0.07);
+  const show = Math.floor(p * (2 * n - 1) + 0.999);   // new L tiles revealed so far, corner outwards
+  // The new L is laid as one stroke: along the new top row into the corner, then down the new column.
+  const L = []; for (let i = 0; i < n; i++) L.push([i, n - 1]); for (let j = n - 2; j >= 0; j--) L.push([n - 1, j]);
+  ctx.save(); ctx.globalAlpha = fade * dim;
+  const cell = (i, j, fill, stroke, pop = 1) => {
+    const x = x0 + i * tile + gap / 2, y = y0 + (n - 1 - j) * tile + gap / 2, w = (tile - gap) * pop;
+    ctx.beginPath(); ctx.roundRect(x + (tile - gap - w) / 2, y + (tile - gap - w) / 2, w, w, Math.min(14, tile * 0.16));
+    ctx.fillStyle = fill; ctx.fill(); ctx.strokeStyle = stroke; ctx.lineWidth = 2; ctx.stroke();
+  };
+  for (let i = 0; i < n - 1; i++) for (let j = 0; j < n - 1; j++) cell(i, j, BLUE_SOFT, BLUE_EDGE);
+  L.slice(0, show).forEach(([i, j], idx) => {
+    const age = api.clamp01((p * (2 * n - 1) - idx) / 1.5);   // each tile pops in
+    const settled = api.prog(t, STEP[n - 1] + stepDur + 0.3, 0.6);
+    const fill = settled >= 1 ? BLUE_SOFT : `rgba(63, 86, 160, ${lerp(0.85, 0.16, settled)})`;
+    cell(i, j, fill, BLUE_EDGE, 0.6 + 0.4 * api.ease(age));
+  });
+  // "+ (2n − 1)" tag beside the new L while it lands
+  const tag = api.prog(t, STEP[n - 1], 0.3) * (1 - api.prog(t, STEP[n - 1] + stepDur + 0.4, 0.4));
+  if (n > 1 && tag > 0) {
+    ctx.globalAlpha = fade * tag; ctx.fillStyle = BLUE; ctx.font = `700 48px ${api.SOFT_UI}`; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(`+${2 * n - 1}`, Math.min(x0 + S + 20, 900), y0 + tile / 2);
+  }
+  ctx.restore();
+}
+
+// Running sum under the square: "1 + 3 + 5 = 9 = 3²", the newest term in blue.
+function drawSum(ctx, t, api, isCover) {
+  const n = stateAt(t); if (!n || isCover) return;
+  const a = 1 - api.prog(t, GEN0 - 0.4, 0.4); if (a <= 0) return;
+  const terms = n <= 6 ? Array.from({ length: n }, (_, i) => String(2 * i + 1)) : ['1', '3', '5', '…', String(2 * n - 1)];
+  const tokens = [];
+  terms.forEach((x, i) => { if (i) tokens.push('  +  '); tokens.push(i === terms.length - 1 ? { text: x, color: BLUE } : x); });
+  tokens.push(`  =  ${n * n}  =  ${n}`, { sup: '2', color: GREEN });
+  ctx.save(); ctx.globalAlpha = a; api.math(tokens, { y: 1520, size: n <= 6 ? 54 : 50, cx: 540, color: INK }); ctx.restore();
+}
+
+// The general rule, over the dimmed 10×10 square.
+function drawRule(ctx, t, api) {
+  const out = 1 - api.prog(t, PAY0 - 0.6, 0.5);
+  const a1 = api.prog(t, GEN0, 0.5) * out, a2 = api.prog(t, GEN0 + 2.4, 0.5) * out;
+  ctx.save();
+  if (a1 > 0) { ctx.globalAlpha = a1; api.math(['each new L adds the next odd number'], { y: 1470, size: 46, cx: 540, color: INK }); }
+  if (a2 > 0) {
+    ctx.globalAlpha = a2;
+    api.math(['1 + 3 + 5 + … + (2n − 1)  =  ', { text: 'n', color: GREEN }, { sup: '2', color: GREEN }], { y: 1570, size: 56, cx: 540, color: INK });
+  }
+  ctx.restore();
+}
+
+// ---- payoff: the real NDA question zooms in, solved by the rule ----
+const CARD = { x: 110, y: 560, w: 860, h: 470 }, CARD_CY = CARD.y + CARD.h / 2;
+function drawMatrix(ctx, api, dy) {
+  const lab = api.math([{ text: 'M', color: BLUE }, { sub: 'k', color: BLUE }, { text: '  =', color: BLUE }], { y: 760 + dy, size: 54, x: 350 });
+  const x0 = lab.x1 + 26, w = 270, top = 680 + dy, bot = 796 + dy, c1 = x0 + 78, c2 = x0 + 196;
+  ctx.save(); ctx.strokeStyle = BLUE; ctx.lineWidth = 4; ctx.lineCap = 'round';
+  for (const [x, d] of [[x0, 1], [x0 + w, -1]]) { ctx.beginPath(); ctx.moveTo(x + 14 * d, top); ctx.lineTo(x, top); ctx.lineTo(x, bot); ctx.lineTo(x + 14 * d, bot); ctx.stroke(); }
+  ctx.fillStyle = BLUE; ctx.font = api.hand(46); ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  for (const [txt, x, y] of [['k', c1, 728], ['k − 1', c2, 728], ['k − 1', c1, 782], ['k', c2, 782]]) ctx.fillText(txt, x, y + dy);
+  ctx.restore();
+}
+function drawPayoff(ctx, t, api) {
+  const a = api.prog(t, PAY0, 0.6) * (1 - api.prog(t, END_AT, 0.4)); if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = MUTED; ctx.font = `600 40px ${api.SOFT_UI}`; ctx.textAlign = 'center';
+  ctx.fillText('NDA asked exactly this:', 540, 520); ctx.restore();
+  const s = lerp(1.16, 1, api.prog(t, PAY0, 1.0));
+  ctx.save(); ctx.globalAlpha = a; ctx.translate(540, CARD_CY); ctx.scale(s, s); ctx.translate(-540, -CARD_CY);
+  api.card(CARD.x, CARD.y, CARD.w, CARD.h);
+  ctx.fillStyle = MUTED; ctx.font = `600 34px ${api.SOFT_UI}`; ctx.textAlign = 'center'; ctx.fillText('NDA 2026 (I)  ·  Maths  ·  Q20', 540, 626);
+  drawMatrix(ctx, api, 0);
+  api.math([{ text: '|M' }, { sub: '1' }, { text: '| + |M' }, { sub: '2' }, { text: '| + … + |M' }, { sub: '50' }, { text: '|  = ?' }], { y: 872, size: 58, cx: 540, color: INK });
+  api.chips(t, { labels: ['(a) 50', '(b) 1250', '(c) 2500', '(d) 5000'], y: 928, answer: 2, at: ANSWER, size: 40, w: 190, h: 76, gap: 14 });
+  ctx.restore();
+  // The working, line by line: the rule, the determinants one by one (they are the odd numbers), the sum.
+  const det = (k, rest) => ['|M', { sub: String(k) }, '|  =  ', ...rest];
+  const steps = [
+    [PAY0 + 2.0, ['|M', { sub: 'k' }, '|  =  k', { sup: '2' }, ' − (k − 1)', { sup: '2' }, '  =  ', { text: '2k − 1', color: BLUE }], 1130, 54, 540],
+    [PAY0 + 3.4, det(1, [{ text: '1', color: BLUE }]), 1240, 50, 250],
+    [PAY0 + 4.0, det(2, [{ text: '3', color: BLUE }]), 1240, 50, 540],
+    [PAY0 + 4.6, det(3, [{ text: '5', color: BLUE }]), 1240, 50, 830],
+    [PAY0 + 5.4, ['…    ', ...det(50, ['2(50) − 1  =  ', { text: '99', color: BLUE }])], 1340, 50, 540],
+    [PAY0 + 7.0, ['sum  =  1 + 3 + 5 + … + 99'], 1450, 52, 540],
+  ];
+  steps.forEach(([t0, tokens, y, size, cx]) => {
+    const b = api.prog(t, t0, 0.5) * a; if (b <= 0) return;
+    ctx.save(); ctx.globalAlpha = b; api.math(tokens, { y, size, cx, color: INK }); ctx.restore();
+  });
+  const r = api.prog(t, PAY0 + 8.6, 0.5) * a;
+  if (r > 0) { ctx.save(); ctx.globalAlpha = r; api.math(['=  50', { sup: '2' }, '  =  ', { text: '2500', color: GREEN }], { y: 1555, size: 72, cx: 540, color: GREEN }); ctx.restore(); }
+}
+
+Reel.mount({
+  name: 'nda-maths-009-why-odd-squares',
+  theme: 'white',
+  vignette: true,
+  size: [1080, 1920],
+  duration: 43.2,
+  watermarkY: null,
+  captions: [],
+  lines: [],
+  draw(ctx, t, api, isCover) {
+    drawTitle(ctx, t, api);
+    drawSquares(ctx, t, api);
+    drawSum(ctx, t, api, isCover);
+    drawRule(ctx, t, api);
+    drawPayoff(ctx, t, api);
+    return null;
+  },
+  end: { t0: END_AT, y: 860, lines: [
+    { at: 0.2, size: 48, weight: 400, color: MUTED, text: 'Odd numbers stack into squares.' },
+    { at: 0.5, size: 64, weight: 600, color: INK, text: 'That\'s the why.' },
+    { at: 1.1, size: 78, weight: 700, color: GREEN, text: 'Follow for Why? #2' },
+  ] },
+  music: { chime: ANSWER },
+  // Cover: a blue L being laid on the 5×5 (colour + the idea at a glance); the header already has the title.
+  cover: { t: 12.6, text: '1 + 3 + 5 + 7 + 9 = 5²', y: 1530, size: 66 },
+});
+</script>
+</body>
+</html>

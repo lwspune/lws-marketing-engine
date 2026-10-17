@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-009-why-odd-squares",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "Why? #1: odd numbers add up to a square → NDA 2026 (I) Q20 (43 s, continuous motion)",
+  "video": "nda-maths-009-why-odd-squares.mp4",
+  "cover": "nda-maths-009-why-odd-squares-cover.png",
+  "captions": {
+    "instagram": "Why? #1 · Why do odd numbers add up to a square? 🟦\n\n1 = 1², 1 + 3 = 2², 1 + 3 + 5 = 3²… Each new L around the square adds the next odd number, so 1 + 3 + 5 + … + (2n − 1) = n².\n\nNDA 2026 (I) asked exactly this (Maths Q20): |Mₖ| = k² − (k − 1)² = 2k − 1, so |M₁| = 1, |M₂| = 3, |M₃| = 5 … |M₅₀| = 99 and |M₁| + … + |M₅₀| = 1 + 3 + … + 99 = 50² = 2500 → (c).\n\nSave this 📌 Send it to a friend preparing for NDA. Follow for Why? #2.\nPractise every Matrices & Determinants PYQ free → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #MathsTricks #LWSPune #MathVisualization",
+    "facebook": "Why? #1 · Why do odd numbers add up to a square? 🟦\n\n1 = 1², 1 + 3 = 2², 1 + 3 + 5 = 3²… Each new L around the square adds the next odd number, so 1 + 3 + 5 + … + (2n − 1) = n².\n\nNDA 2026 (I) asked exactly this (Maths Q20): |Mₖ| = k² − (k − 1)² = 2k − 1, so |M₁| + … + |M₅₀| = 50² = 2500 → (c).\n\nPractise NDA Maths PYQs free: https://www.pyqvault.com/questions/nda/mathematics/matrices-determinants\n\n#NDA #NDAMaths #NDA2027",
+    "youtube": {
+      "title": "Why do odd numbers add up to a square? (NDA 2026 asked it) #shorts",
+      "description": "Why? #1. 1 + 3 + 5 + … + (2n − 1) = n²: each new L around a square adds the next odd number. NDA 2026 (I) Maths Q20 uses it: |Mₖ| = 2k − 1, so the sum of 50 determinants is 50² = 2500 (c).\n\nPractise NDA Maths PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #NDA2027 #Shorts"
+    }
+  }
+}

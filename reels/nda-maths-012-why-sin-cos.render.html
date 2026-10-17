@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reel 012 Why Sin Cos</title>
+<link rel="stylesheet" href="render.css">
+</head>
+<body>
+<canvas id="c" aria-label="Reel preview"></canvas>
+<div class="bar" id="bar"></div>
+<div id="status" role="status"></div>
+<script src="engine.js"></script>
+<script>
+// Reel 012 — "Why? #4: why is sin²θ + cos²θ always 1?" (2026-10-17).
+// A point on a circle of radius 1: its height is sin θ, its width cos θ, and Pythagoras gives sin² + cos² = 1.
+// Then the point spins and a stacked bar shows sin²θ (green) and cos²θ (blue): one grows as the other
+// shrinks, the total never changes. Payoff: the real NDA 2025 (I) Maths Q35: p = sin α − sin(α − 90°)
+// = sin α + cos α; they can't both be 1, best when equal → max √2 (b).
+// Music: the "bright" loop (founder, 17 Oct: different music per reel; the sonified tones were dropped).
+const { blue: BLUE, green: GREEN, ink: INK, muted: MUTED } = Reel.WHITE;
+const lerp = (a, b, k) => a + (b - a) * k;
+const show = (api, t, t0, t1, f = 0.35) => api.prog(t, t0, f) * (1 - api.prog(t, t1 - f, f));
+
+const T = { circle: 3.2, point: 4.2, tri: 5.0, labels: 5.8, pyth: 9.8, bar: 13.6, spin: 14.0, land: 28.4, share: 28.6 };
+const PAY0 = 32.6, ANSWER = 41.2, END_AT = 44.2;
+const C = { x: 360, y: 1000 }, R = 240;
+const BAR = { x: 730, w: 100, top: C.y - R, base: C.y + R };
+
+// θ(t): a gentle wobble around 45° while it's explained, settling exactly on 45° at T.spin; then two full
+// turns (sine ease, so it starts and stops softly) landing on 45° again at T.land.
+const Q = Math.PI / 4;
+function theta(t) {
+  if (t < T.spin) {
+    const settle = 1 - Reel_prog(t, 11.6, 2.4);
+    return Q + 0.38 * Math.sin(2 * Math.PI * (t - T.circle) / 5.4) * settle;
+  }
+  const u = Math.min(1, (t - T.spin) / (T.land - T.spin));
+  return Q + 4 * Math.PI * (0.5 - 0.5 * Math.cos(Math.PI * u));
+}
+// prog without api (theta is a plain function of t, outside the draw call)
+function Reel_prog(t, t0, d) { const p = Math.min(1, Math.max(0, (t - t0) / d)); return p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; }
+const S2 = t => Math.sin(theta(t)) ** 2;
+
+// ---- title: held still on a card with a light running round its edge, then it glides up ----
+const TITLE_CARD = { x: 80, y: 620, w: 920, h: 360 };
+function drawTitle(ctx, t, api) {
+  const k = api.prog(t, 2.6, 1.0), ca = 1 - api.prog(t, 2.5, 0.5);
+  if (ca > 0) {
+    ctx.save(); ctx.globalAlpha = ca; api.card(TITLE_CARD.x, TITLE_CARD.y, TITLE_CARD.w, TITLE_CARD.h); ctx.restore();
+    api.glowRing(t, { ...TITLE_CARD, t0: 0, dur: 2.8, laps: 1.25, alpha: ca });
+  }
+  const s = lerp(1, 0.72, k), cy = lerp(847, 350, k);   // 847: the title block (label + 2 lines) centred on the card
+  ctx.save(); ctx.translate(540, cy); ctx.scale(s, s);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = MUTED; ctx.font = `700 50px ${api.SOFT_UI}`; ctx.fillText('WHY?  #4', 0, -150);
+  ctx.fillStyle = INK; ctx.font = api.hand(78);
+  ctx.fillText('Why is sin²θ + cos²θ', 0, -60); ctx.fillText('always 1?', 0, 40);
+  ctx.restore();
+}
+
+// ---- the circle, the point, its triangle ----
+function line(ctx, x0, y0, x1, y1, color, w) { ctx.strokeStyle = color; ctx.lineWidth = w; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke(); }
+function drawCircle(ctx, t, api) {
+  const out = 1 - api.prog(t, PAY0 - 0.6, 0.6); if (out <= 0) return;
+  const g = api.prog(t, T.circle, 0.5) * out; if (g <= 0) return;
+  const th = theta(t), px = C.x + R * Math.cos(th), py = C.y - R * Math.sin(th);
+  ctx.save(); ctx.globalAlpha = g;
+  // axes + the unit circle tracing in
+  ctx.strokeStyle = Reel.WHITE.axis; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(C.x - R - 50, C.y); ctx.lineTo(C.x + R + 50, C.y); ctx.moveTo(C.x, C.y + R + 50); ctx.lineTo(C.x, C.y - R - 50); ctx.stroke();
+  const arc = api.prog(t, T.circle, 1.0);
+  ctx.strokeStyle = 'rgba(35, 48, 74, 0.35)'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.arc(C.x, C.y, R, 0, -2 * Math.PI * arc, true); ctx.stroke();
+  // triangle: cos θ along the x-axis (blue), sin θ straight up (green), radius 1 (ink)
+  const tri = api.prog(t, T.tri, 0.8), pt = api.prog(t, T.point, 0.5);
+  if (tri > 0) {
+    ctx.globalAlpha = g * tri;
+    line(ctx, C.x, C.y, px, C.y, BLUE, 7);
+    line(ctx, px, C.y, px, lerp(C.y, py, tri), GREEN, 7);
+    // right-angle mark (only when the legs are long enough to show it)
+    if (Math.abs(Math.cos(th)) > 0.2 && Math.abs(Math.sin(th)) > 0.2) {
+      const sx = Math.sign(Math.cos(th)), sy = Math.sign(Math.sin(th)), m = 22;
+      ctx.strokeStyle = 'rgba(35, 48, 74, 0.45)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(px - sx * m, C.y); ctx.lineTo(px - sx * m, C.y - sy * m); ctx.lineTo(px, C.y - sy * m); ctx.stroke();
+    }
+  }
+  if (pt > 0) {
+    ctx.globalAlpha = g * pt;
+    line(ctx, C.x, C.y, px, py, INK, 5);
+    ctx.fillStyle = INK; ctx.beginPath(); ctx.arc(px, py, 13, 0, 7); ctx.fill();
+    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(px, py, 5, 0, 7); ctx.fill();
+  }
+  // labels: steady while it wobbles near 45°, hidden while it spins, back when it lands on 45°
+  const la = api.prog(t, T.labels, 0.5) * (1 - api.prog(t, T.spin, 0.4)) + api.prog(t, T.land, 0.5);
+  if (la > 0) {
+    ctx.globalAlpha = g * Math.min(1, la); ctx.textBaseline = 'middle';
+    ctx.font = api.hand(42);
+    ctx.fillStyle = BLUE; ctx.textAlign = 'center'; ctx.fillText('cos θ', (C.x + px) / 2, C.y + 40);
+    ctx.fillStyle = GREEN; ctx.textAlign = 'left'; ctx.fillText('sin θ', px + 18, (C.y + py) / 2);
+    ctx.fillStyle = INK; ctx.textAlign = 'right'; ctx.fillText('1', (C.x + px) / 2 - 16, (C.y + py) / 2 - 16);
+    ctx.fillStyle = MUTED; ctx.font = api.hand(36); ctx.textAlign = 'left'; ctx.fillText('θ', C.x + 58, C.y - 22);
+    ctx.strokeStyle = 'rgba(95, 104, 128, 0.7)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(C.x, C.y, 44, 0, -(th % (2 * Math.PI)), true); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// ---- the stacked bar: sin² (green, bottom) + cos² (blue, top) always fills exactly 1 ----
+function drawBar(ctx, t, api) {
+  const a = api.prog(t, T.bar, 0.6) * (1 - api.prog(t, PAY0 - 0.6, 0.6)); if (a <= 0) return;
+  const s2 = S2(t), h = BAR.base - BAR.top, ys = BAR.base - s2 * h;
+  ctx.save(); ctx.globalAlpha = a;
+  ctx.beginPath(); ctx.roundRect(BAR.x, BAR.top, BAR.w, h, 14); ctx.fillStyle = '#ffffff'; ctx.fill();
+  ctx.save(); ctx.clip();
+  ctx.fillStyle = 'rgba(42, 115, 110, 0.75)'; ctx.fillRect(BAR.x, ys, BAR.w, BAR.base - ys);
+  ctx.fillStyle = 'rgba(63, 86, 160, 0.75)'; ctx.fillRect(BAR.x, BAR.top, BAR.w, ys - BAR.top);
+  ctx.restore();
+  ctx.strokeStyle = 'rgba(35, 48, 74, 0.3)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.roundRect(BAR.x, BAR.top, BAR.w, h, 14); ctx.stroke();
+  // the "1" line the total always reaches
+  ctx.save(); ctx.setLineDash([8, 8]); line(ctx, BAR.x - 30, BAR.top, BAR.x + BAR.w + 10, BAR.top, 'rgba(35, 48, 74, 0.5)', 2); ctx.restore();
+  ctx.fillStyle = INK; ctx.font = api.hand(44); ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.fillText('1', BAR.x - 38, BAR.top);
+  // labels brighten with their share
+  ctx.font = api.hand(40); ctx.textAlign = 'left';
+  ctx.globalAlpha = a * (0.35 + 0.65 * s2); ctx.fillStyle = GREEN; ctx.fillText('sin²', BAR.x + BAR.w + 16, lerp(BAR.base, ys, 0.5));
+  ctx.globalAlpha = a * (0.35 + 0.65 * (1 - s2)); ctx.fillStyle = BLUE; ctx.fillText('cos²', BAR.x + BAR.w + 16, lerp(ys, BAR.top, 0.5));
+  ctx.restore();
+}
+
+// ---- words + live numbers ----
+function drawWords(ctx, t, api, isCover) {
+  if (isCover) return;
+  const say = (a, tokens, y, size, color = INK) => { if (a <= 0) return; ctx.save(); ctx.globalAlpha = a; api.math(tokens, { y, size, cx: 540, color }); ctx.restore(); };
+  say(show(api, t, T.point, T.pyth), ['a point on a circle of radius 1'], 1400, 50);
+  say(show(api, t, T.labels + 0.6, T.pyth), ['height ', { text: 'sin θ', color: GREEN }, '   ·   width ', { text: 'cos θ', color: BLUE }], 1490, 48);
+  say(show(api, t, T.pyth, T.spin), ['Pythagoras on this triangle:'], 1400, 48, MUTED);
+  say(show(api, t, T.pyth + 1.0, T.spin), [{ text: 'sin²θ', color: GREEN }, '  +  ', { text: 'cos²θ', color: BLUE }, '  =  1²  =  1'], 1500, 62);
+  // live: the two shares, rounded so they always add to 1.00
+  const lv = show(api, t, T.bar, PAY0 - 0.3);
+  if (lv > 0) {
+    const s = Math.round(S2(t) * 100), c = 100 - s, f = n => (n / 100).toFixed(2);
+    say(lv, [{ text: 'sin²θ = ' + f(s), color: GREEN }, '   +   ', { text: 'cos²θ = ' + f(c), color: BLUE }, '   =  1'], 1330, 44);
+  }
+  say(show(api, t, T.spin + 0.4, 19.4), ['spin it: ', { text: 'green is sin²θ', color: GREEN }, ', ', { text: 'blue is cos²θ', color: BLUE }], 1440, 46);
+  say(show(api, t, 19.4, 24.0), ['one grows as the other shrinks'], 1440, 50);
+  say(show(api, t, 24.0, T.share), ['together they never change: ', { text: 'always 1', color: INK }], 1440, 50);
+  say(show(api, t, T.share, PAY0 - 0.3), ['they share one circle:'], 1440, 50);
+  say(show(api, t, T.share + 1.0, PAY0 - 0.3), ['sin and cos can ', { text: 'never both be 1', color: GREEN }], 1530, 52);
+}
+
+// ---- payoff: the real NDA question ----
+const CARD = { x: 110, y: 560, w: 860, h: 360 }, CARD_CY = CARD.y + CARD.h / 2;
+function drawPayoff(ctx, t, api) {
+  const a = api.prog(t, PAY0, 0.6) * (1 - api.prog(t, END_AT, 0.4)); if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = MUTED; ctx.font = `600 40px ${api.SOFT_UI}`; ctx.textAlign = 'center';
+  ctx.fillText('NDA asked exactly this:', 540, 520); ctx.restore();
+  const s = lerp(1.14, 1, api.prog(t, PAY0, 1.0));
+  ctx.save(); ctx.globalAlpha = a; ctx.translate(540, CARD_CY); ctx.scale(s, s); ctx.translate(-540, -CARD_CY);
+  api.card(CARD.x, CARD.y, CARD.w, CARD.h);
+  ctx.fillStyle = MUTED; ctx.font = `600 34px ${api.SOFT_UI}`; ctx.textAlign = 'center'; ctx.fillText('NDA 2025 (I)  ·  Maths  ·  Q35', 540, 616);
+  api.math(['p  =  sin α − sin(α − 90°)'], { y: 698, size: 54, cx: 540, color: INK });
+  api.math(['maximum value of p  =  ?'], { y: 776, size: 50, cx: 540, color: INK });
+  api.chips(t, { labels: ['(a) 1', '(b) √2', '(c) √3', '(d) 2'], y: 818, answer: 1, at: ANSWER, size: 42, w: 180, h: 74, gap: 16 });
+  ctx.restore();
+  const say = (t0, tokens, y, size, color = INK) => {
+    const b = api.prog(t, t0, 0.5) * a; if (b <= 0) return;
+    ctx.save(); ctx.globalAlpha = b; api.math(tokens, { y, size, cx: 540, color }); ctx.restore();
+  };
+  say(PAY0 + 2.2, ['sin(α − 90°) = −cos α   →   p = ', { text: 'sin α', color: GREEN }, ' + ', { text: 'cos α', color: BLUE }], 1030, 44);
+  say(PAY0 + 4.2, ['they can\'t both be 1  (sin² + cos² = 1)'], 1124, 46, MUTED);
+  say(PAY0 + 5.8, ['best when equal:  ', { text: '1/√2', color: GREEN }, '  and  ', { text: '1/√2', color: BLUE }], 1218, 48);
+  say(PAY0 + 7.2, ['p  =  1/√2 + 1/√2  =  √2'], 1330, 64, GREEN);
+  say(PAY0 + 9.2, ['(d) 2 needs sin = cos = 1 together: impossible'], 1430, 40, MUTED);
+}
+
+Reel.mount({
+  name: 'nda-maths-012-why-sin-cos',
+  theme: 'white',
+  vignette: true,
+  size: [1080, 1920],
+  duration: 47.6,
+  watermarkY: null,
+  captions: [],
+  lines: [],
+  draw(ctx, t, api, isCover) {
+    drawTitle(ctx, t, api);
+    drawCircle(ctx, t, api);
+    drawBar(ctx, t, api);
+    drawWords(ctx, t, api, isCover);
+    drawPayoff(ctx, t, api);
+    return null;
+  },
+  end: { t0: END_AT, y: 860, lines: [
+    { at: 0.2, size: 48, weight: 400, color: MUTED, text: 'sin and cos share one circle.' },
+    { at: 0.5, size: 64, weight: 600, color: INK, text: 'That\'s the why.' },
+    { at: 1.1, size: 78, weight: 700, color: GREEN, text: 'Follow for Why? #5' },
+  ] },
+  music: { style: 'bright', chime: ANSWER },
+  // Cover: the point mid-spin with the bar split; the header already has the title.
+  cover: { t: 21.3, text: 'One grows, one shrinks: always 1', y: 1500, size: 60 },
+});
+</script>
+</body>
+</html>

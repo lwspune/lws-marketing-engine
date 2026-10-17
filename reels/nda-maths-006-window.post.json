@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-006-window",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "Q89 |sin x| over a 100π window, the area never changes (white visual format)",
+  "video": "nda-maths-006-window.mp4",
+  "cover": "nda-maths-006-window-cover.png",
+  "captions": {
+    "instagram": "NDA 2024 (I) · Maths · Q89. a is in the limits… so is a in the answer? 👀\n\nOne hump of |sin x| has area 2, and it repeats every π. Any window 100π wide holds exactly 100 humps, wherever it starts → 100 × 2 = 200 (d).\nTrap: (b) a and (c) 100a. Slide the window and the area never changes.\n\nSave this 📌 Follow @lws.pune for one real NDA PYQ every day.\nPractise every Definite Integration PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #MathsTricks #LWSPune #Calculus",
+    "facebook": "NDA 2024 (I) · Maths · Q89. a is in the limits… so is a in the answer? 👀\n\nOne hump of |sin x| has area 2, and it repeats every π. Any window 100π wide holds exactly 100 humps, wherever it starts → 100 × 2 = 200 (d).\nTrap: (b) a and (c) 100a. Slide the window and the area never changes.\n\nPractise every Definite Integration PYQ free: https://www.pyqvault.com/questions/nda/mathematics/definite-integration\n\n#NDA #NDAMaths #NDA2027",
+    "youtube": {
+      "title": "NDA Maths PYQ: ∫ |sin x| from a to a+100π, no calculation #shorts",
+      "description": "NDA 2024 (I) Maths Q89. One hump of |sin x| has area 2 and it repeats every π, so any window 100π wide holds 100 humps wherever it starts: 100 × 2 = 200. Trap: (b) a and (c) 100a, the start point doesn't matter.\n\nPractise NDA Maths PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #NDA2027 #Shorts"
+    }
+  }
+}

@@ -1,4 +1,12 @@
 nda-maths-002-hook.render.html fb8999f43c1a db50d6cfa405 e4209f087e0e 70a7c2f74407 70a7c2f74407 70a7c2f74407 70a7c2f74407 cover:e5ee3cfbd80f
 nda-maths-003-carousel.render.html 42aecc49e2b1 3f45c36bddc5 65ebb714525c c74bbf4075ab
-nda-maths-004-v.render.html 79662d7cbee3 36d99e03655a 86c75a5c6e9e 78cf45e7aeb6 268f33edfbec 367b513f85ef db5d8cdf6a73 cover:ef9da0f3779e
+nda-maths-004-v.render.html 75af48a24080 168c124e4ef2 2366daf9ad33 9db153c6db09 e68a3f38381f cc221334d6a2 2b8ec75e4e2f cover:1405150cfdcd
 nda-maths-005-area.render.html fd8c576a5120 8228a15afedc 7e85fce82939 d66965ede183 e424bf516328 012567fed70f faaaaa63ba64 cover:9d6b212695d1
+nda-maths-006-window.render.html 1a64eecabc97 41c79aa7c69a 8ced092e6687 3b049f34ef37 78ca4e218bda e53e4627102f e53e4627102f cover:7051bbdbfb96
+nda-maths-007-cancel.render.html 05ad634c636c 3be74580d48c d4621882fbf2 3132d3eb151e 997e2b536d91 2839b3299226 b2cc83d97d12 cover:7b036d00744c
+nda-maths-008-quick-modulus.render.html 7e7e8d3d8833 baa7fc715533 aaa4f004f5f5 5b35055aeedd e31965bd3ffc e31965bd3ffc e31965bd3ffc cover:47b70f569c2b
+nda-maths-009-why-odd-squares.render.html 1a0acf9d5338 126b738e52a4 80f10a066f86 e6eff6b8a279 621a9def61ea 9a8c14291466 2aaa1a616a20 cover:158010446f2b
+nda-maths-010-why-seven.render.html bf8d62781ac5 a6dd5b78d648 11166feae226 054a057ff5bd e0be6ff5ee47 13bc52b37532 359713ed71a4 cover:61b56be99b12
+nda-maths-011-why-det-area.render.html d3c6c7938bde efd9f584541b 6204ef324d25 815c398ca29d 71636b80ea97 5ef3c75d0d38 012b0308b6ad cover:8a30cc1f13e0
+nda-maths-012-why-sin-cos.render.html a52747133661 bdc8bfe46871 1e7a55dc88d4 71a80be5a7b5 c0766c3e1854 d25315c06337 eb1478744a2d cover:b3adbc95b0f7
+nda-physics-013-why-spoon.render.html 3abc3842cfe2 6c8c5b61018d 6a07f1eb4b2f e76d61926531 b69682bfb9da 4e9f6b50cbda 236c7e48b3b5 cover:29093abc8032

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reel 006 Sliding Window</title>
+<link rel="stylesheet" href="render.css">
+</head>
+<body>
+<canvas id="c" aria-label="Reel preview"></canvas>
+<div class="bar" id="bar"></div>
+<div id="status" role="status"></div>
+<script src="engine.js"></script>
+<script>
+// Reel 006 — white "visual" format. NDA 2024 (I) Maths Q89: φ(a) = ∫ₐ^(a+100π) |sin x| dx = 200.
+// |sin x| repeats every π and one hump has area 2, so any window 100π wide holds 100 humps: 100 × 2 = 200 (d).
+// Traps: (b) a and (c) 100a assume the start point matters; (a) 0 is ∫ sin x over whole periods (no modulus).
+const { blue: BLUE, green: GREEN, amber: AMBER, fill: FILL, grid: GRID, axis: AXIS, ink: INK, muted: MUTED } = Reel.WHITE, PI = Math.PI;
+
+// Graph: x from 0 to 6π maps onto GX0..GX1; the baseline is GY. The window is drawn 4 humps wide
+// (schematic for 100π, labelled "not to scale").
+const GX0 = 130, GX1 = 920, GY = 1330, AMP = 210, XMAX = 6 * PI, HUMPS = 4;
+const px = x => GX0 + x / XMAX * (GX1 - GX0), py = y => GY - y * AMP;
+const f = x => Math.abs(Math.sin(x));
+
+// Where the window starts: 0, slides to 1.5π, then back to 0.4π during the traps (200 never moves).
+const SLIDE0 = 10.4;
+const startAt = (t, api) => 1.5 * PI * api.prog(t, SLIDE0, 5.2) - 1.1 * PI * api.prog(t, 20.0, 2.6);
+
+function region(a, b) {
+  const p = new Path2D(); p.moveTo(px(a), GY);
+  for (let i = 0; i <= 120; i++) { const x = a + (b - a) * i / 120; p.lineTo(px(x), py(f(x))); }
+  p.lineTo(px(b), GY); p.closePath();
+  return p;
+}
+
+function drawAxes(ctx, api) {
+  ctx.save();
+  // Faint dot grid: every π/2 across, every quarter unit up.
+  ctx.fillStyle = GRID;
+  for (let k = 1; k * PI / 2 <= XMAX + 1e-6; k++) for (const y of [0.25, 0.5, 0.75, 1]) {
+    ctx.beginPath(); ctx.arc(px(k * PI / 2), py(y), 2.6, 0, 7); ctx.fill();
+  }
+  ctx.strokeStyle = AXIS; ctx.fillStyle = AXIS; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(GX0 - 20, GY); ctx.lineTo(GX1 + 30, GY); ctx.moveTo(GX0, GY + 20); ctx.lineTo(GX0, GY - 330); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(GX1 + 42, GY); ctx.lineTo(GX1 + 24, GY - 9); ctx.lineTo(GX1 + 24, GY + 9); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(GX0, GY - 342); ctx.lineTo(GX0 - 9, GY - 324); ctx.lineTo(GX0 + 9, GY - 324); ctx.fill();
+  ctx.font = api.hand(36); ctx.textAlign = 'center'; ctx.fillText('x', GX1 + 32, GY - 22);
+  ctx.textAlign = 'left'; ctx.fillText('y', GX0 + 18, GY - 318);
+  ctx.restore();
+}
+
+// The window: area under the humps from a to a + 100π, with a brace above.
+function drawWindow(ctx, t, api) {
+  const a = startAt(t, api), b = a + HUMPS * PI, w = api.prog(t, 6.8, 0.8);
+  if (w <= 0) return;
+  ctx.save(); ctx.globalAlpha = w; ctx.fillStyle = FILL; ctx.fill(region(a, b));
+  ctx.strokeStyle = AXIS; ctx.lineWidth = 2; ctx.setLineDash([8, 8]);
+  for (const x of [a, b]) { ctx.beginPath(); ctx.moveTo(px(x), GY); ctx.lineTo(px(x), 1110); ctx.stroke(); }
+  ctx.setLineDash([]); ctx.fillStyle = MUTED; ctx.font = api.hand(32); ctx.textAlign = 'center';
+  ctx.fillText('a', px(a), GY + 46); ctx.fillText('a + 100π', px(b), GY + 46);
+  ctx.restore();
+  const x0 = px(a) + 4, x1 = px(b) - 4, xm = (x0 + x1) / 2, y = 1098;
+  api.strokePartial([[x0, y + 14], [x0 + 8, y], [xm - 10, y], [xm, y - 14], [xm + 10, y], [x1 - 8, y], [x1, y + 14]], w, 3.5, INK);
+  ctx.save(); ctx.globalAlpha = w; ctx.textAlign = 'center';
+  ctx.fillStyle = INK; ctx.font = api.hand(40); ctx.fillText('100π  =  100 humps', xm, 1038);
+  ctx.fillStyle = MUTED; ctx.font = `400 30px ${api.SOFT_UI}`; ctx.fillText('not to scale', xm, 1072);
+  ctx.restore();
+
+  // While it slides: the piece that left (hatched, dashed) and the identical piece that joined (green).
+  const s = api.prog(t, SLIDE0, 0.4);
+  if (s <= 0 || a <= 0.01) return;
+  const lost = region(0, a), gained = region(HUMPS * PI, b);
+  ctx.save(); ctx.globalAlpha = s;
+  ctx.save(); ctx.clip(lost); ctx.globalAlpha = s * 0.35; ctx.strokeStyle = MUTED; ctx.lineWidth = 2;
+  for (let x = GX0 - 300; x < px(a); x += 16) { ctx.beginPath(); ctx.moveTo(x, GY); ctx.lineTo(x + 240, GY - 240); ctx.stroke(); }
+  ctx.restore();
+  ctx.setLineDash([12, 9]); ctx.strokeStyle = MUTED; ctx.lineWidth = 3.5; ctx.stroke(lost); ctx.setLineDash([]);
+  ctx.fillStyle = FILL; ctx.fill(gained); ctx.strokeStyle = GREEN; ctx.lineWidth = 3; ctx.stroke(gained);
+  ctx.font = api.hand(34); ctx.textAlign = 'center';
+  ctx.globalAlpha = s * api.prog(t, 12.0, 0.5); ctx.fillStyle = MUTED; ctx.fillText('leaves', px(a / 2), GY + 92);
+  ctx.globalAlpha = s * api.prog(t, 13.4, 0.5); ctx.fillStyle = GREEN; ctx.fillText('joins', px(HUMPS * PI + a / 2), GY + 92);
+  ctx.restore();
+}
+
+// The curve traces in, led by a glowing dot; then a "2" appears in each hump.
+function drawCurve(ctx, t, api) {
+  const end = XMAX * api.prog(t, 1.0, 3.0);
+  if (end > 0) {
+    const p = new Path2D();
+    for (let i = 0; i <= 480; i++) { const x = end * i / 480; i ? p.lineTo(px(x), py(f(x))) : p.moveTo(px(x), py(f(x))); }
+    api.softStroke(p, BLUE, 6);
+    if (end < XMAX - 1e-6) {
+      ctx.save(); ctx.fillStyle = BLUE; ctx.shadowColor = BLUE; ctx.shadowBlur = 18;
+      ctx.beginPath(); ctx.arc(px(end), py(f(end)), 9, 0, 7); ctx.fill(); ctx.restore();
+    }
+    ctx.save(); ctx.font = api.hand(44); ctx.textAlign = 'right'; ctx.fillStyle = BLUE;
+    ctx.globalAlpha = api.prog(t, 1.0, 0.5); ctx.fillText('y = |sin x|', GX1, 975); ctx.restore();
+  }
+  for (let k = 1; k <= 6; k++) {
+    const la = api.prog(t, 3.6 + (k - 1) * 0.12, 0.3); if (la <= 0) continue;
+    ctx.save(); ctx.globalAlpha = la; ctx.fillStyle = GREEN; ctx.font = `800 40px ${api.UI}`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('2', px((k - 0.5) * PI), py(0.4)); ctx.restore();
+  }
+}
+
+function drawWorking(ctx, t, api) {
+  const steps = [
+    [4.4, 9.8, [{ int: ['0', 'π'], color: BLUE }, { text: ' sin x dx', color: BLUE }, ' = [−cos x]', { limits: ['0', 'π'] }, ' = 1 + 1 = ', { text: '2', color: GREEN }], 54],
+    [10.0, 19.6, ['φ(a)  =  100 × 2  =  ', { text: '200', color: GREEN }], 62],
+    [20.0, 24.0, [{ text: 'a moves', color: AMBER }, '   →   φ(a) stays  ', { text: '200', color: GREEN }], 56],
+  ];
+  for (const [t0, t1, tokens, size] of steps) {
+    const a = api.prog(t, t0, 0.5) * (1 - api.prog(t, t1, 0.4)); if (a <= 0) continue;
+    ctx.save(); ctx.globalAlpha = a; api.math(tokens, { y: 1525, size, cx: 540 }); ctx.restore();
+  }
+}
+
+// The question on a floating card: source line, the set-up, the question, and the options as chips.
+function drawQuestionCard(ctx, t, api) {
+  api.card(110, 460, 860, 390);
+  ctx.save(); ctx.fillStyle = MUTED; ctx.font = `600 34px ${api.SOFT_UI}`; ctx.textAlign = 'center';
+  ctx.fillText('NDA 2024 (I)  ·  Maths  ·  Q89', 540, 520); ctx.restore();
+  api.math(['φ(a)  =  ', { int: ['a', '  a + 100π'], color: BLUE }, { text: '  |sin x| dx', color: BLUE }], { y: 625, size: 62, cx: 540 });
+  api.math(['φ(a)  =  ?'], { y: 718, size: 44, cx: 540 });
+  api.chips(t, { labels: ['(a) 0', '(b) a', '(c) 100a', '(d) 200'], y: 750, answer: 3, at: 16.4, size: 40, w: 182, gap: 14 });
+}
+
+Reel.mount({
+  name: 'nda-maths-006-window',
+  theme: 'white',
+  size: [1080, 1920],
+  duration: 27.0,
+  captions: [
+    { t0: 0,    t1: 3.4,  text: 'a is in the limits.\nIs a in the answer?' },
+    { t0: 3.4,  t1: 6.6,  text: 'Each hump of |sin x|\nhas area 2.' },
+    { t0: 6.6,  t1: 10.0, text: 'φ(a) = the area inside\na window 100π wide.' },
+    { t0: 10.0, t1: 13.0, text: 'Slide it. A piece leaves\non the left…' },
+    { t0: 13.0, t1: 16.2, text: '…the same piece joins\non the right.' },
+    { t0: 16.2, t1: 19.8, text: 'Area never changes:\n100 × 2 = 200 → (d)' },
+    { t0: 19.8, t1: 24.0, size: 48, text: 'Trap (b) a, (c) 100a: start doesn\'t matter.\nTrap (a) 0: that\'s sin x, not |sin x|.' },
+  ],
+  lines: [],
+  draw(ctx, t, api) {
+    drawQuestionCard(ctx, t, api);
+    ctx.save(); ctx.beginPath(); ctx.rect(0, 880, api.W, 590); ctx.clip();
+    drawAxes(ctx, api);
+    drawWindow(ctx, t, api);
+    drawCurve(ctx, t, api);
+    ctx.restore();
+    drawWorking(ctx, t, api);
+    return null;
+  },
+  end: { t0: 24.0, lines: [
+    { at: 0.3, size: 50, weight: 400, color: MUTED, text: 'Window = whole humps?' },
+    { at: 0.6, size: 62, weight: 600, color: INK, text: 'Its area never changes.' },
+    { at: 1.3, size: 80, weight: 700, color: GREEN, text: 'Follow for more' },
+  ] },
+  music: { chime: 16.4 },
+  cover: { t: 14.6, text: 'Slide the window.\nThe area stays 200.', y: 1440, size: 76 },
+});
+</script>
+</body>
+</html>

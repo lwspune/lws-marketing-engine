@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reel 011 Why Det Area</title>
+<link rel="stylesheet" href="render.css">
+</head>
+<body>
+<canvas id="c" aria-label="Reel preview"></canvas>
+<div class="bar" id="bar"></div>
+<div id="status" role="status"></div>
+<script src="engine.js"></script>
+<script>
+// Reel 011 — "Why? #3: why is |2A| not 2|A|?" (2026-10-17).
+// The rows of A = [3 1; 1 2] are two arrows; |A| = 5 is the area of the parallelogram they span. Double row 1:
+// one side stretches, 2 copies, area 10. Double row 2 too: 4 copies, area 20 = 4|A|. n rows → |mA| = mⁿ|A|.
+// Payoff: the real NDA 2025 (II) Maths Q44: Statement II (one row × m ⇒ det × m) explains Statement I
+// (det(mX) = mⁿ det X) → (a).
+// Tests (reels/learnings.md): L11 · L12 · L13 something always moving · L14 numbered series "Why? #3".
+const { blue: BLUE, green: GREEN, ink: INK, muted: MUTED, amber: AMBER } = Reel.WHITE;
+const FILL = Reel.WHITE.fill;
+const lerp = (a, b, k) => a + (b - a) * k;
+const tint = (hex, a) => `rgba(${[1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)).join(', ')}, ${a})`;
+const show = (api, t, t0, t1, f = 0.35) => api.prog(t, t0, f) * (1 - api.prog(t, t1 - f, f));
+
+const T = { grid: 3.4, mat: 4.0, r1: 4.8, r2: 5.8, fill: 7.0, area: 8.4, det: 9.2, d1: 14.0, d2: 20.4, both: 25.6, rule: 29.0 };
+const STRETCH = 1.6;
+const PAY0 = 32.8, ANSWER = 40.4, END_AT = 43.4;
+const R1 = [3, 1], R2 = [1, 2];          // rows of A; |A| = 3·2 − 1·1 = 5
+
+// ---- title ----
+// Held still at the centre on a card with a light running round its edge (a slow push-in shimmered), then
+// the card fades as the title glides up into the header.
+const TITLE_CARD = { x: 80, y: 620, w: 920, h: 360 };
+function drawTitle(ctx, t, api) {
+  const k = api.prog(t, 2.6, 1.0), ca = 1 - api.prog(t, 2.5, 0.5);
+  if (ca > 0) {
+    ctx.save(); ctx.globalAlpha = ca; api.card(TITLE_CARD.x, TITLE_CARD.y, TITLE_CARD.w, TITLE_CARD.h); ctx.restore();
+    api.glowRing(t, { ...TITLE_CARD, t0: 0, dur: 2.8, laps: 1.25, alpha: ca });
+  }
+  const s = lerp(1, 0.72, k), cy = lerp(847, 350, k);   // 847: the title block (label + 2 lines) centred on the card
+  ctx.save(); ctx.translate(540, cy); ctx.scale(s, s);
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = MUTED; ctx.font = `700 50px ${api.SOFT_UI}`; ctx.fillText('WHY?  #3', 0, -150);
+  ctx.fillStyle = INK; ctx.font = api.hand(84);
+  ctx.fillText('Why is |2A|', 0, -60); ctx.fillText('not 2|A| ?', 0, 44);
+  ctx.restore();
+}
+
+// ---- the picture: two arrows, the parallelogram, its copies ----
+function view(t, api) {
+  const s1 = 1 + api.ease(api.prog(t, T.d1, STRETCH)), s2 = 1 + api.ease(api.prog(t, T.d2, STRETCH));
+  const a = [R1[0] * s1, R1[1] * s1], b = [R2[0] * s2, R2[1] * s2];
+  const bx = a[0] + b[0], by = a[1] + b[1];
+  const U = Math.min(170, 760 / bx, 630 / by);
+  const ox = 540 - bx * U / 2, oy = 1080 + by * U / 2;
+  return { s1, s2, a, b, bx, by, U, P: (x, y) => [ox + x * U, oy - y * U] };
+}
+function arrow(ctx, api, from, to, color, w = 7) {
+  const [x0, y0] = from, [x1, y1] = to, ang = Math.atan2(y1 - y0, x1 - x0), h = 26;
+  const p = new Path2D(); p.moveTo(x0, y0); p.lineTo(x1 - Math.cos(ang) * h * 0.6, y1 - Math.sin(ang) * h * 0.6);
+  api.softStroke(p, color, w);
+  ctx.save(); ctx.fillStyle = color; ctx.beginPath(); ctx.moveTo(x1, y1);
+  ctx.lineTo(x1 - h * Math.cos(ang - 0.42), y1 - h * Math.sin(ang - 0.42));
+  ctx.lineTo(x1 - h * Math.cos(ang + 0.42), y1 - h * Math.sin(ang + 0.42)); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function drawFigure(ctx, t, api, isCover) {
+  const out = 1 - api.prog(t, PAY0 - 0.6, 0.6); if (out <= 0) return;
+  const g = api.prog(t, T.grid, 0.6) * out; if (g <= 0) return;
+  const V = view(t, api), { a, b, P, s1, s2 } = V;
+  const at = (u, v) => P(u * a[0] + v * b[0], u * a[1] + v * b[1]);
+  ctx.save();
+  // dot grid + axes
+  ctx.globalAlpha = g;
+  ctx.fillStyle = tint(INK, 0.28);
+  for (let x = 0; x <= Math.ceil(V.bx); x++) for (let y = 0; y <= Math.ceil(V.by); y++) { const [px, py] = P(x, y); ctx.beginPath(); ctx.arc(px, py, 3.2, 0, 7); ctx.fill(); }
+  ctx.strokeStyle = Reel.WHITE.axis; ctx.lineWidth = 2;
+  const [x0, y0] = P(0, 0), [xe] = P(V.bx + 0.5, 0), [, ye] = P(0, V.by + 0.5);
+  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(xe, y0); ctx.moveTo(x0, y0); ctx.lineTo(x0, ye); ctx.stroke();
+  // parallelogram: far sides dash in, then it fills
+  const side = api.prog(t, T.fill, 0.6), fill = api.prog(t, T.fill + 0.5, 0.6);
+  if (fill > 0) {
+    ctx.globalAlpha = g * fill; ctx.beginPath();
+    for (const [u, v] of [[0, 0], [1, 0], [1, 1], [0, 1]]) ctx.lineTo(...at(u, v));
+    ctx.closePath(); ctx.fillStyle = FILL; ctx.fill(); ctx.strokeStyle = tint(GREEN, 0.7); ctx.lineWidth = 3; ctx.stroke();
+  }
+  if (side > 0 && fill < 1) {
+    ctx.globalAlpha = g; ctx.save(); ctx.setLineDash([10, 10]); ctx.strokeStyle = tint(GREEN, 0.7); ctx.lineWidth = 3;
+    const A1 = at(1, 0), B1 = at(0, 1), C = at(1, 1);
+    ctx.beginPath(); ctx.moveTo(...A1); ctx.lineTo(lerp(A1[0], C[0], side), lerp(A1[1], C[1], side));
+    ctx.moveTo(...B1); ctx.lineTo(lerp(B1[0], C[0], side), lerp(B1[1], C[1], side)); ctx.stroke(); ctx.restore();
+  }
+  // copies: the original side lengths stay marked by dashed lines, one "5" per copy
+  ctx.globalAlpha = g; ctx.save(); ctx.setLineDash([10, 10]); ctx.strokeStyle = tint(GREEN, 0.7); ctx.lineWidth = 3;
+  if (s1 > 1.001) { ctx.beginPath(); ctx.moveTo(...at(1 / s1, 0)); ctx.lineTo(...at(1 / s1, 1)); ctx.stroke(); }
+  if (s2 > 1.001) { ctx.beginPath(); ctx.moveTo(...at(0, 1 / s2)); ctx.lineTo(...at(1, 1 / s2)); ctx.stroke(); }
+  ctx.restore();
+  const us = [[0, 1 / s1], [1 / s1, 1]], vs = [[0, 1 / s2], [1 / s2, 1]];
+  const born = [[T.area, T.d1 + STRETCH], [T.d2 + STRETCH, T.d2 + STRETCH]];   // [u-cell][v-cell] label times
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.font = api.hand(Math.max(44, Math.min(64, V.U * 0.38)));
+  for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) {
+    const t0 = j === 0 ? born[0][i] : born[1][i], la = api.prog(t, t0, 0.5) * g; if (la <= 0) continue;
+    const [cx, cy] = at((us[i][0] + us[i][1]) / 2, (vs[j][0] + vs[j][1]) / 2);
+    ctx.globalAlpha = la; ctx.fillStyle = GREEN; ctx.fillText('5', cx, cy);
+  }
+  // the two rows as arrows, labelled at their tips once settled
+  const k1 = api.prog(t, T.r1, 0.8), k2 = api.prog(t, T.r2, 0.8);
+  ctx.globalAlpha = g;
+  if (k1 > 0) arrow(ctx, api, P(0, 0), at(k1, 0), BLUE);
+  if (k2 > 0) arrow(ctx, api, P(0, 0), at(0, k2), INK);
+  const tip = (k, s, row, color, dx, dy, align) => {
+    if (k < 1) return;
+    const settle = Math.abs(2 * (s - 1) - 1);      // 1 when s is 1 or 2, 0 mid-stretch
+    const [px, py] = row === 1 ? at(1, 0) : at(0, 1), r = row === 1 ? R1 : R2, m = s > 1.5 ? 2 : 1;
+    ctx.globalAlpha = g * settle; ctx.fillStyle = color; ctx.font = api.hand(40); ctx.textAlign = align;
+    ctx.fillText(`(${r[0] * m}, ${r[1] * m})`, px + dx, py + dy);
+  };
+  tip(k1, s1, 1, BLUE, 22, 34, 'left');
+  tip(k2, s2, 2, INK, -22, -10, 'right');
+  ctx.restore();
+}
+
+// ---- the matrix above the picture: label + entries crossfade as rows double ----
+function drawMatrix(ctx, t, api) {
+  const a = api.prog(t, T.mat, 0.5) * (1 - api.prog(t, PAY0 - 0.6, 0.6)); if (a <= 0) return;
+  const c1 = api.prog(t, T.d1 + 0.4, 0.6), c2 = api.prog(t, T.d2 + 0.4, 0.6);
+  const cy = 590, top = cy - 66, bot = cy + 62, bx0 = 500, bx1 = 760, e1 = 570, e2 = 690;
+  ctx.save(); ctx.globalAlpha = a;
+  ctx.strokeStyle = INK; ctx.lineWidth = 4; ctx.lineCap = 'round';
+  for (const [x, d] of [[bx0, 1], [bx1, -1]]) { ctx.beginPath(); ctx.moveTo(x + 14 * d, top); ctx.lineTo(x, top); ctx.lineTo(x, bot); ctx.lineTo(x + 14 * d, bot); ctx.stroke(); }
+  ctx.textBaseline = 'middle';
+  const put = (txt, x, y, alpha, color, align = 'center', size = 52) => { if (alpha <= 0) return; ctx.globalAlpha = a * alpha; ctx.fillStyle = color; ctx.font = api.hand(size); ctx.textAlign = align; ctx.fillText(txt, x, y); };
+  put('3', e1, cy - 30, 1 - c1, BLUE); put('1', e2, cy - 30, 1 - c1, BLUE);
+  put('6', e1, cy - 30, c1, BLUE); put('2', e2, cy - 30, c1, BLUE);
+  put('1', e1, cy + 32, 1 - c2, INK); put('2', e2, cy + 32, 1 - c2, INK);
+  put('2', e1, cy + 32, c2, INK); put('4', e2, cy + 32, c2, INK);
+  put('A  =', 476, cy, 1 - c1, INK, 'right', 56);
+  put('Y  =', 476, cy, c1 * (1 - c2), INK, 'right', 56);
+  put('2A  =', 476, cy, c2, INK, 'right', 56);
+  ctx.restore();
+}
+
+// ---- words under the picture ----
+function drawWords(ctx, t, api, isCover) {
+  if (isCover) return;
+  const say = (a, tokens, y, size, color = INK) => { if (a <= 0) return; ctx.save(); ctx.globalAlpha = a; api.math(tokens, { y, size, cx: 540, color }); ctx.restore(); };
+  say(show(api, t, T.r1, T.det), ['the rows of A are two arrows'], 1480, 50);
+  say(show(api, t, T.det, T.d1), ['|A|  =  3·2 − 1·1  =  ', { text: '5', color: GREEN }], 1480, 56);
+  say(show(api, t, T.det + 1.2, T.d1), ['= the shaded area'], 1564, 48, MUTED);
+  say(show(api, t, T.d1, T.d2), ['double row 1  →  ', { text: '2 copies', color: GREEN }], 1480, 54);
+  say(show(api, t, T.d1 + STRETCH + 0.4, T.d2), ['area  ', { text: '10', color: GREEN }, '  (one side × 2)'], 1564, 48, MUTED);
+  say(show(api, t, T.d2, T.both), ['double row 2 too  →  ', { text: '4 copies', color: GREEN }], 1480, 54);
+  say(show(api, t, T.d2 + STRETCH + 0.4, T.both), ['area  ', { text: '20', color: GREEN }, '  (both sides × 2)'], 1564, 48, MUTED);
+  say(show(api, t, T.both, PAY0 - 0.3), ['|2A|  =  2 · 2 · |A|  =  ', { text: '4|A|', color: GREEN }], 1480, 56);
+  say(show(api, t, T.both + 1.2, T.rule), ['not 2|A|: both rows got doubled'], 1564, 46, MUTED);
+  say(show(api, t, T.rule, PAY0 - 0.3), ['n × n:  |mA|  =  m', { sup: 'n', color: BLUE }, ' |A|'], 1564, 52);
+}
+
+// ---- payoff: the real NDA question ----
+const CARD = { x: 90, y: 560, w: 900, h: 470 }, CARD_CY = CARD.y + CARD.h / 2;
+const OPTS = ['(a)  both true, and II explains I', '(b)  both true, but II doesn\'t explain I', '(c)  only I is true', '(d)  only II is true'];
+function drawPayoff(ctx, t, api) {
+  const a = api.prog(t, PAY0, 0.6) * (1 - api.prog(t, END_AT, 0.4)); if (a <= 0) return;
+  ctx.save(); ctx.globalAlpha = a; ctx.fillStyle = MUTED; ctx.font = `600 40px ${api.SOFT_UI}`; ctx.textAlign = 'center';
+  ctx.fillText('NDA asked exactly this:', 540, 520); ctx.restore();
+  const s = lerp(1.14, 1, api.prog(t, PAY0, 1.0));
+  ctx.save(); ctx.globalAlpha = a; ctx.translate(540, CARD_CY); ctx.scale(s, s); ctx.translate(-540, -CARD_CY);
+  api.card(CARD.x, CARD.y, CARD.w, CARD.h);
+  ctx.fillStyle = MUTED; ctx.font = `600 34px ${api.SOFT_UI}`; ctx.textAlign = 'center'; ctx.fillText('NDA 2025 (II)  ·  Maths  ·  Q44', 540, 616);
+  api.math(['I.  det(mX)  =  m', { sup: 'n' }, ' det(X),  X is n × n'], { y: 690, size: 46, x: 140, color: INK });
+  api.math(['II.  one row × m  ⇒  det × m'], { y: 760, size: 46, x: 140, color: INK });
+  // options as a list; the answer gets the amber ring + pulse at ANSWER (amber marks the answer only)
+  const on = api.prog(t, ANSWER, 0.6), pulse = Math.sin(Math.PI * api.clamp01((t - ANSWER) / 0.7));
+  OPTS.forEach((o, i) => {
+    const y = 830 + i * 54, hit = i === 0 && on > 0;
+    if (hit) {
+      ctx.save(); ctx.translate(540, y); ctx.scale(1 + 0.03 * pulse, 1 + 0.03 * pulse);
+      ctx.beginPath(); ctx.roundRect(-420, -26, 840, 52, 26); ctx.fillStyle = tint(AMBER, 0.12 * on); ctx.fill();
+      ctx.strokeStyle = tint(AMBER, 0.25 + 0.6 * on); ctx.lineWidth = 2 + on; ctx.stroke(); ctx.restore();
+    }
+    ctx.fillStyle = hit && on > 0.5 ? AMBER : INK; ctx.font = api.hand(38); ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.fillText(o, 140, y + 2);
+  });
+  ctx.restore();
+  const say = (t0, tokens, y, size, color = INK) => {
+    const b = api.prog(t, t0, 0.5) * a; if (b <= 0) return;
+    ctx.save(); ctx.globalAlpha = b; api.math(tokens, { y, size, cx: 540, color }); ctx.restore();
+  };
+  say(PAY0 + 2.4, ['II:  stretch one side  →  area × m'], 1140, 48);
+  say(PAY0 + 4.2, ['mX: all n rows × m  →  m · m ⋯ m  =  m', { sup: 'n' }], 1236, 46);
+  say(PAY0 + 5.8, ['so II explains I  →  (a)'], 1350, 64, GREEN);
+}
+
+Reel.mount({
+  name: 'nda-maths-011-why-det-area',
+  theme: 'white',
+  vignette: true,
+  size: [1080, 1920],
+  duration: 46.8,
+  watermarkY: null,
+  captions: [],
+  lines: [],
+  draw(ctx, t, api, isCover) {
+    drawTitle(ctx, t, api);
+    drawMatrix(ctx, t, api);
+    drawFigure(ctx, t, api, isCover);
+    drawWords(ctx, t, api, isCover);
+    drawPayoff(ctx, t, api);
+    return null;
+  },
+  end: { t0: END_AT, y: 860, lines: [
+    { at: 0.2, size: 48, weight: 400, color: MUTED, text: 'A determinant is an area.' },
+    { at: 0.5, size: 64, weight: 600, color: INK, text: 'That\'s the why.' },
+    { at: 1.1, size: 78, weight: 700, color: GREEN, text: 'Follow for Why? #4' },
+  ] },
+  music: { chime: ANSWER },
+  // Cover: 2A's parallelogram cut into 4 copies of A's; the header already has the title.
+  cover: { t: 24.6, text: '|2A| = 4|A|', y: 1500, size: 72 },
+});
+</script>
+</body>
+</html>

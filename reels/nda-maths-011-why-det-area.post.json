@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-011-why-det-area",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "Why? #3: why |2A| is not 2|A| (a determinant is an area) → NDA 2025 (II) Q44 (47 s, continuous motion)",
+  "video": "nda-maths-011-why-det-area.mp4",
+  "cover": "nda-maths-011-why-det-area-cover.png",
+  "captions": {
+    "instagram": "Why? #3 · Why is |2A| not 2|A|? 🔷\n\nThe rows of a 2×2 matrix are two arrows, and its determinant is the area of the parallelogram they make. A = [3 1; 1 2] → |A| = 3·2 − 1·1 = 5.\nDouble one row: one side stretches → 2 copies → area 10.\nDouble the other row too (that's 2A): 4 copies → |2A| = 20 = 4|A|, not 2|A|.\nFor an n×n matrix: |mA| = mⁿ|A|.\n\nNDA 2025 (II) asked exactly this (Maths Q44): Statement I: det(mX) = mⁿ det(X). Statement II: multiplying one row by m multiplies det by m. Answer (a): both true, and II explains I.\n\nSave this 📌 Send it to a friend who writes |2A| = 2|A|. Follow for Why? #4.\nPractise every Matrices & Determinants PYQ free → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Matrices #LWSPune #MathVisualization",
+    "facebook": "Why? #3 · Why is |2A| not 2|A|? 🔷\n\nA determinant is an area: the rows of A are two arrows and |A| is the parallelogram between them. Doubling one row stretches one side (area × 2); 2A doubles both rows, so the area goes × 4: |2A| = 4|A|. For n×n: |mA| = mⁿ|A|.\n\nNDA 2025 (II) Maths Q44: Statement II (one row × m ⇒ det × m) explains Statement I (det(mX) = mⁿ det X) → (a).\n\nPractise NDA Matrices & Determinants PYQs free: https://www.pyqvault.com/questions/nda/mathematics/matrices-determinants\n\n#NDA #NDAMaths #NDA2027",
+    "youtube": {
+      "title": "Why is |2A| not 2|A|? A determinant is an area (NDA 2025) #shorts",
+      "description": "Why? #3. The rows of A are two arrows; |A| is the parallelogram's area. Double one row → area × 2; 2A doubles both → × 4. So |2A| = 4|A| and |mA| = mⁿ|A|. NDA 2025 (II) Maths Q44: answer (a).\n\nPractise NDA Maths PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #NDA2027 #Shorts"
+    }
+  }
+}
