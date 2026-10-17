@@ -17,7 +17,9 @@
 //   notes:    [{ t0, dur, kind: underline|box|ring|arrow, from, to }]  — red pen, by mark names
 //   draw(ctx, t, api, isCover) → pen | null     — optional custom drawing (robot, timer, figure)
 //   end:      { t0, y?, image?, lines: [{ at, size, weight, color, text }] }
-//   music:    { chime?: t, ticks?: [t…], ding?: t } | null
+//   music:    { style?: lofi|bright|calm, chime?: t, ticks?: [t…], ding?: t,   — style: original loops (lofi = house default)
+//               tones?: [{ t0, t1, hz, peak, gain: t => 0…1, type? }],   — sonification: loudness follows gain(t)
+//               duck?: [[t0, t1, level]] } | null                       — lower the music bed (not tones/chime)
 //   cover:    { t, text, y?, size? }
 //   images:   { key: 'assets/file.png' }       — preloaded, available as api.img(key)
 //   slides:   [{ captions, lines, notes, draw }] — carousel mode instead of a timeline
@@ -41,6 +43,16 @@
 
   const clamp01 = v => Math.max(0, Math.min(1, v));
   const ease = p => p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+  // A tone's gain curve: fn(t) clamped to 0…1, sampled `rate` times a second from t0 to t1, faded over
+  // 0.25 s at both ends so it never clicks (tests/reel-tones.test.js).
+  function toneCurve(fn, t0, t1, rate = 100) {
+    const n = Math.round((t1 - t0) * rate) + 1, out = new Float32Array(n);
+    for (let i = 0; i < n; i++) {
+      const t = t0 + i / rate, edge = Math.min(1, (t - t0) / 0.25, (t1 - t) / 0.25);
+      out[i] = Math.min(1, Math.max(0, fn(t))) * Math.max(0, edge);
+    }
+    return out;
+  }
   const prog = (t, t0, dur) => dur <= 0 ? (t >= t0 ? 1 : 0) : ease(clamp01((t - t0) / dur));
   const hand = size => `600 ${size}px ${TEXT_FONT}`;
   const wob = (i, a = 3) => Math.sin(i * 1.7) * a;
@@ -99,6 +111,13 @@
       const g = ctx.createRadialGradient(W / 2, H * 0.42, 100, W / 2, H * 0.42, H * 0.75);
       g.addColorStop(0, WHITE.board); g.addColorStop(1, WHITE.edge);
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      // Opt-in premium edge shade (config.vignette, reel 009 on): a soft slate falloff towards the frame's
+      // boundary that pulls the eye to the centre. Part of the board, so the end card keeps it too.
+      if (config.vignette) {
+        const v = ctx.createRadialGradient(W / 2, H * 0.46, H * 0.30, W / 2, H * 0.46, H * 0.80);
+        v.addColorStop(0, tint(WHITE.ink, 0)); v.addColorStop(1, tint(WHITE.ink, 0.17));
+        ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+      }
       if (!mark || config.watermarkY === null) return;
       ctx.fillStyle = tint(WHITE.muted, 0.55); ctx.font = `600 34px ${UI}`; ctx.textAlign = 'left';
       ctx.fillText('LWS Pune  ·  NDA Maths', LEFT, config.watermarkY ?? (H > 1500 ? 1600 : H - 60));
@@ -253,6 +272,19 @@
       ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = color; ctx.lineWidth = width;
       ctx.shadowColor = tint(color, 0.28); ctx.shadowBlur = 14; ctx.shadowOffsetY = 4; ctx.stroke(path); ctx.restore();
     }
+    // A light running round a card's edge: bright head, fading tail, soft bloom. Draws attention without
+    // moving or scaling anything (a slow zoom on text shimmers). Constant speed; fades in from t0, out at the end.
+    function glowRing(t, { x, y, w, h, r = 32, t0 = 0, dur = 2.6, laps = 1.25, color = WHITE.blue, alpha = 1 }) {
+      if (t < t0 || t > t0 + dur || alpha <= 0) return;
+      const k = (t - t0) / dur, fade = alpha * Math.min(1, (t - t0) / 0.3 + 0.35, (1 - k) / 0.18);
+      const g = ctx.createConicGradient(-Math.PI / 2 + k * laps * 2 * Math.PI, x + w / 2, y + h / 2);
+      g.addColorStop(0, tint(color, 0)); g.addColorStop(0.6, tint(color, 0)); g.addColorStop(0.985, tint(color, 0.95)); g.addColorStop(1, tint(color, 0));
+      ctx.save(); ctx.beginPath(); ctx.roundRect(x, y, w, h, r);
+      ctx.globalAlpha = fade * 0.5; ctx.strokeStyle = tint(color, 0.14); ctx.lineWidth = 2; ctx.stroke();
+      ctx.globalAlpha = fade * 0.3; ctx.strokeStyle = g; ctx.lineWidth = 14; ctx.stroke();
+      ctx.globalAlpha = fade; ctx.lineWidth = 4; ctx.shadowColor = tint(color, 0.7); ctx.shadowBlur = 20; ctx.stroke();
+      ctx.restore();
+    }
     // Speech bubble with a tail pointing at (tx, ty). Text in UI font, dark on white.
     function bubble(text, x, y, w, alpha, tx, ty, size = 46) {
       if (!text || alpha <= 0) return;
@@ -290,7 +322,7 @@
       ctx.restore();
     }
 
-    const api = { ctx, W, H, INK: ink, RED: red, UI, SOFT_UI, card, chips, softStroke, hand, prog, ease, clamp01, strokePartial, roundedPath, arrowHead, bubble, caption,
+    const api = { ctx, W, H, INK: ink, RED: red, UI, SOFT_UI, card, chips, softStroke, glowRing, hand, prog, ease, clamp01, strokePartial, roundedPath, arrowHead, bubble, caption,
       math, wrap, marks: () => MARKS, img: k => images[k] };
 
     // ---- frames -----------------------------------------------------------
@@ -338,9 +370,15 @@
       master.gain.setValueAtTime(1, t0 + D - fadeOut);
       master.gain.linearRampToValueAtTime(0, t0 + D);
 
+      // The bed (pads, bass, drums, arp) runs through its own gain so it can duck under sonified tones.
+      const bed = ac.createGain(); bed.connect(master);
+      for (const [a, b, level] of M.duck ?? []) {
+        bed.gain.setValueAtTime(1, t0 + a); bed.gain.linearRampToValueAtTime(level, t0 + a + 0.6);
+        bed.gain.setValueAtTime(level, t0 + b - 0.6); bed.gain.linearRampToValueAtTime(1, t0 + b);
+      }
       const noise = ac.createBuffer(1, ac.sampleRate, ac.sampleRate), nd = noise.getChannelData(0);
       for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
-      const voice = (type, f, at, len, peak, attack = 0.01, dest = master) => {
+      const voice = (type, f, at, len, peak, attack = 0.01, dest = bed) => {
         const o = ac.createOscillator(), g = ac.createGain();
         o.type = type; o.frequency.value = f;
         g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(peak, at + attack);
@@ -358,16 +396,50 @@
         const s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
         s.buffer = noise; f.type = filterType; f.frequency.value = freq;
         g.gain.setValueAtTime(peak, at); g.gain.exponentialRampToValueAtTime(0.0001, at + len);
-        s.connect(f); f.connect(g); g.connect(master); s.start(at); s.stop(at + len + 0.05);
+        s.connect(f); f.connect(g); g.connect(bed); s.start(at); s.stop(at + len + 0.05);
       };
       const kick = at => {
         const o = ac.createOscillator(), g = ac.createGain();
         o.frequency.setValueAtTime(110, at); o.frequency.exponentialRampToValueAtTime(42, at + 0.22);
         g.gain.setValueAtTime(0.55, at); g.gain.exponentialRampToValueAtTime(0.0001, at + 0.32);
-        o.connect(g); g.connect(master); o.start(at); o.stop(at + 0.4);
+        o.connect(g); g.connect(bed); o.start(at); o.stop(at + 0.4);
       };
-      const padBus = ac.createBiquadFilter(); padBus.type = 'lowpass'; padBus.frequency.value = 950; padBus.connect(master);
-      for (let k = 0; k * bar < D; k++) {
+      const padBus = ac.createBiquadFilter(); padBus.type = 'lowpass'; padBus.frequency.value = 950; padBus.connect(bed);
+      // A struck note: a sine plus soft 2nd/3rd harmonics that die away faster (pluck / piano-like).
+      const strike = (f, at, len, peak) => { for (const [h, p] of [[1, 1], [2, 0.35], [3, 0.12]]) voice('sine', f * h, at, len / h, peak * p, 0.004); };
+      const style = M.style ?? 'lofi';
+      if (style === 'bright') {
+        // Original "bright" loop: Dmaj7 – A – Bm7 – G/B at 100 BPM. Pluck arpeggio, light beat, a bell motif.
+        const b2 = 60 / 100, bar2 = b2 * 4;
+        const CH = [[62, 66, 69, 73], [61, 64, 69, 71], [59, 62, 66, 69], [59, 62, 67, 71]], BS = [38, 45, 47, 43];
+        const MOTIF = [[0, 81], [1.5, 78], [2, 76], [3, 74]];
+        for (let k = 0; k * bar2 < D; k++) {
+          const at = t0 + k * bar2, ch = CH[k % 4];
+          for (const m of ch) for (const d of [-6, 6]) pad(hz(m), at, bar2 + 0.3, 0.022, padBus, d);
+          for (const b of [0, 2, 2.75]) voice('sine', hz(BS[k % 4]), at + b * b2, b2 * 1.1, 0.24, 0.02);
+          const arp = [ch[0], ch[1], ch[2], ch[3], ch[2] + 12, ch[3], ch[2], ch[1]];
+          arp.forEach((m, e) => strike(hz(m + 12), at + e * b2 / 2, 0.42, k >= 1 ? 0.05 : 0.035));
+          if (k >= 1) {
+            for (const b of [0, 1, 2, 3]) kick(at + b * b2);
+            for (const b of [1, 3]) hit(at + b * b2, 0.16, 0.1, 'bandpass', 1500);
+            for (let e = 0; e < 16; e++) hit(at + e * b2 / 4, 0.035, e % 4 === 2 ? 0.035 : 0.018, 'highpass', 8000);
+          }
+          if (k >= 3 && k % 2 === 1) for (const [b, m] of MOTIF) strike(hz(m), at + b * b2, 1.4, 0.045);
+        }
+      } else if (style === 'calm') {
+        // Original "calm" piano: Fmaj7 – Am7 – Dm9 – B♭maj7 at 72 BPM. Broken chords, a low pad, no drums.
+        const b3 = 60 / 72, bar3 = b3 * 4;
+        const CH = [[53, 57, 60, 64], [57, 60, 64, 67], [50, 57, 60, 64], [46, 53, 57, 62]], BS = [41, 45, 38, 46];
+        for (let k = 0; k * bar3 < D; k++) {
+          const at = t0 + k * bar3, ch = CH[k % 4];
+          for (const m of ch) for (const d of [-5, 5]) pad(hz(m), at, bar3 + 0.4, 0.03, padBus, d);
+          voice('sine', hz(BS[k % 4]), at, bar3 * 0.95, 0.36, 0.05);
+          const run = [ch[0], ch[1], ch[2], ch[3], ch[2] + 12, ch[3] + 12, ch[2] + 12, ch[3]];
+          run.forEach((m, e) => strike(hz(m + 12), at + e * b3 / 2, 2.4, e === 0 ? 0.13 : 0.095));
+          if (k % 2 === 1) strike(hz(ch[3] + 24), at + 3 * b3, 2.8, 0.06);
+        }
+      }
+      for (let k = 0; style === 'lofi' && k * bar < D; k++) {
         const at = t0 + k * bar, chord = CHORDS[k % 4];
         for (const m of chord) for (const d of [-7, 7]) pad(hz(m), at, bar + 0.3, 0.03, padBus, d);
         for (const b of [0, 1.5, 2]) voice('sine', hz(BASS[k % 4]), at + b * beat, beat * 1.2, 0.22, 0.02);
@@ -382,9 +454,17 @@
         }
       }
       // Clock ticks (woodblock-ish) and a two-note "time's up" ding.
-      for (const tt of M.ticks ?? []) { voice('square', 1760, t0 + tt, 0.06, 0.05, 0.002); voice('sine', 880, t0 + tt, 0.08, 0.12, 0.002); }
-      if (M.ding != null) for (const [m, p, d] of [[79, 0.14, 0], [84, 0.14, 0.18]]) voice('sine', hz(m), t0 + M.ding + d, 1.2, p, 0.005);
-      if (M.chime != null) for (const [m, p] of [[84, 0.11], [91, 0.06], [96, 0.03]]) voice('sine', hz(m), t0 + M.chime, 1.6, p, 0.005);
+      for (const tt of M.ticks ?? []) { voice('square', 1760, t0 + tt, 0.06, 0.05, 0.002, master); voice('sine', 880, t0 + tt, 0.08, 0.12, 0.002, master); }
+      if (M.ding != null) for (const [m, p, d] of [[79, 0.14, 0], [84, 0.14, 0.18]]) voice('sine', hz(m), t0 + M.ding + d, 1.2, p, 0.005, master);
+      if (M.chime != null) for (const [m, p] of [[84, 0.11], [91, 0.06], [96, 0.03]]) voice('sine', hz(m), t0 + M.chime, 1.6, p, 0.005, master);
+      // Sonification: each tone's loudness follows its gain(t), so the maths is heard as well as seen.
+      for (const T of M.tones ?? []) {
+        const o = ac.createOscillator(), g = ac.createGain();
+        o.type = T.type ?? 'sine'; o.frequency.value = T.hz;
+        g.gain.setValueAtTime(0, t0);
+        g.gain.setValueCurveAtTime(toneCurve(T.gain, T.t0, T.t1).map(v => v * T.peak), t0 + T.t0, T.t1 - T.t0);
+        o.connect(g); g.connect(master); o.start(t0 + T.t0); o.stop(t0 + T.t1 + 0.05);
+      }
     }
 
     // ---- playback + recording ----------------------------------------------
@@ -461,5 +541,5 @@
     window.prepare = () => prepare(config.lines);
   }
 
-  window.Reel = { mount, WHITE };
+  window.Reel = { mount, WHITE, toneCurve };
 })();
