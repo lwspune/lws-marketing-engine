@@ -31,9 +31,8 @@ const IST = new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", dateSty
 const when = (iso: string | null) => (iso ? `${IST.format(new Date(iso))} IST` : "");
 
 const STATUS_STYLE: Record<string, string> = {
-  ready: "border-line text-muted", approved: "border-warn/60 text-warn", pending: "border-warn/60 text-warn",
-  processing: "border-warn/60 text-warn", published: "border-accent/60 text-accent", partially_published: "border-warn/60 text-warn",
-  failed: "border-danger/60 text-danger", rejected: "border-line text-muted",
+  ready: "chip-muted", approved: "chip-warn", pending: "chip-warn", processing: "chip-warn", published: "chip-accent",
+  partially_published: "chip-warn", failed: "chip-danger", rejected: "chip-muted",
 };
 const STATUS_LABEL: Record<string, string> = {
   ready: "Ready", approved: "Approved", pending: "Waiting", processing: "Uploading", published: "Live",
@@ -82,42 +81,42 @@ export function PostCard({ post }: { post: PostView }) {
   const allPending = post.publications.every((p) => p.status === "pending");
 
   return (
-    <article className="overflow-hidden rounded-lg border border-line bg-panel" aria-labelledby={`t-${post.id}`}>
-      <div className="flex flex-col gap-4 p-4 sm:flex-row">
-        <div className="w-full shrink-0 sm:w-48">
+    <article className="card overflow-hidden" aria-labelledby={`t-${post.id}`}>
+      <div className="flex flex-col gap-5 p-4 sm:flex-row sm:gap-6 sm:p-6">
+        <div className="mx-auto w-full max-w-[240px] shrink-0 sm:mx-0 sm:w-52">
           {story && post.coverUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={post.coverUrl} alt={`Story card: ${post.quiz?.title ?? post.title}`} className="aspect-[9/16] w-full rounded-md object-cover" />
+            <img src={post.coverUrl} alt={`Story card: ${post.quiz?.title ?? post.title}`} className="aspect-[9/16] w-full rounded-xl border border-line object-cover" />
           ) : post.kind === "reel" && post.videoUrl ? (
             <video src={post.videoUrl} poster={post.coverUrl ?? undefined} controls preload="metadata" playsInline
-              className="aspect-[9/16] w-full rounded-md bg-black" aria-label={`Preview of ${post.title}`} />
+              className="aspect-[9/16] w-full rounded-xl border border-line bg-black" aria-label={`Preview of ${post.title}`} />
           ) : post.slideUrls.length ? (
             <div className="flex snap-x gap-2 overflow-x-auto" role="list" aria-label="Slides">
               {post.slideUrls.map((u, i) => (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img key={u} src={u} alt={`Slide ${i + 1} of ${post.slideUrls.length}`} role="listitem"
-                  className="aspect-[4/5] w-40 shrink-0 snap-start rounded-md object-cover sm:w-full" />
+                  className="aspect-[4/5] w-40 shrink-0 snap-start rounded-xl border border-line object-cover sm:w-full" />
               ))}
             </div>
           ) : (
-            <div className="flex aspect-[9/16] items-center justify-center rounded-md bg-bg text-xs text-muted">No preview</div>
+            <div className="flex aspect-[9/16] items-center justify-center rounded-xl border border-dashed border-line bg-bg text-xs text-muted">No preview</div>
           )}
         </div>
 
-        <div className="min-w-0 flex-1 space-y-3">
-          <div>
+        <div className="min-w-0 flex-1 space-y-5">
+          <div className="space-y-1.5">
             <div className="flex flex-wrap items-center gap-2">
-              <span className={`chip ${STATUS_STYLE[post.status] ?? "border-line"}`}>{STATUS_LABEL[post.status] ?? post.status}</span>
-              <span className="chip border-line text-muted">{post.kind}</span>
+              <span className={`chip ${STATUS_STYLE[post.status] ?? "chip-muted"}`}>{STATUS_LABEL[post.status] ?? post.status}</span>
+              <span className="chip chip-muted capitalize">{post.kind}</span>
               {post.projectName && <span className="text-xs text-muted">{post.projectName}</span>}
             </div>
-            <h2 id={`t-${post.id}`} className="mt-1 font-medium">{post.title}</h2>
-            {post.scheduledAt && post.status === "approved" && <p className="text-xs text-warn">Scheduled for {when(post.scheduledAt)}</p>}
+            <h2 id={`t-${post.id}`} className="text-lg font-semibold leading-snug tracking-tight">{post.title}</h2>
+            {post.scheduledAt && post.status === "approved" && <p className="text-sm text-warn">Scheduled for {when(post.scheduledAt)}</p>}
             {story && post.quiz && (
               <p className="text-sm text-muted">
                 Quiz: {post.quiz.title}{" "}
                 <a href={`https://www.pyqvault.com/quiz/${encodeURIComponent(post.quiz.publicSlug)}`} target="_blank" rel="noopener noreferrer"
-                  className="text-accent underline">Check the quiz<span className="sr-only"> (opens in a new tab)</span></a>
+                  className="link">Check the quiz<span className="sr-only"> (opens in a new tab)</span></a>
               </p>
             )}
             {post.rejectReason && <p className="text-xs text-muted">Rejected: {post.rejectReason}</p>}
@@ -126,9 +125,9 @@ export function PostCard({ post }: { post: PostView }) {
           {ready ? (
             <>
               {story ? (
-                <p className="text-sm">
-                  Instagram Story · posts {post.plannedFor ? when(post.plannedFor) : "when approved"}
-                  <span className="block text-xs text-muted">Approving later on its day posts it straight away; after its day it can only be rejected.</span>
+                <p className="tile text-sm">
+                  Instagram Story · posts <strong className="font-semibold">{post.plannedFor ? when(post.plannedFor) : "when approved"}</strong>
+                  <span className="mt-1 block text-xs text-muted">Approving later on its day posts it straight away; after its day it can only be rejected.</span>
                 </p>
               ) : (
                 <>
@@ -139,9 +138,9 @@ export function PostCard({ post }: { post: PostView }) {
                     {usable.length === 0 ? (
                       <p className="text-sm text-danger">No accounts are connected for this project yet.</p>
                     ) : (
-                      <div className="flex flex-wrap gap-3">
+                      <div className="flex flex-wrap gap-2">
                         {usable.map((c) => (
-                          <label key={c.platform} className="flex items-center gap-2 text-sm">
+                          <label key={c.platform} className="flex cursor-pointer items-center gap-2 rounded-lg border border-line bg-raised px-3 py-2 hover:border-white/20 text-sm">
                             <input type="checkbox" checked={platforms.includes(c.platform)} onChange={() => toggle(c.platform)}
                               className="h-4 w-4 accent-[#4fd1a5]" />
                             {PLATFORM_LABEL[c.platform]} <span className="text-muted">({c.name})</span>
@@ -153,9 +152,9 @@ export function PostCard({ post }: { post: PostView }) {
 
                   <fieldset>
                     <legend className="label">When</legend>
-                    <div className="flex flex-wrap items-center gap-3 text-sm">
-                      <label className="flex items-center gap-2"><input type="radio" name={`when-${post.id}`} checked={mode === "now"} onChange={() => setMode("now")} className="accent-[#4fd1a5]" />Publish now</label>
-                      <label className="flex items-center gap-2"><input type="radio" name={`when-${post.id}`} checked={mode === "later"} onChange={() => setMode("later")} className="accent-[#4fd1a5]" />Schedule</label>
+                    <div className="flex flex-wrap items-center gap-2 text-sm">
+                      <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-line bg-raised px-3 py-2 hover:border-white/20"><input type="radio" name={`when-${post.id}`} checked={mode === "now"} onChange={() => setMode("now")} className="accent-[#4fd1a5]" />Publish now</label>
+                      <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-line bg-raised px-3 py-2 hover:border-white/20"><input type="radio" name={`when-${post.id}`} checked={mode === "later"} onChange={() => setMode("later")} className="accent-[#4fd1a5]" />Schedule</label>
                       {mode === "later" && (
                         <input type="datetime-local" value={at} onChange={(e) => setAt(e.target.value)} className="field w-auto"
                           aria-label="Publish date and time (your time zone)" />
@@ -170,7 +169,7 @@ export function PostCard({ post }: { post: PostView }) {
                 <ul className="space-y-1 text-sm text-danger" aria-live="polite">{problems.map((p) => <li key={p}>{p}</li>)}</ul>
               )}
 
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 border-t border-line pt-5">
                 <button type="button" className="btn btn-primary" onClick={approve}
                   disabled={pending || (!story && (platforms.length === 0 || problems.length > 0))}>
                   {story ? "Approve story" : mode === "later" ? "Approve & schedule" : "Approve & publish"}
@@ -199,10 +198,10 @@ export function PostCard({ post }: { post: PostView }) {
               {post.publications.length > 0 && (
                 <ul className="space-y-2" aria-label="Platforms">
                   {post.publications.map((p) => (
-                    <li key={p.id} className="flex flex-wrap items-center gap-2 text-sm">
-                      <span className="w-20 text-muted">{PLATFORM_LABEL[p.platform]}</span>
-                      <span className={`chip ${STATUS_STYLE[p.status] ?? "border-line"}`}>{STATUS_LABEL[p.status] ?? p.status}</span>
-                      {p.permalink && <a href={p.permalink} target="_blank" rel="noopener noreferrer" className="text-accent underline">Open</a>}
+                    <li key={p.id} className="tile flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
+                      <span className="w-20 font-medium">{PLATFORM_LABEL[p.platform]}</span>
+                      <span className={`chip ${STATUS_STYLE[p.status] ?? "chip-muted"}`}>{STATUS_LABEL[p.status] ?? p.status}</span>
+                      {p.permalink && <a href={p.permalink} target="_blank" rel="noopener noreferrer" className="link">Open<span className="sr-only"> on {PLATFORM_LABEL[p.platform]} (opens a new tab)</span></a>}
                       {p.publishedAt && <span className="text-xs text-muted">{when(p.publishedAt)}</span>}
                       {p.status === "failed" && p.attempts < 3 && (
                         <button type="button" className="btn px-2 py-1 text-xs" disabled={pending}
@@ -276,30 +275,36 @@ function Scorecard({ snapshots }: { snapshots: Snapshot[] }) {
   const v = compareToBaseline(m, LWS_BASELINE);
   const n = (x: number | null) => (x === null ? "–" : Number(x).toLocaleString("en-IN"));
   const cell = (label: string, value: string, verdict?: Verdict) => (
-    <span className="whitespace-nowrap">
-      {value} {label}
-      {verdict && verdict !== "n/a" && (
-        <span className={`ml-0.5 ${VERDICT[verdict].cls}`} title={VERDICT[verdict].text} aria-label={VERDICT[verdict].text}>{VERDICT[verdict].mark}</span>
-      )}
-    </span>
+    <div className="rounded-lg bg-bg/60 px-3 py-2">
+      <div className="stat-label">{label}</div>
+      <div className="mt-0.5 text-base font-semibold tabular-nums">
+        {value}
+        {verdict && verdict !== "n/a" && (
+          <span className={`ml-1 text-xs ${VERDICT[verdict].cls}`} title={VERDICT[verdict].text} aria-label={VERDICT[verdict].text}>{VERDICT[verdict].mark}</span>
+        )}
+      </div>
+    </div>
   );
   return (
-    <p className="flex w-full flex-wrap gap-x-3 gap-y-1 text-xs text-fg">
-      <span className="text-muted">{s.snapshot === "7d" ? "7 days" : "48 h"}:</span>
-      {cell("views", n(s.views), v.views)}
-      {cell("saves", n(s.saves), v.saves)}
-      {cell("shares", n(s.shares))}
-      {cell("watched", s.avgWatchMs === null ? "–" : `${(s.avgWatchMs / 1000).toFixed(1)} s`, v.avgWatchMs)}
-      <span className="text-muted">vs typical {LWS_BASELINE.views} views · {LWS_BASELINE.saves} save · {(LWS_BASELINE.avgWatchMs / 1000).toFixed(1)} s</span>
-    </p>
+    <div className="w-full space-y-2 pt-1">
+      <p className="text-xs text-muted">
+        After {s.snapshot === "7d" ? "7 days" : "48 h"} · vs typical {LWS_BASELINE.views} views · {LWS_BASELINE.saves} save · {(LWS_BASELINE.avgWatchMs / 1000).toFixed(1)} s
+      </p>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {cell("Views", n(s.views), v.views)}
+        {cell("Saves", n(s.saves), v.saves)}
+        {cell("Shares", n(s.shares))}
+        {cell("Watched", s.avgWatchMs === null ? "–" : `${(s.avgWatchMs / 1000).toFixed(1)} s`, v.avgWatchMs)}
+      </div>
+    </div>
   );
 }
 
 function CaptionPreview({ captions }: { captions: Captions }) {
   return (
-    <details className="text-sm">
-      <summary className="cursor-pointer text-muted">Captions</summary>
-      <pre className="mt-2 whitespace-pre-wrap break-words rounded-md bg-bg p-3 font-mono text-xs">{captions.instagram ?? captions.facebook ?? ""}</pre>
+    <details className="rounded-xl border border-line bg-raised text-sm">
+      <summary className="cursor-pointer select-none rounded-xl px-3 py-2 text-muted hover:text-fg">Captions</summary>
+      <pre className="mx-3 mb-3 whitespace-pre-wrap break-words rounded-lg bg-bg p-3 font-mono text-xs">{captions.instagram ?? captions.facebook ?? ""}</pre>
     </details>
   );
 }

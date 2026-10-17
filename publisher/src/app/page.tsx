@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { PostCard, type PostView } from "@/components/PostCard";
-import { Nav } from "@/components/Nav";
+import { Nav, PageHeader } from "@/components/Nav";
 import { ApproveStoriesButton } from "@/components/ApproveStoriesButton";
 import type { StoryQuiz } from "@/lib/domain/story";
 import type { Platform } from "@/lib/domain/types";
@@ -83,47 +83,50 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
   };
 
   return (
-    <main className="mx-auto max-w-3xl px-4 pb-16">
+    <>
       <Nav current="queue" />
-      <h1 className="sr-only">Post queue</h1>
+      <main className="mx-auto max-w-5xl px-4 pb-16 pt-8">
+        <PageHeader title="Queue">Approve what goes out. Nothing posts without you.</PageHeader>
 
-      {!projects?.length ? (
-        <p className="rounded-md border border-line bg-panel p-4 text-sm text-muted">
-          Your account isn&apos;t part of any organisation yet. Ask the owner to add you.
-        </p>
-      ) : (
-        <>
-          {projects.length > 1 && (
-            <nav aria-label="Projects" className="mb-3 flex flex-wrap gap-2">
-              <Link href={href({ project: null })} aria-current={!projectId ? "page" : undefined}
-                className={`chip ${!projectId ? "border-accent text-accent" : "border-line text-muted"}`}>All projects</Link>
-              {projects.map((p) => (
-                <Link key={p.id} href={href({ project: p.id })} aria-current={projectId === p.id ? "page" : undefined}
-                  className={`chip ${projectId === p.id ? "border-accent text-accent" : "border-line text-muted"}`}>{p.name}</Link>
+        {!projects?.length ? (
+          <p className="card p-5 text-sm text-muted">
+            Your account isn&apos;t part of any organisation yet. Ask the owner to add you.
+          </p>
+        ) : (
+          <>
+            {projects.length > 1 && (
+              <nav aria-label="Projects" className="mb-4 flex flex-wrap gap-2">
+                <Link href={href({ project: null })} aria-current={!projectId ? "page" : undefined}
+                  className={`chip py-1 ${!projectId ? "chip-accent" : "chip-muted hover:text-fg"}`}>All projects</Link>
+                {projects.map((p) => (
+                  <Link key={p.id} href={href({ project: p.id })} aria-current={projectId === p.id ? "page" : undefined}
+                    className={`chip py-1 ${projectId === p.id ? "chip-accent" : "chip-muted hover:text-fg"}`}>{p.name}</Link>
+                ))}
+              </nav>
+            )}
+
+            <nav aria-label="Post status" className="mb-6 flex gap-1 overflow-x-auto border-b border-line">
+              {TABS.map((t) => (
+                <Link key={t.id} href={href({ tab: t.id })} aria-current={tab === t.id ? "page" : undefined}
+                  className={`-mb-px flex items-center gap-1.5 whitespace-nowrap border-b-2 px-2 py-2.5 sm:gap-2 sm:px-3 text-sm font-medium transition-colors ${tab === t.id ? "border-accent text-fg" : "border-transparent text-muted hover:text-fg"}`}>
+                  {t.label}
+                  <span className={`rounded-full px-1.5 text-xs tabular-nums ${tab === t.id ? "bg-accent/15 text-accent" : "bg-white/[0.06] text-muted"}`}>{counts[t.id]}</span>
+                </Link>
               ))}
             </nav>
-          )}
 
-          <nav aria-label="Post status" className="mb-4 flex gap-1 overflow-x-auto border-b border-line">
-            {TABS.map((t) => (
-              <Link key={t.id} href={href({ tab: t.id })} aria-current={tab === t.id ? "page" : undefined}
-                className={`whitespace-nowrap border-b-2 px-3 py-2 text-sm ${tab === t.id ? "border-accent text-fg" : "border-transparent text-muted hover:text-fg"}`}>
-                {t.label} <span className="text-muted">({counts[t.id]})</span>
-              </Link>
-            ))}
-          </nav>
+            {readyStories > 0 && <ApproveStoriesButton count={readyStories} projectId={projectId} />}
 
-          {readyStories > 0 && <ApproveStoriesButton count={readyStories} projectId={projectId} />}
-
-          {views.length === 0 ? (
-            <p className="py-10 text-center text-sm text-muted">Nothing here.</p>
-          ) : (
-            <ul className="space-y-4">
-              {views.map((v) => <li key={v.id}><PostCard post={v} /></li>)}
-            </ul>
-          )}
-        </>
-      )}
-    </main>
+            {views.length === 0 ? (
+              <p className="card px-5 py-12 text-center text-sm text-muted">Nothing here.</p>
+            ) : (
+              <ul className="space-y-5">
+                {views.map((v) => <li key={v.id}><PostCard post={v} /></li>)}
+              </ul>
+            )}
+          </>
+        )}
+      </main>
+    </>
   );
 }

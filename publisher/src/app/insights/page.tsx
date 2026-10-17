@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { Nav } from "@/components/Nav";
+import { Nav, PageHeader } from "@/components/Nav";
 import { RefreshInsights } from "@/components/RefreshInsights";
 import { compareToBaseline, median, typicalReel, type PostMetrics, type Verdict } from "@/lib/domain/metrics";
 import { AdsSummary, type AdsSummaryProps } from "@/components/AdsSummary";
@@ -107,83 +107,92 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
   };
   const sorted = [...rows].sort((a, b) => key[sort](b) - key[sort](a));
 
+  const typicalTile = (label: string, value: string, recentValue: string, verdict: Verdict) => (
+    <div className="tile">
+      <dt className="stat-label">{label}</dt>
+      <dd className="stat-value">{value}</dd>
+      <dd className="mt-1 text-xs text-muted">Last 30 days: <span className="tabular-nums text-fg">{recentValue}</span><Mark v={verdict} /></dd>
+    </div>
+  );
+
   return (
-    <main className="mx-auto max-w-3xl px-4 pb-16">
+    <>
       <Nav current="insights" />
-      <h1 className="sr-only">Insights</h1>
-      <div className="mb-4"><AdsSummary {...ads} /></div>
+      <main className="mx-auto max-w-5xl px-4 pb-16 pt-8">
+        <PageHeader title="Insights">How your ads and reels are doing, against your own typical numbers.</PageHeader>
+        <div className="mb-6"><AdsSummary {...ads} /></div>
 
-      {accounts.length > 1 && (
-        <nav aria-label="Instagram account" className="mb-4 flex flex-wrap gap-2">
-          {[...accounts].sort((a, b) => a.createdAt.localeCompare(b.createdAt)).map((a) => (
-            <Link key={a.id} href={qs({ account: a.id })} aria-current={account?.id === a.id ? "page" : undefined}
-              className={`chip ${account?.id === a.id ? "border-accent text-accent" : "border-line text-muted"}`}>{a.displayName}</Link>
-          ))}
-        </nav>
-      )}
-
-      {rows.length === 0 ? (
-        <section className="space-y-3 rounded-lg border border-line bg-panel p-4">
-          <p className="text-sm text-muted">No reels read yet. They refresh every night at 3 am; you can read them now.</p>
-          <RefreshInsights label="Read my reels now" />
-        </section>
-      ) : (
-        <>
-          <section aria-labelledby="summary" className="space-y-3 rounded-lg border border-line bg-panel p-4">
-            <h2 id="summary" className="font-medium">Your typical reel{accounts.length > 1 && account ? ` on ${account.displayName}` : ""}</h2>
-            <p className="text-sm">
-              <strong>{n(typical.views)}</strong> views · <strong>{n(typical.saves)}</strong> {typical.saves === 1 ? "save" : "saves"} ·{" "}
-              <strong>{sec(typical.avgWatchMs)}</strong> watched <span className="text-muted">({typical.note})</span>
-            </p>
-            <p className="text-sm">
-              <span className="text-muted">Last 30 days ({recent.length} reels):</span>{" "}
-              {n(recentM.views)} views<Mark v={recentV.views} /> · {n(recentM.saves)} saves<Mark v={recentV.saves} /> · {sec(recentM.avgWatchMs)} watched<Mark v={recentV.avgWatchMs} />
-            </p>
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="text-xs text-muted">
-                ▲ above / ▼ below your typical reel · updated {lastSync ? IST.format(new Date(lastSync)) : "never"} (refreshes nightly)
-              </p>
-              <RefreshInsights />
-            </div>
-          </section>
-
-          <nav aria-label="Sort reels" className="my-4 flex flex-wrap gap-2">
-            {SORTS.map((s) => (
-              <Link key={s.id} href={qs({ sort: s.id })} aria-current={sort === s.id ? "page" : undefined}
-                className={`chip ${sort === s.id ? "border-accent text-accent" : "border-line text-muted"}`}>{s.label}</Link>
+        {accounts.length > 1 && (
+          <nav aria-label="Instagram account" className="mb-4 flex flex-wrap gap-2">
+            {[...accounts].sort((a, b) => a.createdAt.localeCompare(b.createdAt)).map((a) => (
+              <Link key={a.id} href={qs({ account: a.id })} aria-current={account?.id === a.id ? "page" : undefined}
+                className={`chip py-1 ${account?.id === a.id ? "chip-accent" : "chip-muted hover:text-fg"}`}>{a.displayName}</Link>
             ))}
           </nav>
+        )}
 
-          <ul className="space-y-2" aria-label={`${rows.length} reels`}>
-            {sorted.map((r) => {
-              const v = compareToBaseline(metricsOf(r), typical);
-              return (
-                <li key={r.external_id} className="rounded-lg border border-line bg-panel p-3">
-                  <div className="flex items-start justify-between gap-3">
-                    <p className="min-w-0 text-sm">
-                      <span className="text-muted">{IST.format(new Date(r.posted_at))} · </span>
-                      <span className="break-words">{r.caption.split("\n")[0].slice(0, 110) || "(no caption)"}</span>
-                    </p>
-                    <a href={r.permalink} target="_blank" rel="noopener noreferrer" className="shrink-0 text-sm text-accent underline"
+        {rows.length === 0 ? (
+          <section className="card space-y-3 p-4 sm:p-6">
+            <p className="text-sm text-muted">No reels read yet. They refresh every night at 3 am; you can read them now.</p>
+            <RefreshInsights label="Read my reels now" />
+          </section>
+        ) : (
+          <>
+            <section aria-labelledby="summary" className="card space-y-4 p-4 sm:p-6">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h2 id="summary" className="text-lg font-semibold tracking-tight">Your typical reel{accounts.length > 1 && account ? ` on ${account.displayName}` : ""}</h2>
+                <span className="text-xs text-muted">{typical.note}</span>
+              </div>
+              <dl className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-3">
+                {typicalTile("Views", n(typical.views), n(recentM.views), recentV.views)}
+                {typicalTile("Saves", n(typical.saves), n(recentM.saves), recentV.saves)}
+                {typicalTile("Watched", sec(typical.avgWatchMs), sec(recentM.avgWatchMs), recentV.avgWatchMs)}
+              </dl>
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4">
+                <p className="text-xs text-muted">
+                  Last 30 days = {recent.length} reels · ▲ above / ▼ below your typical reel · updated {lastSync ? IST.format(new Date(lastSync)) : "never"} (refreshes nightly)
+                </p>
+                <RefreshInsights />
+              </div>
+            </section>
+
+            <div className="mb-3 mt-8 flex flex-wrap items-center justify-between gap-3">
+              <h2 className="text-lg font-semibold tracking-tight">Reels <span className="text-sm font-normal text-muted">({rows.length})</span></h2>
+              <nav aria-label="Sort reels" className="seg">
+                {SORTS.map((s) => (
+                  <Link key={s.id} href={qs({ sort: s.id })} aria-current={sort === s.id ? "page" : undefined} className="seg-item">{s.label}</Link>
+                ))}
+              </nav>
+            </div>
+
+            <ul className="card divide-y divide-line overflow-hidden" aria-label={`${rows.length} reels`}>
+              {sorted.map((r) => {
+                const v = compareToBaseline(metricsOf(r), typical);
+                return (
+                  <li key={r.external_id} className="flex flex-col gap-2 px-4 py-3 transition-colors hover:bg-white/[0.02] sm:flex-row sm:items-center sm:gap-6">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs text-muted">{IST.format(new Date(r.posted_at))} · {n(r.likes)} likes · {n(r.comments)} comments</p>
+                      <p className="break-words text-sm">{r.caption.split("\n")[0].slice(0, 110) || "(no caption)"}</p>
+                    </div>
+                    {r.insights_error ? (
+                      <p className="text-xs text-muted sm:max-w-xs">Numbers unavailable: {r.insights_error}</p>
+                    ) : (
+                      <dl className="grid shrink-0 grid-cols-4 gap-3 text-sm tabular-nums sm:w-[22rem]">
+                        <div><dt className="stat-label">Views</dt><dd>{n(r.views)}<Mark v={v.views} /></dd></div>
+                        <div><dt className="stat-label">Saves</dt><dd>{n(r.saves)}<Mark v={v.saves} /></dd></div>
+                        <div><dt className="stat-label">Shares</dt><dd>{n(r.shares)}</dd></div>
+                        <div><dt className="stat-label">Watched</dt><dd>{sec(r.avg_watch_ms)}<Mark v={v.avgWatchMs} /></dd></div>
+                      </dl>
+                    )}
+                    <a href={r.permalink} target="_blank" rel="noopener noreferrer" className="link shrink-0 self-start text-sm sm:self-auto"
                       aria-label={`Open this reel on Instagram (posted ${IST.format(new Date(r.posted_at))})`}>Open</a>
-                  </div>
-                  {r.insights_error ? (
-                    <p className="mt-1 text-xs text-muted">Numbers unavailable: {r.insights_error}</p>
-                  ) : (
-                    <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs">
-                      <span>{n(r.views)} views<Mark v={v.views} /></span>
-                      <span>{n(r.saves)} saves<Mark v={v.saves} /></span>
-                      <span>{n(r.shares)} shares</span>
-                      <span>{sec(r.avg_watch_ms)} watched<Mark v={v.avgWatchMs} /></span>
-                      <span className="text-muted">{n(r.likes)} likes · {n(r.comments)} comments</span>
-                    </p>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </>
-      )}
-    </main>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        )}
+      </main>
+    </>
   );
 }

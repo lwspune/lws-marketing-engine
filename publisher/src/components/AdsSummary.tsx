@@ -7,10 +7,10 @@ import { COST_PER_CHAT, type CampaignSummary, type ChatVerdict } from "@/lib/dom
 const rupees = (x: number | null) => (x === null ? "–" : `₹${Math.round(x).toLocaleString("en-IN")}`);
 
 const VERDICT: Record<ChatVerdict, { label: string; cls: string; help: string }> = {
-  good: { label: "Good", cls: "border-accent/60 text-accent", help: `₹${COST_PER_CHAT.good} or less per chat` },
-  watch: { label: "Watch", cls: "border-warn/60 text-warn", help: `₹${COST_PER_CHAT.good}–${COST_PER_CHAT.watch} per chat` },
-  change: { label: "Change the poster", cls: "border-danger/60 text-danger", help: `over ₹${COST_PER_CHAT.watch} per chat: change the poster or hook, not the budget` },
-  early: { label: "Too early", cls: "border-line text-muted", help: "not enough spent to judge yet" },
+  good: { label: "Good", cls: "chip-accent", help: `₹${COST_PER_CHAT.good} or less per chat` },
+  watch: { label: "Watch", cls: "chip-warn", help: `₹${COST_PER_CHAT.good}–${COST_PER_CHAT.watch} per chat` },
+  change: { label: "Change the poster", cls: "chip-danger", help: `over ₹${COST_PER_CHAT.watch} per chat: change the poster or hook, not the budget` },
+  early: { label: "Too early", cls: "chip-muted", help: "not enough spent to judge yet" },
 };
 
 const STATUS: Record<string, string> = {
@@ -37,46 +37,61 @@ const day = (d: string | null) => (d ? DAY.format(new Date(`${d}T00:00:00Z`)) : 
 
 export function AdsSummary({ accountId, campaigns, weekStart, thisWeek, lastSync }: AdsSummaryProps) {
   return (
-    <section aria-labelledby="ads" className="space-y-3 rounded-lg border border-line bg-panel p-4">
-      <h2 id="ads" className="font-medium">Ads <span className="text-sm font-normal text-muted">(last 30 days)</span></h2>
+    <section aria-labelledby="ads" className="card space-y-4 p-4 sm:p-6">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h2 id="ads" className="text-lg font-semibold tracking-tight">Ads</h2>
+        <span className="text-xs text-muted">Last 30 days</span>
+      </div>
 
       {!accountId ? (
         <p className="text-sm text-muted">No ad account connected yet. See SETUP.md, step “Connect the ad account”.</p>
       ) : campaigns.length === 0 ? (
         <p className="text-sm text-muted">No ads have run in the last 30 days.</p>
       ) : (
-        <ul className="space-y-3" aria-label={`${campaigns.length} campaigns`}>
+        <ul className="space-y-4" aria-label={`${campaigns.length} campaigns`}>
           {campaigns.map((c) => (
-            <li key={c.campaignId} className="space-y-2 rounded-md border border-line p-3">
+            <li key={c.campaignId} className="space-y-4 rounded-xl border border-line bg-bg/40 p-4">
               <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h3 className="min-w-0 break-words text-sm font-medium">{c.name}</h3>
+                <h3 className="min-w-0 break-words font-medium">{c.name}</h3>
                 <span className="text-xs text-muted">
                   {statusLabel(c.status)}{c.firstDay ? ` · ${day(c.firstDay)}–${day(c.lastDay)}` : " · no results yet"}
                 </span>
               </div>
-              <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-                <span><strong>{rupees(c.spend)}</strong> spent</span>
-                <span><strong>{c.chats}</strong> WhatsApp {c.chats === 1 ? "chat" : "chats"}</span>
-                <span><strong>{rupees(c.costPerChat)}</strong> per chat</span>
-                <Verdict v={c.verdict} />
-              </p>
-              <p className="text-sm">
-                {c.booked === null ? (
-                  <span className="text-muted">No bookings typed in yet.</span>
-                ) : (
-                  <>
-                    <strong>{c.booked}</strong> tests booked · <strong>{c.leads}</strong> NDA leads ·{" "}
-                    <strong>{rupees(c.costPerBooked)}</strong> per booked test
-                  </>
-                )}
-              </p>
+              <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                <div className="tile">
+                  <dt className="stat-label">Spent</dt>
+                  <dd className="stat-value">{rupees(c.spend)}</dd>
+                </div>
+                <div className="tile">
+                  <dt className="stat-label">WhatsApp chats</dt>
+                  <dd className="stat-value">{c.chats}</dd>
+                </div>
+                <div className="tile">
+                  <dt className="stat-label">Per chat</dt>
+                  <dd className="stat-value">{rupees(c.costPerChat)}</dd>
+                  <dd className="mt-1.5"><Verdict v={c.verdict} /></dd>
+                </div>
+                <div className="tile">
+                  <dt className="stat-label">Tests booked</dt>
+                  {c.booked === null ? (
+                    <dd className="mt-1 text-sm text-muted">None typed in yet</dd>
+                  ) : (
+                    <>
+                      <dd className="stat-value">{c.booked}</dd>
+                      <dd className="mt-1 text-xs text-muted">
+                        {rupees(c.costPerBooked)} each · {c.leads} NDA {c.leads === 1 ? "lead" : "leads"}
+                      </dd>
+                    </>
+                  )}
+                </div>
+              </dl>
               {c.adsets.length > 0 && (
-                <ul className="space-y-1 border-t border-line pt-2" aria-label="Ad sets">
+                <ul className="divide-y divide-line rounded-lg border border-line" aria-label="Ad sets">
                   {c.adsets.map((a) => (
-                    <li key={a.adsetId} className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+                    <li key={a.adsetId} className="flex flex-wrap items-center gap-x-3 gap-y-1 px-3 py-2 text-xs">
                       <span className="min-w-0 break-words font-medium">{a.name}</span>
                       <span className="text-muted">{statusLabel(a.status)}{a.dailyBudgetInr !== null ? ` · ${rupees(a.dailyBudgetInr)}/day` : ""}</span>
-                      <span>{rupees(a.spend)} · {a.chats} {a.chats === 1 ? "chat" : "chats"} · {rupees(a.costPerChat)} per chat</span>
+                      <span className="tabular-nums sm:ml-auto">{rupees(a.spend)} · {a.chats} {a.chats === 1 ? "chat" : "chats"} · {rupees(a.costPerChat)} per chat</span>
                       <Verdict v={a.verdict} />
                     </li>
                   ))}

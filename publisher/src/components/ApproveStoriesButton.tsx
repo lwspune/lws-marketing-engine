@@ -20,8 +20,11 @@ export function ApproveStoriesButton({ count, projectId }: { count: number; proj
     });
 
   return (
-    <div className="mb-4 flex flex-wrap items-center gap-3 rounded-lg border border-line bg-panel p-3">
-      <p className="text-sm">{count} daily {count === 1 ? "story is" : "stories are"} waiting. Check the cards below, then:</p>
+    <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-accent/25 bg-accent/[0.06] p-4">
+      <p className="text-sm">
+        <strong className="font-semibold">{count} daily {count === 1 ? "story is" : "stories are"} waiting.</strong>{" "}
+        <span className="text-muted">Check the cards below, then:</span>
+      </p>
       <button type="button" className="btn btn-primary" disabled={pending} onClick={approveAll}>
         Approve all {count} {count === 1 ? "story" : "stories"}
       </button>

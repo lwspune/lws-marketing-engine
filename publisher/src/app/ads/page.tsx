@@ -1,5 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { Nav } from "@/components/Nav";
+import { Nav, PageHeader } from "@/components/Nav";
 import { AdDraftCard, type AdDraftView } from "@/components/AdDraftCard";
 import { adsManagerUrl, type AdSpec, type DraftStatus } from "@/lib/domain/ads";
 
@@ -32,20 +32,21 @@ export default async function AdsPage() {
   }));
 
   return (
-    <main className="mx-auto max-w-3xl px-4 pb-16">
+    <>
       <Nav current="ads" />
-      <h1 className="sr-only">Ads</h1>
-      <p className="mb-4 text-sm text-muted">
-        Approve creates the ad on Meta <strong className="text-fg">paused</strong>. Check the preview in Ads Manager, then Launch.
-        Nothing spends until you press Launch. Results are on the Insights tab.
-      </p>
-      {views.length === 0 ? (
-        <p className="rounded-lg border border-line bg-panel p-4 text-sm text-muted">
-          No ads yet. Add one with <code className="font-mono">npm run ads:add</code> and an .ad.json file.
-        </p>
-      ) : (
-        <div className="space-y-4">{views.map((v) => <AdDraftCard key={v.id} ad={v} />)}</div>
-      )}
-    </main>
+      <main className="mx-auto max-w-5xl px-4 pb-16 pt-8">
+        <PageHeader title="Ads">
+          Approve creates the ad on Meta <strong className="font-medium text-fg">paused</strong>. Check the preview in Ads Manager, then Launch.
+          Nothing spends until you press Launch. Results are on the Insights tab.
+        </PageHeader>
+        {views.length === 0 ? (
+          <p className="card p-5 text-sm text-muted">
+            No ads yet. Add one with <code className="font-mono">npm run ads:add</code> and an .ad.json file.
+          </p>
+        ) : (
+          <div className="space-y-5">{views.map((v) => <AdDraftCard key={v.id} ad={v} />)}</div>
+        )}
+      </main>
+    </>
   );
 }

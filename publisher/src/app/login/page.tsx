@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { Logo } from "@/components/Nav";
 
 // Email + password, with an email magic link as a fallback. Logins are created only by
 // `npm run seed` (sign-ups are off in Supabase), and `shouldCreateUser: false` keeps the
@@ -35,15 +36,18 @@ export default function LoginPage() {
   const busy = state.kind === "busy";
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-4">
-      <h1 className="font-mono text-xl font-semibold">LWS Publisher</h1>
-      <p className="mt-1 text-sm text-muted">Approve ready posts. Nothing goes out without you.</p>
+    <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-4 py-12">
+      <div className="mb-8 flex flex-col items-center text-center">
+        <Logo size="lg" />
+        <h1 className="mt-4 text-2xl font-semibold tracking-tight">LWS Publisher</h1>
+        <p className="mt-1 text-sm text-muted">Approve ready posts. Nothing goes out without you.</p>
+      </div>
       {state.kind === "sent" ? (
-        <p role="status" className="mt-8 rounded-md border border-accent/40 bg-panel p-4 text-sm">
+        <p role="status" className="card border-accent/40 p-5 text-sm">
           Check <strong>{email}</strong> for a sign-in link.
         </p>
       ) : (
-        <form onSubmit={signIn} className="mt-8 space-y-3">
+        <form onSubmit={signIn} className="card space-y-4 p-6">
           <div>
             <label htmlFor="email" className="label">Email</label>
             <input id="email" type="email" required autoComplete="email" value={email}
@@ -59,7 +63,7 @@ export default function LoginPage() {
           </button>
           {state.kind === "error" && <p role="alert" className="text-sm text-danger">{state.message}</p>}
           <button type="button" onClick={sendLink} disabled={busy}
-            className="w-full text-center text-sm text-muted underline hover:text-fg">
+            className="w-full rounded-lg py-1 text-center text-sm text-muted underline decoration-muted/40 underline-offset-4 hover:text-fg">
             Forgot it? Email me a sign-in link instead
           </button>
         </form>

@@ -16,7 +16,7 @@ export function AdOutcomeForm(props: {
 
   return (
     <form
-      className="flex flex-wrap items-end gap-3 border-t border-line pt-2"
+      className="flex flex-wrap items-end gap-3 border-t border-line pt-4"
       aria-label={`Bookings this week for ${props.campaignName}`}
       onSubmit={(e) => {
         e.preventDefault();
