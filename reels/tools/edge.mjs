@@ -1,7 +1,7 @@
 // Minimal headless-Edge driver over the Chrome DevTools Protocol (Node's built-in fetch + WebSocket).
 // No npm packages. Every tool in this folder opens a reel page through openPage().
 import { spawn } from 'node:child_process';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, rmSync, readdirSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -9,7 +9,23 @@ import { pathToFileURL } from 'node:url';
 const EDGE = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
 export const fileUrl = p => pathToFileURL(resolve(p)).href;
 
+// A killed or crashed run never reaches close(), so its profile stays behind (124 of them filled the disk on
+// 2026-10-17). Every launch first removes `edge-*` profiles older than maxAgeMs; fresh ones may be in use.
+export function sweepStaleProfiles(root = tmpdir(), maxAgeMs = 30 * 60_000) {
+  let removed = 0;
+  for (const name of readdirSync(root)) {
+    if (!name.startsWith('edge-')) continue;
+    const d = join(root, name);
+    try {
+      if (!statSync(d).isDirectory() || Date.now() - statSync(d).mtimeMs < maxAgeMs) continue;
+      rmSync(d, { recursive: true, force: true }); removed++;
+    } catch {}   // locked by a running Edge: leave it
+  }
+  return removed;
+}
+
 export async function launch(url) {
+  sweepStaleProfiles();
   const port = 20000 + Math.floor(Math.random() * 20000), dir = mkdtempSync(join(tmpdir(), 'edge-'));
   const proc = spawn(EDGE, ['--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${dir}`,
     '--autoplay-policy=no-user-gesture-required', '--allow-file-access-from-files', '--disable-background-timer-throttling',
@@ -20,7 +36,7 @@ export async function launch(url) {
     await new Promise(r => setTimeout(r, 200));
   }
   const page = targets.find(t => t.type === 'page' && t.url.startsWith('file:'));
-  if (!page) { proc.kill(); throw new Error('Edge did not open ' + url); }
+  if (!page) { proc.kill(); setTimeout(() => { try { rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 300 }); } catch {} }, 1500); throw new Error('Edge did not open ' + url); }
   const ws = new WebSocket(page.webSocketDebuggerUrl);
   await new Promise(r => ws.addEventListener('open', r));
   let id = 0; const pending = new Map();
