@@ -81,6 +81,16 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   creates everything PAUSED on Meta, a separate Launch (with confirmation) starts spending. Budget
   guardrails (≤ ₹1,000/day, 1–30 days, end date required) are database constraints.
 
+- **Remotion trial (2026-10-18, founder-approved).** Does Remotion (React video, rendered frame by frame)
+  make reels clearly better without slowing the weekly routine? Trial = reel 005 remade in `remotion/`
+  (not posted: the question is already up) and judged side by side. npm is allowed **in `remotion/`
+  only**; `reels/engine.js` keeps "no npm packages". Free licence: LWS has ≤ 3 employees. Renders with
+  the laptop's Edge (no browser download). If it loses, delete `remotion/`; nothing else depends on it.
+  **Result (same day): founder judged Remotion "far better".** Measured: the engine's real-time MP4 of
+  005 averages 29.2 fps with gaps of up to 0.4 s in the first second (the hook) and runs ~0.5 s behind
+  its script; Remotion gives exactly 30 fps, on time. Cost: 2 min 15 s to render 31.5 s (engine ≈ 32 s).
+  Next: the next new visual reel is made in Remotion and posted; its numbers go in reels/learnings.md.
+
 ## File structure
 
 ```
@@ -105,6 +115,10 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   tools/                 #   headless-Edge scripts: frames, record, cover, check-video, unchanged (+ baseline.txt)
   assets/                #   V mascot poses (copied from Question_Bank/public/chat)
   *.post.json            #   one per piece: manifest for publisher's `queue:add` (files + captions)
+remotion/                # TRIAL: reels in Remotion (React + SVG, frame-by-frame render, Edge). `npm test`,
+                         #   `npm run typecheck`, `npm run audio` (soundtrack from the engine MP4), `npm run render`,
+                         #   `npm run compare:files && npm run compare` (old vs new side by side) → out/
+  src/lib/               #   pure timelines (same prog/ease/caption timing as engine.js; palette test-locked to Reel.WHITE)
 publisher/               # HOSTED approve → publish app (Next.js 14 + Supabase, own Vercel project)
   SETUP.md               #   one-time setup runbook (Supabase, Meta app, Vercel, scheduler)
   supabase/migrations/   #   schema + RLS + transition triggers (0001), write functions (0002), pg_cron (0003)
