@@ -3,13 +3,13 @@
 // marked "upgrade": springs, a comet trail on the curve, pop-in numbers, dimmed wrong options.
 import React from 'react';
 import { AbsoluteFill, Html5Audio, spring, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
-import { WHITE as P, tint, TEXT_FONT, SOFT_UI, UI } from './lib/palette.ts';
+import { WHITE as P, TEXT_FONT, SOFT_UI, UI } from './lib/palette.ts';
 import { clamp01, prog, captionAt } from './lib/motion.ts';
 import {
   GX0, GX1, GY, CLIP_Y0, CLIP_Y1, ANSWER_AT, END_AT, CAPTIONS, view, px, py, f, foldAt, curveEnd, curvePaths, fillPath,
   humpAlpha, humpsShown, slices, slicesAlpha, type View,
 } from './lib/reel005.ts';
-import { Board, Card, Caption, MathRow, Int, Limits, C, hand, useFonts } from './board.tsx';
+import { Board, Card, Caption, MathRow, Int, Limits, C, Chips, EndCard, hand, useFonts, type EndLine } from './board.tsx';
 
 const PI = Math.PI;
 const COVER = { t: 9.6, text: 'Area over 8π?\nCount the humps.', y: 1440, size: 76 };
@@ -107,9 +107,6 @@ function Period({ t, V }: { t: number; V: View }) {
 
 // The question on a floating card: source line, the integral, and the options as chips.
 function QuestionCard({ t }: { t: number }) {
-  const on = prog(t, ANSWER_AT, 0.6), pulse = Math.sin(PI * clamp01((t - ANSWER_AT) / 0.7));
-  const dim = 1 - 0.55 * prog(t, ANSWER_AT + 0.3, 0.5); // upgrade: wrong options step back once the answer is in
-  const labels = ['(a) 2', '(b) 4', '(c) 8', '(d) 16'], w = 180, h = 72, gap = 20, x0 = 540 - (4 * w + 3 * gap) / 2;
   return (
     <>
       <Card x={110} y={460} w={860} h={380} />
@@ -117,19 +114,7 @@ function QuestionCard({ t }: { t: number }) {
         NDA 2023 (II)  ·  Maths  ·  Q67
       </div>
       <MathRow y={655} size={80}><Int lo="0" hi="8π" size={80} color={P.blue} /><C color={P.blue}> |sin x|</C> dx  =  ?</MathRow>
-      {labels.map((label, i) => {
-        const hit = i === 3 && on > 0, s = hit ? 1 + 0.07 * pulse : 1;
-        return (
-          <div key={label} style={{
-            position: 'absolute', left: x0 + i * (w + gap), top: 735, width: w, height: h, borderRadius: h / 2, boxSizing: 'border-box',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', transform: `scale(${s})`,
-            border: `${hit ? 2 + on : 2}px solid ${hit ? tint(P.amber, 0.25 + 0.6 * on) : tint(P.ink, 0.14)}`,
-            background: hit ? tint(P.amber, 0.12 * on) : 'transparent',
-            boxShadow: hit ? `0 6px 22px ${tint(P.amber, 0.25 * on)}` : 'none',
-            opacity: i === 3 ? 1 : dim, color: hit && on > 0.5 ? P.amber : P.ink, ...hand(44), paddingTop: 2,
-          }}>{label}</div>
-        );
-      })}
+      <Chips t={t} labels={['(a) 2', '(b) 4', '(c) 8', '(d) 16']} answer={3} at={ANSWER_AT} top={735} />
     </>
   );
 }
@@ -151,26 +136,11 @@ function Working({ t, fps }: { t: number; fps: number }) {
   );
 }
 
-const END = [
+const END: EndLine[] = [
   { at: 0.3, size: 50, weight: 400, color: P.muted, text: 'Graph keeps repeating?' },
   { at: 0.6, size: 62, weight: 600, color: P.ink, text: 'Find one hump. Multiply.' },
   { at: 1.3, size: 80, weight: 700, color: P.green, text: 'Follow for more' },
 ];
-function EndCard({ t, fps }: { t: number; fps: number }) {
-  const p = clamp01((t - END_AT) / 0.5); if (p <= 0) return null;
-  let y = 820;
-  return (
-    <AbsoluteFill style={{ opacity: p }}>
-      <Board watermark={false} />
-      {END.map(l => {
-        const a = clamp01((t - END_AT - l.at) / 0.35), s = spring({ frame: (t - END_AT - l.at) * fps, fps, config: { damping: 16 } });
-        const top = y; y += l.size * (l.size > 70 ? 2.0 : 1.75);
-        return <div key={l.text} style={{ position: 'absolute', left: 0, width: 1080, top: top - l.size * 0.6, textAlign: 'center', opacity: a,
-          font: `${l.weight} ${l.size}px/${l.size * 1.2}px ${SOFT_UI}`, color: l.color, transform: `translateY(${(1 - s) * 22}px)` }}>{l.text}</div>;
-      })}
-    </AbsoluteFill>
-  );
-}
 
 export function Reel005({ cover = false }: { cover?: boolean }) {
   useFonts();
@@ -200,7 +170,7 @@ export function Reel005({ cover = false }: { cover?: boolean }) {
       {cover
         ? <Caption text={COVER.text} alpha={1} age={0} size={COVER.size} y={COVER.y} rise={false} />
         : cap && <Caption text={cap.caption.text} alpha={cap.alpha} age={cap.age} size={cap.caption.size} y={cap.caption.y} rise={cap.caption.t0 > 0} />}
-      {!cover && <EndCard t={t} fps={fps} />}
+      {!cover && <EndCard t={t} at={END_AT} lines={END} />}
       {/* The engine's soundtrack starts 0.15 s late (its record lead; beats measured at +0.16 s), so skip 5 frames. */}
       {!cover && <Html5Audio src={staticFile('nda-maths-005-area.aac')} trimBefore={5} />}
     </AbsoluteFill>

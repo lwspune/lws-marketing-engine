@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { AbsoluteFill, continueRender, delayRender, spring, useVideoConfig } from 'remotion';
 import { WHITE as P, tint, TEXT_FONT, MATH_FONT, SOFT_UI, UI } from './lib/palette.ts';
+import { clamp01, prog } from './lib/motion.ts';
 
 // System fonts are not loaded until first used: hold the render until they are, as engine.js does.
 const FONTS = ['600 40px Cambria', '40px "Cambria Math"', '800 40px "Segoe UI"', '600 40px "Segoe UI"',
@@ -73,3 +74,42 @@ export function Int({ lo, hi, size, color }: { lo: string; hi: string; size: num
 }
 export const Limits = ({ lo, hi, size }: { lo: string; hi: string; size: number }) => <Stack lo={lo} hi={hi} size={size} gap={size * 0.04} />;
 export const C = ({ color, children }: { color: string; children: React.ReactNode }) => <span style={{ color }}>{children}</span>;
+
+// Answer options as pills centred on the page. From `at` the answer fills with the accent and pulses once;
+// the wrong options step back so the eye lands on the answer.
+export function Chips({ t, labels, answer, at, top, w = 180, h = 72, gap = 20, size = 44 }:
+  { t: number; labels: string[]; answer: number; at: number; top: number; w?: number; h?: number; gap?: number; size?: number }) {
+  const on = prog(t, at, 0.6), pulse = Math.sin(Math.PI * clamp01((t - at) / 0.7)), dim = 1 - 0.55 * prog(t, at + 0.3, 0.5);
+  const x0 = 540 - (labels.length * w + (labels.length - 1) * gap) / 2;
+  return <>{labels.map((label, i) => {
+    const hit = i === answer && on > 0, s = hit ? 1 + 0.07 * pulse : 1;
+    return (
+      <div key={label} style={{
+        position: 'absolute', left: x0 + i * (w + gap), top, width: w, height: h, borderRadius: h / 2, boxSizing: 'border-box',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', transform: `scale(${s})`,
+        border: `${hit ? 2 + on : 2}px solid ${hit ? tint(P.amber, 0.25 + 0.6 * on) : tint(P.ink, 0.14)}`,
+        background: hit ? tint(P.amber, 0.12 * on) : 'transparent', boxShadow: hit ? `0 6px 22px ${tint(P.amber, 0.25 * on)}` : 'none',
+        opacity: i === answer ? 1 : dim, color: hit && on > 0.5 ? P.amber : P.ink, ...hand(size), paddingTop: 2,
+      }}>{label}</div>
+    );
+  })}</>;
+}
+
+export type EndLine = { at: number; size: number; weight: number; color: string; text: string };
+// The white end card: fades into the same soft board, then each line rises in on a spring.
+export function EndCard({ t, at, lines }: { t: number; at: number; lines: EndLine[] }) {
+  const { fps } = useVideoConfig();
+  const p = clamp01((t - at) / 0.5); if (p <= 0) return null;
+  let y = 820;
+  return (
+    <AbsoluteFill style={{ opacity: p }}>
+      <Board watermark={false} />
+      {lines.map(l => {
+        const a = clamp01((t - at - l.at) / 0.35), s = spring({ frame: (t - at - l.at) * fps, fps, config: { damping: 16 } });
+        const top = y; y += l.size * (l.size > 70 ? 2.0 : 1.75);
+        return <div key={l.text} style={{ position: 'absolute', left: 0, width: 1080, top: top - l.size * 0.6, textAlign: 'center', opacity: a,
+          font: `${l.weight} ${l.size}px/${l.size * 1.2}px ${SOFT_UI}`, color: l.color, transform: `translateY(${(1 - s) * 22}px)` }}>{l.text}</div>;
+      })}
+    </AbsoluteFill>
+  );
+}

@@ -1,6 +1,5 @@
 // Old engine reel (left) beside its Remotion remake (right), playing together, for judging the trial on a phone.
 // Both MP4s are copied into public/ by `npm run compare:files`; the sound is the remake's (the same music).
-import React from 'react';
 import { AbsoluteFill, OffthreadVideo, staticFile } from 'remotion';
 import { SOFT_UI } from './lib/palette.ts';
 
