@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-014-cone",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "3D #1: r = cos θ î + sin θ ĵ + k̂ sweeps a cone, always 45° to z → NDA 2026 (II) Q68 (31.5 s, first Remotion 3D reel)",
+  "video": "nda-maths-014-cone.mp4",
+  "cover": "nda-maths-014-cone-cover.png",
+  "captions": {
+    "instagram": "NDA 2026 (II) · Maths · Q68. θ keeps changing. Does the angle? 🌀\n\nr = (cos θ) î + (sin θ) ĵ + k̂ always goes up 1 and across 1 (cos²θ + sin²θ = 1). So every r is the long side of the same right triangle: |r| = √2, cos γ = 1/√2, γ = 45° = π/4 for every θ → (c).\nAs θ runs, r sweeps a cone around the z-axis.\nTraps: (a) π/2 is the angle of its shadow on the floor. (b) π/3 comes from cos γ = 1/2: you forgot the √ in |r|.\n\nSave this 📌 Follow @lws.pune for one real NDA PYQ every day.\nPractise every Vectors PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #MathsTricks #LWSPune #Vectors #3DGeometry",
+    "facebook": "NDA 2026 (II) · Maths · Q68: what angle does r = (cos θ) î + (sin θ) ĵ + k̂ make with the z-axis?\n\nIt always goes up 1 and across 1, so |r| = √2 and cos γ = 1/√2: γ = π/4 for every θ (c). As θ runs, r sweeps a cone.\nTraps: π/2 is its shadow's angle; π/3 forgets the √.\n\nPractise NDA Vectors PYQs free: https://www.pyqvault.com/questions/nda/mathematics/vectors\n\n#NDA #NDAMaths #NDA2027",
+    "youtube": {
+      "title": "θ changes, the angle doesn't: NDA 2026 vector in 3D #shorts",
+      "description": "NDA 2026 (II) Maths Q68. r = (cos θ) î + (sin θ) ĵ + k̂ always goes up 1 and across 1, so it sweeps a cone at 45° to the z-axis: the answer is π/4 for every θ.\n\nPractise NDA Maths PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #NDA2027 #Shorts"
+    }
+  }
+}

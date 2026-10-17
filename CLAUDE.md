@@ -119,6 +119,9 @@ remotion/                # TRIAL: reels in Remotion (React + SVG, frame-by-frame
                          #   `npm run typecheck`, `npm run audio` (soundtrack from the engine MP4), `npm run render`,
                          #   `npm run compare:files && npm run compare` (old vs new side by side) → out/
   src/lib/               #   pure timelines (same prog/ease/caption timing as engine.js; palette test-locked to Reel.WHITE)
+  src/Reel014.tsx        #   first 3D reel (@remotion/three + three.js, GPU via ANGLE); `npm run music:014`,
+                         #   `render:014`, `cover:014` write to ../reels/. Runbook: reels/visual-reel-workflow.md
+  music/*.json           #   music spec per reel → reels/tools/music.mjs renders engine.js music offline to WAV
 publisher/               # HOSTED approve → publish app (Next.js 14 + Supabase, own Vercel project)
   SETUP.md               #   one-time setup runbook (Supabase, Meta app, Vercel, scheduler)
   supabase/migrations/   #   schema + RLS + transition triggers (0001), write functions (0002), pg_cron (0003)

@@ -154,6 +154,25 @@ the cover.
 
 Never publish without this tick. The publisher app enforces the same gate.
 
+## Remotion reels (on trial from 2026-10-18; 3D goes here)
+
+For a question whose picture is **3D** (a cone, a plane, a solid), make it in `remotion/` instead of a
+`.render.html`. Remotion renders every frame (the engine's real-time recording drops some, L25). Reel 014
+(`remotion/src/Reel014.tsx`) is the example. Steps 1, 2, 5 and 6 above are unchanged; steps 3–4 become:
+
+1. **Timeline first, in tests:** `src/lib/<reel>.ts` holds the timings and geometry as pure functions of t;
+   `tests/<reel>.test.ts` checks them first (`npm test`). For 3D, test that every label stays inside the 3D
+   band on every frame (`project()`), and that the key figure **faces the camera** while it's being
+   explained, answered and trapped (never edge-on).
+2. **Scene:** the 3D figure in a `ThreeCanvas` band; the question card, captions, working and end card are
+   the shared HTML pieces in `src/board.tsx` (same white look and Reel.WHITE colours, palette test-locked).
+   Labels are HTML placed with `project()`, so they stay crisp Cambria.
+3. **Music:** write `remotion/music/<reel>.json` (`duration`, `music.chime`), then
+   `node ../reels/tools/music.mjs music/<reel>.json public/<reel>.wav`: the house music from `engine.js`,
+   rendered offline (sample-exact, chime on time).
+4. **Check:** render beat frames with `npx remotion still <Comp> <out.png> --frame=<n>` into the scratchpad
+   and look at them as a sheet; then render the MP4 to `reels/` and run `check-video.mjs` as in step 4.
+
 ## Where the 2026-10-14 rules came from
 
 An outside "visual upgrade brief" reviewed reel 006. Its useful parts are the rules in steps 3.7–3.8
