@@ -1,0 +1,16 @@
+{
+  "slug": "pv-physics-001-collision",
+  "project": "pyqvault-insta",
+  "kind": "reel",
+  "title": "@pyqvault_ · Physics, visualised #1: why the moving ball stops dead → JEE Main 2022 Q8 (40 s, LAB dark theme)",
+  "video": "pv-physics-001-collision.mp4",
+  "cover": "pv-physics-001-collision-cover.png",
+  "captions": {
+    "instagram": "Physics, visualised #1 · Why does the moving ball stop dead? ⚪⚪\n\nTwo equal balls, one at 4 m/s, one at rest. After a perfectly elastic hit, the first one stops completely and the second leaves at 4 m/s. Watch the energy bars: it squeezes into the squash and comes straight back out.\n\nWhy? Afterwards the speeds must obey both rules at once:\nmomentum: vA + vB = 4 (a line)\nenergy: vA² + vB² = 16 (a circle)\nA line meets a circle at only two points: (4, 0) is \"before\", (0, 4) is \"after\". Equal balls can only swap speeds.\n\nJEE Main 2022 (27 June) asked it: what % of KE goes to a ball 5× heavier at rest? Share = 4mM/(m + M)² = 20/36 = 55.5% → (c).\n\nSave this for your Work, Energy & Power revision 📌 Follow for #2.\nPractise every JEE Main PYQ on this chapter free → link in bio (PYQ Vault).\n\n#Physics #Class11 #JEEMain #JEE2027 #NEET #CBSE #PhysicsVisualised #Momentum #STEM",
+    "facebook": "Physics, visualised #1 · Why does the moving ball stop dead? ⚪⚪\n\nTwo equal balls, an elastic hit: the moving one stops, the other takes all its speed. After the hit, momentum (vA + vB = 4, a line) and energy (vA² + vB² = 16, a circle) must both hold, and a line meets a circle at only two points: before (4, 0) and after (0, 4).\n\nJEE Main 2022 (27 June) Q8: KE passed to a ball 5× heavier = 4·1·5/6² = 55.5% (c).\n\nPractise JEE Main Work, Energy & Power PYQs free: https://www.pyqvault.com/questions/jee-mains/physics/work-energy-and-power\n\n#Physics #JEEMain #Class11",
+    "youtube": {
+      "title": "Why does the moving ball stop dead? (JEE Main asked it) #shorts",
+      "description": "Physics, visualised #1. Equal balls, elastic collision: the moving one stops, the other takes all its speed. Momentum is a line, energy is a circle: they meet only at 'before' and 'after'. JEE Main 2022 Q8: 5× heavier ball gets 55.5% of the KE (c).\n\nPractise PYQs free, chapter-wise: pyqvault.com\n\n#Physics #JEEMain #Shorts"
+    }
+  }
+}
