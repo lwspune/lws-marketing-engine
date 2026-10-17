@@ -10,9 +10,10 @@ makes sure it gets used.
 
 Non-negotiables while doing it:
 
-1. **Real PYQ, re-derived.** Read it from the question bank (read-only, anon key) and solve it
-   yourself before building anything. Write the working and traps into the caption kit.
-2. **Template, not scratch.** Copy `reels/nda-maths-005-area.render.html`, keep `theme: 'white'`,
+1. **One real PYQ, re-derived.** Exactly one question per reel, never two (not even a linked pair on
+   one set-up). Read it from the question bank (read-only, anon key) and solve it yourself before
+   building anything. Write the working and traps into the caption kit.
+2. **Template, not scratch.** Copy `reels/nda-maths-007-cancel.render.html`, keep `theme: 'white'`,
    and use only `Reel.WHITE` colours.
 3. **Tools, not ad-hoc scripts.** Use `reels/tools/` (frames → record → cover → check-video). Look at
    the contact sheet and the decoded strip before calling it done; `check-video` must print 4 PASS.

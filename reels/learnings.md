@@ -1,0 +1,51 @@
+# @lws.pune learnings log
+
+Every lesson from real numbers becomes a **testable idea**: what we saw, what we think it means, which
+reel tests it, and the result. Update the **Result** and **Status** after each reel's 48 h and 7 d
+numbers (Insights tab of the publisher app, or the reel's Done card). A rule moves into
+`lwspune-insta.md` (house settings) or `visual-reel-workflow.md` (how reels are made) only once it's
+**Confirmed**.
+
+**Status:** 🧪 testing · ✅ confirmed (do it from now on) · ❌ rejected (don't) · 📌 fact (no test needed)
+
+Baseline (typical @lws.pune reel, 172 reels, 2026-10-15): **779 views · 1 save · 6.9 s watched**.
+Reach-test targets: typical reach **> 2,000** · watch **> 10 s** · at least one reel **> 10k**.
+
+---
+
+| # | What we saw (evidence) | What we think it means | Test | Result | Status |
+|---|---|---|---|---|---|
+| L1 | 30 days to 17 Oct: 782,280 of 788,970 accounts reached came from **ads**; organic reach was ≈ 5,300 (reels 3,434). | Ads hide the real picture. Judge content on **organic** reach only. | Insights shows organic vs ads separately (to build). | — | 📌 fact |
+| L2 | Only **480 of 1,044 followers** saw anything in 30 days; 5 reels posted that month. | Too few posts: Instagram has little to show and no winners to find. | Daily posting during the reach test. | — | 🧪 testing |
+| L3 | Viewers leave at **~5–7 s** whatever the length (27–33 s reels and the 18.8 s reel 008 alike). In 008, 5 s is still inside a 6 s still countdown. | A **still screen loses people**; the countdown was the exit point. | (the quick v2 009 that would test this was dropped 17 Oct; L13 now covers it) | 008: 5.2 s at 6 h. | 🧪 testing |
+| L4 | 008 (quick format, ~19 s) reached **971 accounts in 6 h**, faster than any maths reel's full lifetime except Q67 (1,335). | Short + question on screen at 0 s helps **reach**. | Compare 008 and 009 at 48 h with older maths reels. | 008 at 48 h: — | 🧪 testing |
+| L5 | 008 had **0 shares**; its "Send them this" card comes at 15.6 s, after most viewers left. | A share/comment ask only works **before** people leave. | A future quick reel (the quick 009 was dropped). | — | 🧪 testing |
+| L6 | Maths reels get **~4 saves** vs 1 for a typical reel (001, 005 at 3–5 days). | Useful maths is **save-worthy**: the reason to follow. | Keep maths as the core of the mix. | — | ✅ confirmed |
+| L7 | Comments are rare everywhere: median **~1** per reel for @lws.pune and for @nda_defence_cds (31k followers). | Comments are hard; don't judge a reel on them. | — | — | 📌 fact |
+| L8 | The 3 biggest reels ever (397k, 106k, 25k views, 2025) were **defence stories with a question to the viewer**. | Broad defence topics + a question = the **reach** format. | Add 1 defence-story question reel per week (own visuals only). | — | 🧪 not started |
+| L9 | @nda_defence_cds: **fact/myth cards** (2.5×) and **occasion posters** (Air Force Day 3.8×) beat their usual. | Real-data fact cards and the occasions calendar travel. | Navy Day 4 Dec, Army Day 15 Jan, NDA Raising Day 16 Jan; a "most-asked chapters" card from the question bank. | — | 🧪 not started |
+| L10 | 001 went out with 002's caption on 12 Oct; a caption search pointed at the wrong reel. | Match posted reels by the **video**, not the caption. | — | — | ✅ confirmed (in workflow) |
+| L11 | (Founder's idea, 2026-10-17) Question **zooms in at the centre, then glides to the top**. | Motion from frame 0 + a focal point should hold the first seconds. | 009–011: title held still on a card with a blue light circling its edge, then it glides up (the slow push-in looked jerky to the founder, 17 Oct: text shimmers under a slow zoom). | 009: — | 🧪 testing |
+| L12 | (Founder's idea, 2026-10-17) **Premium edge shade** (soft vignette at the frame's boundary). | Pulls the eye to the centre; feels premium. Engine option `vignette: true`. | 009. | 009: — | 🧪 testing |
+| L13 | **@ubilumapp** (visual maths intuition): 0 → 19.5k followers in ~8 weeks (first reel 21 Aug 2026, 47 reels, ~3.6/week); median 10.9k views; top reels ~60 s long (599k, 574k) with something always being drawn. | Length isn't the problem, **still moments are**. Constant motion holds people even at 60 s. (Refines L3.) | 009 "Why? #1" (43 s) and 010 "Why? #2" (44 s), something always moving. | 009: — · 010: — | 🧪 testing |
+| L14 | @ubilumapp's numbered series top their chart: "Calculus I/II/III in 60 seconds" (599k/574k/192k), "Millennium problems Day 1/7" (333k). | A **numbered series** gives a reason to follow and come back. | "Why? #1, #2…" series, starting with 009. | 009: — | 🧪 testing |
+| L15 | @ubilumapp's "Pick a number 0–100, I'll use the comments" got **719 comments** vs their median 2. | A **comment game** (viewers' answers feed the result) beats "comment your answer". | One comment-game reel. | — | 🧪 not started |
+| L16 | @ubilumapp's look: pure white/black, thin lines, serif maths, one blue accent, almost no on-screen text, no boxed captions. | Even calmer than our white board; may read as more premium. Note they post ~00:00 IST for a **global** audience, so copy the look, not the timing or the topics. | A minimal variant (no caption boxes) of a "Why?" reel. | — | 🧪 not started |
+| L17 | **@sciencevisualised** (61k followers, 2026-10-17): their 2 biggest reels ever (10.8M, 9.8M views) and 5 more of the top 15 are **sonification**: "what does maths sound like?", the curve drawn while you hear it as sound. A run of them in Oct: 644k, 475k, 281k, 207k. | **Hearing the maths** is a hook nobody else in NDA uses. Our music is already generated in code, so a curve can literally play its own sound. Still silent-first: the picture and text must work muted. | 012 "Why? #4" was built with two tones (sin²θ, cos²θ loudness), then tried alone and an octave apart. | Founder (17 Oct): two sounds at once are chaos; skip it. Use a different background music per reel instead. | ❌ rejected (founder) |
+| L18 | @sciencevisualised restarted in Jul 2026 (28 reels, median 3.5k views), then posted **70 reels in Aug** (2+ a day): median jumped to 21k, then 27k (Sep) and 69k (Oct). 10.5 reels/week over 90 days. | Volume found the winners: Instagram needs many tries before one travels. (Backs L2.) | Daily posting during the reach test. | — | 🧪 testing (L2) |
+| L19 | Their physics simulations travel too: energy trade-off 2.6M, vector components 1.45M, work vs power 1.3M, bouncing ball 0.9M: each one formula + one moving picture + live bars/numbers. All dark-theme Manim (`#manim` on 24 of their 32 viral reels); @ubilumapp is white. | The **idea + constant motion** is the lever, not dark vs white (keep our white board). These are NDA **GAT physics** topics: a later "Why?" track if maths works. | Later, after the maths "Why?" results. | — | 🧪 not started |
+| L20 | **@bisal.physics** (Indian creator, 10.3k followers in 10 weeks, 2026-10-17): Aug maths function plots peaked at 50–75k views; Sep–Oct physics simulations hit 1.06M (adiabatic gas), 774k (Boyle), 457k, 421k, 408k (collision). 28% of reels ≥ 3× their median. Each = a live experiment (particles in a piston) + a live table of numbers proving the law + a graph tracing. | **Physics simulations travel ~10× better than maths plots**; a law checked live on screen holds attention. Backs L19 with an Indian audience. | Why? #5: the first physics reel (concave mirror, NDA optics PYQ). | — | 🧪 testing |
+| L21 | All 8 of @bisal.physics's biggest reels went out **09:30–11:45 IST** (earlier 19:00 posts did less). | An Indian student audience may scroll mornings; our posts go out at 15:40. | Next week: same format at 11:00 vs 15:40 (keep 009–012 at 15:40 so content is the only change). | — | 🧪 not started |
+
+---
+
+## Reel-by-reel results (fill at 48 h and 7 d)
+
+| Reel | Tests | Posted | Reach | Views | Watch | Saves | Shares | Comments |
+|---|---|---|---|---|---|---|---|---|
+| 008 quick, Q45 | L3 L4 L5 | 17 Oct 15:40 | 971 (6 h) | 1,240 (6 h) | 5.2 s | 3 | 0 | 1 |
+| 009 Why? #1, odd squares → Q20 | L11 L12 L13 L14 | | | | | | | |
+| 010 Why? #2, two dice → 26-II Q111 | L11 L12 L13 L14 | | | | | | | |
+| 011 Why? #3, |2A| ≠ 2|A| → 25-II Q44 | L11 L12 L13 L14 | | | | | | | |
+| 012 Why? #4, sin² + cos² = 1 → 25-I Q35 (bright music) | L11 L13 L14 | | | | | | | |
+| 013 Why? #5 (physics), spoon = concave mirror → 26-I GAT Q64 (calm music) | L20 L11 L13 L14 | | | | | | | |

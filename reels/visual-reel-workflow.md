@@ -11,6 +11,8 @@ otherwise.
 
 ## 1. Pick the question (10 min)
 
+- **One question per reel** (founder's rule). Never combine two PYQs, even a linked pair on one
+  set-up (e.g. Q89 + Q90): solve the one the picture answers. See `lwspune-insta.md` → Content rules.
 - **Start from `visual-candidates.md`:** the shortlist of PYQs already sorted by picture type.
 - **Good fit:** the answer *is* a picture. Examples: area under a curve, periodic graphs (|sin x|,
   sawtooth x − [x]), odd/even symmetry (the areas cancel), the slope of a tangent, a locus.
@@ -31,32 +33,63 @@ otherwise.
 | Zoom + build | 10–16 s | zoom on one piece; slices grow and melt into one area; the working appears below |
 | Repeat / count | 16–21.5 s | zoom out; the other pieces fill in turn while a counter runs |
 | Answer | 21.5–25 s | red ring on the option + chime (`music: { chime: t }`) |
-| Traps | 25–28.5 s | one line per wrong option; draw the reason (e.g. a brace "repeats every π") |
+| Traps | 25–28.5 s | one line per wrong option; draw the reason (e.g. a brace "repeats every π") in `muted` + dashed, not amber |
 | End card | 28.5 s → end | house navy end card: one takeaway line + "Follow for more" |
 
 Captions: short, at most 2 lines, and they cross-fade on the white board.
 
 ## 3. Build the render page (30–60 min)
 
-1. Copy `nda-maths-005-area.render.html` to `nda-maths-NNN-<slug>.render.html`. Keep
-   `theme: 'white'`.
+1. Copy `nda-maths-007-cancel.render.html` to `nda-maths-NNN-<slug>.render.html` (the first reel made
+   to every rule below: shrinking card, growing graph, no watermark). Keep `theme: 'white'`. Reel 005
+   is still the example for zoom + slices.
 2. Take colours from `Reel.WHITE` only, never new hex values. They are contrast-tested in
    `tests/reel-theme.test.js`:
    `ink` = text · `muted` = labels and the source line · `blue` = the function, ∫ and limits ·
-   `green` = area and result · `amber` = the one accent (answer, traps) · `fill` = area fill ·
+   `green` = area and result · `amber` = the correct answer **only** · `fill` = area fill ·
    `grid` / `axis` = the graph frame.
 3. Change `drawQuestionCard` (source line, maths, `api.chips` labels + answer index + answer time),
    `captions`, the `draw()` functions, `end` and `cover`.
 4. Long upper limits on ∫ need leading spaces so they clear the sign: `{ int: ['0', '  8π'] }`.
 5. Put the cover caption low (y ≈ 1440) so the figure shows in the 3:4 profile-grid crop.
+6. Option labels longer than "(d) 16" (e.g. "(c) 100a") overflow the default chip: use
+   `size: 40, w: 182, gap: 14` in `api.chips`.
+7. **Honest scale.** Never draw a different count, domain or scale from the question's (e.g. 4 humps
+   standing for 100). If the real count is large, show it first (100 humps as a fine comb across the
+   graph), then zoom into the part that matters. Only if that's truly impossible: a "not to scale"
+   label at full label size (36 px) with the dot grid kept out from behind it.
+8. **Shrink the question after the hook.** Once the graph starts drawing, collapse the question card to
+   a slim strip (source line + the maths + chips) and give the graph the space it frees up. The full card
+   stays only for the first ~3 s. In 007, `drawQuestionCard` lerps the card with `k = api.prog(t, 3.0, 0.8)`
+   and `setView` grows the graph (`GY`, `SY`) with the same `k`.
+9. **No watermark** (from reel 007): `watermarkY: null` in `Reel.mount` (already in the 007 template).
+10. ∫ limits are drawn at half the maths size, so keep the card's maths at ≥ 56 px or the limits get
+    too small to read. When the expression is long, cut its size only until it fits the 860 px card.
+
+**On test (see `learnings.md`, don't treat as rules yet):** `vignette: true` in `Reel.mount` adds a soft
+slate edge shade that stays on the end card (L12); the opening title held still at the centre on a card
+with a light circling its edge (`api.glowRing`), then gliding to the top (L11; reels 009–011); the quick format: ~19 s, 3 s countdown
+with motion, comment prompt before the reveal, answer at the end (L3–L5; reel 008); the "Why?" series: one intuitive why, something always moving, then the real PYQ it unlocks (L13–L14; reel 009).
+
+**Music:** pick `music: { style }` per reel and rotate it (founder, 2026-10-17: different background music per reel): `lofi` (house default), `bright` (D-major pluck arpeggio + light beat, 100 BPM; reel 012), `calm` (soft piano, no drums, 72 BPM). All original, made in code. Check loudness with check-video after any new style. **Don't** sonify the maths (two tones at once sounded chaotic to the founder, L17); `music.tones` stays in the engine unused.
 
 **Premium look checklist** (founder's brief: premium + soothing to the eyes):
-- [ ] At most **one maths colour + one area colour + one accent**; the accent appears only at the answer/traps
+- [ ] At most **one maths colour + one area colour + one accent**; amber marks the correct answer and
+      nothing else. Traps use `muted` with a dashed line or hatch, never the answer's colour
+- [ ] **One focal point per scene**: if the caption, question, graph and working all compete, shrink
+      or hide one (see step 3.8)
+- [ ] **Colour is never the only cue**: pair it with a label, hatch, dash or position (e.g. "leaves" =
+      hatched + dashed, "joins" = solid green + label)
+- [ ] **No label under 36 px** if the viewer needs to read it (a 1080-wide frame shows at about 1/2.8
+      size on a phone, so 30 px comes out at about 11 pt); 30–34 px only for scaffolding like axis letters
+- [ ] **Timing comes from reading time**, not the beat table: hold a 2-line caption ≥ 2.5 s and a
+      working line ≥ 3 s. A longer, clear reel beats a rushed one
 - [ ] Text on white cards or straight on the board, never on black slabs; sentence case, not ALL CAPS
 - [ ] Depth from soft shadows (`api.card`, `api.softStroke`), not borders and boxes
 - [ ] Scaffolding (grid, axes, labels) quieter than the maths: dot grid, thin muted axes
 - [ ] Motion is calm: things fade, grow or are led by a dot; nothing scribbles, flashes or snaps
-- [ ] Nothing within ~60 px of the watermark (y = 1600) or in the bottom ~320 px
+- [ ] No slow zoom on text: it shimmers (founder, 2026-10-17). Hold text still and move light around it (`api.glowRing`)
+- [ ] Nothing in the bottom ~320 px (below y ≈ 1600), and no `LWS Pune · NDA Maths` watermark (`watermarkY: null`)
 - [ ] The end card stays on the soft board (no dark flash)
 
 ## 4. Check, record, check again (10 min, mostly waiting)
@@ -79,6 +112,10 @@ node reels/tools/check-video.mjs reels/<name>.mp4 strip.png 0.05 9.6 15.2 22.6 2
 `check-video` must print four PASS lines (1080×1920, stereo, peak ≤ −3 dB, loudness about −22 dB).
 Look at the strip too: it's decoded from the MP4 itself, so it shows what Instagram gets.
 
+**Every new or remade reel:** once it's final, run `node reels/tools/unchanged.mjs --save` so its frames
+join the baseline (006 and 007 were missing until 2026-10-15, so a later check showed them CHANGED for
+no real reason). Run the compare first: only the reel you just made may differ.
+
 **If you changed `engine.js`:**
 ```
 node reels/tools/unchanged.mjs           # every existing reel must say SAME
@@ -88,12 +125,25 @@ Only after an *intended* change to an existing reel: `node reels/tools/unchanged
 
 ## 5. Caption kit and manifest (15 min)
 
-- `nda-maths-NNN-<slug>.md`: copy `nda-maths-005-area.md`. It holds the source, the checked working,
+- `nda-maths-NNN-<slug>.md`: copy `nda-maths-007-cancel.md`. It holds the source, the checked working,
   the traps, a table of what's on screen, the caption, and the before-you-post checklist.
-- `nda-maths-NNN-<slug>.post.json`: copy `nda-maths-005-area.post.json` (Instagram, Facebook and
-  YouTube captions). Validate it with the publisher's own rules: `parseManifest` + `captionErrors` in
-  `publisher/src/lib/domain/` (a throwaway vitest file in `publisher/tests/`, deleted afterwards).
+- `nda-maths-NNN-<slug>.post.json`: copy `nda-maths-007-cancel.post.json` (Instagram, Facebook and
+  YouTube captions). Validate it with the publisher's own rules (`parseManifest` + `captionErrors`):
+  `cd publisher && npx vitest run tests/content` already checks every `reels/*.post.json`, so no
+  throwaway test file is needed.
 - Add the reel to `format-test.md` (schedule + scorecard row) while the format is on test.
+- Queue it in the publisher: `cd publisher && npm run queue:add -- --org=lws-pune ../reels/<name>.post.json`.
+  **Remade** a reel that's still Ready in the queue? Add `--replace`: it swaps the files and captions in
+  place (refused once the post is approved, published or rejected). Check Instagram first: a reel
+  already posted by hand must be rejected in the queue, never approved again. **Match by the video,
+  not the caption:** on 2026-10-12 the Q74 solution (001) went out with the hook's (002) caption, so
+  a caption search pointed at the wrong reel. Ask the founder or compare the thumbnail.
+
+**V reels (the mascot explains):** see `nda-maths-004-v.render.html`. V's speech carries the steps,
+so the top caption is used only for the hook and the answer (one focal point). Draw the speech as a
+soft white card with a small tail (`api.card`), not `api.bubble`: that is the old paper style with a
+dark border, which breaks the premium checklist. Keep V and its card above y ≈ 1600 and hide both on
+the cover.
 
 ## 6. Approval gate (founder)
 
@@ -103,3 +153,16 @@ Only after an *intended* change to an existing reel: `node reels/tools/unchanged
 - [ ] Cover PNG chosen in the upload screen; bio link opens PYQ Vault
 
 Never publish without this tick. The publisher app enforces the same gate.
+
+## Where the 2026-10-14 rules came from
+
+An outside "visual upgrade brief" reviewed reel 006. Its useful parts are the rules in steps 3.7–3.8
+and the checklist above. Reels 005 and 006 predate them and stay as they are (founder's call: no
+rework). Considered and **declined**, so don't re-propose them without a reason:
+- **Dark navy "cinematic" palette:** the white board is mid-test; a dark look would be its own test
+  after the scorecard, never a swap.
+- **A pipeline that renders any question from data:** too early at 6 reels. Move repeated graph code
+  (axes, traced curve, area fill) into `engine.js` when a third graph reel needs it.
+- **Sound effects only, no music:** the original music is approved and loudness-checked.
+- **A "practise on PYQ Vault" line on the end card:** the founder removed such lines; the link
+  lives in the caption.

@@ -37,8 +37,8 @@ more than one paper, which gives a ready hook ("NDA asked this 3 times").
 ### 1. Areas under a graph (25): reel 005's code
 | Question | The picture |
 |---|---|
-| 24-I Q89, Q90 | \|sin x\| over any 100π window: always 100 humps × 2 = 200, so it doesn't depend on a and φ′(a) = 0. **Sibling of reel 005** ✓ |
-| 24-I Q74 · 24-II Q94 · 26-II Q75 | odd function on a symmetric interval: the two areas cancel to 0. **Asked 3 times** ✓ |
+| 24-I Q89, Q90 | \|sin x\| over any 100π window: always 100 humps × 2 = 200, so it doesn't depend on a and φ′(a) = 0. **Q89 done: reel 006** (one question per reel; Q90 is the slope of Q89's answer, better as a paper reel) |
+| 24-I Q74 · 24-II Q94 · 26-II Q75 | odd function on a symmetric interval: the two areas cancel to 0. **Asked 3 times** ✓ **24-I Q74 done: reel 007** (the only one of the three with a real curve to draw) |
 | 24-II Q87, Q88 | parabola segment = ⅔ of its bounding box (Archimedes) |
 | 24-II Q91, Q92 · 25-I Q90 | \|quadratic\|: flip the part below the axis, then add areas |
 | 25-II Q92 | sawtooth x − [x]: each tooth is a triangle of area ½ |
@@ -113,12 +113,38 @@ more than one paper, which gives a ready hook ("NDA asked this 3 times").
 
 ## Make next (in this order)
 
-1. **24-I Q89/90**, \|sin x\| sliding window: almost reel 005's code; "the area doesn't care where you start".
-2. **Odd function = 0**, asked 3 times: one reel, three PYQs on screen.
+1. ~~**24-I Q89**, |sin x| sliding window~~ **done: reel 006** (Q89 only).
+2. ~~**Odd function = 0**, asked 3 times~~ **done: reel 007** (24-I Q74 only; "asked 3 times" is the caption hook).
 3. **Corners = no derivative**, 26-II Q92 + 25-II Q88: draw the V, zoom on the corner.
-4. **Two-dice grid**, asked 3 times: one grid, three questions.
+4. ~~**Two-dice grid**, asked 3 times~~ **done: reel 010, Why? #2** (26-II Q111).
 5. **Rectangle diagonals**, \|z₁ + z₂\| = \|z₁ − z₂\|, asked 3 times.
-6. **Odd numbers make a square**, 26-I Q20 / 25-II Q6.
+6. ~~**Odd numbers make a square**~~ **done: reel 009, Why? #1** (26-I Q20).
 7. **Archimedes ⅔**, 24-II Q87/88.
 
 Items 1–3 reuse reel 005's graph code. Items 4–7 need a new drawing (grid, arrows, blocks, parabola box).
+
+## "Why?" series: concepts first, then the PYQ (founder-approved 2026-10-17)
+
+A "Why?" reel explains one NDA maths idea visually (~30 s, something always moving), then ends on the real
+NDA question it unlocks ("NDA asked exactly this:", ~10 s). The concept widens the audience to every Class
+11–12 maths student; the PYQ keeps it NDA and gives the caption its PYQ Vault link. Never a concept reel
+without a real PYQ payoff (no-slop rule). On test: L13–L14 in `learnings.md`.
+
+Chapters ranked by **how often NDA asks them** (720 Maths PYQs, six papers 2024–26, per paper) × **how
+visual the idea is**:
+
+| Chapter | Per paper | The "why" to show | Status |
+|---|---|---|---|
+| Probability | **11.8** | why 7 comes up most with two dice (diagonals → pyramid) | **#2, reel 010** |
+| Matrices & Determinants | **10.0** | why a determinant is an area: "why is |2A| not 2|A|?" (rows as arrows, 1 → 2 → 4 copies) | **#3, reel 011** (25-II Q44) |
+| Trig identities + Functions | 6.7 + 6.2 | why sin² + cos² = 1 (point on the unit circle + stacked bar: one grows, one shrinks) | **#4, reel 012** (25-I Q35) |
+| Statistics | 6.2 | why the mean is the balance point | later |
+| Vectors + Complex numbers | 5.8 + 3.8 | why × i turns an arrow 90°; equal diagonals ⇒ right angle (asked 3×) | later |
+| Limits, Differentiation | 4.7 + 4.2 | why a corner has no slope: zoom in, a smooth curve straightens, a corner never does | later |
+| Definite integration | 4.5 | integral = area; Archimedes' ⅔ | later |
+| Sequence & Series | 4.2 | odd numbers stack into squares (**#1, reel 009**); 1 + 2 + … + n as a staircase | #1 done |
+
+**Physics track (L19–L20):** #5 = concave mirror / spoon (reel 013, 26-I GAT Q64). NDA physics PYQs 2024–26 in PYQ Vault: 149 (optics 30, electricity 29, laws of motion 21, work-energy-power 13, heat 12).
+
+Not visual (stay paper reels): Binomial, Logarithms, Differential equations, most of P&C.
+Check the "Why?" reels' 48 h numbers (from 009, Mon 20 Oct) before going past #4.

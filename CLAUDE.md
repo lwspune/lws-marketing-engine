@@ -97,6 +97,9 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   *.render.html          #   one per piece: content config + Reel.mount(); open in Edge to re-make
   lwspune-insta.md       #   @lws.pune HOUSE SETTINGS (approved): look, sound, captions, upload steps
   format-test.md         #   format test (days 1–5): schedule, captions, scorecard
+  learnings.md           #   LEARNINGS LOG: every lesson as a testable idea (evidence → test reel → result →
+                         #   status). Update after each reel's 48 h / 7 d numbers; only Confirmed rules move
+                         #   into lwspune-insta.md or visual-reel-workflow.md
   visual-reel-workflow.md #  runbook for white-board animated-graph reels (skill: .claude/skills/visual-reel)
   visual-candidates.md   #   PYQs whose answer is a picture, by paper (pick visual reels from here)
   tools/                 #   headless-Edge scripts: frames, record, cover, check-video, unchanged (+ baseline.txt)
