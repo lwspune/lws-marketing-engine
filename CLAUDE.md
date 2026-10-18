@@ -176,6 +176,10 @@ the password). First staff: connect.with.soundmind@gmail.com → `soundmind-shiv
 change: manifests and the story planner name projects by slug.
 **Note:** `TEST_DATABASE_URL` is the same database as `DATABASE_URL` (tests roll back), so
 `db:migrate` changes the live schema; dry-run a new migration in a rolled-back transaction first.
+**Address and name (2026-10-19, founder):** the app is **GoPost** at **https://gopostapp.vercel.app** (no "LWS":
+outside brands use it too). The old https://lws-marketing-engine.vercel.app still works as an alias; the Vercel
+project keeps its name `lws-marketing-engine`. pg_cron reaches the app through the Vault secret `publisher_cron_url`
+(now the gopostapp address); change it there if the address ever changes again.
 **Deploys (2026-10-16):** Vercel (Hobby, owner `thefableisland`) now BLOCKS git-push deploys
 because the commit author (GitHub `lwspune`) isn't on the Vercel account. Until the founder links
 GitHub `lwspune` in Vercel → Account Settings → Login Connections, deploy with the owner's token:
