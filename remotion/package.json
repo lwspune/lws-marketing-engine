@@ -20,7 +20,10 @@
     "cover:pv002": "remotion still PvPhysics002Cover ../reels/pv-physics-002-boyle-cover.png",
     "music:pc002": "node ../reels/tools/music.mjs music/pv-chem-002-families.json public/pv-chem-002-families.wav",
     "render:pc002": "remotion render PvChem002 ../reels/pv-chem-002-families.mp4",
-    "cover:pc002": "remotion still PvChem002Cover ../reels/pv-chem-002-families-cover.png"
+    "cover:pc002": "remotion still PvChem002Cover ../reels/pv-chem-002-families-cover.png",
+    "music:pm001": "node ../reels/tools/music.mjs music/pv-maths-001-sin-cos.json public/pv-maths-001-sin-cos.wav",
+    "render:pm001": "remotion render PvMaths001 ../reels/pv-maths-001-sin-cos.mp4",
+    "cover:pm001": "remotion still PvMaths001Cover ../reels/pv-maths-001-sin-cos-cover.png"
   },
   "dependencies": {
     "@react-three/fiber": "9.8.1",

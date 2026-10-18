@@ -1,0 +1,16 @@
+{
+  "slug": "pv-maths-001-sin-cos",
+  "project": "pyqvault-insta",
+  "kind": "reel",
+  "title": "@pyqvault_ · Maths, visualised #1: sine and cosine in motion, cos = sin shifted 90° (white, Remotion, drive)",
+  "video": "pv-maths-001-sin-cos.mp4",
+  "cover": "pv-maths-001-sin-cos-cover.png",
+  "captions": {
+    "instagram": "Class 11 Maths · Trigonometric Functions\nMaths, visualised #1 · Where do the sin and cos waves come from? 🌀\n\nOne point going round a circle draws both:\n🟢 its height is sin θ\n🔵 its width is cos θ\nTurn the cos wave onto the sine axes and slide it 90° right: it lands exactly on the sine wave. cos θ = sin(θ + 90°). Same wave, a quarter turn apart.\n\nOn your syllabus: Class 11 Trigonometric Functions, and every trig question in JEE Main and the boards.\n\nSave this for revision 📌 Follow for #2.\nPractise every PYQ chapter-wise, free → pyqvault.com (link in bio).\n\n#Maths #Class11 #Class11Maths #Trigonometry #CBSE #JEEMain #MHTCET #MathsVisualised #STEM",
+    "facebook": "Class 11 Maths · Trigonometric Functions\nMaths, visualised #1 · Where do the sin and cos waves come from? 🌀\n\nA point going round a circle: its height draws sin θ, its width draws cos θ. Slide the cos wave 90° and it lands on the sine wave: cos θ = sin(θ + 90°).\n\nPractise PYQs free, chapter-wise: https://www.pyqvault.com\n\n#Maths #Class11 #Trigonometry",
+    "youtube": {
+      "title": "Where do sine and cosine waves come from? #shorts",
+      "description": "Maths, visualised #1. One point on a circle: its height draws sin θ, its width draws cos θ. Slide the cos wave 90° and it lands on the sine wave: cos θ = sin(θ + 90°).\n\nPractise PYQs free, chapter-wise: pyqvault.com\n\n#Maths #Class11 #Shorts"
+    }
+  }
+}
