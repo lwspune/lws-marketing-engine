@@ -90,6 +90,11 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   005 averages 29.2 fps with gaps of up to 0.4 s in the first second (the hook) and runs ~0.5 s behind
   its script; Remotion gives exactly 30 fps, on time. Cost: 2 min 15 s to render 31.5 s (engine ≈ 32 s).
   Next: the next new visual reel is made in Remotion and posted; its numbers go in reels/learnings.md.
+- **First outside brand in the publisher (2026-10-18, founder-approved).** @soundmindwithshivani (Shivani
+  Dhumal's "Sound Mind" brand, not an LWS product) posts through the publisher as project `soundmind-shivani`
+  inside the LWS Pune org: no separate org, no login for Shivani yet. Access is Shivani's Page "Sound Mind
+  Shivani" (owned by her "Sound Mind" business portfolio) shared with the LWS Facebook login, which she can
+  revoke at any time. The marketing engine's profiles and house reel styles don't cover this brand.
 
 ## File structure
 
@@ -162,7 +167,12 @@ against the live API until the first real Approve: if Meta rejects a field, the 
 reason; fix `src/lib/domain/ads.ts` and Retry.
 **Projects (0009, founder 2026-10-18): LWS Pune first, PYQ Vault second.** Names follow the Instagram account:
 slug `pyq-vault` is shown as **LWS Pune** (@lws.pune: NDA reels, daily stories), `pyqvault-insta` as **PYQ Vault**
-(@pyqvault_), `lws-coaching` as **LWS Pune ads** (ads only; the Queue hides projects with no posts). Slugs never
+(@pyqvault_), `lws-coaching` as **LWS Pune ads** (ads only; the Queue hides projects with no posts), `soundmind-shivani` as **Sound Mind with Shivani**
+(@soundmindwithshivani, an outside brand, 18:00 IST).
+**Staff logins (0011, founder 2026-10-18):** role `staff` sees only the projects in `project_members` (their posts,
+channels, accounts, reels, media), never ads; owners/editors see the whole org. Enforced by RLS + `lock_member_post`
+(tests/db/staff.test.ts). Add one with `npm run staff:add -- --org=lws-pune --email=… --projects=<slug>` (asks for
+the password). First staff: connect.with.soundmind@gmail.com → `soundmind-shivani`. Slugs never
 change: manifests and the story planner name projects by slug.
 **Note:** `TEST_DATABASE_URL` is the same database as `DATABASE_URL` (tests roll back), so
 `db:migrate` changes the live schema; dry-run a new migration in a rolled-back transaction first.
