@@ -2,9 +2,11 @@
 // in its project's next free slot. Times are IST (HH:MM). Projects are named by slug (they never change).
 //   pyqvault-insta = PYQ Vault (@pyqvault_): 3 reels a day: morning (@bisal.physics's hits), after school, night.
 //   pyq-vault      = LWS Pune (@lws.pune): 1 reel a day, the slot the format test used.
+//   soundmind-shivani = Sound Mind with Shivani (@soundmindwithshivani, an outside brand): 1 post a day, evening.
 export const POST_SLOTS: Readonly<Record<string, readonly string[]>> = {
   "pyqvault-insta": ["11:00", "17:30", "21:30"],
   "pyq-vault": ["15:40"],
+  "soundmind-shivani": ["18:00"],
 };
 
 export const slotsFor = (projectSlug: string): string[] => [...(POST_SLOTS[projectSlug] ?? [])];

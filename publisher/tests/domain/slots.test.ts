@@ -10,6 +10,9 @@ describe("slotsFor", () => {
     expect(slotsFor("pyqvault-insta")).toEqual(["11:00", "17:30", "21:30"]);
     expect(slotsFor("pyq-vault")).toEqual(["15:40"]);
   });
+  it("has one evening slot for Sound Mind with Shivani (@soundmindwithshivani)", () => {
+    expect(slotsFor("soundmind-shivani")).toEqual(["18:00"]);
+  });
   it("is empty for a project without slots (ads only)", () => {
     expect(slotsFor("lws-coaching")).toEqual([]);
   });
