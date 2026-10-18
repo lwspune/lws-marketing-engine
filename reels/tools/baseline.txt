@@ -10,5 +10,5 @@ nda-maths-010-why-seven.render.html bf8d62781ac5 a6dd5b78d648 11166feae226 054a0
 nda-maths-011-why-det-area.render.html d3c6c7938bde efd9f584541b 6204ef324d25 815c398ca29d 71636b80ea97 5ef3c75d0d38 012b0308b6ad cover:8a30cc1f13e0
 nda-maths-012-why-sin-cos.render.html a52747133661 bdc8bfe46871 1e7a55dc88d4 71a80be5a7b5 c0766c3e1854 d25315c06337 eb1478744a2d cover:b3adbc95b0f7
 nda-physics-013-why-spoon.render.html 3abc3842cfe2 6c8c5b61018d 6a07f1eb4b2f e76d61926531 b69682bfb9da 4e9f6b50cbda 236c7e48b3b5 cover:29093abc8032
-pv-chem-001-heat-rate.render.html a04b36d77086 46858aac578a d60e71ca6c18 5fb85ed6a68c 9ca267d57ddf e9c9ee609f21 e9c9ee609f21 cover:0b805f7cb8bb
+pv-chem-001-heat-rate.render.html a04b36d77086 46858aac578a 227877e31815 8cc884c8f2d3 edd8fdf08fe9 078e76c742de 5b1e611c0d44 cover:0b805f7cb8bb
 pv-physics-001-collision.render.html 6c04ac0b67b0 6e61cf98641f 63818eb816b7 71aaf6309315 27caf9eebb43 8006a2f770a3 016be8c34eb6 cover:f6bd7d914d9c

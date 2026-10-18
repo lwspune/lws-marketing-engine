@@ -54,6 +54,17 @@
   const ease = p => p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
   // A tone's gain curve: fn(t) clamped to 0…1, sampled `rate` times a second from t0 to t1, faded over
   // 0.25 s at both ends so it never clicks (tests/reel-tones.test.js).
+  const MUSIC_STYLES = ['lofi', 'bright', 'calm', 'drive', 'synthwave', 'trap', 'cinematic'];
+  // Where each riser-into-impact goes (tests/reel-music.test.js): a riser runs up to 2 s into its hit; hits in the
+  // first second, in the fade-out, or within 1.5 s of the previous hit are dropped.
+  function hitWindows(hits, duration) {
+    const last = duration - Math.min(2.5, duration * 0.2) - 0.3, out = [];
+    for (const at of [...hits].sort((a, b) => a - b)) {
+      if (at < 1 || at > last || (out.length && at - out[out.length - 1].at < 1.5)) continue;
+      out.push({ from: Math.max(0.3, at - 2), at });
+    }
+    return out;
+  }
   function toneCurve(fn, t0, t1, rate = 100) {
     const n = Math.round((t1 - t0) * rate) + 1, out = new Float32Array(n);
     for (let i = 0; i < n; i++) {
@@ -469,6 +480,138 @@
       // A struck note: a sine plus soft 2nd/3rd harmonics that die away faster (pluck / piano-like).
       const strike = (f, at, len, peak) => { for (const [h, p] of [[1, 1], [2, 0.35], [3, 0.12]]) voice('sine', f * h, at, len / h, peak * p, 0.004); };
       const style = M.style ?? 'lofi';
+
+      // ---- the energetic styles (2026-10-18): drive, synthwave, trap, cinematic. All original, made here. ----
+      // Open top end (no 2.6 kHz lowpass), a compressor for punch, stereo width, a generated-noise reverb, and pads
+      // that duck on every kick (the "pump").
+      function energetic(name) {
+        const comp = ac.createDynamicsCompressor();
+        comp.threshold.value = -16; comp.ratio.value = 4; comp.attack.value = 0.004; comp.release.value = 0.2;
+        // master → compressor → per-style level → limiter → out, so every style lands at the house loudness
+        // (body ≈ −22 dB RMS, peaks ≤ −3 dB; measured with reels/tools/check-video.mjs).
+        const TRIM = { drive: 0.3, synthwave: 2.2, trap: 0.85, cinematic: 2.6 }, trim = ac.createGain(), lim = ac.createDynamicsCompressor();
+        trim.gain.value = TRIM[name]; lim.threshold.value = -9; lim.knee.value = 0; lim.ratio.value = 20; lim.attack.value = 0.001; lim.release.value = 0.1;
+        tone.frequency.value = 14000; master.disconnect(); master.connect(comp); comp.connect(trim); const post = ac.createGain(); post.gain.value = 0.56; // the limiter adds make-up gain: take 5 dB back
+        trim.connect(lim); lim.connect(post); post.connect(tone);
+        const ir = ac.createBuffer(2, Math.round(ac.sampleRate * 2.2), ac.sampleRate);
+        for (let ch = 0; ch < 2; ch++) { const d = ir.getChannelData(ch); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 3); }
+        const verb = ac.createConvolver(), vg = ac.createGain(); verb.buffer = ir; vg.gain.value = 0.22; verb.connect(vg); vg.connect(bed);
+        const out = (node, p = 0, wet = 0) => {
+          const pn = ac.createStereoPanner(); pn.pan.value = p; node.connect(pn); pn.connect(bed);
+          if (wet) { const w = ac.createGain(); w.gain.value = wet; node.connect(w); w.connect(verb); }
+        };
+        const pump = ac.createGain(); out(pump, 0, 0.5);
+        const duck = at => { pump.gain.setValueAtTime(0.3, at); pump.gain.linearRampToValueAtTime(1, at + 0.22); };
+        const env = (g, at, peak, a, len) => { g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(peak, at + a); g.gain.exponentialRampToValueAtTime(0.0001, at + len); };
+        // A filtered saw (two slightly detuned) for leads, plucks, bass and string stabs.
+        const saw = (f, at, len, peak, cut, p = 0, wet = 0.25, dest = null, a = 0.006) => {
+          const lp = ac.createBiquadFilter(), g = ac.createGain(); lp.type = 'lowpass'; lp.Q.value = 2;
+          lp.frequency.setValueAtTime(cut * 2.5, at); lp.frequency.exponentialRampToValueAtTime(cut, at + Math.min(len, 0.25));
+          for (const d of [-7, 7]) { const o = ac.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f; o.detune.value = d; o.connect(lp); o.start(at); o.stop(at + len + 0.05); }
+          lp.connect(g); env(g, at, peak, a, len); dest ? g.connect(dest) : out(g, p, wet);
+        };
+        const padChord = (notes, at, len, peak, cut) => {
+          for (const m of notes) for (const d of [-12, 12]) {
+            const o = ac.createOscillator(), lp = ac.createBiquadFilter(), g = ac.createGain();
+            o.type = 'sawtooth'; o.frequency.value = hz(m); o.detune.value = d; lp.type = 'lowpass'; lp.frequency.value = cut;
+            g.gain.setValueAtTime(0, at); g.gain.linearRampToValueAtTime(peak, at + 0.3); g.gain.setValueAtTime(peak, at + len - 0.2); g.gain.linearRampToValueAtTime(0, at + len);
+            o.connect(lp); lp.connect(g); g.connect(pump); o.start(at); o.stop(at + len + 0.05);
+          }
+        };
+        const kick = (at, peak = 0.9) => {
+          const o = ac.createOscillator(), g = ac.createGain();
+          o.frequency.setValueAtTime(160, at); o.frequency.exponentialRampToValueAtTime(45, at + 0.12);
+          env(g, at, peak, 0.002, 0.42); o.connect(g); out(g); o.start(at); o.stop(at + 0.45); duck(at);
+          const c = ac.createBufferSource(), cf = ac.createBiquadFilter(), cg = ac.createGain();
+          c.buffer = noise; cf.type = 'highpass'; cf.frequency.value = 2500; env(cg, at, 0.12, 0.001, 0.02);
+          c.connect(cf); cf.connect(cg); out(cg); c.start(at); c.stop(at + 0.05);
+        };
+        const snare = (at, peak = 0.35, len = 0.22, wet = 0.6) => {
+          const s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+          s.buffer = noise; f.type = 'bandpass'; f.frequency.value = 2200; f.Q.value = 0.7; env(g, at, peak, 0.001, len);
+          s.connect(f); f.connect(g); out(g, 0, wet); s.start(at); s.stop(at + len + 0.05);
+          const o = ac.createOscillator(), og = ac.createGain(); o.frequency.setValueAtTime(220, at); o.frequency.exponentialRampToValueAtTime(150, at + 0.08);
+          env(og, at, peak * 0.6, 0.001, 0.12); o.connect(og); out(og); o.start(at); o.stop(at + 0.15);
+        };
+        const hat = (at, peak = 0.07, len = 0.04, p = 0.25) => {
+          const s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+          s.buffer = noise; f.type = 'highpass'; f.frequency.value = 8500; env(g, at, peak, 0.001, len);
+          s.connect(f); f.connect(g); out(g, p); s.start(at); s.stop(at + len + 0.05);
+        };
+        const sub = (f, at, len, peak, from = null) => { // an 808-style sub, optionally gliding in from another note
+          const o = ac.createOscillator(), g = ac.createGain(), sh = ac.createWaveShaper(), c = new Float32Array(256);
+          for (let i = 0; i < 256; i++) { const x = i / 128 - 1; c[i] = Math.tanh(2.2 * x); } sh.curve = c;
+          o.frequency.setValueAtTime(from ?? f, at); if (from) o.frequency.exponentialRampToValueAtTime(f, at + 0.12);
+          env(g, at, peak, 0.005, len); o.connect(sh); sh.connect(g); out(g); o.start(at); o.stop(at + len + 0.05);
+        };
+        const intro = 1; // bars before the drums come in
+        if (name === 'drive') {
+          // 122 BPM electro-pop in A minor: Am – F – C – G. Four on the floor, offbeat hats, pumping pad, pluck hook.
+          const bt = 60 / 122, br = bt * 4;
+          const CH = [[57, 60, 64], [53, 57, 60], [48, 52, 55], [55, 59, 62]], RT = [45, 41, 48, 43];
+          const HOOK = [[0, 76], [0.5, 72], [1, 69], [1.5, 72], [2, 76], [2.75, 79], [3.25, 76], [3.5, 74]];
+          for (let k = 0; k * br < D; k++) {
+            const at = t0 + k * br, ch = CH[k % 4];
+            padChord(ch, at, br, 0.022, 1800);
+            if (k >= intro) {
+              for (let b = 0; b < 4; b++) kick(at + b * bt);
+              for (const b of [1, 3]) snare(at + b * bt, 0.3, 0.18, 0.4);
+              for (let b = 0; b < 4; b++) hat(at + (b + 0.5) * bt, 0.09, 0.09, b % 2 ? 0.3 : -0.3);
+              for (let e = 0; e < 8; e++) sub(hz(RT[k % 4]), at + (e + 0.5) * bt / 2, bt / 2 * 0.8, 0.32);
+            }
+            if (k >= intro + 1) for (const [b, m] of HOOK) saw(hz(m + (k % 4 === 3 ? 2 : 0)), at + b * bt, 0.32, 0.075, 2600, b % 1 ? 0.35 : -0.35, 0.3);
+          }
+        } else if (name === 'synthwave') {
+          // 100 BPM retro in E minor: Em – C – G – D. Big gated snare, rolling 16th saw bass, a delayed arp.
+          const bt = 0.6, br = bt * 4, CH = [[52, 55, 59], [48, 52, 55], [55, 59, 62], [50, 54, 57]], RT = [40, 36, 43, 38];
+          const dl = ac.createDelay(1), fb = ac.createGain(), dg = ac.createGain();
+          dl.delayTime.value = bt * 0.75; fb.gain.value = 0.35; dg.gain.value = 0.45; dl.connect(fb); fb.connect(dl); dl.connect(dg); out(dg, 0.4, 0.3);
+          for (let k = 0; k * br < D; k++) {
+            const at = t0 + k * br, ch = CH[k % 4];
+            padChord(ch, at, br, 0.026, 1400);
+            for (let e = 0; e < 16; e++) saw(hz(RT[k % 4] + (e % 4 === 2 ? 12 : 0)), at + e * bt / 4, bt / 4 * 0.9, 0.06, 700, 0, 0);
+            if (k >= intro) {
+              for (const b of [0, 2]) kick(at + b * bt, 0.85);
+              for (const b of [1, 3]) snare(at + b * bt, 0.4, 0.5, 0.9);
+              for (let e = 0; e < 8; e++) hat(at + e * bt / 2, 0.05, 0.03, 0.2);
+            }
+            if (k >= intro + 1) [ch[0] + 24, ch[1] + 24, ch[2] + 24, ch[1] + 24].forEach((m, e) => saw(hz(m), at + e * bt, 0.3, 0.05, 3000, -0.3, 0.2, dl));
+          }
+        } else if (name === 'trap') {
+          // 140 BPM, half-time feel in C minor. 808 slides, hi-hat rolls, a dark bell melody.
+          const bt = 60 / 140, br = bt * 4, RT = [36, 32, 39, 34], BELL = [[0, 72], [0.75, 75], [1.5, 79], [2.5, 77], [3, 75]];
+          for (let k = 0; k * br < D; k++) {
+            const at = t0 + k * br;
+            padChord([RT[k % 4] + 24, RT[k % 4] + 27, RT[k % 4] + 31], at, br, 0.016, 1200);
+            for (const [b, m] of BELL) strike(hz(m - (k % 2 ? 2 : 0)), at + b * bt, 1.2, 0.05);
+            if (k >= intro) {
+              kick(at); kick(at + 2.5 * bt, 0.75);
+              snare(at + 2 * bt, 0.42, 0.25, 0.5);
+              sub(hz(RT[k % 4]), at, br * 0.6, 0.5, k % 4 === 0 ? null : hz(RT[(k + 3) % 4]));
+              const roll = k % 2 === 1;
+              for (let e = 0; e < 8; e++) {
+                if (roll && e === 6) { for (let r = 0; r < 6; r++) hat(at + (6 + r / 3) * bt / 2, 0.06, 0.025, 0.3); continue; }
+                if (roll && e === 7) continue;
+                hat(at + e * bt / 2, e % 2 ? 0.05 : 0.08, 0.035, e % 2 ? 0.25 : -0.25);
+              }
+            }
+          }
+        } else if (name === 'cinematic') {
+          // 90 BPM in D minor: Dm – B♭ – F – C. 16th-note string ostinato, deep drums that build, a brass swell.
+          const bt = 60 / 90, br = bt * 4, CH = [[50, 53, 57], [46, 50, 53], [53, 57, 60], [48, 52, 55]];
+          const bars = Math.ceil(D / br);
+          for (let k = 0; k < bars; k++) {
+            const at = t0 + k * br, ch = CH[k % 4], grow = Math.min(1, 0.45 + k / bars);
+            padChord(ch.map(m => m - 12), at, br, 0.02 * grow, 900);
+            for (let e = 0; e < 16; e++) saw(hz(ch[e % 2 ? 1 : 0] + 12 + (e % 8 === 7 ? ch[2] - ch[0] : 0)), at + e * bt / 4, bt / 4 * 0.8, 0.05 * grow, 2200, e % 2 ? 0.3 : -0.3, 0.35);
+            if (k >= intro) {
+              kick(at, 0.95 * grow); kick(at + 1.5 * bt, 0.7 * grow); if (k >= 2) kick(at + 2.5 * bt, 0.6 * grow);
+              snare(at + 3 * bt, 0.25 * grow, 0.6, 1);
+            }
+            if (k >= 2 && k % 2 === 0) saw(hz(ch[0] + 12), at, br * 1.9, 0.045 * grow, 1500, 0, 0.6, null, 0.8);
+          }
+        }
+      }
       if (style === 'bright') {
         // Original "bright" loop: Dmaj7 – A – Bm7 – G/B at 100 BPM. Pluck arpeggio, light beat, a bell motif.
         const b2 = 60 / 100, bar2 = b2 * 4;
@@ -500,6 +643,7 @@
           if (k % 2 === 1) strike(hz(ch[3] + 24), at + 3 * b3, 2.8, 0.06);
         }
       }
+      if (['drive', 'synthwave', 'trap', 'cinematic'].includes(style)) energetic(style);
       for (let k = 0; style === 'lofi' && k * bar < D; k++) {
         const at = t0 + k * bar, chord = CHORDS[k % 4];
         for (const m of chord) for (const d of [-7, 7]) pad(hz(m), at, bar + 0.3, 0.03, padBus, d);
@@ -513,6 +657,22 @@
           const arp = [chord[0], chord[2], chord[3], chord[1] + 12, chord[3], chord[2], chord[1], chord[2]];
           arp.forEach((m, e) => voice('triangle', hz(m + 12), at + e * beat / 2, 0.45, 0.045));
         }
+      }
+      // Key moments (`music.hits`): a noise riser sweeps up into a punchy impact exactly on the beat of the picture.
+      for (const { from, at } of hitWindows(M.hits ?? [], D)) {
+        const s = ac.createBufferSource(), f = ac.createBiquadFilter(), g = ac.createGain();
+        s.buffer = noise; s.loop = true; f.type = 'bandpass'; f.Q.value = 1.2;
+        f.frequency.setValueAtTime(500, t0 + from); f.frequency.exponentialRampToValueAtTime(7000, t0 + at);
+        g.gain.setValueAtTime(0.0001, t0 + from); g.gain.exponentialRampToValueAtTime(0.16, t0 + at - 0.02); g.gain.linearRampToValueAtTime(0, t0 + at);
+        s.connect(f); f.connect(g); g.connect(master); s.start(t0 + from); s.stop(t0 + at + 0.05);
+        const b = ac.createOscillator(), bg = ac.createGain();             // the boom
+        b.frequency.setValueAtTime(140, t0 + at); b.frequency.exponentialRampToValueAtTime(38, t0 + at + 0.5);
+        bg.gain.setValueAtTime(0.7, t0 + at); bg.gain.exponentialRampToValueAtTime(0.0001, t0 + at + 0.9);
+        b.connect(bg); bg.connect(master); b.start(t0 + at); b.stop(t0 + at + 1);
+        const c = ac.createBufferSource(), cf = ac.createBiquadFilter(), cg = ac.createGain(); // the crash
+        c.buffer = noise; cf.type = 'highpass'; cf.frequency.value = 3500;
+        cg.gain.setValueAtTime(0.22, t0 + at); cg.gain.exponentialRampToValueAtTime(0.0001, t0 + at + 1.4);
+        c.connect(cf); cf.connect(cg); cg.connect(master); c.start(t0 + at); c.stop(t0 + at + 1.5);
       }
       // Clock ticks (woodblock-ish) and a two-note "time's up" ding.
       for (const tt of M.ticks ?? []) { voice('square', 1760, t0 + tt, 0.06, 0.05, 0.002, master); voice('sine', 880, t0 + tt, 0.08, 0.12, 0.002, master); }
@@ -610,5 +770,5 @@
     window.prepare = () => prepare(config.lines);
   }
 
-  window.Reel = { mount, WHITE, LAB, palette, toneCurve, wav };
+  window.Reel = { mount, WHITE, LAB, palette, toneCurve, wav, hitWindows, MUSIC_STYLES };
 })();
