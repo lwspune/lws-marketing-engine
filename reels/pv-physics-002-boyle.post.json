@@ -1,0 +1,16 @@
+{
+  "slug": "pv-physics-002-boyle",
+  "project": "pyqvault-insta",
+  "kind": "reel",
+  "title": "@pyqvault_ · Physics, visualised #2: Boyle's law, 3D piston + live hits (white, Remotion)",
+  "video": "pv-physics-002-boyle.mp4",
+  "cover": "pv-physics-002-boyle-cover.png",
+  "captions": {
+    "instagram": "Class 11 Physics · Kinetic Theory\nPhysics, visualised #2 · Why does squeezing a gas raise its pressure? 🫧\n\nA gas pushes on its container by hitting the walls. Halve the space and the same molecules, at the same speed, reach the piston twice as often: twice the hits → twice the pressure.\nHalve it again → four times. Watch the counter: about 14 → 25 → 50 hits a second, and P × V stays 4 the whole way (Boyle's law). Plot P against 1/V and the curve becomes a straight line.\n\nOn your syllabus: Class 11 Kinetic Theory and Thermodynamics, JEE Main and MHT-CET ask Boyle's law every year.\n\nSave this for revision 📌 Follow for #3.\nPractise every PYQ on this chapter free → pyqvault.com (link in bio).\n\n#Physics #Class11 #Class11Physics #CBSE #JEEMain #NEET #MHTCET #BoylesLaw #PhysicsVisualised #STEM",
+    "facebook": "Class 11 Physics · Kinetic Theory\nPhysics, visualised #2 · Why does squeezing a gas raise its pressure? 🫧\n\nHalve the space and the molecules hit the piston twice as often: twice the hits, twice the pressure. P × V stays the same (Boyle's law), and P against 1/V is a straight line.\n\nPractise Kinetic Theory PYQs free: https://www.pyqvault.com/questions/jee-mains/physics/kinetic-theory\n\n#Physics #Class11 #BoylesLaw",
+    "youtube": {
+      "title": "Why does squeezing a gas raise its pressure? (Boyle's law, visualised) #shorts",
+      "description": "Physics, visualised #2. Halve the volume and the molecules hit the piston twice as often: twice the hits, twice the pressure. P × V stays constant, and P against 1/V is a straight line.\n\nPractise PYQs free, chapter-wise: pyqvault.com\n\n#Physics #Class11 #Shorts"
+    }
+  }
+}

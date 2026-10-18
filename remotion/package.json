@@ -14,7 +14,13 @@
     "compare": "remotion render Compare005 out/005-old-vs-new.mp4",
     "music:014": "node ../reels/tools/music.mjs music/nda-maths-014-cone.json public/nda-maths-014-cone.wav",
     "render:014": "remotion render Reel014 ../reels/nda-maths-014-cone.mp4",
-    "cover:014": "remotion still Reel014Cover ../reels/nda-maths-014-cone-cover.png"
+    "cover:014": "remotion still Reel014Cover ../reels/nda-maths-014-cone-cover.png",
+    "music:pv002": "node ../reels/tools/music.mjs music/pv-physics-002-boyle.json public/pv-physics-002-boyle.wav",
+    "render:pv002": "remotion render PvPhysics002 ../reels/pv-physics-002-boyle.mp4",
+    "cover:pv002": "remotion still PvPhysics002Cover ../reels/pv-physics-002-boyle-cover.png",
+    "music:pc002": "node ../reels/tools/music.mjs music/pv-chem-002-families.json public/pv-chem-002-families.wav",
+    "render:pc002": "remotion render PvChem002 ../reels/pv-chem-002-families.mp4",
+    "cover:pc002": "remotion still PvChem002Cover ../reels/pv-chem-002-families-cover.png"
   },
   "dependencies": {
     "@react-three/fiber": "9.8.1",
