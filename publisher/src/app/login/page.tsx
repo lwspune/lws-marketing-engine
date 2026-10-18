@@ -39,7 +39,7 @@ export default function LoginPage() {
     <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-4 py-12">
       <div className="mb-8 flex flex-col items-center text-center">
         <Logo size="lg" />
-        <h1 className="mt-4 text-2xl font-semibold tracking-tight">LWS Publisher</h1>
+        <h1 className="mt-4 text-2xl font-semibold tracking-tight">GoPost</h1>
         <p className="mt-1 text-sm text-muted">Approve ready posts. Nothing goes out without you.</p>
       </div>
       {state.kind === "sent" ? (

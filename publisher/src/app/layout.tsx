@@ -6,7 +6,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "LWS Publisher",
+  title: "GoPost",
   description: "Approve ready-made reels and posts, then publish to Instagram, Facebook and YouTube.",
   robots: { index: false, follow: false },
 };
