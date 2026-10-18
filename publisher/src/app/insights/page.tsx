@@ -6,6 +6,7 @@ import { compareToBaseline, median, typicalReel, type PostMetrics, type Verdict 
 import { AdsSummary, type AdsSummaryProps } from "@/components/AdsSummary";
 import { summariseCampaigns, weekStartIst, type DailyRow, type EntityRow, type OutcomeRow } from "@/lib/domain/ads";
 import { pickInstagramAccount, type InstagramAccount } from "@/lib/domain/accounts";
+import { canSeeAds } from "@/lib/supabase/access";
 
 export const dynamic = "force-dynamic";
 
@@ -68,7 +69,8 @@ async function loadAds(supabase: Db, now: Date): Promise<AdsSummaryProps> {
 
 export default async function InsightsPage({ searchParams }: { searchParams: { sort?: string; account?: string } }) {
   const supabase = createSupabaseServerClient();
-  const ads = await loadAds(supabase, new Date());
+  const showAds = await canSeeAds(supabase);
+  const ads = showAds ? await loadAds(supabase, new Date()) : null;
   const sort: SortId = (SORTS.find((s) => s.id === searchParams.sort)?.id ?? "new") as SortId;
   // One Instagram account at a time (RLS: only the member's own org), so two audiences never blend.
   const { data: igRows } = await supabase.from("connected_accounts").select("id, display_name, created_at").eq("platform", "instagram");
@@ -117,10 +119,10 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
 
   return (
     <>
-      <Nav current="insights" />
+      <Nav current="insights" ads={showAds} />
       <main className="mx-auto max-w-5xl px-4 pb-16 pt-8">
-        <PageHeader title="Insights">How your ads and reels are doing, against your own typical numbers.</PageHeader>
-        <div className="mb-6"><AdsSummary {...ads} /></div>
+        <PageHeader title="Insights">How your {ads ? "ads and reels are" : "reels are"} doing, against your own typical numbers.</PageHeader>
+        {ads && <div className="mb-6"><AdsSummary {...ads} /></div>}
 
         {accounts.length > 1 && (
           <nav aria-label="Instagram account" className="mb-4 flex flex-wrap gap-2">

@@ -10,8 +10,8 @@ export function Logo({ size = "sm" }: { size?: "sm" | "lg" }) {
   );
 }
 
-/** Top bar shared by the Queue, Ads and Insights pages. */
-export function Nav({ current }: { current: "queue" | "ads" | "insights" }) {
+/** Top bar shared by the Queue, Ads and Insights pages. `ads={false}` hides the Ads tab (staff logins). */
+export function Nav({ current, ads = true }: { current: "queue" | "ads" | "insights"; ads?: boolean }) {
   const item = (href: string, id: typeof current, label: string) => (
     <Link href={href} aria-current={current === id ? "page" : undefined} className="seg-item">{label}</Link>
   );
@@ -24,7 +24,7 @@ export function Nav({ current }: { current: "queue" | "ads" | "insights" }) {
         </Link>
         <nav aria-label="Sections" className="seg sm:ml-4">
           {item("/", "queue", "Queue")}
-          {item("/ads", "ads", "Ads")}
+          {ads && item("/ads", "ads", "Ads")}
           {item("/insights", "insights", "Insights")}
         </nav>
         <form action="/auth/signout" method="post" className="ml-auto">
