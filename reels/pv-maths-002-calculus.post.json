@@ -1,0 +1,16 @@
+{
+  "slug": "pv-maths-002-calculus",
+  "project": "pyqvault-insta",
+  "kind": "reel",
+  "title": "@pyqvault_ · Maths, visualised #2: all of calculus in one curve (lab, Remotion, cinematic)",
+  "video": "pv-maths-002-calculus.mp4",
+  "cover": "pv-maths-002-calculus-cover.png",
+  "captions": {
+    "instagram": "Class 11–12 Maths · Limits, Derivatives, Integrals\nMaths, visualised #2 · All of calculus in one curve 📈\n\n1️⃣ Limit: zoom in on any smooth curve and it starts to look straight (×64 here).\n2️⃣ Derivative: that straight bit's slope. Watch the secant shrink onto the tangent: 0.745 → 0.502 → 0.437 → 0.436.\n3️⃣ Integral: cut the area into thinner and thinner strips: 4, 8, 16, 64… and the total closes in on the exact area, 2.883.\nOne idea behind all three: zoom in.\n\nOn your syllabus: Class 11 Limits & Derivatives, Class 12 Calculus, JEE Main every year.\n\nSave this 📌 Follow for #3.\nPractise every PYQ chapter-wise, free → pyqvault.com (link in bio).\n\n#Maths #Calculus #Class11 #Class12 #JEEMain #CBSE #MHTCET #MathsVisualised #STEM",
+    "facebook": "Class 11–12 Maths · Limits, Derivatives, Integrals\nMaths, visualised #2 · All of calculus in one curve 📈\n\nZoom in until the curve looks straight (limit), take that straight bit's slope (derivative), add up thinner and thinner strips (integral). One idea: zoom in.\n\nPractise PYQs free, chapter-wise: https://www.pyqvault.com\n\n#Maths #Calculus #Class12",
+    "youtube": {
+      "title": "All of calculus in one curve #shorts",
+      "description": "Maths, visualised #2. Limit: zoom in until the curve looks straight. Derivative: that straight bit's slope. Integral: thinner and thinner strips add up to the area. One idea: zoom in.\n\nPractise PYQs free, chapter-wise: pyqvault.com\n\n#Maths #Calculus #Shorts"
+    }
+  }
+}

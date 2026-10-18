@@ -1,0 +1,16 @@
+{
+  "slug": "pv-physics-003-pendulum",
+  "project": "pyqvault-insta",
+  "kind": "reel",
+  "title": "@pyqvault_ · Physics, visualised #3: where a pendulum's energy goes (lab, Remotion 3D, synthwave)",
+  "video": "pv-physics-003-pendulum.mp4",
+  "cover": "pv-physics-003-pendulum-cover.png",
+  "captions": {
+    "instagram": "Class 11 Physics · Work, Energy & Power\nPhysics, visualised #3 · Where does a swinging pendulum's energy go? ⚖️\n\nLift a 1 kg bob on a 1.2 m string to 50° and it stores 4.20 J.\n🔵 At the top it's all height (potential energy)\n🟢 At the bottom it's all speed (kinetic energy)\nWithout air, they just trade places and the total stays 4.20 J.\n\nNow add air. Each swing hands a little to the air as heat 🟠, and the swing shrinks. That's why every real pendulum stops: the energy isn't lost, it's turned into heat.\n\nOn your syllabus: Class 11 Work, Energy & Power and Oscillations.\n\nSave this for revision 📌 Follow for #4.\nPractise every PYQ chapter-wise, free → pyqvault.com (link in bio).\n\n#Physics #Class11 #Class11Physics #Pendulum #EnergyConservation #CBSE #JEEMain #NEET #PhysicsVisualised",
+    "facebook": "Class 11 Physics · Work, Energy & Power\nPhysics, visualised #3 · Where does a swinging pendulum's energy go? ⚖️\n\nHeight and speed trade places and the total stays the same, until air turns a little of it into heat on every swing. That's why a real pendulum stops.\n\nPractise Work, Energy & Power PYQs free: https://www.pyqvault.com/questions/jee-mains/physics/work-energy-and-power\n\n#Physics #Class11 #Pendulum",
+    "youtube": {
+      "title": "Where does a pendulum's energy go? #shorts",
+      "description": "Physics, visualised #3. Height (PE) and speed (KE) trade places and the total stays 4.20 J; add air and each swing turns a little into heat, which is why it stops.\n\nPractise PYQs free, chapter-wise: pyqvault.com\n\n#Physics #Class11 #Shorts"
+    }
+  }
+}

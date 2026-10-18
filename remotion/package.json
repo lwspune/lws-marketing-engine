@@ -23,7 +23,16 @@
     "cover:pc002": "remotion still PvChem002Cover ../reels/pv-chem-002-families-cover.png",
     "music:pm001": "node ../reels/tools/music.mjs music/pv-maths-001-sin-cos.json public/pv-maths-001-sin-cos.wav",
     "render:pm001": "remotion render PvMaths001 ../reels/pv-maths-001-sin-cos.mp4",
-    "cover:pm001": "remotion still PvMaths001Cover ../reels/pv-maths-001-sin-cos-cover.png"
+    "cover:pm001": "remotion still PvMaths001Cover ../reels/pv-maths-001-sin-cos-cover.png",
+    "music:pp003": "node ../reels/tools/music.mjs music/pv-physics-003-pendulum.json public/pv-physics-003-pendulum.wav",
+    "render:pp003": "remotion render PvPhysics003 ../reels/pv-physics-003-pendulum.mp4",
+    "cover:pp003": "remotion still PvPhysics003Cover ../reels/pv-physics-003-pendulum-cover.png",
+    "music:pc003": "node ../reels/tools/music.mjs music/pv-chem-003-avogadro.json public/pv-chem-003-avogadro.wav",
+    "render:pc003": "remotion render PvChem003 ../reels/pv-chem-003-avogadro.mp4",
+    "cover:pc003": "remotion still PvChem003Cover ../reels/pv-chem-003-avogadro-cover.png",
+    "music:pm002": "node ../reels/tools/music.mjs music/pv-maths-002-calculus.json public/pv-maths-002-calculus.wav",
+    "render:pm002": "remotion render PvMaths002 ../reels/pv-maths-002-calculus.mp4",
+    "cover:pm002": "remotion still PvMaths002Cover ../reels/pv-maths-002-calculus-cover.png"
   },
   "dependencies": {
     "@react-three/fiber": "9.8.1",

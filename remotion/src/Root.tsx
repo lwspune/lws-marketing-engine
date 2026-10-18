@@ -5,11 +5,17 @@ import { Compare005 } from './Compare.tsx';
 import { PvPhysics002 } from './PvPhysics002.tsx';
 import { PvChem002 } from './PvChem002.tsx';
 import { PvMaths001 } from './PvMaths001.tsx';
+import { PvPhysics003 } from './PvPhysics003.tsx';
+import { PvChem003 } from './PvChem003.tsx';
+import { PvMaths002 } from './PvMaths002.tsx';
 import { DURATION } from './lib/reel005.ts';
 import { DURATION as DURATION_014 } from './lib/reel014.ts';
 import { DURATION as DURATION_PV002 } from './lib/pv002.ts';
 import { DURATION as DURATION_PC002 } from './lib/pc002.ts';
 import { DURATION as DURATION_PM001 } from './lib/pm001.ts';
+import { DURATION as DURATION_PP003 } from './lib/pp003.ts';
+import { DURATION as DURATION_PC003 } from './lib/pc003.ts';
+import { DURATION as DURATION_PM002 } from './lib/pm002.ts';
 
 export const Root = () => (
   <>
@@ -24,5 +30,11 @@ export const Root = () => (
     <Still id="PvChem002Cover" component={PvChem002} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="PvMaths001" component={PvMaths001} durationInFrames={Math.round(DURATION_PM001 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="PvMaths001Cover" component={PvMaths001} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="PvPhysics003" component={PvPhysics003} durationInFrames={Math.round(DURATION_PP003 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="PvPhysics003Cover" component={PvPhysics003} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="PvChem003" component={PvChem003} durationInFrames={Math.round(DURATION_PC003 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="PvChem003Cover" component={PvChem003} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="PvMaths002" component={PvMaths002} durationInFrames={Math.round(DURATION_PM002 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="PvMaths002Cover" component={PvMaths002} width={1080} height={1920} defaultProps={{ cover: true }} />
   </>
 );
