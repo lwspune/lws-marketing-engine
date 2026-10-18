@@ -73,6 +73,8 @@ with motion, comment prompt before the reveal, answer at the end (L3–L5; reel 
 
 **Music:** pick `music: { style }` per reel and rotate it (founder, 2026-10-17: different background music per reel): `lofi` (house default), `bright` (D-major pluck arpeggio + light beat, 100 BPM; reel 012), `calm` (soft piano, no drums, 72 BPM). All original, made in code. Check loudness with check-video after any new style. **Don't** sonify the maths (two tones at once sounded chaotic to the founder, L17); `music.tones` stays in the engine unused.
 
+**Choosing the topic:** start from `remake-backlog.md` (proven reels from the creators we studied, remade our way; founder, 2026-10-18). Take the idea, never their video or words.
+
 **Premium look checklist** (founder's brief: premium + soothing to the eyes):
 - [ ] At most **one maths colour + one area colour + one accent**; amber marks the correct answer and
       nothing else. Traps use `muted` with a dashed line or hatch, never the answer's colour
