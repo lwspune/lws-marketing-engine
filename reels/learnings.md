@@ -57,6 +57,7 @@ Reach-test targets: typical reach **> 2,000** · watch **> 10 s** · at least on
 | 013 Why? #5 (physics), spoon = concave mirror → 26-I GAT Q64 (calm music) | L20 L11 L13 L14 | | | | | | | |
 | 014 3D #1, cone at 45° → 26-II Q68 (Remotion, lo-fi) | L25 L3 | | | | | | | |
 | @pyqvault_ PV Physics #1, collision → JEE Main 2022 Q8 (**lab**) | L22 L20 | 18 Oct 00:44 (posted on approval, so not an 11:00 test) | | | | | | |
-| @pyqvault_ PV Chemistry #1, heat → rate → MHT-CET 2026 Q32 (**white**, 3D jar) | L22 L20 L21 L23 | | | | | | | |
+| @pyqvault_ PV Chemistry #1, heat → rate (**white**, 3D jar) · first went out 18 Oct 09:10 with 2 others within 5 min; deleted and reposted in a slot (`-repost`): read the repost's numbers | L22 L20 L21 L23 | | | | | | | |
 | @pyqvault_ PV Physics #2, Boyle's law, 3D piston + live hits (**white**, Remotion) | L22 L27 L20 | | | | | | | |
-| @pyqvault_ PV Chemistry #2, the 8 families (**lab**, Remotion, cinematic music; remake of @sciencevisualised 4.45M) | L22 L27 | | | | | | | |
+| @pyqvault_ PV Chemistry #2, the 8 families (**lab**, Remotion, cinematic music; remake of @sciencevisualised 4.45M) · first went out 18 Oct 09:04, deleted, reposted in a slot (`-repost`) | L22 L27 | | | | | | | |
+| @pyqvault_ PV Maths #1, sine and cosine in motion (**white**, Remotion, drive; remake of @codematrixvishal 3.10M) | L22 L27 L23 | | | | | | | |
