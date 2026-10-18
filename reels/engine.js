@@ -489,7 +489,7 @@
         comp.threshold.value = -16; comp.ratio.value = 4; comp.attack.value = 0.004; comp.release.value = 0.2;
         // master → compressor → per-style level → limiter → out, so every style lands at the house loudness
         // (body ≈ −22 dB RMS, peaks ≤ −3 dB; measured with reels/tools/check-video.mjs).
-        const TRIM = { drive: 0.3, synthwave: 2.2, trap: 0.85, cinematic: 2.6 }, trim = ac.createGain(), lim = ac.createDynamicsCompressor();
+        const TRIM = { drive: 0.18, synthwave: 2.2, trap: 0.85, cinematic: 2.6 }, trim = ac.createGain(), lim = ac.createDynamicsCompressor();
         trim.gain.value = TRIM[name]; lim.threshold.value = -9; lim.knee.value = 0; lim.ratio.value = 20; lim.attack.value = 0.001; lim.release.value = 0.1;
         tone.frequency.value = 14000; master.disconnect(); master.connect(comp); comp.connect(trim); const post = ac.createGain(); post.gain.value = 0.56; // the limiter adds make-up gain: take 5 dB back
         trim.connect(lim); lim.connect(post); post.connect(tone);
