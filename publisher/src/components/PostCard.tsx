@@ -14,6 +14,8 @@ export interface PostView {
   scheduledAt: string | null; rejectReason: string | null; projectName: string;
   /** Stories only: the morning it's meant for and the quiz its card shows. */
   plannedFor: string | null; quiz: StoryQuiz | null;
+  /** Reels and carousels: the project's next free posting slot, where approving puts it (null: no slots). */
+  nextSlotAt: string | null;
   videoUrl: string | null; coverUrl: string | null; slideUrls: string[];
   channels: { platform: Platform; name: string }[];
   publications: {
@@ -48,7 +50,7 @@ export function PostCard({ post }: { post: PostView }) {
   );
   const [captions, setCaptions] = useState<Captions>(post.captions);
   const [platforms, setPlatforms] = useState<Platform[]>(usable.map((c) => c.platform));
-  const [mode, setMode] = useState<"now" | "later">("now");
+  const [mode, setMode] = useState<"slot" | "now" | "later">(post.nextSlotAt ? "slot" : "now");
   const [at, setAt] = useState("");
   const [rejecting, setRejecting] = useState(false);
   const [reason, setReason] = useState("");
@@ -68,13 +70,15 @@ export function PostCard({ post }: { post: PostView }) {
     if (story) return run(() => approveStory({ postId: post.id }), "Approved. It posts at its time.");
     const scheduledAt = mode === "later" && at ? new Date(at).toISOString() : null;
     if (mode === "later" && !at) return setMessage({ kind: "err", text: "Pick a date and time, or choose Publish now." });
-    run(async () => {
+    start(async () => {
       if (dirty) {
         const saved = await saveCaptions({ postId: post.id, captions });
-        if (!saved.ok) return saved;
+        if (!saved.ok) return setMessage({ kind: "err", text: saved.error.message });
       }
-      return approvePost({ postId: post.id, platforms, scheduledAt });
-    }, scheduledAt ? "Approved and scheduled." : "Approved. Publishing within a minute.");
+      const r = await approvePost({ postId: post.id, platforms, scheduledAt, slot: mode === "slot" });
+      setMessage(!r.ok ? { kind: "err", text: r.error.message }
+        : r.data.scheduledAt ? { kind: "ok", text: `Approved. Goes out ${when(r.data.scheduledAt)}.` } : { kind: "ok", text: "Approved. Publishing within a minute." });
+    });
   };
 
   const toggle = (p: Platform) => setPlatforms((cur) => (cur.includes(p) ? cur.filter((x) => x !== p) : [...cur, p]));
@@ -153,6 +157,9 @@ export function PostCard({ post }: { post: PostView }) {
                   <fieldset>
                     <legend className="label">When</legend>
                     <div className="flex flex-wrap items-center gap-2 text-sm">
+                      {post.nextSlotAt && (
+                        <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-line bg-raised px-3 py-2 hover:border-white/20"><input type="radio" name={`when-${post.id}`} checked={mode === "slot"} onChange={() => setMode("slot")} className="accent-[#4fd1a5]" />Next free slot · {when(post.nextSlotAt)}</label>
+                      )}
                       <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-line bg-raised px-3 py-2 hover:border-white/20"><input type="radio" name={`when-${post.id}`} checked={mode === "now"} onChange={() => setMode("now")} className="accent-[#4fd1a5]" />Publish now</label>
                       <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-line bg-raised px-3 py-2 hover:border-white/20"><input type="radio" name={`when-${post.id}`} checked={mode === "later"} onChange={() => setMode("later")} className="accent-[#4fd1a5]" />Schedule</label>
                       {mode === "later" && (
@@ -172,7 +179,7 @@ export function PostCard({ post }: { post: PostView }) {
               <div className="flex flex-wrap gap-2 border-t border-line pt-5">
                 <button type="button" className="btn btn-primary" onClick={approve}
                   disabled={pending || (!story && (platforms.length === 0 || problems.length > 0))}>
-                  {story ? "Approve story" : mode === "later" ? "Approve & schedule" : "Approve & publish"}
+                  {story ? "Approve story" : mode === "now" ? "Approve & publish" : "Approve & schedule"}
                 </button>
                 {dirty && (
                   <button type="button" className="btn" disabled={pending}

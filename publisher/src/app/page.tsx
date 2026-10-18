@@ -6,6 +6,7 @@ import { ApproveStoriesButton } from "@/components/ApproveStoriesButton";
 import type { StoryQuiz } from "@/lib/domain/story";
 import { queueProjects } from "@/lib/domain/projects";
 import type { Platform } from "@/lib/domain/types";
+import { nextSlot, slotsFor } from "@/lib/domain/slots";
 
 export const dynamic = "force-dynamic";
 
@@ -43,6 +44,16 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
 
   const { data: channels } = await supabase.from("project_channels").select("project_id, platform, connected_accounts(display_name)");
 
+  // The next free posting slot per project (approving a post puts it there; domain/slots.ts).
+  const now = new Date();
+  const { data: booked } = await supabase.from("posts").select("project_id, scheduled_at")
+    .not("scheduled_at", "is", null).gt("scheduled_at", now.toISOString()).neq("kind", "story");
+  const slotOf = (projectId: string) => {
+    const slug = projects?.find((p) => p.id === projectId)?.slug ?? "";
+    const taken = (booked ?? []).filter((b) => b.project_id === projectId).map((b) => new Date(b.scheduled_at as string));
+    return nextSlot(slotsFor(slug), taken, now)?.toISOString() ?? null;
+  };
+
   // Preview links for the media of the posts on screen (members may read their org's files).
   const paths = (posts ?? []).flatMap((p) => [p.video_path, p.cover_path, ...(p.slide_paths ?? [])]).filter((x): x is string => !!x);
   const signed = new Map<string, string>();
@@ -55,6 +66,7 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
     id: p.id, title: p.title, slug: p.slug, kind: p.kind, status: p.status, captions: p.captions ?? {},
     scheduledAt: p.scheduled_at, rejectReason: p.reject_reason,
     plannedFor: p.planned_for, quiz: (p.quiz ?? null) as StoryQuiz | null,
+    nextSlotAt: p.kind === "story" ? null : slotOf(p.project_id),
     projectName: projects?.find((x) => x.id === p.project_id)?.name ?? "",
     videoUrl: p.video_path ? signed.get(p.video_path) ?? null : null,
     coverUrl: p.cover_path ? signed.get(p.cover_path) ?? null : null,

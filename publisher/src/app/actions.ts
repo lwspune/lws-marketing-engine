@@ -5,6 +5,7 @@ import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { planApproval } from "@/lib/domain/workflow";
 import { storyApproval } from "@/lib/domain/story";
+import { nextSlot, slotsFor } from "@/lib/domain/slots";
 import { DomainError, PLATFORMS, type Captions, type Platform, type Post } from "@/lib/domain/types";
 import { fail, fromRpcError, ok, type Result } from "@/lib/publishing/result";
 
@@ -26,11 +27,13 @@ async function signedIn() {
 
 const invalid = (e: z.ZodError) => fail("invalid_input", e.issues.map((i) => i.message).join("; "));
 
-export async function approvePost(input: { postId: string; platforms: string[]; scheduledAt: string | null }): Promise<Result<{ publications: number }>> {
+export async function approvePost(input: { postId: string; platforms: string[]; scheduledAt: string | null; slot?: boolean }):
+  Promise<Result<{ publications: number; scheduledAt: string | null }>> {
   const parsed = z.object({
     postId: Uuid,
     platforms: z.array(z.enum(PLATFORMS)).max(3),
     scheduledAt: z.string().datetime({ offset: true }).nullable(),
+    slot: z.boolean().optional(),
   }).safeParse(input);
   if (!parsed.success) return invalid(parsed.error);
   const supabase = await signedIn();
@@ -41,23 +44,41 @@ export async function approvePost(input: { postId: string; platforms: string[]; 
   const { data: channels } = await supabase.from("project_channels").select("platform").eq("project_id", row.project_id);
 
   const post: Post = { id: row.id, orgId: row.org_id, projectId: row.project_id, kind: row.kind, status: row.status, captions: row.captions as Captions };
-  const scheduledAt = parsed.data.scheduledAt ? new Date(parsed.data.scheduledAt) : null;
-  try {
-    planApproval(post, {
-      platforms: parsed.data.platforms as Platform[], scheduledAt, now: new Date(),
-      connected: (channels ?? []).map((c) => c.platform as Platform),
-    });
-  } catch (e) {
-    if (e instanceof DomainError) return fail(e.code, e.message);
-    throw e;
+  const now = new Date();
+
+  // "Next free slot" (domain/slots.ts): the project's slots minus the ones already booked. The database allows one
+  // post per slot (0010), so if another approval took this one a moment ago, try the next slot (at most 3 times).
+  let times: string[] = [], taken: Date[] = [];
+  if (parsed.data.slot) {
+    const { data: project } = await supabase.from("projects").select("slug").eq("id", row.project_id).maybeSingle();
+    times = slotsFor(project?.slug ?? "");
+    if (!times.length) return fail("no_slots", "This project has no posting slots. Choose Publish now or Schedule.");
+    const { data: booked } = await supabase.from("posts").select("scheduled_at")
+      .eq("project_id", row.project_id).not("scheduled_at", "is", null).gt("scheduled_at", now.toISOString()).neq("kind", "story");
+    taken = (booked ?? []).map((b) => new Date(b.scheduled_at as string));
   }
 
-  const { data, error } = await supabase.rpc("approve_post", {
-    p_post: post.id, p_platforms: parsed.data.platforms, p_scheduled_at: scheduledAt?.toISOString() ?? null,
-  });
-  if (error) return fromRpcError(error);
-  revalidatePath("/");
-  return ok({ publications: (data ?? []).length });
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const scheduledAt = parsed.data.slot ? nextSlot(times, taken, now) : parsed.data.scheduledAt ? new Date(parsed.data.scheduledAt) : null;
+    if (parsed.data.slot && !scheduledAt) return fail("no_free_slot", "No free slot in the next 75 days.");
+    try {
+      planApproval(post, {
+        platforms: parsed.data.platforms as Platform[], scheduledAt, now,
+        connected: (channels ?? []).map((c) => c.platform as Platform),
+      });
+    } catch (e) {
+      if (e instanceof DomainError) return fail(e.code, e.message);
+      throw e;
+    }
+    const { data, error } = await supabase.rpc("approve_post", {
+      p_post: post.id, p_platforms: parsed.data.platforms, p_scheduled_at: scheduledAt?.toISOString() ?? null,
+    });
+    if (error?.code === "23505" && parsed.data.slot && scheduledAt) { taken.push(scheduledAt); continue; }
+    if (error) return fromRpcError(error);
+    revalidatePath("/");
+    return ok({ publications: (data ?? []).length, scheduledAt: scheduledAt?.toISOString() ?? null });
+  }
+  return fail("slot_busy", "Those slots were just taken. Refresh and approve again.");
 }
 
 type Db = ReturnType<typeof createSupabaseServerClient>;
