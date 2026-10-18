@@ -11,3 +11,12 @@ test('palette: WHITE matches reels/engine.js Reel.WHITE', () => {
   runInNewContext(readFileSync(new URL('../../reels/engine.js', import.meta.url), 'utf8'), { window });
   assert.deepEqual({ ...WHITE }, { ...window.Reel!.WHITE });
 });
+
+// The dark "lab" look (@pyqvault_ background A/B test, L22): the same rule, against Reel.LAB.
+test('palette: LAB matches reels/engine.js Reel.LAB', async () => {
+  const { LAB } = await import('../src/lib/palette.ts') as { LAB?: Record<string, string> };
+  const window: { Reel?: { LAB: Record<string, string> } } = {};
+  runInNewContext(readFileSync(new URL('../../reels/engine.js', import.meta.url), 'utf8'), { window });
+  assert.ok(LAB, 'palette.ts exports LAB');
+  assert.deepEqual({ ...LAB }, { ...window.Reel!.LAB });
+});

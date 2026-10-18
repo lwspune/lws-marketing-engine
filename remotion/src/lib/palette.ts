@@ -5,7 +5,17 @@ export const WHITE = {
   fill: 'rgba(42, 115, 110, 0.16)', grid: 'rgba(35, 48, 74, 0.16)', axis: 'rgba(35, 48, 74, 0.45)',
 } as const;
 
-export const tint = (hex: string, a: number) => `rgba(${[1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)).join(', ')}, ${a})`;
+// The dark "lab" board: a copy of Reel.LAB (tests/palette.test.ts). Same colour roles as WHITE, plus the card fill
+// and the shadow colour (shadows on a dark board are black, not ink).
+export const LAB = {
+  board: '#121822', edge: '#0a0e15', ink: '#e6ebf3', muted: '#a3adbd',
+  blue: '#86a8ff', green: '#4fd1a5', amber: '#ffb35c', red: '#ffb35c',
+  fill: 'rgba(79, 209, 165, 0.16)', grid: 'rgba(230, 235, 243, 0.14)', axis: 'rgba(230, 235, 243, 0.42)',
+  card: '#1b2330', shadow: '#000000',
+} as const;
+export type Palette = { readonly [K in keyof typeof WHITE]: string } & { readonly card?: string; readonly shadow?: string };
+
+export const tint =(hex: string, a: number) => `rgba(${[1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)).join(', ')}, ${a})`;
 
 // Fonts, as in reels/engine.js: Cambria for maths and handwriting-weight text, Segoe UI Variable for captions.
 export const TEXT_FONT = 'Cambria, "Cambria Math", serif';

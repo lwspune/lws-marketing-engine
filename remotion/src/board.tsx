@@ -1,8 +1,8 @@
 // White-board building blocks shared by every reel: the board, floating cards, captions and maths,
 // drawn to match reels/engine.js ('white' theme) at 1080×1920.
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { AbsoluteFill, continueRender, delayRender, spring, useVideoConfig } from 'remotion';
-import { WHITE as P, tint, TEXT_FONT, MATH_FONT, SOFT_UI, UI } from './lib/palette.ts';
+import { WHITE, tint, TEXT_FONT, MATH_FONT, SOFT_UI, UI, type Palette } from './lib/palette.ts';
 import { clamp01, prog } from './lib/motion.ts';
 
 // System fonts are not loaded until first used: hold the render until they are, as engine.js does.
@@ -13,10 +13,19 @@ export function useFonts() {
   useEffect(() => { Promise.all(FONTS.map(f => document.fonts.load(f))).then(() => continueRender(handle)); }, [handle]);
 }
 
+// The look: white unless a reel wraps itself in <Theme value={LAB}> (the dark board, @pyqvault_ A/B test L22).
+const ThemeContext = createContext<Palette>(WHITE);
+export const Theme = ThemeContext.Provider;
+export const usePalette = () => useContext(ThemeContext);
+// A card's fill and shadow: white with an ink shadow on the white board, the palette's card with a black shadow on lab.
+const cardFill = (P: Palette) => P.card ?? '#fff';
+const cardShadow = (P: Palette, a: number) => tint(P.shadow ?? P.ink, P.shadow ? Math.min(0.6, a * 3.5) : a);
+
 export const hand = (size: number) => ({ font: `600 ${size}px ${TEXT_FONT}` });
 
 // Warm paper-white, a touch darker towards the edges, with the account's watermark.
 export function Board({ watermark = true }: { watermark?: boolean }) {
+  const P = usePalette();
   return (
     <AbsoluteFill style={{ background: `radial-gradient(circle 1440px at 540px 806px, ${P.board} 100px, ${P.edge} 1440px)` }}>
       {watermark && (
@@ -29,19 +38,21 @@ export function Board({ watermark = true }: { watermark?: boolean }) {
 }
 
 export function Card({ x, y, w, h, r = 32, shade = 0.1 }: { x: number; y: number; w: number; h: number; r?: number; shade?: number }) {
-  return <div style={{ position: 'absolute', left: x, top: y, width: w, height: h, borderRadius: r, background: '#fff', boxShadow: `0 16px 48px ${tint(P.ink, shade)}` }} />;
+  const P = usePalette();
+  return <div style={{ position: 'absolute', left: x, top: y, width: w, height: h, borderRadius: r, background: cardFill(P), boxShadow: `0 16px 48px ${cardShadow(P, shade)}` }} />;
 }
 
 // A caption on a floating white card centred on (540, y). From `age` = 0 it rises into place on a spring;
 // the opening caption (rise = false) is already in place on frame 0, because it is the hook.
 export function Caption({ text, alpha, age, size = 56, y = 300, rise = true }: { text: string; alpha: number; age: number; size?: number; y?: number; rise?: boolean }) {
+  const P = usePalette();
   const { fps } = useVideoConfig();
   const s = rise ? spring({ frame: age * fps, fps, config: { damping: 15, mass: 0.7 } }) : 1;
   if (alpha <= 0) return null;
   return (
     <div style={{
-      position: 'absolute', left: 540, top: y, maxWidth: 860 + 96, padding: '30px 48px', borderRadius: 34, background: '#fff',
-      boxShadow: `0 16px 48px ${tint(P.ink, 0.14)}`, opacity: alpha, textAlign: 'center', whiteSpace: 'pre-line',
+      position: 'absolute', left: 540, top: y, maxWidth: 860 + 96, padding: '30px 48px', borderRadius: 34, background: cardFill(P),
+      boxShadow: `0 16px 48px ${cardShadow(P, 0.14)}`, opacity: alpha, textAlign: 'center', whiteSpace: 'pre-line',
       font: `600 ${size}px/${size * 1.22}px ${SOFT_UI}`, color: P.ink, width: 'max-content',
       transform: `translate(-50%, -50%) translateY(${(1 - s) * 26}px) scale(${0.95 + 0.05 * s})`,
     }}>{text}</div>
@@ -50,6 +61,7 @@ export function Caption({ text, alpha, age, size = 56, y = 300, rise = true }: {
 
 // Maths set as text, centred on x = 540 with its baseline near y. Limits stack beside ∫ and ] like a textbook.
 export function MathRow({ y, size, children, opacity = 1 }: { y: number; size: number; children: React.ReactNode; opacity?: number }) {
+  const P = usePalette();
   if (opacity <= 0) return null;
   return (
     <div style={{ position: 'absolute', left: 0, width: 1080, top: y - size * 0.95, display: 'flex', justifyContent: 'center', alignItems: 'center',
@@ -79,6 +91,7 @@ export const C = ({ color, children }: { color: string; children: React.ReactNod
 // the wrong options step back so the eye lands on the answer.
 export function Chips({ t, labels, answer, at, top, w = 180, h = 72, gap = 20, size = 44 }:
   { t: number; labels: string[]; answer: number; at: number; top: number; w?: number; h?: number; gap?: number; size?: number }) {
+  const P = usePalette();
   const on = prog(t, at, 0.6), pulse = Math.sin(Math.PI * clamp01((t - at) / 0.7)), dim = 1 - 0.55 * prog(t, at + 0.3, 0.5);
   const x0 = 540 - (labels.length * w + (labels.length - 1) * gap) / 2;
   return <>{labels.map((label, i) => {
@@ -93,6 +106,33 @@ export function Chips({ t, labels, answer, at, top, w = 180, h = 72, gap = 20, s
       }}>{label}</div>
     );
   })}</>;
+}
+
+// The opening title, as in reels/engine.js: held still on a card while a light runs ~1¼ times round its edge,
+// then the card fades and the title glides up into a slim header (no slow zoom on text: it shimmers).
+const TITLE_CARD = { x: 80, y: 620, w: 920, h: 360, r: 32 };
+export function TitleCard({ t, label, lines, color, size = 78 }: { t: number; label: string; lines: [string, string]; color?: string; size?: number }) {
+  const P = usePalette(), glow = color ?? P.blue;
+  const k = prog(t, 2.6, 1.0), cardA = 1 - prog(t, 2.5, 0.5), s = 1 + (0.72 - 1) * k, cy = 847 + (350 - 847) * k;
+  const ring = clamp01(t / 2.8), ringA = cardA * Math.min(1, t / 0.3 + 0.35, (1 - ring) / 0.18);
+  const c = TITLE_CARD;
+  return (
+    <>
+      {cardA > 0 && <div style={{ opacity: cardA }}><Card x={c.x} y={c.y} w={c.w} h={c.h} r={c.r} /></div>}
+      {ringA > 0 && t < 2.8 && (
+        <div style={{
+          position: 'absolute', left: c.x, top: c.y, width: c.w, height: c.h, borderRadius: c.r, padding: 4, boxSizing: 'border-box', opacity: ringA,
+          background: `conic-gradient(from ${ring * 1.25 * 360}deg, transparent 0 60%, ${tint(glow, 0.95)} 98.5%, transparent 100%)`,
+          WebkitMask: 'linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)', WebkitMaskComposite: 'xor', maskComposite: 'exclude',
+          filter: `drop-shadow(0 0 8px ${tint(glow, 0.7)})`,
+        }} />
+      )}
+      <div style={{ position: 'absolute', left: 0, width: 1080, top: cy, transform: `translateY(-50%) scale(${s})`, textAlign: 'center' }}>
+        <div style={{ font: `700 50px ${SOFT_UI}`, color: P.muted, marginBottom: 22, whiteSpace: 'pre' }}>{label}</div>
+        {lines.map(l => <div key={l} style={{ ...hand(size), lineHeight: `${Math.round(size * 1.28)}px`, color: P.ink, whiteSpace: 'pre' }}>{l}</div>)}
+      </div>
+    </>
+  );
 }
 
 export type EndLine = { at: number; size: number; weight: number; color: string; text: string };
