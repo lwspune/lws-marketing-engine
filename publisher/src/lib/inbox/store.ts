@@ -2,14 +2,14 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { InboxRow } from "@/lib/domain/inbox";
 import type { MetaConfig } from "@/lib/platforms/meta";
 import { fetchInstagramProfile } from "@/lib/platforms/metaMessages";
-import type { NeedsProfile } from "./webhook";
+import type { InboxPlatform, NeedsProfile } from "./webhook";
 
 // Stores DMs through the 0012 database functions (service role). Shared by the webhook route, the reply action
 // and `npm run messages:backfill`, so no `server-only` here: callers pass the admin client.
 
 const CHUNK = 200;
 
-export async function ingestRows(db: SupabaseClient, platform: "instagram", externalId: string, rows: InboxRow[]): Promise<NeedsProfile[]> {
+export async function ingestRows(db: SupabaseClient, platform: InboxPlatform, externalId: string, rows: InboxRow[]): Promise<NeedsProfile[]> {
   const needs = new Map<string, NeedsProfile>();
   for (let i = 0; i < rows.length; i += CHUNK) {
     const { data, error } = await db.rpc("ingest_messages", { p_platform: platform, p_external_id: externalId, p_rows: rows.slice(i, i + CHUNK) });

@@ -151,4 +151,22 @@ describe.skipIf(!TEST_DB_URL)("database: inbox", () => {
       .toEqual([{ contact_id: "9001", preview: "" }, { contact_id: "9002", preview: "Sir fees kitni hai?" }]);
     expect(await q("select 1 from cron.job where jobname = 'messages-retention'")).toHaveLength(1);
   }));
+
+  it("WhatsApp: a number connects as its own account, and the sender's WhatsApp name is stored (newest wins)", () => withTx(async (q) => {
+    const f = await inboxFixture(q);
+    await asOwner(q);
+    const [{ id: wa }] = await q<{ id: string }>(
+      "select public.upsert_connected_account($1, 'whatsapp', '123456789012345', '+91 76206 99213', 'EAAG-system-user-token-0123456789', null) as id", [f.org]);
+    await asService(q);
+    const send = (rows: object[]) => q("select * from public.ingest_messages('whatsapp', '123456789012345', $1::jsonb)", [JSON.stringify(rows)]);
+    const waRow = (over: Record<string, unknown> = {}) => row({ contact_id: "919800000001", mid: "wamid.1", contact_name: "Parent A", ...over });
+    expect(await send([waRow()])).toEqual([]); // named already: no lookup needed
+    await send([waRow({ mid: "wamid.2", contact_name: "Parent A (Rahul's mom)", sent_at: "2026-10-19T09:00:00Z" })]);
+    await send([waRow({ mid: "wamid.3", contact_name: null, sent_at: "2026-10-19T10:00:00Z" })]);
+    await asUser(q, f.member);
+    expect(await q("select channel, contact_id, contact_name from public.conversations where account_id = $1", [wa]))
+      .toEqual([{ channel: "whatsapp", contact_id: "919800000001", contact_name: "Parent A (Rahul's mom)" }]);
+    expect(await q("select count(*)::int as n from public.messages m join public.conversations c on c.id = m.conversation_id where c.account_id = $1", [wa]))
+      .toEqual([{ n: 3 }]);
+  }));
 });

@@ -1,17 +1,19 @@
 import { timingSafeEqual } from "node:crypto";
-import { parseInstagramWebhook, verifyMetaSignature, type InboxRow } from "@/lib/domain/inbox";
+import { parseInstagramWebhook, parseWhatsAppWebhook, verifyMetaSignature, type InboxRow } from "@/lib/domain/inbox";
 import { fail, ok } from "@/lib/publishing/result";
 
 // The /api/webhooks/meta handler, kept free of Next and Supabase so it can be tested directly (like cron.ts).
-// GET: Meta checks the address once with our verify token. POST: one signed delivery of DMs. Storing failures
+// GET: Meta checks the address once with our verify token. POST: one signed delivery of Instagram DMs or WhatsApp
+// messages (the same address serves both products). Storing failures
 // answer 500 so Meta delivers again (the database ignores duplicates); a failed name lookup doesn't.
 
 export interface NeedsProfile { accountId: string; conversationId: string; contactId: string }
+export type InboxPlatform = "instagram" | "whatsapp";
 
 export interface WebhookDeps {
   appSecret: string;
   verifyToken: string;
-  ingest: (platform: "instagram", accountExternalId: string, rows: InboxRow[]) => Promise<NeedsProfile[]>;
+  ingest: (platform: InboxPlatform, accountExternalId: string, rows: InboxRow[]) => Promise<NeedsProfile[]>;
   fillProfiles: (needs: NeedsProfile[]) => Promise<void>;
   logger?: { error: (...args: unknown[]) => void };
 }
@@ -43,13 +45,19 @@ export async function handleMetaWebhook(req: Request, deps: WebhookDeps): Promis
     return Response.json(fail("invalid_input", "Body is not JSON."), { status: 400 });
   }
 
-  const groups = parseInstagramWebhook(body);
+  const groups: [InboxPlatform, ReturnType<typeof parseInstagramWebhook>][] = [
+    ["instagram", parseInstagramWebhook(body)], ["whatsapp", parseWhatsAppWebhook(body)],
+  ];
   const needs: NeedsProfile[] = [];
   let stored = 0;
   try {
-    for (const g of groups) {
-      needs.push(...(await deps.ingest("instagram", g.accountExternalId, g.rows)));
-      stored += g.rows.length;
+    for (const [platform, list] of groups) {
+      for (const g of list) {
+        const missing = await deps.ingest(platform, g.accountExternalId, g.rows);
+        // WhatsApp sends names with the message; only Instagram contacts are looked up.
+        if (platform === "instagram") needs.push(...missing);
+        stored += g.rows.length;
+      }
     }
   } catch (e) {
     log.error("inbox: storing a webhook delivery failed", { error: (e as Error).message });

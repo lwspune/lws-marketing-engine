@@ -17,7 +17,9 @@ export const MAX_REPLY = 1000;
 /** Instagram lets a business reply only within 24 hours of the person's last message. */
 export const REPLY_WINDOW_MS = 24 * 3_600_000;
 
-const ATTACHMENTS = new Set(["image", "video", "audio", "file", "share", "ig_post", "ig_reel", "story", "story_mention", "sticker"]);
+const ATTACHMENTS = new Set([
+  "image", "video", "audio", "file", "share", "ig_post", "ig_reel", "story", "story_mention", "sticker", "location", "contacts",
+]);
 const AD_ID = /^\d{1,30}$/;
 
 /** One message in the shape public.ingest_messages expects. */
@@ -34,6 +36,8 @@ export interface InboxRow {
   ad_id: string | null;
   /** The person unsent it: delete the stored copy. */
   deleted: boolean;
+  /** WhatsApp sends the sender's profile name with each message (Instagram doesn't: looked up once instead). */
+  contact_name?: string | null;
 }
 
 export interface InboxGroup { accountExternalId: string; rows: InboxRow[] }
@@ -91,6 +95,62 @@ export function parseInstagramWebhook(body: unknown): InboxGroup[] {
   return [...groups].map(([accountExternalId, rows]) => ({ accountExternalId, rows }));
 }
 
+// WhatsApp message types → stored attachment type (text-like ones become the body instead).
+const WA_MEDIA: Record<string, string> = {
+  image: "image", video: "video", audio: "audio", document: "file", sticker: "sticker", location: "location", contacts: "contacts",
+};
+const WA_SKIP = new Set(["reaction", "system", "ephemeral", "request_welcome"]);
+
+function waRow(m: Obj, names: Map<string, string>): InboxRow | null {
+  const mid = str(m.id), from = str(m.from), type = typeof m.type === "string" ? m.type : "";
+  const secs = typeof m.timestamp === "string" && /^\d+$/.test(m.timestamp) ? Number(m.timestamp) : typeof m.timestamp === "number" ? m.timestamp : NaN;
+  if (!mid || !from || !Number.isFinite(secs) || WA_SKIP.has(type)) return null;
+  let body = "", attachment: string | null = null;
+  const part = isObj(m[type]) ? (m[type] as Obj) : null;
+  if (type === "text" && part && typeof part.body === "string") body = part.body;
+  else if (type === "button" && part && typeof part.text === "string") body = part.text;
+  else if (type === "interactive" && part) {
+    const reply = [part.button_reply, part.list_reply].find(isObj) as Obj | undefined;
+    body = typeof reply?.title === "string" ? reply.title : "";
+    if (!body) attachment = "other";
+  } else {
+    attachment = WA_MEDIA[type] ?? "other";
+    if (part && typeof part.caption === "string") body = part.caption;
+  }
+  const referral = isObj(m.referral) ? m.referral : null;
+  const adId = referral && referral.source_type === "ad" && typeof referral.source_id === "string" && AD_ID.test(referral.source_id) ? referral.source_id : null;
+  return {
+    contact_id: from, mid, direction: "in", body: body.slice(0, MAX_BODY), attachment,
+    sent_at: new Date(secs * 1000).toISOString(), source: adId ? "ad" : "direct", ad_id: adId, deleted: false,
+    contact_name: names.get(from) ?? null,
+  };
+}
+
+/** Meta's WhatsApp Cloud API webhook body → incoming messages per phone number id. Statuses and other fields are skipped. */
+export function parseWhatsAppWebhook(body: unknown): InboxGroup[] {
+  if (!isObj(body) || body.object !== "whatsapp_business_account" || !Array.isArray(body.entry)) return [];
+  const groups = new Map<string, InboxRow[]>();
+  for (const entry of body.entry) {
+    if (!isObj(entry) || !Array.isArray(entry.changes)) continue;
+    for (const change of entry.changes) {
+      if (!isObj(change) || change.field !== "messages" || !isObj(change.value)) continue;
+      const v = change.value;
+      const account = isObj(v.metadata) ? str(v.metadata.phone_number_id) : null;
+      if (!account || !Array.isArray(v.messages)) continue;
+      const names = new Map<string, string>();
+      for (const c of Array.isArray(v.contacts) ? v.contacts.filter(isObj) : []) {
+        const id = str(c.wa_id), name = isObj(c.profile) && typeof c.profile.name === "string" ? c.profile.name : null;
+        if (id && name) names.set(id, name);
+      }
+      for (const m of v.messages) {
+        const row = isObj(m) ? waRow(m, names) : null;
+        if (row) groups.set(account, [...(groups.get(account) ?? []), row]);
+      }
+    }
+  }
+  return [...groups].map(([accountExternalId, rows]) => ({ accountExternalId, rows }));
+}
+
 /** Meta signs each delivery: X-Hub-Signature-256 = "sha256=" + HMAC-SHA256(app secret, raw body). */
 export function verifyMetaSignature(rawBody: string, header: string | null, appSecret: string): boolean {
   if (!appSecret || !header?.startsWith("sha256=")) return false;
@@ -123,12 +183,14 @@ export function summariseInbox(
   return out;
 }
 
-export const contactLabel = (c: { contact_name: string | null; contact_username: string | null; contact_id: string }): string =>
-  c.contact_name || (c.contact_username ? `@${c.contact_username}` : `Instagram user …${c.contact_id.slice(-4)}`);
+export const contactLabel = (c: { contact_name: string | null; contact_username: string | null; contact_id: string; channel?: string }): string =>
+  c.contact_name || (c.channel === "whatsapp" ? `+${c.contact_id}`
+    : c.contact_username ? `@${c.contact_username}` : `Instagram user …${c.contact_id.slice(-4)}`);
 
 const ATTACHMENT_LABEL: Record<string, string> = {
   image: "Photo", video: "Video", audio: "Voice note", file: "File", share: "Shared post", ig_post: "Shared post",
   ig_reel: "Shared reel", story: "Shared story", story_mention: "Mentioned you in a story", sticker: "Sticker",
+  location: "Location", contacts: "Contact card",
 };
 export const attachmentLabel = (type: string): string => ATTACHMENT_LABEL[type] ?? "Attachment";
 

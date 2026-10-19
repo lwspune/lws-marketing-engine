@@ -79,3 +79,18 @@ describe("handleMetaWebhook: messages (POST)", () => {
     expect(d.logger!.error).toHaveBeenCalled();
   });
 });
+
+describe("handleMetaWebhook: WhatsApp", () => {
+  const waBody = JSON.stringify({ object: "whatsapp_business_account", entry: [{ id: "WABA1", changes: [{ field: "messages", value: {
+    metadata: { phone_number_id: "PN1" }, contacts: [{ profile: { name: "Parent A" }, wa_id: "919800000001" }],
+    messages: [{ from: "919800000001", id: "wamid.1", timestamp: "1760860800", type: "text", text: { body: "Hi" } }] } }] }] });
+
+  it("stores WhatsApp messages under the phone number id, and never looks names up on Instagram", async () => {
+    const d = deps();
+    const res = await handleMetaWebhook(post(waBody), d);
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ ok: true, data: { stored: 1 } });
+    expect(d.ingest).toHaveBeenCalledWith("whatsapp", "PN1", [expect.objectContaining({ mid: "wamid.1", contact_name: "Parent A" })]);
+    expect(d.fillProfiles).not.toHaveBeenCalled();
+  });
+});

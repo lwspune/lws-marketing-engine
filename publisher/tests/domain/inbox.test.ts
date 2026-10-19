@@ -1,7 +1,8 @@
 import { createHmac } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import {
-  attachmentLabel, canReply, contactLabel, LEAD_STATUSES, MAX_BODY, needsReply, parseInstagramWebhook, redactForThemes, summariseInbox, verifyMetaSignature,
+  attachmentLabel, canReply, contactLabel, LEAD_STATUSES, MAX_BODY, needsReply, parseInstagramWebhook, parseWhatsAppWebhook, redactForThemes,
+  summariseInbox, verifyMetaSignature,
 } from "@/lib/domain/inbox";
 
 // Instagram DMs pulled into GoPost (founder, 2026-10-19). Shapes follow Meta's Instagram messaging webhooks:
@@ -148,10 +149,77 @@ describe("contactLabel / attachmentLabel", () => {
     expect(contactLabel({ contact_name: null, contact_username: "rahul_07", contact_id: "123456789" })).toBe("@rahul_07");
     expect(contactLabel({ contact_name: null, contact_username: null, contact_id: "123456789" })).toBe("Instagram user …6789");
   });
+  it("shows a WhatsApp contact's name, else their number", () => {
+    expect(contactLabel({ contact_name: "Parent A", contact_username: null, contact_id: "919800000001", channel: "whatsapp" })).toBe("Parent A");
+    expect(contactLabel({ contact_name: null, contact_username: null, contact_id: "919800000001", channel: "whatsapp" })).toBe("+919800000001");
+  });
   it("names attachments in plain words", () => {
     expect(attachmentLabel("image")).toBe("Photo");
     expect(attachmentLabel("ig_reel")).toBe("Shared reel");
     expect(attachmentLabel("story_mention")).toBe("Mentioned you in a story");
     expect(attachmentLabel("other")).toBe("Attachment");
+    expect(attachmentLabel("location")).toBe("Location");
+    expect(attachmentLabel("contacts")).toBe("Contact card");
+  });
+});
+
+// WhatsApp Cloud API webhooks: object "whatsapp_business_account", entry[].changes[].value holds one phone number's
+// messages (metadata.phone_number_id = our account), with each sender's profile name in value.contacts.
+describe("parseWhatsAppWebhook", () => {
+  const PN = "123456789012345";
+  const wa = (messages: object[], contacts: object[] = [{ profile: { name: "Parent A" }, wa_id: "919800000001" }]) => ({
+    object: "whatsapp_business_account",
+    entry: [{ id: "WABA1", changes: [{ field: "messages", value: {
+      messaging_product: "whatsapp", metadata: { display_phone_number: "917620699213", phone_number_id: PN }, contacts, messages,
+    } }] }],
+  });
+  const msg = (over: object) => ({ from: "919800000001", id: "wamid.1", timestamp: "1760860800", type: "text", text: { body: "Sir test kab hai?" }, ...over });
+
+  it("reads an incoming text with the sender's WhatsApp name, for our phone number", () => {
+    expect(parseWhatsAppWebhook(wa([msg({})]))).toEqual([{
+      accountExternalId: PN,
+      rows: [{
+        contact_id: "919800000001", mid: "wamid.1", direction: "in", body: "Sir test kab hai?", attachment: null,
+        sent_at: "2025-10-19T08:00:00.000Z", source: "direct", ad_id: null, deleted: false, contact_name: "Parent A",
+      }],
+    }]);
+  });
+
+  it("records Click-to-WhatsApp ads by their ad id", () => {
+    const [{ rows: [row] }] = parseWhatsAppWebhook(wa([msg({ referral: { source_type: "ad", source_id: "120239876543210", source_url: "https://fb.me/x", ctwa_clid: "c" } })]));
+    expect(row).toMatchObject({ source: "ad", ad_id: "120239876543210" });
+    const [{ rows: [post] }] = parseWhatsAppWebhook(wa([msg({ referral: { source_type: "post", source_id: "999" } })]));
+    expect(post).toMatchObject({ source: "direct", ad_id: null });
+  });
+
+  it("keeps media types (with captions), button and list replies, location and contact cards", () => {
+    const rows = parseWhatsAppWebhook(wa([
+      msg({ id: "a", type: "image", text: undefined, image: { id: "m1", mime_type: "image/jpeg", caption: "Q74 ka doubt" } }),
+      msg({ id: "b", type: "document", text: undefined, document: { id: "m2", filename: "fees.pdf" } }),
+      msg({ id: "c", type: "button", text: undefined, button: { text: "Yes, book me", payload: "BOOK" } }),
+      msg({ id: "d", type: "interactive", text: undefined, interactive: { type: "list_reply", list_reply: { id: "s1", title: "Sunday 10 am" } } }),
+      msg({ id: "e", type: "location", text: undefined, location: { latitude: 18.5, longitude: 73.8 } }),
+      msg({ id: "f", type: "contacts", text: undefined, contacts: [{ name: { formatted_name: "X" } }] }),
+      msg({ id: "g", type: "unsupported", text: undefined }),
+    ]))[0].rows;
+    expect(rows.map((r) => [r.mid, r.attachment, r.body])).toEqual([
+      ["a", "image", "Q74 ka doubt"], ["b", "file", ""], ["c", null, "Yes, book me"], ["d", null, "Sunday 10 am"],
+      ["e", "location", ""], ["f", "contacts", ""], ["g", "other", ""],
+    ]);
+  });
+
+  it("skips reactions, system notices, delivery statuses and other fields", () => {
+    expect(parseWhatsAppWebhook(wa([msg({ type: "reaction", text: undefined, reaction: { message_id: "x", emoji: "👍" } }), msg({ type: "system", text: undefined })]))).toEqual([]);
+    const statusOnly = { object: "whatsapp_business_account", entry: [{ id: "WABA1", changes: [{ field: "messages", value: {
+      metadata: { phone_number_id: PN }, statuses: [{ id: "wamid.9", status: "delivered" }] } }] }] };
+    expect(parseWhatsAppWebhook(statusOnly)).toEqual([]);
+    expect(parseWhatsAppWebhook({ object: "whatsapp_business_account", entry: [{ id: "W", changes: [{ field: "message_template_status_update", value: {} }] }] })).toEqual([]);
+    expect(parseWhatsAppWebhook({ object: "instagram", entry: [] })).toEqual([]);
+    expect(parseWhatsAppWebhook(null)).toEqual([]);
+  });
+
+  it("leaves the name empty when WhatsApp sends none", () => {
+    const [{ rows: [row] }] = parseWhatsAppWebhook(wa([msg({})], []));
+    expect(row.contact_name).toBeNull();
   });
 });
