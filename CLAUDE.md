@@ -96,6 +96,12 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   Shivani" (owned by her "Sound Mind" business portfolio) shared with the LWS Facebook login, which she can
   revoke at any time. The marketing engine's profiles and house reel styles don't cover this brand.
 
+- **Sound Mind carousels (2026-10-19, founder-approved).** Sound Mind posts shareable carousels (quote cards +
+  metaphor stories), modelled on @komal_reads / @myeasytherapy after a Business Discovery read of four accounts showed
+  their images and carousels beat reels, and Sound Mind's reels got 0 shares. Made in `soundmind/` (vanilla JS +
+  headless Edge, like the reels), queued with `queue:add`; Shivani judges finished posts, not drafts. Runbook:
+  `soundmind/brand.md`.
+
 - **Instagram DMs in GoPost (2026-10-19, founder-approved).** Pull DMs into an owner-only **Inbox** to read,
   reply, mark leads, count them, and mine what students ask. This reverses the 2026-10-15 "no messaging
   permissions" choice, with safeguards: only `owner` logins read messages (RLS, not editors or staff), nobody
@@ -128,6 +134,12 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   tools/                 #   headless-Edge scripts: frames, record, cover, check-video, unchanged (+ baseline.txt)
   assets/                #   V mascot poses (copied from Question_Bank/public/chat)
   *.post.json            #   one per piece: manifest for publisher's `queue:add` (files + captions)
+soundmind/               # @soundmindwithshivani carousels (outside brand). Runbook + research: brand.md
+  cards.js               #   pure rules: batch validation, health-claim check, font sizes, GoPost manifest
+  art.js                 #   line-drawing catalogue for story slides
+  card.html, render.mjs  #   one template; render.mjs → 1080×1350 JPEGs + <slug>.post.json per post
+  <year>-w<week>/        #   batch.json (committed) + rendered slides (gitignored)
+tests/soundmind-cards.test.js # node --test
 remotion/                # TRIAL: reels in Remotion (React + SVG, frame-by-frame render, Edge). `npm test`,
                          #   `npm run typecheck`, `npm run audio` (soundtrack from the engine MP4), `npm run render`,
                          #   `npm run compare:files && npm run compare` (old vs new side by side) → out/
