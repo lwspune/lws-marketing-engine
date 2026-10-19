@@ -167,6 +167,27 @@ ranked problems in students' words → `../analytics/dm-themes-<date>.md`. Perso
 @handles, numbers, emails, links) are removed before anything is sent to Claude. Needs
 `ANTHROPIC_API_KEY` in `.env.local`; without it you get the redacted questions to paste yourself.
 
+## 9. WhatsApp in the Inbox (owners only, ~15 min)
+
+Messages to a **WhatsApp API number** in your business portfolio land in the same Inbox (first: +91 76206 99213, which
+WABridge also uses for the attendance messages). GoPost listens **alongside** WABridge: nothing is moved or
+re-registered, and WABridge keeps sending. GoPost sees what people send in (with their WhatsApp name, and the ad id when a
+chat starts from a Click-to-WhatsApp ad), not WABridge's outgoing messages. Replies from GoPost work within 24 hours of
+their last message; after that WhatsApp allows only approved templates (not in GoPost yet). WhatsApp keeps no history,
+so the Inbox starts the day you connect.
+
+1. App dashboard → **Add use cases → Connect on WhatsApp** → Permissions: add **`whatsapp_business_management`** and
+   **`whatsapp_business_messaging`**. Do **not** use API Setup → "Add phone number" (that would re-register the number
+   to this app) or Tech Provider onboarding.
+2. Same use case → **Configuration** → webhook: the same callback URL and verify token as step 8 → subscribe **messages**.
+3. Business Settings → **Accounts → WhatsApp accounts** → the number → **Assign people** → **Digi Publisher** (the
+   system user) → Full control.
+4. Business Settings → **System users → Digi Publisher → Generate token**: app Digital Marketing Automation,
+   `whatsapp_business_management, whatsapp_business_messaging, business_management`, expiry **Never**.
+5. `npm run connect:whatsapp -- --org=lws-pune --number=7620699213` and paste the token into the terminal. It ends with
+   "✓ Inbox: WhatsApp messages to this number will reach GoPost". Send the number a WhatsApp from another phone: it
+   appears in the Inbox under the "WhatsApp +91 …" chip.
+
 ## Adding another Facebook Page later
 
 The app is granted **current Pages only** (by choice, so a new Page never gets connected by

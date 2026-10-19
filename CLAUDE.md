@@ -100,8 +100,9 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   reply, mark leads, count them, and mine what students ask. This reverses the 2026-10-15 "no messaging
   permissions" choice, with safeguards: only `owner` logins read messages (RLS, not editors or staff), nobody
   signed in writes them (webhook → service role), text deleted after 12 months, no attachment URLs or raw
-  payloads, personal details redacted before the themes report goes to Claude. WhatsApp comes next through the
-  same tables (`channel`), once the Cloud API "coexistence" route for 7020003600 is confirmed.
+  payloads, personal details redacted before the themes report goes to Claude. WhatsApp uses the same tables
+  (`channel`): first the API number 7620699213 that WABridge already uses (no coexistence needed), with GoPost
+  listening alongside WABridge rather than taking the number over.
 
 ## File structure
 
@@ -188,7 +189,12 @@ readable by **owners only** (`private.is_org_owner`). `/inbox` lists chats (Need
 replies via `me/messages` (24-hour window, `canReply`) and sets the lead status (`set_conversation_status`). Insights
 shows "Messages this week" to owners. Nightly pg_cron `messages-retention` deletes text older than 12 months.
 `npm run messages:backfill -- --accounts=@lws.pune,…` (old chats, ~20 messages each; only named accounts), `npm run messages:themes` (redacted → Claude →
-`../analytics/dm-themes-<date>.md`). Needs `instagram_manage_messages` + `pages_manage_metadata` + `pages_messaging`
+`../analytics/dm-themes-<date>.md`). **WhatsApp (0013, founder 2026-10-19):** connected account platform `whatsapp`
+(external_id = Meta phone number id, token = Digi Publisher system user token) via `npm run connect:whatsapp`, which
+subscribes this app to the WhatsApp account alongside WABridge (attendance messages keep flowing; GoPost sees only what
+people send in). Same webhook address (`parseWhatsAppWebhook`), sender names arrive with the message, Click-to-WhatsApp
+ad ids are kept, replies via `/{phone-number-id}/messages` (JSON, 24-hour window). SETUP.md step 9. First number: +91
+76206 99213 (ads still point to +91 91563 10546, outside the portfolio, so their chats don't reach GoPost yet). Needs `instagram_manage_messages` + `pages_manage_metadata` + `pages_messaging`
 (Meta refuses the Page subscription without it before Advanced Access) and the Page subscribed (`connect:meta` does
 it): SETUP.md step 8. Live since 2026-10-19 for @lws.pune and @pyqvault_ (Sound Mind not connected: needs Shivani's OK). Pure rules: `src/lib/domain/inbox.ts`.
 **Note:** `TEST_DATABASE_URL` is the same database as `DATABASE_URL` (tests roll back), so
