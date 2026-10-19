@@ -189,6 +189,43 @@ so the Inbox starts the day you connect.
    "✓ Inbox: WhatsApp messages to this number will reach GoPost". Send the number a WhatsApp from another phone: it
    appears in the Inbox under the "WhatsApp +91 …" chip.
 
+## 10. A WhatsApp Business app number in the Inbox (owners only)
+
+For a number that runs on the **WhatsApp Business app on a phone** (first: +91 70200 03600). Meta's "coexistence"
+keeps it working on the phone and also sends its chats to GoPost, including what the team sends from the phone and,
+once, up to about 6 months of old chats. GoPost never registers the number (that would move it off the phone).
+
+What changes on the phone: broadcast lists become read-only, disappearing / view-once messages and live location
+are switched off in one-to-one chats, group chats don't come to GoPost, linked devices are unlinked (re-link them
+afterwards; **WhatsApp for Windows can't be re-linked**), and the app must be opened at least every 14 days or the
+connection stops. Needs WhatsApp Business app 2.24.17 or newer.
+
+1. **Tech Provider (once, Meta-side).** Meta allows this route only for Tech Providers. The business portfolio is
+   already verified (checked 2026-10-19), so what's left is **App Review**: Advanced Access to
+   `whatsapp_business_messaging` and `whatsapp_business_management`, with two screen recordings (a message sent from
+   the app and received in WhatsApp; a message template created in WhatsApp Manager). Try steps 2–5 first: Meta may
+   let the app's own admin connect the portfolio's own number before the review.
+2. App dashboard → **Facebook Login for Business → Settings**: switch on Client OAuth login, Web OAuth login,
+   Enforce HTTPS, Embedded Browser OAuth Login, strict mode for redirect URIs and Login with the JavaScript SDK. Add
+   `https://gopostapp.vercel.app/` to **Allowed domains** and **Valid OAuth redirect URIs**.
+3. **Facebook Login for Business → Configurations → Create** from the WhatsApp Embedded Signup template (token that
+   never expires). Copy its **configuration id** into Vercel as `META_WA_SIGNUP_CONFIG_ID` (Production) and redeploy.
+4. **WhatsApp → Configuration → Webhook fields**: subscribe **history**, **smb_message_echoes** and
+   **account_update** (alongside **messages** from step 9). `smb_app_state_sync` (the phone's address book) is left
+   off on purpose: GoPost doesn't need it.
+5. Open the Inbox → **Connect a WhatsApp Business app number** → **Connect with Meta**. In Meta's window choose
+   **connect your existing WhatsApp Business app**, pick 70200 03600, scan the QR code with the phone (keep the app
+   open) and allow sharing chat history. GoPost then saves the number, subscribes to it and asks for the old chats
+   straight away (Meta allows that once, within 24 hours). It ends with "Connected: WhatsApp +91 70200 03600".
+6. Check: send the number a WhatsApp from another phone (it appears under its chip), then reply from the phone app
+   (it appears in GoPost as "You: …").
+7. **Office PC:** 70200 03600 was used in WhatsApp for Windows (founder, 2026-10-19), which can't be re-linked. Open
+   **web.whatsapp.com** in Edge, scan its QR code with the phone, and install it as an app (Edge ⋯ → Apps → Install
+   this site as an app). Replies sent from WhatsApp Web reach GoPost; ones from the Windows app wouldn't.
+
+If the window doesn't offer the WhatsApp Business app option, Meta has changed how the route is picked:
+`SIGNUP_EXTRAS` in `src/components/WhatsAppConnectBox.tsx` is the one place to update.
+
 ## Adding another Facebook Page later
 
 The app is granted **current Pages only** (by choice, so a new Page never gets connected by

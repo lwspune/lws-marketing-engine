@@ -213,6 +213,13 @@ it): SETUP.md step 8. Live since 2026-10-19 for @lws.pune and @pyqvault_ (Sound 
 message is from an ad (Meta's ad mark, or one of Meta's ready-made ad questions, `adStarts`) gets the account's saved
 reply once (`src/lib/inbox/autoReply.ts`). `claim_auto_reply` (service role) is the gate: switched on, never claimed,
 nobody has replied yet; a failed send calls `release_auto_reply`. Owners set text + on/off in the Inbox box (`set_auto_reply`).
+**WhatsApp Business app numbers (founder 2026-10-19, first: +91 70200 03600):** Meta "coexistence": the number stays on
+the phone app and also reaches GoPost. Inbox → "Connect a WhatsApp Business app number" opens Meta's Embedded Signup
+(`WhatsAppConnectBox`, env `META_WA_SIGNUP_CONFIG_ID`) → `connectWhatsAppBusinessApp` (owners) → `connectBusinessAppNumber`:
+swap the 30-s code, save the number (platform `whatsapp`, business token in Vault), subscribe, request history once
+(Meta allows it only within 24 h). Never call `/register` on such a number (it would leave the phone). The webhook also
+reads `smb_message_echoes` (sent from the phone → `out`) and `history` (old chats). No migration. Meta requires Tech
+Provider status (App Review; the portfolio is verified): SETUP.md step 10.
 **Note:** `TEST_DATABASE_URL` is the same database as `DATABASE_URL` (tests roll back), so
 `db:migrate` changes the live schema; dry-run a new migration in a rolled-back transaction first.
 **Address and name (2026-10-19, founder):** the app is **GoPost** at **https://gopostapp.vercel.app** (no "LWS":
