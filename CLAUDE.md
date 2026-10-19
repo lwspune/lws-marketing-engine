@@ -209,6 +209,10 @@ ad ids are kept, replies via `/{phone-number-id}/messages` (JSON, 24-hour window
 76206 99213 (ads still point to +91 91563 10546, outside the portfolio, so their chats don't reach GoPost yet). Needs `instagram_manage_messages` + `pages_manage_metadata` + `pages_messaging`
 (Meta refuses the Page subscription without it before Advanced Access) and the Page subscribed (`connect:meta` does
 it): SETUP.md step 8. Live since 2026-10-19 for @lws.pune and @pyqvault_ (Sound Mind not connected: needs Shivani's OK). Pure rules: `src/lib/domain/inbox.ts`.
+**Auto-reply to ad chats (0014, founder 2026-10-19):** Instagram only. After the webhook stores a delivery, anyone whose
+message is from an ad (Meta's ad mark, or one of Meta's ready-made ad questions, `adStarts`) gets the account's saved
+reply once (`src/lib/inbox/autoReply.ts`). `claim_auto_reply` (service role) is the gate: switched on, never claimed,
+nobody has replied yet; a failed send calls `release_auto_reply`. Owners set text + on/off in the Inbox box (`set_auto_reply`).
 **Note:** `TEST_DATABASE_URL` is the same database as `DATABASE_URL` (tests roll back), so
 `db:migrate` changes the live schema; dry-run a new migration in a rolled-back transaction first.
 **Address and name (2026-10-19, founder):** the app is **GoPost** at **https://gopostapp.vercel.app** (no "LWS":
