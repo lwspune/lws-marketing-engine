@@ -96,6 +96,13 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   Shivani" (owned by her "Sound Mind" business portfolio) shared with the LWS Facebook login, which she can
   revoke at any time. The marketing engine's profiles and house reel styles don't cover this brand.
 
+- **Instagram DMs in GoPost (2026-10-19, founder-approved).** Pull DMs into an owner-only **Inbox** to read,
+  reply, mark leads, count them, and mine what students ask. This reverses the 2026-10-15 "no messaging
+  permissions" choice, with safeguards: only `owner` logins read messages (RLS, not editors or staff), nobody
+  signed in writes them (webhook → service role), text deleted after 12 months, no attachment URLs or raw
+  payloads, personal details redacted before the themes report goes to Claude. WhatsApp comes next through the
+  same tables (`channel`), once the Cloud API "coexistence" route for 7020003600 is confirmed.
+
 ## File structure
 
 ```
@@ -174,6 +181,15 @@ channels, accounts, reels, media), never ads; owners/editors see the whole org. 
 (tests/db/staff.test.ts). Add one with `npm run staff:add -- --org=lws-pune --email=… --projects=<slug>` (asks for
 the password). First staff: connect.with.soundmind@gmail.com → `soundmind-shivani`. Slugs never
 change: manifests and the story planner name projects by slug.
+**Inbox (0012, founder 2026-10-19):** Instagram DMs reach `/api/webhooks/meta` (signed with `META_APP_SECRET`,
+checked by `verifyMetaSignature`; GET answers Meta's check with `META_WEBHOOK_VERIFY_TOKEN`; not behind sign-in) →
+`ingest_messages` (service role; dedupes on Meta's message id, deletes unsent ones) → `conversations` + `messages`,
+readable by **owners only** (`private.is_org_owner`). `/inbox` lists chats (Needs reply / Leads / All), `/inbox/[id]`
+replies via `me/messages` (24-hour window, `canReply`) and sets the lead status (`set_conversation_status`). Insights
+shows "Messages this week" to owners. Nightly pg_cron `messages-retention` deletes text older than 12 months.
+`npm run messages:backfill` (old chats, ~20 messages each), `npm run messages:themes` (redacted → Claude →
+`../analytics/dm-themes-<date>.md`). Needs `instagram_manage_messages` + `pages_manage_metadata` and the Page
+subscribed (`connect:meta` does it): SETUP.md step 8. Pure rules: `src/lib/domain/inbox.ts`.
 **Note:** `TEST_DATABASE_URL` is the same database as `DATABASE_URL` (tests roll back), so
 `db:migrate` changes the live schema; dry-run a new migration in a rolled-back transaction first.
 **Address and name (2026-10-19, founder):** the app is **GoPost** at **https://gopostapp.vercel.app** (no "LWS":

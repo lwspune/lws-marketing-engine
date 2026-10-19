@@ -46,8 +46,9 @@ back), run `npm run db:migrate -- --test`, then `npm test`.
 1. Push this repo to GitHub, then vercel.com → Add New Project → import it → **Root Directory:
    `publisher`**.
 2. Environment variables: everything from `.env.local` **except** `DATABASE_URL`,
-   `TEST_DATABASE_URL`, `META_APP_SECRET` (scripts only). Generate `CRON_SECRET` as a long random
-   string.
+   `TEST_DATABASE_URL`. Generate `CRON_SECRET` as a long random string. `META_APP_SECRET` and
+   `META_WEBHOOK_VERIFY_TOKEN` are needed there since the Inbox (step 8): Meta's DM webhook is checked
+   against them.
 3. Deploy, then set Supabase's Site URL (step 1.3) to the Vercel URL.
 
 ## 5. Turn on the scheduler (SQL editor in Supabase)
@@ -131,6 +132,38 @@ AI changes off (poster and text run exactly as written; `music` is the only opti
 Multi-advertiser ads off. Under-18 audiences are fine: Meta only allows age + location for them,
 which is all this uses.
 
+## 8. Inbox: Instagram DMs (owners only, ~20 min)
+
+DMs land in GoPost's **Inbox** tab: read, reply (within Instagram's 24-hour window), mark each chat
+New / Interested / Booked / Bought / Not a lead. Only **owner** logins see it: not editors, not staff.
+Message text is deleted after 12 months; the lead counts stay. Get the brand owner's OK before
+connecting an outside brand's account (e.g. Sound Mind).
+
+1. Generate a verify token (any long random string) and put it in `.env.local` and on Vercel as
+   `META_WEBHOOK_VERIFY_TOKEN`; put `META_APP_SECRET` on Vercel too. Redeploy.
+2. App dashboard → use cases → Instagram → add the permission **`instagram_manage_messages`**, plus
+   **`pages_manage_metadata`**.
+3. App dashboard → **Webhooks** → product **Instagram** → callback URL
+   `https://gopostapp.vercel.app/api/webhooks/meta`, verify token from step 1 → **Verify and save** →
+   subscribe to the **messages** field.
+4. Graph API Explorer → same token as step 3 above **plus** `instagram_manage_messages,
+   pages_manage_metadata` → run `npm run connect:meta -- --org=lws-pune --page="LWS Pune"
+   --projects=pyq-vault,lws-coaching` (and again per Page). It says "✓ Inbox: new Instagram DMs will
+   reach GoPost".
+5. On the phone, each Instagram account: **Settings → Messages and story replies → Message controls →
+   Connected tools → Allow access to messages** (on).
+6. `npm run messages:backfill -- --org=lws-pune` pulls in recent existing chats (about the last 20
+   messages of each). Send the account a test DM from another profile: it appears in the Inbox.
+
+Meta may ask for App Review of `instagram_manage_messages` before DMs from the public arrive (only
+people with a role on the app would get through until then). The review wants a screen recording
+of the Inbox: open a chat, reply, set a status.
+
+**Monthly:** `npm run messages:themes -- --org=lws-pune` groups the last 30 days of questions into
+ranked problems in students' words → `../analytics/dm-themes-<date>.md`. Personal details (names,
+@handles, numbers, emails, links) are removed before anything is sent to Claude. Needs
+`ANTHROPIC_API_KEY` in `.env.local`; without it you get the redacted questions to paste yourself.
+
 ## Adding another Facebook Page later
 
 The app is granted **current Pages only** (by choice, so a new Page never gets connected by
@@ -153,6 +186,8 @@ accident). For each new Page:
 - **Insights tab:** every reel on the account (including hand-posted ones) with ▲/▼ against your
   typical reel; refreshes nightly at 3 am IST, or tap **Refresh now**. `npm run insights --
   --org=lws-pune` does the same refresh and also writes `../analytics/lwspune-reels-<date>.csv`.
+- **Inbox** (owners): "Needs reply" lists chats waiting on you; the Insights tab's **Messages this
+  week** box counts new chats, chats from ads, leads and bookings from the statuses you set.
 - Tokens: the Page token doesn't expire, but it stops working if you change your Facebook password
   or remove the app. Run `connect:meta` again to reconnect.
 - **Ads:** the Insights tab's **Ads** box shows each campaign's last 30 days: spend, WhatsApp chats,
