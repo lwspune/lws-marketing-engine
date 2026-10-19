@@ -187,7 +187,7 @@ checked by `verifyMetaSignature`; GET answers Meta's check with `META_WEBHOOK_VE
 readable by **owners only** (`private.is_org_owner`). `/inbox` lists chats (Needs reply / Leads / All), `/inbox/[id]`
 replies via `me/messages` (24-hour window, `canReply`) and sets the lead status (`set_conversation_status`). Insights
 shows "Messages this week" to owners. Nightly pg_cron `messages-retention` deletes text older than 12 months.
-`npm run messages:backfill` (old chats, ~20 messages each), `npm run messages:themes` (redacted → Claude →
+`npm run messages:backfill -- --accounts=@lws.pune,…` (old chats, ~20 messages each; only named accounts), `npm run messages:themes` (redacted → Claude →
 `../analytics/dm-themes-<date>.md`). Needs `instagram_manage_messages` + `pages_manage_metadata` + `pages_messaging`
 (Meta refuses the Page subscription without it before Advanced Access) and the Page subscribed (`connect:meta` does
 it): SETUP.md step 8. Live since 2026-10-19 for @lws.pune and @pyqvault_ (Sound Mind not connected: needs Shivani's OK). Pure rules: `src/lib/domain/inbox.ts`.

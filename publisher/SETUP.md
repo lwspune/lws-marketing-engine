@@ -155,7 +155,7 @@ connecting an outside brand's account (e.g. Sound Mind).
    reach GoPost".
 5. On the phone, each Instagram account: **Settings → Messages and story replies → Message controls →
    Connected tools → Allow access to messages** (on).
-6. `npm run messages:backfill -- --org=lws-pune` pulls in recent existing chats (about the last 20
+6. `npm run messages:backfill -- --org=lws-pune --accounts=@lws.pune,@pyqvault_` pulls in recent existing chats (about the last 20
    messages of each). Send the account a test DM from another profile: it appears in the Inbox.
 
 Meta may ask for App Review of `instagram_manage_messages` before DMs from the public arrive (only
