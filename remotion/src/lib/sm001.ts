@@ -4,11 +4,13 @@
 // reel (@silvabydebalina, studied 2026-10-19): message on screen at frame 0 → first wave → close-up → second wave
 // with a second line → the cloud leaves, the sun comes out, ME smiles. Pure functions of t (seconds), 1080×1920.
 import { clamp01, ease } from './motion.ts';
+import { textAlpha as textAlphaFor, zoomAt as zoomFor, LABEL_H, labelWidth, SCREEN_W, MARGIN, type TextItem } from './meStory.ts';
+
+export { SAFE, TEXT_BOXES, LABEL_H, labelWidth, type TextItem } from './meStory.ts';
 
 export const DURATION = 26;
 export const MUSIC = { style: 'calm' as const, chime: 22.8 };
 
-export type TextItem = { text: string; t0: number; t1: number };
 export const HOOK: TextItem = { text: 'Not everything that falls on you is yours to carry.', t0: 0, t1: 11 };
 export const LINE2: TextItem = { text: 'Stay under your umbrella. Let the rest roll off.', t0: 15.8, t1: DURATION };
 export const ZOOM = { t0: 11, t1: 15.5, peak: 1.35 };
@@ -19,18 +21,6 @@ export const ME = { x: 510, headY: 1120, r: 64 };
 export const GROUND_Y = 1330;
 export const CLOUD_Y = 590;
 const SPAWN_Y = 650;
-
-// Instagram draws its buttons on the right and the caption at the bottom: text stays inside this band.
-export const SAFE = { top: 220, bottom: 1600, left: 60, right: 960 };
-export const TEXT_BOXES = [
-  { id: 'hook', x: 100, y: 230, w: 840, h: 260 },
-  { id: 'line2', x: 100, y: 1380, w: 840, h: 170 },
-  { id: 'handle', x: 290, y: 1560, w: 500, h: 36 },
-];
-
-// Word-drops: rounded labels in Kalam 34 px capitals (readable on a phone).
-export const LABEL_H = 72;
-export const labelWidth = (label: string) => Math.round(label.length * 19.5 + 48);
 
 export type Drop = { label: string; x: number; t0: number };
 const wave = (labels: string[], offsets: number[], start: number, gap: number): Drop[] =>
@@ -52,7 +42,7 @@ function slope(x: number) {
   return (ry * u) / (rx * Math.sqrt(1 - u * u));
 }
 
-const G_FALL = 900, G_DROP = 2400, SLIDE = 0.9, REST = 0.4, FADE = 0.7, DRIFT = 80, SCREEN_W = 1080, MARGIN = 20;
+const G_FALL = 900, G_DROP = 2400, SLIDE = 0.9, REST = 0.4, FADE = 0.7, DRIFT = 80;
 export type DropState = { x: number; y: number; rot: number; alpha: number; phase: 'wait' | 'fall' | 'slide' | 'drop' | 'gone' };
 
 export function dropAt(d: Drop, t: number): DropState {
@@ -85,19 +75,8 @@ export function dropAt(d: Drop, t: number): DropState {
   return { x: landX, y: y1, rot: 0, alpha: 0, phase: 'gone' };
 }
 
-/** Text opacity: the hook is fully there on frame 0; others fade in over 0.3 s; all fade out over their last 0.4 s. */
-export function textAlpha(item: TextItem, t: number) {
-  if (t < item.t0 || t > item.t1) return 0;
-  const fadeIn = item.t0 === 0 ? 1 : clamp01((t - item.t0) / 0.3);
-  return Math.min(fadeIn, item.t1 >= DURATION ? 1 : clamp01((item.t1 - t) / 0.4));
-}
-
-/** Close-up on ME: a slow push in and back out. */
-export function zoomAt(t: number) {
-  const mid = (ZOOM.t0 + ZOOM.t1) / 2;
-  if (t <= ZOOM.t0 || t >= ZOOM.t1) return 1;
-  return t < mid ? 1 + (ZOOM.peak - 1) * ease((t - ZOOM.t0) / (mid - ZOOM.t0)) : ZOOM.peak - (ZOOM.peak - 1) * ease((t - mid) / (ZOOM.t1 - mid));
-}
+export const textAlpha = (item: TextItem, t: number) => textAlphaFor(item, t, DURATION);
+export const zoomAt = (t: number) => zoomFor(t, ZOOM);
 
 export const sunAt = (t: number) => ease(clamp01((t - 22.5) / 2.7));
 export const smileAt = (t: number) => ease(clamp01((t - 23.2) / 1.2));
