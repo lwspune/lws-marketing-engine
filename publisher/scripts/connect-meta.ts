@@ -5,6 +5,8 @@
 // Permissions on the token: pages_show_list, pages_read_engagement, pages_manage_posts,
 // instagram_basic, instagram_content_publish, business_management, and the read-only statistics
 // pair instagram_manage_insights + read_insights. Re-running only refreshes the stored tokens.
+// For the Inbox (owners only, migration 0012) also grant instagram_manage_messages + pages_manage_metadata:
+// the script then subscribes the Page to the app's webhooks so new DMs reach /api/webhooks/meta.
 //
 // It asks for a short-lived USER token from Graph API Explorer (never pass tokens on the command
 // line; they end up in shell history), swaps it for a long-lived one, then reads the Page's own
@@ -73,6 +75,20 @@ run(async () => {
     console.log(`✓ Instagram ${ig.username ? `@${ig.username}` : ig.id} connected`);
   } else {
     console.log("! This Page has no linked Instagram professional account; only Facebook was connected.");
+  }
+
+  // Inbox: only when the messaging permission was granted (otherwise DMs stay out of GoPost).
+  const perms = (await graph("me/permissions", { access_token: userToken })).data as { permission: string; status: string }[];
+  const granted = (name: string) => perms?.some((p) => p.permission === name && p.status === "granted");
+  if (ig && granted("instagram_manage_messages") && granted("pages_manage_metadata")) {
+    const res = await fetch(`${GRAPH}/${page.id}/subscribed_apps`, {
+      method: "POST", body: new URLSearchParams({ subscribed_fields: "messages", access_token: page.access_token }),
+    });
+    const json = (await res.json()) as { success?: boolean; error?: { message?: string } };
+    if (!res.ok || !json.success) console.log(`! Couldn't subscribe the Page to DMs: ${json.error?.message ?? res.statusText}`);
+    else console.log("✓ Inbox: new Instagram DMs will reach GoPost (run npm run messages:backfill for old ones)");
+  } else if (ig) {
+    console.log("· Inbox off: grant instagram_manage_messages + pages_manage_metadata to pull DMs (SETUP.md → Inbox)");
   }
 
   for (const slug of projectSlugs) {

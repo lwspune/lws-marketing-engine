@@ -18,7 +18,9 @@
     "queue:add": "tsx scripts/queue-add.ts",
     "ads:add": "tsx scripts/ads-add.ts",
     "insights": "tsx scripts/insights.ts",
-    "stories:plan": "tsx scripts/stories-plan.ts"
+    "stories:plan": "tsx scripts/stories-plan.ts",
+    "messages:backfill": "tsx scripts/messages-backfill.ts",
+    "messages:themes": "tsx scripts/messages-themes.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
