@@ -24,6 +24,10 @@ import { DURATION as DURATION_PC004 } from './lib/pc004.ts';
 import { DURATION as DURATION_PM003 } from './lib/pm003.ts';
 import { SoundMind001 } from './SoundMind001.tsx';
 import { DURATION as DURATION_SM001 } from './lib/sm001.ts';
+import { SoundMind002 } from './SoundMind002.tsx';
+import { DURATION as DURATION_SM002 } from './lib/sm002.ts';
+import { SoundMind003 } from './SoundMind003.tsx';
+import { DURATION as DURATION_SM003 } from './lib/sm003.ts';
 
 export const Root = () => (
   <>
@@ -52,5 +56,9 @@ export const Root = () => (
     <Still id="PvMaths003Cover" component={PvMaths003} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="SoundMind001" component={SoundMind001} durationInFrames={Math.round(DURATION_SM001 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="SoundMind001Cover" component={SoundMind001} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="SoundMind002" component={SoundMind002} durationInFrames={Math.round(DURATION_SM002 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="SoundMind002Cover" component={SoundMind002} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="SoundMind003" component={SoundMind003} durationInFrames={Math.round(DURATION_SM003 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="SoundMind003Cover" component={SoundMind003} width={1080} height={1920} defaultProps={{ cover: true }} />
   </>
 );
