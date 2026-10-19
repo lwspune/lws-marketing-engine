@@ -6,6 +6,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { canReply, checkAutoReplyText, LEAD_STATUSES, MAX_REPLY } from "@/lib/domain/inbox";
 import { ingestRows } from "@/lib/inbox/store";
+import { connectBusinessAppNumber, type HistoryState } from "@/lib/inbox/connectWhatsApp";
 import { MetaApiError, metaConfigFromEnv } from "@/lib/platforms/meta";
 import { sendInstagramText, sendWhatsAppText } from "@/lib/platforms/metaMessages";
 import { fail, fromRpcError, ok, type Result } from "@/lib/publishing/result";
@@ -89,4 +90,38 @@ export async function setLeadStatus(input: { conversationId: string; status: str
   revalidatePath("/inbox");
   revalidatePath("/insights");
   return ok(null);
+}
+
+/**
+ * Finish connecting a WhatsApp Business app number after Meta's Embedded Signup window (owners only). The number
+ * stays on the phone app; GoPost gets its messages too. See src/lib/inbox/connectWhatsApp.ts.
+ */
+export async function connectWhatsAppBusinessApp(
+  input: { code: string; wabaId: string | null; phoneNumberId: string | null },
+): Promise<Result<{ number: string; history: HistoryState }>> {
+  const id = z.string().regex(/^\d{1,30}$/).nullable();
+  const parsed = z.object({ code: z.string().min(10).max(2000), wabaId: id, phoneNumberId: id }).safeParse(input);
+  if (!parsed.success) return fail("invalid_input", "Meta's window didn't return a usable code. Please try again.");
+  const supabase = createSupabaseServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return fail("unauthorized", "Please sign in again.");
+  // RLS returns the user's own memberships; only an owner may connect a number.
+  const { data: owned } = await supabase.from("org_members").select("org_id").eq("user_id", user.id).eq("role", "owner");
+  if (!owned?.length) return fail("forbidden", "Only owners can connect a WhatsApp number.");
+  if (owned.length > 1) return fail("invalid_input", "You own more than one organisation; connect the number with the script instead.");
+  const appId = process.env.META_APP_ID, appSecret = process.env.META_APP_SECRET;
+  if (!appId || !appSecret) return fail("not_configured", "META_APP_ID and META_APP_SECRET aren't set on the server.");
+
+  const admin = createSupabaseAdminClient();
+  const r = await connectBusinessAppNumber(parsed.data, {
+    cfg: metaConfigFromEnv(), appId, appSecret,
+    save: async (n, token) => {
+      const { error } = await admin.rpc("upsert_connected_account", {
+        p_org: owned[0].org_id, p_platform: "whatsapp", p_external_id: n.phoneNumberId, p_display_name: n.displayPhoneNumber, p_token: token, p_expires_at: null,
+      });
+      if (error) throw new Error(`upsert_connected_account: ${error.message}`);
+    },
+  });
+  if (r.ok) revalidatePath("/inbox");
+  return r;
 }

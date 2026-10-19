@@ -1,5 +1,5 @@
 import { attachmentType, MAX_BODY, type InboxRow } from "@/lib/domain/inbox";
-import { graphUrl, metaCall, type MetaConfig } from "./meta";
+import { graphUrl, MetaApiError, metaCall, type MetaConfig } from "./meta";
 
 // Instagram messaging with the stored Page token (instagram_manage_messages). With a Page token, /me is the Page.
 // WhatsApp with a system user token (whatsapp_business_messaging / _management), addressed by phone number id.
@@ -83,8 +83,30 @@ export async function sendWhatsAppText(
 }
 
 export interface WhatsAppNumber { wabaId: string; phoneNumberId: string; displayPhoneNumber: string; verifiedName: string }
+/** `onPhoneApp`: the number is also on the WhatsApp Business app ("coexistence"), not only on the Cloud API. */
+export interface WabaNumber extends WhatsAppNumber { onPhoneApp: boolean }
 
 const last10 = (s: string) => s.replace(/\D/g, "").slice(-10);
+
+/** The WhatsApp accounts a token was granted (debug_token's target ids); a system user token lists none. */
+export async function tokenWabaIds(cfg: MetaConfig, input: { token: string; appToken: string }): Promise<string[]> {
+  const debug = (await metaCall(graphUrl(cfg, "debug_token"), {
+    method: "GET", params: { input_token: input.token, access_token: input.appToken }, token: input.token,
+  })) as { data?: { granular_scopes?: { scope: string; target_ids?: string[] }[] } };
+  const whatsappScopes = (debug.data?.granular_scopes ?? []).filter((g) => g.scope.startsWith("whatsapp_business_"));
+  if (!whatsappScopes.length) throw new Error("This token has no WhatsApp permissions. Tick whatsapp_business_management and whatsapp_business_messaging.");
+  return [...new Set(whatsappScopes.flatMap((g) => g.target_ids ?? []))];
+}
+
+/** One WhatsApp account's phone numbers. */
+export async function listWabaNumbers(cfg: MetaConfig, input: { token: string; wabaId: string }): Promise<WabaNumber[]> {
+  const list = (await metaCall(graphUrl(cfg, `${input.wabaId}/phone_numbers`), {
+    method: "GET", params: { fields: "id,display_phone_number,verified_name,is_on_biz_app", access_token: input.token }, token: input.token,
+  })) as { data?: { id: string; display_phone_number: string; verified_name?: string; is_on_biz_app?: boolean }[] };
+  return (list.data ?? []).map((n) => ({
+    wabaId: input.wabaId, phoneNumberId: n.id, displayPhoneNumber: n.display_phone_number, verifiedName: n.verified_name ?? "", onPhoneApp: n.is_on_biz_app === true,
+  }));
+}
 
 /**
  * Which WhatsApp account and phone number id a number is. Uses the accounts listed on the token; a system user token
@@ -93,12 +115,7 @@ const last10 = (s: string) => s.replace(/\D/g, "").slice(-10);
 export async function findWhatsAppNumber(
   cfg: MetaConfig, input: { token: string; appToken: string; number: string; businessId?: string },
 ): Promise<WhatsAppNumber> {
-  const debug = (await metaCall(graphUrl(cfg, "debug_token"), {
-    method: "GET", params: { input_token: input.token, access_token: input.appToken }, token: input.token,
-  })) as { data?: { granular_scopes?: { scope: string; target_ids?: string[] }[] } };
-  const whatsappScopes = (debug.data?.granular_scopes ?? []).filter((g) => g.scope.startsWith("whatsapp_business_"));
-  if (!whatsappScopes.length) throw new Error("This token has no WhatsApp permissions. Tick whatsapp_business_management and whatsapp_business_messaging.");
-  let wabaIds = [...new Set(whatsappScopes.flatMap((g) => g.target_ids ?? []))];
+  let wabaIds = await tokenWabaIds(cfg, input);
   if (!wabaIds.length) {
     if (!input.businessId) throw new Error("This token doesn't list its WhatsApp accounts (system users don't). Pass --business=<business portfolio id>.");
     for (const edge of ["owned_whatsapp_business_accounts", "client_whatsapp_business_accounts"]) {
@@ -111,17 +128,38 @@ export async function findWhatsAppNumber(
   }
   const seen: string[] = [];
   for (const wabaId of wabaIds) {
-    const list = (await metaCall(graphUrl(cfg, `${wabaId}/phone_numbers`), {
-      method: "GET", params: { fields: "id,display_phone_number,verified_name", access_token: input.token }, token: input.token,
-    })) as { data?: { id: string; display_phone_number: string; verified_name?: string }[] };
-    for (const n of list.data ?? []) {
-      seen.push(n.display_phone_number);
-      if (last10(n.display_phone_number) === last10(input.number)) {
-        return { wabaId, phoneNumberId: n.id, displayPhoneNumber: n.display_phone_number, verifiedName: n.verified_name ?? "" };
-      }
+    for (const { onPhoneApp: _, ...n } of await listWabaNumbers(cfg, { token: input.token, wabaId })) {
+      seen.push(n.displayPhoneNumber);
+      if (last10(n.displayPhoneNumber) === last10(input.number)) return n;
     }
   }
   throw new Error(`${input.number} isn't among the numbers this token can reach: ${seen.join(", ") || "none"}.`);
+}
+
+/** Embedded Signup hands our page a code (valid 30 seconds); swap it for the business token. */
+export async function exchangeSignupCode(cfg: MetaConfig, input: { appId: string; appSecret: string; code: string }): Promise<string> {
+  const res = await metaCall(graphUrl(cfg, "oauth/access_token"), {
+    method: "GET", params: { client_id: input.appId, client_secret: input.appSecret, code: input.code }, token: input.appSecret,
+  });
+  if (typeof res.access_token !== "string" || !res.access_token) throw new Error("Meta didn't return a token for the sign-up code.");
+  return res.access_token;
+}
+
+/**
+ * Ask Meta to copy a WhatsApp Business app number's old chats (up to about 6 months) to our webhook as `history`
+ * deliveries. Allowed once, within 24 hours of connecting. Returns Meta's request id, or null when it was
+ * already requested (code 135000).
+ */
+export async function requestWhatsAppHistory(cfg: MetaConfig, input: { token: string; phoneNumberId: string }): Promise<string | null> {
+  try {
+    const res = await metaCall(graphUrl(cfg, `${input.phoneNumberId}/smb_app_data`), {
+      method: "POST", token: input.token, json: { messaging_product: "whatsapp", sync_type: "history" },
+    });
+    return typeof res.request_id === "string" ? res.request_id : "";
+  } catch (e) {
+    if (e instanceof MetaApiError && /\(code 135000\)/.test(e.message)) return null;
+    throw e;
+  }
 }
 
 /** Ask Meta to send this app the WhatsApp account's webhooks too. Other apps (e.g. WABridge) keep theirs. */

@@ -4,6 +4,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { memberAccess } from "@/lib/supabase/access";
 import { Nav, PageHeader } from "@/components/Nav";
 import { AutoReplyBox } from "@/components/AutoReplyBox";
+import { WhatsAppConnectBox } from "@/components/WhatsAppConnectBox";
 import { attachmentLabel, contactLabel, LEAD_LABEL, MAX_REPLY, needsReply, type LeadStatus } from "@/lib/domain/inbox";
 import { pickInstagramAccount, type InstagramAccount } from "@/lib/domain/accounts";
 
@@ -122,6 +123,9 @@ export default async function InboxPage({ searchParams }: { searchParams: { acco
             })}
           </ul>
         )}
+
+        <WhatsAppConnectBox appId={process.env.META_APP_ID ?? ""} configId={process.env.META_WA_SIGNUP_CONFIG_ID ?? ""}
+          version={process.env.META_GRAPH_VERSION || "v24.0"} />
       </main>
     </>
   );

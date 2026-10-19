@@ -1,7 +1,8 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { startFakeMeta } from "../helpers/fakeMeta";
 import {
-  fetchInstagramConversations, fetchInstagramProfile, findWhatsAppNumber, sendInstagramText, sendWhatsAppText, subscribeAppToWaba,
+  exchangeSignupCode, fetchInstagramConversations, fetchInstagramProfile, findWhatsAppNumber, listWabaNumbers, requestWhatsAppHistory,
+  sendInstagramText, sendWhatsAppText, subscribeAppToWaba,
 } from "@/lib/platforms/metaMessages";
 import { MetaApiError } from "@/lib/platforms/meta";
 
@@ -120,5 +121,44 @@ describe("WhatsApp Cloud API", () => {
     await subscribeAppToWaba(fake.config, { token: "SYS", wabaId: "WABA1" });
     const call = fake.calls.find((c) => c.method === "POST" && c.path.endsWith("/WABA1/subscribed_apps"))!;
     expect(call.params.override_callback_uri).toBeUndefined();
+  });
+});
+
+// A WhatsApp Business app number joins the Cloud API through Meta's Embedded Signup ("coexistence"): the phone keeps working.
+describe("WhatsApp Business app number (Embedded Signup)", () => {
+  it("swaps the sign-up code for the business token, with the app's id and secret", async () => {
+    fake = await startFakeMeta();
+    expect(await exchangeSignupCode(fake.config, { appId: "APP", appSecret: "SECRET", code: "CODE1" })).toBe("BIZTOKEN-0123456789abcdef");
+    const call = fake.calls.find((c) => c.path.endsWith("/oauth/access_token"))!;
+    expect(call.method).toBe("GET");
+    expect(call.params).toMatchObject({ client_id: "APP", client_secret: "SECRET", code: "CODE1" });
+  });
+
+  it("says plainly when the code has expired (it lives 30 seconds), without the app secret", async () => {
+    fake = await startFakeMeta();
+    const err = await exchangeSignupCode(fake.config, { appId: "APP", appSecret: "SECRET-abcdef0123456789", code: "OLD" }).catch((e) => e);
+    expect(err).toBeInstanceOf(MetaApiError);
+    expect(err.message).toMatch(/expired/);
+    expect(err.message).not.toContain("SECRET-abcdef0123456789");
+  });
+
+  it("lists a WhatsApp account's numbers, marking the ones that are also on the phone app", async () => {
+    fake = await startFakeMeta();
+    expect(await listWabaNumbers(fake.config, { token: "BIZ", wabaId: "WABA2" })).toEqual([
+      { wabaId: "WABA2", phoneNumberId: "PN3", displayPhoneNumber: "+91 70200 03600", verifiedName: "LWS Pune", onPhoneApp: true },
+    ]);
+    expect((await listWabaNumbers(fake.config, { token: "SYS", wabaId: "WABA1" })).map((n) => n.onPhoneApp)).toEqual([false, false]);
+  });
+
+  it("asks Meta to copy the phone's chat history (once), returning Meta's request id", async () => {
+    fake = await startFakeMeta();
+    expect(await requestWhatsAppHistory(fake.config, { token: "BIZ", phoneNumberId: "PN3" })).toBe("REQ1");
+    const call = fake.calls.find((c) => c.method === "POST" && c.path.endsWith("/PN3/smb_app_data"))!;
+    expect(call.json).toEqual({ messaging_product: "whatsapp", sync_type: "history" });
+  });
+
+  it("treats 'history already requested' (code 135000) as done", async () => {
+    fake = await startFakeMeta({ failOn: { path: /\/PN3\/smb_app_data$/, status: 400, message: "Sync already requested", code: 135000 } });
+    expect(await requestWhatsAppHistory(fake.config, { token: "BIZ", phoneNumberId: "PN3" })).toBeNull();
   });
 });

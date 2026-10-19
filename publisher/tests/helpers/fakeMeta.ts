@@ -19,7 +19,7 @@ export interface FakeMetaOptions {
   /** Payload for GET /{fb-video-id}/video_insights. */
   fbInsights?: object;
   /** Force an error response for the first call whose path matches. */
-  failOn?: { path: RegExp; status: number; message: string; once?: boolean; userTitle?: string; userMsg?: string };
+  failOn?: { path: RegExp; status: number; message: string; once?: boolean; userTitle?: string; userMsg?: string; code?: number };
   /** Ad account act_1: its campaigns / ad sets / ads (GET lists) and daily insights rows, served in pages. */
   adLists?: { campaigns?: object[]; adsets?: object[]; ads?: object[] };
   adInsights?: object[];
@@ -29,6 +29,8 @@ export interface FakeMetaOptions {
   igConversationsPageSize?: number;
   /** debug_token without target_ids, as Meta returns for system user tokens. */
   debugTokenNoTargets?: boolean;
+  /** debug_token's WhatsApp account ids (default ["WABA1"]). */
+  debugTokenTargets?: string[];
 }
 
 export async function startFakeMeta(opts: FakeMetaOptions = {}) {
@@ -48,7 +50,7 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
     const f = opts.failOn;
     if (f && f.path.test(url.pathname) && !(f.once && failUsed)) {
       failUsed = true;
-      return send(f.status, { error: { message: f.message, type: "OAuthException", code: 190, fbtrace_id: "trace",
+      return send(f.status, { error: { message: f.message, type: "OAuthException", code: f.code ?? 190, fbtrace_id: "trace",
         ...(f.userTitle ? { error_user_title: f.userTitle } : {}), ...(f.userMsg ? { error_user_msg: f.userMsg } : {}) } });
     }
 
@@ -88,7 +90,7 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
       return send(200, { messaging_product: "whatsapp", contacts: [{ input: "x", wa_id: "x" }], messages: [{ id: "wamid.sent1" }] });
     }
     if (req.method === "GET" && /^\/v[\d.]+\/debug_token$/.test(p)) {
-      const targets = opts.debugTokenNoTargets ? {} : { target_ids: ["WABA1"] };
+      const targets = opts.debugTokenNoTargets ? {} : { target_ids: opts.debugTokenTargets ?? ["WABA1"] };
       return send(200, { data: { is_valid: true, granular_scopes: [
         { scope: "whatsapp_business_management", ...targets }, { scope: "whatsapp_business_messaging", ...targets },
         { scope: "business_management" }] } });
@@ -101,6 +103,16 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
         { id: "PN1", display_phone_number: "+91 76206 99213", verified_name: "LWS PUNE PRIVATE LIMITED" }] });
     }
     if (req.method === "POST" && /^\/v[\d.]+\/WABA1\/subscribed_apps$/.test(p)) return send(200, { success: true });
+    // --- WhatsApp Business app number joined through Embedded Signup (coexistence): WhatsApp account WABA2, number PN3
+    if (req.method === "GET" && /^\/v[\d.]+\/oauth\/access_token$/.test(p)) {
+      if (params.code !== "CODE1") return send(400, { error: { message: "This authorization code has expired.", code: 100 } });
+      return send(200, { access_token: "BIZTOKEN-0123456789abcdef", token_type: "bearer" });
+    }
+    if (req.method === "GET" && /^\/v[\d.]+\/WABA2\/phone_numbers$/.test(p)) {
+      return send(200, { data: [{ id: "PN3", display_phone_number: "+91 70200 03600", verified_name: "LWS Pune", is_on_biz_app: true, platform_type: "CLOUD_API" }] });
+    }
+    if (req.method === "POST" && /^\/v[\d.]+\/WABA2\/subscribed_apps$/.test(p)) return send(200, { success: true });
+    if (req.method === "POST" && /^\/v[\d.]+\/PN3\/smb_app_data$/.test(p)) return send(200, { messaging_product: "whatsapp", request_id: "REQ1" });
     // --- Facebook Page reels
     if (req.method === "POST" && /^\/v[\d.]+\/page1\/video_reels$/.test(p)) {
       if (params.upload_phase === "start") return send(200, { video_id: `v${id()}`, upload_url: "unused" });
