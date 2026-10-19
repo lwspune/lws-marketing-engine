@@ -6,6 +6,7 @@ import { Nav, PageHeader } from "@/components/Nav";
 import { ApproveStoriesButton } from "@/components/ApproveStoriesButton";
 import type { StoryQuiz } from "@/lib/domain/story";
 import { queueProjects } from "@/lib/domain/projects";
+import { newestFirst } from "@/lib/domain/queue";
 import type { Platform } from "@/lib/domain/types";
 import { nextSlot, slotsFor } from "@/lib/domain/slots";
 
@@ -33,7 +34,8 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
     .from("posts")
     .select("id, project_id, slug, kind, title, status, captions, video_path, cover_path, slide_paths, scheduled_at, planned_for, quiz, created_at, reject_reason, publications(id, platform, status, scheduled_at, attempts, permalink, error, published_at, publication_metrics(snapshot, views, reach, saves, shares, avg_watch_ms, error))")
     .in("status", statuses as unknown as string[])
-    .order("created_at", { ascending: false })
+    .order("created_at", { ascending: !newestFirst(tab) })
+    .order("slug", { ascending: !newestFirst(tab) })
     .limit(50);
   if (projectId) postsQuery = postsQuery.eq("project_id", projectId);
   const { data: posts } = await postsQuery;

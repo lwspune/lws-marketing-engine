@@ -8,6 +8,7 @@ import { compareToBaseline, LWS_BASELINE, type PostMetrics, type Verdict } from 
 import { PLATFORM_LABEL, type Captions, type Platform, type PostKind } from "@/lib/domain/types";
 import type { Result } from "@/lib/publishing/result";
 import type { StoryQuiz } from "@/lib/domain/story";
+import { SlideViewer } from "@/components/SlideViewer";
 
 export interface PostView {
   id: string; title: string; slug: string; kind: PostKind; status: string; captions: Captions;
@@ -87,7 +88,7 @@ export function PostCard({ post }: { post: PostView }) {
   return (
     <article className="card overflow-hidden" aria-labelledby={`t-${post.id}`}>
       <div className="flex flex-col gap-5 p-4 sm:flex-row sm:gap-6 sm:p-6">
-        <div className="mx-auto w-full max-w-[240px] shrink-0 sm:mx-0 sm:w-52">
+        <div className={`mx-auto w-full shrink-0 sm:mx-0 ${post.slideUrls.length ? "max-w-[360px] sm:w-72" : "max-w-[240px] sm:w-52"}`}>
           {story && post.coverUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={post.coverUrl} alt={`Story card: ${post.quiz?.title ?? post.title}`} className="aspect-[9/16] w-full rounded-xl border border-line object-cover" />
@@ -95,13 +96,7 @@ export function PostCard({ post }: { post: PostView }) {
             <video src={post.videoUrl} poster={post.coverUrl ?? undefined} controls preload="metadata" playsInline
               className="aspect-[9/16] w-full rounded-xl border border-line bg-black" aria-label={`Preview of ${post.title}`} />
           ) : post.slideUrls.length ? (
-            <div className="flex snap-x gap-2 overflow-x-auto" role="list" aria-label="Slides">
-              {post.slideUrls.map((u, i) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img key={u} src={u} alt={`Slide ${i + 1} of ${post.slideUrls.length}`} role="listitem"
-                  className="aspect-[4/5] w-40 shrink-0 snap-start rounded-xl border border-line object-cover sm:w-full" />
-              ))}
-            </div>
+            <SlideViewer urls={post.slideUrls} title={post.title} />
           ) : (
             <div className="flex aspect-[9/16] items-center justify-center rounded-xl border border-dashed border-line bg-bg text-xs text-muted">No preview</div>
           )}
