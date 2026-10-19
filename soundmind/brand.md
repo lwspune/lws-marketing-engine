@@ -40,11 +40,21 @@ peace" reel (45.6K likes on a 4.6K account), studied frame by frame. We rebuild 
 4. **Happy ending:** the threat leaves, ME smiles, something grows.
 5. 20–30 s, something moves every 1–2 s, text inside Instagram's safe band, calm piano made in code.
 
-These rules are tests (`remotion/tests/sm001.test.ts`). Made in Remotion: `remotion/src/SoundMind001.tsx` + timeline
-`src/lib/sm001.ts`; Kalam and Lora ship in `remotion/public/fonts` (Open Font Licence).
-`cd remotion && npm run music:sm001 && npm run render:sm001 && npm run cover:sm001` → `soundmind/reels/`
-(MP4 gitignored), then `queue:add` the `.post.json` beside it. Next metaphors on the same template: ME closing a
-window on *Overthinking*, ME watering her own plant while *Other people's opinions* circle.
+These rules are tests (`remotion/tests/sm00N.test.ts`). Made in Remotion: shared pieces (sky, ME, plant, labels, text,
+fonts) in `remotion/src/MeStory.tsx` + `src/lib/meStory.ts`; each reel adds its metaphor in `src/SoundMind00N.tsx` with its
+timeline in `src/lib/sm00N.ts`. Kalam and Lora ship in `remotion/public/fonts` (Open Font Licence).
+`cd remotion && npm run music:sm00N && npm run render:sm00N && npm run cover:sm00N` → `soundmind/reels/` (MP4 gitignored),
+then `queue:add` the `.post.json` beside it.
+
+| Reel | Metaphor | Conflict | Ending |
+|---|---|---|---|
+| sm-r001 umbrella | ME under an umbrella | word-drops roll off | sun, smile, plant grows |
+| sm-r002 window | ME with tea by a closed window | thoughts thump on the glass | night, moon, ME asleep smiling |
+| sm-r003 plant | ME watering her own plant | crows circle with remarks, give up | plant blooms, sun, smile |
+
+**Checking a refactor of shared pieces:** renders aren't bit-identical (the wobble filter adds noise of a few pixels on
+~1 in 60 frames), so compare old and new renders at `--scale=0.5` and accept only scattered blips that also show up
+between two renders of the same code. Mind the disk: 780 full-size PNGs are about 2 GB.
 
 ## Look
 

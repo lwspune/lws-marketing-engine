@@ -139,7 +139,8 @@ soundmind/               # @soundmindwithshivani carousels (outside brand). Runb
   art.js                 #   line-drawing catalogue for story slides
   card.html, render.mjs  #   one template; render.mjs → 1080×1350 JPEGs + <slug>.post.json per post
   <year>-w<week>/        #   batch.json (committed) + rendered slides (gitignored)
-  reels/                 #   "ME" story reels made in remotion/ (SoundMind001 …): .post.json + cover; MP4 gitignored
+  reels/                 #   "ME" story reels made in remotion/ (MeStory.tsx shared, SoundMind00N.tsx each):
+                         #   .post.json + cover; MP4 gitignored
 tests/soundmind-cards.test.js # node --test
 remotion/                # TRIAL: reels in Remotion (React + SVG, frame-by-frame render, Edge). `npm test`,
                          #   `npm run typecheck`, `npm run audio` (soundtrack from the engine MP4), `npm run render`,
