@@ -1,7 +1,8 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { InboxRow } from "@/lib/domain/inbox";
 import type { MetaConfig } from "@/lib/platforms/meta";
-import { fetchInstagramProfile } from "@/lib/platforms/metaMessages";
+import { fetchInstagramProfile, sendInstagramText } from "@/lib/platforms/metaMessages";
+import type { AutoReplyDeps } from "./autoReply";
 import type { InboxPlatform, NeedsProfile } from "./webhook";
 
 // Stores DMs through the 0012 database functions (service role). Shared by the webhook route, the reply action
@@ -41,4 +42,28 @@ export async function fillProfiles(
       logger.error("inbox: contact lookup failed", { conversationId: n.conversationId, error: (e as Error).message });
     }
   }
+}
+
+/** The auto-reply's database and Instagram calls (claim/release through 0014's functions, send with the Page token). */
+export function autoReplyStore(db: SupabaseClient, cfg: MetaConfig): Omit<AutoReplyDeps, "logger" | "now"> {
+  return {
+    claim: async (externalId, contactId) => {
+      const { data, error } = await db.rpc("claim_auto_reply", { p_platform: "instagram", p_external_id: externalId, p_contact_id: contactId });
+      if (error) throw new Error(`claim_auto_reply: ${error.message}`);
+      return ((data ?? []) as { conversation_id: string; account_id: string; body: string }[])
+        .map((r) => ({ conversationId: r.conversation_id, accountId: r.account_id, body: r.body }));
+    },
+    release: async (conversationId) => {
+      const { error } = await db.rpc("release_auto_reply", { p_conversation: conversationId });
+      if (error) throw new Error(`release_auto_reply: ${error.message}`);
+    },
+    send: async (accountId, contactId, text) => {
+      const { data: token } = await db.rpc("get_account_token", { p_account: accountId });
+      if (!token) throw new Error("The Instagram connection needs renewing (SETUP.md step 8).");
+      return sendInstagramText(cfg, { token: token as string, recipientId: contactId, text });
+    },
+    record: async (externalId, row) => {
+      await ingestRows(db, "instagram", externalId, [row]);
+    },
+  };
 }

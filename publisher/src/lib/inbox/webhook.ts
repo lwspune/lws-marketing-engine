@@ -5,7 +5,7 @@ import { fail, ok } from "@/lib/publishing/result";
 // The /api/webhooks/meta handler, kept free of Next and Supabase so it can be tested directly (like cron.ts).
 // GET: Meta checks the address once with our verify token. POST: one signed delivery of Instagram DMs or WhatsApp
 // messages (the same address serves both products). Storing failures
-// answer 500 so Meta delivers again (the database ignores duplicates); a failed name lookup doesn't.
+// answer 500 so Meta delivers again (the database ignores duplicates); a failed auto-reply or name lookup doesn't.
 
 export interface NeedsProfile { accountId: string; conversationId: string; contactId: string }
 export type InboxPlatform = "instagram" | "whatsapp";
@@ -15,6 +15,8 @@ export interface WebhookDeps {
   verifyToken: string;
   ingest: (platform: InboxPlatform, accountExternalId: string, rows: InboxRow[]) => Promise<NeedsProfile[]>;
   fillProfiles: (needs: NeedsProfile[]) => Promise<void>;
+  /** Auto-reply to people who just messaged from an ad (Instagram only; src/lib/inbox/autoReply.ts). */
+  autoReply?: (accountExternalId: string, rows: InboxRow[]) => Promise<number>;
   logger?: { error: (...args: unknown[]) => void };
 }
 
@@ -45,9 +47,8 @@ export async function handleMetaWebhook(req: Request, deps: WebhookDeps): Promis
     return Response.json(fail("invalid_input", "Body is not JSON."), { status: 400 });
   }
 
-  const groups: [InboxPlatform, ReturnType<typeof parseInstagramWebhook>][] = [
-    ["instagram", parseInstagramWebhook(body)], ["whatsapp", parseWhatsAppWebhook(body)],
-  ];
+  const instagram = parseInstagramWebhook(body);
+  const groups: [InboxPlatform, typeof instagram][] = [["instagram", instagram], ["whatsapp", parseWhatsAppWebhook(body)]];
   const needs: NeedsProfile[] = [];
   let stored = 0;
   try {
@@ -62,6 +63,15 @@ export async function handleMetaWebhook(req: Request, deps: WebhookDeps): Promis
   } catch (e) {
     log.error("inbox: storing a webhook delivery failed", { error: (e as Error).message });
     return Response.json(fail("ingest_failed", "Couldn't store the messages."), { status: 500 });
+  }
+  if (deps.autoReply) {
+    for (const g of instagram) {
+      try {
+        await deps.autoReply(g.accountExternalId, g.rows);
+      } catch (e) {
+        log.error("inbox: auto-reply failed", { error: (e as Error).message });
+      }
+    }
   }
   if (needs.length) {
     try {

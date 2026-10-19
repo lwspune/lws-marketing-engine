@@ -1,6 +1,7 @@
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { handleMetaWebhook } from "@/lib/inbox/webhook";
-import { fillProfiles, ingestRows } from "@/lib/inbox/store";
+import { autoReplyStore, fillProfiles, ingestRows } from "@/lib/inbox/store";
+import { autoReplyToAds } from "@/lib/inbox/autoReply";
 import { metaConfigFromEnv } from "@/lib/platforms/meta";
 
 // Meta calls this for every Instagram DM (app dashboard → Webhooks → Instagram → messages) and every WhatsApp message
@@ -16,6 +17,7 @@ const deps = () => {
     verifyToken: process.env.META_WEBHOOK_VERIFY_TOKEN ?? "",
     ingest: (platform: Parameters<typeof ingestRows>[1], externalId: string, rows: Parameters<typeof ingestRows>[3]) => ingestRows(db, platform, externalId, rows),
     fillProfiles: (needs: Parameters<typeof fillProfiles>[2]) => fillProfiles(db, metaConfigFromEnv(), needs),
+    autoReply: (externalId: string, rows: Parameters<typeof autoReplyToAds>[1]) => autoReplyToAds(externalId, rows, autoReplyStore(db, metaConfigFromEnv())),
   };
 };
 

@@ -3,7 +3,8 @@ import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { memberAccess } from "@/lib/supabase/access";
 import { Nav, PageHeader } from "@/components/Nav";
-import { attachmentLabel, contactLabel, LEAD_LABEL, needsReply, type LeadStatus } from "@/lib/domain/inbox";
+import { AutoReplyBox } from "@/components/AutoReplyBox";
+import { attachmentLabel, contactLabel, LEAD_LABEL, MAX_REPLY, needsReply, type LeadStatus } from "@/lib/domain/inbox";
 import { pickInstagramAccount, type InstagramAccount } from "@/lib/domain/accounts";
 
 export const dynamic = "force-dynamic";
@@ -35,6 +36,11 @@ export default async function InboxPage({ searchParams }: { searchParams: { acco
     id: a.id, displayName: a.platform === "whatsapp" ? `WhatsApp ${a.display_name}` : a.display_name, createdAt: a.created_at,
   }));
   const account = pickInstagramAccount(accounts, searchParams.account);
+  const isInstagram = accountRows?.find((a) => a.id === account?.id)?.platform === "instagram";
+  // RLS: owners only, like the chats.
+  const { data: autoReply } = account && isInstagram
+    ? await supabase.from("auto_replies").select("enabled, body").eq("account_id", account.id).maybeSingle()
+    : { data: null };
   // RLS: only owners get rows back.
   const { data } = account
     ? await supabase.from("conversations")
@@ -67,6 +73,10 @@ export default async function InboxPage({ searchParams }: { searchParams: { acco
                 className={`chip py-1 ${account?.id === a.id ? "chip-accent" : "chip-muted hover:text-fg"}`}>{a.displayName}</Link>
             ))}
           </nav>
+        )}
+
+        {account && isInstagram && (
+          <AutoReplyBox key={account.id} accountId={account.id} enabled={autoReply?.enabled ?? false} text={autoReply?.body ?? ""} maxLength={MAX_REPLY} />
         )}
 
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">

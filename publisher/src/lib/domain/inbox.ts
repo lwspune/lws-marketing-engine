@@ -162,7 +162,30 @@ export function verifyMetaSignature(rawBody: string, header: string | null, appS
 export const canReply = (lastIncomingAt: string | null, now: Date): boolean =>
   !!lastIncomingAt && now.getTime() - new Date(lastIncomingAt).getTime() <= REPLY_WINDOW_MS;
 
-export const needsReply = (c: { last_incoming_at: string | null; last_outgoing_at: string | null }): boolean =>
+// Auto-reply to ad chats (founder, 2026-10-19; migration 0014). Meta marks only some ad messages as from an ad
+// (2 of 62 on 19 Oct); the rest start with one of Meta's ready-made ad questions, matched whole so a person's
+// own question that happens to mention an ad isn't caught.
+const AD_STARTERS = new Set(["can i learn more about your business", "is anyone available to chat", "can you tell me more about your ad"]);
+const starterKey = (body: string) => body.trim().toLowerCase().replace(/\s+/g, " ").replace(/[?.!]+$/, "");
+
+/** Who in this delivery just messaged from an ad (one entry per person), while Instagram still allows a reply. */
+export function adStarts(rows: InboxRow[], now: Date): string[] {
+  const out = new Set<string>();
+  for (const r of rows) {
+    if (r.direction !== "in" || r.deleted || r.source === "story" || !canReply(r.sent_at, now)) continue;
+    if (r.source === "ad" || AD_STARTERS.has(starterKey(r.body))) out.add(r.contact_id);
+  }
+  return [...out];
+}
+
+export function checkAutoReplyText(text: string): { ok: true; text: string } | { ok: false; message: string } {
+  const t = text.trim();
+  if (!t) return { ok: false, message: "Write the reply first." };
+  if (t.length > MAX_REPLY) return { ok: false, message: `Replies can be up to ${MAX_REPLY} characters.` };
+  return { ok: true, text: t };
+}
+
+export const needsReply =(c: { last_incoming_at: string | null; last_outgoing_at: string | null }): boolean =>
   !!c.last_incoming_at && (!c.last_outgoing_at || new Date(c.last_incoming_at) > new Date(c.last_outgoing_at));
 
 export interface InboxWeek { newChats: number; fromAds: number; leads: number; booked: number }

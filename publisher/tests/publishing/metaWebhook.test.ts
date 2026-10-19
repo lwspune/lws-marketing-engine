@@ -80,6 +80,28 @@ describe("handleMetaWebhook: messages (POST)", () => {
   });
 });
 
+describe("handleMetaWebhook: auto-reply to ad chats", () => {
+  it("hands each stored Instagram delivery to the auto-reply, after storing it", async () => {
+    const autoReply = vi.fn(async () => 0), d = deps({ autoReply });
+    expect((await handleMetaWebhook(post(body), d)).status).toBe(200);
+    expect(autoReply).toHaveBeenCalledWith("ig1", [expect.objectContaining({ mid: "mid.1" })]);
+    expect((d.ingest as ReturnType<typeof vi.fn>).mock.invocationCallOrder[0]).toBeLessThan(autoReply.mock.invocationCallOrder[0]);
+  });
+
+  it("never auto-replies when storing failed (Meta will deliver again)", async () => {
+    const autoReply = vi.fn(async () => 0);
+    await handleMetaWebhook(post(body), deps({ autoReply, ingest: vi.fn(async () => { throw new Error("db down"); }) }));
+    expect(autoReply).not.toHaveBeenCalled();
+  });
+
+  it("still answers 200 and looks names up when the auto-reply itself breaks", async () => {
+    const d = deps({ autoReply: vi.fn(async () => { throw new Error("vault down"); }) });
+    expect((await handleMetaWebhook(post(body), d)).status).toBe(200);
+    expect(d.fillProfiles).toHaveBeenCalled();
+    expect(d.logger!.error).toHaveBeenCalledWith("inbox: auto-reply failed", expect.anything());
+  });
+});
+
 describe("handleMetaWebhook: WhatsApp", () => {
   const waBody = JSON.stringify({ object: "whatsapp_business_account", entry: [{ id: "WABA1", changes: [{ field: "messages", value: {
     metadata: { phone_number_id: "PN1" }, contacts: [{ profile: { name: "Parent A" }, wa_id: "919800000001" }],
@@ -92,5 +114,11 @@ describe("handleMetaWebhook: WhatsApp", () => {
     expect(await res.json()).toEqual({ ok: true, data: { stored: 1 } });
     expect(d.ingest).toHaveBeenCalledWith("whatsapp", "PN1", [expect.objectContaining({ mid: "wamid.1", contact_name: "Parent A" })]);
     expect(d.fillProfiles).not.toHaveBeenCalled();
+  });
+
+  it("doesn't auto-reply on WhatsApp (Instagram only for now)", async () => {
+    const autoReply = vi.fn(async () => 0);
+    await handleMetaWebhook(post(waBody), deps({ autoReply }));
+    expect(autoReply).not.toHaveBeenCalled();
   });
 });

@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
-import { canReply, LEAD_STATUSES, MAX_REPLY } from "@/lib/domain/inbox";
+import { canReply, checkAutoReplyText, LEAD_STATUSES, MAX_REPLY } from "@/lib/domain/inbox";
 import { ingestRows } from "@/lib/inbox/store";
 import { MetaApiError, metaConfigFromEnv } from "@/lib/platforms/meta";
 import { sendInstagramText, sendWhatsAppText } from "@/lib/platforms/metaMessages";
@@ -57,6 +57,21 @@ export async function sendReply(input: { conversationId: string; text: string })
     console.error("inbox: storing a sent reply failed", { conversationId: c.id, error: (e as Error).message });
   }
   revalidatePath(`/inbox/${c.id}`);
+  revalidatePath("/inbox");
+  return ok(null);
+}
+
+/** Save one Instagram account's auto-reply to ad chats and switch it on or off (owners only; the database checks). */
+export async function saveAutoReply(input: { accountId: string; enabled: boolean; text: string }): Promise<Result<null>> {
+  const parsed = z.object({ accountId: z.string().uuid(), enabled: z.boolean(), text: z.string() }).safeParse(input);
+  if (!parsed.success) return fail("invalid_input", "Unknown account.");
+  const text = checkAutoReplyText(parsed.data.text);
+  if (!text.ok) return fail("invalid_input", text.message);
+  const supabase = createSupabaseServerClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return fail("unauthorized", "Please sign in again.");
+  const { error } = await supabase.rpc("set_auto_reply", { p_account: parsed.data.accountId, p_enabled: parsed.data.enabled, p_body: text.text });
+  if (error) return fromRpcError(error);
   revalidatePath("/inbox");
   return ok(null);
 }
