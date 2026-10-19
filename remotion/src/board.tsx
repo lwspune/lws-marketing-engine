@@ -135,6 +135,28 @@ export function TitleCard({ t, label, lines, color, size = 78 }: { t: number; la
   );
 }
 
+// The predict-first opening (learnings L28, 2026-10-19): from frame 0 a question the viewer can answer in two seconds,
+// with A/B/C pills and a nudge to comment a guess. No still title card (L29: viewers left within ~3–6 s). The right pill
+// lights at `at`, when the picture has shown the answer.
+export function PredictHeader({ t, label, lines, options, answer, at, size = 58 }:
+  { t: number; label: string; lines: string[]; options: string[]; answer: number; at: number; size?: number }) {
+  const P = usePalette(), nudge = 1 - prog(t, at - 0.4, 0.4), top = 150 + lines.length * size * 1.2;
+  return (
+    <>
+      <div style={{ position: 'absolute', left: 0, width: 1080, top: 96, textAlign: 'center', font: `700 34px ${SOFT_UI}`, color: P.muted, whiteSpace: 'pre' }}>{label}</div>
+      {lines.map((l, i) => (
+        <div key={l} style={{ position: 'absolute', left: 0, width: 1080, top: 150 + i * size * 1.2, textAlign: 'center', ...hand(size), color: P.ink, whiteSpace: 'pre' }}>{l}</div>
+      ))}
+      <Chips t={t} labels={options} answer={answer} at={at} top={top + 26} w={200} h={76} gap={22} size={42} />
+      {nudge > 0 && (
+        <div style={{ position: 'absolute', left: 0, width: 1080, top: top + 122, textAlign: 'center', opacity: nudge, font: `600 32px ${SOFT_UI}`, color: P.muted }}>
+          comment your guess 👇
+        </div>
+      )}
+    </>
+  );
+}
+
 export type EndLine = { at: number; size: number; weight: number; color: string; text: string };
 // The white end card: fades into the same soft board, then each line rises in on a spring.
 export function EndCard({ t, at, lines }: { t: number; at: number; lines: EndLine[] }) {
