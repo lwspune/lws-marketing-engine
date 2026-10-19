@@ -141,13 +141,16 @@ connecting an outside brand's account (e.g. Sound Mind).
 
 1. Generate a verify token (any long random string) and put it in `.env.local` and on Vercel as
    `META_WEBHOOK_VERIFY_TOKEN`; put `META_APP_SECRET` on Vercel too. Redeploy.
-2. App dashboard → use cases → Instagram → add the permission **`instagram_manage_messages`**, plus
-   **`pages_manage_metadata`**.
+2. App dashboard → use cases → **Manage messaging & content on Instagram** → Customize → Permissions →
+   add **`instagram_manage_messages`**; **Manage everything on your Page** → add **`pages_manage_metadata`**;
+   **Add use cases** → the Messenger one → add **`pages_messaging`**. Meta refuses to subscribe a Page to DMs
+   without `pages_messaging` until the app has Advanced Access (found 2026-10-19). Facebook Page chats still
+   don't reach GoPost: the webhook only listens to Instagram.
 3. App dashboard → **Webhooks** → product **Instagram** → callback URL
    `https://gopostapp.vercel.app/api/webhooks/meta`, verify token from step 1 → **Verify and save** →
    subscribe to the **messages** field.
 4. Graph API Explorer → same token as step 3 above **plus** `instagram_manage_messages,
-   pages_manage_metadata` → run `npm run connect:meta -- --org=lws-pune --page="LWS Pune"
+   pages_manage_metadata, pages_messaging` (paste the token into the terminal, not into chat) → run `npm run connect:meta -- --org=lws-pune --page="LWS Pune"
    --projects=pyq-vault,lws-coaching` (and again per Page). It says "✓ Inbox: new Instagram DMs will
    reach GoPost".
 5. On the phone, each Instagram account: **Settings → Messages and story replies → Message controls →

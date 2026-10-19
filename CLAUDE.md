@@ -188,8 +188,9 @@ readable by **owners only** (`private.is_org_owner`). `/inbox` lists chats (Need
 replies via `me/messages` (24-hour window, `canReply`) and sets the lead status (`set_conversation_status`). Insights
 shows "Messages this week" to owners. Nightly pg_cron `messages-retention` deletes text older than 12 months.
 `npm run messages:backfill` (old chats, ~20 messages each), `npm run messages:themes` (redacted → Claude →
-`../analytics/dm-themes-<date>.md`). Needs `instagram_manage_messages` + `pages_manage_metadata` and the Page
-subscribed (`connect:meta` does it): SETUP.md step 8. Pure rules: `src/lib/domain/inbox.ts`.
+`../analytics/dm-themes-<date>.md`). Needs `instagram_manage_messages` + `pages_manage_metadata` + `pages_messaging`
+(Meta refuses the Page subscription without it before Advanced Access) and the Page subscribed (`connect:meta` does
+it): SETUP.md step 8. Live since 2026-10-19 for @lws.pune and @pyqvault_ (Sound Mind not connected: needs Shivani's OK). Pure rules: `src/lib/domain/inbox.ts`.
 **Note:** `TEST_DATABASE_URL` is the same database as `DATABASE_URL` (tests roll back), so
 `db:migrate` changes the live schema; dry-run a new migration in a rolled-back transaction first.
 **Address and name (2026-10-19, founder):** the app is **GoPost** at **https://gopostapp.vercel.app** (no "LWS":

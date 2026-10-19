@@ -5,8 +5,10 @@
 // Permissions on the token: pages_show_list, pages_read_engagement, pages_manage_posts,
 // instagram_basic, instagram_content_publish, business_management, and the read-only statistics
 // pair instagram_manage_insights + read_insights. Re-running only refreshes the stored tokens.
-// For the Inbox (owners only, migration 0012) also grant instagram_manage_messages + pages_manage_metadata:
-// the script then subscribes the Page to the app's webhooks so new DMs reach /api/webhooks/meta.
+// For the Inbox (owners only, migration 0012) also grant instagram_manage_messages, pages_manage_metadata and
+// pages_messaging: the script then subscribes the Page to the app's webhooks so new DMs reach /api/webhooks/meta.
+// Without Advanced Access Meta refuses the `messages` subscription unless pages_messaging (from the app's Messenger
+// use case) is granted too (found 2026-10-19).
 //
 // It asks for a short-lived USER token from Graph API Explorer (never pass tokens on the command
 // line; they end up in shell history), swaps it for a long-lived one, then reads the Page's own
@@ -80,7 +82,8 @@ run(async () => {
   // Inbox: only when the messaging permission was granted (otherwise DMs stay out of GoPost).
   const perms = (await graph("me/permissions", { access_token: userToken })).data as { permission: string; status: string }[];
   const granted = (name: string) => perms?.some((p) => p.permission === name && p.status === "granted");
-  if (ig && granted("instagram_manage_messages") && granted("pages_manage_metadata")) {
+  const inboxPerms = ["instagram_manage_messages", "pages_manage_metadata", "pages_messaging"];
+  if (ig && inboxPerms.every(granted)) {
     const res = await fetch(`${GRAPH}/${page.id}/subscribed_apps`, {
       method: "POST", body: new URLSearchParams({ subscribed_fields: "messages", access_token: page.access_token }),
     });
@@ -88,7 +91,7 @@ run(async () => {
     if (!res.ok || !json.success) console.log(`! Couldn't subscribe the Page to DMs: ${json.error?.message ?? res.statusText}`);
     else console.log("✓ Inbox: new Instagram DMs will reach GoPost (run npm run messages:backfill for old ones)");
   } else if (ig) {
-    console.log("· Inbox off: grant instagram_manage_messages + pages_manage_metadata to pull DMs (SETUP.md → Inbox)");
+    console.log(`· Inbox off: grant ${inboxPerms.filter((p) => !granted(p)).join(" + ")} to pull DMs (SETUP.md → Inbox)`);
   }
 
   for (const slug of projectSlugs) {
