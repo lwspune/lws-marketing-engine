@@ -1,6 +1,9 @@
 // Connect a WhatsApp API number to the Inbox (owners only, migrations 0012/0013).
 //
-//   npm run connect:whatsapp -- --org=lws-pune --number=7620699213
+//   npm run connect:whatsapp -- --org=lws-pune --number=7620699213 --business=9624437840908410
+//
+// --business is the business portfolio id (business.facebook.com URLs show it as business_id=…). It's needed because a
+// system user token doesn't list its WhatsApp accounts, so they're looked up through the portfolio.
 //
 // It asks for a SYSTEM USER token (Business Settings → System users → Digi Publisher → Generate token, with
 // whatsapp_business_management + whatsapp_business_messaging + business_management, never expiring) after the
@@ -16,7 +19,7 @@ import { admin, flags, need, run } from "./lib";
 
 run(async () => {
   const f = flags();
-  const orgSlug = need(f, "org"), number = need(f, "number");
+  const orgSlug = need(f, "org"), number = need(f, "number"), businessId = f.business;
   const appId = process.env.META_APP_ID, appSecret = process.env.META_APP_SECRET;
   if (!appId || !appSecret) throw new Error("Set META_APP_ID and META_APP_SECRET in .env.local first.");
 
@@ -26,7 +29,7 @@ run(async () => {
   if (token.length < 20) throw new Error("That doesn't look like an access token.");
 
   const cfg = metaConfigFromEnv();
-  const n = await findWhatsAppNumber(cfg, { token, appToken: `${appId}|${appSecret}`, number });
+  const n = await findWhatsAppNumber(cfg, { token, appToken: `${appId}|${appSecret}`, number, businessId });
   console.log(`✓ found ${n.displayPhoneNumber} (${n.verifiedName}) in WhatsApp account ${n.wabaId}`);
 
   const db = admin();

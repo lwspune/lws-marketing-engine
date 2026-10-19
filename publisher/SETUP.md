@@ -184,7 +184,8 @@ so the Inbox starts the day you connect.
    system user) → Full control.
 4. Business Settings → **System users → Digi Publisher → Generate token**: app Digital Marketing Automation,
    `whatsapp_business_management, whatsapp_business_messaging, business_management`, expiry **Never**.
-5. `npm run connect:whatsapp -- --org=lws-pune --number=7620699213` and paste the token into the terminal. It ends with
+5. `npm run connect:whatsapp -- --org=lws-pune --number=7620699213 --business=9624437840908410` (the business
+   portfolio id from any business.facebook.com URL) and paste the token into the terminal. It ends with
    "✓ Inbox: WhatsApp messages to this number will reach GoPost". Send the number a WhatsApp from another phone: it
    appears in the Inbox under the "WhatsApp +91 …" chip.
 

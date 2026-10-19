@@ -27,6 +27,8 @@ export interface FakeMetaOptions {
   /** Items for GET /me/conversations?platform=instagram (Instagram DMs), served in pages. */
   igConversations?: object[];
   igConversationsPageSize?: number;
+  /** debug_token without target_ids, as Meta returns for system user tokens. */
+  debugTokenNoTargets?: boolean;
 }
 
 export async function startFakeMeta(opts: FakeMetaOptions = {}) {
@@ -86,10 +88,13 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
       return send(200, { messaging_product: "whatsapp", contacts: [{ input: "x", wa_id: "x" }], messages: [{ id: "wamid.sent1" }] });
     }
     if (req.method === "GET" && /^\/v[\d.]+\/debug_token$/.test(p)) {
+      const targets = opts.debugTokenNoTargets ? {} : { target_ids: ["WABA1"] };
       return send(200, { data: { is_valid: true, granular_scopes: [
-        { scope: "whatsapp_business_management", target_ids: ["WABA1"] }, { scope: "whatsapp_business_messaging", target_ids: ["WABA1"] },
+        { scope: "whatsapp_business_management", ...targets }, { scope: "whatsapp_business_messaging", ...targets },
         { scope: "business_management" }] } });
     }
+    if (req.method === "GET" && /^\/v[\d.]+\/BIZ1\/owned_whatsapp_business_accounts$/.test(p)) return send(200, { data: [{ id: "WABA1", name: "LWS" }] });
+    if (req.method === "GET" && /^\/v[\d.]+\/BIZ1\/client_whatsapp_business_accounts$/.test(p)) return send(200, { data: [] });
     if (req.method === "GET" && /^\/v[\d.]+\/WABA1\/phone_numbers$/.test(p)) {
       return send(200, { data: [
         { id: "PN2", display_phone_number: "+91 84840 44851", verified_name: "LWS Pune Pvt Ltd" },

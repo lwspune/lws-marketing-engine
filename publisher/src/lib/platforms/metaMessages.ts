@@ -86,16 +86,29 @@ export interface WhatsAppNumber { wabaId: string; phoneNumberId: string; display
 
 const last10 = (s: string) => s.replace(/\D/g, "").slice(-10);
 
-/** Which WhatsApp account and phone number id a number is, among those the (system user) token was given. */
+/**
+ * Which WhatsApp account and phone number id a number is. Uses the accounts listed on the token; a system user token
+ * lists none (Meta, 2026-10-19), so then the business portfolio's own and client WhatsApp accounts are searched.
+ */
 export async function findWhatsAppNumber(
-  cfg: MetaConfig, input: { token: string; appToken: string; number: string },
+  cfg: MetaConfig, input: { token: string; appToken: string; number: string; businessId?: string },
 ): Promise<WhatsAppNumber> {
   const debug = (await metaCall(graphUrl(cfg, "debug_token"), {
     method: "GET", params: { input_token: input.token, access_token: input.appToken }, token: input.token,
   })) as { data?: { granular_scopes?: { scope: string; target_ids?: string[] }[] } };
-  const wabaIds = [...new Set((debug.data?.granular_scopes ?? [])
-    .filter((g) => g.scope.startsWith("whatsapp_business_")).flatMap((g) => g.target_ids ?? []))];
-  if (!wabaIds.length) throw new Error("This token can't reach any WhatsApp account. Assign it to the system user and tick the WhatsApp permissions.");
+  const whatsappScopes = (debug.data?.granular_scopes ?? []).filter((g) => g.scope.startsWith("whatsapp_business_"));
+  if (!whatsappScopes.length) throw new Error("This token has no WhatsApp permissions. Tick whatsapp_business_management and whatsapp_business_messaging.");
+  let wabaIds = [...new Set(whatsappScopes.flatMap((g) => g.target_ids ?? []))];
+  if (!wabaIds.length) {
+    if (!input.businessId) throw new Error("This token doesn't list its WhatsApp accounts (system users don't). Pass --business=<business portfolio id>.");
+    for (const edge of ["owned_whatsapp_business_accounts", "client_whatsapp_business_accounts"]) {
+      const res = (await metaCall(graphUrl(cfg, `${input.businessId}/${edge}`), {
+        method: "GET", params: { fields: "id", limit: "100", access_token: input.token }, token: input.token,
+      })) as { data?: { id: string }[] };
+      wabaIds.push(...(res.data ?? []).map((w) => w.id));
+    }
+    wabaIds = [...new Set(wabaIds)];
+  }
   const seen: string[] = [];
   for (const wabaId of wabaIds) {
     const list = (await metaCall(graphUrl(cfg, `${wabaId}/phone_numbers`), {

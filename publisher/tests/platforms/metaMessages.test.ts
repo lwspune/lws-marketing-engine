@@ -100,6 +100,14 @@ describe("WhatsApp Cloud API", () => {
     });
   });
 
+  it("for a system user token (no account list on the token), finds the number through the business portfolio", async () => {
+    fake = await startFakeMeta({ debugTokenNoTargets: true });
+    expect(await findWhatsAppNumber(fake.config, { token: "SYS", appToken: "APP|SECRET", number: "7620699213", businessId: "BIZ1" }))
+      .toMatchObject({ wabaId: "WABA1", phoneNumberId: "PN1" });
+    const err = await findWhatsAppNumber(fake.config, { token: "SYS", appToken: "APP|SECRET", number: "7620699213" }).catch((e) => e);
+    expect(err.message).toMatch(/--business/);
+  });
+
   it("says which numbers the token can reach when the asked one isn't among them", async () => {
     fake = await startFakeMeta();
     const err = await findWhatsAppNumber(fake.config, { token: "SYS", appToken: "APP|SECRET", number: "9156310546" }).catch((e) => e);
