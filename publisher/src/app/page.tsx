@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { canSeeAds } from "@/lib/supabase/access";
+import { memberAccess } from "@/lib/supabase/access";
 import { PostCard, type PostView } from "@/components/PostCard";
 import { Nav, PageHeader } from "@/components/Nav";
 import { ApproveStoriesButton } from "@/components/ApproveStoriesButton";
@@ -25,7 +25,7 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
   const tab: TabId = (TABS.find((t) => t.id === searchParams.tab)?.id ?? "ready") as TabId;
   const statuses = TABS.find((t) => t.id === tab)!.statuses;
 
-  const showAds = await canSeeAds(supabase);
+  const access = await memberAccess(supabase);
   const { data: projects } = await supabase.from("projects").select("id, name, slug, organizations(name)").order("name");
   const projectId = projects?.find((p) => p.id === searchParams.project)?.id ?? null;
 
@@ -100,7 +100,7 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
 
   return (
     <>
-      <Nav current="queue" ads={showAds} />
+      <Nav current="queue" ads={access.ads} inbox={access.inbox} />
       <main className="mx-auto max-w-5xl px-4 pb-16 pt-8">
         <PageHeader title="Queue">Approve what goes out. Nothing posts without you.</PageHeader>
 

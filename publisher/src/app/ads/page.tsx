@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { canSeeAds } from "@/lib/supabase/access";
+import { memberAccess } from "@/lib/supabase/access";
 import { Nav, PageHeader } from "@/components/Nav";
 import { AdDraftCard, type AdDraftView } from "@/components/AdDraftCard";
 import { adsManagerUrl, type AdSpec, type DraftStatus } from "@/lib/domain/ads";
@@ -11,7 +11,8 @@ export const maxDuration = 60;
 
 export default async function AdsPage() {
   const supabase = createSupabaseServerClient();
-  if (!(await canSeeAds(supabase))) redirect("/");
+  const access = await memberAccess(supabase);
+  if (!access.ads) redirect("/");
   const [{ data: drafts }, { data: projects }, { data: accounts }] = await Promise.all([
     supabase.from("ad_drafts")
       .select("id, project_id, account_id, title, status, spec, image_path, error, reject_reason, meta_campaign_id, launched_at, created_at")
@@ -36,7 +37,7 @@ export default async function AdsPage() {
 
   return (
     <>
-      <Nav current="ads" />
+      <Nav current="ads" inbox={access.inbox} />
       <main className="mx-auto max-w-5xl px-4 pb-16 pt-8">
         <PageHeader title="Ads">
           Approve creates the ad on Meta <strong className="font-medium text-fg">paused</strong>. Check the preview in Ads Manager, then Launch.

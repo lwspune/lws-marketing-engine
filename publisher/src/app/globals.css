@@ -37,5 +37,5 @@ body {
   /* segmented control: a row of links/buttons where one is the current one (aria-current) */
   .seg { @apply inline-flex max-w-full gap-0.5 overflow-x-auto rounded-xl border border-line bg-panel p-1; }
   .seg-item { @apply whitespace-nowrap rounded-lg px-3 py-1.5 text-sm text-muted transition-colors hover:text-fg; }
-  .seg-item[aria-current="page"] { @apply bg-raised text-fg shadow-card; }
+  .seg-item[aria-current="page"], .seg-item[aria-pressed="true"] { @apply bg-raised text-fg shadow-card; }
 }

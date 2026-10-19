@@ -10,25 +10,29 @@ export function Logo({ size = "sm" }: { size?: "sm" | "lg" }) {
   );
 }
 
-/** Top bar shared by the Queue, Ads and Insights pages. `ads={false}` hides the Ads tab (staff logins). */
-export function Nav({ current, ads = true }: { current: "queue" | "ads" | "insights"; ads?: boolean }) {
+/**
+ * Top bar shared by every page. `ads={false}` hides the Ads tab (staff logins); `inbox` shows the Inbox tab
+ * (owners only: DMs, migration 0012).
+ */
+export function Nav({ current, ads = true, inbox = false }: { current: "queue" | "inbox" | "ads" | "insights"; ads?: boolean; inbox?: boolean }) {
   const item = (href: string, id: typeof current, label: string) => (
-    <Link href={href} aria-current={current === id ? "page" : undefined} className="seg-item">{label}</Link>
+    <Link href={href} aria-current={current === id ? "page" : undefined} className="seg-item px-2 sm:px-3">{label}</Link>
   );
   return (
     <header className="sticky top-0 z-10 border-b border-line/70 bg-bg/75 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-5xl items-center gap-3 px-4">
+      <div className="mx-auto flex h-14 max-w-5xl items-center gap-2 px-4 sm:gap-3">
         <Link href="/" className="flex items-center gap-2 rounded-lg" aria-label="GoPost, go to the queue">
           <Logo />
           <span className="hidden font-semibold tracking-tight sm:inline">GoPost</span>
         </Link>
         <nav aria-label="Sections" className="seg sm:ml-4">
           {item("/", "queue", "Queue")}
+          {inbox && item("/inbox", "inbox", "Inbox")}
           {ads && item("/ads", "ads", "Ads")}
           {item("/insights", "insights", "Insights")}
         </nav>
         <form action="/auth/signout" method="post" className="ml-auto">
-          <button type="submit" className="rounded-lg px-2 py-1.5 text-sm text-muted transition-colors hover:bg-white/[0.06] hover:text-fg">Sign out</button>
+          <button type="submit" className="whitespace-nowrap rounded-lg px-2 py-1.5 text-sm text-muted transition-colors hover:bg-white/[0.06] hover:text-fg">Sign out</button>
         </form>
       </div>
     </header>

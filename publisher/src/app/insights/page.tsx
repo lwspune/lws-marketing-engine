@@ -6,7 +6,9 @@ import { compareToBaseline, median, typicalReel, type PostMetrics, type Verdict 
 import { AdsSummary, type AdsSummaryProps } from "@/components/AdsSummary";
 import { summariseCampaigns, weekStartIst, type DailyRow, type EntityRow, type OutcomeRow } from "@/lib/domain/ads";
 import { pickInstagramAccount, type InstagramAccount } from "@/lib/domain/accounts";
-import { canSeeAds } from "@/lib/supabase/access";
+import { memberAccess } from "@/lib/supabase/access";
+import { InboxSummary } from "@/components/InboxSummary";
+import { summariseInbox, type InboxWeek } from "@/lib/domain/inbox";
 
 export const dynamic = "force-dynamic";
 
@@ -67,9 +69,25 @@ async function loadAds(supabase: Db, now: Date): Promise<AdsSummaryProps> {
   };
 }
 
+/** This week's chats per Instagram account (owners only; RLS returns nothing to anyone else). */
+async function loadInbox(supabase: Db, accounts: InstagramAccount[], now: Date) {
+  const weekStart = weekStartIst(now);
+  // A week starts Monday 00:00 IST = Sunday 18:30 UTC.
+  const from = new Date(new Date(`${weekStart}T00:00:00Z`).getTime() - 5.5 * 3_600_000).toISOString();
+  const { data } = await supabase.from("conversations").select("account_id, first_message_at, status, source").gte("first_message_at", from).limit(5000);
+  const byAccount = summariseInbox(data ?? [], weekStart);
+  const empty: InboxWeek = { newChats: 0, fromAds: 0, leads: 0, booked: 0 };
+  return {
+    weekStart,
+    accounts: [...accounts].sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+      .map((a) => ({ id: a.id, name: a.displayName, week: byAccount[a.id] ?? empty })),
+  };
+}
+
 export default async function InsightsPage({ searchParams }: { searchParams: { sort?: string; account?: string } }) {
   const supabase = createSupabaseServerClient();
-  const showAds = await canSeeAds(supabase);
+  const access = await memberAccess(supabase);
+  const showAds = access.ads;
   const ads = showAds ? await loadAds(supabase, new Date()) : null;
   const sort: SortId = (SORTS.find((s) => s.id === searchParams.sort)?.id ?? "new") as SortId;
   // One Instagram account at a time (RLS: only the member's own org), so two audiences never blend.
@@ -85,6 +103,7 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
       .limit(2000)
     : { data: [] };
   const rows = (data ?? []) as Row[];
+  const inbox = access.inbox ? await loadInbox(supabase, accounts, new Date()) : null;
   const qs = (next: { sort?: SortId; account?: string }) => {
     const p = new URLSearchParams();
     const s = next.sort ?? sort, a = next.account ?? account?.id;
@@ -119,10 +138,11 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
 
   return (
     <>
-      <Nav current="insights" ads={showAds} />
+      <Nav current="insights" ads={showAds} inbox={access.inbox} />
       <main className="mx-auto max-w-5xl px-4 pb-16 pt-8">
         <PageHeader title="Insights">How your {ads ? "ads and reels are" : "reels are"} doing, against your own typical numbers.</PageHeader>
         {ads && <div className="mb-6"><AdsSummary {...ads} /></div>}
+        {inbox && inbox.accounts.length > 0 && <div className="mb-6"><InboxSummary {...inbox} /></div>}
 
         {accounts.length > 1 && (
           <nav aria-label="Instagram account" className="mb-4 flex flex-wrap gap-2">
