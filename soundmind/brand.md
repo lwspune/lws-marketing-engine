@@ -28,6 +28,24 @@ GoPost can't post single images yet, so both formats are carousels.
 
 Every post ends with a **share slide**: *send this to…*, *save this for…* or *tell me in the comments*.
 
+## Reels: the "ME" story (2026-10-19, on test)
+
+Carousels mostly reach followers; reels reach people who don't follow yet. Model: @silvabydebalina's "protect your
+peace" reel (45.6K likes on a 4.6K account), studied frame by frame. We rebuild its structure, never its content:
+
+1. **Frame 0 carries the whole message** (top text) and the picture-metaphor (a calm **ME** figure).
+2. **Conflict:** named pressures (*SHOULD, GUILT, WHAT WILL PEOPLE SAY?*) attack; the metaphor protects ME.
+   Name feelings and pressures, not "negative people": the conflict stays, the tone stays kind.
+3. **Close-up** on calm ME (no text), then a **second wave with a second line**.
+4. **Happy ending:** the threat leaves, ME smiles, something grows.
+5. 20–30 s, something moves every 1–2 s, text inside Instagram's safe band, calm piano made in code.
+
+These rules are tests (`remotion/tests/sm001.test.ts`). Made in Remotion: `remotion/src/SoundMind001.tsx` + timeline
+`src/lib/sm001.ts`; Kalam and Lora ship in `remotion/public/fonts` (Open Font Licence).
+`cd remotion && npm run music:sm001 && npm run render:sm001 && npm run cover:sm001` → `soundmind/reels/`
+(MP4 gitignored), then `queue:add` the `.post.json` beside it. Next metaphors on the same template: ME closing a
+window on *Overthinking*, ME watering her own plant while *Other people's opinions* circle.
+
 ## Look
 
 Cream paper `#F6F1E7`, green-grey ink `#2F3A33`, sage accent `#8FAE8B` (decoration only), soft-sage
