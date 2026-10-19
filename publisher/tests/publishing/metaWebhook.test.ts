@@ -121,4 +121,20 @@ describe("handleMetaWebhook: WhatsApp", () => {
     await handleMetaWebhook(post(waBody), deps({ autoReply }));
     expect(autoReply).not.toHaveBeenCalled();
   });
+
+  it("stores a WhatsApp Business app number's old chats (history) and phone-app replies (echoes) under its number", async () => {
+    const value = (v: object) => ({ metadata: { phone_number_id: "PN3" }, ...v });
+    const coexist = JSON.stringify({ object: "whatsapp_business_account", entry: [{ id: "WABA2", changes: [
+      { field: "history", value: value({ history: [{ metadata: { phase: 0, chunk_order: 1, progress: 100 }, threads: [{ id: "919800000001", messages: [
+        { from: "919800000001", id: "wamid.h1", timestamp: "1750000000", type: "text", text: { body: "Fees?" } }] }] }] }) },
+      { field: "smb_message_echoes", value: value({ message_echoes: [
+        { from: "917020003600", to: "919800000001", id: "wamid.e1", timestamp: "1760860900", type: "text", text: { body: "₹499" } }] }) },
+    ] }] });
+    const d = deps();
+    const res = await handleMetaWebhook(post(coexist), d);
+    expect(await res.json()).toEqual({ ok: true, data: { stored: 2 } });
+    expect(d.ingest).toHaveBeenCalledWith("whatsapp", "PN3", [
+      expect.objectContaining({ mid: "wamid.h1", direction: "in" }), expect.objectContaining({ mid: "wamid.e1", direction: "out" }),
+    ]);
+  });
 });

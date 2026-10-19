@@ -222,4 +222,47 @@ describe("parseWhatsAppWebhook", () => {
     const [{ rows: [row] }] = parseWhatsAppWebhook(wa([msg({})], []));
     expect(row.contact_name).toBeNull();
   });
+
+  // A WhatsApp Business app number on the Cloud API too ("coexistence", 70200 03600): what the team sends from the
+  // phone arrives as smb_message_echoes, and the phone's old chats arrive once as history chunks.
+  const change = (field: string, value: object) => ({
+    object: "whatsapp_business_account",
+    entry: [{ id: "WABA2", changes: [{ field, value: { messaging_product: "whatsapp", metadata: { display_phone_number: "917020003600", phone_number_id: PN }, ...value } }] }],
+  });
+
+  it("stores a reply sent from the phone app as ours, in the chat with the person it went to", () => {
+    const echo = { from: "917020003600", to: "919800000001", id: "wamid.e1", timestamp: "1760860900", type: "text", text: { body: "Test is on Sunday 10 am" } };
+    expect(parseWhatsAppWebhook(change("smb_message_echoes", { message_echoes: [echo] }))).toEqual([{
+      accountExternalId: PN,
+      rows: [{
+        contact_id: "919800000001", mid: "wamid.e1", direction: "out", body: "Test is on Sunday 10 am", attachment: null,
+        sent_at: "2025-10-19T08:01:40.000Z", source: "direct", ad_id: null, deleted: false, contact_name: null,
+      }],
+    }]);
+  });
+
+  it("reads history chunks: each thread is one person; their messages are incoming, the rest are ours", () => {
+    const history = [{
+      metadata: { phase: 0, chunk_order: 1, progress: 55 },
+      threads: [{ id: "919800000001", messages: [
+        { from: "919800000001", id: "wamid.h1", timestamp: "1750000000", type: "text", text: { body: "Fees kitni hai?" }, history_context: { status: "READ" } },
+        { from: "917020003600", id: "wamid.h2", timestamp: "1750000100", type: "text", text: { body: "₹499 for the mock test" }, history_context: { status: "READ" } },
+        // Media arrive first as a placeholder, then again with the real type under the same id: keep only the real one.
+        { from: "919800000001", id: "wamid.h3", timestamp: "1750000200", type: "media_placeholder", history_context: { status: "DELIVERED" } },
+        { from: "919800000001", id: "wamid.h4", timestamp: "1750000300", type: "reaction", reaction: { emoji: "👍" } },
+      ] }],
+    }];
+    const [{ accountExternalId, rows }] = parseWhatsAppWebhook(change("history", { history }));
+    expect(accountExternalId).toBe(PN);
+    expect(rows.map((r) => [r.contact_id, r.mid, r.direction, r.body])).toEqual([
+      ["919800000001", "wamid.h1", "in", "Fees kitni hai?"],
+      ["919800000001", "wamid.h2", "out", "₹499 for the mock test"],
+    ]);
+    expect(rows[0]).toMatchObject({ sent_at: "2025-06-15T15:06:40.000Z", source: "direct", ad_id: null, contact_name: null });
+  });
+
+  it("ignores a history delivery that only says the phone declined to share history", () => {
+    const declined = [{ errors: [{ code: 2593109, title: "History sync is turned off by the business from the WhatsApp Business App" }] }];
+    expect(parseWhatsAppWebhook(change("history", { history: declined }))).toEqual([]);
+  });
 });

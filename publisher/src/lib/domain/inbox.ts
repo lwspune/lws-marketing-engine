@@ -99,10 +99,12 @@ export function parseInstagramWebhook(body: unknown): InboxGroup[] {
 const WA_MEDIA: Record<string, string> = {
   image: "image", video: "video", audio: "audio", document: "file", sticker: "sticker", location: "location", contacts: "contacts",
 };
-const WA_SKIP = new Set(["reaction", "system", "ephemeral", "request_welcome"]);
+// media_placeholder: history sends a media message first as a placeholder, then again with its real type (same id).
+const WA_SKIP = new Set(["reaction", "system", "ephemeral", "request_welcome", "media_placeholder"]);
 
-function waRow(m: Obj, names: Map<string, string>): InboxRow | null {
-  const mid = str(m.id), from = str(m.from), type = typeof m.type === "string" ? m.type : "";
+/** One WhatsApp message. `ours` = sent from our number (contact = `contact`); otherwise it came in from `from`. */
+function waRow(m: Obj, names: Map<string, string>, side: { ours: boolean; contact?: string | null } = { ours: false }): InboxRow | null {
+  const mid = str(m.id), from = side.ours ? side.contact ?? null : str(m.from), type = typeof m.type === "string" ? m.type : "";
   const secs = typeof m.timestamp === "string" && /^\d+$/.test(m.timestamp) ? Number(m.timestamp) : typeof m.timestamp === "number" ? m.timestamp : NaN;
   if (!mid || !from || !Number.isFinite(secs) || WA_SKIP.has(type)) return null;
   let body = "", attachment: string | null = null;
@@ -120,31 +122,47 @@ function waRow(m: Obj, names: Map<string, string>): InboxRow | null {
   const referral = isObj(m.referral) ? m.referral : null;
   const adId = referral && referral.source_type === "ad" && typeof referral.source_id === "string" && AD_ID.test(referral.source_id) ? referral.source_id : null;
   return {
-    contact_id: from, mid, direction: "in", body: body.slice(0, MAX_BODY), attachment,
+    contact_id: from, mid, direction: side.ours ? "out" : "in", body: body.slice(0, MAX_BODY), attachment,
     sent_at: new Date(secs * 1000).toISOString(), source: adId ? "ad" : "direct", ad_id: adId, deleted: false,
-    contact_name: names.get(from) ?? null,
+    contact_name: side.ours ? null : names.get(from) ?? null,
   };
 }
 
-/** Meta's WhatsApp Cloud API webhook body → incoming messages per phone number id. Statuses and other fields are skipped. */
+/**
+ * Meta's WhatsApp Cloud API webhook body → messages per phone number id. Statuses and other fields are skipped.
+ * A WhatsApp Business app number on the Cloud API too ("coexistence") also sends what the team typed on the phone
+ * (smb_message_echoes: ours, to `to`) and, once, the phone's old chats (history: one thread per person; a message
+ * from anyone but that person is ours). A history chunk that only says sharing was declined holds no threads.
+ */
 export function parseWhatsAppWebhook(body: unknown): InboxGroup[] {
   if (!isObj(body) || body.object !== "whatsapp_business_account" || !Array.isArray(body.entry)) return [];
   const groups = new Map<string, InboxRow[]>();
+  const add = (account: string, row: InboxRow | null) => { if (row) groups.set(account, [...(groups.get(account) ?? []), row]); };
+  const objs = (v: unknown): Obj[] => (Array.isArray(v) ? v.filter(isObj) : []);
   for (const entry of body.entry) {
     if (!isObj(entry) || !Array.isArray(entry.changes)) continue;
     for (const change of entry.changes) {
-      if (!isObj(change) || change.field !== "messages" || !isObj(change.value)) continue;
+      if (!isObj(change) || !isObj(change.value)) continue;
       const v = change.value;
       const account = isObj(v.metadata) ? str(v.metadata.phone_number_id) : null;
-      if (!account || !Array.isArray(v.messages)) continue;
-      const names = new Map<string, string>();
-      for (const c of Array.isArray(v.contacts) ? v.contacts.filter(isObj) : []) {
-        const id = str(c.wa_id), name = isObj(c.profile) && typeof c.profile.name === "string" ? c.profile.name : null;
-        if (id && name) names.set(id, name);
-      }
-      for (const m of v.messages) {
-        const row = isObj(m) ? waRow(m, names) : null;
-        if (row) groups.set(account, [...(groups.get(account) ?? []), row]);
+      if (!account) continue;
+      if (change.field === "messages") {
+        const names = new Map<string, string>();
+        for (const c of objs(v.contacts)) {
+          const id = str(c.wa_id), name = isObj(c.profile) && typeof c.profile.name === "string" ? c.profile.name : null;
+          if (id && name) names.set(id, name);
+        }
+        for (const m of objs(v.messages)) add(account, waRow(m, names));
+      } else if (change.field === "smb_message_echoes") {
+        for (const m of objs(v.message_echoes)) add(account, waRow(m, new Map(), { ours: true, contact: str(m.to) }));
+      } else if (change.field === "history") {
+        for (const chunk of objs(v.history)) {
+          for (const thread of objs(chunk.threads)) {
+            const contact = str(thread.id);
+            if (!contact) continue;
+            for (const m of objs(thread.messages)) add(account, waRow(m, new Map(), { ours: str(m.from) !== contact, contact }));
+          }
+        }
       }
     }
   }
