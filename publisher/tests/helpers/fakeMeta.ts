@@ -24,6 +24,9 @@ export interface FakeMetaOptions {
   adLists?: { campaigns?: object[]; adsets?: object[]; ads?: object[] };
   adInsights?: object[];
   adPageSize?: number;
+  /** Items for GET /me/conversations?platform=instagram (Instagram DMs), served in pages. */
+  igConversations?: object[];
+  igConversationsPageSize?: number;
 }
 
 export async function startFakeMeta(opts: FakeMetaOptions = {}) {
@@ -67,6 +70,16 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
     if (req.method === "GET" && /^\/v[\d.]+\/v\d+\/video_insights$/.test(p)) {
       return send(200, opts.fbInsights ?? { data: [{ name: "fb_reels_total_plays", values: [{ value: 300 }] }] });
     }
+    // --- Instagram messaging (Page token: /me is the Page)
+    if (req.method === "POST" && /^\/v[\d.]+\/me\/messages$/.test(p)) {
+      return send(200, { recipient_id: JSON.parse(params.recipient ?? "{}").id, message_id: "mid.sent1" });
+    }
+    if (req.method === "GET" && /^\/v[\d.]+\/me\/conversations$/.test(p)) {
+      const all = opts.igConversations ?? [], size = opts.igConversationsPageSize ?? 25, from = Number(params.after ?? 0);
+      const next = from + size < all.length;
+      return send(200, { data: all.slice(from, from + size), paging: next ? { cursors: { after: String(from + size) }, next: "more" } : { cursors: {} } });
+    }
+    if (req.method === "GET" && /^\/v[\d.]+\/9001$/.test(p)) return send(200, { name: "Rahul S", username: "rahul_07", id: "9001" });
     // --- Facebook Page reels
     if (req.method === "POST" && /^\/v[\d.]+\/page1\/video_reels$/.test(p)) {
       if (params.upload_phase === "start") return send(200, { video_id: `v${id()}`, upload_url: "unused" });

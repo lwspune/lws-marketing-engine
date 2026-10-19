@@ -3,7 +3,8 @@ import { NextResponse, type NextRequest } from "next/server";
 
 type CookieToSet = { name: string; value: string; options?: CookieOptions };
 
-// Everything except /login, /auth/* and the cron endpoint needs a signed-in user. Being signed in
+// Everything except /login, /auth/*, the cron endpoints and Meta's webhook (signed with the app secret instead)
+// needs a signed-in user. Being signed in
 // isn't enough to see anything: row-level security only shows an org's rows to its members.
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -30,5 +31,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!login|auth/|api/cron/|_next/|favicon.ico).*)"],
+  matcher: ["/((?!login|auth/|api/cron/|api/webhooks/|_next/|favicon.ico).*)"],
 };
