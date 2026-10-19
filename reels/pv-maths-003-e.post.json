@@ -1,0 +1,16 @@
+{
+  "slug": "pv-maths-003-e",
+  "project": "pyqvault-insta",
+  "kind": "reel",
+  "title": "@pyqvault_ · Maths, visualised #3 (predict-first): ₹1 at 100%, added every second → e (white, Remotion, trap)",
+  "video": "pv-maths-003-e.mp4",
+  "cover": "pv-maths-003-e-cover.png",
+  "captions": {
+    "instagram": "₹1 at 100% interest a year, but the interest is added every second. After a year you have? A ₹2 · B ₹2.72 · C crores\nComment your guess before you watch 👇\n\nClass 11–12 Maths · Exponential & Logarithmic Functions\nMaths, visualised #3\n\nOnce a year: ₹2. Twice: ₹2.25. Every month: ₹2.61. Every day: ₹2.71. Every second: ₹2.71828… → B.\nAdding it more often always helps, but less and less: the total never passes 2.71828… That number is e, and it's why eˣ is everywhere in Class 12 calculus.\n\nSave this for revision 📌 Follow for #4.\nPractise every PYQ chapter-wise, free → pyqvault.com (link in bio).\n\n#Maths #Class11 #Class12 #EulersNumber #Exponential #CBSE #JEEMain #MHTCET #MathsVisualised",
+    "facebook": "₹1 at 100% interest a year, added every second. After a year you have? A ₹2 · B ₹2.72 · C crores 👇\n\nMaths, visualised #3: once ₹2, monthly ₹2.61, daily ₹2.71, every second ₹2.71828… (B). It never passes e.\n\nPractise PYQs free, chapter-wise: https://www.pyqvault.com\n\n#Maths #Class12 #EulersNumber",
+    "youtube": {
+      "title": "₹1 at 100%, added every second. ₹2, ₹2.72 or crores? #shorts",
+      "description": "Maths, visualised #3. Compound ₹1 at 100% a year more and more often: ₹2, ₹2.25, ₹2.61, ₹2.71… and it never passes 2.71828…, the number e.\n\nPractise PYQs free, chapter-wise: pyqvault.com\n\n#Maths #Class12 #Shorts"
+    }
+  }
+}

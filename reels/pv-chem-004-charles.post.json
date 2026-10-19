@@ -1,0 +1,16 @@
+{
+  "slug": "pv-chem-004-charles",
+  "project": "pyqvault-insta",
+  "kind": "reel",
+  "title": "@pyqvault_ · Chemistry, visualised #4 (predict-first): heat a gas 0 → 273 °C, its volume? (lab, Remotion 3D, synthwave)",
+  "video": "pv-chem-004-charles.mp4",
+  "cover": "pv-chem-004-charles-cover.png",
+  "captions": {
+    "instagram": "Heat a gas from 0 °C to 273 °C at the same pressure. Its volume becomes? A ×1.5 · B ×2 · C ×273\nComment your guess before you watch 👇\n\nClass 11 Chemistry · States of Matter (Gas Laws)\nChemistry, visualised #4\n\nThe molecules speed up and push the lid higher: the volume doubles → B.\nWhy ×2? Draw volume against temperature and extend the line backwards: it hits zero volume at −273 °C, absolute zero. Measured from there, 0 °C is 273 K and 273 °C is 546 K. Double the kelvin, double the volume. That's Charles's law: V ∝ T (in kelvin).\n\nSave this for revision 📌 Follow for #5.\nPractise every PYQ chapter-wise, free → pyqvault.com (link in bio).\n\n#Chemistry #Class11 #Class11Chemistry #GasLaws #CharlesLaw #CBSE #JEEMain #NEET #ChemistryVisualised",
+    "facebook": "Heat a gas from 0 °C to 273 °C at the same pressure. Its volume becomes? A ×1.5 · B ×2 · C ×273 👇\n\nClass 11 Chemistry · Gas Laws\nChemistry, visualised #4: it doubles (B). The V–T line hits zero at −273 °C, so 0 °C → 273 °C is 273 K → 546 K. Charles's law: V ∝ T in kelvin.\n\nPractise Chemistry PYQs free: https://www.pyqvault.com/questions/jee-mains/chemistry/some-basic-concepts-of-chemistry\n\n#Chemistry #Class11 #GasLaws",
+    "youtube": {
+      "title": "Heat a gas from 0 °C to 273 °C. Its volume? ×1.5, ×2 or ×273? #shorts",
+      "description": "Chemistry, visualised #4. The volume doubles: the V–T line hits zero at −273 °C, so 0 °C → 273 °C is 273 K → 546 K. Charles's law, V ∝ T in kelvin.\n\nPractise PYQs free, chapter-wise: pyqvault.com\n\n#Chemistry #Class11 #Shorts"
+    }
+  }
+}

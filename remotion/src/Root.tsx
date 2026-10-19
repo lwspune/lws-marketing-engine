@@ -8,6 +8,9 @@ import { PvMaths001 } from './PvMaths001.tsx';
 import { PvPhysics003 } from './PvPhysics003.tsx';
 import { PvChem003 } from './PvChem003.tsx';
 import { PvMaths002 } from './PvMaths002.tsx';
+import { PvPhysics004 } from './PvPhysics004.tsx';
+import { PvChem004 } from './PvChem004.tsx';
+import { PvMaths003 } from './PvMaths003.tsx';
 import { DURATION } from './lib/reel005.ts';
 import { DURATION as DURATION_014 } from './lib/reel014.ts';
 import { DURATION as DURATION_PV002 } from './lib/pv002.ts';
@@ -16,6 +19,9 @@ import { DURATION as DURATION_PM001 } from './lib/pm001.ts';
 import { DURATION as DURATION_PP003 } from './lib/pp003.ts';
 import { DURATION as DURATION_PC003 } from './lib/pc003.ts';
 import { DURATION as DURATION_PM002 } from './lib/pm002.ts';
+import { DURATION as DURATION_PP004 } from './lib/pp004.ts';
+import { DURATION as DURATION_PC004 } from './lib/pc004.ts';
+import { DURATION as DURATION_PM003 } from './lib/pm003.ts';
 
 export const Root = () => (
   <>
@@ -36,5 +42,11 @@ export const Root = () => (
     <Still id="PvChem003Cover" component={PvChem003} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="PvMaths002" component={PvMaths002} durationInFrames={Math.round(DURATION_PM002 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="PvMaths002Cover" component={PvMaths002} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="PvPhysics004" component={PvPhysics004} durationInFrames={Math.round(DURATION_PP004 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="PvPhysics004Cover" component={PvPhysics004} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="PvChem004" component={PvChem004} durationInFrames={Math.round(DURATION_PC004 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="PvChem004Cover" component={PvChem004} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="PvMaths003" component={PvMaths003} durationInFrames={Math.round(DURATION_PM003 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="PvMaths003Cover" component={PvMaths003} width={1080} height={1920} defaultProps={{ cover: true }} />
   </>
 );

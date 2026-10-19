@@ -1,0 +1,16 @@
+{
+  "slug": "pv-physics-004-slope",
+  "project": "pyqvault-insta",
+  "kind": "reel",
+  "title": "@pyqvault_ · Physics, visualised #4 (predict-first): when does the block slide? (white, Remotion 3D, drive)",
+  "video": "pv-physics-004-slope.mp4",
+  "cover": "pv-physics-004-slope-cover.png",
+  "captions": {
+    "instagram": "Tilt the ramp. When does the block slide? A 20° · B 35° · C 50°\nComment your guess before you watch 👇\n\nClass 11 Physics · Laws of Motion (Friction)\nPhysics, visualised #4\n\nGravity pulls the block down the slope with mg sin θ. Friction can hold it back with at most μ mg cos θ. As the ramp tilts, the pull grows and friction's limit shrinks. The moment the pull wins, it slips:\nmg sin θ = μ mg cos θ → tan θ = μ.\nHere μ = 0.7, so it slips at 35° → B.\n\nSave this for revision 📌 Follow for #5.\nPractise every PYQ chapter-wise, free → pyqvault.com (link in bio).\n\n#Physics #Class11 #Class11Physics #Friction #LawsOfMotion #CBSE #JEEMain #NEET #PhysicsVisualised",
+    "facebook": "Tilt the ramp. When does the block slide? A 20° · B 35° · C 50° 👇\n\nClass 11 Physics · Laws of Motion (Friction)\nPhysics, visualised #4: it slips the moment the pull down the slope (mg sin θ) beats the most friction can give (μ mg cos θ): tan θ = μ = 0.7 → 35° (B).\n\nPractise PYQs free, chapter-wise: https://www.pyqvault.com\n\n#Physics #Class11 #Friction",
+    "youtube": {
+      "title": "Tilt the ramp: when does the block slide? 20°, 35° or 50°? #shorts",
+      "description": "Physics, visualised #4. Gravity's pull down the slope (mg sin θ) grows as the ramp tilts; friction's limit (μ mg cos θ) shrinks. It slips when tan θ = μ: with μ = 0.7, at 35°.\n\nPractise PYQs free, chapter-wise: pyqvault.com\n\n#Physics #Class11 #Shorts"
+    }
+  }
+}

@@ -32,7 +32,16 @@
     "cover:pc003": "remotion still PvChem003Cover ../reels/pv-chem-003-avogadro-cover.png",
     "music:pm002": "node ../reels/tools/music.mjs music/pv-maths-002-calculus.json public/pv-maths-002-calculus.wav",
     "render:pm002": "remotion render PvMaths002 ../reels/pv-maths-002-calculus.mp4",
-    "cover:pm002": "remotion still PvMaths002Cover ../reels/pv-maths-002-calculus-cover.png"
+    "cover:pm002": "remotion still PvMaths002Cover ../reels/pv-maths-002-calculus-cover.png",
+    "music:pp004": "node ../reels/tools/music.mjs music/pv-physics-004-slope.json public/pv-physics-004-slope.wav",
+    "render:pp004": "remotion render PvPhysics004 ../reels/pv-physics-004-slope.mp4",
+    "cover:pp004": "remotion still PvPhysics004Cover ../reels/pv-physics-004-slope-cover.png",
+    "music:pc004": "node ../reels/tools/music.mjs music/pv-chem-004-charles.json public/pv-chem-004-charles.wav",
+    "render:pc004": "remotion render PvChem004 ../reels/pv-chem-004-charles.mp4",
+    "cover:pc004": "remotion still PvChem004Cover ../reels/pv-chem-004-charles-cover.png",
+    "music:pm003": "node ../reels/tools/music.mjs music/pv-maths-003-e.json public/pv-maths-003-e.wav",
+    "render:pm003": "remotion render PvMaths003 ../reels/pv-maths-003-e.mp4",
+    "cover:pm003": "remotion still PvMaths003Cover ../reels/pv-maths-003-e-cover.png"
   },
   "dependencies": {
     "@react-three/fiber": "9.8.1",
