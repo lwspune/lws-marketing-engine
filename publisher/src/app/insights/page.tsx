@@ -69,13 +69,17 @@ async function loadAds(supabase: Db, now: Date): Promise<AdsSummaryProps> {
   };
 }
 
-/** This week's chats per Instagram account (owners only; RLS returns nothing to anyone else). */
-async function loadInbox(supabase: Db, accounts: InstagramAccount[], now: Date) {
+/** This week's chats per Instagram account and WhatsApp number (owners only; RLS returns nothing to anyone else). */
+async function loadInbox(supabase: Db, now: Date) {
   const weekStart = weekStartIst(now);
   // A week starts Monday 00:00 IST = Sunday 18:30 UTC.
   const from = new Date(new Date(`${weekStart}T00:00:00Z`).getTime() - 5.5 * 3_600_000).toISOString();
   const { data } = await supabase.from("conversations").select("account_id, first_message_at, status, source").gte("first_message_at", from).limit(5000);
   const byAccount = summariseInbox(data ?? [], weekStart);
+  const { data: rows } = await supabase.from("connected_accounts").select("id, platform, display_name, created_at").in("platform", ["instagram", "whatsapp"]);
+  const accounts: InstagramAccount[] = (rows ?? []).map((a) => ({
+    id: a.id, displayName: a.platform === "whatsapp" ? `WhatsApp ${a.display_name}` : a.display_name, createdAt: a.created_at,
+  }));
   const empty: InboxWeek = { newChats: 0, fromAds: 0, leads: 0, booked: 0 };
   return {
     weekStart,
@@ -103,7 +107,7 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
       .limit(2000)
     : { data: [] };
   const rows = (data ?? []) as Row[];
-  const inbox = access.inbox ? await loadInbox(supabase, accounts, new Date()) : null;
+  const inbox = access.inbox ? await loadInbox(supabase, new Date()) : null;
   const qs = (next: { sort?: SortId; account?: string }) => {
     const p = new URLSearchParams();
     const s = next.sort ?? sort, a = next.account ?? account?.id;

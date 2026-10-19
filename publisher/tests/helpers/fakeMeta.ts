@@ -4,7 +4,7 @@ import type { AddressInfo } from "node:net";
 // A local stand-in for graph.facebook.com + rupload.facebook.com, speaking just enough of the
 // Graph API for the publishing flows. Each test scripts its behaviour and inspects `calls`.
 
-export interface FakeCall { method: string; path: string; params: Record<string, string>; headers: http.IncomingHttpHeaders }
+export interface FakeCall { method: string; path: string; params: Record<string, string>; headers: http.IncomingHttpHeaders; json?: unknown }
 
 export interface FakeMetaOptions {
   /** Status the IG container reports on each poll, in order (last one repeats). */
@@ -39,7 +39,8 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
     const body = await new Promise<string>((r) => { let b = ""; req.on("data", (c) => (b += c)); req.on("end", () => r(b)); });
     const params: Record<string, string> = Object.fromEntries(url.searchParams);
     if (body && (req.headers["content-type"] ?? "").includes("x-www-form-urlencoded")) Object.assign(params, Object.fromEntries(new URLSearchParams(body)));
-    calls.push({ method: req.method ?? "GET", path: url.pathname, params, headers: req.headers });
+    const json = body && (req.headers["content-type"] ?? "").includes("application/json") ? JSON.parse(body) : undefined;
+    calls.push({ method: req.method ?? "GET", path: url.pathname, params, headers: req.headers, json });
 
     const send = (status: number, payload: object) => { res.writeHead(status, { "content-type": "application/json" }); res.end(JSON.stringify(payload)); };
     const f = opts.failOn;
@@ -80,6 +81,21 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
       return send(200, { data: all.slice(from, from + size), paging: next ? { cursors: { after: String(from + size) }, next: "more" } : { cursors: {} } });
     }
     if (req.method === "GET" && /^\/v[\d.]+\/9001$/.test(p)) return send(200, { name: "Rahul S", username: "rahul_07", id: "9001" });
+    // --- WhatsApp Cloud API (system user token; WhatsApp account WABA1 with numbers PN1, PN2)
+    if (req.method === "POST" && /^\/v[\d.]+\/PN1\/messages$/.test(p)) {
+      return send(200, { messaging_product: "whatsapp", contacts: [{ input: "x", wa_id: "x" }], messages: [{ id: "wamid.sent1" }] });
+    }
+    if (req.method === "GET" && /^\/v[\d.]+\/debug_token$/.test(p)) {
+      return send(200, { data: { is_valid: true, granular_scopes: [
+        { scope: "whatsapp_business_management", target_ids: ["WABA1"] }, { scope: "whatsapp_business_messaging", target_ids: ["WABA1"] },
+        { scope: "business_management" }] } });
+    }
+    if (req.method === "GET" && /^\/v[\d.]+\/WABA1\/phone_numbers$/.test(p)) {
+      return send(200, { data: [
+        { id: "PN2", display_phone_number: "+91 84840 44851", verified_name: "LWS Pune Pvt Ltd" },
+        { id: "PN1", display_phone_number: "+91 76206 99213", verified_name: "LWS PUNE PRIVATE LIMITED" }] });
+    }
+    if (req.method === "POST" && /^\/v[\d.]+\/WABA1\/subscribed_apps$/.test(p)) return send(200, { success: true });
     // --- Facebook Page reels
     if (req.method === "POST" && /^\/v[\d.]+\/page1\/video_reels$/.test(p)) {
       if (params.upload_phase === "start") return send(200, { video_id: `v${id()}`, upload_url: "unused" });

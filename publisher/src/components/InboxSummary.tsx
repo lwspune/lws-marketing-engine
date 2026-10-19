@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { InboxWeek } from "@/lib/domain/inbox";
 
-/** Insights tab, owners only: this week's Instagram chats per account, from the Inbox's lead statuses. */
+/** Insights tab, owners only: this week's Instagram and WhatsApp chats per account, from the Inbox's lead statuses. */
 export function InboxSummary({ weekStart, accounts }: { weekStart: string; accounts: { id: string; name: string; week: InboxWeek }[] }) {
   const since = new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", timeZone: "UTC" }).format(new Date(`${weekStart}T00:00:00Z`));
   const tile = (label: string, value: number) => (

@@ -18,7 +18,7 @@ export default async function ConversationPage({ params }: { params: { id: strin
   if (!/^[0-9a-f-]{36}$/i.test(params.id)) notFound();
   // RLS: only owners get the row back.
   const { data: c } = await supabase.from("conversations")
-    .select("id, account_id, contact_id, contact_name, contact_username, status, source, last_incoming_at, first_message_at")
+    .select("id, account_id, channel, contact_id, contact_name, contact_username, status, source, last_incoming_at, first_message_at")
     .eq("id", params.id).maybeSingle();
   if (!c) notFound();
   const [{ data: msgs }, { data: account }] = await Promise.all([
@@ -37,10 +37,11 @@ export default async function ConversationPage({ params }: { params: { id: strin
         <div className="mb-6 mt-3">
           <h1 className="page-title break-words">{name}</h1>
           <p className="page-sub">
+            {c.channel === "whatsapp" && c.contact_name ? `+${c.contact_id} · ` : ""}
             {c.contact_username && c.contact_name ? `@${c.contact_username} · ` : ""}
-            {account?.display_name ?? "Instagram"}
+            {c.channel === "whatsapp" ? "WhatsApp " : ""}{account?.display_name ?? "Instagram"}
             {c.source === "ad" ? " · started from an ad" : c.source === "story" ? " · started as a story reply" : ""}
-            {c.contact_username && (
+            {c.channel === "instagram" && c.contact_username && (
               <> · <a className="link" href={`https://www.instagram.com/${encodeURIComponent(c.contact_username)}/`} target="_blank" rel="noopener noreferrer"
                 aria-label={`Open ${name}'s Instagram profile`}>Profile</a></>
             )}
@@ -72,7 +73,8 @@ export default async function ConversationPage({ params }: { params: { id: strin
           </ol>
         </section>
 
-        <ReplyBox conversationId={c.id} open={canReply(c.last_incoming_at, new Date())} maxLength={MAX_REPLY} contact={name} />
+        <ReplyBox conversationId={c.id} open={canReply(c.last_incoming_at, new Date())} maxLength={MAX_REPLY} contact={name}
+          channel={c.channel === "whatsapp" ? "whatsapp" : "instagram"} />
       </main>
     </>
   );

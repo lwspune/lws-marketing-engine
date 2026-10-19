@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { startFakeMeta } from "../helpers/fakeMeta";
-import { fetchInstagramConversations, fetchInstagramProfile, sendInstagramText } from "@/lib/platforms/metaMessages";
+import {
+  fetchInstagramConversations, fetchInstagramProfile, findWhatsAppNumber, sendInstagramText, sendWhatsAppText, subscribeAppToWaba,
+} from "@/lib/platforms/metaMessages";
 import { MetaApiError } from "@/lib/platforms/meta";
 
 // Instagram messaging over the Graph API with the stored Page token (instagram_manage_messages).
@@ -74,5 +76,41 @@ describe("fetchInstagramConversations", () => {
     });
     const out = await fetchInstagramConversations(fake.config, { token: "T", igUserId: "ig1", maxConversations: 3 });
     expect(new Set(out.rows.map((r) => r.contact_id)).size).toBe(3);
+  });
+});
+
+describe("WhatsApp Cloud API", () => {
+  it("sends a text reply from our phone number as JSON and returns the message id", async () => {
+    fake = await startFakeMeta();
+    const id = await sendWhatsAppText(fake.config, { token: "SYS", phoneNumberId: "PN1", to: "919800000001", text: "Sunday 10 am slot is open" });
+    expect(id).toBe("wamid.sent1");
+    const call = fake.calls.find((c) => c.method === "POST" && c.path.endsWith("/PN1/messages"))!;
+    expect(call.headers["content-type"]).toMatch(/application\/json/);
+    expect(call.headers.authorization).toBe("Bearer SYS");
+    expect(call.json).toEqual({
+      messaging_product: "whatsapp", recipient_type: "individual", to: "919800000001", type: "text",
+      text: { body: "Sunday 10 am slot is open", preview_url: false },
+    });
+  });
+
+  it("finds the number's WhatsApp account and phone number id from the token's access", async () => {
+    fake = await startFakeMeta();
+    expect(await findWhatsAppNumber(fake.config, { token: "SYS", appToken: "APP|SECRET", number: "+91 76206 99213" })).toEqual({
+      wabaId: "WABA1", phoneNumberId: "PN1", displayPhoneNumber: "+91 76206 99213", verifiedName: "LWS PUNE PRIVATE LIMITED",
+    });
+  });
+
+  it("says which numbers the token can reach when the asked one isn't among them", async () => {
+    fake = await startFakeMeta();
+    const err = await findWhatsAppNumber(fake.config, { token: "SYS", appToken: "APP|SECRET", number: "9156310546" }).catch((e) => e);
+    expect(err.message).toMatch(/9156310546/);
+    expect(err.message).toMatch(/\+91 76206 99213/);
+  });
+
+  it("subscribes our app to the WhatsApp account without replacing other apps' webhooks", async () => {
+    fake = await startFakeMeta();
+    await subscribeAppToWaba(fake.config, { token: "SYS", wabaId: "WABA1" });
+    const call = fake.calls.find((c) => c.method === "POST" && c.path.endsWith("/WABA1/subscribed_apps"))!;
+    expect(call.params.override_callback_uri).toBeUndefined();
   });
 });

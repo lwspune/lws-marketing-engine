@@ -3,8 +3,11 @@
 import { useId, useState, useTransition } from "react";
 import { sendReply } from "@/app/inbox/actions";
 
-/** Reply to one Instagram chat. Closed (with the reason) once Instagram's 24-hour window has passed. */
-export function ReplyBox({ conversationId, open, maxLength, contact }: { conversationId: string; open: boolean; maxLength: number; contact: string }) {
+/** Reply to one Instagram or WhatsApp chat. Closed (with the reason) once the platform's 24-hour window has passed. */
+export function ReplyBox({ conversationId, open, maxLength, contact, channel }: {
+  conversationId: string; open: boolean; maxLength: number; contact: string; channel: "instagram" | "whatsapp";
+}) {
+  const app = channel === "whatsapp" ? "WhatsApp" : "Instagram";
   const id = useId();
   const [text, setText] = useState("");
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
@@ -13,7 +16,9 @@ export function ReplyBox({ conversationId, open, maxLength, contact }: { convers
   if (!open) {
     return (
       <p className="card p-4 text-sm text-muted" role="note">
-        Instagram only allows replies from here within 24 hours of their last message. Reply from the Instagram app instead.
+        {channel === "whatsapp"
+          ? "WhatsApp only allows replies within 24 hours of their last message; after that, approved templates only (not in GoPost yet)."
+          : "Instagram only allows replies from here within 24 hours of their last message. Reply from the Instagram app instead."}
       </p>
     );
   }
@@ -31,7 +36,7 @@ export function ReplyBox({ conversationId, open, maxLength, contact }: { convers
         });
       }}
     >
-      <label htmlFor={id} className="label">Reply on Instagram</label>
+      <label htmlFor={id} className="label">Reply on {app}</label>
       <textarea id={id} className="field min-h-[96px] resize-y" maxLength={maxLength} required value={text}
         onChange={(e) => setText(e.target.value)} placeholder="Write your reply…" />
       <div className="flex flex-wrap items-center gap-3">

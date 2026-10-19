@@ -16,7 +16,7 @@ const VIEWS = [
 type ViewId = (typeof VIEWS)[number]["id"];
 
 interface Row {
-  id: string; account_id: string; contact_id: string; contact_name: string | null; contact_username: string | null; status: LeadStatus;
+  id: string; account_id: string; channel: string; contact_id: string; contact_name: string | null; contact_username: string | null; status: LeadStatus;
   source: string; last_message_at: string; last_incoming_at: string | null; last_outgoing_at: string | null; preview: string;
 }
 
@@ -29,13 +29,16 @@ export default async function InboxPage({ searchParams }: { searchParams: { acco
   if (!access.inbox) redirect("/");
   const view: ViewId = (VIEWS.find((v) => v.id === searchParams.view)?.id ?? "reply") as ViewId;
 
-  const { data: igRows } = await supabase.from("connected_accounts").select("id, display_name, created_at").eq("platform", "instagram");
-  const accounts: InstagramAccount[] = (igRows ?? []).map((a) => ({ id: a.id, displayName: a.display_name, createdAt: a.created_at }));
+  // Instagram accounts and WhatsApp numbers, one chip each.
+  const { data: accountRows } = await supabase.from("connected_accounts").select("id, platform, display_name, created_at").in("platform", ["instagram", "whatsapp"]);
+  const accounts: InstagramAccount[] = (accountRows ?? []).map((a) => ({
+    id: a.id, displayName: a.platform === "whatsapp" ? `WhatsApp ${a.display_name}` : a.display_name, createdAt: a.created_at,
+  }));
   const account = pickInstagramAccount(accounts, searchParams.account);
   // RLS: only owners get rows back.
   const { data } = account
     ? await supabase.from("conversations")
-      .select("id, account_id, contact_id, contact_name, contact_username, status, source, last_message_at, last_incoming_at, last_outgoing_at, preview")
+      .select("id, account_id, channel, contact_id, contact_name, contact_username, status, source, last_message_at, last_incoming_at, last_outgoing_at, preview")
       .eq("account_id", account.id).order("last_message_at", { ascending: false }).limit(500)
     : { data: [] };
   const all = (data ?? []) as Row[];
@@ -55,7 +58,7 @@ export default async function InboxPage({ searchParams }: { searchParams: { acco
     <>
       <Nav current="inbox" ads={access.ads} inbox />
       <main className="mx-auto max-w-5xl px-4 pb-16 pt-8">
-        <PageHeader title="Inbox">Instagram messages, in one place. Only owners can see this page.</PageHeader>
+        <PageHeader title="Inbox">Instagram and WhatsApp messages, in one place. Only owners can see this page.</PageHeader>
 
         {accounts.length > 1 && (
           <nav aria-label="Instagram account" className="mb-4 flex flex-wrap gap-2">
@@ -79,7 +82,7 @@ export default async function InboxPage({ searchParams }: { searchParams: { acco
           <section className="card space-y-2 p-4 sm:p-6">
             <p className="text-sm">No messages yet.</p>
             <p className="text-sm text-muted">
-              New Instagram DMs appear here as they arrive, once Instagram messaging is switched on for this account
+              New messages appear here as they arrive, once messaging is switched on for this account
               (publisher/SETUP.md → Inbox).
             </p>
           </section>

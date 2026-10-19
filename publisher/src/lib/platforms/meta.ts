@@ -57,11 +57,15 @@ const redact = (text: string, token: string) => (token ? text.split(token).join(
 
 async function call(
   url: string,
-  init: { method: "GET" | "POST"; params?: Record<string, string>; headers?: Record<string, string>; token: string },
+  init: { method: "GET" | "POST"; params?: Record<string, string>; headers?: Record<string, string>; token: string; json?: unknown },
 ): Promise<Record<string, unknown>> {
   let target = url;
   const opts: RequestInit = { method: init.method, headers: { ...init.headers } };
-  if (init.params) {
+  if (init.json !== undefined) {
+    // WhatsApp Cloud API takes a JSON body, with the token as a bearer header.
+    opts.body = JSON.stringify(init.json);
+    Object.assign(opts.headers as Record<string, string>, { "content-type": "application/json", authorization: `Bearer ${init.token}` });
+  } else if (init.params) {
     const body = new URLSearchParams(init.params);
     if (init.method === "GET") target += `?${body}`;
     else {
