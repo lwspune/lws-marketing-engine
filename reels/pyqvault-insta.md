@@ -15,13 +15,18 @@ runbook (`visual-reel-workflow.md`); the rules below override it for this handle
   labels and one short line at a time (aim ≤ 7 words), no derivations, no formula walls. Live numbers that
   change with the picture (speed, rate, energy bars) count as visuals and are welcome.
 - **The @bisal.physics recipe** (learnings L20): a live simulation + live numbers + a graph that draws itself.
+- **Predict-first opening (on test from 2026-10-19, L28 + L29):** frame 0 asks a question the viewer can answer in
+  two seconds, with A/B/C pills and "comment your guess 👇" (`PredictHeader` in `remotion/src/board.tsx`); no still title
+  card; the picture then settles it and the right pill lights. The caption's first line repeats the question + "Comment
+  your guess". Aim for ≤ 25 s. **The cover never gives the answer away:** take it before the right pill lights,
+  and keep the answer out of the cover text (e.g. "Guess before you watch"). Our first five reels averaged 2.7–6.6 s of watch time and 0 comments: this tests the fix.
 - **Made in Remotion from #2 on** (founder, 2026-10-18; the engine drops frames, L25): `remotion/src/PvPhysics002.tsx` is
   the template: real three.js 3D, timeline as pure functions of t in `src/lib/<reel>.ts` with tests first (physics
   re-checked in the test, labels ≤ 7 words), `TitleCard` + `EndCard` from `src/board.tsx`. Physics #1 and Chemistry #1
   were made with the engine (`api.jar`, `api.sphere3d`) and stay as they are.
-- **The dark lab look isn't in Remotion yet:** add it (a palette like `Reel.LAB`, test-locked) before the next lab reel (Chemistry #2).
+- **Dark lab look in Remotion:** wrap the reel in `<Theme value={LAB}>` (`src/lib/palette.ts`, test-locked to `Reel.LAB`).
 - **Honest scale:** never fake counts or proportions; zoom with a visible label (e.g. "zoomed ×10⁹").
-- **Length:** ~25–35 s now that there's no question segment.
+- **Length:** ≤ 25 s for predict-first reels (L29: viewers left within seconds); ~25–35 s otherwise.
 - **End card ends with the website, `pyqvault.com`** (founder, 2026-10-18), large, in the accent colour. (This
   is the opposite of @lws.pune, where the founder removed link lines from the end card.)
 
