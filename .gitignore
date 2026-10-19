@@ -14,6 +14,8 @@ out/
 reels/*.mp4
 # Sound Mind slides, re-made from their batch: node soundmind/render.mjs soundmind/<week>/batch.json
 soundmind/*/*.jpg
+# Sound Mind reels, re-made in remotion/: npm run music:sm001 && npm run render:sm001 && npm run cover:sm001
+soundmind/reels/*.mp4
 
 # Personal Claude Code settings
 .claude/settings.local.json

@@ -41,7 +41,10 @@
     "cover:pc004": "remotion still PvChem004Cover ../reels/pv-chem-004-charles-cover.png",
     "music:pm003": "node ../reels/tools/music.mjs music/pv-maths-003-e.json public/pv-maths-003-e.wav",
     "render:pm003": "remotion render PvMaths003 ../reels/pv-maths-003-e.mp4",
-    "cover:pm003": "remotion still PvMaths003Cover ../reels/pv-maths-003-e-cover.png"
+    "cover:pm003": "remotion still PvMaths003Cover ../reels/pv-maths-003-e-cover.png",
+    "music:sm001": "node ../reels/tools/music.mjs music/sm-r001-umbrella.json public/sm-r001-umbrella.wav",
+    "render:sm001": "remotion render SoundMind001 ../soundmind/reels/sm-r001-umbrella.mp4",
+    "cover:sm001": "remotion still SoundMind001Cover ../soundmind/reels/sm-r001-umbrella-cover.jpg --image-format=jpeg"
   },
   "dependencies": {
     "@react-three/fiber": "9.8.1",

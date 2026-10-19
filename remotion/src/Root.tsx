@@ -22,6 +22,8 @@ import { DURATION as DURATION_PM002 } from './lib/pm002.ts';
 import { DURATION as DURATION_PP004 } from './lib/pp004.ts';
 import { DURATION as DURATION_PC004 } from './lib/pc004.ts';
 import { DURATION as DURATION_PM003 } from './lib/pm003.ts';
+import { SoundMind001 } from './SoundMind001.tsx';
+import { DURATION as DURATION_SM001 } from './lib/sm001.ts';
 
 export const Root = () => (
   <>
@@ -48,5 +50,7 @@ export const Root = () => (
     <Still id="PvChem004Cover" component={PvChem004} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="PvMaths003" component={PvMaths003} durationInFrames={Math.round(DURATION_PM003 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="PvMaths003Cover" component={PvMaths003} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="SoundMind001" component={SoundMind001} durationInFrames={Math.round(DURATION_SM001 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="SoundMind001Cover" component={SoundMind001} width={1080} height={1920} defaultProps={{ cover: true }} />
   </>
 );
