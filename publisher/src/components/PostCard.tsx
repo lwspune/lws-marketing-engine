@@ -9,6 +9,7 @@ import { PLATFORM_LABEL, type Captions, type Platform, type PostKind } from "@/l
 import type { Result } from "@/lib/publishing/result";
 import type { StoryQuiz } from "@/lib/domain/story";
 import { SlideViewer } from "@/components/SlideViewer";
+import { ReelPreview } from "@/components/ReelPreview";
 
 export interface PostView {
   id: string; title: string; slug: string; kind: PostKind; status: string; captions: Captions;
@@ -91,10 +92,10 @@ export function PostCard({ post }: { post: PostView }) {
         <div className={`mx-auto w-full shrink-0 sm:mx-0 ${post.slideUrls.length ? "max-w-[360px] sm:w-72" : "max-w-[240px] sm:w-52"}`}>
           {story && post.coverUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={post.coverUrl} alt={`Story card: ${post.quiz?.title ?? post.title}`} className="aspect-[9/16] w-full rounded-xl border border-line object-cover" />
+            <img src={post.coverUrl} alt={`Story card: ${post.quiz?.title ?? post.title}`} loading="lazy" decoding="async"
+              className="aspect-[9/16] w-full rounded-xl border border-line object-cover" />
           ) : post.kind === "reel" && post.videoUrl ? (
-            <video src={post.videoUrl} poster={post.coverUrl ?? undefined} controls preload="metadata" playsInline
-              className="aspect-[9/16] w-full rounded-xl border border-line bg-black" aria-label={`Preview of ${post.title}`} />
+            <ReelPreview videoUrl={post.videoUrl} coverUrl={post.coverUrl} title={post.title} />
           ) : post.slideUrls.length ? (
             <SlideViewer urls={post.slideUrls} title={post.title} />
           ) : (

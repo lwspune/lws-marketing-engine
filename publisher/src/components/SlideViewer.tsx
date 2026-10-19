@@ -42,7 +42,7 @@ export function SlideViewer({ urls, title }: { urls: string[]; title: string }) 
       <button type="button" onClick={() => dialog.current?.showModal()} {...swipe}
         className="block w-full rounded-xl" aria-label={`Slide ${index + 1} of ${n}. Open full size`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={urls[index]} alt="" className="aspect-[4/5] w-full rounded-xl border border-line object-cover" />
+        <img src={urls[index]} alt="" loading="lazy" decoding="async" className="aspect-[4/5] w-full rounded-xl border border-line object-cover" />
       </button>
       {controls(false)}
       <p className="text-center text-xs text-muted">Tap the slide to see it full size</p>
@@ -55,7 +55,7 @@ export function SlideViewer({ urls, title }: { urls: string[]; title: string }) 
           </div>
           <div className="flex min-h-0 w-full flex-1 items-center justify-center" {...swipe}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={urls[index]} alt={`Slide ${index + 1} of ${n}`} className="max-h-full max-w-full rounded-xl object-contain" />
+            <img src={urls[index]} alt={`Slide ${index + 1} of ${n}`} loading="lazy" className="max-h-full max-w-full rounded-xl object-contain" />
           </div>
           <div className="w-full max-w-sm">{controls(true)}</div>
         </div>

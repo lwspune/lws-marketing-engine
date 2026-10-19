@@ -72,7 +72,7 @@ export function AdDraftCard({ ad }: { ad: AdDraftView }) {
       <div className="grid grid-cols-[6.5rem_1fr] gap-4 sm:grid-cols-[11rem_1fr] sm:gap-x-6">
         {ad.imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element -- signed URL from private storage
-          <img src={ad.imageUrl} alt={`Poster for ${ad.title}`} className="w-full rounded-xl border border-line sm:row-span-2" />
+          <img src={ad.imageUrl} alt={`Poster for ${ad.title}`} loading="lazy" decoding="async" className="w-full rounded-xl border border-line sm:row-span-2" />
         ) : <div className="aspect-square w-full rounded-xl border border-dashed border-line sm:row-span-2" aria-hidden />}
         <div className="grid min-w-0 grid-cols-1 content-start gap-2 min-[420px]:grid-cols-3">
           <Stat label="Per day" value={`₹${s.dailyBudgetInr}`} />
