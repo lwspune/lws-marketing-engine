@@ -38,16 +38,17 @@ export default async function InboxPage({ searchParams }: { searchParams: { acco
   }));
   const account = pickInstagramAccount(accounts, searchParams.account);
   const isInstagram = accountRows?.find((a) => a.id === account?.id)?.platform === "instagram";
-  // RLS: owners only, like the chats.
-  const { data: autoReply } = account && isInstagram
-    ? await supabase.from("auto_replies").select("enabled, body").eq("account_id", account.id).maybeSingle()
-    : { data: null };
-  // RLS: only owners get rows back.
-  const { data } = account
-    ? await supabase.from("conversations")
-      .select("id, account_id, channel, contact_id, contact_name, contact_username, status, source, last_message_at, last_incoming_at, last_outgoing_at, preview")
-      .eq("account_id", account.id).order("last_message_at", { ascending: false }).limit(500)
-    : { data: [] };
+  // RLS: owners only, for both. Fetched together (one round trip each).
+  const [{ data: autoReply }, { data }] = await Promise.all([
+    account && isInstagram
+      ? supabase.from("auto_replies").select("enabled, body").eq("account_id", account.id).maybeSingle()
+      : { data: null },
+    account
+      ? supabase.from("conversations")
+        .select("id, account_id, channel, contact_id, contact_name, contact_username, status, source, last_message_at, last_incoming_at, last_outgoing_at, preview")
+        .eq("account_id", account.id).order("last_message_at", { ascending: false }).limit(500)
+      : { data: [] },
+  ]);
   const all = (data ?? []) as Row[];
   const rows = all.filter((r) => view === "all" || (view === "reply" ? needsReply(r) && r.status !== "not_lead" : ["interested", "booked", "bought"].includes(r.status)));
   const waiting = all.filter((r) => needsReply(r) && r.status !== "not_lead").length;

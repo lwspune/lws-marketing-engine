@@ -26,8 +26,18 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
   const tab: TabId = (TABS.find((t) => t.id === searchParams.tab)?.id ?? "ready") as TabId;
   const statuses = TABS.find((t) => t.id === tab)!.statuses;
 
-  const access = await memberAccess(supabase);
-  const { data: projects } = await supabase.from("projects").select("id, name, slug, organizations(name)").order("name");
+  // Independent reads go out together: each one is a round trip to the database.
+  const now = new Date();
+  const [access, { data: projects }, { data: allPosts }, { data: channels }, { data: booked }] = await Promise.all([
+    memberAccess(supabase),
+    supabase.from("projects").select("id, name, slug, organizations(name)").order("name"),
+    // Every post's project and status: the tab counts, and which projects get a button.
+    supabase.from("posts").select("project_id, status"),
+    supabase.from("project_channels").select("project_id, platform, connected_accounts(display_name)"),
+    // Booked slots, for each project's next free posting slot (domain/slots.ts).
+    supabase.from("posts").select("project_id, scheduled_at")
+      .not("scheduled_at", "is", null).gt("scheduled_at", now.toISOString()).neq("kind", "story"),
+  ]);
   const projectId = projects?.find((p) => p.id === searchParams.project)?.id ?? null;
 
   let postsQuery = supabase
@@ -40,18 +50,11 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
   if (projectId) postsQuery = postsQuery.eq("project_id", projectId);
   const { data: posts } = await postsQuery;
 
-  // Every post's project and status: the tab counts, and which projects get a button.
-  const { data: allPosts } = await supabase.from("posts").select("project_id, status");
   const inView = (allPosts ?? []).filter((r) => !projectId || r.project_id === projectId);
   const counts = Object.fromEntries(TABS.map((t) => [t.id, inView.filter((r) => (t.statuses as readonly string[]).includes(r.status)).length]));
   const projectButtons = queueProjects(projects ?? [], (allPosts ?? []).map((r) => r.project_id as string), projectId);
 
-  const { data: channels } = await supabase.from("project_channels").select("project_id, platform, connected_accounts(display_name)");
-
-  // The next free posting slot per project (approving a post puts it there; domain/slots.ts).
-  const now = new Date();
-  const { data: booked } = await supabase.from("posts").select("project_id, scheduled_at")
-    .not("scheduled_at", "is", null).gt("scheduled_at", now.toISOString()).neq("kind", "story");
+  // The next free posting slot per project (approving a post puts it there).
   const slotOf = (projectId: string) => {
     const slug = projects?.find((p) => p.id === projectId)?.slug ?? "";
     const taken = (booked ?? []).filter((b) => b.project_id === projectId).map((b) => new Date(b.scheduled_at as string));

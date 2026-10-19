@@ -74,9 +74,11 @@ async function loadInbox(supabase: Db, now: Date) {
   const weekStart = weekStartIst(now);
   // A week starts Monday 00:00 IST = Sunday 18:30 UTC.
   const from = new Date(new Date(`${weekStart}T00:00:00Z`).getTime() - 5.5 * 3_600_000).toISOString();
-  const { data } = await supabase.from("conversations").select("account_id, first_message_at, status, source").gte("first_message_at", from).limit(5000);
+  const [{ data }, { data: rows }] = await Promise.all([
+    supabase.from("conversations").select("account_id, first_message_at, status, source").gte("first_message_at", from).limit(5000),
+    supabase.from("connected_accounts").select("id, platform, display_name, created_at").in("platform", ["instagram", "whatsapp"]),
+  ]);
   const byAccount = summariseInbox(data ?? [], weekStart);
-  const { data: rows } = await supabase.from("connected_accounts").select("id, platform, display_name, created_at").in("platform", ["instagram", "whatsapp"]);
   const accounts: InstagramAccount[] = (rows ?? []).map((a) => ({
     id: a.id, displayName: a.platform === "whatsapp" ? `WhatsApp ${a.display_name}` : a.display_name, createdAt: a.created_at,
   }));
@@ -92,22 +94,28 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
   const supabase = createSupabaseServerClient();
   const access = await memberAccess(supabase);
   const showAds = access.ads;
-  const ads = showAds ? await loadAds(supabase, new Date()) : null;
   const sort: SortId = (SORTS.find((s) => s.id === searchParams.sort)?.id ?? "new") as SortId;
   // One Instagram account at a time (RLS: only the member's own org), so two audiences never blend.
-  const { data: igRows } = await supabase.from("connected_accounts").select("id, display_name, created_at").eq("platform", "instagram");
-  const accounts: InstagramAccount[] = (igRows ?? []).map((a) => ({ id: a.id, displayName: a.display_name, createdAt: a.created_at }));
-  const account = pickInstagramAccount(accounts, searchParams.account);
-  const { data } = account
-    ? await supabase
-      .from("account_media")
-      .select("external_id, permalink, caption, posted_at, likes, comments, views, reach, saves, shares, avg_watch_ms, insights_error, refreshed_at")
-      .eq("account_id", account.id)
-      .order("posted_at", { ascending: false })
-      .limit(2000)
-    : { data: [] };
-  const rows = (data ?? []) as Row[];
-  const inbox = access.inbox ? await loadInbox(supabase, new Date()) : null;
+  const loadReels = async () => {
+    const { data: igRows } = await supabase.from("connected_accounts").select("id, display_name, created_at").eq("platform", "instagram");
+    const accounts: InstagramAccount[] = (igRows ?? []).map((a) => ({ id: a.id, displayName: a.display_name, createdAt: a.created_at }));
+    const account = pickInstagramAccount(accounts, searchParams.account);
+    const { data } = account
+      ? await supabase
+        .from("account_media")
+        .select("external_id, permalink, caption, posted_at, likes, comments, views, reach, saves, shares, avg_watch_ms, insights_error, refreshed_at")
+        .eq("account_id", account.id)
+        .order("posted_at", { ascending: false })
+        .limit(2000)
+      : { data: [] };
+    return { accounts, account, rows: (data ?? []) as Row[] };
+  };
+  // The three sections don't depend on each other: load them together.
+  const [ads, { accounts, account, rows }, inbox] = await Promise.all([
+    showAds ? loadAds(supabase, new Date()) : null,
+    loadReels(),
+    access.inbox ? loadInbox(supabase, new Date()) : null,
+  ]);
   const qs = (next: { sort?: SortId; account?: string }) => {
     const p = new URLSearchParams();
     const s = next.sort ?? sort, a = next.account ?? account?.id;
