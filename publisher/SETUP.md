@@ -212,7 +212,12 @@ connection stops. Needs WhatsApp Business app 2.24.17 or newer.
    never expires). Copy its **configuration id** into Vercel as `META_WA_SIGNUP_CONFIG_ID` (Production) and redeploy.
 4. **WhatsApp → Configuration → Webhook fields**: subscribe **history**, **smb_message_echoes** and
    **account_update** (alongside **messages** from step 9). `smb_app_state_sync` (the phone's address book) is left
-   off on purpose: GoPost doesn't need it.
+   off on purpose: GoPost doesn't need it. (Done 2026-10-19 through the API: `POST /{app-id}/subscriptions` with the
+   app token, object `whatsapp_business_account`, all four fields listed, same callback URL and verify token.)
+
+Note: 70200 03600 already shows in Business Settings → WhatsApp accounts (account 1781479843047484, linked from the
+phone app), but Meta reports it `DISCONNECTED` from the API. Assigning people or the system user to it does NOT bring
+its messages to GoPost; only step 5 does.
 5. Open the Inbox → **Connect a WhatsApp Business app number** → **Connect with Meta**. In Meta's window choose
    **connect your existing WhatsApp Business app**, pick 70200 03600, scan the QR code with the phone (keep the app
    open) and allow sharing chat history. GoPost then saves the number, subscribes to it and asks for the old chats
