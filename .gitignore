@@ -12,6 +12,8 @@ out/
 # Rendered videos are large and re-made from their page:
 #   node reels/tools/record.mjs reels/<name>.render.html
 reels/*.mp4
+# Sound Mind slides, re-made from their batch: node soundmind/render.mjs soundmind/<week>/batch.json
+soundmind/*/*.jpg
 
 # Personal Claude Code settings
 .claude/settings.local.json

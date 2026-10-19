@@ -49,7 +49,14 @@ export async function launch(url) {
   };
   // Kill Edge, then delete its throwaway profile (~30 MB each).
   const close = () => { try { ws.close(); } catch {} proc.kill(); setTimeout(() => { try { rmSync(dir, { recursive: true, force: true, maxRetries: 5, retryDelay: 300 }); } catch {} }, 1500); };
-  return { evaluate, close };
+  // JPEG of the page's top-left w×h pixels (Sound Mind cards are plain HTML, not a canvas).
+  const screenshot = async (w, h, quality = 92) => {
+    await send('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: 1, mobile: false });
+    const m = await send('Page.captureScreenshot', { format: 'jpeg', quality, clip: { x: 0, y: 0, width: w, height: h, scale: 1 } });
+    if (!m.result?.data) throw new Error('screenshot failed: ' + JSON.stringify(m.error ?? m).slice(0, 300));
+    return Buffer.from(m.result.data, 'base64');
+  };
+  return { evaluate, close, screenshot };
 }
 
 // Open a *.render.html page and wait until its fonts and images are loaded.
