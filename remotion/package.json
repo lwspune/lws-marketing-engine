@@ -103,6 +103,7 @@
     "cover:sm004": "remotion still SoundMind004Cover ../soundmind/reels/sm-r004-page-cover.jpg --image-format=jpeg"
   },
   "dependencies": {
+    "@dimforge/rapier3d-compat": "0.21.0",
     "@react-three/fiber": "9.8.1",
     "@react-three/postprocessing": "3.2.1",
     "@remotion/cli": "4.0.532",
@@ -116,7 +117,8 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "remotion": "4.0.532",
-    "three": "0.186.1"
+    "three": "0.186.1",
+    "three.quarks": "0.17.1"
   },
   "devDependencies": {
     "@types/node": "24.19.2",

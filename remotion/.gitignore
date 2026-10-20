@@ -4,3 +4,4 @@ public/*.aac
 public/*.mp4
 public/*.wav
 public/voice/
+public/demo-*.json

@@ -58,6 +58,13 @@ test('deps: the reel toolkit is installed', () => {
     'postprocessing', 'perfect-freehand']) assert.ok(all[name], `${name} in package.json`);
 });
 
+// Realism (2026-10-20, founder-approved after seeing demos): Rapier physics and three.quarks particles are kept for
+// topics that need them; the path tracer was dropped (1–4 min per still and GPU resets on this laptop).
+test('deps: the realism packages are installed', () => {
+  for (const name of ['@dimforge/rapier3d-compat', 'three.quarks']) assert.ok(all[name], `${name} in package.json`);
+  for (const name of ['three-gpu-pathtracer', 'three-mesh-bvh']) assert.ok(!all[name], `${name} was dropped`);
+});
+
 // The voiceover trial (2026-10-20, founder-approved, L43): Kokoro text-to-speech, Apache 2.0, runs offline.
 test('deps: the voice package is installed', () => {
   assert.ok(all['kokoro-js'], 'kokoro-js in package.json');

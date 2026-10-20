@@ -121,6 +121,11 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   still work muted. Every voiced reel is also rendered silent; the founder picks. Framework F23, lesson L43; decide after
   3 voiced reels. The own-voice ElevenLabs plan (2026-10-15) stays parked.
 
+- **Realism demos (2026-10-20, founder-approved after seeing them).** Rapier physics (`@dimforge/rapier3d-compat`) and
+  three.quarks particles are kept in `remotion/` for topics that need them (demos: `DemoPhysics.tsx`, `DemoParticles.tsx`;
+  how to use them in Remotion: `reels/visual-reel-workflow.md` → Reel toolkit). The path tracer was tried and dropped
+  (too slow and unreliable on this laptop).
+
 ## File structure
 
 ```

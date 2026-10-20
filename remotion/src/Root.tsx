@@ -15,6 +15,8 @@ import { PvPhysics006 } from './PvPhysics006.tsx';
 import { PvPhysics007 } from './PvPhysics007.tsx';
 import { PvChem006 } from './PvChem006.tsx';
 import { PvChem007 } from './PvChem007.tsx';
+import { DemoPhysics } from './DemoPhysics.tsx';
+import { DemoParticles } from './DemoParticles.tsx';
 import { PvChem005 } from './PvChem005.tsx';
 import { Reel015 } from './Reel015.tsx';
 import { Reel010 } from './Reel010.tsx';
@@ -85,6 +87,8 @@ export const Root = () => (
     <Composition id="PvChem007" component={PvChem007} durationInFrames={Math.round(DURATION_PC007 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, voice: false }} />
     <Composition id="PvChem007Voice" component={PvChem007} durationInFrames={Math.round(DURATION_PC007 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, voice: true }} />
     <Still id="PvChem007Cover" component={PvChem007} width={1080} height={1920} defaultProps={{ cover: true, voice: false }} />
+    <Composition id="DemoPhysics" component={DemoPhysics} durationInFrames={150} fps={30} width={1080} height={1920} />
+    <Composition id="DemoParticles" component={DemoParticles} durationInFrames={150} fps={30} width={1080} height={1920} />
     <Composition id="PvChem005" component={PvChem005} durationInFrames={Math.round(DURATION_PC005 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="PvChem005Cover" component={PvChem005} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="Reel015" component={Reel015} durationInFrames={Math.round(DURATION_015 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
