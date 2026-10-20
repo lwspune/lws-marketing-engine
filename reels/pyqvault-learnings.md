@@ -1,0 +1,48 @@
+# @pyqvault_ learnings log
+
+Kept apart from @lws.pune's log (`learnings.md`) since 2026-10-20 (founder): a different audience (Class 11–12
+science, not NDA), a different format ("Physics / Chemistry / Maths, visualised") and different numbers. Same method:
+every lesson from real numbers becomes a **testable idea**: what we saw, what we think it means, which reel tests it,
+and the result. Update **Result** and **Status** after each reel's 48 h and 7 d numbers (Insights tab of GoPost, or
+`npm run insights -- --org=lws-pune` → `analytics/pyqvault-reels-<date>.csv`). A rule moves into `pyqvault-insta.md`
+(house settings) only once it's **Confirmed** or the founder makes it one.
+
+Both logs share **one numbering** (L1, L2, …), so a number always means one lesson. The next new lesson is **L33**,
+in whichever log it belongs to.
+
+**Status:** 🧪 testing · ✅ confirmed (do it from now on) · ❌ rejected (don't) · 📌 fact (no test needed)
+
+Baseline (typical @pyqvault_ reel, 9 reels, 2026-10-20): **133 views · 0 saves · 5.2 s watched**.
+For scale: typical @lws.pune reel 788 views · 6.8 s; typical Sound Mind reel 399 views · 6.1 s (same day).
+
+---
+
+| # | What we saw (evidence) | What we think it means | Test | Result | Status |
+|---|---|---|---|---|---|
+| L22 | (Founder, 2026-10-18) The two fastest-growing science accounts we studied are **dark** (@bisal.physics, @sciencevisualised); @ubilumapp is white; @lws.pune runs white. | Unknown which background holds a Class 11–12 audience better: **let the data decide**. | On @pyqvault_ (Physics / Chemistry, visualised), alternate the engine's `lab` (dark) and `white` themes, balanced across physics and chemistry (P1 lab, C1 white, P2 white, C2 lab, …). Compare views, watch time and saves at 48 h and 7 d. | 20 Oct (8 reels, 12–57 h old): **dark** 4 reels avg 170 views · **5.5 s**; **white** 4 reels avg 159 views · **4.0 s**. Same slot (17:30): dark calculus 5.9 s vs white heat 3.5 s. But both 21:30 reels were white (L32), so time and background are tangled. Leaning dark; not called. | 🧪 testing |
+| L27 | **@codematrixvishal**'s **physics/chemistry law** reels (Boyle 3.5M, "Physics Laws" formula sheet 5.2M; 55 such reels, median **72k**) beat their maths curves (median 30k) and tricks (37k) by ~2×. Two 20M+ reels are a **reference sheet** (full trig unit circle, 21M) and a **trick** (Japanese multiplication, 28M). | Science laws shown live are their best category, the same direction as @pyqvault_ (backs L20). Save-able **reference sheets** are a format we haven't tried. | @pyqvault_: a "one-screen reference" reel (e.g. every Class 11 gas law on one animated sheet) as a test. | 20 Oct: our top reel is a law shown live (Boyle: 263 views, 3 saves), backing the first half. Reference sheet not made yet. | 🧪 not started |
+| L28 | **@maths_mentor24** (70k followers, Class 9–12 maths + SSC, 2026-10-19): almost every reel is one static **"SOLVE THIS QUESTION" / "Math Test"** card (one equation, often A/B/C options, "x = ??"). Typical reel 12k views but **33 comments** (3.3 per 1k views) vs 1–5 for every other account we studied, ours 0. Their #1: 2.73M views, 5,722 comments. Grew in bursts of ~3 reels a day (Dec 2025–Feb 2026). | A question the viewer can answer in 2 seconds, asked on frame 0, turns watchers into commenters ("comment your answer"), and comments are what Instagram rewards. Our reels explain beautifully but never ask the viewer anything. | Test a **predict-first opening** on @pyqvault_: frame 0 asks a quick prediction with A/B/C ("Tilt the ramp: when does the block slide?"), caption says "comment your guess", the visual then reveals it. Not an exam question at the end (house rule kept). | First two go out 20 Oct: Physics #4 (11:00), Chemistry #4 (17:30). Maths #3 rejected by the founder. Pass mark: watch > 6.6 s (our best so far) and some comments. | 🧪 testing |
+| L29 | **Our first @pyqvault_ numbers** (18 Oct, from GoPost): 5 reels, 119–228 views, 0 comments, 0–2 saves, **average watch 2.7–6.6 s of ~30 s**. | Most viewers leave in the first few seconds: the opening title card (2.6 s) and slow build lose them before the picture moves. The hook must be instant and moving. | With L28: motion from frame 0 (no static title card on @pyqvault_), the question on screen at once. Compare avg watch time and comments at 48 h. | 20 Oct: 8 reels, **107–263 views**, watch **3.0–6.6 s** (10–21 % of the reel), **0 comments** in total. Every reel stopped at Instagram's first test audience (reach ≈ views). | 🧪 testing |
+| L30 | (Founder, 2026-10-20) **Vivid animation gets views.** Our 3 most-viewed reels have the most moving on screen: Boyle (dozens of molecules hitting a piston, live count) 263 views · 6.3 s · 3 saves; calculus in one curve (zoom, slope, area filling) 226 views at only 16 h · 5.9 s; the 8 families (118 elements lighting up in 8 colours) 194 views · 6.6 s · 1 share. The quiet ones (one dot drawing sin/cos, gas under a lid, one jar warming, one pendulum) got 107–133 views · 3.0–4.2 s. | The whole frame alive (many objects, bold colour changes, something new every second) holds the scroll; one object moving on a calm screen doesn't. | **Make more vivid reels** (founder): pick topics where the whole screen can move and change colour (rule in `pyqvault-insta.md`). Compare their views and watch time with the quiet four. | — | 🧪 testing |
+| L31 | (Founder, 2026-10-20) Viewers leave by 3–6 s (L29). Idea: **the question in the foreground, the animation already running behind it from frame 0.** | Seeing something happen before you know why makes you stay to find out (curiosity). A still frame under the question gives no reason to wait. | Every new @pyqvault_ reel from 20 Oct: the question pinned on top, the scene moving behind it from the first frame, no still frames in the first 3 s (rule in `pyqvault-insta.md`). Physics #4 (ramp tilts from 0.8 s) is close; Chemistry #4 holds still for 2 s first. | — | 🧪 testing |
+| L32 | Both reels posted at **21:30** had the lowest watch time: Maths #1 3.0 s · 131 views, Chemistry #3 3.1 s · 107 views. Morning and 17:30 reels did better (09:04 Boyle 263 views). Only two reels, and both white (L22). | Night may be the wrong time for this audience. | (Founder, 2026-10-20) Slots moved from 11:00 / 17:30 / 21:30 to **09:00 / 13:00 / 18:00** IST (`publisher/src/lib/domain/slots.ts`), from 21 Oct. Compare watch time by slot after a week. | — | 🧪 testing |
+
+---
+
+## Reel-by-reel results (fill at 48 h and 7 d)
+
+Numbers read 20 Oct 09:20 IST; the reel's age at that reading is in brackets. Replace them with the 48 h and 7 d readings.
+
+| Reel | Tests | Posted | Reach | Views | Watch | Saves | Shares | Comments |
+|---|---|---|---|---|---|---|---|---|
+| PV Physics #1, collision → JEE Main 2022 Q8 (**lab**, 40 s) | L22 L20 | 18 Oct 00:44 (posted on approval, so not a slot test) | 122 | 141 (57 h) | 5.2 s | 1 | 0 | 0 |
+| PV Chemistry #1, heat → rate (**white**, 3D jar, 32 s) · first went out 18 Oct 09:10 with 2 others within 5 min; deleted and reposted in a slot (`-repost`): these are the repost's numbers | L22 L20 L21 L23 | 18 Oct 17:31 | 120 | 133 (40 h) | 3.5 s | 1 | 0 | 0 |
+| PV Physics #2, Boyle's law, 3D piston + live hits (**white**, Remotion, 30 s) | L22 L27 L20 L30 | 18 Oct 09:04 | 225 | **263** (48 h) | 6.3 s | **3** | 0 | 0 |
+| PV Chemistry #2, the 8 families (**lab**, Remotion, cinematic music, 33 s; remake of @sciencevisualised 4.45M) · first went out 18 Oct 09:04, deleted, reposted in a slot (`-repost`) | L22 L27 L30 | 18 Oct 11:01 | 146 | 194 (46 h) | **6.6 s** | 0 | 1 | 0 |
+| PV Maths #1, sine and cosine in motion (**white**, Remotion, drive, 29 s; remake of @codematrixvishal 3.10M) | L22 L27 L23 L32 | 18 Oct 21:31 | 121 | 131 (36 h) | 3.0 s | 0 | 0 | 0 |
+| PV Physics #3, pendulum energy + heat (**lab**, Remotion 3D, synthwave, 31 s; remake of @sciencevisualised 2.60M) | L22 L27 | 19 Oct 11:01 | 107 | 118 (22 h) | 4.2 s | 0 | 0 | 0 |
+| PV Chemistry #3, Avogadro: add gas, volume grows (**white**, Remotion 3D, trap, 30 s; remake of @bisal.physics 421k) | L22 L20 L32 | 19 Oct 21:32 | 99 | 107 (12 h) | 3.1 s | 0 | 0 | 0 |
+| PV Maths #2, calculus in one curve (**lab**, Remotion, cinematic, 30 s; remake of @ubilumapp 599k) | L22 L23 L30 | 19 Oct 17:31 | 193 | 226 (16 h) | 5.9 s | 1 | 0 | 0 |
+| PV Physics #4, ramp slip at 35° (**white**, Remotion 3D, drive; **predict-first**, 23.8 s; remake of @mathsy.uk 1.50M) | L28 L29 L22 L31 | 20 Oct 11:00 (scheduled) | | | | | | |
+| PV Chemistry #4, heat 0 → 273 °C: volume ×2 (**lab**, Remotion 3D, synthwave; **predict-first**, 24 s; remake of @codematrixvishal 807k) | L28 L29 L22 L31 | 20 Oct 17:30 (scheduled) | | | | | | |
+| PV Maths #3, ₹1 compounded → e (**white**, Remotion, trap; **predict-first**; remake of @codematrixvishal 1.59M) | L28 L29 L22 | rejected by the founder (20 Oct), not posted | | | | | | |

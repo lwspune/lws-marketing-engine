@@ -58,6 +58,16 @@ Then run the 17 DB tests against the real database and do ONE real test post wit
 
 ## Backfill ledger
 
+### @pyqvault_ Chemistry #4 opens on a still picture for 2 s (logged 2026-10-20, awaiting the founder's call)
+New founder rule (L31 in `reels/pyqvault-learnings.md`, rule in `reels/pyqvault-insta.md`): the question sits in front
+while the animation already runs behind it, no still frames in the first 3 s. Chemistry #4 (approved, posts 20 Oct
+17:30) shows the question over a cylinder that stays still until the flames light at 2 s. Physics #4 (11:00) starts
+moving at 0.8 s: close enough. Reels already posted aren't touched.
+**360:** scope = one approved reel · blast radius = its GoPost post (MP4 + cover replaced) · does it apply? partly: 2 s
+still with the question already on screen, vs the 2.6 s title card before · risk = re-render + re-upload hours before
+its slot · cost ≈ 20 min · **recommendation: leave it.** It's still a clean predict-first test (L28), and set against
+Physics #4 (moving at 0.8 s) it gives a first hint for L31.
+
 ### Wrong handle burned into reels 001–004 (logged 2026-10-12, DECLINED by user the same day)
 User: viewers can tap the account to follow, so the handle isn't needed; keep the Instagram files as
 they are. Future pieces carry no handle on screen (see `reels/lwspune-insta.md`).

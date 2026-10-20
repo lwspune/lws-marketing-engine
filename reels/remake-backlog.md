@@ -13,7 +13,8 @@ tricks, "math sounds like", parametric art).
 - The caption kit (`<reel>.md`) names the source reel in a "Proven idea" line, so the numbers can be compared later.
 - Each one still needs its physics/maths re-checked in its tests, and a real PYQ (@lws.pune) or a "where it's asked"
   line (@pyqvault_).
-- When a remake is posted, fill its row in `learnings.md`: did a proven idea beat our own ideas on our account?
+- When a remake is posted, fill its row in `learnings.md` (@lws.pune) or `pyqvault-learnings.md` (@pyqvault_): did a
+  proven idea beat our own ideas on our account?
 
 ## @pyqvault_ (Class 11–12 Physics and Chemistry), in the order to make them
 
