@@ -7,7 +7,7 @@ tricks, "math sounds like", parametric art).
 
 **Rules for a remake**
 - We take the **idea** (the topic and the kind of picture), never their video, frames, text, voice or music.
-  Everything is drawn in our own look (Remotion template `remotion/src/PvPhysics002.tsx`) with our own words.
+  Everything is drawn in our own look (Remotion template `remotion/src/PvPhysics004.tsx`, framework F11) with our own words.
 - **Better, not the same:** add what theirs lacks, usually the *why* (a live count, a second picture, a graph that
   morphs) and our house rules (`pyqvault-insta.md` / `lwspune-insta.md`).
 - The caption kit (`<reel>.md`) names the source reel in a "Proven idea" line, so the numbers can be compared later.
@@ -16,9 +16,52 @@ tricks, "math sounds like", parametric art).
 - When a remake is posted, fill its row in `learnings.md` (@lws.pune) or `pyqvault-learnings.md` (@pyqvault_): did a
   proven idea beat our own ideas on our account?
 
-## @pyqvault_ (Class 11–12 Physics and Chemistry), in the order to make them
+## Topic scores
 
-Rotation: physics/chemistry alternate; background follows the L22 test (P1 lab, C1 white, P2 white, C2 lab, P3 lab, C3 white, …).
+**Which idea to make next** (framework F21, founder 2026-10-20). Each open @pyqvault_ idea gets a score out of 10;
+the next reel of the subject that's due (P → C → M) takes the **highest open score**, ties going to the better-proven
+idea. `node reels/tools/topic-scores.js` checks every row and prints the next pick per subject. The goal is
+**engagement and reach**, so exam weight is deliberately *not* a criterion (founder). L35 checks whether a high score
+really predicts watch time; the criteria are tuned from that.
+
+| Criterion | Points | Anchors | Why |
+|---|---|---|---|
+| **Proof** | 0–3, worked out | their views ÷ their typical reel: ≥ 100× → 3 · ≥ 30× → 2 · ≥ 3× → 1 · our own idea (–) → 0 | demand already shown (F1) |
+| **Vivid** | 0–3 | 3 = many objects moving across the whole frame + colour changing (Boyle's molecules, the 8 families) · 2 = several moving parts or a strong colour change · 1 = one main object moving · 0 = mostly still | our 3 busiest reels were our top 3 (L30) |
+| **Question** | 0–2 | 2 = a 2-second A/B/C guess with a surprising answer · 1 = a question that needs a sum or reading · 0 = no natural question | the opening that gets comments (L28, F4) |
+| **Law live** | 0–1 | a live simulation + live numbers + a graph that draws itself | our best category and others' (F3, L27) |
+| **Everyday** | 0–1 | something viewers have seen in real life (a pump getting hot, tea cooling, topspin) | reach beyond students: @mathsy.uk's #1 is a soda can (2.7M), Magnus 1.1M. Claude's addition, 2026-10-20: on test (L35) |
+
+Re-score an idea when its angle changes, and keep a made idea's row (status "made") so its score can be checked
+against its results. **Chemistry is thin:** the 5 accounts we studied have no proven chemistry left beyond the gas laws,
+so C7–C11 are our own vivid ideas (proof 0) until a study of chemistry accounts finds proven ones.
+
+| # | Subject | Idea | Proof (×) | Vivid | Question | Law live | Everyday | Score | Status |
+|---|---|---|---|---|---|---|---|---|---|
+| P5 | P | Adiabatic squeeze heats the gas (insulated vs open, side by side) | 125 | 3 | 2 | 1 | 1 | 10 | |
+| P9 | P | Heat flows hot → cold, never back (two chambers mixing) | 54 | 3 | 1 | 1 | 1 | 8 | |
+| P11 | P | 30° and 60° land in the same spot (a fan of launch angles) | 11 | 3 | 2 | 1 | 1 | 8 | |
+| P12 | P | Topspin dips, slice floats (Magnus, streamlines) | 63 | 3 | 2 | 0 | 1 | 8 | |
+| P6 | P | Same lift, faster = more power | 76 | 1 | 2 | 1 | 1 | 7 | |
+| P7 | P | Tilt the rope: lift vs pull (drone towing a box) | 83 | 2 | 1 | 1 | 1 | 7 | |
+| P8 | P | Why a bounced ball never comes back as high | 52 | 1 | 1 | 1 | 1 | 6 | |
+| P10 | P | One-screen sheet: Class 12 electricity & magnetism | 190 | 2 | 0 | 0 | 0 | 5 | |
+| C5 | C | P, V and T together (combined gas law) | 11 | 2 | 2 | 1 | 1 | 7 | |
+| C7 | C | Flame colours: each metal burns its own colour (fireworks) | – | 3 | 2 | 0 | 1 | 6 | |
+| C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | 3 | 2 | 1 | 0 | 6 | |
+| C9 | C | The pH rainbow: universal indicator from lemon to soap | – | 3 | 2 | 0 | 1 | 6 | |
+| C11 | C | Diffusion: dye in hot vs cold water | – | 2 | 2 | 0 | 1 | 5 | |
+| C10 | C | Cool the brown gas: NO₂ ⇌ N₂O₄ shifts (Le Chatelier) | – | 2 | 2 | 0 | 0 | 4 | |
+| M4 | M | f and f′ together: the slope becomes a graph | 115 | 2 | 1 | 1 | 0 | 7 | |
+| M5 | M | The quadratic formula is a square, completed | 40 | 2 | 1 | 0 | 0 | 5 | |
+| M7 | M | What is integration? Rectangles get thinner | 19 | 2 | 1 | 1 | 0 | 5 | |
+| M9 | M | Every type of matrix on one screen | 35 | 2 | 0 | 0 | 0 | 4 | |
+| M6 | M | e^(iθ): multiplying by i turns 90° | 17 | 1 | 1 | 0 | 0 | 3 | |
+| M8 | M | The equation of a circle is just Pythagoras | 15 | 1 | 1 | 0 | 0 | 3 | |
+
+## @pyqvault_ (Class 11–12 Physics and Chemistry): the proven ideas (pick by **Topic scores** above)
+
+Rotation: Physics → Chemistry → Maths; background follows the L22 test, music the L34 rotation (`pyqvault-framework.md`).
 
 | # | Remake | Proof (views, × their typical reel) | Our angle | Chapter | Look | Status |
 |---|---|---|---|---|---|---|
@@ -34,8 +77,9 @@ Rotation: physics/chemistry alternate; background follows the L22 test (P1 lab, 
 | P8 | Why a bounced ball never comes back as high | @sciencevisualised 908k (52×) [link](https://www.instagram.com/reel/DbnqvWgMo8b/) | heights shrink by e² each bounce; energy lost per bounce as bars | 11 · Work, energy & power | lab | |
 | P9 | Heat flows hot → cold, never back | @bisal.physics 457k (54×) [link](https://www.instagram.com/reel/DeGfT9iyQd3/) | two chambers, fast/slow particles mixing until the speeds even out | 11 · Thermodynamics | white | |
 | P10 | One-screen sheet: Class 12 electricity & magnetism laws | @codematrixvishal 5.21M (190×) [link](https://www.instagram.com/reel/DZGBPbdzgsS/) | the **reference-sheet** format (L27): each law appears with a tiny live picture, built to be saved | 12 · Electrostatics → EMI | lab | test format |
-| P11 | 30° and 60° land in the same spot | @sciencevisualised 193k (11×) [link](https://www.instagram.com/reel/Dc3b1oVsuzr/) | two projectiles launched together; range readout; sin 2θ twin angles | 11 · Projectile motion | white | |
+| P11 | 30° and 60° land in the same spot | @sciencevisualised 193k (11×) [link](https://www.instagram.com/reel/Dc3b1oVsuzr/) | a fan of projectiles (15°–75°) launched together, each its own colour; twin pairs (30°/60°, 15°/75°) land together; range readout; sin 2θ twin angles | 11 · Projectile motion | white | |
 | P12 | Topspin dips, slice floats (Magnus) | @sciencevisualised 1.10M (63×) [link](https://www.instagram.com/reel/Dbvz1s7M3C6/) | 3D spinning ball, pressure arrows above/below (Bernoulli) | 11 · Fluids | lab | |
+| C5 | P, V and T together (combined gas law) | @codematrixvishal 299k (11×) [link](https://www.instagram.com/reel/DX13CZTJdVK/) | one piston: heat it, squeeze it, three live gauges; P·V/T never moves | 11 · States of matter | lab | |
 
 ### @pyqvault_ · Maths, visualised (Class 11–12; added 2026-10-18, founder)
 
