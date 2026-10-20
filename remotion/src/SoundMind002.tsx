@@ -56,8 +56,8 @@ function Sky({ night, t }: { night: number; t: number }) {
 function Thoughts({ t }: { t: number }) {
   return (
     <g clipPath="url(#glass)">
-      {THOUGHTS.map((th, i) => {
-        const p = thoughtAt(th, t);
+      {/* far-away thoughts still flying in are drawn behind the ones already against the glass */}
+      {THOUGHTS.map((th, i) => ({ th, i, p: thoughtAt(th, t) })).sort((a, b) => Number(a.p.phase !== 'approach') - Number(b.p.phase !== 'approach')).map(({ th, i, p }) => {
         if (p.phase === 'wait' || p.phase === 'gone' || p.alpha <= 0) return null;
         const w = labelWidth(th.label);
         return (
@@ -96,7 +96,7 @@ function WindowFront() {
 
 // ME holds her tea in both hands; during the close-up she lifts it to her lips.
 function cupAt(t: number) {
-  return { x: ME.x + 6, y: ME.headY + 92 - 66 * sipAt(t) };
+  return { x: ME.x + 6, y: ME.headY + 82 - 58 * sipAt(t) };
 }
 function Me({ t }: { t: number }) {
   const { x, headY, r } = ME, cup = cupAt(t);
