@@ -1,0 +1,16 @@
+{
+  "slug": "pv-physics-006-topspin",
+  "project": "pyqvault-insta",
+  "kind": "reel",
+  "title": "@pyqvault_ · Physics, visualised #6 (predict-first): same tennis shot with topspin: dip, float or neither? (white, drive)",
+  "video": "pv-physics-006-topspin.mp4",
+  "cover": "pv-physics-006-topspin-cover.png",
+  "captions": {
+    "instagram": "Same tennis shot, now with topspin. The ball will… A dip · B float · C neither\nComment your guess before you watch 👇\n\nClass 11 Physics · Mechanical Properties of Fluids (dynamic lift)\nPhysics, visualised #6\n\nOne machine, one speed (26 m/s at 14°), three spins.\nNo spin lands at 25.6 m: out (the court is 23.77 m). Backspin floats to 33 m: way out. Topspin clears the net and dips in at 20.1 m → A.\nWhy: a spinning ball drags the air round and throws it off one way. Topspin throws the air up, so the ball is pushed down (the Magnus effect). Backspin: air down, ball up.\nThat's why players hit topspin.\n\nSave this for revision 📌 Follow for #7.\nPractise every PYQ chapter-wise, free → pyqvault.com (link in bio).\n\n#Physics #Class11 #Class11Physics #MagnusEffect #FluidMechanics #Bernoulli #CBSE #JEEMain #NEET #PhysicsVisualised",
+    "facebook": "Same tennis shot, now with topspin. The ball will… A dip · B float · C neither 👇\n\nClass 11 Physics · Mechanical Properties of Fluids (dynamic lift)\nPhysics, visualised #6: one speed, three spins. No spin lands just out, backspin floats far out, topspin clears the net and dips in → A. A spinning ball throws the air one way and is pushed the other: topspin throws it up, so the ball dips (the Magnus effect).\n\nPractise PYQs free, chapter-wise: https://www.pyqvault.com\n\n#Physics #Class11 #MagnusEffect",
+    "youtube": {
+      "title": "Same tennis shot with topspin: does it dip, float or neither? #shorts",
+      "description": "Physics, visualised #6. A real tennis ball at 26 m/s, 14° up, with gravity, drag and Magnus lift (C_L 0.25): no spin lands 25.6 m (out), backspin 33 m (out), topspin dips in at 20.1 m. Topspin throws the air up, so the ball is pushed down: the Magnus effect (NCERT Class 11, dynamic lift).\n\nPractise PYQs free, chapter-wise: pyqvault.com\n\n#Physics #Class11 #Shorts"
+    }
+  }
+}

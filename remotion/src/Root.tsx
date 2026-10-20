@@ -11,6 +11,7 @@ import { PvMaths002 } from './PvMaths002.tsx';
 import { PvPhysics004 } from './PvPhysics004.tsx';
 import { PvChem004 } from './PvChem004.tsx';
 import { PvPhysics005 } from './PvPhysics005.tsx';
+import { PvPhysics006 } from './PvPhysics006.tsx';
 import { PvChem005 } from './PvChem005.tsx';
 import { Reel015 } from './Reel015.tsx';
 import { PvMaths003 } from './PvMaths003.tsx';
@@ -25,6 +26,7 @@ import { DURATION as DURATION_PM002 } from './lib/pm002.ts';
 import { DURATION as DURATION_PP004 } from './lib/pp004.ts';
 import { DURATION as DURATION_PC004 } from './lib/pc004.ts';
 import { DURATION as DURATION_PP005 } from './lib/pp005.ts';
+import { DURATION as DURATION_PP006 } from './lib/pp006.ts';
 import { DURATION as DURATION_PC005 } from './lib/pc005.ts';
 import { DURATION as DURATION_015 } from './lib/reel015.ts';
 import { DURATION as DURATION_PM003 } from './lib/pm003.ts';
@@ -60,6 +62,8 @@ export const Root = () => (
     <Still id="PvChem004Cover" component={PvChem004} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="PvPhysics005" component={PvPhysics005} durationInFrames={Math.round(DURATION_PP005 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="PvPhysics005Cover" component={PvPhysics005} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="PvPhysics006" component={PvPhysics006} durationInFrames={Math.round(DURATION_PP006 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="PvPhysics006Cover" component={PvPhysics006} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="PvChem005" component={PvChem005} durationInFrames={Math.round(DURATION_PC005 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="PvChem005Cover" component={PvChem005} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="Reel015" component={Reel015} durationInFrames={Math.round(DURATION_015 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />

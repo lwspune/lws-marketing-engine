@@ -42,7 +42,7 @@ so C7–C11 are our own vivid ideas (proof 0) until a study of chemistry account
 | P5 | P | Adiabatic squeeze heats the gas (insulated vs open, side by side) | 125 | 3 | 2 | 1 | 1 | 10 | ✅ made 2026-10-20 (`pv-physics-005-adiabatic`) |
 | P9 | P | Heat flows hot → cold, never back (two chambers mixing) | 54 | 3 | 1 | 1 | 1 | 8 | |
 | P11 | P | 30° and 60° land in the same spot (a fan of launch angles) | 11 | 3 | 2 | 1 | 1 | 8 | |
-| P12 | P | Topspin dips, slice floats (Magnus, streamlines) | 63 | 3 | 2 | 0 | 1 | 8 | |
+| P12 | P | Topspin dips, slice floats (Magnus, streamlines) | 63 | 3 | 2 | 0 | 1 | 8 | ✅ made 2026-10-20 (`pv-physics-006-topspin`) |
 | P6 | P | Same lift, faster = more power | 76 | 1 | 2 | 1 | 1 | 7 | |
 | P7 | P | Tilt the rope: lift vs pull (drone towing a box) | 83 | 2 | 1 | 1 | 1 | 7 | |
 | P8 | P | Why a bounced ball never comes back as high | 52 | 1 | 1 | 1 | 1 | 6 | |
