@@ -19,6 +19,8 @@ soundmind/reels/*.mp4
 
 # Personal Claude Code settings
 .claude/settings.local.json
+# Remotion's official skill, installed locally (its repo has no licence file, so it isn't redistributed here)
+.claude/skills/remotion-markup/
 
 # OS clutter
 Thumbs.db
