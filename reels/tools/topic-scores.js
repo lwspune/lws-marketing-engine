@@ -24,7 +24,8 @@ function parse(md) {
   const rows = [];
   for (const line of (end < 0 ? rest : rest.slice(0, end)).split("\n")) {
     const cells = line.split("|").slice(1, -1).map((c) => c.trim());
-    if (cells.length !== 10 || !/^[A-Z]\d+$/.test(cells[0])) continue;
+    if (!/^[A-Z]\d+$/.test(cells[0] || "")) continue;
+    if (cells.length !== 10) { rows.push({ id: cells[0], broken: cells.length }); continue; }   // reported by validate()
     const n = (c) => Number(c);
     rows.push({
       id: cells[0], subject: cells[1], idea: cells[2], proofX: /^\d+(\.\d+)?$/.test(cells[3]) ? n(cells[3]) : null,
@@ -40,6 +41,7 @@ const total = (r) => proofPoints(r.proofX) + r.vivid + r.question + r.law + r.ev
 function validate(rows) {
   const errors = [], seen = new Set();
   for (const r of rows) {
+    if (r.broken) { errors.push(`${r.id}: ${r.broken} columns, expected 10`); continue; }
     if (seen.has(r.id)) errors.push(`${r.id}: id used twice`);
     seen.add(r.id);
     if (!SUBJECTS.includes(r.subject)) errors.push(`${r.id}: subject "${r.subject}" should be P, C or M`);
@@ -50,9 +52,15 @@ function validate(rows) {
   return errors;
 }
 
-const isOpen = (r) => !/made|rejected|dropped/i.test(r.status);
+const isQueued = (r) => /queued/i.test(r.status);                       // picked, waiting to be made
+const isOpen = (r) => !/made|rejected|dropped|queued/i.test(r.status);
 
-/** The best open idea per subject: highest score, then the better-proven one. */
+/** Ideas already picked and waiting to be made, best first. */
+function queued(rows) {
+  return rows.filter(isQueued).sort((a, b) => b.score - a.score);
+}
+
+/** The best open idea per subject (not queued): highest score, then the better-proven one. */
 function nextPicks(rows) {
   const out = {};
   for (const s of SUBJECTS) {
@@ -63,7 +71,7 @@ function nextPicks(rows) {
   return out;
 }
 
-module.exports = { proofPoints, parse, validate, nextPicks };
+module.exports = { proofPoints, parse, validate, nextPicks, queued };
 
 if (require.main === module) {
   const md = require("node:fs").readFileSync(require("node:path").join(__dirname, "..", "remake-backlog.md"), "utf8");
@@ -74,6 +82,8 @@ if (require.main === module) {
     const open = rows.filter((r) => r.subject === s && isOpen(r)).sort((a, b) => b.score - a.score);
     console.log(`${name[s]}: ${open.map((r) => `${r.id} ${r.score}`).join(" · ") || "nothing open"}`);
   }
+  const q = queued(rows);
+  console.log(`\nQueued to make: ${q.map((r) => `${r.id} "${r.idea}" (${r.score}/10)`).join(" · ") || "none"}`);
   const next = nextPicks(rows);
-  console.log("\nNext:", SUBJECTS.map((s) => next[s] ? `${name[s]} ${next[s].id} "${next[s].idea}" (${next[s].score}/10)` : `${name[s]} —`).join(" · "));
+  console.log("Next after the queue:", SUBJECTS.map((s) => next[s] ? `${name[s]} ${next[s].id} "${next[s].idea}" (${next[s].score}/10)` : `${name[s]} —`).join(" · "));
 }

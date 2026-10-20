@@ -38,7 +38,7 @@ so C7–C11 are our own vivid ideas (proof 0) until a study of chemistry account
 
 | # | Subject | Idea | Proof (×) | Vivid | Question | Law live | Everyday | Score | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| P5 | P | Adiabatic squeeze heats the gas (insulated vs open, side by side) | 125 | 3 | 2 | 1 | 1 | 10 | |
+| P5 | P | Adiabatic squeeze heats the gas (insulated vs open, side by side) | 125 | 3 | 2 | 1 | 1 | 10 | ⏭ queued 2026-10-20 |
 | P9 | P | Heat flows hot → cold, never back (two chambers mixing) | 54 | 3 | 1 | 1 | 1 | 8 | |
 | P11 | P | 30° and 60° land in the same spot (a fan of launch angles) | 11 | 3 | 2 | 1 | 1 | 8 | |
 | P12 | P | Topspin dips, slice floats (Magnus, streamlines) | 63 | 3 | 2 | 0 | 1 | 8 | |
@@ -46,13 +46,13 @@ so C7–C11 are our own vivid ideas (proof 0) until a study of chemistry account
 | P7 | P | Tilt the rope: lift vs pull (drone towing a box) | 83 | 2 | 1 | 1 | 1 | 7 | |
 | P8 | P | Why a bounced ball never comes back as high | 52 | 1 | 1 | 1 | 1 | 6 | |
 | P10 | P | One-screen sheet: Class 12 electricity & magnetism | 190 | 2 | 0 | 0 | 0 | 5 | |
-| C5 | C | P, V and T together (combined gas law) | 11 | 2 | 2 | 1 | 1 | 7 | |
+| C5 | C | P, V and T together (combined gas law) | 11 | 2 | 2 | 1 | 1 | 7 | ⏭ queued 2026-10-20 |
 | C7 | C | Flame colours: each metal burns its own colour (fireworks) | – | 3 | 2 | 0 | 1 | 6 | |
 | C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | 3 | 2 | 1 | 0 | 6 | |
 | C9 | C | The pH rainbow: universal indicator from lemon to soap | – | 3 | 2 | 0 | 1 | 6 | |
 | C11 | C | Diffusion: dye in hot vs cold water | – | 2 | 2 | 0 | 1 | 5 | |
 | C10 | C | Cool the brown gas: NO₂ ⇌ N₂O₄ shifts (Le Chatelier) | – | 2 | 2 | 0 | 0 | 4 | |
-| M4 | M | f and f′ together: the slope becomes a graph | 115 | 2 | 1 | 1 | 0 | 7 | |
+| M4 | M | f and f′ together: the slope becomes a graph | 115 | 2 | 1 | 1 | 0 | 7 | ⏭ queued 2026-10-20 |
 | M5 | M | The quadratic formula is a square, completed | 40 | 2 | 1 | 0 | 0 | 5 | |
 | M7 | M | What is integration? Rectangles get thinner | 19 | 2 | 1 | 1 | 0 | 5 | |
 | M9 | M | Every type of matrix on one screen | 35 | 2 | 0 | 0 | 0 | 4 | |

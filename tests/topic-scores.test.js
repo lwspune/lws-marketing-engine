@@ -74,3 +74,15 @@ test("the real backlog's score table is valid and has an open idea for every sub
   const next = ts.nextPicks(rows);
   for (const s of ["P", "C", "M"]) assert.ok(next[s], `no open ${s} idea`);
 });
+
+test("queued ideas (to make next) are listed as queued, and the next pick moves past them", () => {
+  const md = TABLE.replace("| 125 | 3 | 2 | 1 | 1 | 10 | |", "| 125 | 3 | 2 | 1 | 1 | 10 | ⏭ queued |");
+  const rows = ts.parse(md);
+  assert.deepEqual(ts.queued(rows).map((r) => r.id), ["P5"]);
+  assert.equal(ts.nextPicks(rows).P.id, "P6", "P5 is already queued, so the next physics pick is P6");
+});
+
+test("a broken row (wrong number of columns) is reported, not silently skipped", () => {
+  const md = TABLE.replace("| 76 | 1 | 2 | 1 | 1 | 7 | |", "| 76 | 1 | 2 | 1 | 1 | 7 || queued |");
+  assert.match(ts.validate(ts.parse(md)).join("\n"), /P6: 11 columns, expected 10/);
+});
