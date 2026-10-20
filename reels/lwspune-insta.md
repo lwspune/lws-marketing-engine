@@ -10,12 +10,18 @@ together.
   Never "@lwspune": that's a different account, so a CTA with it sends viewers away. The hashtag stays
   `#LWSPune`, because hashtags can't contain dots.
 - **Audience:** NDA aspirants (Class 11–12 and droppers), Maths first
-- **Bio link:** https://www.pyqvault.com (stable; chapter links go in captions)
+- **Bio link:** https://www.pyqvault.com/go/quiz (from 2026-10-17: always opens today's quiz, never needs
+  editing; chapter links still go in captions). The **Daily Quiz** highlight's link sticker uses
+  https://www.pyqvault.com/go/quiz?src=highlight
 - **Ads:** ₹0. Organic only until free leads convert (about 2 buyers per 100 leads). Don't use Ads Manager.
 
 ## Content rules
 
 - **Real PYQs only**, from the PYQ Vault question bank (read-only). Re-derive every answer before use.
+- **One question per piece** (founder's rule, 2026-10-14). Never put two PYQs in one reel or post, even
+  when the paper asks two questions on one set-up (e.g. NDA 2024 (I) Q89 + Q90). Pick the one the
+  picture answers; the other can be its own piece later. "NDA asked this 3 times" is fine as a hook
+  line, but only one question is on screen and solved.
 - Label every piece with paper, subject and question number, e.g. `NDA 2026 (II) · Maths · Q74`.
 - **No made-up numbers**: no "90% get this wrong" unless the bank has real attempt data.
 - **Faceless + silent-first.** On-screen text carries the explanation; no voice, no face. V (the PYQ
@@ -35,7 +41,7 @@ together.
 | Hook | visible on **frame 0**, with no fade-in (people decide in the first second) |
 | Cover | the question on paper + one big black box mid-page (y ≈ 1060–1080). The profile grid crops reels to 3:4, so nothing important in the top or bottom 240 px |
 | Safe zones | keep text out of the bottom ~320 px (caption/username) and the right ~120 px below mid-screen (buttons) |
-| Watermark | `LWS Pune · NDA Maths`, small and faded, bottom left (skip when V is on screen) |
+| Watermark | **None**, from reel 007 on (founder's call, 2026-10-14): set `watermarkY: null` in the render page. Reels 001–006 keep their `LWS Pune · NDA Maths` line as made |
 | End card | **solid** dark `#0c1018`, short: one takeaway line + a green `#4fd1a5` call to action. **No handle on screen**: viewers tap the account name to follow (founder's call, 2026-10-12). Wording per platform: Instagram **"Follow for more"**, YouTube **"Subscribe for more"**. No extra lines (the founder removed "A real NDA PYQ every day" and "link in bio") |
 
 ### Experimental: white visual format (added 2026-10-13, on test)
@@ -47,7 +53,7 @@ Not yet approved as house style; it's day 5 of `format-test.md`. How to make one
 | Element | Setting |
 |---|---|
 | Board | warm soft-white `#faf8f3` fading to `#f1ede4` at the edges; never pure white, no ruled lines |
-| Colours | from `Reel.WHITE` only: slate ink `#23304a`, muted `#5f6880`, one maths colour indigo `#3f56a0` (curve, ∫, limits), one area colour sage `#2a736e` on a soft fill, **one accent** terracotta `#a94f28` used only for the answer and traps. All ≥ 4.5:1 centre to edge (tested) |
+| Colours | from `Reel.WHITE` only: slate ink `#23304a`, muted `#5f6880`, one maths colour indigo `#3f56a0` (curve, ∫, limits), one area colour sage `#2a736e` on a soft fill, **one accent** terracotta `#a94f28` used only for the correct answer (traps are muted + dashed, from 2026-10-14). All ≥ 4.5:1 centre to edge (tested) |
 | Captions | floating white cards with a soft shadow, Segoe UI Variable semibold, sentence case; they cross-fade |
 | Question | `api.card()` with the source line, the maths, and options as `api.chips()`; the answer chip fills with the accent and pulses once (no scribbled ring) |
 | Lines | `api.softStroke()`: round caps, faint shadow in the line's own colour; a glowing dot leads a curve as it draws |
@@ -55,8 +61,22 @@ Not yet approved as house style; it's day 5 of `format-test.md`. How to make one
 | Cover | sentence case on a white card, low (y ≈ 1440) so the figure shows in the 3:4 grid crop |
 | End card | **fades into the same soft board** (no navy flash), muted lead line, ink takeaway, sage "Follow for more". Founder-approved exception to the navy end card, white format only (2026-10-13) |
 
-Everything else above (hook on frame 0, safe zones, watermark, music) still applies. Best for
+Everything else above (hook on frame 0, safe zones, no watermark, music) still applies. Best for
 questions with a picture: areas, periodic graphs, symmetry (`visual-candidates.md`).
+
+## Daily quiz Story (added 2026-10-17)
+
+Made and posted by the publisher (`publisher/src/lib/publishing/storyCard.ts`), one a day at 7:30 am
+IST, approved a week at a time. No caption, no music.
+
+| Element | Setting |
+|---|---|
+| Size | 1080 × 1920 **JPEG** (the Instagram API rejects PNG) |
+| Look | the soft-white board (`#faf8f3` → `#f1ede4`), one white card with a soft shadow, Noto Sans |
+| Words | "Today's quiz · Mon 19 Oct", the chapter (ink, bold), the quiz name (indigo), "Free · see your score instantly" (muted) |
+| Call to action | sage `#2a736e` pill: **"Tap the link in our bio"** until the story-reply DM is live, then **"Reply QUIZ for the link"** |
+| Safe zones | nothing in the top ~250 px (profile bar) or bottom ~340 px (reply box) |
+| Rules | no handle on screen, no numbers we can't back up (same as reels) |
 
 ## Sound
 
