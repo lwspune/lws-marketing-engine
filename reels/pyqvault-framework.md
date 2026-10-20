@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.2, 2026-10-20)
+# @pyqvault_ reel framework (v1.3, 2026-10-20)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -19,6 +19,15 @@ viewers stay.
 **F1 · Remake a proven idea.** Pick from `remake-backlog.md`: ideas that already went viral for other creators,
 remade our way. · *Why:* someone else's views prove people want it; our first reels were all remakes, and the best did
 2× the worst (L27). · *Check:* the backlog row has the proof link. · 📌 founder, 2026-10-18
+
+**F21 · Pick by topic score.** Each open idea is scored out of 10 in `remake-backlog.md` → **Topic scores**: proof
+(0–3, worked out from their views multiple) + vivid (0–3) + a 2-second question (0–2) + law live (0–1) + everyday hook
+(0–1), each with written anchors. The subject that's due (P → C → M) takes its highest open score; `node
+reels/tools/topic-scores.js` checks the table and names the next pick. **No exam-weight criterion:** the goal is
+engagement and reach (founder). · *Why:* the criteria are F1–F4's reasons turned into numbers, so the choice is the same
+whoever makes it, and L35 can test whether the score predicts results; the everyday hook is for reach beyond students
+(@mathsy.uk's #1 is a soda can, 2.7M). · *Check:* the tool passes (`tests/topic-scores.test.js` also checks the real
+table). · 🧪 L35
 
 **F2 · Vivid first.** The whole screen moves and changes colour: many objects at once (molecules, elements,
 particles), bold colour changes, something new every second. If a topic can only show one thing moving, add what's
@@ -137,3 +146,4 @@ becomes a user. · *Check:* the end card. · 📌 founder, 2026-10-18
 | v1 | 2026-10-20 | Framework created from the house settings (F1, F3, F4, F6, F7, F10–F13, F17–F20) plus today's points: F2 vivid first, F5 question in front of a moving picture, F8 rounded shapes, F9 zooms, F14 the experiment's own sound, F15 whooshes on fast zooms only, F16 the mix. | Founder: a standard framework, every point with a reason. Today's points come from the first 8 reels' numbers (L29, L30) and the founder's calls (L31, L33). First reels made with all of it: the remakes of Physics #4 and Chemistry #4. |
 | v1.1 | 2026-10-20 | F13 music: from 📌 to 🧪 L34; fair rotation between five styles while the test runs; style logged per reel. | Founder: track music performance. The first 8 reels hint the opposite of F13's "energetic first" (cinematic and lofi on top, drive/synthwave/trap at the bottom), too weak to change the rule, enough to measure it. |
 | v1.2 | 2026-10-20 | F12 background: a Background column per reel and a rule for when to call it (≥ 6 posted reels each side, median watch time first). | Founder: track dark vs white. The test (L22) had a rotation but no column and no finish line, so it could run forever or be called on a hunch. |
+| v1.3 | 2026-10-20 | F21 added: pick by topic score (proof, vivid, question, law live, everyday hook). F1's backlog is now ranked by it. | Founder: a mechanism to choose topics, aimed at engagement and reach, so no exam weight. The backlog's order was set on 18 Oct, before L30; a written score makes the choice repeatable and testable (L35). The everyday hook is Claude's addition, with its evidence. |

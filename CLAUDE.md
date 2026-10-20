@@ -137,6 +137,7 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   visual-reel-workflow.md #  runbook for white-board animated-graph reels (skill: .claude/skills/visual-reel)
   visual-candidates.md   #   PYQs whose answer is a picture, by paper (pick visual reels from here)
   tools/                 #   headless-Edge scripts: frames, record, cover, check-video, unchanged (+ baseline.txt)
+  tools/topic-scores.js  #   @pyqvault_ next topic by score (framework F21; table in remake-backlog.md → Topic scores)
   assets/                #   V mascot poses (copied from Question_Bank/public/chat)
   *.post.json            #   one per piece: manifest for publisher's `queue:add` (files + captions)
 soundmind/               # @soundmindwithshivani carousels (outside brand). Runbook + research: brand.md
