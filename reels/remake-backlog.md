@@ -40,7 +40,8 @@ so C7–C11 are our own vivid ideas (proof 0) until a study of chemistry account
 (2026-10-20, founder: "look at the CET notes for better ideas")** come from PYQ Vault's MHT-CET physics and chemistry
 notes: concepts that pass F2–F4, with the question each reel opens on in the list below. Their PYQ counts are context for the
 caption's "where it's asked" line only, not a score. Ties: the bigger views multiple, then the law shown live (F3), then the
-order of this table.
+order of this table. **P19–P29 (2026-10-20, founder: "take one physics chapter")** cover Ray Optics concept by concept
+(list below). Their Proof column records what other accounts' reels of the same idea did, flops included (below 3× scores 0).
 
 | # | Subject | Idea | Proof (×) | Vivid | Question | Law live | Everyday | Score | Status |
 |---|---|---|---|---|---|---|---|---|---|
@@ -57,7 +58,18 @@ order of this table.
 | P15 | P | Bright red light frees no electrons, dim violet does (CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
 | P16 | P | Red star or blue star: which is hotter? (Wien, CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
 | P17 | P | Join a small and a big soap bubble: the big one grows (CET notes) | – | 2 | 2 | 1 | 1 | 6 | |
-| P18 | P | A laser follows a curved water jet (total internal reflection, CET notes) | – | 2 | 2 | 1 | 1 | 6 | |
+| P18 | P | A laser follows a curved water jet (total internal reflection, CET notes) | – | 2 | 2 | 1 | 1 | 6 | ⏸ parked: total internal reflection is P20's mirage, the everyday angle (founder, 2026-10-20) |
+| P19 | P | White light through a prism: violet bends most (dispersion, Ray Optics) | 0.5 | 3 | 2 | 1 | 1 | 7 | |
+| P20 | P | The "water" on a hot road is the sky (mirage, Ray Optics) | 0.4 | 3 | 2 | 0 | 1 | 6 | |
+| P21 | P | Cover half the lens: the whole image stays, dimmer (Ray Optics) | 0.9 | 2 | 2 | 1 | 1 | 6 | |
+| P22 | P | A 2 m pool looks 1.5 m deep (apparent depth, Ray Optics) | – | 2 | 2 | 1 | 1 | 6 | |
+| P23 | P | Walk a candle up to a convex lens: the image flips upright (Ray Optics) | – | 2 | 2 | 1 | 1 | 6 | |
+| P24 | P | Your face in a spoon: upside down, then upright up close (concave mirror, Ray Optics) | 10.5 | 2 | 2 | 1 | 1 | 7 | queued (founder, 2026-10-20: Ray Optics first, ahead of P11) |
+| P25 | P | A magnifying glass under water barely magnifies (lensmaker, Ray Optics) | – | 2 | 2 | 1 | 1 | 6 | |
+| P26 | P | A half-height mirror shows your whole body, at any distance (Ray Optics) | – | 1 | 2 | 1 | 1 | 5 | |
+| P27 | P | A bigger telescope lens: a brighter moon, not a bigger one (Ray Optics) | – | 2 | 2 | 0 | 1 | 5 | |
+| P28 | P | Turn a prism: the bend dips, then rises (minimum deviation, Ray Optics) | – | 2 | 2 | 1 | 0 | 5 | |
+| P29 | P | "Objects in mirror are closer than they appear" (convex mirror, Ray Optics) | 6.2 | 2 | 2 | 1 | 1 | 7 | |
 | C5 | C | P, V and T together (combined gas law) | 11 | 2 | 2 | 1 | 1 | 7 | ✅ made 2026-10-20 (`pv-chem-005-pvt`) |
 | C7 | C | Flame colours: each metal burns its own colour (fireworks) | – | 3 | 2 | 0 | 1 | 6 | ✅ made 2026-10-20 (`pv-chem-006-flame`) |
 | C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | 3 | 2 | 1 | 0 | 6 | |
@@ -112,6 +124,32 @@ so their results test whether a vivid unproven idea holds viewers (L35).
 | C15 | Zinc in copper sulphate | The rod stays, turns copper-coloured, or fizzes? → copper coats it, the blue fades | Cu²⁺ ions take electrons from zinc; the blue fades as they leave; E° from the series | Electrochemistry · galvanic cells (73) |
 | C16 | Why water is bent | Water's angle: 109.5°, 104.5° or 90°? → 104.5° | CH₄ → NH₃ → H₂O: lone pairs push the bonds closer, angle live; a 3D shape (orbit fits) | Chemical bonding · VSEPR |
 | C17 | Salt in boiling water | Water boils at a lower, higher or the same temperature? → higher | solute particles block the surface; the boiling point rises with i·m (a kitchen myth busted) | Solutions · boiling-point elevation (43) |
+
+### @pyqvault_ · one chapter, concept by concept: Ray Optics (2026-10-20)
+
+Founder: "take one physics chapter, identify the concepts which can be explained visually." Ray Optics (Class 12): no reel of
+ours covers it yet, light suits the glow (L42), and it has everyday hooks; 112 MHT-CET PYQs. Concepts from
+`Question_Bank/src/app/notes/mht-cet-physics/ray-optics` (read-only); several questions are the notes' own "common
+mistakes". Left out: lens combinations and lensmaker sums (worked on paper, nothing to watch).
+
+**Evidence** (`analytics/competitors/`, read 17 Oct): @bisal.physics posted an optics run on 12–15 Oct (reels 2–5 days old
+when read). **Mirrors won**: concave mirror image 89k (10.5×), convex mirror 52k (6.2×), tilted mirror 2θ 20k (2.3×).
+**The rest lost**: sliced lens 0.9×, two lenses 1.1×, prism 0.5×, total internal reflection 0.3×. @sciencevisualised's
+mirage (0.4×) and refraction (0.1×) also lost. Read their multiples again before trusting them.
+
+| # | Idea | The question on frame 0 → answer | The picture | Evidence | CET notes section |
+|---|---|---|---|---|---|
+| P19 | Prism and dispersion | White light into a prism: which bends most? red, violet or all the same → violet | a white beam enters and fans out into glowing colours; each colour's bend live | @bisal.physics 0.5× [link](https://www.instagram.com/reel/DebJu8pSlr6/) | Prism · dispersion |
+| P20 | Mirage on a hot road | The "water" on a hot road is: real water, the sky, or heat haze? → the sky | hot air layers shimmer; a ray from the sky curves up into the eye; the "puddle" appears | @sciencevisualised 0.4× [link](https://www.instagram.com/reel/DcCpnCSKfKM/) | Refraction · total internal reflection |
+| P21 | Half-covered lens | Cover half the lens: half the image, the whole image dimmer, or none? → whole, dimmer | candle, lens, screen; a card slides over half the lens; the open half still draws the whole flame; brightness % live (a finger on a phone camera) | @bisal.physics sliced lens 0.9× [link](https://www.instagram.com/reel/Deg9x1hyS5X/) | Mirrors · "a half-covered mirror forms half an image" (mistake) |
+| P22 | Apparent depth | A 2 m pool looks: 2 m, 1.5 m or 2.7 m deep? → 1.5 m | water fills; rays from a coin bend at the surface; a ghost coin rises with the water; real vs apparent depth draws | related, not counted: @sciencevisualised refraction 0.1× | Refraction · apparent depth |
+| P23 | Convex lens: walk the candle in | Closer than f, the image is: smaller, inverted and bigger, or upright and bigger? → upright and bigger | the image grows inverted, runs off to infinity at f, returns upright (a magnifying glass); v–u graph draws | related, not counted: @bisal.physics two lenses 1.1× | Lenses · lens formula |
+| P24 | Concave mirror: the spoon | Upside down in a spoon; bring it to your nose? → it flips upright | the same flip in a mirror; ray rules drawn; mirror formula live | @bisal.physics concave mirror 10.5× [link](https://www.instagram.com/reel/DeZOe3Sy5Fb/) | Mirrors · mirror formula |
+| P25 | Glass lens in water | A magnifying glass under water: same, stronger, or much weaker? → much weaker (f about 4×) | water floods round the lens; rays bend less; f live; why eyes blur underwater and goggles fix it | – | Lenses · "using the glass's own index in water" (mistake) |
+| P26 | Whole-body mirror | How tall a mirror to see all of you: your height, half, or it depends on distance? → half, at any distance | a person walks back; the strip of mirror used stays the same size | – | Mirrors · plane mirrors |
+| P27 | Telescope aperture | A bigger front lens makes the moon: bigger, brighter, or both? → brighter | more rays pour in; image brightness climbs, size stays | – | Instruments · "a large aperture raises the magnification" (mistake) |
+| P28 | Minimum deviation | Keep turning a prism: does the bend keep growing? → no, it dips, then rises | the prism turns; the U-shaped deviation curve draws itself | – | Prism · minimum deviation |
+| P29 | Convex mirror: "closer than they appear" | A car in the wing mirror is: closer, farther, or as far as it looks? → closer | a car approaches; its image stays small behind the mirror; wider view than a flat mirror | @bisal.physics convex mirror 6.2× [link](https://www.instagram.com/reel/Deb17aCSjg2/) | Mirrors · mirror formula |
 
 ### @pyqvault_ · Maths, visualised: closed 2026-10-20 (founder: @pyqvault_ is physics and chemistry only)
 
