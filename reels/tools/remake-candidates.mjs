@@ -33,10 +33,10 @@ const TOPICS = [
   ['P', 'Magnetism & induction', /magnetic|biot|ampere|faraday|lenz|induction|solenoid/i],
   ['P', 'Optics', /mirror|lens|refraction|total internal|prism|young|diffraction|tyndall|rainbow|optic/i],
   ['P', 'Modern physics', /photoelectric|bohr|radioactiv|half.?life|nuclear|de broglie/i],
-  ['C', 'Periodic table', /periodic table|chemical famil|element/i],
+  ['C', 'Periodic table', /periodic table|chemical famil|\bchemical elements?\b/i],   // not "elementary"
   ['C', 'Atomic structure & bonding', /orbital|electron config|hybridi|vsepr|bond/i],
-  ['C', 'Equilibrium, kinetics, acids', /equilibrium|le chatelier|reaction rate|activation|catalyst|\bph\b|acid|base/i],
-  ['C', 'Electrochemistry & solutions', /electrolysis|electrochem|galvanic|osmosis|solution/i],
+  ['C', 'Equilibrium, kinetics, acids', /equilibrium|le chatelier|reaction rate|activation energy|catalyst|\bph\b|\bacids?\b|\balkali/i],   // not "base" (of a log)
+  ['C', 'Electrochemistry & solutions', /electrolysis|electrochem|galvanic|osmosis|molarity|solubility|dissolv/i],   // not "method solution"
   ['M', 'Trigonometry', /trigonom|unit circle|sin|cos\b|tan\b|radian/i],
   ['M', 'Differentiation', /differentiat|derivative|tangent|gradient|optimi[sz]/i],
   ['M', 'Integration', /integrat|integral|area under/i],
