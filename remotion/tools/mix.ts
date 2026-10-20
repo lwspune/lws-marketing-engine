@@ -7,6 +7,7 @@ import { SR, mixWithMusic, readWav, renderSfx, writeWav, type Score } from '../s
 const REELS: Record<string, { lib: string; file: string }> = {
   pp004: { lib: '../src/lib/pp004.ts', file: 'public/pv-physics-004-slope' },
   pc004: { lib: '../src/lib/pc004.ts', file: 'public/pv-chem-004-charles' },
+  pp005: { lib: '../src/lib/pp005.ts', file: 'public/pv-physics-005-adiabatic' },
 };
 const id = process.argv[2], reel = REELS[id];
 if (!reel) throw new Error(`usage: node tools/mix.ts <${Object.keys(REELS).join(' | ')}>`);

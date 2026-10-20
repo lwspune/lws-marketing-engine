@@ -1,0 +1,16 @@
+{
+  "slug": "pv-physics-005-adiabatic",
+  "project": "pyqvault-insta",
+  "kind": "reel",
+  "title": "@pyqvault_ · Physics, visualised #5 (predict-first): squeeze an insulated gas, its temperature? (dark, trap)",
+  "video": "pv-physics-005-adiabatic.mp4",
+  "cover": "pv-physics-005-adiabatic-cover.png",
+  "captions": {
+    "instagram": "Squeeze a gas to half its volume in an insulated cylinder. Its temperature? A same · B hotter · C colder\nComment your guess before you watch 👇\n\nClass 11 Physics · Thermodynamics\nPhysics, visualised #5\n\nInsulated, the work you do on the gas has nowhere to go, so it turns into heat: 300 K → 476 K.\nThe same squeeze in water: the heat flows out and it stays at 300 K.\nInsulated (adiabatic): T·V^(γ−1) stays constant, so halving V raises T by 2^(2/3) ≈ 1.59× (γ = 5/3).\nThat's why a bicycle pump gets hot → B.\n\nSave this for revision 📌 Follow for #6.\nPractise every PYQ chapter-wise, free → pyqvault.com (link in bio).\n\n#Physics #Class11 #Class11Physics #Thermodynamics #AdiabaticProcess #CBSE #JEEMain #NEET #PhysicsVisualised",
+    "facebook": "Squeeze a gas to half its volume in an insulated cylinder. Its temperature? A same · B hotter · C colder 👇\n\nClass 11 Physics · Thermodynamics\nPhysics, visualised #5: insulated, your work has nowhere to go, so it becomes heat (300 K → 476 K). In water, the heat flows out and it stays at 300 K. That's why a bicycle pump gets hot → B.\n\nPractise PYQs free, chapter-wise: https://www.pyqvault.com\n\n#Physics #Class11 #Thermodynamics",
+    "youtube": {
+      "title": "Squeeze an insulated gas to half: hotter, colder or the same? #shorts",
+      "description": "Physics, visualised #5. Insulated (adiabatic), the work done on the gas becomes heat: T·V^(γ−1) = constant, so 300 K → 476 K when V halves (γ = 5/3). In water (isothermal) it stays at 300 K. That's why a bicycle pump gets hot.\n\nPractise PYQs free, chapter-wise: pyqvault.com\n\n#Physics #Class11 #Shorts"
+    }
+  }
+}
