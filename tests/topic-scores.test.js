@@ -93,6 +93,14 @@ test("an idea moved to another handle is closed: never queued, never picked", ()
   assert.deepEqual(ts.queued(rows), []);
 });
 
+test("a parked idea is skipped until it's unparked (founder, 2026-10-20: park W6)", () => {
+  const { heading, subjects } = ts.ACCOUNTS.lwspune;
+  const rows = ts.parse(LWS.replace("| 9 | |", "| 9 | ⏸ parked (founder, 2026-10-20) |"), heading);
+  assert.deepEqual(ts.validate(rows, subjects), []);
+  assert.equal(ts.nextPicks(rows, subjects).M.id, "W14");
+  assert.deepEqual(ts.queued(rows), []);
+});
+
 // @lws.pune has its own table (founder 2026-10-20: same framework for both handles): NDA maths concepts, subject M only.
 const LWS = `
 ## Topic scores

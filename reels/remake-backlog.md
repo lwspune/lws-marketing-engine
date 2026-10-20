@@ -167,7 +167,7 @@ and the goal of the reel is reach. `node reels/tools/topic-scores.js lwspune` ch
 
 | # | Subject | Idea | Proof (×) | Vivid | Question | Concept live | Everyday | Score | Status |
 |---|---|---|---|---|---|---|---|---|---|
-| W6 | M | The soda-can problem: the best shape | 114 | 2 | 2 | 1 | 1 | 9 | |
+| W6 | M | The soda-can problem: the best shape | 114 | 2 | 2 | 1 | 1 | 9 | ⏸ parked (founder, 2026-10-20) |
 | W11 | M | Why do we multiply probabilities? (the shrinking square) | 34 | 2 | 2 | 1 | 1 | 8 | |
 | W14 | M | A matrix moves space (determinant = area scale) | 34 | 3 | 1 | 1 | 0 | 7 | |
 | W8 | M | What a derivative really is: secant → tangent | 115 | 1 | 1 | 1 | 0 | 6 | |
