@@ -1,4 +1,4 @@
-# @lws.pune reel framework (v1, 2026-10-20)
+# @lws.pune reel framework (v1.1, 2026-10-20)
 
 How every new @lws.pune reel is made, one numbered point at a time. Same standard as @pyqvault_'s
 (`pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or dropped
@@ -156,4 +156,5 @@ end felt like homework (founder, on @pyqvault_). · *Check:* the end card. · �
 
 | Version | Date | Change | Why |
 |---|---|---|---|
+| v1.1 | 2026-10-20 | F21: ties go to the bigger views multiple, then the concept shown live, then table order (the same tool as @pyqvault_). | Same reason as @pyqvault_ v1.6: a tie with equal proof was settled by table order. |
 | v1 | 2026-10-20 | Framework created: @pyqvault_'s v1.4 points, numbered the same, adapted to @lws.pune: F1 concepts first (a PYQ in the caption when one fits), F21 with the NDA-chapter gate, F9 zoom the picture not text, F12 white kept, F13 a different style each reel, F18 up to ~45 s for "why" builds, F19 exam + chapter label, F20 "Follow for more" with no website. Rules that already stood (one question per reel, no made-up numbers, faceless, Remotion, the 3:4 cover) folded in. | Founder: "make similar things for @lws.pune". Each adaptation comes from this account's own lessons (L3, L5–L7, L11, L13, L14, L17, L23, L25) or the founder's call (concepts first, 20 Oct). First reel already made this way: 015 (f and f′ together). |

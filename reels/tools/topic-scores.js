@@ -67,12 +67,13 @@ function queued(rows) {
   return rows.filter(isQueued).sort((a, b) => b.score - a.score);
 }
 
-/** The best open idea per subject (not queued): highest score, then the better-proven one (bigger views multiple). */
+/** The best open idea per subject (not queued): highest score, then the better-proven one (bigger views multiple), then
+    the one that shows its law live (F3). */
 function nextPicks(rows, subjects = SUBJECTS) {
   const out = {};
   for (const s of subjects) {
     const open = rows.filter((r) => r.subject === s && isOpen(r))
-      .sort((a, b) => b.score - a.score || (b.proofX ?? 0) - (a.proofX ?? 0));
+      .sort((a, b) => b.score - a.score || (b.proofX ?? 0) - (a.proofX ?? 0) || b.law - a.law);
     out[s] = open[0] || null;
   }
   return out;

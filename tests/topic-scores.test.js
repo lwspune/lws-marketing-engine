@@ -145,3 +145,10 @@ test("a tie on score goes to the bigger views multiple, not just more proof poin
   const rows = ts.parse(md.replace("| 125 | 3 | 2 | 1 | 1 | 10 | |", "| 125 | 3 | 2 | 1 | 1 | 10 | ✅ made |"));
   assert.equal(ts.nextPicks(rows).P.id, "P12", "both score 8 with 2 proof points; 63× beats 54×");
 });
+
+test("same score and same proof: the idea with the law shown live goes first (F3: our best category)", () => {
+  const md = TABLE.replace("| C7 | C | Flame colours | – | 3 | 2 | 0 | 1 | 6 | |",
+    "| C7 | C | Flame colours | – | 3 | 2 | 0 | 1 | 6 | |\n| C12 | C | Heat it by 10 °C | – | 3 | 2 | 1 | 0 | 6 | |")
+    .replace("| 11 | 2 | 2 | 1 | 1 | 7 | |", "| 11 | 2 | 2 | 1 | 1 | 7 | ✅ made |");
+  assert.equal(ts.nextPicks(ts.parse(md)).C.id, "C12", "both 6 with no proof; C12 shows its law live, C7 doesn't");
+});

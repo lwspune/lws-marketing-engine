@@ -35,7 +35,11 @@ really predicts watch time; the criteria are tuned from that.
 
 Re-score an idea when its angle changes, and keep a made idea's row (status "made") so its score can be checked
 against its results. **Chemistry is thin:** the 5 accounts we studied have no proven chemistry left beyond the gas laws,
-so C7–C11 are our own vivid ideas (proof 0) until a study of chemistry accounts finds proven ones.
+so C7–C11 are our own vivid ideas (proof 0) until a study of chemistry accounts finds proven ones. **P13–P18 and C12–C17
+(2026-10-20, founder: "look at the CET notes for better ideas")** come from PYQ Vault's MHT-CET physics and chemistry
+notes: concepts that pass F2–F4, with the question each reel opens on in the list below. Their PYQ counts are context for the
+caption's "where it's asked" line only, not a score. Ties: the bigger views multiple, then the law shown live (F3), then the
+order of this table.
 
 | # | Subject | Idea | Proof (×) | Vivid | Question | Law live | Everyday | Score | Status |
 |---|---|---|---|---|---|---|---|---|---|
@@ -47,12 +51,24 @@ so C7–C11 are our own vivid ideas (proof 0) until a study of chemistry account
 | P7 | P | Tilt the rope: lift vs pull (drone towing a box) | 83 | 2 | 1 | 1 | 1 | 7 | |
 | P8 | P | Why a bounced ball never comes back as high | 52 | 1 | 1 | 1 | 1 | 6 | |
 | P10 | P | One-screen sheet: Class 12 electricity & magnetism | 190 | 2 | 0 | 0 | 0 | 5 | |
+| P13 | P | Rolling race: ring, disc and ball down one slope (CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
+| P14 | P | A magnet dropped down a copper pipe falls in slow motion (CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
+| P15 | P | Bright red light frees no electrons, dim violet does (CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
+| P16 | P | Red star or blue star: which is hotter? (Wien, CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
+| P17 | P | Join a small and a big soap bubble: the big one grows (CET notes) | – | 2 | 2 | 1 | 1 | 6 | |
+| P18 | P | A laser follows a curved water jet (total internal reflection, CET notes) | – | 2 | 2 | 1 | 1 | 6 | |
 | C5 | C | P, V and T together (combined gas law) | 11 | 2 | 2 | 1 | 1 | 7 | ✅ made 2026-10-20 (`pv-chem-005-pvt`) |
 | C7 | C | Flame colours: each metal burns its own colour (fireworks) | – | 3 | 2 | 0 | 1 | 6 | ✅ made 2026-10-20 (`pv-chem-006-flame`) |
 | C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | 3 | 2 | 1 | 0 | 6 | |
 | C9 | C | The pH rainbow: universal indicator from lemon to soap | – | 3 | 2 | 0 | 1 | 6 | |
 | C11 | C | Diffusion: dye in hot vs cold water | – | 2 | 2 | 0 | 1 | 5 | |
 | C10 | C | Cool the brown gas: NO₂ ⇌ N₂O₄ shifts (Le Chatelier) | – | 2 | 2 | 0 | 0 | 4 | |
+| C12 | C | Heat it by 10 °C: the rate doubles (collisions over the energy hill, CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
+| C13 | C | Half-life: 64 atoms, 2 half-lives, 16 left (CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
+| C14 | C | Stack the oranges: 52%, 68% or 74% filled (packing efficiency, CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
+| C15 | C | A zinc rod in blue copper sulphate: copper coats it, the blue fades (CET notes) | – | 3 | 2 | 1 | 0 | 6 | |
+| C16 | C | Why water is bent: lone pairs squeeze 109.5° → 104.5° (VSEPR, CET notes) | – | 2 | 2 | 1 | 1 | 6 | |
+| C17 | C | Salt makes water boil hotter, not faster (boiling-point elevation, CET notes) | – | 2 | 2 | 1 | 1 | 6 | |
 
 ## @pyqvault_ (Class 11–12 Physics and Chemistry): the proven ideas (pick by **Topic scores** above)
 
@@ -75,6 +91,26 @@ Rotation: Physics → Chemistry → Maths; background follows the L22 test, musi
 | P11 | 30° and 60° land in the same spot | @sciencevisualised 193k (11×) [link](https://www.instagram.com/reel/Dc3b1oVsuzr/) | a fan of projectiles (15°–75°) launched together, each its own colour; twin pairs (30°/60°, 15°/75°) land together; range readout; sin 2θ twin angles | 11 · Projectile motion | white | |
 | P12 | Topspin dips, slice floats (Magnus) | @sciencevisualised 1.10M (63×) [link](https://www.instagram.com/reel/Dbvz1s7M3C6/) | 3D spinning ball, pressure arrows above/below (Bernoulli) | 11 · Fluids | lab | |
 | C5 | P, V and T together (combined gas law) | @codematrixvishal 299k (11×) [link](https://www.instagram.com/reel/DX13CZTJdVK/) | one piston: heat it, squeeze it, three live gauges; P·V/T never moves | 11 · States of matter | lab | |
+
+### @pyqvault_ · our own ideas from the MHT-CET notes (2026-10-20)
+
+From `Question_Bank/src/app/notes/mht-cet-physics` and `mht-cet-chemistry` (read-only). No proven reel behind them (proof 0),
+so their results test whether a vivid unproven idea holds viewers (L35).
+
+| # | Idea | The question on frame 0 → answer | The picture | CET chapter (PYQs) |
+|---|---|---|---|---|
+| P13 | Rolling race | Ring, disc, ball down one slope: which is first? → the ball | three bodies race; each one's energy bar splits into moving + spinning live; mass doesn't matter, shape does | Rotational dynamics · rolling (37) |
+| P14 | Magnet in a copper pipe | Dropped down a copper pipe it falls normally, slower or faster? → far slower | the magnet drifts down; induced current rings glow in the pipe and push back (Lenz) | EM induction · magnetic braking (27) |
+| P15 | Photoelectric effect | Bright red light on a metal frees more, none or faster electrons? → none | a stream of photons; red ones bounce off however bright, violet ones knock electrons out; KE = hf − φ live | Dual nature · photoelectric (87) |
+| P16 | Red star, blue star | Which is hotter: red, blue or same? → blue | a body heats from red to white to blue; the black-body curve's peak slides left (Wien) and its area grows as T⁴ | Radiation · Wien, Stefan (93) |
+| P17 | Two soap bubbles joined | Join a small and a big bubble: which grows? → the big one | air flows from small to big; ΔP = 4T/r live | Fluids · excess pressure (63) |
+| P18 | Light in a water jet | A laser into a curving jet: straight out or along the water? → along it | the beam bounces inside the jet at more than the critical angle; how fibre internet works | Ray optics · total internal reflection (37) |
+| C12 | Heat it by 10 °C | The rate: +10%, ×2 or ×10? → about ×2 | many molecules colliding; only those over the energy hill spark and react; the energy curve shifts as it warms | Chemical kinetics · Arrhenius, collision theory (18) |
+| C13 | Half-life | 64 atoms, 2 half-lives: 0, 16 or 32 left? → 16 | dots flick off at random; the count halves each half-life; carbon dating | Chemical kinetics · first order (77) |
+| C14 | Stack the oranges | The best you can fill a box: 52%, 68% or 74%? → 74% | 3D spheres stack three ways (simple cubic, bcc, fcc) with the fill % live | Solid state · packing efficiency (49) |
+| C15 | Zinc in copper sulphate | The rod stays, turns copper-coloured, or fizzes? → copper coats it, the blue fades | Cu²⁺ ions take electrons from zinc; the blue fades as they leave; E° from the series | Electrochemistry · galvanic cells (73) |
+| C16 | Why water is bent | Water's angle: 109.5°, 104.5° or 90°? → 104.5° | CH₄ → NH₃ → H₂O: lone pairs push the bonds closer, angle live; a 3D shape (orbit fits) | Chemical bonding · VSEPR |
+| C17 | Salt in boiling water | Water boils at a lower, higher or the same temperature? → higher | solute particles block the surface; the boiling point rises with i·m (a kitchen myth busted) | Solutions · boiling-point elevation (43) |
 
 ### @pyqvault_ · Maths, visualised: closed 2026-10-20 (founder: @pyqvault_ is physics and chemistry only)
 
