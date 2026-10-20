@@ -9,6 +9,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   pc004: { lib: '../src/lib/pc004.ts', file: 'public/pv-chem-004-charles' },
   pp005: { lib: '../src/lib/pp005.ts', file: 'public/pv-physics-005-adiabatic' },
   pp006: { lib: '../src/lib/pp006.ts', file: 'public/pv-physics-006-topspin' },
+  pc006: { lib: '../src/lib/pc006.ts', file: 'public/pv-chem-006-flame' },
   pc005: { lib: '../src/lib/pc005.ts', file: 'public/pv-chem-005-pvt' },
   '015': { lib: '../src/lib/reel015.ts', file: 'public/nda-maths-015-slope-graph' },
 };

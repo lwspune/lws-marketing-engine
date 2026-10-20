@@ -48,7 +48,7 @@ so C7–C11 are our own vivid ideas (proof 0) until a study of chemistry account
 | P8 | P | Why a bounced ball never comes back as high | 52 | 1 | 1 | 1 | 1 | 6 | |
 | P10 | P | One-screen sheet: Class 12 electricity & magnetism | 190 | 2 | 0 | 0 | 0 | 5 | |
 | C5 | C | P, V and T together (combined gas law) | 11 | 2 | 2 | 1 | 1 | 7 | ✅ made 2026-10-20 (`pv-chem-005-pvt`) |
-| C7 | C | Flame colours: each metal burns its own colour (fireworks) | – | 3 | 2 | 0 | 1 | 6 | |
+| C7 | C | Flame colours: each metal burns its own colour (fireworks) | – | 3 | 2 | 0 | 1 | 6 | ✅ made 2026-10-20 (`pv-chem-006-flame`) |
 | C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | 3 | 2 | 1 | 0 | 6 | |
 | C9 | C | The pH rainbow: universal indicator from lemon to soap | – | 3 | 2 | 0 | 1 | 6 | |
 | C11 | C | Diffusion: dye in hot vs cold water | – | 2 | 2 | 0 | 1 | 5 | |
