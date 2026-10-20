@@ -46,3 +46,17 @@
 `pv-physics-008-spoon-cover.png` (4.3 s, before the answer: "Guess before you watch") · `pv-physics-008-spoon.post.json`
 · strip `pv-physics-008-strip.png`. Re-make: `cd remotion && npm run music:pp008 && npm run voice:pp008 && npm run
 mix:pp008 && npm run render:pp008 && npm run render:pp008v && npm run cover:pp008`.
+
+## The vivid remake (framework F24, 2026-10-21)
+
+Founder: "more vivid colour objects", then "remake this physics reel with this new rule, I want to compare". Same timeline,
+sound and voice; only the objects' colours change (`<PvPhysics008 vivid />`, colours from the white board's `VIVID` set):
+a cyan spoon, a red candle on a violet holder, an orange flame, six rays each in its own colour (blue = parallel ray,
+pink = pole ray, then red, green, orange, violet), their light dots and dashed trace-backs in the same colours, violet F
+and C marks, and a red (upside down) → green (upright) graph. Text keeps the WHITE palette.
+
+`pv-physics-008-spoon-vivid-voice.mp4` (passes `check-video`) · cover `pv-physics-008-spoon-vivid-cover.png` · strip
+`pv-physics-008-vivid-strip.png` · side by side: `pv-physics-008-compare.mp4` (first left, vivid right, the vivid one's
+sound; `npm run compare:pp008`). Re-make: `npm run render:pp008vivid && npm run cover:pp008vivid`.
+The queued GoPost post is still the first version; if the founder picks vivid, the manifest points to the vivid files
+and the post is replaced before approval.

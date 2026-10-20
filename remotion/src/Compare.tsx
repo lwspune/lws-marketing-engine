@@ -16,3 +16,11 @@ export const Compare005 = () => (
     <Side x={540} label="NEW (Remotion)" color="#4fd1a5" src="nda-maths-005-area-remotion.mp4" muted={false} />
   </AbsoluteFill>
 );
+
+// @pyqvault_ Physics #8 as queued (left) beside its remake under framework F24, bright objects (right), founder 2026-10-21.
+export const Compare008 = () => (
+  <AbsoluteFill style={{ background: '#222' }}>
+    <Side x={0} label="FIRST (queued)" color="#ffffff" src="pv-physics-008-spoon-voice.mp4" muted />
+    <Side x={540} label="VIVID (F24)" color="#4fd1a5" src="pv-physics-008-spoon-vivid-voice.mp4" muted={false} />
+  </AbsoluteFill>
+);

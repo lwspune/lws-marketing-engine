@@ -9,7 +9,7 @@ import { AbsoluteFill, Html5Audio, staticFile, useCurrentFrame, useVideoConfig }
 import { ThreeCanvas } from '@remotion/three';
 import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { WHITE as P, tint, SOFT_UI } from './lib/palette.ts';
+import { WHITE as P, VIVID, tint, SOFT_UI } from './lib/palette.ts';
 import { prog, captionAt } from './lib/motion.ts';
 import {
   END_AT, HEADER, CAPTIONS, OPTIONS, ANSWER, ANSWER_AT, F, R, POLE_X, APERTURE, U_START, T_RAYS, COVER_T, BAND, EYE,
@@ -20,7 +20,27 @@ import { RoundBox, softEdges } from './shapes.tsx';
 import { RealLight } from './realism.tsx';
 
 const COVER = { text: 'Guess before you watch', y: 1590, size: 60 };
-const FLAME = '#ffb020', FLAME_CORE = '#fff2b0', WAX = '#d64b3c', RAY = '#f08a24', RAY_RULE = '#e0601c', BACK = '#3f56a0';
+const FLAME_CORE = '#fff2b0';
+// The reel's object colours. FIRST is the version queued on 21 Oct; VIVID_LOOK remakes it under framework F24 (bright
+// objects, founder 2026-10-21): every key object from the white board's VIVID set, and each ray its own colour so it
+// can be followed from the flame to the image. Text and UI keep the WHITE palette (contrast).
+type Look = {
+  wax: string; flame: string; holder: string; spoon: string; metal: number; marks: string; iris: string;
+  rays: string[]; rayOpacity: number; back: (ray: number) => string; down: string; up: string;
+  backOpacity: [rule: number, fan: number]; ghost: [virtual: number, real: number];
+};
+const FIRST: Look = {
+  wax: '#d64b3c', flame: '#ffb020', holder: '#c9ced8', spoon: '#dfe3ea', metal: 1, marks: P.ink, iris: P.blue,
+  rays: ['#e0601c', '#e0601c', '#f08a24', '#f08a24', '#f08a24', '#f08a24'], rayOpacity: 0.55, back: () => '#3f56a0', down: P.amber, up: P.green,
+  backOpacity: [0.55, 0.3], ghost: [0.7, 0.85],
+};
+const V = VIVID.white;
+const VIVID_LOOK: Look = {
+  wax: V.red, flame: V.orange, holder: V.violet, spoon: V.cyan, metal: 0.55, marks: V.violet, iris: V.blue,
+  rays: [V.blue, V.pink, V.red, V.green, V.orange, V.violet], rayOpacity: 0.9, back: i => [V.blue, V.pink, V.red, V.green, V.orange, V.violet][i],
+  backOpacity: [0.75, 0.55], ghost: [0.82, 0.9],
+  down: V.red, up: V.green,
+};
 
 function Rig({ t }: { t: number }) {
   const { camera } = useThree(), cam = camera as THREE.PerspectiveCamera, c = cameraAt(t);
@@ -44,8 +64,8 @@ const lerp = (a: V2, b: V2, k: number): V2 => [a[0] + (b[0] - a[0]) * k, a[1] + 
 const lenOf = ([a, b]: [V2, V2]) => Math.hypot(b[0] - a[0], b[1] - a[1]);
 
 // One ray: the incoming part draws first, then the reflection; light dots run along it at a steady speed.
-function RayView({ ray, t, drawn }: { ray: Ray; t: number; drawn: number }) {
-  const rule = ray.rule !== null, r = rule ? 0.016 : 0.008, col = rule ? RAY_RULE : RAY, op = rule ? 0.95 : 0.55;
+function RayView({ ray, i, t, drawn, look }: { ray: Ray; i: number; t: number; drawn: number; look: Look }) {
+  const rule = ray.rule !== null, r = rule ? 0.016 : look === FIRST ? 0.008 : 0.011, col = look.rays[i], op = rule ? 0.95 : look.rayOpacity;
   const kIn = Math.min(1, drawn * 2), kOut = Math.max(0, drawn * 2 - 1);
   const inEnd = lerp(ray.inc[0], ray.inc[1], kIn), outEnd = lerp(ray.out[0], ray.out[1], kOut);
   const L1 = lenOf(ray.inc), L2 = lenOf(ray.out), reach = kIn * L1 + kOut * L2, dots: V2[] = [];
@@ -57,32 +77,32 @@ function RayView({ ray, t, drawn }: { ray: Ray; t: number; drawn: number }) {
       {kOut > 0 && <Seg a={ray.out[0]} b={outEnd} r={r} color={col} opacity={op} />}
       {dots.map((d, i) => (
         <mesh key={i} position={[d[0], d[1], 0]}><sphereGeometry args={[rule ? 0.03 : 0.022, 10, 10]} />
-          <meshBasicMaterial color={FLAME_CORE} toneMapped={false} /></mesh>
+          <meshBasicMaterial color={look === FIRST ? FLAME_CORE : col} toneMapped={false} /></mesh>
       ))}
       {back && Array.from({ length: Math.floor(lenOf(back) / 0.14) }, (_, i) => {
         const L = lenOf(back), a = lerp(back[0], back[1], (i * 0.14) / L), b = lerp(back[0], back[1], (i * 0.14 + 0.08) / L);
-        return <Seg key={`b${i}`} a={a} b={b} r={r * 0.8} color={BACK} opacity={(rule ? 0.55 : 0.3) + 0.35 * trace} />;
+        return <Seg key={`b${i}`} a={a} b={b} r={r * 0.8} color={look.back(i)} opacity={Math.min(1, (rule ? look.backOpacity[0] : look.backOpacity[1]) + 0.35 * trace)} />;
       })}
     </group>
   );
 }
 
 // The candle (or its image, scaled by m: negative = upside down). Its base sits on the axis, the flame's tip at y = H.
-function Candle({ x, m = 1, t, ghost = 0 }: { x: number; m?: number; t: number; ghost?: number }) {
+function Candle({ x, m = 1, t, ghost = 0, look }: { x: number; m?: number; t: number; ghost?: number; look: Look }) {
   const k = flicker(t), real = ghost === 0, op = real ? 1 : ghost;
   const mat = (color: string, extra = {}) => <meshStandardMaterial color={color} roughness={0.55} transparent={!real} opacity={op} depthWrite={real} {...extra} />;
   return (
     <group position={[x, 0, 0]} scale={[Math.abs(m), m, Math.abs(m)]}>
-      {real && <mesh position={[0, -0.03, 0]}><cylinderGeometry args={[0.17, 0.19, 0.06, 40]} /><meshStandardMaterial color="#c9ced8" metalness={0.6} roughness={0.3} /></mesh>}
-      <mesh position={[0, 0.18, 0]}><cylinderGeometry args={[0.075, 0.08, 0.36, 32]} />{mat(WAX)}</mesh>
+      {real && <mesh position={[0, -0.03, 0]}><cylinderGeometry args={[0.17, 0.19, 0.06, 40]} /><meshStandardMaterial color={look.holder} metalness={0.6} roughness={0.3} /></mesh>}
+      <mesh position={[0, 0.18, 0]}><cylinderGeometry args={[0.075, 0.08, 0.36, 32]} />{mat(look.wax)}</mesh>
       <mesh position={[0, 0.375, 0]}><cylinderGeometry args={[0.006, 0.006, 0.03, 6]} />{mat('#3a3029')}</mesh>
       <mesh position={[0.004 * Math.sin(t * 9), 0.425, 0]} scale={[0.62 + 0.06 * k, 1.25 + 0.18 * k, 0.62 + 0.06 * k]}>
         <sphereGeometry args={[0.06, 20, 20]} />
-        <meshBasicMaterial color={FLAME} toneMapped={false} transparent opacity={op} />
+        <meshBasicMaterial color={look.flame} toneMapped={false} transparent opacity={op} />
       </mesh>
       <mesh position={[0, 0.415, 0]} scale={[0.5, 0.9, 0.5]}><sphereGeometry args={[0.05, 16, 16]} /><meshBasicMaterial color={FLAME_CORE} toneMapped={false} transparent opacity={op} /></mesh>
       {real && <mesh position={[0, 0.43, 0]}><sphereGeometry args={[0.17 + 0.03 * k, 20, 20]} />
-        <meshBasicMaterial color={FLAME} transparent opacity={0.16} depthWrite={false} toneMapped={false} /></mesh>}
+        <meshBasicMaterial color={look.flame} transparent opacity={0.16} depthWrite={false} toneMapped={false} /></mesh>}
     </group>
   );
 }
@@ -90,8 +110,8 @@ function Candle({ x, m = 1, t, ghost = 0 }: { x: number; m?: number; t: number; 
 // The spoon: its bowl is a slice of a sphere of radius R round C, squashed a little front to back so it reads as a spoon
 // in the orbit (the side view, where the rays are, is unchanged), a rolled rim and a handle curving away below.
 const CAP = Math.asin(APERTURE / R), RIM_X = POLE_X + R - Math.sqrt(R * R - APERTURE * APERTURE);
-function Spoon() {
-  const steel = <meshStandardMaterial color="#dfe3ea" metalness={1} roughness={0.16} side={THREE.DoubleSide} />;
+function Spoon({ look }: { look: Look }) {
+  const steel = <meshStandardMaterial color={look.spoon} metalness={look.metal} roughness={0.16} side={THREE.DoubleSide} />;
   return (
     <group>
       <group position={[POLE_X + R, 0, 0]} scale={[1, 1, 0.78]}>
@@ -101,27 +121,27 @@ function Spoon() {
         <mesh rotation={[0, Math.PI / 2, 0]}><torusGeometry args={[APERTURE, 0.022, 12, 96]} />{steel}</mesh>
       </group>
       <mesh position={[RIM_X - 0.12, -APERTURE - 0.78, 0]} rotation={[0, 0, -0.16]}>
-        <RoundBox size={[0.13, 1.7, 0.26]} radius={0.06} /><meshStandardMaterial color="#dfe3ea" metalness={1} roughness={0.2} />
+        <RoundBox size={[0.13, 1.7, 0.26]} radius={0.06} /><meshStandardMaterial color={look.spoon} metalness={look.metal} roughness={0.2} />
       </mesh>
     </group>
   );
 }
 
-function Eye({ t }: { t: number }) {
+function Eye({ t, look }: { t: number; look: Look }) {
   const a = prog(t, 12.2, 0.4);
   if (a <= 0) return null;
-  const look = Math.atan2(0 - EYE[1], POLE_X - EYE[0]);           // the pupil faces the spoon
+  const gaze = Math.atan2(0 - EYE[1], POLE_X - EYE[0]);           // the pupil faces the spoon
   return (
     <group position={[EYE[0], EYE[1], 0]} scale={a}>
       <mesh><sphereGeometry args={[0.17, 32, 32]} /><meshStandardMaterial color="#ffffff" roughness={0.25} /></mesh>
-      <mesh position={[0.15 * Math.cos(look), 0.15 * Math.sin(look), 0.02]} rotation={[0, 0, look - Math.PI / 2]}>
-        <cylinderGeometry args={[0.075, 0.075, 0.04, 28]} /><meshStandardMaterial color={P.blue} roughness={0.3} />
+      <mesh position={[0.15 * Math.cos(gaze), 0.15 * Math.sin(gaze), 0.02]} rotation={[0, 0, gaze - Math.PI / 2]}>
+        <cylinderGeometry args={[0.075, 0.075, 0.04, 28]} /><meshStandardMaterial color={look.iris} roughness={0.3} />
       </mesh>
     </group>
   );
 }
 
-function Scene({ t }: { t: number }) {
+function Scene({ t, look }: { t: number; look: Look }) {
   const u = uAt(t), im = imageAt(t), drawn = raysDrawn(t), marks = prog(t, 2.8, 0.3);
   return (
     <>
@@ -129,12 +149,12 @@ function Scene({ t }: { t: number }) {
       <RealLight env={0.9} />
       <ambientLight intensity={0.6} />
       <Seg a={[-3.8, 0]} b={[3.4, 0]} r={0.007} color={P.ink} opacity={0.35} />
-      {[F, R].map(d => <mesh key={d} position={[POLE_X + d, 0, 0]} scale={marks}><sphereGeometry args={[0.04, 16, 16]} /><meshBasicMaterial color={P.ink} /></mesh>)}
-      <Spoon />
-      <Candle x={POLE_X + u} t={t} />
-      {im.alpha > 0 && <Candle x={im.x} m={im.m} t={t} ghost={(im.virtual ? 0.7 : 0.85) * im.alpha} />}
-      {drawn > 0 && rayPaths(t).map((ray, i) => <RayView key={i} ray={ray} t={t} drawn={drawn} />)}
-      <Eye t={t} />
+      {[F, R].map(d => <mesh key={d} position={[POLE_X + d, 0, 0]} scale={marks}><sphereGeometry args={[0.04, 16, 16]} /><meshBasicMaterial color={look.marks} /></mesh>)}
+      <Spoon look={look} />
+      <Candle x={POLE_X + u} t={t} look={look} />
+      {im.alpha > 0 && <Candle x={im.x} m={im.m} t={t} ghost={(im.virtual ? look.ghost[0] : look.ghost[1]) * im.alpha} look={look} />}
+      {drawn > 0 && rayPaths(t).map((ray, i) => <RayView key={i} ray={ray} i={i} t={t} drawn={drawn} look={look} />)}
+      <Eye t={t} look={look} />
     </>
   );
 }
@@ -173,7 +193,7 @@ function Readout({ t }: { t: number }) {
 const G = { x0: 150, x1: 990, top: 1190, bottom: 1470, uMax: 2.6, mMax: 3.5 };
 const gx = (u: number) => G.x0 + ((G.uMax - u) / G.uMax) * (G.x1 - G.x0), mid = (G.top + G.bottom) / 2;
 const gy = (m: number) => mid - (m / G.mMax) * ((G.bottom - G.top) / 2);
-function Graph({ t }: { t: number }) {
+function Graph({ t, look }: { t: number; look: Look }) {
   const start = T_RAYS + 0.8, u = uAt(t);
   const pts = (from: number, to: number) => Array.from({ length: 81 }, (_, k) => from + ((to - from) * k) / 80)
     .map(x => [x, magnification(x)] as const).filter(([, m]) => Math.abs(m) <= G.mMax);
@@ -190,9 +210,9 @@ function Graph({ t }: { t: number }) {
       {label(gx(F), mid + 34, 'F', 'middle', P.ink)}{label(gx(R), mid + 34, 'C', 'middle', P.ink)}
       {label(G.x0, G.top + 4, 'upright ↑', 'start', P.green)}{label(G.x0, G.bottom + 2, 'upside down ↓', 'start', P.amber)}
       {label(G.x1, G.top - 14, 'image size  ·  closer →', 'end')}
-      {far.length > 1 && <path d={path(far)} fill="none" stroke={P.amber} strokeWidth={6} strokeLinecap="round" />}
-      {near.length > 1 && <path d={path(near)} fill="none" stroke={P.green} strokeWidth={6} strokeLinecap="round" />}
-      {dot && <circle cx={gx(u)} cy={gy(m)} r={12} fill={m > 0 ? P.green : P.amber} />}
+      {far.length > 1 && <path d={path(far)} fill="none" stroke={look.down} strokeWidth={6} strokeLinecap="round" />}
+      {near.length > 1 && <path d={path(near)} fill="none" stroke={look.up} strokeWidth={6} strokeLinecap="round" />}
+      {dot && <circle cx={gx(u)} cy={gy(m)} r={12} fill={m > 0 ? look.up : look.down} />}
     </svg>
   );
 }
@@ -204,8 +224,9 @@ const END: EndLine[] = [
   { at: 1.2, size: 80, weight: 700, color: P.green, text: 'pyqvault.com' },
 ];
 
-export function PvPhysics008({ cover = false, voice = false }: { cover?: boolean; voice?: boolean }) {
+export function PvPhysics008({ cover = false, voice = false, vivid = false }: { cover?: boolean; voice?: boolean; vivid?: boolean }) {
   useFonts();
+  const look = vivid ? VIVID_LOOK : FIRST;
   const frame = useCurrentFrame(), { fps } = useVideoConfig();
   const t = cover ? COVER_T : frame / fps, cap = cover ? null : captionAt(CAPTIONS, t);
   return (
@@ -214,11 +235,11 @@ export function PvPhysics008({ cover = false, voice = false }: { cover?: boolean
         <Board watermark={false} />
         <PredictHeader t={t} label={'PHYSICS, VISUALISED  #8'} lines={HEADER} options={OPTIONS} answer={ANSWER} at={ANSWER_AT} size={52} chipW={320} />
         <div style={{ position: 'absolute', left: 0, top: BAND.top, width: BAND.width, height: BAND.height, ...softEdges({ top: 0.08, bottom: 0.1, left: 0.04, right: 0.04 }) }}>
-          <ThreeCanvas width={BAND.width} height={BAND.height} gl={{ antialias: true, alpha: true }}><Scene t={t} /></ThreeCanvas>
+          <ThreeCanvas width={BAND.width} height={BAND.height} gl={{ antialias: true, alpha: true }}><Scene t={t} look={look} /></ThreeCanvas>
         </div>
         <AxisLabels t={t} />
         <Readout t={t} />
-        <Graph t={t} />
+        <Graph t={t} look={look} />
         {cover
           ? <Caption text={COVER.text} alpha={1} age={0} size={COVER.size} y={COVER.y} rise={false} />
           : cap && <Caption text={cap.caption.text} alpha={cap.alpha} age={cap.age} size={cap.caption.size ?? 50} y={cap.caption.y ?? 1590} />}

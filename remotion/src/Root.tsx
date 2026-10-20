@@ -1,7 +1,7 @@
 import { Composition, Still } from 'remotion';
 import { Reel005 } from './Reel005.tsx';
 import { Reel014 } from './Reel014.tsx';
-import { Compare005 } from './Compare.tsx';
+import { Compare005, Compare008 } from './Compare.tsx';
 import { PvPhysics002 } from './PvPhysics002.tsx';
 import { PvChem002 } from './PvChem002.tsx';
 import { PvMaths001 } from './PvMaths001.tsx';
@@ -89,6 +89,9 @@ export const Root = () => (
     <Composition id="PvPhysics008" component={PvPhysics008} durationInFrames={Math.round(DURATION_PP008 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, voice: false }} />
     <Composition id="PvPhysics008Voice" component={PvPhysics008} durationInFrames={Math.round(DURATION_PP008 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, voice: true }} />
     <Still id="PvPhysics008Cover" component={PvPhysics008} width={1080} height={1920} defaultProps={{ cover: true, voice: false }} />
+    <Composition id="Compare008" component={Compare008} durationInFrames={Math.round(DURATION_PP008 * 30)} fps={30} width={1080} height={1040} />
+    <Composition id="PvPhysics008Vivid" component={PvPhysics008} durationInFrames={Math.round(DURATION_PP008 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, voice: true, vivid: true }} />
+    <Still id="PvPhysics008VividCover" component={PvPhysics008} width={1080} height={1920} defaultProps={{ cover: true, voice: false, vivid: true }} />
     <Composition id="PvChem006" component={PvChem006} durationInFrames={Math.round(DURATION_PC006 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="PvChem006Cover" component={PvChem006} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="PvChem007" component={PvChem007} durationInFrames={Math.round(DURATION_PC007 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, voice: false }} />
