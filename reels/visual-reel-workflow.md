@@ -166,18 +166,32 @@ For a question whose picture is **3D** (a cone, a plane, a solid), make it in `r
 `.render.html`. Remotion renders every frame (the engine's real-time recording drops some, L25). Reel 014
 (`remotion/src/Reel014.tsx`) is the example. Steps 1, 2, 5 and 6 above are unchanged; steps 3–4 become:
 
-1. **Timeline first, in tests:** `src/lib/<reel>.ts` holds the timings and geometry as pure functions of t;
-   `tests/<reel>.test.ts` checks them first (`npm test`). For 3D, test that every label stays inside the 3D
-   band on every frame (`project()`), and that the key figure **faces the camera** while it's being
-   explained, answered and trapped (never edge-on).
-2. **Scene:** the 3D figure in a `ThreeCanvas` band; the question card, captions, working and end card are
+1. **Storyboard first: a beat table** (founder, 2026-10-21), at the top of `src/lib/<reel>.ts`, one row per beat:
+   time · what moves · the caption, and how long its voice line takes · what the camera must keep in frame · the key
+   objects' colours against the background (L22 decides white or dark). *Why:* on Physics #8 every first-render fault
+   was one a table catches: a cream candle and its image nearly invisible on the white board, the answer's image
+   cropped at the band's edge, two voice lines longer than their captions. Remakes and rejections (Physics #4,
+   Chemistry #4, Maths #3, the clay Sound Mind reel) each cost about an hour for a fault visible in a few frames.
+2. **Timeline in tests:** `src/lib/<reel>.ts` holds the timings and geometry as pure functions of t;
+   `tests/<reel>.test.ts` checks them first (`npm test`). For 3D, test that every label **and every row's
+   "keep in frame" object** stays inside the 3D band on every frame (`project()`), and that the key figure **faces the
+   camera** while it's being explained, answered and trapped (never edge-on).
+3. **Voice before caption times** (voiced reels, F23): write the lines, run `npm run voice:<reel>` and set each
+   caption's slot from the measured length (+ 0.1 s lead), then re-run until it prints no "too long". Silent reels: the
+   same slots, so either render can go out.
+4. **Scene:** the 3D figure in a `ThreeCanvas` band; the question card, captions, working and end card are
    the shared HTML pieces in `src/board.tsx` (same white look and Reel.WHITE colours, palette test-locked).
    Labels are HTML placed with `project()`, so they stay crisp Cambria.
-3. **Music:** write `remotion/music/<reel>.json` (`duration`, `music.chime`), then
+5. **Stills sheet before any sound or full render:** render 6–8 beat frames (the opening, the cover time, each beat,
+   the answer, the end card) with `npx remotion still <Comp> <out.png> --frame=<n>` into the scratchpad, put them on
+   one sheet (an HTML grid screenshotted by headless Edge) and fix what it shows: anything hard to see on the board,
+   cropped, overlapping or late. **Claude's own check:** the founder judges the finished reel only, never the sheet
+   (founder, 2026-10-21).
+6. **Music:** write `remotion/music/<reel>.json` (`duration`, `music.style`, `music.hits`), then
    `node ../reels/tools/music.mjs music/<reel>.json public/<reel>.wav`: the house music from `engine.js`,
-   rendered offline (sample-exact, chime on time).
-4. **Check:** render beat frames with `npx remotion still <Comp> <out.png> --frame=<n>` into the scratchpad
-   and look at them as a sheet; then render the MP4 to `reels/` and run `check-video.mjs` as in step 4.
+   rendered offline (sample-exact, hits on time). Then `npm run mix:<reel>`.
+7. **Check:** render the MP4 to `reels/` and run `check-video.mjs` as in step 4 (four PASS lines), and look at its
+   strip.
 
 ### Reel toolkit (2026-10-20, founder-approved): reach for these before hand-rolling
 
