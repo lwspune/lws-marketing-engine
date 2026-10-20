@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.3, 2026-10-20)
+# @pyqvault_ reel framework (v1.4, 2026-10-20)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -72,6 +72,15 @@ renders of the remakes). · *Check:* no `boxGeometry` in the reel's file; the fr
 the big moment**, a zoom out to show the result. Written as tested keys (`CAMERA`, `tween` in `motion.ts`). · *Why:* a
 change of view restarts attention and makes the big moment feel big (founder). · *Check:* tests: at least 2 zooms in and
 1 out, no jump between frames, a punch-in on the big moment. · 🧪 L33
+
+**F22 · An orbit shot in 3D reels** (the camera swings round the object: front, side, back). 3D reels only, at most
+**one per reel**, an arc of **60–120°**, in the **opening seconds** (while the question is up) or the closing moment;
+**back at the explaining view before the key moment**, never during a punch-in, slow and eased with no whoosh. Written as
+a third camera value (orbit angle) on the same `CAMERA` keys. · *Why:* it shows the depth of the 3D we already build,
+gives motion from frame 0 (F5) and a fresh view that restarts attention (like F9); founder's idea (2026-10-20). Limited
+because our reels explain from a chosen angle: a slope's angle, arrows and gauges only read from the front, so an orbit
+at the key moment would hide the very thing being explained. · *Check:* the reel's tests (arc size, back at the front
+before the key moment, no jumps). · 🧪 L37
 
 **F10 · Honest.** The physics and maths are re-derived in tests; never fake counts, proportions or effects; label any
 scale change ("zoomed ×10⁹"). · *Why:* a wrong reel on an exam account costs trust we can't buy back; it's the no-slop
@@ -147,3 +156,4 @@ becomes a user. · *Check:* the end card. · 📌 founder, 2026-10-18
 | v1.1 | 2026-10-20 | F13 music: from 📌 to 🧪 L34; fair rotation between five styles while the test runs; style logged per reel. | Founder: track music performance. The first 8 reels hint the opposite of F13's "energetic first" (cinematic and lofi on top, drive/synthwave/trap at the bottom), too weak to change the rule, enough to measure it. |
 | v1.2 | 2026-10-20 | F12 background: a Background column per reel and a rule for when to call it (≥ 6 posted reels each side, median watch time first). | Founder: track dark vs white. The test (L22) had a rotation but no column and no finish line, so it could run forever or be called on a hunch. |
 | v1.3 | 2026-10-20 | F21 added: pick by topic score (proof, vivid, question, law live, everyday hook). F1's backlog is now ranked by it. | Founder: a mechanism to choose topics, aimed at engagement and reach, so no exam weight. The backlog's order was set on 18 Oct, before L30; a written score makes the choice repeatable and testable (L35). The everyday hook is Claude's addition, with its evidence. |
+| v1.4 | 2026-10-20 | F22 added: one orbit shot in 3D reels, 60–120°, opening or closing only, back at the explaining view before the key moment. | Founder's idea (an arc round the object). Kept on test with limits because our reels explain from a fixed angle. First reel: Chemistry #5; Physics #5 (no orbit) is the comparison (L37). |
