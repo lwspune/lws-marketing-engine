@@ -64,7 +64,7 @@ order of this table. **P19–P29 (2026-10-20, founder: "take one physics chapter
 | P21 | P | Cover half the lens: the whole image stays, dimmer (Ray Optics) | 0.9 | 2 | 2 | 1 | 1 | 5 | |
 | P22 | P | A 2 m pool looks 1.5 m deep (apparent depth, Ray Optics) | – | 2 | 2 | 1 | 1 | 6 | |
 | P23 | P | Walk a candle up to a convex lens: the image flips upright (Ray Optics) | – | 2 | 2 | 1 | 1 | 6 | |
-| P24 | P | Your face in a spoon: upside down, then upright up close (concave mirror, Ray Optics) | 10.5 | 2 | 2 | 1 | 1 | 7 | queued (founder, 2026-10-20: Ray Optics first, ahead of P11) |
+| P24 | P | Your face in a spoon: upside down, then upright up close (concave mirror, Ray Optics) | 10.5 | 2 | 2 | 1 | 1 | 7 | ✅ made 2026-10-21 (`pv-physics-008-spoon`, first of Ray Optics) |
 | P25 | P | A magnifying glass under water barely magnifies (lensmaker, Ray Optics) | – | 2 | 2 | 1 | 1 | 6 | |
 | P26 | P | A half-height mirror shows your whole body, at any distance (Ray Optics) | – | 1 | 2 | 1 | 1 | 5 | |
 | P27 | P | A bigger telescope lens: a brighter moon, not a bigger one (Ray Optics) | – | 2 | 2 | 0 | 1 | 5 | |

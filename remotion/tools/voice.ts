@@ -11,6 +11,7 @@ import { VOICE, VOICE_RMS, levelTo, overruns, placeVoice, trimSilence, upsample2
 
 const REELS: Record<string, { lib: string; file: string }> = {
   pc007: { lib: '../src/lib/pc007.ts', file: 'public/pv-chem-007-halflife' },
+  pp008: { lib: '../src/lib/pp008.ts', file: 'public/pv-physics-008-spoon' },
 };
 const id = process.argv[2], reel = REELS[id];
 if (!reel) throw new Error(`usage: node tools/voice.ts <${Object.keys(REELS).join(' | ')}>`);

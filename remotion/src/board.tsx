@@ -138,8 +138,8 @@ export function TitleCard({ t, label, lines, color, size = 78 }: { t: number; la
 // The predict-first opening (learnings L28, 2026-10-19): from frame 0 a question the viewer can answer in two seconds,
 // with A/B/C pills and a nudge to comment a guess. No still title card (L29: viewers left within ~3–6 s). The right pill
 // lights at `at`, when the picture has shown the answer.
-export function PredictHeader({ t, label, lines, options, answer, at, size = 58 }:
-  { t: number; label: string; lines: string[]; options: string[]; answer: number; at: number; size?: number }) {
+export function PredictHeader({ t, label, lines, options, answer, at, size = 58, chipW = 200 }:
+  { t: number; label: string; lines: string[]; options: string[]; answer: number; at: number; size?: number; chipW?: number }) {
   const P = usePalette(), nudge = 1 - prog(t, at - 0.4, 0.4), top = 150 + lines.length * size * 1.2;
   return (
     <>
@@ -147,7 +147,7 @@ export function PredictHeader({ t, label, lines, options, answer, at, size = 58 
       {lines.map((l, i) => (
         <div key={l} style={{ position: 'absolute', left: 0, width: 1080, top: 150 + i * size * 1.2, textAlign: 'center', ...hand(size), color: P.ink, whiteSpace: 'pre' }}>{l}</div>
       ))}
-      <Chips t={t} labels={options} answer={answer} at={at} top={top + 26} w={200} h={76} gap={22} size={42} />
+      <Chips t={t} labels={options} answer={answer} at={at} top={top + 26} w={chipW} h={76} gap={22} size={42} />
       {nudge > 0 && (
         <div style={{ position: 'absolute', left: 0, width: 1080, top: top + 122, textAlign: 'center', opacity: nudge, font: `600 32px ${SOFT_UI}`, color: P.muted }}>
           comment your guess 👇
