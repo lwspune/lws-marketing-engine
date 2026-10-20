@@ -22,7 +22,7 @@ remade our way. · *Why:* someone else's views prove people want it; our first r
 2× the worst (L27). · *Check:* the backlog row has the proof link. · 📌 founder, 2026-10-18
 
 **F21 · Pick by topic score.** Each open idea is scored out of 10 in `remake-backlog.md` → **Topic scores**: proof
-(0–3, worked out from their views multiple) + vivid (0–3) + a 2-second question (0–2) + law live (0–1) + everyday hook
+(−1–3, worked out from their views multiple; a known flop, under 1×, is −1) + vivid (0–3) + a 2-second question (0–2) + law live (0–1) + everyday hook
 (0–1), each with written anchors. The subject that's due (P → C) takes its highest open score, a tie going to the bigger views multiple, then to the idea that shows its law live (F3); `node
 reels/tools/topic-scores.js` checks the table and names the next pick. **No exam-weight criterion:** the goal is
 engagement and reach (founder). **No repeats:** a concept already made is not picked again, even under a new angle;
@@ -169,3 +169,4 @@ becomes a user. · *Check:* the end card. · 📌 founder, 2026-10-18
 | v1.7 | 2026-10-20 | F23 added: voiceover on test (Kokoro, on-screen words only, a silent render alongside); F13's "no voice (voiceover parked)" now points to it. F21: no repeats. | Founder: try a free voiceover on @pyqvault_ (the ElevenLabs own-voice plan of 15 Oct stays parked); measured by L43. No repeats: C12 (heat → rate) was next but repeats Chemistry #1; founder's call. First voiced reel: Chemistry #7, half-life. |
 | v1.8 | 2026-10-20 | F22: the orbit is the hook. Every 3D reel opens with a full 360° orbit, from frame 0, ending at the explaining view by 3 s; no closing orbits. From 🧪 to 📌. | Founder: "orbit is hook and should be there in first 3 sec", for @pyqvault_ and @lws.pune; "make it 360 degree orbit" (was 60–120°). Reels already made are left as they are (founder). |
 | v1.9 | 2026-10-20 | F22: the orbit stays for 3D reels only; 2D reels open with their picture building from frame 0. | Founder: a 3D opening (360° turn settling into the flat grid) was built for @lws.pune 016 and dropped the same day: "doesn't look good". |
+| v1.10 | 2026-10-20 | F21: proof runs −1–3; an idea that flopped for another account (under 1× their typical reel) scores −1, and loses a tie to an untested idea. P19–P29 (Ray Optics) added; P24 queued ahead of P11. | Founder, 2026-10-20: the Ray Optics search found ideas that flopped for other accounts (prism 0.5×, mirage 0.4×, sliced lens 0.9×) scoring the same as untested ones, and winning ties against them. A flop is evidence against, so it costs a point; in a tie, no evidence counts as 1×. Ray Optics first: founder ("take one physics chapter"). |

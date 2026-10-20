@@ -28,7 +28,7 @@ really predicts watch time; the criteria are tuned from that.
 
 | Criterion | Points | Anchors | Why |
 |---|---|---|---|
-| **Proof** | 0–3, worked out | their views ÷ their typical reel: ≥ 100× → 3 · ≥ 30× → 2 · ≥ 3× → 1 · our own idea (–) → 0 | demand already shown (F1) |
+| **Proof** | −1–3, worked out | their views ÷ their typical reel: ≥ 100× → 3 · ≥ 30× → 2 · ≥ 3× → 1 · our own idea (–) or 1–3× → 0 · **under 1× → −1** (a known flop) | demand already shown (F1); a flop is worse than no evidence (founder, 2026-10-20) |
 | **Vivid** | 0–3 | 3 = many objects moving across the whole frame + colour changing (Boyle's molecules, the 8 families) · 2 = several moving parts or a strong colour change · 1 = one main object moving · 0 = mostly still | our 3 busiest reels were our top 3 (L30) |
 | **Question** | 0–2 | 2 = a 2-second A/B/C guess with a surprising answer · 1 = a question that needs a sum or reading · 0 = no natural question | the opening that gets comments (L28, F4) |
 | **Law live** | 0–1 | a live simulation + live numbers + a graph that draws itself | our best category and others' (F3, L27) |
@@ -41,7 +41,7 @@ so C7–C11 are our own vivid ideas (proof 0) until a study of chemistry account
 notes: concepts that pass F2–F4, with the question each reel opens on in the list below. Their PYQ counts are context for the
 caption's "where it's asked" line only, not a score. Ties: the bigger views multiple, then the law shown live (F3), then the
 order of this table. **P19–P29 (2026-10-20, founder: "take one physics chapter")** cover Ray Optics concept by concept
-(list below). Their Proof column records what other accounts' reels of the same idea did, flops included (below 3× scores 0).
+(list below). Their Proof column records what other accounts' reels of the same idea did, flops included (under 1× costs a point).
 
 | # | Subject | Idea | Proof (×) | Vivid | Question | Law live | Everyday | Score | Status |
 |---|---|---|---|---|---|---|---|---|---|
@@ -59,9 +59,9 @@ order of this table. **P19–P29 (2026-10-20, founder: "take one physics chapter
 | P16 | P | Red star or blue star: which is hotter? (Wien, CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
 | P17 | P | Join a small and a big soap bubble: the big one grows (CET notes) | – | 2 | 2 | 1 | 1 | 6 | |
 | P18 | P | A laser follows a curved water jet (total internal reflection, CET notes) | – | 2 | 2 | 1 | 1 | 6 | ⏸ parked: total internal reflection is P20's mirage, the everyday angle (founder, 2026-10-20) |
-| P19 | P | White light through a prism: violet bends most (dispersion, Ray Optics) | 0.5 | 3 | 2 | 1 | 1 | 7 | |
-| P20 | P | The "water" on a hot road is the sky (mirage, Ray Optics) | 0.4 | 3 | 2 | 0 | 1 | 6 | |
-| P21 | P | Cover half the lens: the whole image stays, dimmer (Ray Optics) | 0.9 | 2 | 2 | 1 | 1 | 6 | |
+| P19 | P | White light through a prism: violet bends most (dispersion, Ray Optics) | 0.5 | 3 | 2 | 1 | 1 | 6 | |
+| P20 | P | The "water" on a hot road is the sky (mirage, Ray Optics) | 0.4 | 3 | 2 | 0 | 1 | 5 | |
+| P21 | P | Cover half the lens: the whole image stays, dimmer (Ray Optics) | 0.9 | 2 | 2 | 1 | 1 | 5 | |
 | P22 | P | A 2 m pool looks 1.5 m deep (apparent depth, Ray Optics) | – | 2 | 2 | 1 | 1 | 6 | |
 | P23 | P | Walk a candle up to a convex lens: the image flips upright (Ray Optics) | – | 2 | 2 | 1 | 1 | 6 | |
 | P24 | P | Your face in a spoon: upside down, then upright up close (concave mirror, Ray Optics) | 10.5 | 2 | 2 | 1 | 1 | 7 | queued (founder, 2026-10-20: Ray Optics first, ahead of P11) |

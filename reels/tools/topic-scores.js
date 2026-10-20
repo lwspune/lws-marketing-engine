@@ -5,7 +5,7 @@
 //   node reels/tools/topic-scores.js            (both handles)
 //   node reels/tools/topic-scores.js lwspune    (one handle: pyqvault or lwspune)
 //
-// Score out of 10 = proof (0–3, from the views multiple) + vivid (0–3) + question (0–2) + law live (0–1)
+// Score out of 10 = proof (−1–3, from the views multiple; −1 for a known flop) + vivid (0–3) + question (0–2) + law live (0–1)
 // + everyday hook (0–1). The goal is engagement and reach, so exam weight is not a criterion (founder, 2026-10-20).
 
 const RANGES = { vivid: 3, question: 2, law: 1, everyday: 1 };
@@ -17,11 +17,15 @@ const ACCOUNTS = {
   lwspune: { handle: "@lws.pune", heading: "## @lws.pune topic scores", subjects: ["M"] },
 };
 
-/** Proof points from "their views ÷ their typical reel": a big multiple means proven demand (framework F1). */
+/** Proof points from "their views ÷ their typical reel": a big multiple means proven demand (framework F1); under 1×
+    the idea already flopped for someone else, which is worse than no evidence (founder, 2026-10-20). */
 function proofPoints(x) {
   if (x == null) return 0;
-  return x >= 100 ? 3 : x >= 30 ? 2 : x >= 3 ? 1 : 0;
+  return x >= 100 ? 3 : x >= 30 ? 2 : x >= 3 ? 1 : x >= 1 ? 0 : -1;
 }
+
+/** Tie-break order: no evidence counts as an ordinary reel (1×), so a flop ranks below it. */
+const proofRank = (r) => r.proofX ?? 1;
 
 /** Rows of the table under `heading` (a whole line; stops at the next ## heading). */
 function parse(md, heading = ACCOUNTS.pyqvault.heading) {
@@ -73,7 +77,7 @@ function nextPicks(rows, subjects = SUBJECTS) {
   const out = {};
   for (const s of subjects) {
     const open = rows.filter((r) => r.subject === s && isOpen(r))
-      .sort((a, b) => b.score - a.score || (b.proofX ?? 0) - (a.proofX ?? 0) || b.law - a.law);
+      .sort((a, b) => b.score - a.score || proofRank(b) - proofRank(a) || b.law - a.law);
     out[s] = open[0] || null;
   }
   return out;

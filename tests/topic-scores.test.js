@@ -31,6 +31,20 @@ test("proof points come from the views multiple: ≥100× → 3, ≥30× → 2, 
   assert.equal(ts.proofPoints(11), 1);
   assert.equal(ts.proofPoints(3), 1);
   assert.equal(ts.proofPoints(null), 0);
+  assert.equal(ts.proofPoints(2.3), 0);
+  assert.equal(ts.proofPoints(1), 0);
+});
+
+test("a known flop (under 1× their typical reel) costs a point (founder, 2026-10-20)", () => {
+  assert.equal(ts.proofPoints(0.9), -1);
+  assert.equal(ts.proofPoints(0.1), -1);
+});
+
+test("same score: an untested idea goes before a known flop", () => {
+  const md = TABLE.replace("| C7 | C | Flame colours | – | 3 | 2 | 0 | 1 | 6 | |",
+    "| C7 | C | Flame colours | – | 3 | 2 | 0 | 1 | 6 | |\n| C12 | C | Prism | 0.5 | 3 | 2 | 1 | 1 | 6 | |")
+    .replace("| 11 | 2 | 2 | 1 | 1 | 7 | |", "| 11 | 2 | 2 | 1 | 1 | 7 | ✅ made |");
+  assert.equal(ts.nextPicks(ts.parse(md)).C.id, "C7", "both 6; C12's 0.5× flop ranks below no evidence");
 });
 
 test("reads the Topic scores table and nothing after it", () => {

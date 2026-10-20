@@ -27,7 +27,7 @@ fundamentals named by exam and topic (@mathsy.uk, L23); someone else's views pro
 backlog row has the proof link and an NDA chapter. · 🧪 L39
 
 **F21 · Pick by topic score.** Each open idea is scored out of 10 in `remake-backlog.md` → **@lws.pune topic scores**:
-proof (0–3, from their views multiple) + vivid (0–3) + a 2-second question (0–2) + concept live (0–1) + everyday hook
+proof (−1–3, from their views multiple; a known flop, under 1×, is −1) + vivid (0–3) + a 2-second question (0–2) + concept live (0–1) + everyday hook
 (0–1), with @pyqvault_'s written anchors. **Gate:** NDA maths chapters only. No exam-weight criterion: the gate already
 keeps it on the syllabus, and the reel's job is reach. `node reels/tools/topic-scores.js lwspune` checks the table and
 names the next pick. · *Why:* the same choice whoever makes it, and testable; the criteria are F1–F4's reasons as
@@ -156,6 +156,7 @@ end felt like homework (founder, on @pyqvault_). · *Check:* the end card. · �
 
 | Version | Date | Change | Why |
 |---|---|---|---|
+| v1.4 | 2026-10-20 | F21: a known flop (under 1× their typical reel) scores −1 and loses a tie to an untested idea (the same tool as @pyqvault_ v1.10). No @lws.pune row changes. | Founder, 2026-10-20: the Ray Optics search found ideas that flopped for other accounts (prism 0.5×, mirage 0.4×, sliced lens 0.9×) scoring the same as untested ones, and winning ties against them. A flop is evidence against, so it costs a point; in a tie, no evidence counts as 1×. |
 | v1.3 | 2026-10-20 | F22: the orbit stays for 3D reels only; 2D reels open with their picture building from frame 0. | Founder: a 3D opening (360° turn settling into the flat grid) was built for @lws.pune 016 and dropped the same day: "doesn't look good". |
 | v1.2 | 2026-10-20 | F22: the orbit is the hook. Every 3D reel opens with a full 360° orbit, from frame 0, ending at the explaining view by 3 s; no closing orbits. From 🧪 to 📌. | Founder: "orbit is hook and should be there in first 3 sec", for @pyqvault_ and @lws.pune; "make it 360 degree orbit" (was 60–120°). Reels already made are left as they are (founder). |
 | v1.1 | 2026-10-20 | F21: ties go to the bigger views multiple, then the concept shown live, then table order (the same tool as @pyqvault_). | Same reason as @pyqvault_ v1.6: a tie with equal proof was settled by table order. |
