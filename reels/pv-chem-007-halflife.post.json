@@ -1,0 +1,16 @@
+{
+  "slug": "pv-chem-007-halflife",
+  "project": "pyqvault-insta",
+  "kind": "reel",
+  "title": "Chemistry #7 · half-life: 64 atoms, 2 half-lives, how many left? (predict-first, white, lofi, first voiceover)",
+  "video": "pv-chem-007-halflife-voice.mp4",
+  "cover": "pv-chem-007-halflife-cover.png",
+  "captions": {
+    "instagram": "64 atoms. Two half-lives. How many are left? A 0 · B 16 · C 32\nComment your guess before you watch 👇\n\nClass 12 Chemistry · Chemical Kinetics (first-order reactions, half-life)\nChemistry, visualised #7\n\nEvery half-life, half of what's left decays: 64 → 32 → 16 → B.\nWhich atom goes next is pure chance. How many go is not: radioactive decay is first order, so the half-life (t½ = 0.693/k) is the same however many atoms are left.\nThat's how carbon dating works: C-14 halves every 5,730 years, so a bone with 25% of its C-14 left is about 11,460 years old.\n\nSave this for revision 📌 Follow for #8.\nPractise every PYQ chapter-wise, free → pyqvault.com (link in bio).\n🔊 Voice: AI narrator\n\n#Chemistry #Class12 #Class12Chemistry #ChemicalKinetics #HalfLife #CarbonDating #CBSE #JEEMain #NEET #MHTCET #ChemistryVisualised",
+    "facebook": "64 atoms. Two half-lives. How many are left? A 0 · B 16 · C 32 👇\n\nClass 12 Chemistry · Chemical Kinetics (half-life)\nChemistry, visualised #7: every half-life, half of what's left decays, 64 → 32 → 16 → B. Which atom goes is chance; how many is not (first order: t½ = 0.693/k, the same however many are left). Carbon dating: C-14 halves every 5,730 years, so 25% left ≈ 11,460 years.\n\nPractise PYQs free, chapter-wise: https://www.pyqvault.com\n🔊 Voice: AI narrator\n\n#Chemistry #Class12 #HalfLife",
+    "youtube": {
+      "title": "64 atoms, two half-lives: how many are left? #shorts",
+      "description": "Chemistry, visualised #7. Half-life (NCERT Class 12, Chemical Kinetics): every half-life, half of what's left decays, so 64 → 32 → 16. Which atom goes is random; how many is not. First order: t½ = 0.693/k, the same however many are left. Carbon dating: C-14 halves every 5,730 years, so 25% left ≈ 11,460 years.\n\nPractise PYQs free, chapter-wise: pyqvault.com\nVoice: AI narrator\n\n#Chemistry #Class12 #Shorts"
+    }
+  }
+}

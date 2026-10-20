@@ -21,7 +21,8 @@ tricks, "math sounds like", parametric art).
 **Which idea to make next** (framework F21, founder 2026-10-20). Each open @pyqvault_ idea gets a score out of 10;
 the next reel of the subject that's due (P → C) takes the **highest open score**, ties going to the better-proven
 idea (the bigger views multiple). **@pyqvault_ is physics and chemistry only** (founder, 2026-10-20: they have the better
-visual content); its maths ideas are closed below, and maths goes to @lws.pune. `node reels/tools/topic-scores.js` checks every row and prints the next pick per subject. The goal is
+visual content); its maths ideas are closed below, and maths goes to @lws.pune. **No repeats** (founder, 2026-10-20): a
+concept already made is not picked again, even under a new angle; such a row is parked with the reel it repeats. `node reels/tools/topic-scores.js` checks every row and prints the next pick per subject. The goal is
 **engagement and reach**, so exam weight is deliberately *not* a criterion (founder). L35 checks whether a high score
 really predicts watch time; the criteria are tuned from that.
 
@@ -61,10 +62,10 @@ order of this table.
 | C7 | C | Flame colours: each metal burns its own colour (fireworks) | – | 3 | 2 | 0 | 1 | 6 | ✅ made 2026-10-20 (`pv-chem-006-flame`) |
 | C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | 3 | 2 | 1 | 0 | 6 | |
 | C9 | C | The pH rainbow: universal indicator from lemon to soap | – | 3 | 2 | 0 | 1 | 6 | |
-| C11 | C | Diffusion: dye in hot vs cold water | – | 2 | 2 | 0 | 1 | 5 | |
+| C11 | C | Diffusion: dye in hot vs cold water | – | 2 | 2 | 0 | 1 | 5 | ⏸ parked: close to Chemistry #1, heat speeds things up (founder, 2026-10-20) |
 | C10 | C | Cool the brown gas: NO₂ ⇌ N₂O₄ shifts (Le Chatelier) | – | 2 | 2 | 0 | 0 | 4 | |
-| C12 | C | Heat it by 10 °C: the rate doubles (collisions over the energy hill, CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
-| C13 | C | Half-life: 64 atoms, 2 half-lives, 16 left (CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
+| C12 | C | Heat it by 10 °C: the rate doubles (collisions over the energy hill, CET notes) | – | 3 | 2 | 1 | 1 | 7 | ⏸ parked: repeats Chemistry #1, heat → rate (founder, 2026-10-20) |
+| C13 | C | Half-life: 64 atoms, 2 half-lives, 16 left (CET notes) | – | 3 | 2 | 1 | 1 | 7 | ✅ made 2026-10-20 (`pv-chem-007-halflife`, first voiceover) |
 | C14 | C | Stack the oranges: 52%, 68% or 74% filled (packing efficiency, CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
 | C15 | C | A zinc rod in blue copper sulphate: copper coats it, the blue fades (CET notes) | – | 3 | 2 | 1 | 0 | 6 | |
 | C16 | C | Why water is bent: lone pairs squeeze 109.5° → 104.5° (VSEPR, CET notes) | – | 2 | 2 | 1 | 1 | 6 | |

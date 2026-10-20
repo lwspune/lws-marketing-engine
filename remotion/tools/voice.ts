@@ -10,6 +10,7 @@ import { SR, readWav, writeWav } from '../src/lib/sfx.ts';
 import { VOICE, VOICE_RMS, levelTo, overruns, placeVoice, trimSilence, upsample2x, voiceKey, type VoiceLine } from '../src/lib/voice.ts';
 
 const REELS: Record<string, { lib: string; file: string }> = {
+  pc007: { lib: '../src/lib/pc007.ts', file: 'public/pv-chem-007-halflife' },
 };
 const id = process.argv[2], reel = REELS[id];
 if (!reel) throw new Error(`usage: node tools/voice.ts <${Object.keys(REELS).join(' | ')}>`);

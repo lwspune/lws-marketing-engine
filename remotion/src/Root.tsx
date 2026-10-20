@@ -14,6 +14,7 @@ import { PvPhysics005 } from './PvPhysics005.tsx';
 import { PvPhysics006 } from './PvPhysics006.tsx';
 import { PvPhysics007 } from './PvPhysics007.tsx';
 import { PvChem006 } from './PvChem006.tsx';
+import { PvChem007 } from './PvChem007.tsx';
 import { PvChem005 } from './PvChem005.tsx';
 import { Reel015 } from './Reel015.tsx';
 import { Reel010 } from './Reel010.tsx';
@@ -34,6 +35,7 @@ import { DURATION as DURATION_PP005 } from './lib/pp005.ts';
 import { DURATION as DURATION_PP006 } from './lib/pp006.ts';
 import { DURATION as DURATION_PP007 } from './lib/pp007.ts';
 import { DURATION as DURATION_PC006 } from './lib/pc006.ts';
+import { DURATION as DURATION_PC007 } from './lib/pc007.ts';
 import { DURATION as DURATION_PC005 } from './lib/pc005.ts';
 import { DURATION as DURATION_015 } from './lib/reel015.ts';
 import { DURATION as DURATION_010 } from './lib/reel010.ts';
@@ -80,6 +82,9 @@ export const Root = () => (
     <Still id="PvPhysics007Cover" component={PvPhysics007} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="PvChem006" component={PvChem006} durationInFrames={Math.round(DURATION_PC006 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="PvChem006Cover" component={PvChem006} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="PvChem007" component={PvChem007} durationInFrames={Math.round(DURATION_PC007 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, voice: false }} />
+    <Composition id="PvChem007Voice" component={PvChem007} durationInFrames={Math.round(DURATION_PC007 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, voice: true }} />
+    <Still id="PvChem007Cover" component={PvChem007} width={1080} height={1920} defaultProps={{ cover: true, voice: false }} />
     <Composition id="PvChem005" component={PvChem005} durationInFrames={Math.round(DURATION_PC005 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="PvChem005Cover" component={PvChem005} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="Reel015" component={Reel015} durationInFrames={Math.round(DURATION_015 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
