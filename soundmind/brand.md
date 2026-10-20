@@ -14,6 +14,7 @@ shares and saves of other accounts):
 | @myeasytherapy (1.3M) | one sentence on a flat brand colour; images get ~10× the likes of her reels | **Format A**: one strong line beats a video; "comment KEYWORD" to sell |
 | @selfcarewithwall (3.4M) | "this is so me" quote cards in carousels (mostly reposts + paid promos) | short, sendable lines; copy the format, never the content |
 | @therapypulse (372K) | stick-figure psychology reels; median fell from 5.8K likes (Aug 2025) to ~300 | the format is wearing out: don't make it the main bet |
+| @easybrilliantart | **not read yet**: noted by the founder (2026-10-20) as a model for Sound Mind | read it through Business Discovery before the next batch; fill this row from its numbers |
 
 Sound Mind's own 80 reels (to 2026-06): median 399 views, **0 shares, 0 saves**, 6 s watch time.
 GoPost can't post single images yet, so both formats are carousels.
