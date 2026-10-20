@@ -92,3 +92,44 @@ test("an idea moved to another handle is closed: never queued, never picked", ()
   assert.equal(ts.nextPicks(rows).M, null);
   assert.deepEqual(ts.queued(rows), []);
 });
+
+// @lws.pune has its own table (founder 2026-10-20: same framework for both handles): NDA maths concepts, subject M only.
+const LWS = `
+## Topic scores
+
+| # | Subject | Idea | Proof (×) | Vivid | Question | Law live | Everyday | Score | Status |
+|---|---|---|---|---|---|---|---|---|---|
+| P5 | P | Adiabatic squeeze | 125 | 3 | 2 | 1 | 1 | 10 | |
+
+## @lws.pune topic scores
+
+| # | Subject | Idea | Proof (×) | Vivid | Question | Concept live | Everyday | Score | Status |
+|---|---|---|---|---|---|---|---|---|---|
+| W6 | M | The soda can | 114 | 2 | 2 | 1 | 1 | 9 | |
+| W14 | M | A matrix moves space | 34 | 3 | 1 | 1 | 0 | 7 | |
+| W15 | M | f and f′ together | 115 | 2 | 1 | 1 | 0 | 7 | ✅ made |
+
+## Re-run
+`;
+
+test("each handle reads only its own table", () => {
+  assert.deepEqual(ts.parse(LWS).map((r) => r.id), ["P5"], "the default is @pyqvault_'s table");
+  assert.deepEqual(ts.parse(LWS, ts.ACCOUNTS.lwspune.heading).map((r) => r.id), ["W6", "W14", "W15"]);
+});
+
+test("@lws.pune ideas are NDA maths only: subject M, and its next pick skips made ideas", () => {
+  const { heading, subjects } = ts.ACCOUNTS.lwspune;
+  const rows = ts.parse(LWS, heading);
+  assert.deepEqual(ts.validate(rows, subjects), []);
+  assert.equal(ts.nextPicks(rows, subjects).M.id, "W6");
+  assert.match(ts.validate(ts.parse(LWS.replace("| W14 | M |", "| W14 | P |"), heading), subjects).join("\n"), /W14: subject "P" should be M/);
+});
+
+test("the real backlog's @lws.pune table is valid and has an open idea", () => {
+  const md = fs.readFileSync(path.join(__dirname, "..", "reels", "remake-backlog.md"), "utf8");
+  const { heading, subjects } = ts.ACCOUNTS.lwspune;
+  const rows = ts.parse(md, heading);
+  assert.ok(rows.length >= 9, `only ${rows.length} scored @lws.pune ideas`);
+  assert.deepEqual(ts.validate(rows, subjects), []);
+  assert.ok(ts.nextPicks(rows, subjects).M, "no open @lws.pune idea");
+});

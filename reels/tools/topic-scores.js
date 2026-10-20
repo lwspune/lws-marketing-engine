@@ -1,14 +1,20 @@
 "use strict";
-// @pyqvault_ topic score (framework F21): which idea to make next. Reads the "Topic scores" table in
+// Topic score (framework F21, both handles): which idea to make next. Reads each handle's score table in
 // reels/remake-backlog.md, checks every row, and names the best open idea per subject.
 //
-//   node reels/tools/topic-scores.js
+//   node reels/tools/topic-scores.js            (both handles)
+//   node reels/tools/topic-scores.js lwspune    (one handle: pyqvault or lwspune)
 //
 // Score out of 10 = proof (0–3, from the views multiple) + vivid (0–3) + question (0–2) + law live (0–1)
 // + everyday hook (0–1). The goal is engagement and reach, so exam weight is not a criterion (founder, 2026-10-20).
 
 const RANGES = { vivid: 3, question: 2, law: 1, everyday: 1 };
 const SUBJECTS = ["P", "C", "M"];
+// @lws.pune scores NDA maths concepts only (founder 2026-10-20); its "law live" column is "concept live".
+const ACCOUNTS = {
+  pyqvault: { handle: "@pyqvault_", heading: "## Topic scores", subjects: SUBJECTS },
+  lwspune: { handle: "@lws.pune", heading: "## @lws.pune topic scores", subjects: ["M"] },
+};
 
 /** Proof points from "their views ÷ their typical reel": a big multiple means proven demand (framework F1). */
 function proofPoints(x) {
@@ -16,11 +22,11 @@ function proofPoints(x) {
   return x >= 100 ? 3 : x >= 30 ? 2 : x >= 3 ? 1 : 0;
 }
 
-/** Rows of the "## Topic scores" table (stops at the next heading). */
-function parse(md) {
-  const start = md.indexOf("## Topic scores");
+/** Rows of the table under `heading` (a whole line; stops at the next ## heading). */
+function parse(md, heading = ACCOUNTS.pyqvault.heading) {
+  const lines = md.split("\n"), start = lines.findIndex((l) => l.trim() === heading);
   if (start < 0) return [];
-  const rest = md.slice(start + 1), end = rest.search(/\n## /);
+  const rest = lines.slice(start + 1).join("\n"), end = rest.search(/(^|\n)## /);
   const rows = [];
   for (const line of (end < 0 ? rest : rest.slice(0, end)).split("\n")) {
     const cells = line.split("|").slice(1, -1).map((c) => c.trim());
@@ -38,13 +44,13 @@ function parse(md) {
 const total = (r) => proofPoints(r.proofX) + r.vivid + r.question + r.law + r.everyday;
 
 /** Everything wrong with the table, as readable lines (empty when it's fine). */
-function validate(rows) {
-  const errors = [], seen = new Set();
+function validate(rows, subjects = SUBJECTS) {
+  const errors = [], seen = new Set(), list = subjects.join(", ").replace(/, (?=[^,]*$)/, " or ");
   for (const r of rows) {
     if (r.broken) { errors.push(`${r.id}: ${r.broken} columns, expected 10`); continue; }
     if (seen.has(r.id)) errors.push(`${r.id}: id used twice`);
     seen.add(r.id);
-    if (!SUBJECTS.includes(r.subject)) errors.push(`${r.id}: subject "${r.subject}" should be P, C or M`);
+    if (!subjects.includes(r.subject)) errors.push(`${r.id}: subject "${r.subject}" should be ${list}`);
     for (const [k, max] of Object.entries(RANGES))
       if (!Number.isInteger(r[k]) || r[k] < 0 || r[k] > max) errors.push(`${r.id}: ${k} ${r[k]} is outside 0–${max}`);
     if (r.score !== total(r)) errors.push(`${r.id}: score ${r.score} should be ${total(r)}`);
@@ -61,9 +67,9 @@ function queued(rows) {
 }
 
 /** The best open idea per subject (not queued): highest score, then the better-proven one. */
-function nextPicks(rows) {
+function nextPicks(rows, subjects = SUBJECTS) {
   const out = {};
-  for (const s of SUBJECTS) {
+  for (const s of subjects) {
     const open = rows.filter((r) => r.subject === s && isOpen(r))
       .sort((a, b) => b.score - a.score || proofPoints(b.proofX) - proofPoints(a.proofX));
     out[s] = open[0] || null;
@@ -71,19 +77,26 @@ function nextPicks(rows) {
   return out;
 }
 
-module.exports = { proofPoints, parse, validate, nextPicks, queued };
+module.exports = { ACCOUNTS, proofPoints, parse, validate, nextPicks, queued };
 
 if (require.main === module) {
   const md = require("node:fs").readFileSync(require("node:path").join(__dirname, "..", "remake-backlog.md"), "utf8");
-  const rows = parse(md), errors = validate(rows);
-  if (errors.length) { console.error(errors.join("\n")); process.exit(1); }
-  const name = { P: "Physics", C: "Chemistry", M: "Maths" };
-  for (const s of SUBJECTS) {
-    const open = rows.filter((r) => r.subject === s && isOpen(r)).sort((a, b) => b.score - a.score);
-    console.log(`${name[s]}: ${open.map((r) => `${r.id} ${r.score}`).join(" · ") || "nothing open"}`);
+  const only = process.argv[2], name = { P: "Physics", C: "Chemistry", M: "Maths" };
+  if (only && !ACCOUNTS[only]) { console.error(`unknown handle "${only}": use ${Object.keys(ACCOUNTS).join(" or ")}`); process.exit(1); }
+  let failed = false;
+  for (const [key, { handle, heading, subjects }] of Object.entries(ACCOUNTS)) {
+    if (only && only !== key) continue;
+    const rows = parse(md, heading), errors = validate(rows, subjects);
+    console.log(`\n${handle}`);
+    if (errors.length) { console.error(errors.join("\n")); failed = true; continue; }
+    for (const s of subjects) {
+      const open = rows.filter((r) => r.subject === s && isOpen(r)).sort((a, b) => b.score - a.score);
+      console.log(`${name[s]}: ${open.map((r) => `${r.id} ${r.score}`).join(" · ") || "nothing open"}`);
+    }
+    const q = queued(rows);
+    console.log(`Queued to make: ${q.map((r) => `${r.id} "${r.idea}" (${r.score}/10)`).join(" · ") || "none"}`);
+    const next = nextPicks(rows, subjects);
+    console.log("Next after the queue:", subjects.map((s) => next[s] ? `${name[s]} ${next[s].id} "${next[s].idea}" (${next[s].score}/10)` : `${name[s]} —`).join(" · "));
   }
-  const q = queued(rows);
-  console.log(`\nQueued to make: ${q.map((r) => `${r.id} "${r.idea}" (${r.score}/10)`).join(" · ") || "none"}`);
-  const next = nextPicks(rows);
-  console.log("Next after the queue:", SUBJECTS.map((s) => next[s] ? `${name[s]} ${next[s].id} "${next[s].idea}" (${next[s].score}/10)` : `${name[s]} —`).join(" · "));
+  if (failed) process.exit(1);
 }
