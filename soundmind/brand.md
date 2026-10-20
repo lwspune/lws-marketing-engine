@@ -52,6 +52,13 @@ then `queue:add` the `.post.json` beside it.
 | sm-r002 window | ME with tea by a closed window | thoughts thump on the glass | night, moon, ME asleep smiling |
 | sm-r003 plant | ME watering her own plant | crows circle with remarks, give up | plant blooms, sun, smile |
 | sm-r003v plant, vivid | the same reel in the **vivid** palette | same | same, with a coral bloom |
+| sm-r004 page (vivid) | ME beside her notebook; a pencil writes and strikes | the inner critic's lines (TOO LATE NOW, EVERYONE'S AHEAD…) write themselves and are struck out; second wave: a doodle grows beside each | I'M ENOUGH written and marker-highlighted, sun, smile |
+
+**Hand-drawn tools** (from sm-r004, 2026-10-20; details in `reels/visual-reel-workflow.md` → Reel toolkit): strikes,
+circles and marker highlights on words with `@remotion/rough-notation` (always pass `seed`); pen doodles that draw
+themselves with `perfect-freehand`; gentle sway with `@remotion/noise`. The pencil moves on its own (storybook style):
+a stick-figure arm long enough to reach across the page looks wrong. If the founder likes the pen look, the carousels
+can take `perfect-freehand` as one copied file (MIT licence kept with it), since `soundmind/` has no npm.
 
 **Palettes** (`remotion/src/lib/smPalette.ts`): `MUTED` (the original cream/sage) and `VIVID` (founder, 2026-10-20: "more
 vibrant colours"; morning-blue sky, fresh greens, terracotta pot, turquoise can, candy-coloured remarks, coral bloom).

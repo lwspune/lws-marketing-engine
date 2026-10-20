@@ -110,6 +110,12 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   (`channel`): first the API number 7620699213 that WABridge already uses (no coexistence needed), with GoPost
   listening alongside WABridge rather than taking the number over.
 
+- **Reel toolkit (2026-10-20, founder-approved).** Five vetted packages in `remotion/` for more sophisticated reels:
+  `@remotion/paths`, `@remotion/noise`, `@remotion/rough-notation`, `@react-three/postprocessing`, `perfect-freehand`
+  (+ Remotion's official `remotion-markup` skill, local only: its repo has no licence file). Chosen from a GitHub search
+  for maintained, licensed, well-known repos; drei and tegaki were checked and dropped. Installed pinned with scripts off;
+  `tests/deps.test.ts` keeps every future package that way. First reels: @pyqvault_ Physics #7, Sound Mind sm-r004.
+
 ## File structure
 
 ```
@@ -164,6 +170,8 @@ remotion/                # TRIAL: reels in Remotion (React + SVG, frame-by-frame
   src/Reel014.tsx        #   first 3D reel (@remotion/three + three.js, GPU via ANGLE); `npm run music:014`,
                          #   `render:014`, `cover:014` write to ../reels/. Runbook: reels/visual-reel-workflow.md
   music/*.json           #   music spec per reel → reels/tools/music.mjs renders engine.js music offline to WAV
+  tests/deps.test.ts     #   package guard: exact versions, npm registry only, no unread install scripts. Reel toolkit
+                         #   (glow, self-drawing paths, noise, hand-drawn notes, pen strokes): reels/visual-reel-workflow.md
 publisher/               # HOSTED approve → publish app (Next.js 14 + Supabase, own Vercel project)
   SETUP.md               #   one-time setup runbook (Supabase, Meta app, Vercel, scheduler)
   supabase/migrations/   #   schema + RLS + transition triggers (0001), write functions (0002), pg_cron (0003)

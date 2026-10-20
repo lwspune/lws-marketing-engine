@@ -179,6 +179,30 @@ For a question whose picture is **3D** (a cone, a plane, a solid), make it in `r
 4. **Check:** render beat frames with `npx remotion still <Comp> <out.png> --frame=<n>` into the scratchpad
    and look at them as a sheet; then render the MP4 to `reels/` and run `check-video.mjs` as in step 4.
 
+### Reel toolkit (2026-10-20, founder-approved): reach for these before hand-rolling
+
+Installed in `remotion/` only, pinned. First used in @pyqvault_ Physics #7 (`PvPhysics007.tsx`) and Sound Mind sm-r004.
+
+| Tool | Use it for | Gotcha |
+|---|---|---|
+| `@react-three/postprocessing` `<Bloom>` | real glow on hot / bright / fast things in 3D (photons, a star, induced current, hot molecules) | Draws only from the canvas's 2nd render: add a `BloomWarmUp` (copy it from `PvPhysics007.tsx`) or the cover and each tab's first frame are blank. Glow = `meshBasicMaterial toneMapped={false}` colour above 1; dark (lab) board shows it best. |
+| `@remotion/paths` `evolvePath` | arrows, curves and outlines that draw themselves (the heat arrow in Physics #7) | Gives `strokeDasharray` / `strokeDashoffset` for an SVG `<path>`; replaces hand-written dash maths. |
+| `@remotion/noise` | gentle organic motion (sway, drift, breathing), the same on every render | Seeded noise of t, never `Math.random`. |
+| `@remotion/rough-notation` | hand-drawn strike-throughs, circles, underlines, marker highlights on HTML text | **Always pass `seed`** (it falls back to `Math.random`, so every render would differ). Wrap words in it as HTML; it measures them, so put it inside the same CSS transform as the scene's zoom. |
+| `perfect-freehand` `getStroke` | real pen strokes that thicken and taper; drawn point by point for "the pen draws it" | Feed it the points drawn so far; fill the outline it returns. |
+| Many particles (3D) | one `instancedMesh` updated in `useLayoutEffect`, from a precomputed simulation (Physics #7: 2,400 molecules) | Simulate with + − × ÷ √ only and a seeded generator, so Node (tests, sound) and Edge (render) get the identical run. |
+
+**Not used, and why** (checked 2026-10-20): `@react-three/drei` (pulls in 21 packages incl. face tracking and a GPU check
+that downloads data; three.js's own `TubeGeometry` / `Line2` cover trails and thick lines), tegaki (handwriting only in
+its 13 bundled fonts, not Kalam), Remotion's `@remotion/effects` (needs `HtmlInCanvas`, behind a Chrome flag), matter-js
+(a physics engine drifts energy; our reels re-derive exact physics, F10). KaTeX waits for the first reel with a formula
+label (P7, P15, P17).
+
+**Adding a package:** `npm install --save-exact --ignore-scripts <pkg>@<x.y.z>` in `remotion/`, never `npx remotion add`.
+`tests/deps.test.ts` fails on a loose version, a package from outside npm's registry, or an install script nobody has
+read. Remotion's official skill (`.claude/skills/remotion-markup`, local only) has the API details; where it differs, the
+rules here and in the framework win.
+
 ## Where the 2026-10-14 rules came from
 
 An outside "visual upgrade brief" reviewed reel 006. Its useful parts are the rules in steps 3.7–3.8

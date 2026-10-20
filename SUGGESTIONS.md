@@ -64,6 +64,15 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### Real glow / pen strokes on reels already made (logged 2026-10-20, not proposed)
+The reel toolkit (CLAUDE.md decisions log) adds real glow (bloom) to 3D reels and pen-pressure strokes to Sound Mind's
+drawings. Reels already made colour hot things bright (Physics #5 molecules, Chemistry #4/#6 flames) without glow, and
+Sound Mind 001–003 use even-width lines.
+**360:** scope = 6 @pyqvault_ 3D reels (posted or queued) + 4 Sound Mind reels · blast radius = their GoPost posts (MP4 +
+cover) · does it apply? only as polish: each was judged and approved as it is, and glow is itself on test (L42) ·
+risk = re-render + re-upload, posted reels can't be replaced without losing their numbers · cost ≈ 15 min per reel ·
+**recommendation: decline for posted reels; defer for queued ones** until L42 shows glow helps on new reels.
+
 ### ~~@pyqvault_ Chemistry #4 opens on a still picture for 2 s~~ (logged 2026-10-20) DONE the same day: the founder had both
 Physics #4 and Chemistry #4 remade (framework v1, `reels/pyqvault-framework.md`) instead of posting them as they were
 New founder rule (L31 in `reels/pyqvault-learnings.md`, rule in `reels/pyqvault-insta.md`): the question sits in front
