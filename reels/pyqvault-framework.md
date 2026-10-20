@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.9, 2026-10-20)
+# @pyqvault_ reel framework (v1.11, 2026-10-20)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -53,9 +53,12 @@ still scene under the question. · *Why:* viewers left by 3–6 s, during the 2.
 happen before you know why makes you stay (founder, L31). · *Check:* a test that something changes on every frame of
 the first 3 s. · 🧪 L29, L31
 
-**F6 · The cover never gives the answer away.** Take it before the reveal; cover text like "Guess before you
-watch". · *Why:* the guess is the hook; a cover with the answer kills it. · *Check:* cover time is before the answer
-lights and no answer number is on screen. · 🧪 L28 (part of predict-first)
+**F6 · Neither the cover nor the caption gives the answer away.** Take the cover before the reveal; cover text like
+"Guess before you watch". The caption asks the question and says "Answer at the end of the reel 👀"; it explains the
+idea without naming the answer (no "→ B"; Instagram, Facebook and YouTube alike). · *Why:* the guess is the hook; a
+cover with the answer kills it, and so does a caption: the first two predict-first reels got 0 comments with the answer
+printed under the question (L45). · *Check:* cover time is before the answer lights and no answer number is on screen;
+`tests/caption-answer.test.js` checks every caption. · 🧪 L28 (part of predict-first), L45
 
 ## Picture
 
@@ -170,3 +173,4 @@ becomes a user. · *Check:* the end card. · 📌 founder, 2026-10-18
 | v1.8 | 2026-10-20 | F22: the orbit is the hook. Every 3D reel opens with a full 360° orbit, from frame 0, ending at the explaining view by 3 s; no closing orbits. From 🧪 to 📌. | Founder: "orbit is hook and should be there in first 3 sec", for @pyqvault_ and @lws.pune; "make it 360 degree orbit" (was 60–120°). Reels already made are left as they are (founder). |
 | v1.9 | 2026-10-20 | F22: the orbit stays for 3D reels only; 2D reels open with their picture building from frame 0. | Founder: a 3D opening (360° turn settling into the flat grid) was built for @lws.pune 016 and dropped the same day: "doesn't look good". |
 | v1.10 | 2026-10-20 | F21: proof runs −1–3; an idea that flopped for another account (under 1× their typical reel) scores −1, and loses a tie to an untested idea. P19–P29 (Ray Optics) added; P24 queued ahead of P11. | Founder, 2026-10-20: the Ray Optics search found ideas that flopped for other accounts (prism 0.5×, mirage 0.4×, sliced lens 0.9×) scoring the same as untested ones, and winning ties against them. A flop is evidence against, so it costs a point; in a tie, no evidence counts as 1×. Ray Optics first: founder ("take one physics chapter"). |
+| v1.11 | 2026-10-20 | F6: the caption never gives the answer either ("Answer at the end of the reel 👀"), checked by `tests/caption-answer.test.js`. | Founder, 2026-10-20 (L45): Physics #4 and Chemistry #4 asked "Comment your guess" and got 0 comments at 1,403 and 340 views, with "→ B" printed a few lines down. First reel under the rule: Physics #8 (P24, the spoon). Reels made before it are in SUGGESTIONS.md → Backfill ledger. |

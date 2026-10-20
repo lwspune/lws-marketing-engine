@@ -64,6 +64,19 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### Predict-first captions that print the answer (logged 2026-10-20, awaiting founder)
+New founder rule (L45, framework F6 v1.11): a predict-first caption never names the answer; it says "Answer at the end
+of the reel 👀". Made before the rule, all 9 @pyqvault_ predict-first manifests print it ("→ B"): posted Physics #4 and
+Chemistry #4; queued for approval Physics #5, Chemistry #5, Chemistry #7; made Physics #6, #7 and Chemistry #6; rejected
+Maths #3. `tests/caption-answer.test.js` lists them (BEFORE_L45) and fails once one is fixed but still listed. @lws.pune's
+four (010, 011, 012, 014) follow their own framework: not part of this rule.
+**360:** scope = 6 unposted reels' captions (Physics #5–#7, Chemistry #5–#7) + 2 posted · blast radius = their GoPost
+posts (caption text only: no re-render, no new cover) · does it apply? yes for unposted ones, the rule is about what a
+viewer reads before guessing; the 2 posted reels are L45's baseline (0 comments with the answer shown), so changing them
+would muddy the test · risk = low, text only, reversible in GoPost before approval · cost ≈ 5 min per reel ·
+**recommendation: do it for the 6 unposted reels** (edit each caption in GoPost before approving; then drop them from
+BEFORE_L45); **leave the 2 posted ones.** This also gives L45 six more test reels within days.
+
 ### Real glow / pen strokes on reels already made (logged 2026-10-20, not proposed)
 The reel toolkit (CLAUDE.md decisions log) adds real glow (bloom) to 3D reels and pen-pressure strokes to Sound Mind's
 drawings. Reels already made colour hot things bright (Physics #5 molecules, Chemistry #4/#6 flames) without glow, and

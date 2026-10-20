@@ -23,6 +23,9 @@ that used to be here moved there unchanged (plus the 2026-10-20 points); change 
 - Hashtags: #Physics or #Chemistry, #Class11 / #Class12, #CBSE, #JEEMain, #NEET (+ #MHTCET where relevant),
   the chapter, #PhysicsVisualised / #ChemistryVisualised.
 - Facebook: same, with the PYQ Vault chapter link written out.
+- **Predict-first reels** (framework F4, F6): line 1 is the question with its options, then "Comment your guess before you
+  watch 👇" and "Answer at the end of the reel 👀". The answer is never in the caption, on any platform (L45; checked
+  by `tests/caption-answer.test.js`).
 
 ## Posting
 
