@@ -1,10 +1,9 @@
 {
-  "duration": 24,
+  "duration": 22,
   "music": {
     "style": "synthwave",
     "hits": [
-      11,
-      13
+      9
     ]
   }
 }

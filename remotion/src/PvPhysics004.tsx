@@ -2,25 +2,31 @@
 // Frame 0: the question with A/B/C (no still title card, L29). A three.js plank tilts; live arrows for the pull down the
 // slope (amber) and friction (green); bars compare the pull with the most friction can give; it slips at 35°.
 // House settings (reels/pyqvault-insta.md): short labels only, no exam question at the end, pyqvault.com on the end card.
+// Remade 2026-10-20 (founder): tilting from frame 0, rounded shapes, camera zooms (CAMERA) and the experiment's own sound
+// (SOUND in lib/pp004.ts, mixed into the music by tools/mix.ts).
 import { AbsoluteFill, Html5Audio, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
 import { ThreeCanvas } from '@remotion/three';
 import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { WHITE as P, tint, SOFT_UI } from './lib/palette.ts';
-import { prog, captionAt } from './lib/motion.ts';
-import { END_AT, CAPTIONS, OPTIONS, ANSWER, MU_S, T_SLIP, PLANK, BLOCK, tiltAt, blockAt, forcesAt, M, G } from './lib/pp004.ts';
+import { prog, captionAt, tween } from './lib/motion.ts';
+import { END_AT, CAPTIONS, OPTIONS, ANSWER, MU_S, T_SLIP, PLANK, BLOCK, CAMERA, tiltAt, blockAt, forcesAt, M, G } from './lib/pp004.ts';
 import { Board, Caption, EndCard, PredictHeader, hand, useFonts, type EndLine } from './board.tsx';
+import { RoundBox, softEdges } from './shapes.tsx';
 
 const DEG = 180 / Math.PI;
-const COVER = { t: T_SLIP - 0.05, text: 'When does it slide?', y: 1590, size: 62 };
+const COVER = { t: 7.5, text: 'When does it slide?', y: 1590, size: 62 };   // ~27°: before it slips, so no spoiler
 const BAND = { left: 0, top: 470, width: 1080, height: 700 };
 const HINGE = new THREE.Vector3(1.55, 0, 0);               // the low end of the plank, on the floor
 const along = (th: number, s: number, up = 0) =>            // a point s along the plank from the hinge, `up` above its top face
   new THREE.Vector3(HINGE.x - s * Math.cos(th) - up * Math.sin(th), HINGE.y + 0.06 + s * Math.sin(th) + up * Math.cos(th), 0);
 
-function Rig() {
-  const { camera } = useThree(), cam = camera as THREE.PerspectiveCamera;
-  cam.position.set(0.5, 1.6, 6.1); cam.fov = 32; cam.aspect = BAND.width / BAND.height; cam.lookAt(0.1, 0.85, 0); cam.updateProjectionMatrix();
+const WIDE = new THREE.Vector3(0.1, 0.85, 0), OFFSET = new THREE.Vector3(0.4, 0.75, 6.1);   // the whole ramp, and the view's direction
+function Rig({ t, block }: { t: number; block: THREE.Vector3 }) {
+  const { camera } = useThree(), cam = camera as THREE.PerspectiveCamera, [zoom, focus] = tween(t, CAMERA.start, CAMERA.keys);
+  const target = WIDE.clone().lerp(block, focus);                     // zoom = move closer along the same line of sight
+  cam.position.copy(target.clone().add(OFFSET.clone().divideScalar(zoom))); cam.fov = 32; cam.aspect = BAND.width / BAND.height;
+  cam.lookAt(target); cam.updateProjectionMatrix();
   return null;
 }
 function Arrow({ from, dir, len, color }: { from: THREE.Vector3; dir: THREE.Vector3; len: number; color: string }) {
@@ -38,25 +44,25 @@ function Scene({ t }: { t: number }) {
   const topEnd = along(th, PLANK.len);
   return (
     <>
-      <Rig />
+      <Rig t={t} block={centre} />
       <ambientLight intensity={1.3} />
       <directionalLight position={[-3, 5, 5]} intensity={2.3} />
       {/* floor */}
-      <mesh position={[0, -0.02, 0]}><boxGeometry args={[5.6, 0.04, 1.6]} /><meshStandardMaterial color="#e4dfd4" roughness={0.9} /></mesh>
+      <mesh position={[0, -0.04, 0]}><RoundBox size={[5.6, 0.08, 1.6]} radius={0.035} /><meshStandardMaterial color="#e4dfd4" roughness={0.9} /></mesh>
       {/* the plank (hinged at the low end) and the stand that lifts its other end */}
       <mesh position={along(th, PLANK.len / 2, -0.06)} rotation={[0, 0, -th]}>
-        <boxGeometry args={[PLANK.len, 0.12, 1.0]} /><meshStandardMaterial color="#c9a27a" roughness={0.65} />
+        <RoundBox size={[PLANK.len, 0.12, 1.0]} radius={0.05} /><meshStandardMaterial color="#c9a27a" roughness={0.65} />
       </mesh>
       {topEnd.y > 0.12 && <mesh position={[topEnd.x + 0.05, (topEnd.y - 0.06) / 2, 0]}>
-        <boxGeometry args={[0.12, Math.max(0.01, topEnd.y - 0.06), 0.5]} /><meshStandardMaterial color="#8d97a8" metalness={0.5} roughness={0.35} />
+        <cylinderGeometry args={[0.07, 0.07, Math.max(0.01, topEnd.y - 0.06), 32]} /><meshStandardMaterial color="#8d97a8" metalness={0.5} roughness={0.35} />
       </mesh>}
       {/* the bottom stop */}
       <mesh position={along(th, PLANK.stop - BLOCK.len / 2 - 0.05, 0.1)} rotation={[0, 0, -th]}>
-        <boxGeometry args={[0.08, 0.2, 1.0]} /><meshStandardMaterial color="#8d97a8" />
+        <RoundBox size={[0.08, 0.2, 1.0]} radius={0.035} /><meshStandardMaterial color="#8d97a8" />
       </mesh>
       {/* the block */}
       <mesh position={centre} rotation={[0, 0, -th]}>
-        <boxGeometry args={[BLOCK.len, BLOCK.h, 0.5]} /><meshStandardMaterial color={P.blue} roughness={0.35} metalness={0.15} />
+        <RoundBox size={[BLOCK.len, BLOCK.h, 0.5]} radius={0.07} /><meshStandardMaterial color={P.blue} roughness={0.35} metalness={0.15} />
       </mesh>
       {/* forces along the slope: the pull down it, friction up it */}
       <Arrow from={centre.clone().add(new THREE.Vector3(0, 0, 0.3))} dir={down} len={f.pull * k} color={P.amber} />
@@ -102,7 +108,7 @@ export function PvPhysics004({ cover = false }: { cover?: boolean }) {
       <Board watermark={false} />
       <PredictHeader t={t} label={'PHYSICS, VISUALISED  #4'} lines={['Tilt the ramp.', 'When does the block slide?']}
         options={OPTIONS} answer={ANSWER} at={T_SLIP + 0.5} />
-      <div style={{ position: 'absolute', left: BAND.left, top: BAND.top, width: BAND.width, height: BAND.height }}>
+      <div style={{ position: 'absolute', left: BAND.left, top: BAND.top, width: BAND.width, height: BAND.height, ...softEdges({ top: 0.1, bottom: 0.12 }) }}>
         <ThreeCanvas width={BAND.width} height={BAND.height} gl={{ antialias: true, alpha: true }}><Scene t={t} /></ThreeCanvas>
       </div>
       <Bars t={t} />
@@ -115,7 +121,7 @@ export function PvPhysics004({ cover = false }: { cover?: boolean }) {
         ? <Caption text={COVER.text} alpha={1} age={0} size={COVER.size} y={COVER.y} rise={false} />
         : cap && <Caption text={cap.caption.text} alpha={cap.alpha} age={cap.age} size={cap.caption.size ?? 50} y={cap.caption.y ?? 1570} />}
       {!cover && <EndCard t={t} at={END_AT} lines={END} />}
-      {!cover && <Html5Audio src={staticFile('pv-physics-004-slope.wav')} />}
+      {!cover && <Html5Audio src={staticFile('pv-physics-004-slope-mix.wav')} />}
     </AbsoluteFill>
   );
 }
