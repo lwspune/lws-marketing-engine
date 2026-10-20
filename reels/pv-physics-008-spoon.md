@@ -58,5 +58,6 @@ and C marks, and a red (upside down) → green (upright) graph. Text keeps the W
 `pv-physics-008-spoon-vivid-voice.mp4` (passes `check-video`) · cover `pv-physics-008-spoon-vivid-cover.png` · strip
 `pv-physics-008-vivid-strip.png` · side by side: `pv-physics-008-compare.mp4` (first left, vivid right, the vivid one's
 sound; `npm run compare:pp008`). Re-make: `npm run render:pp008vivid && npm run cover:pp008vivid`.
-The queued GoPost post is still the first version; if the founder picks vivid, the manifest points to the vivid files
-and the post is replaced before approval.
+**Founder's pick (2026-10-21):** "original spoon colour was better, rest vivid is better". The vivid look now keeps the
+steel spoon (framework F24 v1.13: known materials keep their look); the manifest points to the vivid files and the queued
+GoPost post was replaced (`queue:add --replace`, still Ready). `pv-physics-008-compare.mp4` shows the cyan-spoon draft.

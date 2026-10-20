@@ -23,7 +23,8 @@ const COVER = { text: 'Guess before you watch', y: 1590, size: 60 };
 const FLAME_CORE = '#fff2b0';
 // The reel's object colours. FIRST is the version queued on 21 Oct; VIVID_LOOK remakes it under framework F24 (bright
 // objects, founder 2026-10-21): every key object from the white board's VIVID set, and each ray its own colour so it
-// can be followed from the flame to the image. Text and UI keep the WHITE palette (contrast).
+// can be followed from the flame to the image; the spoon stays steel (founder, comparing: "original spoon colour was
+// better"). Text and UI keep the WHITE palette (contrast).
 type Look = {
   wax: string; flame: string; holder: string; spoon: string; metal: number; marks: string; iris: string;
   rays: string[]; rayOpacity: number; back: (ray: number) => string; down: string; up: string;
@@ -36,7 +37,7 @@ const FIRST: Look = {
 };
 const V = VIVID.white;
 const VIVID_LOOK: Look = {
-  wax: V.red, flame: V.orange, holder: V.violet, spoon: V.cyan, metal: 0.55, marks: V.violet, iris: V.blue,
+  wax: V.red, flame: V.orange, holder: V.violet, spoon: FIRST.spoon, metal: FIRST.metal, marks: V.violet, iris: V.blue,
   rays: [V.blue, V.pink, V.red, V.green, V.orange, V.violet], rayOpacity: 0.9, back: i => [V.blue, V.pink, V.red, V.green, V.orange, V.violet][i],
   backOpacity: [0.75, 0.55], ghost: [0.82, 0.9],
   down: V.red, up: V.green,
