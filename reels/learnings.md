@@ -57,3 +57,4 @@ its reels' results, and L30–L37 live there. Both logs share one numbering, so 
 | 012 Why? #4, sin² + cos² = 1 → 25-I Q35 (bright music) | L11 L13 L14 | | | | | | | |
 | 013 Why? #5 (physics), spoon = concave mirror → 26-I GAT Q64 (calm music) | L20 L11 L13 L14 | | | | | | | |
 | 014 3D #1, cone at 45° → 26-II Q68 (Remotion, lo-fi) | L25 L3 | | | | | | | |
+| 015 f and f′ together: slope 0 at every peak and valley (NDA maths concept; NDA 2024 (I) Q91 in the caption; Remotion 2D, predict-first, zooms + own sound, cinematic; moved from @pyqvault_ 20 Oct) | L3 L13 | | | | | | | |

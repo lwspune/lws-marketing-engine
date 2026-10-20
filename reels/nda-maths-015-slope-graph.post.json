@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-015-slope-graph",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "015 · f and f′ together: the slope is 0 at every peak and valley (NDA maths concept, predict-first, white)",
+  "video": "nda-maths-015-slope-graph.mp4",
+  "cover": "nda-maths-015-slope-graph-cover.png",
+  "captions": {
+    "instagram": "NDA Maths · Derivatives. At the top of the hill, the slope graph is…? A highest · B zero · C lowest 👇\n\nSlide a tangent along f(x) = x³ − 3x and draw its slope below: f′(x) = 3x² − 3.\nAt every peak and valley the tangent is flat, so f′ = 0 → B. That's how you find maxima and minima: solve f′(x) = 0.\nTrap: f″ < 0 at a peak isn't guaranteed (−x⁴ has a peak at 0 with f″(0) = 0).\nNDA asked this idea in 2024 (I), Q91.\n\nSave this 📌 Follow @lws.pune for one NDA maths idea every day.\nPractise every Application of Derivatives PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #MathsTricks #LWSPune",
+    "facebook": "NDA Maths · Derivatives. At the top of the hill, the slope graph is…? A highest · B zero · C lowest 👇\n\nSlide a tangent along f(x) = x³ − 3x and plot its slope: f′(x) = 3x² − 3. At every peak and valley the tangent is flat, so f′ = 0 (B): that's how maxima and minima are found. Trap: f″ < 0 isn't guaranteed at a peak. NDA asked this in 2024 (I), Q91.\n\nPractise NDA PYQs free, chapter-wise: https://www.pyqvault.com\n\n#NDA #NDAMaths #LWSPune",
+    "youtube": {
+      "title": "At the top of the hill, is the slope highest, zero or lowest? NDA maths #shorts",
+      "description": "A tangent slides along f(x) = x³ − 3x and its slope is drawn below as f′(x) = 3x² − 3. At the peak and the valley the tangent is flat: f′ = 0. That's how maxima and minima are found (NDA 2024 (I) Q91 asks exactly this).\n\nPractise NDA PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #Shorts"
+    }
+  }
+}

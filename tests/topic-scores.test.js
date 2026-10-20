@@ -86,3 +86,9 @@ test("a broken row (wrong number of columns) is reported, not silently skipped",
   const md = TABLE.replace("| 76 | 1 | 2 | 1 | 1 | 7 | |", "| 76 | 1 | 2 | 1 | 1 | 7 || queued |");
   assert.match(ts.validate(ts.parse(md)).join("\n"), /P6: 11 columns, expected 10/);
 });
+
+test("an idea moved to another handle is closed: never queued, never picked", () => {
+  const rows = ts.parse(TABLE.replace("| 115 | 2 | 1 | 1 | 0 | 7 | |", "| 115 | 2 | 1 | 1 | 0 | 7 | ↪ moved to @lws.pune |"));
+  assert.equal(ts.nextPicks(rows).M, null);
+  assert.deepEqual(ts.queued(rows), []);
+});

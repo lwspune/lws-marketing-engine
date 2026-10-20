@@ -9,7 +9,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   pc004: { lib: '../src/lib/pc004.ts', file: 'public/pv-chem-004-charles' },
   pp005: { lib: '../src/lib/pp005.ts', file: 'public/pv-physics-005-adiabatic' },
   pc005: { lib: '../src/lib/pc005.ts', file: 'public/pv-chem-005-pvt' },
-  pm004: { lib: '../src/lib/pm004.ts', file: 'public/pv-maths-004-slope-graph' },
+  '015': { lib: '../src/lib/reel015.ts', file: 'public/nda-maths-015-slope-graph' },
 };
 const id = process.argv[2], reel = REELS[id];
 if (!reel) throw new Error(`usage: node tools/mix.ts <${Object.keys(REELS).join(' | ')}>`);

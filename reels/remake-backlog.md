@@ -52,7 +52,7 @@ so C7–C11 are our own vivid ideas (proof 0) until a study of chemistry account
 | C9 | C | The pH rainbow: universal indicator from lemon to soap | – | 3 | 2 | 0 | 1 | 6 | |
 | C11 | C | Diffusion: dye in hot vs cold water | – | 2 | 2 | 0 | 1 | 5 | |
 | C10 | C | Cool the brown gas: NO₂ ⇌ N₂O₄ shifts (Le Chatelier) | – | 2 | 2 | 0 | 0 | 4 | |
-| M4 | M | f and f′ together: the slope becomes a graph | 115 | 2 | 1 | 1 | 0 | 7 | ✅ made 2026-10-20 (`pv-maths-004-slope-graph`) |
+| M4 | M | f and f′ together: the slope becomes a graph | 115 | 2 | 1 | 1 | 0 | 7 | ↪ moved to @lws.pune (reel 015, founder 2026-10-20) |
 | M5 | M | The quadratic formula is a square, completed | 40 | 2 | 1 | 0 | 0 | 5 | |
 | M7 | M | What is integration? Rectangles get thinner | 19 | 2 | 1 | 1 | 0 | 5 | |
 | M9 | M | Every type of matrix on one screen | 35 | 2 | 0 | 0 | 0 | 4 | |
@@ -86,14 +86,14 @@ Rotation: Physics → Chemistry → Maths; background follows the L22 test, musi
 The third @pyqvault_ series, in rotation with Physics and Chemistry (P → C → M), same house settings (short labels,
 no exam question, pyqvault.com). **No overlap with @lws.pune:** each maths idea belongs to one handle only (the NDA list
 below keeps the soda can, derivative wheel, secant → tangent, unit-circle sheet, area between curves, probability,
-logarithms, series and matrix transformations).
+logarithms, series and matrix transformations; and, since 2026-10-20, **f and f′ together**, moved to @lws.pune as reel 015).
 
 | # | Remake | Proof (views, × their typical reel) | Our angle | Chapter | Look | Status |
 |---|---|---|---|---|---|---|
 | M1 | Sine and cosine in motion: a point circles, its waves unroll | @codematrixvishal 3.10M (113×) [link](https://www.instagram.com/reel/DbKeNVpps4y/); 783k (29×) [link](https://www.instagram.com/reel/DbfKhhnJh4-/) | the height and the width of one turning point draw sin and cos side by side, live | 11 · Trigonometric functions | white | ✅ made (`pv-maths-001-sin-cos`) |
 | M2 | Calculus in 60 seconds: limit → derivative → integral | @ubilumapp 599k (55×) [link](https://www.instagram.com/reel/DcwfuB6Omyy/) | one curve, three ideas in a row: zoom in (limit), slope (derivative), strips (integral) | 11–12 · Limits, derivatives, integrals | lab | ✅ made (`pv-maths-002-calculus`) |
 | M3 | e: why 2.718…? | @codematrixvishal 1.59M (58×) [link](https://www.instagram.com/reel/Dbqgimsp0bk/) | ₹1 at 100% interest, compounded more and more often: the total climbs and stops at e | 11–12 · Exponential & log functions | white | ✅ made, predict-first (`pv-maths-003-e`) |
-| M4 | f and f′ together: the slope becomes a graph | @codematrixvishal 651k (24×) [link](https://www.instagram.com/reel/DdvWvQlJu86/); 3.14M (115×) [link](https://www.instagram.com/reel/DXq3MMKiQWi/) | a tangent slides along a cubic and drops its slope as a dot that draws f′ below | 12 · Continuity & differentiability | lab | |
+| M4 | f and f′ together: the slope becomes a graph | @codematrixvishal 651k (24×) [link](https://www.instagram.com/reel/DdvWvQlJu86/); 3.14M (115×) [link](https://www.instagram.com/reel/DXq3MMKiQWi/) | a tangent slides along a cubic and drops its slope as a dot that draws f′ below | 12 · Continuity & differentiability | lab || ↪ moved to @lws.pune: `nda-maths-015-slope-graph` (founder 2026-10-20) |
 | M5 | The quadratic formula is a square, completed | @codematrixvishal 1.10M (40×) [link](https://www.instagram.com/reel/DZPH3WfpKcB/) | x² + bx is cut and moved into an almost-square; the missing corner is (b/2)² | 11 · Quadratic equations | white | |
 | M6 | e^(iθ): multiplying by i turns 90° | @codematrixvishal 453k (17×) [link](https://www.instagram.com/reel/Dbhl5GMpsNR/) | a point on the Argand plane rotates; cos θ + i sin θ traced live | 11 · Complex numbers | lab | |
 | M7 | What is integration? Rectangles get thinner | @mathsy.uk 459k (19×) [link](https://www.instagram.com/reel/C4wUT11tpvK/) | n rectangles → 4, 8, 64…; live sum closes in on the exact area | 12 · Integrals | white | |

@@ -1,11 +1,11 @@
-// @pyqvault_ · Maths, visualised #3 (predict-first; topic M4): at the top of the hill, the slope graph is…? White look.
+// @lws.pune · reel 015 (predict-first): at the top of the hill, the slope graph is…? An NDA maths concept, white look.
 // A tangent slides along f(x) = x³ − 3x from frame 0; its slope draws itself below as f′(x) = 3x² − 3, green where f
 // rises, amber where it falls, the area filled in colour. At the peak and the valley the tangent goes flat and f′ = 0.
-// Framework v1.4 (flat 2D: the zooms move over the graphs, no orbit): rounded strokes, soft edges, own sound (SOUND).
+// Made with the @pyqvault_ framework v1.4 (flat 2D: zooms over the graphs); @lws.pune end card (no link, "Follow for more").
 import { AbsoluteFill, Html5Audio, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
 import { WHITE as P, tint } from './lib/palette.ts';
 import { prog, captionAt, tween } from './lib/motion.ts';
-import { END_AT, CAPTIONS, OPTIONS, ANSWER, ANSWER_AT, T_VALLEY, CAMERA, f, df, xAt, px, X0, SX, FY0, FSY, DY0, DSY } from './lib/pm004.ts';
+import { END_AT, CAPTIONS, OPTIONS, ANSWER, ANSWER_AT, T_VALLEY, CAMERA, f, df, xAt, px, X0, SX, FY0, FSY, DY0, DSY } from './lib/reel015.ts';
 import { Board, Caption, EndCard, PredictHeader, Theme, hand, useFonts, type EndLine } from './board.tsx';
 import { softEdges } from './shapes.tsx';
 
@@ -67,13 +67,12 @@ function Graphs({ t }: { t: number }) {
 }
 
 const END: EndLine[] = [
-  { at: 0.2, size: 46, weight: 400, color: P.muted, text: 'Every peak and valley: f′ = 0.' },
-  { at: 0.5, size: 60, weight: 600, color: P.ink, text: 'That’s the maths.' },
-  { at: 0.9, size: 44, weight: 600, color: P.muted, text: 'Follow for #4' },
-  { at: 1.2, size: 80, weight: 700, color: P.green, text: 'pyqvault.com' },
+  { at: 0.3, size: 50, weight: 400, color: P.muted, text: 'Every peak and valley:' },
+  { at: 0.6, size: 62, weight: 600, color: P.ink, text: 'the slope is 0.' },
+  { at: 1.3, size: 80, weight: 700, color: P.green, text: 'Follow for more' },
 ];
 
-export function PvMaths004({ cover = false }: { cover?: boolean }) {
+export function Reel015({ cover = false }: { cover?: boolean }) {
   useFonts();
   const frame = useCurrentFrame(), { fps } = useVideoConfig();
   const t = cover ? COVER.t : frame / fps, cap = cover ? null : captionAt(CAPTIONS, t);
@@ -81,7 +80,7 @@ export function PvMaths004({ cover = false }: { cover?: boolean }) {
     <Theme value={P}>
       <AbsoluteFill>
         <Board watermark={false} />
-        <PredictHeader t={t} label={'MATHS, VISUALISED  #3'} lines={['At the top of the hill,', 'the slope graph is…?']}
+        <PredictHeader t={t} label={'NDA MATHS  ·  DERIVATIVES'} lines={['At the top of the hill,', 'the slope graph is…?']}
           options={OPTIONS} answer={ANSWER} at={ANSWER_AT} size={54} />
         <div style={{ position: 'absolute', left: 0, top: BAND.top, width: 1080, height: BAND.height, overflow: 'hidden', ...softEdges({ top: 0.05, bottom: 0.06 }) }}>
           <Graphs t={t} />
@@ -90,7 +89,7 @@ export function PvMaths004({ cover = false }: { cover?: boolean }) {
           ? <Caption text={COVER.text} alpha={1} age={0} size={COVER.size} y={COVER.y} rise={false} />
           : cap && <Caption text={cap.caption.text} alpha={cap.alpha} age={cap.age} size={cap.caption.size ?? 50} y={cap.caption.y ?? 1580} />}
         {!cover && <EndCard t={t} at={END_AT} lines={END} />}
-        {!cover && <Html5Audio src={staticFile('pv-maths-004-slope-graph-mix.wav')} />}
+        {!cover && <Html5Audio src={staticFile('nda-maths-015-slope-graph-mix.wav')} />}
       </AbsoluteFill>
     </Theme>
   );

@@ -53,7 +53,7 @@ function validate(rows) {
 }
 
 const isQueued = (r) => /queued/i.test(r.status);                       // picked, waiting to be made
-const isOpen = (r) => !/made|rejected|dropped|queued/i.test(r.status);
+const isOpen = (r) => !/made|rejected|dropped|queued|moved/i.test(r.status);
 
 /** Ideas already picked and waiting to be made, best first. */
 function queued(rows) {

@@ -2,11 +2,11 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   DURATION, END_AT, CAPTIONS, MUSIC_HITS, OPTIONS, ANSWER, ANSWER_AT, T_VALLEY, f, df, xAt, CAMERA, SOUND, GRID_X,
-} from '../src/lib/pm004.ts';
+} from '../src/lib/reel015.ts';
 import { tween } from '../src/lib/motion.ts';
 import { whooshesFor } from '../src/lib/sfx.ts';
 
-// @pyqvault_ · Maths, visualised #3 (predict-first): f and f′ together. f(x) = x³ − 3x, f′(x) = 3x² − 3. A tangent slides
+// @lws.pune · reel 015 (predict-first): f and f′ together (an NDA maths concept). f(x) = x³ − 3x, f′(x) = 3x² − 3. A tangent slides
 // along f and its slope is drawn below as f′. At the top of the hill (x = −1) and the bottom of the valley (x = 1) the
 // tangent is flat: f′ = 0. Answer: B zero.
 const near = (a: number, b: number, eps = 1e-9) => assert.ok(Math.abs(a - b) < eps, `${a} ≉ ${b}`);

@@ -31,6 +31,15 @@ Then run the 17 DB tests against the real database and do ONE real test post wit
 
 ## Deferred improvements
 
+### @lws.pune: NDA maths concepts first, real PYQs not so strict (founder, 2026-10-20: "note down for later")
+The founder wants @lws.pune to focus on **NDA maths concepts**, without making real PYQs too harsh a rule. Today the
+house settings say "Real PYQs only" and "label every piece with paper, subject and question number" (and the caption
+template starts with that label). First reel made this way: **015, f and f′ together** (moved from @pyqvault_): a concept
+reel with an NDA maths header; the related PYQ (NDA 2024 (I) Q91) is named in the caption only.
+**To do later:** reword `reels/lwspune-insta.md` → Content rules + Caption template (concept first; a real PYQ when one
+fits, named in the caption) and check `visual-reel-workflow.md` and memory `feedback-one-question-per-reel` still read
+right. Wait until the uncommitted edits already in `lwspune-insta.md` (another session's) are settled.
+
 - **Publisher phase 3: YouTube Shorts.** Google Cloud project + OAuth + `videos.insert`; uploads stay
   private until Google's API audit passes, so submit the audit form early. Then the
   "Subscribe for more" YouTube render variants (`?platform=yt`).

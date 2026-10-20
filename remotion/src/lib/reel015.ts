@@ -1,8 +1,8 @@
-// @pyqvault_ · Maths, visualised #3 (predict-first): f and f′ together (Class 11–12 · Limits & Derivatives /
-// Application of Derivatives). f(x) = x³ − 3x; f′(x) = 3x² − 3. A tangent slides along f; its slope draws itself below
+// @lws.pune · reel 015 (predict-first): f and f′ together, an NDA maths concept (Application of Derivatives; moved from
+// @pyqvault_ by the founder, 2026-10-20: it suits NDA better). NDA asked the idea in 2024 (I) Q91: a local max means f′ = 0. f(x) = x³ − 3x; f′(x) = 3x² − 3. A tangent slides along f; its slope draws itself below
 // as f′. At the top of the hill (x = −1) and the bottom of the valley (x = 1) the tangent is flat: f′ = 0 (answer B).
-// Proven idea: @codematrixvishal "f and f′" 651k / 3.14M (remake-backlog M4, topic score 7/10). Flat 2D, so no orbit
-// (F22 is for 3D); the zooms act on the graphs. Framework v1.4. Pure functions of t.
+// Proven idea: @codematrixvishal "f and f′" 651k / 3.14M (remake-backlog M4). Flat 2D; the zooms act on the graphs.
+// Made with the @pyqvault_ reel framework v1.4. Pure functions of t.
 import { prog, type Caption, type Key } from './motion.ts';
 import { whooshesFor, type Hit, type Score } from './sfx.ts';
 
