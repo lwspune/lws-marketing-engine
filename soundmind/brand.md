@@ -51,6 +51,12 @@ then `queue:add` the `.post.json` beside it.
 | sm-r001 umbrella | ME under an umbrella | word-drops roll off | sun, smile, plant grows |
 | sm-r002 window | ME with tea by a closed window | thoughts thump on the glass | night, moon, ME asleep smiling |
 | sm-r003 plant | ME watering her own plant | crows circle with remarks, give up | plant blooms, sun, smile |
+| sm-r003v plant, vivid | the same reel in the **vivid** palette | same | same, with a coral bloom |
+
+**Palettes** (`remotion/src/lib/smPalette.ts`): `MUTED` (the original cream/sage) and `VIVID` (founder, 2026-10-20: "more
+vibrant colours"; morning-blue sky, fresh greens, terracotta pot, turquoise can, candy-coloured remarks, coral bloom).
+Shared pieces take `p={palette}`; text stays the green-grey ink, kept WCAG AA on every background by
+`tests/smPalette.test.ts`. A 3D clay version of 003 was tried the same day and rejected: keep these reels flat 2D.
 
 **Checking a refactor of shared pieces:** renders aren't bit-identical (the wobble filter adds noise of a few pixels on
 ~1 in 60 frames), so compare old and new renders at `--scale=0.5` and accept only scattered blips that also show up
