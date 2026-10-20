@@ -50,7 +50,9 @@
     "cover:sm002": "remotion still SoundMind002Cover ../soundmind/reels/sm-r002-window-cover.jpg --image-format=jpeg",
     "music:sm003": "node ../reels/tools/music.mjs music/sm-r003-plant.json public/sm-r003-plant.wav",
     "render:sm003": "remotion render SoundMind003 ../soundmind/reels/sm-r003-plant.mp4",
-    "cover:sm003": "remotion still SoundMind003Cover ../soundmind/reels/sm-r003-plant-cover.jpg --image-format=jpeg"
+    "cover:sm003": "remotion still SoundMind003Cover ../soundmind/reels/sm-r003-plant-cover.jpg --image-format=jpeg",
+    "render:sm003v": "remotion render SoundMind003V ../soundmind/reels/sm-r003v-plant-vivid.mp4",
+    "cover:sm003v": "remotion still SoundMind003VCover ../soundmind/reels/sm-r003v-plant-vivid-cover.jpg --image-format=jpeg"
   },
   "dependencies": {
     "@react-three/fiber": "9.8.1",

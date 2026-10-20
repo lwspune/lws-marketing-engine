@@ -60,5 +60,7 @@ export const Root = () => (
     <Still id="SoundMind002Cover" component={SoundMind002} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="SoundMind003" component={SoundMind003} durationInFrames={Math.round(DURATION_SM003 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="SoundMind003Cover" component={SoundMind003} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="SoundMind003V" component={SoundMind003} durationInFrames={Math.round(DURATION_SM003 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, vivid: true }} />
+    <Still id="SoundMind003VCover" component={SoundMind003} width={1080} height={1920} defaultProps={{ cover: true, vivid: true }} />
   </>
 );
