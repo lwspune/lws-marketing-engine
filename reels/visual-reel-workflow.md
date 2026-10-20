@@ -168,7 +168,7 @@ For a question whose picture is **3D** (a cone, a plane, a solid), make it in `r
 
 1. **Storyboard first: a beat table** (founder, 2026-10-21), at the top of `src/lib/<reel>.ts`, one row per beat:
    time · what moves · the caption, and how long its voice line takes · what the camera must keep in frame · the key
-   objects' colours against the background (L22 decides white or dark). *Why:* on Physics #8 every first-render fault
+   objects' colours, from the board's `VIVID` set (F24; L22 decides white or dark). *Why:* on Physics #8 every first-render fault
    was one a table catches: a cream candle and its image nearly invisible on the white board, the answer's image
    cropped at the band's edge, two voice lines longer than their captions. Remakes and rejections (Physics #4,
    Chemistry #4, Maths #3, the clay Sound Mind reel) each cost about an hour for a fault visible in a few frames.
@@ -185,7 +185,7 @@ For a question whose picture is **3D** (a cone, a plane, a solid), make it in `r
 5. **Stills sheet before any sound or full render:** render 6–8 beat frames (the opening, the cover time, each beat,
    the answer, the end card) with `npx remotion still <Comp> <out.png> --frame=<n>` into the scratchpad, put them on
    one sheet (an HTML grid screenshotted by headless Edge) and fix what it shows: anything hard to see on the board,
-   cropped, overlapping or late. **Claude's own check:** the founder judges the finished reel only, never the sheet
+   grey or washed out (F24), cropped, overlapping or late. **Claude's own check:** the founder judges the finished reel only, never the sheet
    (founder, 2026-10-21).
 6. **Music:** write `remotion/music/<reel>.json` (`duration`, `music.style`, `music.hits`), then
    `node ../reels/tools/music.mjs music/<reel>.json public/<reel>.wav`: the house music from `engine.js`,

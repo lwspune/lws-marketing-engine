@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.11, 2026-10-20)
+# @pyqvault_ reel framework (v1.12, 2026-10-21)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -72,6 +72,12 @@ area **fades into the board at its edges** (`softEdges`) instead of a hard crop 
 zooms in. · *Why:*
 soft shapes look friendlier and more premium (founder); a straight crop line is a corner too (seen on the first
 renders of the remakes). · *Check:* no `boxGeometry` in the reel's file; the frame strip shows no hard edge. · 🧪 L33
+
+**F24 · Bright objects.** Every key object (what moves, changes or is explained) takes a colour from `VIVID`
+(`remotion/src/lib/palette.ts`), the set for its board (white or lab); objects the viewer must tell apart get different
+colours (each ray its own, say); no grey, beige or cream objects (metal and glass take a tint or a coloured rim). The board
+stays calm and text keeps the WHITE / LAB palette, so words keep their contrast. · *Why:* founder, 2026-10-21: "more vivid colour objects". Our busiest, most colourful reels did best (L30), and on the white board pale objects vanish: Physics #8's first cream candle and its image were nearly invisible. · *Check:* `remotion/tests/palette.test.ts` (each VIVID colour saturated ≥ 0.65, ≥ 3:1 on its board, ≥ 20° of hue from the others); the beat table names each key object's VIVID colour (runbook step 1); the stills sheet shows nothing grey or washed out. ·
+🧪 L46
 
 **F9 · Zoom in and out at 3–4 moments.** A slow push in while something builds, a quick **punch-in that lands on
 the big moment**, a zoom out to show the result. Written as tested keys (`CAMERA`, `tween` in `motion.ts`). · *Why:* a
@@ -174,3 +180,4 @@ becomes a user. · *Check:* the end card. · 📌 founder, 2026-10-18
 | v1.9 | 2026-10-20 | F22: the orbit stays for 3D reels only; 2D reels open with their picture building from frame 0. | Founder: a 3D opening (360° turn settling into the flat grid) was built for @lws.pune 016 and dropped the same day: "doesn't look good". |
 | v1.10 | 2026-10-20 | F21: proof runs −1–3; an idea that flopped for another account (under 1× their typical reel) scores −1, and loses a tie to an untested idea. P19–P29 (Ray Optics) added; P24 queued ahead of P11. | Founder, 2026-10-20: the Ray Optics search found ideas that flopped for other accounts (prism 0.5×, mirage 0.4×, sliced lens 0.9×) scoring the same as untested ones, and winning ties against them. A flop is evidence against, so it costs a point; in a tie, no evidence counts as 1×. Ray Optics first: founder ("take one physics chapter"). |
 | v1.11 | 2026-10-20 | F6: the caption never gives the answer either ("Answer at the end of the reel 👀"), checked by `tests/caption-answer.test.js`. | Founder, 2026-10-20 (L45): Physics #4 and Chemistry #4 asked "Comment your guess" and got 0 comments at 1,403 and 340 views, with "→ B" printed a few lines down. First reel under the rule: Physics #8 (P24, the spoon). Reels made before it are in SUGGESTIONS.md → Backfill ledger. |
+| v1.12 | 2026-10-21 | F24 added: bright objects from the `VIVID` set (both handles). | Founder: "more vivid colour objects", for @pyqvault_ and @lws.pune. Measured by L46. First reel: Physics #8 remade (`PvPhysics008Vivid`), set beside the first version for the founder to compare. |

@@ -64,6 +64,16 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### Bright objects (F24) on reels already made (logged 2026-10-21, not proposed)
+New founder rule (framework F24, both handles): key objects take colours from the `VIVID` set. Made before it: every
+@pyqvault_ and @lws.pune reel, including the queued ones (Physics #5–#7, Chemistry #5–#7). Physics #8 is the exception:
+the founder asked for its remake to compare (`pv-physics-008-compare.mp4`).
+**360:** scope = 6 queued @pyqvault_ reels + every posted reel on both handles · blast radius = their GoPost posts (MP4 +
+cover re-rendered and re-uploaded) · does it apply? only as polish: each was judged as made, and F24 is itself on test
+(L46, L47) · risk = posted reels can't be replaced without losing their numbers; a queued one is a re-render + re-upload ·
+cost ≈ 20–30 min per reel · **recommendation: decline for posted reels; defer for queued ones** until the Physics #8
+comparison and L46 show colour helps.
+
 ### Predict-first captions that print the answer (logged 2026-10-20) DECLINED: founder, 2026-10-21, "queued is fine"
 New founder rule (L45, framework F6 v1.11): a predict-first caption never names the answer; it says "Answer at the end
 of the reel 👀". Made before the rule, all 9 @pyqvault_ predict-first manifests print it ("→ B"): posted Physics #4 and

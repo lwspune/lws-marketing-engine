@@ -14,7 +14,7 @@ Reach-test targets: typical reach **> 2,000** · watch **> 10 s** · at least on
 reels posted 12–19 Oct, read 20 Oct: **1,271 views · 6.1 s watched · 3 saves · 0 comments · 0 shares**.
 
 **@pyqvault_ has its own log: `pyqvault-learnings.md`** (founder, 2026-10-20): L22, L27–L29 moved there with
-its reels' results, and L30–L37 live there. Both logs share one numbering, so the next new lesson in either is **L46**.
+its reels' results, and L30–L37 live there. Both logs share one numbering, so the next new lesson in either is **L48**.
 
 ---
 
@@ -50,6 +50,7 @@ its reels' results, and L30–L37 live there. Both logs share one numbering, so 
 | L39 | (Founder, 2026-10-20) **Concepts first**: NDA maths concepts, a real PYQ named in the caption when one fits instead of a PYQ solved on screen; picked by topic score (F1, F21). | Concept reels travel further than PYQ walk-throughs (@mathsy.uk's fundamentals, L23), and good ideas that have no exact PYQ aren't lost. | Concept reels (009–013 "Why?", 015 on) vs the PYQ walk-throughs (001–008) on views and watch; and whether a higher topic score goes with more views (as L35 on @pyqvault_). | — | 🧪 testing |
 | L40 | (2026-10-20) **Music and background per reel**: @lws.pune has used lo-fi on most reels and white on all of them; the founder asked for a different music per reel (L17) and tracks both on @pyqvault_ (L22, L34). | Unknown which music style holds NDA viewers; white is the house look and stays unless L22 calls dark clearly. | Log both in the results table; compare median watch time per music style once each style has ≥ 3 posted reels. | — | 🧪 logging |
 | L44 | (Founder, 2026-10-20) The orbit is the hook (F22); @lws.pune reels are flat graphs with nothing to turn, so: build the opening picture in 3D, turn it 360° and settle it flat into the 2D drawing. | A flat reel could get the same moving, deep first 3 s as a 3D reel. | Built for 016 (raised blocks, real light, motion blur, flattening into the grid). | 20 Oct: the founder watched it and dropped it ("doesn't look good"); 2D reels open with their picture building from frame 0 (F22, both frameworks). Never posted, so no numbers. | ❌ rejected |
+| L47 | (Founder, 2026-10-21) "More vivid colour objects." Our objects used the text colours (brick, teal, navy), muted on purpose for reading; on the white board pale objects vanish (Physics #8's first cream candle). | Saturated objects on a calm board catch the eye in the feed and make the idea easier to follow (each ray, strip or point its own colour). | Framework F24 on @lws.pune: every reel from 21 Oct. Compare median watch time and views of the first 3 F24 reels with the typical @lws.pune reel (788 views · 6.8 s), checking topic vividness (L30) and background (L22) before crediting colour. | — | 🧪 testing |
 
 ---
 
