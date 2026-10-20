@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.1, 2026-10-20)
+# @pyqvault_ reel framework (v1.2, 2026-10-20)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -75,8 +75,9 @@ judged Remotion "far better". · *Check:* rendered by `npm run render:<reel>`. �
 
 **F12 · Dark or white background: on test.** Alternate `LAB` (dark: wrap the reel in `<Theme value={LAB}>`) and
 `WHITE`, balanced across subjects. · *Why:*
-the fastest-growing science accounts are dark, ours started white; the data decides (L22). So far dark leads on watch
-time (5.5 s vs 4.0 s) but the slots were tangled. · *Check:* the L22 rotation. · 🧪 L22
+the fastest-growing science accounts are dark, ours started white; the data decides (L22). So far dark leads (median
+watch 5.6 s vs 3.3 s, 4 reels each) but the slots were tangled. Called once each side has ≥ 6 posted reels. · *Check:*
+the L22 rotation; the background goes in the Background column of the results table. · 🧪 L22
 
 ## Sound
 
@@ -135,3 +136,4 @@ becomes a user. · *Check:* the end card. · 📌 founder, 2026-10-18
 |---|---|---|---|
 | v1 | 2026-10-20 | Framework created from the house settings (F1, F3, F4, F6, F7, F10–F13, F17–F20) plus today's points: F2 vivid first, F5 question in front of a moving picture, F8 rounded shapes, F9 zooms, F14 the experiment's own sound, F15 whooshes on fast zooms only, F16 the mix. | Founder: a standard framework, every point with a reason. Today's points come from the first 8 reels' numbers (L29, L30) and the founder's calls (L31, L33). First reels made with all of it: the remakes of Physics #4 and Chemistry #4. |
 | v1.1 | 2026-10-20 | F13 music: from 📌 to 🧪 L34; fair rotation between five styles while the test runs; style logged per reel. | Founder: track music performance. The first 8 reels hint the opposite of F13's "energetic first" (cinematic and lofi on top, drive/synthwave/trap at the bottom), too weak to change the rule, enough to measure it. |
+| v1.2 | 2026-10-20 | F12 background: a Background column per reel and a rule for when to call it (≥ 6 posted reels each side, median watch time first). | Founder: track dark vs white. The test (L22) had a rotation but no column and no finish line, so it could run forever or be called on a hunch. |
