@@ -138,6 +138,9 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   visual-candidates.md   #   PYQs whose answer is a picture, by paper (pick visual reels from here)
   tools/                 #   headless-Edge scripts: frames, record, cover, check-video, unchanged (+ baseline.txt)
   tools/topic-scores.js  #   @pyqvault_ next topic by score (framework F21; table in remake-backlog.md → Topic scores)
+  analysis-framework.md  #   REEL ELEMENT ANALYSIS: which elements go with hits (top vs typical reels per account), method +
+                         #   decision rule + runs; tools/element-analysis.js (+ elements.js, cover-metrics.mjs, element-report.js),
+                         #   covers via publisher `npm run covers:fetch` (read-only, deleted after measuring); data in analytics/elements/
   assets/                #   V mascot poses (copied from Question_Bank/public/chat)
   *.post.json            #   one per piece: manifest for publisher's `queue:add` (files + captions)
 soundmind/               # @soundmindwithshivani carousels (outside brand). Runbook + research: brand.md

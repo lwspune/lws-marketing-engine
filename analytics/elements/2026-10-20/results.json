@@ -1,0 +1,982 @@
+[
+ {
+  "id": "E1",
+  "name": "Dark background",
+  "verdict": "unclear",
+  "counts": {
+   "top": 0,
+   "typical": 1,
+   "none": 3,
+   "constant": 2
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "typical",
+    "top": 0.2,
+    "typical": 0.67,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "none",
+    "top": 1,
+    "typical": 0.93,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "constant",
+    "top": 1,
+    "typical": 1,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "constant",
+    "top": 1,
+    "typical": 1,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "none",
+    "top": 0.93,
+    "typical": 0.93,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "none",
+    "top": 0.33,
+    "typical": 0.33,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E2",
+  "name": "Colourful cover",
+  "verdict": "unclear",
+  "counts": {
+   "top": 0,
+   "typical": 2,
+   "none": 4,
+   "constant": 0
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "none",
+    "top": 0.47,
+    "typical": 0.53,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "none",
+    "top": 0.53,
+    "typical": 0.47,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "none",
+    "top": 0.53,
+    "typical": 0.47,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "none",
+    "top": 0.47,
+    "typical": 0.53,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "typical",
+    "top": 0.4,
+    "typical": 0.6,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "typical",
+    "top": 0.4,
+    "typical": 0.6,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E3",
+  "name": "Busy cover (edges)",
+  "verdict": "unclear",
+  "counts": {
+   "top": 2,
+   "typical": 1,
+   "none": 3,
+   "constant": 0
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "none",
+    "top": 0.53,
+    "typical": 0.47,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "top",
+    "top": 0.6,
+    "typical": 0.4,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "none",
+    "top": 0.47,
+    "typical": 0.53,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "top",
+    "top": 0.67,
+    "typical": 0.33,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "typical",
+    "top": 0.33,
+    "typical": 0.67,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "none",
+    "top": 0.47,
+    "typical": 0.53,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E4",
+  "name": "Bright accents",
+  "verdict": "unclear",
+  "counts": {
+   "top": 1,
+   "typical": 0,
+   "none": 5,
+   "constant": 0
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "none",
+    "top": 0.4,
+    "typical": 0.47,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "top",
+    "top": 0.6,
+    "typical": 0.4,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "none",
+    "top": 0.53,
+    "typical": 0.47,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "none",
+    "top": 0.47,
+    "typical": 0.53,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "none",
+    "top": 0.53,
+    "typical": 0.47,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "none",
+    "top": 0.53,
+    "typical": 0.47,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E5",
+  "name": "Any text on cover",
+  "verdict": "unclear",
+  "counts": {
+   "top": 0,
+   "typical": 0,
+   "none": 4,
+   "constant": 2
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "none",
+    "top": 0.87,
+    "typical": 0.73,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "none",
+    "top": 1,
+    "typical": 0.93,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "constant",
+    "top": 1,
+    "typical": 1,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "none",
+    "top": 0.6,
+    "typical": 0.6,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "none",
+    "top": 0.93,
+    "typical": 1,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "constant",
+    "top": 1,
+    "typical": 1,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E5b",
+  "name": "Long text on cover (> 6 words)",
+  "verdict": "unclear",
+  "counts": {
+   "top": 2,
+   "typical": 0,
+   "none": 3,
+   "constant": 1
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "top",
+    "top": 0.27,
+    "typical": 0.07,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "none",
+    "top": 0.33,
+    "typical": 0.33,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "none",
+    "top": 0.53,
+    "typical": 0.53,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "none",
+    "top": 0.33,
+    "typical": 0.27,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "top",
+    "top": 0.67,
+    "typical": 0.2,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E6",
+  "name": "Question or problem on cover",
+  "verdict": "unclear",
+  "counts": {
+   "top": 0,
+   "typical": 2,
+   "none": 1,
+   "constant": 3
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "none",
+    "top": 0.2,
+    "typical": 0.2,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "typical",
+    "top": 0,
+    "typical": 0.33,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "typical",
+    "top": 0.27,
+    "typical": 0.47,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "constant",
+    "top": 1,
+    "typical": 1,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E7",
+  "name": "Face or person",
+  "verdict": "unclear",
+  "counts": {
+   "top": 0,
+   "typical": 0,
+   "none": 1,
+   "constant": 5
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "none",
+    "top": 0.07,
+    "typical": 0.07,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E8",
+  "name": "3D look",
+  "verdict": "unclear",
+  "counts": {
+   "top": 0,
+   "typical": 0,
+   "none": 4,
+   "constant": 2
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "none",
+    "top": 0.07,
+    "typical": 0.07,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "none",
+    "top": 0,
+    "typical": 0.13,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "none",
+    "top": 0.07,
+    "typical": 0.07,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "none",
+    "top": 0,
+    "typical": 0.07,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E9",
+  "name": "Many objects (≥ 5)",
+  "verdict": "unclear",
+  "counts": {
+   "top": 1,
+   "typical": 1,
+   "none": 3,
+   "constant": 1
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "none",
+    "top": 0.13,
+    "typical": 0.2,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "none",
+    "top": 0.27,
+    "typical": 0.2,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "typical",
+    "top": 0.27,
+    "typical": 0.53,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "none",
+    "top": 0,
+    "typical": 0.07,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "top",
+    "top": 0.47,
+    "typical": 0.2,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E10",
+  "name": "Real photo / footage",
+  "verdict": "unclear",
+  "counts": {
+   "top": 0,
+   "typical": 0,
+   "none": 3,
+   "constant": 3
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "none",
+    "top": 0,
+    "typical": 0.07,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "none",
+    "top": 0,
+    "typical": 0.07,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "none",
+    "top": 0.6,
+    "typical": 0.6,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E11",
+  "name": "Long caption",
+  "verdict": "works",
+  "counts": {
+   "top": 4,
+   "typical": 1,
+   "none": 1,
+   "constant": 0
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "top",
+    "top": 0.67,
+    "typical": 0.33,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "top",
+    "top": 0.6,
+    "typical": 0.4,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "typical",
+    "top": 0.33,
+    "typical": 0.67,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "none",
+    "top": 0.53,
+    "typical": 0.47,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "top",
+    "top": 0.6,
+    "typical": 0.4,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "top",
+    "top": 0.2,
+    "typical": 0,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E12",
+  "name": "Caption opens with a question",
+  "verdict": "unclear",
+  "counts": {
+   "top": 0,
+   "typical": 0,
+   "none": 5,
+   "constant": 1
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "none",
+    "top": 0.53,
+    "typical": 0.47,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "none",
+    "top": 0,
+    "typical": 0.07,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "none",
+    "top": 0.93,
+    "typical": 1,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "none",
+    "top": 0.27,
+    "typical": 0.4,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "none",
+    "top": 0.07,
+    "typical": 0.13,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E13",
+  "name": "Caption asks for a comment",
+  "verdict": "unclear",
+  "counts": {
+   "top": 0,
+   "typical": 1,
+   "none": 2,
+   "constant": 3
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "none",
+    "top": 0.07,
+    "typical": 0.07,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "typical",
+    "top": 0,
+    "typical": 0.2,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "none",
+    "top": 0,
+    "typical": 0.13,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E14",
+  "name": "Caption asks to save / share / follow",
+  "verdict": "unclear",
+  "counts": {
+   "top": 0,
+   "typical": 1,
+   "none": 1,
+   "constant": 4
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "typical",
+    "top": 0.07,
+    "typical": 0.4,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "constant",
+    "top": 1,
+    "typical": 1,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "none",
+    "top": 0.07,
+    "typical": 0.13,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E15",
+  "name": "Many hashtags",
+  "verdict": "unclear",
+  "counts": {
+   "top": 2,
+   "typical": 0,
+   "none": 1,
+   "constant": 3
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "none",
+    "top": 0.07,
+    "typical": 0.07,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "top",
+    "top": 0.2,
+    "typical": 0,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "top",
+    "top": 0.6,
+    "typical": 0.4,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E16",
+  "name": "Emojis in caption",
+  "verdict": "unclear",
+  "counts": {
+   "top": 1,
+   "typical": 1,
+   "none": 2,
+   "constant": 2
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "top",
+    "top": 0.2,
+    "typical": 0,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "constant",
+    "top": 1,
+    "typical": 1,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "none",
+    "top": 0.87,
+    "typical": 0.73,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "typical",
+    "top": 0.4,
+    "typical": 0.6,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "none",
+    "top": 0.07,
+    "typical": 0,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E17",
+  "name": "Numbered series",
+  "verdict": "unclear",
+  "counts": {
+   "top": 0,
+   "typical": 0,
+   "none": 2,
+   "constant": 4
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "none",
+    "top": 0.2,
+    "typical": 0.07,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "none",
+    "top": 0,
+    "typical": 0.07,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E18",
+  "name": "Posted in the morning (06–12 IST)",
+  "verdict": "unclear",
+  "counts": {
+   "top": 0,
+   "typical": 1,
+   "none": 4,
+   "constant": 1
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "constant",
+    "top": 0,
+    "typical": 0,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "none",
+    "top": 0.47,
+    "typical": 0.4,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "none",
+    "top": 0.2,
+    "typical": 0.13,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "typical",
+    "top": 0,
+    "typical": 0.2,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "none",
+    "top": 0.67,
+    "typical": 0.6,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "none",
+    "top": 0.4,
+    "typical": 0.47,
+    "n": 30
+   }
+  }
+ },
+ {
+  "id": "E19",
+  "name": "Posted on a weekend",
+  "verdict": "unclear",
+  "counts": {
+   "top": 2,
+   "typical": 1,
+   "none": 3,
+   "constant": 0
+  },
+  "accounts": {
+   "ubilumapp": {
+    "direction": "top",
+    "top": 0.47,
+    "typical": 0.2,
+    "n": 30
+   },
+   "codematrixvishal": {
+    "direction": "typical",
+    "top": 0.07,
+    "typical": 0.47,
+    "n": 30
+   },
+   "sciencevisualised": {
+    "direction": "none",
+    "top": 0.27,
+    "typical": 0.4,
+    "n": 30
+   },
+   "mathsy.uk": {
+    "direction": "top",
+    "top": 0.47,
+    "typical": 0,
+    "n": 30
+   },
+   "bisal.physics": {
+    "direction": "none",
+    "top": 0.4,
+    "typical": 0.33,
+    "n": 30
+   },
+   "maths_mentor24": {
+    "direction": "none",
+    "top": 0.33,
+    "typical": 0.47,
+    "n": 30
+   }
+  }
+ }
+]
