@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.8, 2026-10-20)
+# @pyqvault_ reel framework (v1.9, 2026-10-20)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -75,7 +75,7 @@ the big moment**, a zoom out to show the result. Written as tested keys (`CAMERA
 change of view restarts attention and makes the big moment feel big (founder). · *Check:* tests: at least 2 zooms in and
 1 out, no jump between frames, a punch-in on the big moment. · 🧪 L33
 
-**F22 · The orbit is the hook: every 3D reel opens with one.** From frame 0 the camera goes **all the way round the object, a full 360°** (front, side, back, side, front), eased in and out with no whoosh, while the question is up, and it **ends back at the front, the explaining view, by 3 s**, before anything is explained. One orbit per reel, in the opening only (no closing orbit, never during a punch-in). Written as a third camera value (orbit angle) on the same `CAMERA` keys. · *Why:* the founder (2026-10-20): the orbit is the hook, so it belongs in the first 3 s; it shows the
+**F22 · The orbit is the hook: every 3D reel opens with one.** From frame 0 the camera goes **all the way round the object, a full 360°** (front, side, back, side, front), eased in and out with no whoosh, while the question is up, and it **ends back at the front, the explaining view, by 3 s**, before anything is explained. One orbit per reel, in the opening only (no closing orbit, never during a punch-in). Written as a third camera value (orbit angle) on the same `CAMERA` keys. **Not for 2D reels** (founder, 2026-10-20: tried on @lws.pune 016, "doesn't look good"): a flat reel opens with its picture building from frame 0 instead (F5). · *Why:* the founder (2026-10-20): the orbit is the hook, so it belongs in the first 3 s; it shows the
 depth of the 3D we build and gives motion from frame 0 (F5). Back at the front by 3 s because a slope's angle, arrows
 and gauges only read from one view. · *Check:* the reel's tests (the orbit starts at frame 0, turns exactly 360°, ends at the front by 3 s, no jumps, no other orbit). · 📌 founder, measured by L37
 
@@ -168,3 +168,4 @@ becomes a user. · *Check:* the end card. · 📌 founder, 2026-10-18
 | v1.4 | 2026-10-20 | F22 added: one orbit shot in 3D reels, 60–120°, opening or closing only, back at the explaining view before the key moment. | Founder's idea (an arc round the object). Kept on test with limits because our reels explain from a fixed angle. First reel: Chemistry #5; Physics #5 (no orbit) is the comparison (L37). |
 | v1.7 | 2026-10-20 | F23 added: voiceover on test (Kokoro, on-screen words only, a silent render alongside); F13's "no voice (voiceover parked)" now points to it. F21: no repeats. | Founder: try a free voiceover on @pyqvault_ (the ElevenLabs own-voice plan of 15 Oct stays parked); measured by L43. No repeats: C12 (heat → rate) was next but repeats Chemistry #1; founder's call. First voiced reel: Chemistry #7, half-life. |
 | v1.8 | 2026-10-20 | F22: the orbit is the hook. Every 3D reel opens with a full 360° orbit, from frame 0, ending at the explaining view by 3 s; no closing orbits. From 🧪 to 📌. | Founder: "orbit is hook and should be there in first 3 sec", for @pyqvault_ and @lws.pune; "make it 360 degree orbit" (was 60–120°). Reels already made are left as they are (founder). |
+| v1.9 | 2026-10-20 | F22: the orbit stays for 3D reels only; 2D reels open with their picture building from frame 0. | Founder: a 3D opening (360° turn settling into the flat grid) was built for @lws.pune 016 and dropped the same day: "doesn't look good". |
