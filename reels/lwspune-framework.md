@@ -1,4 +1,4 @@
-# @lws.pune reel framework (v1.1, 2026-10-20)
+# @lws.pune reel framework (v1.2, 2026-10-20)
 
 How every new @lws.pune reel is made, one numbered point at a time. Same standard as @pyqvault_'s
 (`pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or dropped
@@ -78,11 +78,11 @@ the question and labels still. · *Why:* a change of view restarts attention (fo
 and looked jerky to the founder (L11). · *Check:* tests: at least 2 zooms in and 1 out, no jump between frames, a
 punch-in on the big moment. · 🧪 L38
 
-**F22 · An orbit shot in 3D reels.** 3D reels only (solids, surfaces, 3D geometry), at most **one per reel**, **60–120°**, in
-the opening seconds or the closing moment, back at the explaining view before the key moment, slow and eased with no
-whoosh. · *Why:* it shows the 3D's depth and gives motion from frame 0 (reel 014 opens with a circling camera, L25); it's
-limited because an angle or a slope only reads from one view. · *Check:* the reel's tests (arc size, back at the front
-before the key moment, no jumps). · 🧪 L38
+**F22 · The orbit is the hook: every 3D reel opens with one.** From frame 0 the camera goes **all the way round the object, a full 360°** (front, side, back, side, front), eased in and out with no whoosh, while the question is up, and it **ends back at the front, the explaining view, by 3 s**, before anything is explained. One orbit per reel, in the opening only (no closing orbit, never during a punch-in). Written as a third camera value (orbit angle) on the same `CAMERA` keys. 3D reels are the solids, surfaces and 3D geometry topics. · *Why:* the founder (2026-10-20): the orbit
+is the hook, so it belongs in the first 3 s; it shows the 3D's depth and gives motion from frame 0 (reel 014 opens
+with one, L25). Back at the front by 3 s because an angle or a slope only reads from one view. · *Check:* the reel's
+tests (the orbit starts at frame 0, turns exactly 360°, ends at the front by 3 s, no jumps, no other orbit). · 📌 founder,
+measured by L38
 
 **F10 · Honest.** The maths is re-derived in the reel's tests; a PYQ named in the caption has its answer re-derived from
 the question bank (read-only); no made-up numbers ("90% get this wrong"); label any scale change. · *Why:* a wrong reel on
@@ -156,5 +156,6 @@ end felt like homework (founder, on @pyqvault_). · *Check:* the end card. · �
 
 | Version | Date | Change | Why |
 |---|---|---|---|
+| v1.2 | 2026-10-20 | F22: the orbit is the hook. Every 3D reel opens with a full 360° orbit, from frame 0, ending at the explaining view by 3 s; no closing orbits. From 🧪 to 📌. | Founder: "orbit is hook and should be there in first 3 sec", for @pyqvault_ and @lws.pune; "make it 360 degree orbit" (was 60–120°). Reels already made are left as they are (founder). |
 | v1.1 | 2026-10-20 | F21: ties go to the bigger views multiple, then the concept shown live, then table order (the same tool as @pyqvault_). | Same reason as @pyqvault_ v1.6: a tie with equal proof was settled by table order. |
 | v1 | 2026-10-20 | Framework created: @pyqvault_'s v1.4 points, numbered the same, adapted to @lws.pune: F1 concepts first (a PYQ in the caption when one fits), F21 with the NDA-chapter gate, F9 zoom the picture not text, F12 white kept, F13 a different style each reel, F18 up to ~45 s for "why" builds, F19 exam + chapter label, F20 "Follow for more" with no website. Rules that already stood (one question per reel, no made-up numbers, faceless, Remotion, the 3:4 cover) folded in. | Founder: "make similar things for @lws.pune". Each adaptation comes from this account's own lessons (L3, L5–L7, L11, L13, L14, L17, L23, L25) or the founder's call (concepts first, 20 Oct). First reel already made this way: 015 (f and f′ together). |
