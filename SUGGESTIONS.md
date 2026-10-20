@@ -64,7 +64,7 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
-### Predict-first captions that print the answer (logged 2026-10-20, awaiting founder)
+### Predict-first captions that print the answer (logged 2026-10-20) DECLINED: founder, 2026-10-21, "queued is fine"
 New founder rule (L45, framework F6 v1.11): a predict-first caption never names the answer; it says "Answer at the end
 of the reel 👀". Made before the rule, all 9 @pyqvault_ predict-first manifests print it ("→ B"): posted Physics #4 and
 Chemistry #4; queued for approval Physics #5, Chemistry #5, Chemistry #7; made Physics #6, #7 and Chemistry #6; rejected
