@@ -164,8 +164,13 @@ const DUCK_HIT: Record<HitKind, { depth: number; hold: number }> = {
 };
 const DUCK_BED = { roar: 0.25, scrape: 0.45 }, FLOOR = 0.5;
 
-/** The music's gain on every sample: 1, dipping (never below 0.5) under effects; 60 ms down, 180 ms back up. */
-export function duckGain(score: Score): Float32Array {
+// Under a voiceover (L43) the music drops to 0.4 (−8 dB), from just before each line until just after it.
+const VOICE_DUCK = 0.4, VOICE_LEAD = 0.12, VOICE_HOLD = 0.15;
+export type VoiceTrack = { track: Float32Array; spans: [number, number][] };
+
+/** The music's gain on every sample: 1, dipping (never below 0.5) under effects and to 0.4 under a voice;
+ *  60 ms down, 180 ms back up. */
+export function duckGain(score: Score, voiceSpans: [number, number][] = []): Float32Array {
   const n = Math.ceil(score.duration * SR), target = new Float32Array(n);
   for (const h of score.hits) {
     const d = DUCK_HIT[h.kind], i0 = Math.round(h.t * SR), i1 = Math.min(n, Math.round((h.t + d.hold) * SR));
@@ -178,10 +183,12 @@ export function duckGain(score: Score): Float32Array {
       for (let j = i; j < Math.min(i1, i + 48); j++) target[j] = Math.max(target[j], v);
     }
   }
+  const voiced = new Uint8Array(n);
+  for (const [a, b] of voiceSpans) voiced.fill(1, Math.max(0, Math.round((a - VOICE_LEAD) * SR)), Math.min(n, Math.round((b + VOICE_HOLD) * SR)));
   const down = 1 - Math.exp(-1 / (0.06 * SR)), up = 1 - Math.exp(-1 / (0.18 * SR)), g = new Float32Array(n);
   let v = 1;
   for (let i = 0; i < n; i++) {
-    const want = Math.max(FLOOR, 1 - target[i]);
+    const want = voiced[i] ? Math.min(VOICE_DUCK, Math.max(FLOOR, 1 - target[i])) : Math.max(FLOOR, 1 - target[i]);
     v += (want - v) * (want < v ? down : up);
     if (want === 1 && 1 - v < 1e-4) v = 1;
     g[i] = v;
@@ -193,13 +200,14 @@ export function duckGain(score: Score): Float32Array {
 // encoding can overshoot it by ~0.1 dB (the reel 014 remake: a −3.0 dB mix measured −2.9 dB in the MP4).
 const LIMIT = 10 ** (-3.3 / 20);
 
-/** Music (stereo) dipped under the effects, plus the effects, through a peak limiter at −3 dB. `scale` = deepest limiting. */
-export function mixWithMusic(music: Float32Array[], score: Score, seed = 7) {
-  const fx = renderSfx(score, seed), g = duckGain(score), n = music[0].length;
+/** Music (stereo) dipped under the effects (and a voice, if any), plus both, through a peak limiter at −3 dB.
+ *  `scale` = deepest limiting. */
+export function mixWithMusic(music: Float32Array[], score: Score, seed = 7, voice?: VoiceTrack) {
+  const fx = renderSfx(score, seed), g = duckGain(score, voice?.spans), n = music[0].length;
   const left = new Float32Array(n), right = new Float32Array(n);
   let peak = 0;
   for (let i = 0; i < n; i++) {
-    const gi = i < g.length ? g[i] : 1, e = i < fx.length ? fx[i] : 0;
+    const gi = i < g.length ? g[i] : 1, e = (i < fx.length ? fx[i] : 0) + (voice && i < voice.track.length ? voice.track[i] : 0);
     left[i] = music[0][i] * gi + e; right[i] = music[1][i] * gi + e;
     peak = Math.max(peak, Math.abs(left[i]), Math.abs(right[i]));
   }

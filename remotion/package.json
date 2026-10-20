@@ -104,6 +104,7 @@
     "@remotion/paths": "4.0.532",
     "@remotion/rough-notation": "4.0.532",
     "@remotion/three": "4.0.532",
+    "kokoro-js": "1.2.1",
     "perfect-freehand": "1.2.3",
     "postprocessing": "6.39.5",
     "react": "19.3.0",

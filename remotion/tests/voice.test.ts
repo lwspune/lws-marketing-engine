@@ -1,0 +1,83 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { SR, mixWithMusic, type Score } from '../src/lib/sfx.ts';
+import { VOICE_SR, upsample2x, trimSilence, levelTo, placeVoice, overruns, voiceKey, onScreen, type VoiceLine } from '../src/lib/voice.ts';
+
+// The voiceover trial (L43, 2026-10-20): Kokoro speaks lines that are already on screen, each inside the time its words
+// are up, with the music dipped under it. The reel must still work muted (F17), so the voice only ever repeats text.
+const rms = (a: Float32Array, t0: number, t1: number) => {
+  let s = 0; const i0 = Math.round(t0 * SR), i1 = Math.round(t1 * SR);
+  for (let i = i0; i < i1; i++) s += a[i] * a[i];
+  return Math.sqrt(s / Math.max(1, i1 - i0));
+};
+const tone = (seconds: number, amp = 0.5, rate = VOICE_SR) =>
+  Float32Array.from({ length: Math.round(seconds * rate) }, (_, i) => amp * Math.sin((2 * Math.PI * 220 * i) / rate));
+
+test('Kokoro speaks at 24 kHz; doubling to 48 kHz keeps every sample and fills the gaps smoothly', () => {
+  assert.equal(VOICE_SR * 2, SR);
+  const x = tone(0.1), y = upsample2x(x);
+  assert.equal(y.length, 2 * x.length);
+  for (let i = 0; i < x.length; i++) assert.equal(y[2 * i], x[i]);
+  for (let i = 1; i < x.length - 2; i++) {
+    const lo = Math.min(x[i], x[i + 1]) - 0.01, hi = Math.max(x[i], x[i + 1]) + 0.01;
+    assert.ok(y[2 * i + 1] >= lo && y[2 * i + 1] <= hi, `midpoint ${i} overshoots`);
+  }
+});
+
+test('the silence Kokoro adds before and after a line is trimmed, leaving a short breath', () => {
+  const quiet = new Float32Array(Math.round(0.4 * SR)), speech = tone(1, 0.5, SR);
+  const clip = Float32Array.from([...quiet, ...speech, ...quiet]), out = trimSilence(clip);
+  assert.ok(out.length < clip.length && out.length >= speech.length, `${out.length / SR} s`);
+  assert.ok(out.length <= speech.length + 0.1 * SR, 'keeps at most 50 ms each side');
+});
+
+test('every line is set to the same speaking level', () => {
+  for (const amp of [0.05, 0.3, 0.9]) {
+    const out = levelTo(tone(1, amp, SR), 0.1);
+    const r = Math.sqrt(out.reduce((s, v) => s + v * v, 0) / out.length);
+    assert.ok(Math.abs(r - 0.1) < 1e-3, `rms ${r}`);
+  }
+});
+
+test('lines are placed at their start times; the spans say where the voice is', () => {
+  const { track, spans } = placeVoice([{ t: 1, samples: tone(0.5, 0.3, SR) }, { t: 2.5, samples: tone(1, 0.3, SR) }], 5);
+  assert.equal(track.length, 5 * SR);
+  assert.equal(rms(track, 0, 0.99), 0); assert.ok(rms(track, 1, 1.5) > 0.1); assert.equal(rms(track, 1.51, 2.49), 0);
+  assert.deepEqual(spans, [[1, 1.5], [2.5, 3.5]]);
+});
+
+test('a line that runs past its slot, or into the next line, is reported (the tool stops on it)', () => {
+  const lines: VoiceLine[] = [{ t: 0, until: 2, text: 'a' }, { t: 2, until: 4, text: 'b' }, { t: 4, until: 5, text: 'c' }];
+  assert.deepEqual(overruns(lines, [1.9, 2.0, 0.5]), []);
+  assert.deepEqual(overruns(lines, [2.1, 1.0, 1.2]).map(o => o.text), ['a', 'c']);
+});
+
+test('the cache key changes with the words, the voice and the speed, and only with them', () => {
+  const line: VoiceLine = { t: 1, until: 3, text: '16 left' };
+  assert.equal(voiceKey(line, 'af_heart', 1), voiceKey({ ...line, t: 2, until: 5 }, 'af_heart', 1));
+  assert.notEqual(voiceKey(line, 'af_heart', 1), voiceKey({ ...line, text: '17 left' }, 'af_heart', 1));
+  assert.notEqual(voiceKey(line, 'af_heart', 1), voiceKey({ ...line, say: 'sixteen left' }, 'af_heart', 1));
+  assert.notEqual(voiceKey(line, 'af_heart', 1), voiceKey(line, 'bf_emma', 1));
+  assert.notEqual(voiceKey(line, 'af_heart', 1), voiceKey(line, 'af_heart', 1.1));
+  assert.match(voiceKey(line, 'af_heart', 1), /^[0-9a-f]{12}$/);
+});
+
+test('the voice only says what is on screen at that moment (F17: the reel still works muted)', () => {
+  const shown = [{ t0: 0, t1: 4, text: '64 atoms. Two half-lives.\nHow many are left?' }, { t0: 4, t1: 7, text: '16 left: half go each half-life' }];
+  assert.ok(onScreen({ t: 0.1, until: 4, text: '64 atoms. Two half-lives. How many are left?' }, shown));
+  assert.ok(onScreen({ t: 4.1, until: 7, text: '16 left: half go each half-life' }, shown));
+  assert.ok(!onScreen({ t: 4.1, until: 7, text: 'Sixteen are left now' }, shown), 'words not on screen');
+  assert.ok(!onScreen({ t: 3, until: 6, text: '16 left: half go each half-life' }, shown), 'starts before its words are up');
+});
+
+test('the mix: music dips under the voice and comes back; the peak stays under −3 dB', () => {
+  const n = 6 * SR, music = [0, 1].map(() => Float32Array.from({ length: n }, (_, i) => 0.6 * Math.sin((2 * Math.PI * 110 * i) / SR)));
+  const score: Score = { duration: 6, hits: [], beds: [] };
+  const voice = placeVoice([{ t: 2, samples: levelTo(tone(1.5, 0.5, SR), 0.25) }], 6);
+  const dry = mixWithMusic(music, score), wet = mixWithMusic(music, score, 7, voice);
+  const musicOnly = wet.left.map((v, i) => v - voice.track[i]);
+  assert.ok(rms(musicOnly, 2.3, 3.4) < 0.45 * rms(dry.left, 2.3, 3.4), 'music did not dip ~7 dB under the voice');
+  assert.ok(Math.abs(rms(wet.left, 0.2, 1.5) - rms(dry.left, 0.2, 1.5)) < 1e-3, 'music changed before the voice');
+  assert.ok(Math.abs(rms(wet.left, 4.6, 5.8) - rms(dry.left, 4.6, 5.8)) < 0.02, 'music did not come back');
+  assert.ok(wet.peak <= 10 ** (-3 / 20), `peak ${wet.peak}`);
+});

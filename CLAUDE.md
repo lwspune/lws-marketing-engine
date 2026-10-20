@@ -116,6 +116,11 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   for maintained, licensed, well-known repos; drei and tegaki were checked and dropped. Installed pinned with scripts off;
   `tests/deps.test.ts` keeps every future package that way. First reels: @pyqvault_ Physics #7, Sound Mind sm-r004.
 
+- **Voiceover trial (2026-10-20, founder-approved).** A free AI voice (Kokoro via `kokoro-js`, Apache 2.0, offline,
+  pinned in `remotion/` with its install scripts read) reads only words already on screen, so reels stay faceless and
+  still work muted. Every voiced reel is also rendered silent; the founder picks. Framework F23, lesson L43; decide after
+  3 voiced reels. The own-voice ElevenLabs plan (2026-10-15) stays parked.
+
 ## File structure
 
 ```
@@ -164,6 +169,8 @@ remotion/                # TRIAL: reels in Remotion (React + SVG, frame-by-frame
                          #   `npm run typecheck`, `npm run audio` (soundtrack from the engine MP4), `npm run render`,
                          #   `npm run compare:files && npm run compare` (old vs new side by side) → out/
   src/lib/               #   pure timelines (same prog/ease/caption timing as engine.js; palette test-locked to Reel.WHITE)
+  src/lib/voice.ts       #   voiceover (F23): place, level, check lines; `npm run voice:<reel>` (tools/voice.ts, Kokoro,
+                         #   offline) → public/voice/; `mix.ts <reel> --voice` → <reel>-voice-mix.wav
   src/lib/sfx.ts         #   sound effects made in code from a reel's SOUND score + ducking + −3 dB limiter (framework F14–F16);
                          #   `npm run mix:<reel>` (tools/mix.ts) mixes them into the music → public/<reel>-mix.wav
   src/shapes.tsx         #   RoundBox (rounded 3D boxes, framework F8); camera zooms are `tween` keys (motion.ts, F9)

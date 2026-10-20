@@ -12,7 +12,13 @@ const lock = JSON.parse(readFileSync(new URL('../package-lock.json', import.meta
 const all = { ...pkg.dependencies, ...pkg.devDependencies };
 
 // Packages allowed to run code on install, each read and approved by name.
-const INSTALL_SCRIPTS_OK = new Set(['esbuild']); // Remotion's bundler: fetches its own platform binary
+const INSTALL_SCRIPTS_OK = new Set([
+  'esbuild',          // Remotion's bundler: fetches its own platform binary
+  // kokoro-js's chain (read 2026-10-20; installed with --ignore-scripts, and none is needed on Windows):
+  'onnxruntime-node', // downloads CUDA binaries on Linux x64 only; the Windows binaries ship in the package
+  'protobufjs',       // prints a warning if a parent pins it with the wrong version prefix; nothing else
+  'sharp',            // checks for a system libvips; the prebuilt @img/sharp-win32-x64 is used instead
+]);
 
 test('deps: every package is pinned to an exact version', () => {
   const loose = Object.entries(all).filter(([, v]) => !/^\d+\.\d+\.\d+$/.test(v));
@@ -50,4 +56,9 @@ test('deps: no install scripts except the approved ones', () => {
 test('deps: the reel toolkit is installed', () => {
   for (const name of ['@remotion/paths', '@remotion/noise', '@remotion/rough-notation', '@react-three/postprocessing',
     'postprocessing', 'perfect-freehand']) assert.ok(all[name], `${name} in package.json`);
+});
+
+// The voiceover trial (2026-10-20, founder-approved, L43): Kokoro text-to-speech, Apache 2.0, runs offline.
+test('deps: the voice package is installed', () => {
+  assert.ok(all['kokoro-js'], 'kokoro-js in package.json');
 });

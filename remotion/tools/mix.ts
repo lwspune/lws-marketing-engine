@@ -1,8 +1,11 @@
 // Mix a reel's own sound effects (its SOUND score) into its music, dipping the music under them:
 //   node tools/mix.ts pp004   →  public/pv-physics-004-slope-mix.wav (the reel plays this file)
+//   node tools/mix.ts pc007 --voice  →  …-voice-mix.wav, with the voiceover from tools/voice.ts (L43)
+//   node tools/mix.ts pc007 --voice=hm_psi  →  …-voice-hm_psi-mix.wav (another voice, to compare)
 // Run after `npm run music:<reel>`. Prints the levels so they can be checked against the house limits.
 import { readFileSync, writeFileSync } from 'node:fs';
-import { SR, mixWithMusic, readWav, renderSfx, writeWav, type Score } from '../src/lib/sfx.ts';
+import { basename } from 'node:path';
+import { SR, mixWithMusic, readWav, renderSfx, writeWav, type Score, type VoiceTrack } from '../src/lib/sfx.ts';
 
 const REELS: Record<string, { lib: string; file: string }> = {
   pp004: { lib: '../src/lib/pp004.ts', file: 'public/pv-physics-004-slope' },
@@ -24,10 +27,17 @@ if (!reel) throw new Error(`usage: node tools/mix.ts <${Object.keys(REELS).join(
 const { SOUND } = (await import(reel.lib)) as { SOUND: Score };
 const music = readWav(readFileSync(`${reel.file}.wav`));
 if (music.sampleRate !== SR) throw new Error(`music is ${music.sampleRate} Hz, expected ${SR}`);
-const { left, right, peak, scale } = mixWithMusic(music.channels, SOUND);
-writeFileSync(`${reel.file}-mix.wav`, writeWav([left, right], SR));
+let voice: VoiceTrack | undefined, out = `${reel.file}-mix.wav`;
+const voiceArg = process.argv.find(a => a === '--voice' || a.startsWith('--voice='));
+if (voiceArg) {
+  const tag = voiceArg.includes('=') ? `-${voiceArg.split('=')[1]}` : '', v = `public/voice/${basename(reel.file)}${tag}`;
+  voice = { track: readWav(readFileSync(`${v}.wav`)).channels[0], spans: JSON.parse(readFileSync(`${v}.json`, 'utf8')).spans };
+  out = `${reel.file}-voice${tag}-mix.wav`;
+}
+const { left, right, peak, scale } = mixWithMusic(music.channels, SOUND, 7, voice);
+writeFileSync(out, writeWav([left, right], SR));
 
 const db = (v: number) => (20 * Math.log10(Math.max(v, 1e-9))).toFixed(1);
 const rmsOf = (a: Float32Array) => Math.sqrt(a.reduce((s, v) => s + v * v, 0) / a.length);
 const fx = renderSfx(SOUND);
-console.log(`${reel.file}-mix.wav: peak ${db(peak)} dB · overall scale ${scale.toFixed(2)} · music ${db(rmsOf(music.channels[0]))} dB RMS · effects ${db(rmsOf(fx))} dB RMS`);
+console.log(`${out}: peak ${db(peak)} dB · overall scale ${scale.toFixed(2)} · music ${db(rmsOf(music.channels[0]))} dB RMS · effects ${db(rmsOf(fx))} dB RMS${voice ? ` · voice ${db(rmsOf(voice.track.filter(v => v !== 0)))} dB RMS while speaking` : ''}`);
