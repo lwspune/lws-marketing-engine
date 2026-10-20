@@ -10,7 +10,7 @@ const REELS = path.join(__dirname, "..", "reels");
 
 /** The parts of a caption that give the answer away: "→ B", "Answer (a)…", "Answer: C", "the answer is B". */
 function giveaways(caption) {
-  return [...caption.matchAll(/→\s*\(?[ABC]\)?(?![\w])|\banswer\s*(?:\(|:|is\b)[^\n]{0,30}/gi)].map((m) => m[0]);
+  return [...caption.matchAll(/→\s*\(?[ABC]\)?(?![\w])|\banswer\s*(?:\(|:|is\s+\(?[ABCabc]\b)[^\n]{0,30}/gi)].map((m) => m[0]);
 }
 
 // Made before the rule; each is a backfill candidate in SUGGESTIONS.md → Backfill ledger. Remove a name once its caption
@@ -29,6 +29,7 @@ test("spots an answer in a caption, and lets the 'answer at the end' line throug
   assert.deepEqual(giveaways("Answer (c) π/4."), ["Answer (c) π/4."]);
   assert.equal(giveaways("The answer is A, because").length, 1);
   assert.deepEqual(giveaways("Answer at the end of the reel 👀\nheat → rate, 64 → 32 → 16"), []);
+  assert.deepEqual(giveaways("Guess first: the answer is at the end."), []);
 });
 
 test("@pyqvault_ predict-first captions keep the answer out (Instagram, Facebook and YouTube)", () => {
