@@ -1,4 +1,4 @@
-# @lws.pune reel framework (v1.5, 2026-10-21)
+# @lws.pune reel framework (v1.6, 2026-10-21)
 
 How every new @lws.pune reel is made, one numbered point at a time. Same standard as @pyqvault_'s
 (`pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or dropped
@@ -74,7 +74,8 @@ and more premium (founder, 2026-10-20); a straight crop line shows as soon as th
 
 **F24 · Bright objects.** Every key object (the curve being drawn, the strips, the points, a 3D figure) takes a colour
 from `VIVID` (`remotion/src/lib/palette.ts`, the white set on the white board); things the viewer must tell apart get
-different colours; no grey or beige objects. Text, axes and grid keep the WHITE palette, so words keep their contrast. ·
+different colours; no grey or beige objects we invent. An everyday object people know by its material keeps it (a steel
+spoon stays steel). Text, axes and grid keep the WHITE palette, so words keep their contrast. ·
 *Why:* founder, 2026-10-21: "more vivid colour objects". Our busiest, most colourful reels did best (L30), and on the white board pale objects vanish: Physics #8's first cream candle and its image were nearly invisible (the same rule as @pyqvault_'s F24). · *Check:* `remotion/tests/palette.test.ts` (each VIVID colour saturated ≥ 0.65, ≥ 3:1 on its board, ≥ 20° of hue from the others); the beat table names each key object's VIVID colour (runbook step 1); the stills sheet shows nothing grey or washed out. · 🧪 L47
 
 **F9 · Zoom in and out at 3–4 moments, on the picture.** A slow push in while something builds, a quick **punch-in on the
@@ -161,6 +162,7 @@ end felt like homework (founder, on @pyqvault_). · *Check:* the end card. · �
 
 | Version | Date | Change | Why |
 |---|---|---|---|
+| v1.6 | 2026-10-21 | F24: an everyday object people know by its material keeps it; the rest stays vivid (as @pyqvault_ v1.13). | Founder, 2026-10-21, comparing Physics #8's two versions: "original spoon colour was better, rest vivid is better". A steel spoon in cyan stopped looking like a spoon; the bright candle, rays and graph read better. |
 | v1.5 | 2026-10-21 | F24 added: bright objects from the `VIVID` set, as on @pyqvault_ (v1.12). | Founder: "more vivid colour objects", for both handles. Measured by L47. |
 | v1.4 | 2026-10-20 | F21: a known flop (under 1× their typical reel) scores −1 and loses a tie to an untested idea (the same tool as @pyqvault_ v1.10). No @lws.pune row changes. | Founder, 2026-10-20: the Ray Optics search found ideas that flopped for other accounts (prism 0.5×, mirage 0.4×, sliced lens 0.9×) scoring the same as untested ones, and winning ties against them. A flop is evidence against, so it costs a point; in a tie, no evidence counts as 1×. |
 | v1.3 | 2026-10-20 | F22: the orbit stays for 3D reels only; 2D reels open with their picture building from frame 0. | Founder: a 3D opening (360° turn settling into the flat grid) was built for @lws.pune 016 and dropped the same day: "doesn't look good". |
