@@ -1,12 +1,15 @@
 ---
 name: visual-reel
-description: Make an @lws.pune "visual" reel — a real NDA PYQ solved by an animated graph on the soft-white board (curve draws, area fills with slices, figure transforms), like reels/nda-maths-005-area. Use when asked for a visual/graph/animated/white-board reel, or "a reel like 005".
+description: Make an @lws.pune "visual" reel — an NDA maths concept (or a real NDA PYQ) shown by an animated graph on the soft-white board (curve draws, area fills with slices, figure transforms), like reels/nda-maths-005-area. Use when asked for a visual/graph/animated/white-board reel, or "a reel like 005".
 ---
 
 # Visual reel
 
 Follow **`reels/visual-reel-workflow.md`** step by step. It is the source of truth; this skill only
 makes sure it gets used.
+
+**First read `reels/lwspune-framework.md`** (2026-10-20): every new @lws.pune reel follows it, and where it differs from
+the workflow (concepts first, a PYQ only in the caption when one fits; Remotion), the framework wins.
 
 Non-negotiables while doing it:
 

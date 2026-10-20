@@ -134,10 +134,13 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
                          #   check and status; change only through its change log, with a reason
   pyqvault-learnings.md  #   @pyqvault_ LEARNINGS LOG, kept apart (founder 2026-10-20); one L-numbering shared with
                          #   learnings.md
+  lwspune-framework.md   #   @lws.pune REEL FRAMEWORK (founder 2026-10-20): same F-numbers as @pyqvault_'s for the same
+                         #   idea, adapted (NDA maths concepts first, white, "Follow for more"); own change log
   visual-reel-workflow.md #  runbook for white-board animated-graph reels (skill: .claude/skills/visual-reel)
   visual-candidates.md   #   PYQs whose answer is a picture, by paper (pick visual reels from here)
   tools/                 #   headless-Edge scripts: frames, record, cover, check-video, unchanged (+ baseline.txt)
-  tools/topic-scores.js  #   @pyqvault_ next topic by score (framework F21; table in remake-backlog.md → Topic scores)
+  tools/topic-scores.js  #   next topic by score, per handle (framework F21; remake-backlog.md → Topic scores /
+                         #   @lws.pune topic scores); `node reels/tools/topic-scores.js [pyqvault|lwspune]`
   analysis-framework.md  #   REEL ELEMENT ANALYSIS: which elements go with hits (top vs typical reels per account), method +
                          #   decision rule + runs; tools/element-analysis.js (+ elements.js, cover-metrics.mjs, element-report.js),
                          #   covers via publisher `npm run covers:fetch` (read-only, deleted after measuring); data in analytics/elements/

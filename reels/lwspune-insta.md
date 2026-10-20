@@ -15,14 +15,24 @@ together.
   https://www.pyqvault.com/go/quiz?src=highlight
 - **Ads:** ₹0. Organic only until free leads convert (about 2 buyers per 100 leads). Don't use Ads Manager.
 
+## How a reel is made: the framework
+
+**Every new reel follows [`lwspune-framework.md`](lwspune-framework.md)** (founder, 2026-10-20): numbered points on
+topic, hook, picture, sound and shape, each with its reason, check and status, numbered like @pyqvault_'s. Change them
+only through its change log. The Look and Sound sections below describe the `engine.js` reels (001–013) and the daily
+Story; new reels are made in Remotion by the framework. Numbers and lessons go in `learnings.md`.
+
 ## Content rules
 
-- **Real PYQs only**, from the PYQ Vault question bank (read-only). Re-derive every answer before use.
+- **NDA maths concepts first** (founder, 2026-10-20; was "real PYQs only"). A reel explains one NDA maths idea; name a
+  real PYQ in the caption when one fits ("NDA asked this in 2024 (I), Q91"), but don't block a good concept for lack of
+  one. Any PYQ used comes from the PYQ Vault question bank (read-only), with its answer re-derived.
 - **One question per piece** (founder's rule, 2026-10-14). Never put two PYQs in one reel or post, even
   when the paper asks two questions on one set-up (e.g. NDA 2024 (I) Q89 + Q90). Pick the one the
   picture answers; the other can be its own piece later. "NDA asked this 3 times" is fine as a hook
   line, but only one question is on screen and solved.
-- Label every piece with paper, subject and question number, e.g. `NDA 2026 (II) · Maths · Q74`.
+- Label every piece with exam and chapter, e.g. `NDA Maths · Derivatives` (framework F19). A piece that solves a PYQ
+  on screen also names the paper and question number, e.g. `NDA 2026 (II) · Maths · Q74`.
 - **No made-up numbers**: no "90% get this wrong" unless the bank has real attempt data.
 - **Faceless + silent-first.** On-screen text carries the explanation; no voice, no face. V (the PYQ
   Vault mascot) may "speak" in speech bubbles.
@@ -84,27 +94,34 @@ IST, approved a week at a time. No caption, no music.
   ~1 s and out ~2.5 s. Never a licensed track.
 - A chime when the answer is circled; clock ticks plus a "time's up" ding for countdowns.
 - Loudness: about −22 dB RMS, peak no higher than −3 dB.
+- New reels: a different music style each reel, the picture's own sound effects and the mix limits (framework F13–F16).
 
 ## Caption template
 
+From 2026-10-20 (concepts first; first used on reel 015):
+
 ```
-NDA <year> (<I/II>) · Maths · Q<n>. <one-line hook>
+NDA Maths · <Chapter>. <the reel's question> A <…> · B <…> · C <…> 👇
 
-<the trick in 1–2 lines>
+<the idea in 1–2 lines>
 <the trap, if any>
+NDA asked this idea in <year> (<I/II>), Q<n>.        ← only when a real PYQ fits (answer re-derived)
 
-Save this 📌 Follow @lws.pune for one real NDA PYQ every day.
+Save this 📌 Follow @lws.pune for one NDA maths idea every day.
 Practise every <Chapter> PYQ free, chapter-wise → link in bio (PYQ Vault).
 ```
+
+A piece that solves a PYQ on screen starts with its label instead: `NDA <year> (<I/II>) · Maths · Q<n>. <one-line hook>`.
 
 **Hashtags:** `#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #MathsTricks #LWSPune`
 plus one topic tag (`#Calculus`, `#BinomialTheorem`, `#Trigonometry`, …).
 
 ## Posting routine
 
-- Same time every day: **7:30 pm IST**.
+- One reel a day at **15:40 IST**: approving in GoPost puts it in the next free slot
+  (`publisher/src/lib/domain/slots.ts`; was 7:30 pm before the format test).
 - Reply to every comment in the first hour. On hook reels, don't reveal the answer.
-- Fill in the scorecard 48 hours after each post (see `format-test.md`).
+- Fill in the reel's row in `learnings.md` at 48 h and 7 d (background and music included).
 
 ### Upload from the computer: Meta Business Suite (free, not Ads Manager)
 

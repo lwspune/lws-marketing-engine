@@ -3,16 +3,18 @@
 Every lesson from real numbers becomes a **testable idea**: what we saw, what we think it means, which
 reel tests it, and the result. Update the **Result** and **Status** after each reel's 48 h and 7 d
 numbers (Insights tab of the publisher app, or the reel's Done card). A rule moves into
-`lwspune-insta.md` (house settings) or `visual-reel-workflow.md` (how reels are made) only once it's
-**Confirmed**.
+`lwspune-insta.md` (house settings) or `lwspune-framework.md` (how reels are made, founder 2026-10-20) only once
+it's **Confirmed**.
 
 **Status:** 🧪 testing · ✅ confirmed (do it from now on) · ❌ rejected (don't) · 📌 fact (no test needed)
 
 Baseline (typical @lws.pune reel, 172 reels, 2026-10-15): **779 views · 1 save · 6.9 s watched**.
 Reach-test targets: typical reach **> 2,000** · watch **> 10 s** · at least one reel **> 10k**.
+**Typical recent maths reel** (what a framework reel has to beat, `lwspune-framework.md`): median of the 7 NDA maths
+reels posted 12–19 Oct, read 20 Oct: **1,271 views · 6.1 s watched · 3 saves · 0 comments · 0 shares**.
 
 **@pyqvault_ has its own log: `pyqvault-learnings.md`** (founder, 2026-10-20): L22, L27–L29 moved there with
-its reels' results, and L30–L37 live there. Both logs share one numbering, so the next new lesson in either is L38.
+its reels' results, and L30–L37 live there. Both logs share one numbering, so the next new lesson in either is **L41**.
 
 ---
 
@@ -44,17 +46,21 @@ its reels' results, and L30–L37 live there. Both logs share one numbering, so 
 | L25 | (2026-10-18) Our engine records reels in real time: 005's MP4 averages **29.2 fps** with gaps up to 0.4 s in the **first second** (the hook) and runs ~0.5 s behind its script. The Remotion remake renders every frame (30.0 fps, on time); founder judged it "far better". | A **smooth, frame-exact picture** and **real 3D** (a camera circling from frame 0) may hold viewers past the 5–7 s exit point (L3). | Reel 014 (first Remotion 3D reel, NDA 2026 (II) Q68): watch time and 3 s hold vs the maths reels 005–012. | 014: — | 🧪 testing |
 | L26 | **@codematrixvishal** (Indian creator, 211k followers in 8 months, 2026-10-18): **~3 reels a day** (789 reels since Feb 2026, 20/week now); typical reel went 6.7k (Feb) → 62k (May), now 25–35k. 28% of reels ≥ 3× their median. Look: black background, neon Manim lines, almost no explanation. | Extreme volume of short, loopable visuals works for reach in India (backs L2, L18, L24). Their followers come for the spectacle, not exam prep, so comments stay ~1. | Keep 1 a day; don't copy their volume until our own per-reel numbers say content quality isn't the limit. | — | 🧪 testing (L2) |
 
+| L38 | (Founder, 2026-10-20) **@lws.pune gets the reel framework** (`lwspune-framework.md`): vivid, the concept live, ask first, the question in front of a moving picture, rounded shapes, zooms on the picture, the picture's own sound, an orbit in 3D reels, short. | The package that @pyqvault_ is testing (its L28–L33, L37) should hold NDA viewers past the 5–7 s exit point (L3) too. | Every new reel from 015 on. Compare watch time first, then views, saves and comments at 48 h with the typical recent maths reel (1,271 views · 6.1 s · 3 saves). It's a package: it shows the framework's effect, not each point's. | 015: — | 🧪 testing |
+| L39 | (Founder, 2026-10-20) **Concepts first**: NDA maths concepts, a real PYQ named in the caption when one fits instead of a PYQ solved on screen; picked by topic score (F1, F21). | Concept reels travel further than PYQ walk-throughs (@mathsy.uk's fundamentals, L23), and good ideas that have no exact PYQ aren't lost. | Concept reels (009–013 "Why?", 015 on) vs the PYQ walk-throughs (001–008) on views and watch; and whether a higher topic score goes with more views (as L35 on @pyqvault_). | — | 🧪 testing |
+| L40 | (2026-10-20) **Music and background per reel**: @lws.pune has used lo-fi on most reels and white on all of them; the founder asked for a different music per reel (L17) and tracks both on @pyqvault_ (L22, L34). | Unknown which music style holds NDA viewers; white is the house look and stays unless L22 calls dark clearly. | Log both in the results table; compare median watch time per music style once each style has ≥ 3 posted reels. | — | 🧪 logging |
+
 ---
 
 ## Reel-by-reel results (fill at 48 h and 7 d)
 
-| Reel | Tests | Posted | Reach | Views | Watch | Saves | Shares | Comments |
-|---|---|---|---|---|---|---|---|---|
-| 008 quick, Q45 | L3 L4 L5 | 17 Oct 15:40 | 971 (6 h) | 1,240 (6 h) | 5.2 s | 3 | 0 | 1 |
-| 009 Why? #1, odd squares → Q20 | L11 L12 L13 L14 | | | | | | | |
-| 010 Why? #2, two dice → 26-II Q111 | L11 L12 L13 L14 | | | | | | | |
-| 011 Why? #3, |2A| ≠ 2|A| → 25-II Q44 | L11 L12 L13 L14 | | | | | | | |
-| 012 Why? #4, sin² + cos² = 1 → 25-I Q35 (bright music) | L11 L13 L14 | | | | | | | |
-| 013 Why? #5 (physics), spoon = concave mirror → 26-I GAT Q64 (calm music) | L20 L11 L13 L14 | | | | | | | |
-| 014 3D #1, cone at 45° → 26-II Q68 (Remotion, lo-fi) | L25 L3 | | | | | | | |
-| 015 f and f′ together: slope 0 at every peak and valley (NDA maths concept; NDA 2024 (I) Q91 in the caption; Remotion 2D, predict-first, zooms + own sound, cinematic; moved from @pyqvault_ 20 Oct) | L3 L13 | | | | | | | |
+| Reel | Background | Music | Tests | Posted | Reach | Views | Watch | Saves | Shares | Comments |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 008 quick, Q45 | white | lofi | L3 L4 L5 | 17 Oct 15:40 | 971 (6 h) | 1,240 (6 h) | 5.2 s | 3 | 0 | 1 |
+| 009 Why? #1, odd squares → Q20 | white | lofi | L11 L12 L13 L14 | | | | | | | |
+| 010 Why? #2, two dice → 26-II Q111 | white | lofi | L11 L12 L13 L14 | | | | | | | |
+| 011 Why? #3, |2A| ≠ 2|A| → 25-II Q44 | white | lofi | L11 L12 L13 L14 | | | | | | | |
+| 012 Why? #4, sin² + cos² = 1 → 25-I Q35 (bright music) | white | bright | L11 L13 L14 | | | | | | | |
+| 013 Why? #5 (physics), spoon = concave mirror → 26-I GAT Q64 (calm music) | white | calm | L20 L11 L13 L14 | | | | | | | |
+| 014 3D #1, cone at 45° → 26-II Q68 (Remotion, lo-fi) | white | lofi | L25 L3 | | | | | | | |
+| 015 f and f′ together: slope 0 at every peak and valley (NDA maths concept; NDA 2024 (I) Q91 in the caption; Remotion 2D, predict-first, zooms + own sound, cinematic; moved from @pyqvault_ 20 Oct; first reel of the framework) | white | cinematic | L38 L39 L40 L3 L13 | | | | | | | |

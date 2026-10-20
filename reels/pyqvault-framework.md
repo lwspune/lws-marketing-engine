@@ -4,6 +4,7 @@ How every @pyqvault_ reel is made, one numbered point at a time. The founder's s
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
 Account settings (captions, hashtags, posting times) live in `pyqvault-insta.md`; the numbers and lessons behind each
 point live in `pyqvault-learnings.md` (the L-numbers below).
+@lws.pune has its own framework, `lwspune-framework.md`: the same idea keeps the same F-number on both.
 
 **Status:** ✅ proven by our own numbers · 🧪 on test (the L-number measures it) · 📌 standing rule: the founder's call or
 a house standard (kept until our numbers say otherwise)

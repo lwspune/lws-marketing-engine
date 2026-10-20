@@ -4,6 +4,10 @@ How to make a reel like `nda-maths-005-area`: a real NDA PYQ solved by a **pictu
 itself** (a curve draws, an area fills with slices, a figure folds) on a soft-white board. No pen,
 no face, no voice. About 30 s. Everything else follows the house settings in `lwspune-insta.md`.
 
+**From 2026-10-20 new @lws.pune reels follow `lwspune-framework.md`** (Remotion, NDA maths concepts first, a PYQ in the
+caption when one fits). Where this runbook and the framework differ, the framework wins; the steps below still hold
+for the picture, the re-derivation and the checks.
+
 **Status:** on test (day 5 of `format-test.md`). Paper stays the house look until the scorecard says
 otherwise.
 
