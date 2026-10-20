@@ -51,7 +51,8 @@ test('the mix keeps the peak at or below −3 dB, limiting only around loud mome
   const n = 4 * SR, music = [new Float32Array(n), new Float32Array(n)];
   for (let i = 0; i < n; i++) music[0][i] = music[1][i] = 0.5 * Math.sin((2 * Math.PI * 220 * i) / SR);   // music peaks −6 dB
   const { left, right } = mixWithMusic(music, { duration: 4, hits: [{ kind: 'thunk', t: 2, gain: 1 }], beds: [] });
-  assert.ok(Math.max(peakOf(left), peakOf(right)) <= 10 ** (-3 / 20) + 1e-6);
+  // −3.3 dB, not −3: AAC encoding can overshoot the WAV's peak by ~0.1 dB (reel 014 remake measured −2.9 dB after a −3.0 mix)
+  assert.ok(Math.max(peakOf(left), peakOf(right)) <= 10 ** (-3.3 / 20) + 1e-6);
   for (const i of [1000, 5000, 20000, 3.5 * SR]) assert.ok(Math.abs(left[i] - music[0][i]) < 1e-6, `music changed at ${i / SR}s`);
 });
 

@@ -189,7 +189,9 @@ export function duckGain(score: Score): Float32Array {
   return g;
 }
 
-const LIMIT = 10 ** (-3 / 20);                                  // house limit: peak ≤ −3 dB (reels/tools/check-video.mjs)
+// House limit: the MP4's peak ≤ −3 dB (reels/tools/check-video.mjs). The WAV is limited 0.3 dB lower, because AAC
+// encoding can overshoot it by ~0.1 dB (the reel 014 remake: a −3.0 dB mix measured −2.9 dB in the MP4).
+const LIMIT = 10 ** (-3.3 / 20);
 
 /** Music (stereo) dipped under the effects, plus the effects, through a peak limiter at −3 dB. `scale` = deepest limiting. */
 export function mixWithMusic(music: Float32Array[], score: Score, seed = 7) {
