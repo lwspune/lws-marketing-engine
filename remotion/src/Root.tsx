@@ -16,6 +16,9 @@ import { PvPhysics007 } from './PvPhysics007.tsx';
 import { PvChem006 } from './PvChem006.tsx';
 import { PvChem005 } from './PvChem005.tsx';
 import { Reel015 } from './Reel015.tsx';
+import { Reel010 } from './Reel010.tsx';
+import { Reel011 } from './Reel011.tsx';
+import { Reel012 } from './Reel012.tsx';
 import { PvMaths003 } from './PvMaths003.tsx';
 import { DURATION } from './lib/reel005.ts';
 import { DURATION as DURATION_014 } from './lib/reel014.ts';
@@ -33,6 +36,9 @@ import { DURATION as DURATION_PP007 } from './lib/pp007.ts';
 import { DURATION as DURATION_PC006 } from './lib/pc006.ts';
 import { DURATION as DURATION_PC005 } from './lib/pc005.ts';
 import { DURATION as DURATION_015 } from './lib/reel015.ts';
+import { DURATION as DURATION_010 } from './lib/reel010.ts';
+import { DURATION as DURATION_011 } from './lib/reel011.ts';
+import { DURATION as DURATION_012 } from './lib/reel012.ts';
 import { DURATION as DURATION_PM003 } from './lib/pm003.ts';
 import { SoundMind001 } from './SoundMind001.tsx';
 import { DURATION as DURATION_SM001 } from './lib/sm001.ts';
@@ -78,6 +84,12 @@ export const Root = () => (
     <Still id="PvChem005Cover" component={PvChem005} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="Reel015" component={Reel015} durationInFrames={Math.round(DURATION_015 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="Reel015Cover" component={Reel015} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="Reel010" component={Reel010} durationInFrames={Math.round(DURATION_010 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="Reel010Cover" component={Reel010} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="Reel011" component={Reel011} durationInFrames={Math.round(DURATION_011 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="Reel011Cover" component={Reel011} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="Reel012" component={Reel012} durationInFrames={Math.round(DURATION_012 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="Reel012Cover" component={Reel012} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="PvMaths003" component={PvMaths003} durationInFrames={Math.round(DURATION_PM003 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="PvMaths003Cover" component={PvMaths003} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="SoundMind001" component={SoundMind001} durationInFrames={Math.round(DURATION_SM001 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />

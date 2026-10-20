@@ -58,9 +58,9 @@ its reels' results, and L30–L37 live there. Both logs share one numbering, so 
 |---|---|---|---|---|---|---|---|---|---|---|
 | 008 quick, Q45 | white | lofi | L3 L4 L5 | 17 Oct 15:40 | 971 (6 h) | 1,240 (6 h) | 5.2 s | 3 | 0 | 1 |
 | 009 Why? #1, odd squares → Q20 | white | lofi | L11 L12 L13 L14 | | | | | | | |
-| 010 Why? #2, two dice → 26-II Q111 | white | lofi | L11 L12 L13 L14 | | | | | | | |
-| 011 Why? #3, |2A| ≠ 2|A| → 25-II Q44 | white | lofi | L11 L12 L13 L14 | | | | | | | |
-| 012 Why? #4, sin² + cos² = 1 → 25-I Q35 (bright music) | white | bright | L11 L13 L14 | | | | | | | |
+| 010 Why? #2, two dice: which total comes up most? **remade 20 Oct** to the framework (Remotion 2D, predict-first, 360 real rolls racing in a histogram, 22 s; the engine version was never posted) | white | bright | L38 L39 L40 | 20 Oct ~16:00 (posted by hand, right after the remake; slot was 15:40) | | | | | | |
+| 011 Why? #3, double a 2×2 matrix: det ×4 (area between the rows) **remade 20 Oct** (Remotion 2D, predict-first, area = 5k² graph, 22 s; NDA 2025 (II) Q44 in the caption) | white | drive | L38 L39 L40 | | | | | | | |
+| 012 Why? #4, the angle turns: sin²θ + cos²θ stays 1 **remade 20 Oct** (Remotion 2D, predict-first, circle + stacked bar + waves, 22 s; NDA 2025 (I) Q35 in the caption) | white | lofi | L38 L39 L40 | | | | | | | |
 | 013 Why? #5 (physics), spoon = concave mirror → 26-I GAT Q64 (calm music) | white | calm | L20 L11 L13 L14 | | | | | | | |
-| 014 3D #1, cone at 45° → 26-II Q68 (Remotion, lo-fi) | white | lofi | L25 L3 | | | | | | | |
+| 014 3D #1, θ turns, the angle with z stays 45° **remade 20 Oct** (Remotion 3D, predict-first, opening orbit F22, live θ / angle strip, 22 s; NDA 2026 (II) Q68 in the caption) | white | calm | L38 L39 L40 L25 | | | | | | | |
 | 015 f and f′ together: slope 0 at every peak and valley (NDA maths concept; NDA 2024 (I) Q91 in the caption; Remotion 2D, predict-first, zooms + own sound, cinematic; moved from @pyqvault_ 20 Oct; first reel of the framework) | white | cinematic | L38 L39 L40 L3 L13 | | | | | | | |

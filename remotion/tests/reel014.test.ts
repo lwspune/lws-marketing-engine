@@ -1,95 +1,87 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import {
-  DURATION, ANSWER_AT, END_AT, BAND, CAPTIONS, thetaAt, coneFraction, arrowGrow, tip, cameraAt, project, labels, working,
+  DURATION, ANSWER_AT, END_AT, BAND, CAPTIONS, MUSIC_HITS, OPTIONS, ANSWER, thetaAt, coneFraction, tip, angleWithZ, cameraAt,
+  azimuthAt, ORBIT_END, project, labels, triangleAlpha, CAMERA, SOUND, CLICKS,
 } from '../src/lib/reel014.ts';
+import { tween } from '../src/lib/motion.ts';
+import { whooshesFor } from '../src/lib/sfx.ts';
 
-// Reel 014, NDA 2026 (II) Q68: r = (cos θ) î + (sin θ) ĵ + k̂ makes π/4 with the z-axis for every θ.
-const PI = Math.PI;
+// @lws.pune · reel 014 remade (predict-first): r = (cos θ, sin θ, 1), θ keeps turning: its angle with the z-axis?
+// |r| = √2 and its z-part is 1, so cos γ = 1/√2: γ = 45° for every θ; the arrow sweeps a cone.
 const near = (a: number, b: number, eps = 1e-9) => assert.ok(Math.abs(a - b) < eps, `${a} ≉ ${b}`);
-const times = (step = 1 / 30) => Array.from({ length: Math.round(END_AT / step) }, (_, i) => i * step);
+const frames = Array.from({ length: Math.round(DURATION * 30) }, (_, i) => i / 30);
+const DEG = Math.PI / 180;
 
-test('tip: |r| = √2 and the angle with the z-axis is π/4 for every θ (the answer, re-derived)', () => {
-  for (const th of [0, 0.7, 2, PI, 5.5]) {
-    const [x, y, z] = tip(th), len = Math.hypot(x, y, z);
-    near(len, Math.SQRT2); near(Math.acos(z / len), PI / 4);
+test('the answer, re-derived: |r| = √2 and the angle with the z-axis is 45° on every frame', () => {
+  for (const t of frames) {
+    const r = tip(thetaAt(t));
+    near(Math.hypot(...r), Math.SQRT2, 1e-12);
+    near(Math.acos(r[2] / Math.hypot(...r)) / DEG, 45, 1e-9);
+    near(angleWithZ(t), 45, 1e-9);
+  }
+  assert.match(OPTIONS[ANSWER], /45°/);
+  for (const o of OPTIONS) assert.ok(o.length <= 10, `chip too long: "${o}"`);
+});
+
+test('θ turns on every frame, never jumps, and the first turn paints the whole cone early', () => {
+  for (let i = 1; i < frames.length; i++) {
+    const d = thetaAt(frames[i]) - thetaAt(frames[i - 1]);
+    assert.ok(d > 0 && d < 0.25, `θ step ${d.toFixed(3)} at ${frames[i].toFixed(2)}`);
+  }
+  near(coneFraction(2.5), 1);
+  assert.ok(coneFraction(1) > 0.2 && coneFraction(1) < 0.8);
+});
+
+test('one orbit shot in the opening: 60–120°, smooth, back at the explaining view before the triangle (F22)', () => {
+  const arc = Math.abs(azimuthAt(0) - azimuthAt(ORBIT_END)) / DEG;
+  assert.ok(arc >= 60 && arc <= 120, `orbit ${arc.toFixed(0)}°`);
+  assert.ok(ORBIT_END <= frames.find(t => triangleAlpha(t) > 0)! && ORBIT_END < ANSWER_AT);
+  for (let i = 1; i < frames.length; i++) assert.ok(Math.abs(azimuthAt(frames[i]) - azimuthAt(frames[i - 1])) < 3 * DEG, 'the camera jumps');
+});
+
+test('while the triangle is shown, explained and answered, it is side-on to the camera (never edge-on)', () => {
+  for (const t of frames.filter(t => t >= 2.6 && t <= 12.5)) {
+    let d = ((thetaAt(t) - azimuthAt(t)) / DEG) % 360; if (d < 0) d += 360;
+    assert.ok((d >= 55 && d <= 125) || (d >= 235 && d <= 305), `the triangle is ${d.toFixed(0)}° from the camera at ${t.toFixed(2)} s`);
   }
 });
 
-test('arrow grows in from 3.2 s; θ holds at 0 until the sweep starts at 7.2 s', () => {
-  assert.equal(arrowGrow(3.1), 0); assert.equal(arrowGrow(4.5), 1);
-  assert.equal(thetaAt(0), 0); assert.equal(thetaAt(7.2), 0);
-});
-
-test('the first sweep paints the whole cone by 12 s, then θ keeps turning from 17 s', () => {
-  assert.equal(coneFraction(7.2), 0);
-  assert.ok(coneFraction(9.6) > 0.3 && coneFraction(9.6) < 0.7);
-  assert.equal(coneFraction(12.0), 1);
-  near(thetaAt(14), thetaAt(16.9));           // frozen while the triangle is explained
-  near(thetaAt(21.4) - thetaAt(16.9), 2 * PI + PI / 3); // one more full turn (and 60°) under the counter
-});
-
-test('θ never jumps: at most 0.25 rad between frames', () => {
-  const ts = times();
-  for (let i = 1; i < ts.length; i++) assert.ok(Math.abs(thetaAt(ts[i]) - thetaAt(ts[i - 1])) < 0.25, `jump at ${ts[i]}`);
-});
-
-test('while the triangle is explained, answered and trapped (12–17 s, 21.8–28.5 s) it faces the camera', () => {
-  const ts = [...times(0.1).filter(t => (t >= 12.2 && t <= 17) || t >= 21.8)];
-  for (const t of ts) {
-    const [px, py] = cameraAt(t).position, th = thetaAt(t);
-    // The triangle's plane holds the z-axis and the direction θ; it faces the camera when they are ~90° apart.
-    const apart = Math.abs(Math.sin(Math.atan2(py, px) - th));
-    assert.ok(apart > 0.85, `edge-on at ${t.toFixed(1)} s (|sin| = ${apart.toFixed(2)})`);
+test('every visible label and the whole figure stay inside the 3D band on every frame', () => {
+  for (const t of frames.filter((_, i) => i % 3 === 0)) {
+    for (const l of labels(t).filter(l => l.alpha > 0)) {
+      const p = project(l.at, cameraAt(t));
+      assert.ok(p.x > 60 && p.x < BAND.width - 80 && p.y > BAND.top + 30 && p.y < BAND.top + BAND.height - 30, `${l.id} at ${t.toFixed(2)} s`);
+    }
+    for (const q of [[1.4, 0, 0], [0, 1.4, 0], [0, 0, 1.5], [1, 0, 1], [0, 1, 1], [-1, 0, 1], [0, -1, 1]] as [number, number, number][]) {
+      const p = project(q, cameraAt(t));
+      assert.ok(p.x > 10 && p.x < BAND.width - 10 && p.y > BAND.top + 10 && p.y < BAND.top + BAND.height - 10, `${q} at ${t.toFixed(2)} s`);
+    }
   }
 });
 
-test('camera circles at a steady pace from frame 0 (something always moving)', () => {
-  const a = cameraAt(0).position, b = cameraAt(1).position, c = cameraAt(20).position;
-  assert.ok(Math.hypot(a[0] - b[0], a[1] - b[1]) > 0.05, 'moving at 0 s');
-  near(Math.hypot(a[0], a[1]), Math.hypot(c[0], c[1]), 1e-9); // same distance from the z-axis
-  near(a[2], c[2]);                                              // same height
-});
-
-test('project: the target lands in the middle of the 3D band', () => {
-  const p = project(cameraAt(5).target, cameraAt(5));
-  near(p.x, BAND.width / 2, 1e-6); near(p.y, BAND.top + BAND.height / 2, 1e-6);
-});
-
-test('every visible 3D label stays inside the band, clear of its edges, on every frame', () => {
-  for (const t of times()) for (const l of labels(t)) {
-    if (l.alpha <= 0) continue;
-    const p = project(l.at, cameraAt(t));
-    assert.ok(p.x > 60 && p.x < BAND.width - 120, `${l.id} x=${p.x.toFixed(0)} at ${t.toFixed(2)} s`);
-    assert.ok(p.y > BAND.top + 30 && p.y < BAND.top + BAND.height - 30, `${l.id} y=${p.y.toFixed(0)} at ${t.toFixed(2)} s`);
+test('the camera zooms in at least twice and out at least once, smoothly, with a punch-in landing on the answer', () => {
+  let z = CAMERA.start[0], ins = 0, outs = 0;
+  for (const k of CAMERA.keys) { if (k.to[0] > z) ins++; else if (k.to[0] < z) outs++; z = k.to[0]; }
+  assert.ok(ins >= 2 && outs >= 1, `${ins} in, ${outs} out`);
+  for (let i = 1; i < frames.length; i++) {
+    const a = tween(frames[i - 1], CAMERA.start, CAMERA.keys), b = tween(frames[i], CAMERA.start, CAMERA.keys);
+    assert.ok(Math.abs(b[0] - a[0]) < 0.1, `zoom jumps at ${frames[i].toFixed(2)}`);
   }
+  assert.ok(CAMERA.keys.some(k => k.dur <= 0.5 && k.to[0] > 1.2 && Math.abs(k.t + k.dur - ANSWER_AT) < 0.05), 'no punch-in on the answer');
 });
 
-test('the whole figure (axes ends, circle at height 1) stays inside the band', () => {
-  const pts: [number, number, number][] = [[0, 0, 0], [0, 0, 1.45], [1.35, 0, 0], [0, 1.35, 0], [-1, 0, 1], [0, -1, 1], [1, 0, 1], [0, 1, 1]];
-  for (const t of times(0.25)) for (const q of pts) {
-    const p = project(q, cameraAt(t));
-    assert.ok(p.x > 20 && p.x < BAND.width - 20 && p.y > BAND.top + 10 && p.y < BAND.top + BAND.height - 10, `${q} → ${p.x.toFixed(0)},${p.y.toFixed(0)} at ${t}`);
-  }
+test('sound from the picture: a click each time θ passes a 30° mark, a thunk on the answer, whooshes on fast zooms', () => {
+  for (const c of CLICKS) { const d = thetaAt(c.t) / DEG; assert.ok(Math.abs(d / 30 - Math.round(d / 30)) < 0.05, `click at ${d.toFixed(2)}°`); }
+  for (let s = 0; s < END_AT; s++) assert.ok(CLICKS.filter(c => c.t >= s && c.t < s + 1).length <= 6, `too many clicks in second ${s}`);
+  assert.ok(SOUND.hits.some(h => h.kind === 'thunk' && Math.abs(h.t - ANSWER_AT) < 1e-9));
+  for (const w of whooshesFor(CAMERA.start, CAMERA.keys)) assert.ok(SOUND.hits.some(s => s.kind === w.kind && Math.abs(s.t - w.t) < 1e-9));
+  for (const h of SOUND.hits) assert.ok(h.t >= 0 && h.t < DURATION - 0.5);
+  near(SOUND.duration, DURATION);
 });
 
-test('working line: |r| first, then cos γ, then the live θ counter, then the trap', () => {
-  assert.equal(working(11).kind, 'none');
-  assert.equal(working(13).kind, 'length');
-  assert.equal(working(15.5).kind, 'cos');
-  const c = working(19);
-  assert.equal(c.kind, 'counter'); assert.ok(c.deg! >= 0 && c.deg! < 360);
-  assert.equal(working(26).kind, 'trap');
-});
-
-test('timeline: answer at 21.8 s, captions run without gaps up to the end card', () => {
-  assert.equal(ANSWER_AT, 21.8); assert.equal(DURATION, 31.5);
-  assert.equal(CAPTIONS[0].t0, 0); assert.equal(CAPTIONS.at(-1)!.t1, END_AT);
-  for (let i = 1; i < CAPTIONS.length; i++) assert.equal(CAPTIONS[i].t0, CAPTIONS[i - 1].t1);
-});
-
-test('music spec matches the timeline (length and chime on the answer)', () => {
-  const spec = JSON.parse(readFileSync(new URL('../music/nda-maths-014-cone.json', import.meta.url), 'utf8'));
-  assert.equal(spec.duration, DURATION); assert.equal(spec.music.chime, ANSWER_AT);
+test('short (≤ 25 s), labels ≤ 7 words, a music hit on the answer', () => {
+  assert.ok(DURATION <= 25 && END_AT < DURATION);
+  for (const c of CAPTIONS) assert.ok(c.text.split(/\s+/).filter(w => /\w/.test(w)).length <= 7, `too long: "${c.text}"`);
+  assert.ok(MUSIC_HITS.includes(ANSWER_AT));
 });

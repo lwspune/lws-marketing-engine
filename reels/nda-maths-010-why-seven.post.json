@@ -2,15 +2,15 @@
   "slug": "nda-maths-010-why-seven",
   "project": "pyq-vault",
   "kind": "reel",
-  "title": "Why? #2: why 7 comes up most with two dice → NDA 2026 (II) Q111 (44 s, continuous motion)",
+  "title": "Why? #2 remade: roll two dice, which total comes up most? (predict-first, Remotion, bright, 22 s)",
   "video": "nda-maths-010-why-seven.mp4",
   "cover": "nda-maths-010-why-seven-cover.png",
   "captions": {
-    "instagram": "Why? #2 · Why does 7 come up most with two dice? 🎲\n\nTwo dice give 36 equally likely outcomes. Write the sum in each box of the 6×6 grid and every sum sits on one diagonal. 7's diagonal is the longest: 6 ways out of 36. Every other sum has fewer.\n\nNDA 2026 (II) asked it (Maths Q111): P(sum is neither 5 nor 7) = ?\nSum 5 has 4 ways, sum 7 has 6 ways → 36 − 4 − 6 = 26 left → 26/36 = 13/18 → (c).\nTrap: (d) 5/6 only removes the 7s.\n\nNDA has asked two-dice sums 3 times in 3 years. Save this 📌 Send it to a friend preparing for NDA. Follow for Why? #3.\nPractise every Probability PYQ free → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Probability #LWSPune #MathVisualization",
-    "facebook": "Why? #2 · Why does 7 come up most with two dice? 🎲\n\nTwo dice give 36 equally likely outcomes. Write the sum in each box of the 6×6 grid and every sum sits on one diagonal. 7's diagonal is the longest: 6 ways out of 36.\n\nNDA 2026 (II) asked it (Maths Q111): P(sum is neither 5 nor 7) = (36 − 4 − 6)/36 = 26/36 = 13/18 → (c).\n\nPractise NDA Probability PYQs free: https://www.pyqvault.com/questions/nda/mathematics/probability\n\n#NDA #NDAMaths #NDA2027",
+    "instagram": "NDA Maths · Probability\nRoll two dice. Which total comes up most? A 7 · B 12 · C equal\nComment your guess before you watch 👇\n\nWhy? #2. Two dice can land 36 equally likely ways. Write each total in the 6×6 grid and every total sits on one diagonal. 7's diagonal is the longest: 6 ways out of 36 → A. 12 has just one (6 + 6).\nIn the reel: 360 real rolls, and 7 pulls ahead.\n\nNDA 2026 (II) asked it (Maths Q111): P(total is neither 5 nor 7) = ?\n5 has 4 ways, 7 has 6 ways → 36 − 4 − 6 = 26 → 26/36 = 13/18 → (c). Trap: (d) 5/6 only removes the 7s.\n\nSave this 📌 Send it to a friend preparing for NDA. Follow for more.\nPractise every Probability PYQ free → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Probability #LWSPune #MathVisualization",
+    "facebook": "NDA Maths · Probability\nRoll two dice. Which total comes up most? A 7 · B 12 · C equal 👇\n\nTwo dice land 36 equally likely ways; 7 has the most (6 of 36) → A. NDA 2026 (II) Maths Q111: P(neither 5 nor 7) = (36 − 4 − 6)/36 = 13/18 → (c).\n\nPractise NDA Probability PYQs free: https://www.pyqvault.com\n\n#NDA #NDAMaths #Probability",
     "youtube": {
-      "title": "Why does 7 come up most with two dice? (NDA asked it 3 times) #shorts",
-      "description": "Why? #2. 36 outcomes in a 6×6 grid: every sum is one diagonal, and 7's is the longest (6 ways). NDA 2026 (II) Maths Q111: P(sum neither 5 nor 7) = 26/36 = 13/18 (c).\n\nPractise NDA Maths PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #NDA2027 #Shorts"
+      "title": "Roll two dice: which total comes up most? (NDA asked it 3 times) #shorts",
+      "description": "360 real rolls of two dice: 7 pulls ahead. Why: 36 equally likely outcomes, and 7 has the most (6 of 36). NDA 2026 (II) Maths Q111: P(total neither 5 nor 7) = 26/36 = 13/18 (c).\n\nPractise NDA Maths PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #NDA2027 #Shorts"
     }
   }
 }

@@ -2,15 +2,15 @@
   "slug": "nda-maths-012-why-sin-cos",
   "project": "pyq-vault",
   "kind": "reel",
-  "title": "Why? #4: why sin²θ + cos²θ = 1 (unit circle + stacked bar) → NDA 2025 (I) Q35 (48 s, bright music)",
+  "title": "Why? #4 remade: the angle keeps turning, sin²θ + cos²θ is…? (predict-first, Remotion, lofi, 22 s)",
   "video": "nda-maths-012-why-sin-cos.mp4",
   "cover": "nda-maths-012-why-sin-cos-cover.png",
   "captions": {
-    "instagram": "Why? #4 · Why is sin²θ + cos²θ always 1? ⭕\n\nPut a point on a circle of radius 1. Its height is sin θ, its width is cos θ, and Pythagoras on that triangle gives sin²θ + cos²θ = 1.\nNow spin the point: sin²θ and cos²θ trade places, one grows while the other shrinks, and the total never changes.\n\nNDA 2025 (I) asked it (Maths Q35): p = sin α − sin(α − 90°). Maximum value of p?\nsin(α − 90°) = −cos α, so p = sin α + cos α. They can't both be 1, so the best is when they're equal: 1/√2 + 1/√2 = √2 → (b).\nTrap: (d) 2 needs sin and cos to be 1 at the same time.\n\nSave this 📌 Send it to a friend preparing for NDA. Follow for Why? #5.\nPractise every Trigonometry PYQ free → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Trigonometry #LWSPune #MathVisualization",
-    "facebook": "Why? #4 · Why is sin²θ + cos²θ always 1? ⭕\n\nA point on a circle of radius 1: height sin θ, width cos θ, Pythagoras gives sin²θ + cos²θ = 1. Spin the point: one grows as the other shrinks, the total never changes.\n\nNDA 2025 (I) Maths Q35: max of p = sin α − sin(α − 90°) = sin α + cos α is √2 (b): they can't both be 1.\n\nPractise NDA Trigonometry PYQs free: https://www.pyqvault.com/questions/nda/mathematics/trigonometric-identities\n\n#NDA #NDAMaths #NDA2027",
+    "instagram": "NDA Maths · Trigonometry\nThe angle keeps turning. sin²θ + cos²θ is… A 1 · B θ · C varies\nComment your guess before you watch 👇\n\nWhy? #4. Put a point on a circle of radius 1. Its height is sin θ, its width is cos θ, and Pythagoras on that triangle gives sin²θ + cos²θ = 1 → A.\nSpin the point: sin²θ and cos²θ trade places, one grows while the other shrinks, and the total never moves.\n\nNDA 2025 (I) asked it (Maths Q35): p = sin α − sin(α − 90°). Maximum value of p?\nsin(α − 90°) = −cos α, so p = sin α + cos α. Square it: p² = sin²α + cos²α + 2 sin α cos α = 1 + sin 2α ≤ 2 → p ≤ √2 → (b).\nTrap: (d) 2 needs sin and cos to be 1 at the same time.\n\nSave this 📌 Send it to a friend preparing for NDA. Follow for more.\nPractise every Trigonometry PYQ free → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Trigonometry #LWSPune #MathVisualization",
+    "facebook": "NDA Maths · Trigonometry\nThe angle keeps turning. sin²θ + cos²θ is… A 1 · B θ · C varies 👇\n\nOn a circle of radius 1, height = sin θ, width = cos θ, so Pythagoras gives sin²θ + cos²θ = 1 → A, at every angle. NDA 2025 (I) Maths Q35: max of sin α + cos α: p² = 1 + sin 2α ≤ 2 → √2 (b).\n\nPractise NDA Trigonometry PYQs free: https://www.pyqvault.com\n\n#NDA #NDAMaths #Trigonometry",
     "youtube": {
-      "title": "Why is sin²θ + cos²θ always 1? (NDA 2025 asked it) #shorts",
-      "description": "Why? #4. A point on a unit circle: height sin θ, width cos θ, so sin²θ + cos²θ = 1. Spin it: one grows as the other shrinks, the total never changes. NDA 2025 (I) Maths Q35: max of sin α + cos α is √2 (b).\n\nPractise NDA Maths PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #NDA2027 #Shorts"
+      "title": "The angle keeps turning: what is sin²θ + cos²θ? #shorts",
+      "description": "A point on a circle of radius 1: height sin θ, width cos θ, so Pythagoras gives sin²θ + cos²θ = 1 at every angle. NDA 2025 (I) Maths Q35: max of sin α + cos α = √2, since p² = 1 + sin 2α ≤ 2 (b).\n\nPractise NDA Maths PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #NDA2027 #Shorts"
     }
   }
 }

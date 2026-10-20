@@ -13,6 +13,10 @@ const REELS: Record<string, { lib: string; file: string }> = {
   pc006: { lib: '../src/lib/pc006.ts', file: 'public/pv-chem-006-flame' },
   pc005: { lib: '../src/lib/pc005.ts', file: 'public/pv-chem-005-pvt' },
   '015': { lib: '../src/lib/reel015.ts', file: 'public/nda-maths-015-slope-graph' },
+  '010': { lib: '../src/lib/reel010.ts', file: 'public/nda-maths-010-why-seven' },
+  '011': { lib: '../src/lib/reel011.ts', file: 'public/nda-maths-011-why-det-area' },
+  '012': { lib: '../src/lib/reel012.ts', file: 'public/nda-maths-012-why-sin-cos' },
+  '014': { lib: '../src/lib/reel014.ts', file: 'public/nda-maths-014-cone' },
 };
 const id = process.argv[2], reel = REELS[id];
 if (!reel) throw new Error(`usage: node tools/mix.ts <${Object.keys(REELS).join(' | ')}>`);

@@ -1,4 +1,9 @@
 {
-  "duration": 31.5,
-  "music": { "chime": 21.8 }
+  "duration": 22,
+  "music": {
+    "style": "calm",
+    "hits": [
+      5
+    ]
+  }
 }

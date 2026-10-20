@@ -1,21 +1,23 @@
-// Reel 014, NDA 2026 (II) Q68: r = (cos θ) î + (sin θ) ĵ + k̂ makes π/4 with the z-axis for every θ.
-// The first 3D reel: a real three.js scene (the arrow sweeping its cone, the "up 1, across 1" triangle)
-// under a camera that circles from frame 0, with the question card, captions and working as HTML on top.
-import React, { useMemo } from 'react';
+// @lws.pune · reel 014 remade (predict-first): r = (cos θ, sin θ, 1), θ keeps turning: its angle with the z-axis?
+// White board, real three.js 3D. An orbit shot opens (F22) while the arrow already sweeps its cone; the "up 1, across 1"
+// triangle and γ = 45° appear side-on; a fixed strip shows θ racing while the angle (computed from r) stays 45.0°. Then the
+// 90° trap: that's only the floor shadow. Timeline and rules: lib/reel014.ts.
+import { useMemo } from 'react';
 import { AbsoluteFill, Html5Audio, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
 import { ThreeCanvas } from '@remotion/three';
 import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { WHITE as P, SOFT_UI } from './lib/palette.ts';
+import { WHITE as P } from './lib/palette.ts';
 import { prog, captionAt } from './lib/motion.ts';
 import {
-  BAND, ANSWER_AT, END_AT, CAPTIONS, thetaAt, coneFraction, arrowGrow, tip, cameraAt, project, labels, working,
-  spokeAlpha, triangleAlpha, arcAlpha, trapAlpha, type V3,
+  BAND, ANSWER_AT, END_AT, CAPTIONS, OPTIONS, ANSWER, thetaAt, coneFraction, arrowGrow, tip, cameraAt, project, labels,
+  triangleAlpha, arcAlpha, trapAlpha, angleWithZ, type V3,
 } from './lib/reel014.ts';
-import { Board, Card, Caption, MathRow, C, Chips, EndCard, hand, useFonts, type EndLine } from './board.tsx';
+import { Board, Caption, EndCard, PredictHeader, Theme, hand, useFonts, type EndLine } from './board.tsx';
+import { softEdges } from './shapes.tsx';
 
 const PI = Math.PI;
-const COVER = { t: 12.1, text: 'θ changes.\nThe angle doesn’t.', y: 1440, size: 76 };
+const COVER = { t: 1.6, text: 'θ turns. The angle…?', y: 1590, size: 62 };   // mid-orbit, no triangle yet: no spoiler
 const v = (p: V3) => new THREE.Vector3(...p);
 
 function CameraRig({ t }: { t: number }) {
@@ -81,7 +83,7 @@ function Fan({ points, color, opacity }: { points: V3[]; color: string; opacity:
 
 function Scene({ t }: { t: number }) {
   const th = thetaAt(t), g = arrowGrow(t), frac = coneFraction(t), [c, s] = [Math.cos(th), Math.sin(th)], P1 = tip(th);
-  const tri = triangleAlpha(t), arc = arcAlpha(t), trap = trapAlpha(t), spoke = spokeAlpha(t);
+  const tri = triangleAlpha(t), arc = arcAlpha(t), trap = trapAlpha(t), spoke = Math.min(1, t / 1.0);
   // The cone the arrow has swept (side surface), its rim at height 1, and ghost arrows every 30° it has passed.
   const rim: V3[] = [], swept = frac * 2 * PI;
   for (let i = 0; i <= Math.ceil(64 * frac); i++) { const a = Math.min(swept, (i / 64) * 2 * PI); rim.push([Math.cos(a), Math.sin(a), 1]); }
@@ -134,43 +136,14 @@ function Labels({ t }: { t: number }) {
   })}</>;
 }
 
-const Vec = ({ children }: { children: React.ReactNode }) => (
-  <span style={{ position: 'relative', display: 'inline-block' }}>{children}
-    <span style={{ position: 'absolute', left: '50%', top: '-0.62em', transform: 'translateX(-50%)', fontSize: '0.62em' }}>→</span></span>
-);
-function QuestionCard({ t }: { t: number }) {
+// The fixed strip (F9: labels stay still): θ races while the angle with the z-axis, computed from r, stays 45.0°.
+function Readout({ t }: { t: number }) {
+  const deg = Math.round(((thetaAt(t) * 180) / PI) % 360), won = prog(t, ANSWER_AT, 0.4) > 0, num = { fontVariantNumeric: 'tabular-nums' as const };
   return (
-    <>
-      <Card x={110} y={460} w={860} h={380} />
-      <div style={{ position: 'absolute', left: 0, width: 1080, top: 515 - 28, textAlign: 'center', font: `600 34px ${SOFT_UI}`, color: P.muted, whiteSpace: 'pre' }}>
-        NDA 2026 (II)  ·  Maths  ·  Q68
-      </div>
-      <MathRow y={612} size={54}><C color={P.blue}><Vec>r</Vec></C> = (cos θ) î + (sin θ) ĵ + k̂</MathRow>
-      <MathRow y={684} size={42}>angle with the +z-axis = ?</MathRow>
-      <Chips t={t} labels={['(a) π/2', '(b) π/3', '(c) π/4', '(d) π/6']} answer={2} at={ANSWER_AT} top={726} />
-    </>
-  );
-}
-
-function Working({ t }: { t: number }) {
-  const w = working(t), Y = 1556;
-  const a = (t0: number, t1: number) => prog(t, t0, 0.4) * (1 - prog(t, t1 - 0.3, 0.3));
-  return (
-    <>
-      <MathRow y={Y} size={50} opacity={w.kind === 'length' ? a(12.6, 14.9) : 0}>
-        |<Vec>r</Vec>| = √(cos²θ + sin²θ + 1) = <C color={P.green}>√2</C>
-      </MathRow>
-      <MathRow y={Y} size={52} opacity={w.kind === 'cos' ? a(14.9, 17.0) : 0}>
-        cos γ = 1 / √2   ⇒   γ = <C color={P.green}>45°</C>
-      </MathRow>
-      <MathRow y={Y} size={56} opacity={w.kind === 'counter' ? prog(t, 17.0, 0.4) : 0}>
-        θ = <span style={{ display: 'inline-block', width: 120, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>{w.deg ?? 0}°</span>
-        <span style={{ display: 'inline-block', width: 90 }} />γ = <C color={P.green}>45°</C>
-      </MathRow>
-      <MathRow y={Y} size={46} opacity={w.kind === 'trap' ? prog(t, 25.0, 0.4) : 0}>
-        <C color={P.muted}>|<Vec>r</Vec>| = √2, not 2  ·  shadow ⟂ z-axis</C>
-      </MathRow>
-    </>
+    <div style={{ position: 'absolute', left: 0, width: 1080, top: 486, textAlign: 'center', ...hand(48), color: P.ink, opacity: prog(t, 0.2, 0.4), whiteSpace: 'pre' }}>
+      <span style={{ color: P.blue }}>θ = </span><span style={{ color: P.blue, display: 'inline-block', width: 110, textAlign: 'right', ...num }}>{deg}°</span>
+      {'      '}angle with z = <span style={{ color: won ? P.green : P.ink, ...num }}>{angleWithZ(t).toFixed(1)}°</span>
+    </div>
   );
 }
 
@@ -185,21 +158,24 @@ export function Reel014({ cover = false }: { cover?: boolean }) {
   const frame = useCurrentFrame(), { fps } = useVideoConfig();
   const t = cover ? COVER.t : frame / fps, cap = cover ? null : captionAt(CAPTIONS, t);
   return (
-    <AbsoluteFill>
-      <Board watermark={false} />
-      <QuestionCard t={t} />
-      <div style={{ position: 'absolute', left: 0, top: BAND.top, width: BAND.width, height: BAND.height }}>
-        <ThreeCanvas width={BAND.width} height={BAND.height} shadows gl={{ antialias: true, alpha: true }}>
-          <Scene t={t} />
-        </ThreeCanvas>
-      </div>
-      <Labels t={t} />
-      {!cover && <Working t={t} />}
-      {cover
-        ? <Caption text={COVER.text} alpha={1} age={0} size={COVER.size} y={COVER.y} rise={false} />
-        : cap && <Caption text={cap.caption.text} alpha={cap.alpha} age={cap.age} size={cap.caption.size} y={cap.caption.y} rise={cap.caption.t0 > 0} />}
-      {!cover && <EndCard t={t} at={END_AT} lines={END} />}
-      {!cover && <Html5Audio src={staticFile('nda-maths-014-cone.wav')} />}
-    </AbsoluteFill>
+    <Theme value={P}>
+      <AbsoluteFill>
+        <Board watermark={false} />
+        <PredictHeader t={t} label={'NDA MATHS  ·  3D VECTORS'} lines={['r = (cos θ, sin θ, 1). θ keeps turning.', 'Its angle with the z-axis…?']}
+          options={OPTIONS} answer={ANSWER} at={ANSWER_AT} size={50} />
+        <Readout t={t} />
+        <div style={{ position: 'absolute', left: 0, top: BAND.top, width: BAND.width, height: BAND.height, ...softEdges({ top: 0.05, bottom: 0.06, left: 0.03, right: 0.03 }) }}>
+          <ThreeCanvas width={BAND.width} height={BAND.height} shadows gl={{ antialias: true, alpha: true }}>
+            <Scene t={t} />
+          </ThreeCanvas>
+        </div>
+        <Labels t={t} />
+        {cover
+          ? <Caption text={COVER.text} alpha={1} age={0} size={COVER.size} y={COVER.y} rise={false} />
+          : cap && <Caption text={cap.caption.text} alpha={cap.alpha} age={cap.age} size={cap.caption.size ?? 50} y={cap.caption.y ?? 1580} />}
+        {!cover && <EndCard t={t} at={END_AT} lines={END} />}
+        {!cover && <Html5Audio src={staticFile('nda-maths-014-cone-mix.wav')} />}
+      </AbsoluteFill>
+    </Theme>
   );
 }

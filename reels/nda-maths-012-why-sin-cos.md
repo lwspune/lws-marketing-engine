@@ -1,44 +1,33 @@
-# Reel 012 — Why? #4: why is sin²θ + cos²θ always 1?
+# Reel 012, Why? #4 (remade 2026-10-20): the angle keeps turning, sin²θ + cos²θ is…?
 
-**Handle:** @lws.pune · **Format:** "Why?" visual-intuition reel on the white board with edge vignette, in-frame
-text (no filming, no face, no voice) · **Music:** the **"bright"** loop (Dmaj7 – A – Bm7 – G/B, 100 BPM, pluck
-arpeggio + light beat), the first reel off the house lo-fi loop · **Length:** ~48 s
-**Source:** the payoff is a real PYQ: NDA 2025 (I), Maths Q35, chapter Trigonometric Identities (question id
-`49d9d19d-5e2c-4eec-b8cc-6a1adc64a016`, stem "Let p = sin α − sin(α − 90°)"). Answer key **(b) √2**,
-re-derived by hand.
+**Handle:** @lws.pune (project `pyq-vault`) · **Framework:** `lwspune-framework.md` v1.1 · **Made in Remotion**
+(`remotion/src/Reel012.tsx`, timeline `src/lib/reel012.ts`, tests `tests/reel012.test.ts`) · **Music:** `lofi`, hit on the
+answer · **Length:** 22 s · **Slot:** Wed 22 Oct 15:40. The first version (engine, still title card, MCQ at the end,
+`.render.html`) was taken back before posting.
 
-Fourth of the **"Why?" series**. Tests L11, L13, L14, and a different music style per reel (founder,
-2026-10-17). A first version played two tones whose loudness was sin²θ and cos²θ; the founder found two
-sounds at once chaotic and dropped the idea (L17).
+## The idea (checked, and tested)
 
-## The idea (checked)
+- A point on a circle of radius 1: width cos θ, height sin θ, hypotenuse 1, so Pythagoras gives sin²θ + cos²θ = 1 at
+  every angle → **A 1** (the tests check the point is on the circle and the sum is 1 on every frame).
+- The parts really trade: sin² swings from 0 to 1 and back while cos² does the opposite.
+- NDA 2025 (I) Maths Q35 (question id `49d9d19d-5e2c-4eec-b8cc-6a1adc64a016`): p = sin α − sin(α − 90°) = sin α + cos α;
+  p² = 1 + sin 2α ≤ 2 → max √2 → (b). In the caption only (it uses this very identity).
 
-- A point on a circle of radius 1 at angle θ: height sin θ, width cos θ, hypotenuse 1. Pythagoras:
-  sin²θ + cos²θ = 1² = 1, for every θ.
-- As the point spins, a stacked bar shows sin²θ (green) and cos²θ (blue): one grows as the other shrinks,
-  and the bar always fills exactly to 1.
-- NDA 2025 (I) Q35: sin(α − 90°) = −cos α, so p = sin α + cos α = √2 sin(α + 45°): max **√2** → **(b)**.
-  Picture: they share one circle, so they can't both be 1; the best is equal shares, 1/√2 each.
-  Trap: (d) 2 = sin α = cos α = 1 at once, which is impossible.
+## On screen
 
-## What's on screen
-
-| Time | Picture | Text (in frame) |
+| Time | Picture | Text |
 |---|---|---|
-| 0–2.6 s | title still on a card, a blue light circling its edge | **WHY? #4 · Why is sin²θ + cos²θ always 1?** |
-| 2.6–14 s | title glides up; unit circle traces; point wobbles near 45°; legs cos θ (blue), sin θ (green), radius 1 | a point on a circle of radius 1 · height sin θ · width cos θ · Pythagoras: **sin²θ + cos²θ = 1² = 1** |
-| 13.6–28.4 s | stacked bar (sin² green, cos² blue) always filling to the "1" line; the point spins two full turns | live: sin²θ = 0.xx + cos²θ = 0.xx = 1 · spin it: green is sin²θ, blue is cos²θ · one grows as the other shrinks · together they never change: always 1 |
-| 28.4–32 s | point lands on 45°: equal shares | they share one circle: sin and cos can **never both be 1** |
-| 32.6–44.2 s | Q35 card zooms in; working; (b) lights + chime at 41.2 s | p = sin α + cos α · they can't both be 1 · best when equal: 1/√2 and 1/√2 · **p = √2** · (d) 2 needs both = 1: impossible |
-| 44.2–47.6 s | end card | sin and cos share one circle. **That's the why.** **Follow for Why? #5** |
+| 0 s → | question + A 1 · B θ · C varies; the point already circling, its triangle, a stacked bar (cos² under sin²) exactly 1 tall, the waves drawing below | **NDA MATHS · TRIGONOMETRY · The angle keeps turning. sin²θ + cos²θ is…?** |
+| 0.6–4.6 s | half a turn: the bar's two parts trade sizes, the total never moves | *Turn the angle: sin², cos² trade* |
+| 4.6 s | punch-in on the bar · **A** lights | *The sum never moves: always 1* |
+| 8.6–15.6 s | push into the circle; the point eases to the top: sin² = 1, cos² = 0 | *Pythagoras on a circle of 1* · *At 90°: 1 + 0 = 1* |
+| 15.6–18.6 s | a faster spin, both waves and the flat green sum | *Any angle: sin² + cos² = 1* |
+| 18.6–22 s | end card | Any angle at all: **sin²θ + cos²θ = 1.** Follow for more |
+
+The live sum (sin²θ + cos²θ = 1.00) sits in a fixed strip above the picture (F9). Sound: a click at every 30° mark
+(pitch following sin²), a thunk on the answer.
 
 ## Files
 
-- `nda-maths-012-why-sin-cos.mp4` (1080×1920, 4 PASS, body −20.7 dB)
-- `nda-maths-012-why-sin-cos-cover.png`: circle + triangle + split bar, "One grows, one shrinks: always 1"
-- `nda-maths-012-strip.png`: frames decoded from the MP4
-
-## Before you post (approval gate)
-
-- [ ] Watch it once on your phone: every line readable at normal size, the music feels right
-- [ ] Caption has NDA 2025 (I), Q35, answer (b)
+- `nda-maths-012-why-sin-cos.mp4` · `-cover.png` (2.0 s) · `nda-maths-012-strip.png` · `.post.json`
+- Re-make: `cd remotion && npm test && npm run music:012 && npm run mix:012 && npm run render:012 && npm run cover:012`

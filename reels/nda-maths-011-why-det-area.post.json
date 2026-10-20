@@ -2,15 +2,15 @@
   "slug": "nda-maths-011-why-det-area",
   "project": "pyq-vault",
   "kind": "reel",
-  "title": "Why? #3: why |2A| is not 2|A| (a determinant is an area) → NDA 2025 (II) Q44 (47 s, continuous motion)",
+  "title": "Why? #3 remade: double a 2×2 matrix, its determinant? (predict-first, Remotion, drive, 22 s)",
   "video": "nda-maths-011-why-det-area.mp4",
   "cover": "nda-maths-011-why-det-area-cover.png",
   "captions": {
-    "instagram": "Why? #3 · Why is |2A| not 2|A|? 🔷\n\nThe rows of a 2×2 matrix are two arrows, and its determinant is the area of the parallelogram they make. A = [3 1; 1 2] → |A| = 3·2 − 1·1 = 5.\nDouble one row: one side stretches → 2 copies → area 10.\nDouble the other row too (that's 2A): 4 copies → |2A| = 20 = 4|A|, not 2|A|.\nFor an n×n matrix: |mA| = mⁿ|A|.\n\nNDA 2025 (II) asked exactly this (Maths Q44): Statement I: det(mX) = mⁿ det(X). Statement II: multiplying one row by m multiplies det by m. Answer (a): both true, and II explains I.\n\nSave this 📌 Send it to a friend who writes |2A| = 2|A|. Follow for Why? #4.\nPractise every Matrices & Determinants PYQ free → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Matrices #LWSPune #MathVisualization",
-    "facebook": "Why? #3 · Why is |2A| not 2|A|? 🔷\n\nA determinant is an area: the rows of A are two arrows and |A| is the parallelogram between them. Doubling one row stretches one side (area × 2); 2A doubles both rows, so the area goes × 4: |2A| = 4|A|. For n×n: |mA| = mⁿ|A|.\n\nNDA 2025 (II) Maths Q44: Statement II (one row × m ⇒ det × m) explains Statement I (det(mX) = mⁿ det X) → (a).\n\nPractise NDA Matrices & Determinants PYQs free: https://www.pyqvault.com/questions/nda/mathematics/matrices-determinants\n\n#NDA #NDAMaths #NDA2027",
+    "instagram": "NDA Maths · Matrices & Determinants\nDouble every number in a 2×2 matrix. Its determinant becomes… A ×2 · B ×4 · C same\nComment your guess before you watch 👇\n\nWhy? #3. The rows of a 2×2 matrix are two arrows, and |det| is the area between them. A = [3 1; 1 2] → |A| = 3·2 − 1·1 = 5.\nDouble row 1: area 10 (2 copies). Double row 2 too (that's 2A): area 20 (4 copies) → |2A| = 4|A| → B, not 2|A|.\nScale by any k: area × k². For an n×n matrix: |kA| = kⁿ|A|.\n\nNDA 2025 (II) asked exactly this (Maths Q44): Statement I: det(mX) = mⁿ det(X). Statement II: multiplying one row by m multiplies det by m. Answer (a): both true, and II explains I.\n\nSave this 📌 Send it to a friend who writes |2A| = 2|A|. Follow for more.\nPractise every Matrices & Determinants PYQ free → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Matrices #LWSPune #MathVisualization",
+    "facebook": "NDA Maths · Matrices & Determinants\nDouble every number in a 2×2 matrix. Its determinant becomes… A ×2 · B ×4 · C same 👇\n\n|det| is the area between the rows. Double one row: area ×2. Double both (2A): ×4 → B. For n×n, |kA| = kⁿ|A| (NDA 2025 (II) Maths Q44, answer (a)).\n\nPractise NDA Matrices PYQs free: https://www.pyqvault.com\n\n#NDA #NDAMaths #Matrices",
     "youtube": {
-      "title": "Why is |2A| not 2|A|? A determinant is an area (NDA 2025) #shorts",
-      "description": "Why? #3. The rows of A are two arrows; |A| is the parallelogram's area. Double one row → area × 2; 2A doubles both → × 4. So |2A| = 4|A| and |mA| = mⁿ|A|. NDA 2025 (II) Maths Q44: answer (a).\n\nPractise NDA Maths PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #NDA2027 #Shorts"
+      "title": "Double a 2×2 matrix: does its determinant go ×2 or ×4? #shorts",
+      "description": "|det| is the area between the rows. Double row 1: area ×2. Double row 2 too: ×4 → |2A| = 4|A|. Any k: area × k²; n×n: |kA| = kⁿ|A|. NDA 2025 (II) Maths Q44: (a).\n\nPractise NDA Maths PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #NDA2027 #Shorts"
     }
   }
 }
