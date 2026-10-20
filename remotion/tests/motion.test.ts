@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { clamp01, ease, prog, captionAt } from '../src/lib/motion.ts';
+import { clamp01, ease, prog, captionAt, tween } from '../src/lib/motion.ts';
 
 // These must match reels/engine.js exactly, so a reel keeps its timings when it moves to Remotion.
 
@@ -54,4 +54,23 @@ test('captionAt: a later caption fades in over 0.18 s', () => {
 test('captionAt: nothing between or after captions', () => {
   assert.equal(captionAt(CAPS, 6.4), null);
   assert.equal(captionAt(CAPS, 99), null);
+});
+
+// Camera moves (zoom in / out, founder 2026-10-20): values glide from one key to the next with the same easing.
+const START = [1, 0], KEYS = [{ t: 2, dur: 1, to: [2, 1] }, { t: 5, dur: 1, to: [0.8, 0.2] }];
+const close = (a: number[], b: number[]) => a.forEach((v, i) => assert.ok(Math.abs(v - b[i]) < 1e-12, `${a} ≉ ${b}`));
+
+test('tween: holds the start before the first move, lands exactly on each key, holds between moves', () => {
+  close(tween(0, START, KEYS), [1, 0]);
+  close(tween(2, START, KEYS), [1, 0]);
+  close(tween(2.5, START, KEYS), [1.5, 0.5]);
+  close(tween(4, START, KEYS), [2, 1]);
+  close(tween(9, START, KEYS), [0.8, 0.2]);
+});
+
+test('tween: smooth, no jumps between frames', () => {
+  for (let f = 1; f < 300; f++) {
+    const a = tween((f - 1) / 30, START, KEYS), b = tween(f / 30, START, KEYS);
+    assert.ok(Math.abs(b[0] - a[0]) < 0.12, `jump at frame ${f}`);
+  }
 });

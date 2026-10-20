@@ -15,3 +15,12 @@ export function captionAt(captions: Caption[], t: number) {
   const fadeIn = caption.t0 === 0 ? 1 : clamp01((t - caption.t0) / 0.18);
   return { caption, alpha: fadeIn * clamp01((caption.t1 - t) / 0.25), age: t - caption.t0 };
 }
+
+// Camera moves (zoom in / out, founder 2026-10-20). Values start at `start`; each key glides them to `to` over `dur`
+// seconds from `t`, eased like everything else. Keys run in order and shouldn't overlap.
+export type Key = { t: number; dur: number; to: number[] };
+export function tween(t: number, start: number[], keys: Key[]): number[] {
+  let v = start.slice();
+  for (const k of keys) { const p = prog(t, k.t, k.dur); v = v.map((x, i) => x + (k.to[i] - x) * p); }
+  return v;
+}

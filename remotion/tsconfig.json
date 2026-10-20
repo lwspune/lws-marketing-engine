@@ -13,5 +13,5 @@
     "types": ["node"],
     "lib": ["ES2023", "DOM"]
   },
-  "include": ["src", "tests", "remotion.config.ts"]
+  "include": ["src", "tests", "tools", "remotion.config.ts"]
 }
