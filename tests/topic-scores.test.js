@@ -18,7 +18,7 @@ const TABLE = `
 | P2 | P | Boyle | 129 | 3 | 1 | 1 | 1 | 9 | ✅ made |
 | C7 | C | Flame colours | – | 3 | 2 | 0 | 1 | 6 | |
 | C5 | C | P, V, T together | 11 | 2 | 2 | 1 | 1 | 7 | |
-| M4 | M | f and f′ | 115 | 2 | 1 | 1 | 0 | 7 | |
+| C8 | C | Split water | – | 3 | 2 | 0 | 0 | 5 | |
 
 ## Next section
 `;
@@ -49,7 +49,7 @@ test("catches a wrong total, a score out of range, an unknown subject and a repe
     .replace("| 76 | 1 | 2 | 1 | 1 | 7 |", "| 76 | 1 | 2 | 1 | 1 | 8 |")
     .replace("| – | 3 | 2 | 0 | 1 | 6 |", "| – | 4 | 2 | 0 | 1 | 7 |")
     .replace("| C5 | C |", "| C5 | X |")
-    .replace("| M4 | M |", "| P5 | M |");
+    .replace("| C8 | C |", "| P5 | C |");
   const errors = ts.validate(ts.parse(bad)).join("\n");
   assert.match(errors, /P6: score 8 should be 7/);
   assert.match(errors, /C7: vivid 4 is outside 0–3/);
@@ -61,7 +61,7 @@ test("next pick per subject: highest open score, made ideas skipped, ties go to 
   const next = ts.nextPicks(ts.parse(TABLE));
   assert.equal(next.P.id, "P5");                       // Boyle (9) is made, P5 (10) is open
   assert.equal(next.C.id, "C5");                       // 7 beats the unproven flame colours (6)
-  assert.equal(next.M.id, "M4");
+  assert.equal(next.M, undefined, "@pyqvault_ has no maths series (founder, 2026-10-20)");
   const tie = ts.nextPicks(ts.parse(TABLE.replace("| – | 3 | 2 | 0 | 1 | 6 |", "| – | 3 | 2 | 1 | 1 | 7 |")));
   assert.equal(tie.C.id, "C5", "same score: the proven idea first");
 });
@@ -69,10 +69,10 @@ test("next pick per subject: highest open score, made ideas skipped, ties go to 
 test("the real backlog's score table is valid and has an open idea for every subject", () => {
   const md = fs.readFileSync(path.join(__dirname, "..", "reels", "remake-backlog.md"), "utf8");
   const rows = ts.parse(md);
-  assert.ok(rows.length >= 15, `only ${rows.length} scored ideas`);
+  assert.ok(rows.length >= 10, `only ${rows.length} scored ideas`);
   assert.deepEqual(ts.validate(rows), []);
   const next = ts.nextPicks(rows);
-  for (const s of ["P", "C", "M"]) assert.ok(next[s], `no open ${s} idea`);
+  for (const s of ["P", "C"]) assert.ok(next[s], `no open ${s} idea`);
 });
 
 test("queued ideas (to make next) are listed as queued, and the next pick moves past them", () => {
@@ -88,8 +88,8 @@ test("a broken row (wrong number of columns) is reported, not silently skipped",
 });
 
 test("an idea moved to another handle is closed: never queued, never picked", () => {
-  const rows = ts.parse(TABLE.replace("| 115 | 2 | 1 | 1 | 0 | 7 | |", "| 115 | 2 | 1 | 1 | 0 | 7 | ↪ moved to @lws.pune |"));
-  assert.equal(ts.nextPicks(rows).M, null);
+  const rows = ts.parse(TABLE.replace("| 11 | 2 | 2 | 1 | 1 | 7 | |", "| 11 | 2 | 2 | 1 | 1 | 7 | ↪ moved to @lws.pune |"));
+  assert.equal(ts.nextPicks(rows).C.id, "C7", "C5 moved away, so the next chemistry pick is C7");
   assert.deepEqual(ts.queued(rows), []);
 });
 
@@ -132,4 +132,16 @@ test("the real backlog's @lws.pune table is valid and has an open idea", () => {
   assert.ok(rows.length >= 9, `only ${rows.length} scored @lws.pune ideas`);
   assert.deepEqual(ts.validate(rows, subjects), []);
   assert.ok(ts.nextPicks(rows, subjects).M, "no open @lws.pune idea");
+});
+
+test("@pyqvault_ is physics and chemistry only: a maths row is an error (founder, 2026-10-20)", () => {
+  const md = TABLE.replace("| C8 | C |", "| M5 | M | Square | 40 | 2 | 1 | 0 | 0 | 5 | |\n| C8 | C |");
+  assert.match(ts.validate(ts.parse(md)).join("\n"), /M5: subject "M" should be P or C/);
+});
+
+test("a tie on score goes to the bigger views multiple, not just more proof points (F21: the better-proven idea)", () => {
+  const md = TABLE.replace("| P6 | P | Work vs power | 76 | 1 | 2 | 1 | 1 | 7 | |",
+    "| P9 | P | Heat flow | 54 | 3 | 1 | 1 | 1 | 8 | |\n| P12 | P | Topspin | 63 | 3 | 2 | 0 | 1 | 8 | |");
+  const rows = ts.parse(md.replace("| 125 | 3 | 2 | 1 | 1 | 10 | |", "| 125 | 3 | 2 | 1 | 1 | 10 | ✅ made |"));
+  assert.equal(ts.nextPicks(rows).P.id, "P12", "both score 8 with 2 proof points; 63× beats 54×");
 });

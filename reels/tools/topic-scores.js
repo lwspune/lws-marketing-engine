@@ -9,7 +9,8 @@
 // + everyday hook (0–1). The goal is engagement and reach, so exam weight is not a criterion (founder, 2026-10-20).
 
 const RANGES = { vivid: 3, question: 2, law: 1, everyday: 1 };
-const SUBJECTS = ["P", "C", "M"];
+// @pyqvault_ is physics and chemistry only: they have the better visual content (founder, 2026-10-20).
+const SUBJECTS = ["P", "C"];
 // @lws.pune scores NDA maths concepts only (founder 2026-10-20); its "law live" column is "concept live".
 const ACCOUNTS = {
   pyqvault: { handle: "@pyqvault_", heading: "## Topic scores", subjects: SUBJECTS },
@@ -66,12 +67,12 @@ function queued(rows) {
   return rows.filter(isQueued).sort((a, b) => b.score - a.score);
 }
 
-/** The best open idea per subject (not queued): highest score, then the better-proven one. */
+/** The best open idea per subject (not queued): highest score, then the better-proven one (bigger views multiple). */
 function nextPicks(rows, subjects = SUBJECTS) {
   const out = {};
   for (const s of subjects) {
     const open = rows.filter((r) => r.subject === s && isOpen(r))
-      .sort((a, b) => b.score - a.score || proofPoints(b.proofX) - proofPoints(a.proofX));
+      .sort((a, b) => b.score - a.score || (b.proofX ?? 0) - (a.proofX ?? 0));
     out[s] = open[0] || null;
   }
   return out;

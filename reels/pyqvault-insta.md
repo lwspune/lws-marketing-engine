@@ -10,8 +10,9 @@ to @pyqvault_ and the PYQ Vault Facebook Page. Reels are made in Remotion (`remo
 topic, hook, picture, sound and shape, each with its reason, how it's checked and its status. The content and look rules
 that used to be here moved there unchanged (plus the 2026-10-20 points); change them only through its change log.
 
-- **Series:** "Physics, visualised #N", "Chemistry, visualised #N" and "Maths, visualised #N", rotating P → C → M day
-  by day (framework F19). Maths topics never repeat @lws.pune's NDA list (see the backlog).
+- **Series:** "Physics, visualised #N" and "Chemistry, visualised #N", alternating P → C (framework F19). **No maths**
+  from 2026-10-20 (founder: physics and chemistry have the better visual content); maths ideas go to @lws.pune. Maths #1
+  and #2 were posted before that and stay up.
 - Physics #1 and Chemistry #1 were made with the old engine (`api.jar`, `api.sphere3d`) and stay as they are.
 
 ## Caption

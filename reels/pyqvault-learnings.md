@@ -1,13 +1,13 @@
 # @pyqvault_ learnings log
 
 Kept apart from @lws.pune's log (`learnings.md`) since 2026-10-20 (founder): a different audience (Class 11–12
-science, not NDA), a different format ("Physics / Chemistry / Maths, visualised") and different numbers. Same method:
+science, not NDA), a different format ("Physics / Chemistry, visualised"; maths until 2026-10-20) and different numbers. Same method:
 every lesson from real numbers becomes a **testable idea**: what we saw, what we think it means, which reel tests it,
 and the result. Update **Result** and **Status** after each reel's 48 h and 7 d numbers (Insights tab of GoPost, or
 `npm run insights -- --org=lws-pune` → `analytics/pyqvault-reels-<date>.csv`). A rule moves into `pyqvault-insta.md`
 (house settings) only once it's **Confirmed** or the founder makes it one.
 
-Both logs share **one numbering** (L1, L2, …), so a number always means one lesson. The next new lesson is **L41**,
+Both logs share **one numbering** (L1, L2, …), so a number always means one lesson. The next new lesson is **L42**,
 in whichever log it belongs to. How reels are made is in `pyqvault-framework.md` (F-numbers); each of its points
 names the lesson that measures it.
 
@@ -32,6 +32,7 @@ For scale: typical @lws.pune reel 788 views · 6.8 s; typical Sound Mind reel 39
 | L35 | (2026-10-20) Topics were picked by judgment from a backlog ordered on 18 Oct. Our numbers since say vivid topics win (L30); the founder wants topics chosen for engagement and reach, not exam weight. | A written topic score (framework F21: proof + vivid + question + law live + everyday hook, out of 10) should pick better reels, and consistently. Whether it does is the test: a score is only useful if it predicts results. | Every reel made from now records its topic score (backlog row, status "made"). After ~10 scored reels: do higher scores get longer watch time and more views? Then check each criterion on its own (vivid is expected to matter most) and re-weight, drop or add criteria through the framework's change log. | — | 🧪 testing |
 | L36 | **Element analysis, run 1** (2026-10-20, `reels/analysis-framework.md`): covers + captions of 180 reels (15 top + 15 typical from each of 6 science/maths accounts), coded blind. 19 of 20 elements don't separate hits from ordinary reels; **long captions** are more common in hits on 4 accounts (weak); a **question on the cover** leaned to ordinary reels on 2. | Hits are decided inside the reel (topic, motion), not by cover or caption styling. Topic choice (F21) and vividness (L30) are the levers. | No framework change yet (founder decides). Keep captions full (we already write 4–6 lines). Let L28's numbers judge question covers. Next run measures our own videos. | — | 📌 finding |
 | L37 | (Founder, 2026-10-20) An **orbit shot**: the camera swings round the object so you see it from the front, side and back. | It shows our 3D's depth and gives motion from frame 0, but it can hide what we explain (angles, arrows, gauges read from one view), so: limited (framework F22). | Chemistry #5 is the first orbit reel (72° in the opening, front again before the squeeze); Physics #5, made the same day without one, is the comparison. Compare watch time at 48 h and how many viewers stay past 3 s, then on more 3D reels. | — | 🧪 testing |
+| L41 | (Founder, 2026-10-20) **Physics and chemistry only** on @pyqvault_: they have the better visual content; maths goes to @lws.pune. Our numbers lean the same way: the top 3 reels include Boyle (263 views) and the 8 families (194); the two maths reels split (calculus 226 views · 5.9 s, sine and cosine 131 · 3.0 s). | A science handle with one look and one audience grows faster than a mixed one; the visual subjects carry it. | From 21 Oct every @pyqvault_ reel is P or C (framework F19 v1.5). Compare the median views and watch time of the next 6 reels with the first 9 (133 views · 5.2 s); the framework changed too, so it shows the direction, not this choice alone. | — | 📌 founder, measured |
 
 ---
 

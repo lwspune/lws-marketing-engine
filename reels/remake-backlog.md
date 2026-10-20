@@ -19,8 +19,9 @@ tricks, "math sounds like", parametric art).
 ## Topic scores
 
 **Which idea to make next** (framework F21, founder 2026-10-20). Each open @pyqvault_ idea gets a score out of 10;
-the next reel of the subject that's due (P → C → M) takes the **highest open score**, ties going to the better-proven
-idea. `node reels/tools/topic-scores.js` checks every row and prints the next pick per subject. The goal is
+the next reel of the subject that's due (P → C) takes the **highest open score**, ties going to the better-proven
+idea (the bigger views multiple). **@pyqvault_ is physics and chemistry only** (founder, 2026-10-20: they have the better
+visual content); its maths ideas are closed below, and maths goes to @lws.pune. `node reels/tools/topic-scores.js` checks every row and prints the next pick per subject. The goal is
 **engagement and reach**, so exam weight is deliberately *not* a criterion (founder). L35 checks whether a high score
 really predicts watch time; the criteria are tuned from that.
 
@@ -52,12 +53,6 @@ so C7–C11 are our own vivid ideas (proof 0) until a study of chemistry account
 | C9 | C | The pH rainbow: universal indicator from lemon to soap | – | 3 | 2 | 0 | 1 | 6 | |
 | C11 | C | Diffusion: dye in hot vs cold water | – | 2 | 2 | 0 | 1 | 5 | |
 | C10 | C | Cool the brown gas: NO₂ ⇌ N₂O₄ shifts (Le Chatelier) | – | 2 | 2 | 0 | 0 | 4 | |
-| M4 | M | f and f′ together: the slope becomes a graph | 115 | 2 | 1 | 1 | 0 | 7 | ↪ moved to @lws.pune (reel 015, founder 2026-10-20) |
-| M5 | M | The quadratic formula is a square, completed | 40 | 2 | 1 | 0 | 0 | 5 | |
-| M7 | M | What is integration? Rectangles get thinner | 19 | 2 | 1 | 1 | 0 | 5 | |
-| M9 | M | Every type of matrix on one screen | 35 | 2 | 0 | 0 | 0 | 4 | |
-| M6 | M | e^(iθ): multiplying by i turns 90° | 17 | 1 | 1 | 0 | 0 | 3 | |
-| M8 | M | The equation of a circle is just Pythagoras | 15 | 1 | 1 | 0 | 0 | 3 | |
 
 ## @pyqvault_ (Class 11–12 Physics and Chemistry): the proven ideas (pick by **Topic scores** above)
 
@@ -81,9 +76,11 @@ Rotation: Physics → Chemistry → Maths; background follows the L22 test, musi
 | P12 | Topspin dips, slice floats (Magnus) | @sciencevisualised 1.10M (63×) [link](https://www.instagram.com/reel/Dbvz1s7M3C6/) | 3D spinning ball, pressure arrows above/below (Bernoulli) | 11 · Fluids | lab | |
 | C5 | P, V and T together (combined gas law) | @codematrixvishal 299k (11×) [link](https://www.instagram.com/reel/DX13CZTJdVK/) | one piston: heat it, squeeze it, three live gauges; P·V/T never moves | 11 · States of matter | lab | |
 
-### @pyqvault_ · Maths, visualised (Class 11–12; added 2026-10-18, founder)
+### @pyqvault_ · Maths, visualised: closed 2026-10-20 (founder: @pyqvault_ is physics and chemistry only)
 
-The third @pyqvault_ series, in rotation with Physics and Chemistry (P → C → M), same house settings (short labels,
+**Closed** (founder, 2026-10-20): @pyqvault_ keeps physics and chemistry, which have the better visual content. M1 and M2
+were posted; M3 was rejected; M4 moved to @lws.pune (reel 015) and M5 to @lws.pune's list (W16). M6–M9 stay here as a
+record; any of them can move to @lws.pune when it fits the NDA list. Was: the third @pyqvault_ series, in rotation with Physics and Chemistry (P → C → M), same house settings (short labels,
 no exam question, pyqvault.com). **No overlap with @lws.pune:** each maths idea belongs to one handle only (the NDA list
 below keeps the soda can, derivative wheel, secant → tangent, unit-circle sheet, area between curves, probability,
 logarithms, series and matrix transformations; and, since 2026-10-20, **f and f′ together**, moved to @lws.pune as reel 015).
@@ -94,7 +91,7 @@ logarithms, series and matrix transformations; and, since 2026-10-20, **f and f�
 | M2 | Calculus in 60 seconds: limit → derivative → integral | @ubilumapp 599k (55×) [link](https://www.instagram.com/reel/DcwfuB6Omyy/) | one curve, three ideas in a row: zoom in (limit), slope (derivative), strips (integral) | 11–12 · Limits, derivatives, integrals | lab | ✅ made (`pv-maths-002-calculus`) |
 | M3 | e: why 2.718…? | @codematrixvishal 1.59M (58×) [link](https://www.instagram.com/reel/Dbqgimsp0bk/) | ₹1 at 100% interest, compounded more and more often: the total climbs and stops at e | 11–12 · Exponential & log functions | white | ✅ made, predict-first (`pv-maths-003-e`) |
 | M4 | f and f′ together: the slope becomes a graph | @codematrixvishal 651k (24×) [link](https://www.instagram.com/reel/DdvWvQlJu86/); 3.14M (115×) [link](https://www.instagram.com/reel/DXq3MMKiQWi/) | a tangent slides along a cubic and drops its slope as a dot that draws f′ below | 12 · Continuity & differentiability | lab || ↪ moved to @lws.pune: `nda-maths-015-slope-graph` (founder 2026-10-20) |
-| M5 | The quadratic formula is a square, completed | @codematrixvishal 1.10M (40×) [link](https://www.instagram.com/reel/DZPH3WfpKcB/) | x² + bx is cut and moved into an almost-square; the missing corner is (b/2)² | 11 · Quadratic equations | white | |
+| M5 | The quadratic formula is a square, completed | @codematrixvishal 1.10M (40×) [link](https://www.instagram.com/reel/DZPH3WfpKcB/) | x² + bx is cut and moved into an almost-square; the missing corner is (b/2)² | 11 · Quadratic equations | white | ↪ moved to @lws.pune as W16 (founder 2026-10-20) |
 | M6 | e^(iθ): multiplying by i turns 90° | @codematrixvishal 453k (17×) [link](https://www.instagram.com/reel/Dbhl5GMpsNR/) | a point on the Argand plane rotates; cos θ + i sin θ traced live | 11 · Complex numbers | lab | |
 | M7 | What is integration? Rectangles get thinner | @mathsy.uk 459k (19×) [link](https://www.instagram.com/reel/C4wUT11tpvK/) | n rectangles → 4, 8, 64…; live sum closes in on the exact area | 12 · Integrals | white | |
 | M8 | The equation of a circle is just Pythagoras | @mathsy.uk 350k (15×) [link](https://www.instagram.com/reel/C_WEKTaN59m/) | a point goes round; its right triangle gives (x − a)² + (y − b)² = r² | 11 · Conic sections | lab | |
@@ -123,6 +120,7 @@ but a good concept isn't blocked for lack of one. Only NDA maths chapters go on 
 | W13 | Series formulas on one screen | @codematrixvishal 2.61M (95×) [link](https://www.instagram.com/reel/DZr28L5p89C/) | reference sheet; each sum shown as a picture (staircases, squares) | Sequences & series | test format |
 | W14 | A matrix moves space | @codematrixvishal 916k (34×) [link](https://www.instagram.com/reel/DbZeJpoJKmm/) | a grid transforms; the determinant = how much area scales (links to reel 011) | Matrices & determinants | |
 | W15 | f and f′ together: the slope becomes a graph | @codematrixvishal (115×), as @pyqvault_ M4 | slope 0 at every peak and valley | Application of derivatives | ✅ made 2026-10-20 (reel 015) |
+| W16 | The quadratic formula is a square, completed | @codematrixvishal 1.10M (40×) [link](https://www.instagram.com/reel/DZPH3WfpKcB/), as @pyqvault_ M5 | x² + 6x as tiles: the 6x strip splits in two and wraps the square; the missing corner (3² = 9) completes it; the same move with b gives the formula | Quadratic equations | moved from @pyqvault_ (founder 2026-10-20) |
 
 ## @lws.pune topic scores
 
@@ -142,6 +140,7 @@ and the goal of the reel is reach. `node reels/tools/topic-scores.js lwspune` ch
 | W9 | M | The whole unit circle on one screen | 779 | 2 | 0 | 0 | 0 | 5 | |
 | W12 | M | What a logarithm is (exponential, flipped) | 46 | 1 | 1 | 1 | 0 | 5 | |
 | W13 | M | Series formulas on one screen | 95 | 2 | 0 | 0 | 0 | 4 | |
+| W16 | M | The quadratic formula is a square, completed (tiles) | 40 | 2 | 1 | 0 | 0 | 5 | |
 | W15 | M | f and f′ together: the slope becomes a graph | 115 | 2 | 1 | 1 | 0 | 7 | ✅ made 2026-10-20 (reel 015) |
 
 Anchors as above. The soda can's question: "Which can uses the least metal: tall, wide or equal?" (h = 2r); the
