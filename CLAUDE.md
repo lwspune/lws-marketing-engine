@@ -129,7 +129,9 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   learnings.md           #   @lws.pune LEARNINGS LOG: every lesson as a testable idea (evidence → test reel → result →
                          #   status). Update after each reel's 48 h / 7 d numbers; only Confirmed rules move
                          #   into lwspune-insta.md or visual-reel-workflow.md
-  pyqvault-insta.md      #   @pyqvault_ HOUSE SETTINGS: vivid-first topics, question over a moving picture, slots
+  pyqvault-insta.md      #   @pyqvault_ HOUSE SETTINGS: audience, series, captions, hashtags, posting slots
+  pyqvault-framework.md  #   @pyqvault_ REEL FRAMEWORK (founder 2026-10-20): numbered points F1…, each with its reason,
+                         #   check and status; change only through its change log, with a reason
   pyqvault-learnings.md  #   @pyqvault_ LEARNINGS LOG, kept apart (founder 2026-10-20); one L-numbering shared with
                          #   learnings.md
   visual-reel-workflow.md #  runbook for white-board animated-graph reels (skill: .claude/skills/visual-reel)
@@ -149,6 +151,9 @@ remotion/                # TRIAL: reels in Remotion (React + SVG, frame-by-frame
                          #   `npm run typecheck`, `npm run audio` (soundtrack from the engine MP4), `npm run render`,
                          #   `npm run compare:files && npm run compare` (old vs new side by side) → out/
   src/lib/               #   pure timelines (same prog/ease/caption timing as engine.js; palette test-locked to Reel.WHITE)
+  src/lib/sfx.ts         #   sound effects made in code from a reel's SOUND score + ducking + −3 dB limiter (framework F14–F16);
+                         #   `npm run mix:<reel>` (tools/mix.ts) mixes them into the music → public/<reel>-mix.wav
+  src/shapes.tsx         #   RoundBox (rounded 3D boxes, framework F8); camera zooms are `tween` keys (motion.ts, F9)
   src/Reel014.tsx        #   first 3D reel (@remotion/three + three.js, GPU via ANGLE); `npm run music:014`,
                          #   `render:014`, `cover:014` write to ../reels/. Runbook: reels/visual-reel-workflow.md
   music/*.json           #   music spec per reel → reels/tools/music.mjs renders engine.js music offline to WAV

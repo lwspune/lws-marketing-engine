@@ -58,7 +58,8 @@ Then run the 17 DB tests against the real database and do ONE real test post wit
 
 ## Backfill ledger
 
-### @pyqvault_ Chemistry #4 opens on a still picture for 2 s (logged 2026-10-20, awaiting the founder's call)
+### ~~@pyqvault_ Chemistry #4 opens on a still picture for 2 s~~ (logged 2026-10-20) DONE the same day: the founder had both
+Physics #4 and Chemistry #4 remade (framework v1, `reels/pyqvault-framework.md`) instead of posting them as they were
 New founder rule (L31 in `reels/pyqvault-learnings.md`, rule in `reels/pyqvault-insta.md`): the question sits in front
 while the animation already runs behind it, no still frames in the first 3 s. Chemistry #4 (approved, posts 20 Oct
 17:30) shows the question over a cylinder that stays still until the flames light at 2 s. Physics #4 (11:00) starts
