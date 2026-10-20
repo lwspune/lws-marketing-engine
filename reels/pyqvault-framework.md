@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1, 2026-10-20)
+# @pyqvault_ reel framework (v1.1, 2026-10-20)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -82,9 +82,12 @@ time (5.5 s vs 4.0 s) but the slots were tangled. · *Check:* the L22 rotation. 
 
 **F13 · Music made in code, picked by mood.** Energetic styles (`drive`, `synthwave`, `cinematic`, `trap`), never the
 same style twice in a row. By mood: simulations and motion → `drive` or `synthwave`; build-up reveals → `cinematic`;
-dark or dramatic → `trap`. 1–3 `music.hits` on the picture's big beats. No voice (voiceover parked). · *Why:* no licence risk, and a hit on
-the big beat makes it land; Claude picks, the founder judges the finished reel. · *Check:* `music/<reel>.json`. · 📌
-founder, 2026-10-18
+dark or dramatic → `trap`. **While L34 runs:** among the styles that fit the mood, take the one with the fewest posted
+reels (cinematic, lofi, drive, synthwave, trap), so each gets a fair count. 1–3 `music.hits` on the picture's big beats.
+No voice (voiceover parked). · *Why:* no licence risk, and a hit on
+the big beat makes it land; Claude picks, the founder judges the finished reel. Which style holds viewers best is now measured (L34): the first 8 reels hint
+that cinematic and lofi beat drive, synthwave and trap. · *Check:* `music/<reel>.json`; the style goes in the Music column
+of the results table. · 🧪 L34
 
 **F14 · The experiment's own sound.** Effects for what's on screen, made in code from the reel's timeline (`SOUND`
 score, `src/lib/sfx.ts`): e.g. a ratchet click per degree, the friction scrape while a block slides, a burner's roar,
@@ -131,3 +134,4 @@ becomes a user. · *Check:* the end card. · 📌 founder, 2026-10-18
 | Version | Date | Change | Why |
 |---|---|---|---|
 | v1 | 2026-10-20 | Framework created from the house settings (F1, F3, F4, F6, F7, F10–F13, F17–F20) plus today's points: F2 vivid first, F5 question in front of a moving picture, F8 rounded shapes, F9 zooms, F14 the experiment's own sound, F15 whooshes on fast zooms only, F16 the mix. | Founder: a standard framework, every point with a reason. Today's points come from the first 8 reels' numbers (L29, L30) and the founder's calls (L31, L33). First reels made with all of it: the remakes of Physics #4 and Chemistry #4. |
+| v1.1 | 2026-10-20 | F13 music: from 📌 to 🧪 L34; fair rotation between five styles while the test runs; style logged per reel. | Founder: track music performance. The first 8 reels hint the opposite of F13's "energetic first" (cinematic and lofi on top, drive/synthwave/trap at the bottom), too weak to change the rule, enough to measure it. |

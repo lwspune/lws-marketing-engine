@@ -12,7 +12,7 @@ Baseline (typical @lws.pune reel, 172 reels, 2026-10-15): **779 views · 1 save 
 Reach-test targets: typical reach **> 2,000** · watch **> 10 s** · at least one reel **> 10k**.
 
 **@pyqvault_ has its own log: `pyqvault-learnings.md`** (founder, 2026-10-20): L22, L27–L29 moved there with
-its reels' results, and L30–L33 live there. Both logs share one numbering, so the next new lesson in either is L34.
+its reels' results, and L30–L34 live there. Both logs share one numbering, so the next new lesson in either is L35.
 
 ---
 
