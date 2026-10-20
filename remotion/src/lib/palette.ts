@@ -13,7 +13,16 @@ export const LAB = {
   fill: 'rgba(79, 209, 165, 0.16)', grid: 'rgba(230, 235, 243, 0.14)', axis: 'rgba(230, 235, 243, 0.42)',
   card: '#1b2330', shadow: '#000000',
 } as const;
-export type Palette = { readonly [K in keyof typeof WHITE]: string } & { readonly card?: string; readonly shadow?: string };
+// Bright objects (framework F24, founder 2026-10-21, @pyqvault_ and @lws.pune): every key object (what moves, changes or
+// is explained) takes one of these, from the set for its board; WHITE / LAB above stay for text and UI. Each is strongly
+// saturated, ≥ 3:1 against its board and ≥ 20° of hue from the others (tests/palette.test.ts). The white set is darker
+// so it holds on the light board; the lab set is lighter so it glows on the dark one.
+export const VIVID = {
+  white: { red: '#e11d48', orange: '#ea580c', yellow: '#a87c00', green: '#16a34a', cyan: '#0891b2', blue: '#2563eb', violet: '#7c3aed', pink: '#c026d3' },
+  lab: { red: '#fb7185', orange: '#fb923c', yellow: '#facc15', green: '#4ade80', cyan: '#22d3ee', blue: '#60a5fa', violet: '#a78bfa', pink: '#e879f9' },
+} as const;
+
+export type Palette ={ readonly [K in keyof typeof WHITE]: string } & { readonly card?: string; readonly shadow?: string };
 
 export const tint =(hex: string, a: number) => `rgba(${[1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16)).join(', ')}, ${a})`;
 
