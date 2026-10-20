@@ -69,7 +69,7 @@ order of this table. **P19–P29 (2026-10-20, founder: "take one physics chapter
 | P26 | P | A half-height mirror shows your whole body, at any distance (Ray Optics) | – | 1 | 2 | 1 | 1 | 5 | |
 | P27 | P | A bigger telescope lens: a brighter moon, not a bigger one (Ray Optics) | – | 2 | 2 | 0 | 1 | 5 | |
 | P28 | P | Turn a prism: the bend dips, then rises (minimum deviation, Ray Optics) | – | 2 | 2 | 1 | 0 | 5 | |
-| P29 | P | "Objects in mirror are closer than they appear" (convex mirror, Ray Optics) | 6.2 | 2 | 2 | 1 | 1 | 7 | |
+| P29 | P | "Objects in mirror are closer than they appear" (convex mirror, Ray Optics) | 6.2 | 2 | 2 | 1 | 1 | 7 | ✅ made 2026-10-21 (`pv-physics-009-wing-mirror`) |
 | C5 | C | P, V and T together (combined gas law) | 11 | 2 | 2 | 1 | 1 | 7 | ✅ made 2026-10-20 (`pv-chem-005-pvt`) |
 | C7 | C | Flame colours: each metal burns its own colour (fireworks) | – | 3 | 2 | 0 | 1 | 6 | ✅ made 2026-10-20 (`pv-chem-006-flame`) |
 | C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | 3 | 2 | 1 | 0 | 6 | |

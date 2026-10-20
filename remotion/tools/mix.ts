@@ -17,6 +17,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   pc005: { lib: '../src/lib/pc005.ts', file: 'public/pv-chem-005-pvt' },
   pc007: { lib: '../src/lib/pc007.ts', file: 'public/pv-chem-007-halflife' },
   pp008: { lib: '../src/lib/pp008.ts', file: 'public/pv-physics-008-spoon' },
+  pp009: { lib: '../src/lib/pp009.ts', file: 'public/pv-physics-009-wing-mirror' },
   '015': { lib: '../src/lib/reel015.ts', file: 'public/nda-maths-015-slope-graph' },
   '016': { lib: '../src/lib/reel016.ts', file: 'public/nda-maths-016-multiply' },
   '010': { lib: '../src/lib/reel010.ts', file: 'public/nda-maths-010-why-seven' },
