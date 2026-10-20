@@ -14,7 +14,7 @@ Reach-test targets: typical reach **> 2,000** · watch **> 10 s** · at least on
 reels posted 12–19 Oct, read 20 Oct: **1,271 views · 6.1 s watched · 3 saves · 0 comments · 0 shares**.
 
 **@pyqvault_ has its own log: `pyqvault-learnings.md`** (founder, 2026-10-20): L22, L27–L29 moved there with
-its reels' results, and L30–L37 live there. Both logs share one numbering, so the next new lesson in either is **L42**.
+its reels' results, and L30–L37 live there. Both logs share one numbering, so the next new lesson in either is **L45**.
 
 ---
 
@@ -49,6 +49,7 @@ its reels' results, and L30–L37 live there. Both logs share one numbering, so 
 | L38 | (Founder, 2026-10-20) **@lws.pune gets the reel framework** (`lwspune-framework.md`): vivid, the concept live, ask first, the question in front of a moving picture, rounded shapes, zooms on the picture, the picture's own sound, an orbit in 3D reels, short. | The package that @pyqvault_ is testing (its L28–L33, L37) should hold NDA viewers past the 5–7 s exit point (L3) too. | Every new reel from 015 on. Compare watch time first, then views, saves and comments at 48 h with the typical recent maths reel (1,271 views · 6.1 s · 3 saves). It's a package: it shows the framework's effect, not each point's. | 015: — | 🧪 testing |
 | L39 | (Founder, 2026-10-20) **Concepts first**: NDA maths concepts, a real PYQ named in the caption when one fits instead of a PYQ solved on screen; picked by topic score (F1, F21). | Concept reels travel further than PYQ walk-throughs (@mathsy.uk's fundamentals, L23), and good ideas that have no exact PYQ aren't lost. | Concept reels (009–013 "Why?", 015 on) vs the PYQ walk-throughs (001–008) on views and watch; and whether a higher topic score goes with more views (as L35 on @pyqvault_). | — | 🧪 testing |
 | L40 | (2026-10-20) **Music and background per reel**: @lws.pune has used lo-fi on most reels and white on all of them; the founder asked for a different music per reel (L17) and tracks both on @pyqvault_ (L22, L34). | Unknown which music style holds NDA viewers; white is the house look and stays unless L22 calls dark clearly. | Log both in the results table; compare median watch time per music style once each style has ≥ 3 posted reels. | — | 🧪 logging |
+| L44 | (Founder, 2026-10-20) The orbit is the hook (F22); @lws.pune reels are flat graphs with nothing to turn, so: build the opening picture in 3D, turn it 360° and settle it flat into the 2D drawing. | A flat reel could get the same moving, deep first 3 s as a 3D reel. | Built for 016 (raised blocks, real light, motion blur, flattening into the grid). | 20 Oct: the founder watched it and dropped it ("doesn't look good"); 2D reels open with their picture building from frame 0 (F22, both frameworks). Never posted, so no numbers. | ❌ rejected |
 
 ---
 
@@ -64,3 +65,4 @@ its reels' results, and L30–L37 live there. Both logs share one numbering, so 
 | 013 Why? #5 (physics), spoon = concave mirror → 26-I GAT Q64 (calm music) | white | calm | L20 L11 L13 L14 | | | | | | | |
 | 014 3D #1, θ turns, the angle with z stays 45° **remade 20 Oct** (Remotion 3D, predict-first, opening orbit F22, live θ / angle strip, 22 s; NDA 2026 (II) Q68 in the caption) | white | calm | L38 L39 L40 L25 | | | | | | | |
 | 015 f and f′ together: slope 0 at every peak and valley (NDA maths concept; NDA 2024 (I) Q91 in the caption; Remotion 2D, predict-first, zooms + own sound, cinematic; moved from @pyqvault_ 20 Oct; first reel of the framework) | white | cinematic | L38 L39 L40 L3 L13 | | | | | | | |
+| 016 Why? #6, heads AND a six: 1/12 (NDA maths concept, no PYQ; Remotion 2D: the 12 cells pop in from frame 0 (a 3D opening was tried and dropped, L44); predict-first, 19.4 s; remake of @mathsy.uk 822k; topic score 8/10) | white | synthwave | L38 L39 L40 | queued 20 Oct, awaiting approval | | | | | | |

@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-016-multiply",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "016 · Why? #6: heads AND a six, chance? (why probabilities multiply; predict-first, white, synthwave)",
+  "video": "nda-maths-016-multiply.mp4",
+  "cover": "nda-maths-016-multiply-cover.png",
+  "captions": {
+    "instagram": "NDA Maths · Probability. Toss a coin, roll a die. Chance of heads AND a six? A 2/3 · B 1/12 · C 1/6 👇\n\nDraw every outcome as a square: 2 coin columns × 6 die rows = 12 equal cells.\nHeads takes half the square. A six takes one row. Both together is the one cell where they cross: 1 of 12 = ½ × ⅙ → B.\nAdd a second coin and that cell halves again: 1/24 = ½ × ½ × ⅙. Each \"and\" cuts the space, which is why we multiply.\nTrap: adding (½ + ⅙ = ⅔) is for \"or\", and only multiply when one event doesn't change the other (independent events).\n\nSave this 📌 Follow @lws.pune for one NDA maths idea every day.\nPractise every Probability PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #Probability #MathsTricks #LWSPune",
+    "facebook": "NDA Maths · Probability. Toss a coin, roll a die. Chance of heads AND a six? A 2/3 · B 1/12 · C 1/6 👇\n\nEvery outcome as a square: 2 coin columns × 6 die rows = 12 cells. Heads is half, a six is one row, and both is the single cell where they cross: 1/12 = ½ × ⅙ (B). A second coin halves it again: 1/24. Each \"and\" cuts the space, so independent chances multiply. Adding (⅔) is the trap.\n\nPractise NDA PYQs free, chapter-wise: https://www.pyqvault.com\n\n#NDA #NDAMaths #LWSPune",
+    "youtube": {
+      "title": "Heads AND a six: is the chance 2/3, 1/12 or 1/6? Why probabilities multiply #shorts",
+      "description": "Draw every outcome of a coin and a die as a square of 12 cells. Heads is half of it, a six is one row, and both together is the one cell where they cross: 1/12 = ½ × ⅙. A second coin halves it again (1/24). Each \"and\" cuts the space, which is why independent chances multiply.\n\nPractise NDA PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #Shorts"
+    }
+  }
+}
