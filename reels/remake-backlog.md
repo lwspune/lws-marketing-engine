@@ -78,7 +78,7 @@ order of this table. **P19–P29 (2026-10-20, founder: "take one physics chapter
 | C10 | C | Cool the brown gas: NO₂ ⇌ N₂O₄ shifts (Le Chatelier) | – | 2 | 2 | 0 | 0 | 4 | |
 | C12 | C | Heat it by 10 °C: the rate doubles (collisions over the energy hill, CET notes) | – | 3 | 2 | 1 | 1 | 7 | ⏸ parked: repeats Chemistry #1, heat → rate (founder, 2026-10-20) |
 | C13 | C | Half-life: 64 atoms, 2 half-lives, 16 left (CET notes) | – | 3 | 2 | 1 | 1 | 7 | ✅ made 2026-10-20 (`pv-chem-007-halflife`, first voiceover) |
-| C14 | C | Stack the oranges: 52%, 68% or 74% filled (packing efficiency, CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
+| C14 | C | Stack the oranges: 52%, 68% or 74% filled (packing efficiency, CET notes) | – | 3 | 2 | 1 | 1 | 7 | ✅ made 2026-10-21 (`pv-chem-008-packing`) |
 | C15 | C | A zinc rod in blue copper sulphate: copper coats it, the blue fades (CET notes) | – | 3 | 2 | 1 | 0 | 6 | |
 | C16 | C | Why water is bent: lone pairs squeeze 109.5° → 104.5° (VSEPR, CET notes) | – | 2 | 2 | 1 | 1 | 6 | |
 | C17 | C | Salt makes water boil hotter, not faster (boiling-point elevation, CET notes) | – | 2 | 2 | 1 | 1 | 6 | |
