@@ -1,0 +1,50 @@
+{
+  "week": "2026-w43",
+  "days": [
+    {
+      "date": "2026-10-23",
+      "questionId": "abdf6a42-4723-4065-a057-782fea7b6d48",
+      "chapter": "Probability",
+      "question": "A fair die is thrown. What are the odds in favour of getting a perfect square on the top face?",
+      "options": [
+        { "label": "A", "text": "\\(1 : 3\\)" },
+        { "label": "B", "text": "\\(2 : 3\\)" },
+        { "label": "C", "text": "\\(1 : 2\\)" },
+        { "label": "D", "text": "\\(2 : 5\\)" }
+      ],
+      "answer": "C",
+      "step": "Perfect squares on a die: 1 and 4. That's 2 for, 4 against: \\(2 : 4 = 1 : 2\\).",
+      "checked": "Faces 1–6; squares {1, 4} → 2 favourable, 4 unfavourable → odds in favour 2 : 4 = 1 : 2 (not the probability 1/3, which is the trap in A). Matches the bank (C)."
+    },
+    {
+      "date": "2026-10-24",
+      "questionId": "40a158b5-6f12-40d9-8d65-3eb05c8ba620",
+      "chapter": "Definite Integration",
+      "question": "Let \\(f(x)\\) be odd and continuous on \\([-a, a]\\). Then \\[\\int_{-a}^{a} x f(x^2)\\,dx =\\]",
+      "options": [
+        { "label": "A", "text": "\\(0\\)" },
+        { "label": "B", "text": "\\(f(a)\\)" },
+        { "label": "C", "text": "\\(2f(a)\\)" },
+        { "label": "D", "text": "\\(2a\\)" }
+      ],
+      "answer": "A",
+      "step": "\\(f(x^2)\\) is even, so \\(x f(x^2)\\) is odd, and an odd function integrates to 0 over \\([-a, a]\\).",
+      "checked": "g(x) = x f(x²); g(−x) = −x f(x²) = −g(x), so g is odd → ∫ from −a to a = 0 (f being odd doesn't matter). Matches the bank (A)."
+    },
+    {
+      "date": "2026-10-25",
+      "questionId": "87bebf09-49fa-4079-8f99-3c9bf1b5471b",
+      "chapter": "Straight Line",
+      "question": "\\(P(2, 7)\\) is the midpoint of the part of a line cut off between the axes. The equation of the line is",
+      "options": [
+        { "label": "A", "text": "\\(2x + 7y = 28\\)" },
+        { "label": "B", "text": "\\(2x - 7y = 28\\)" },
+        { "label": "C", "text": "\\(7x + 2y = 28\\)" },
+        { "label": "D", "text": "\\(7x + 2y = 14\\)" }
+      ],
+      "answer": "C",
+      "step": "The line meets the axes at \\((4, 0)\\) and \\((0, 14)\\): \\(\\tfrac{x}{4} + \\tfrac{y}{14} = 1\\), so \\(7x + 2y = 28\\).",
+      "checked": "Midpoint (2, 7) of (a, 0) and (0, b) → a = 4, b = 14 → x/4 + y/14 = 1 → ×28: 7x + 2y = 28. Check: (2, 7) gives 14 + 14 = 28. Matches the bank (C)."
+    }
+  ]
+}
