@@ -20,6 +20,7 @@ import { PvChem006 } from './PvChem006.tsx';
 import { PvChem007 } from './PvChem007.tsx';
 import { PvChem008 } from './PvChem008.tsx';
 import { Reel016 } from './Reel016.tsx';
+import { Reel017 } from './Reel017.tsx';
 import { DemoPhysics } from './DemoPhysics.tsx';
 import { DemoParticles } from './DemoParticles.tsx';
 import { PvChem005 } from './PvChem005.tsx';
@@ -48,6 +49,7 @@ import { DURATION as DURATION_PC006 } from './lib/pc006.ts';
 import { DURATION as DURATION_PC007 } from './lib/pc007.ts';
 import { DURATION as DURATION_PC008 } from './lib/pc008.ts';
 import { DURATION as DURATION_016 } from './lib/reel016.ts';
+import { DURATION as DURATION_017 } from './lib/reel017.ts';
 import { DURATION as DURATION_PC005 } from './lib/pc005.ts';
 import { DURATION as DURATION_015 } from './lib/reel015.ts';
 import { DURATION as DURATION_010 } from './lib/reel010.ts';
@@ -115,6 +117,8 @@ export const Root = () => (
     <Still id="PvChem008Cover" component={PvChem008} width={1080} height={1920} defaultProps={{ cover: true, voice: false }} />
     <Composition id="Reel016" component={Reel016} durationInFrames={Math.round(DURATION_016 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="Reel016Cover" component={Reel016} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="Reel017" component={Reel017} durationInFrames={Math.round(DURATION_017 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="Reel017Cover" component={Reel017} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="DemoPhysics" component={DemoPhysics} durationInFrames={150} fps={30} width={1080} height={1920} />
     <Composition id="DemoParticles" component={DemoParticles} durationInFrames={150} fps={30} width={1080} height={1920} />
     <Composition id="PvChem005" component={PvChem005} durationInFrames={Math.round(DURATION_PC005 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />

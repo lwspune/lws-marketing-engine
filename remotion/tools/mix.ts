@@ -22,6 +22,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   pc008: { lib: '../src/lib/pc008.ts', file: 'public/pv-chem-008-packing' },
   '015': { lib: '../src/lib/reel015.ts', file: 'public/nda-maths-015-slope-graph' },
   '016': { lib: '../src/lib/reel016.ts', file: 'public/nda-maths-016-multiply' },
+  '017': { lib: '../src/lib/reel017.ts', file: 'public/nda-maths-017-probability-map' },
   '010': { lib: '../src/lib/reel010.ts', file: 'public/nda-maths-010-why-seven' },
   '011': { lib: '../src/lib/reel011.ts', file: 'public/nda-maths-011-why-det-area' },
   '012': { lib: '../src/lib/reel012.ts', file: 'public/nda-maths-012-why-sin-cos' },
