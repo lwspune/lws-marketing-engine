@@ -6,6 +6,14 @@ A running list of actionable improvements and blockers. Strike through when done
 
 ## Blockers only the user can clear
 
+### ~~Meta app "API access blocked" (found 2026-10-17)~~ RESOLVED 2026-10-17 (founder cleared it in the developer dashboard; all 3 tokens valid again)
+Every call with the Meta app (`1475312887986856`, "Digital Marketing Automation") returns code 200
+"API access blocked", even app-level calls, so it's an app restriction, not an expired token. Blocks:
+publishing (daily quiz Stories queued 19–24 Oct will fail → Retry after the fix), Insights + ad-result
+syncs (last good sync 16 Oct 14:03 UTC), competitor study (Business Discovery). Running ads still deliver.
+**How:** developers.facebook.com → the app → Dashboard / Required actions / Alert Inbox → screenshot the
+reason to Claude (likely a privacy-policy URL, Data Use Checkup or verification after going Live).
+
 ### Fill in the Crack SSB profile
 The app ships with a blank Crack SSB profile. Until it holds real buyer problems and real assets,
 the app refuses to generate for it (by design, no-slop rule).
@@ -24,10 +32,14 @@ holds `pyq_year` + `chapter_id` for 2,160 NDA Maths PYQs, so real chapter counts
 ### PYQ Vault price + UPI method (Phase 3)
 **How:** decide the price and pick UPI ID / QR / payment-link provider.
 
-### Publisher setup (built 2026-10-12, needs the founder's accounts)
-Code, tests and migrations are in `publisher/`. To go live, follow `publisher/SETUP.md`: Supabase
-project → migrate + seed → Meta app + `connect:meta` → Vercel deploy → scheduler secrets → `queue:add`.
-Then run the 17 DB tests against the real database and do ONE real test post with the founder's OK.
+### ~~Publisher setup~~ LIVE since 2026-10-15
+https://lws-marketing-engine.vercel.app (Vercel, root `publisher/`) · Supabase `rlbvnuujedtugsfhncey`
+(Mumbai) · Meta app `1475312887986856` (dev mode, LWS Pune Page + @lws.pune, never-expiring Page
+token in Vault) · pg_cron tick every minute · 98/98 tests incl. 17 DB tests on the real database.
+Queued as Ready: 001–005. **Next:** first real approval by the founder; queue 006/007 once final.
+**Security follow-up:** the Supabase access token and DB password were pasted in chat. Rotate both
+when convenient (Account → Access Tokens; Project Settings → Database → reset password, then update
+`.env.local`).
 
 ## Deferred improvements
 
@@ -46,8 +58,62 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 - **Publisher phase 3: YouTube Shorts.** Google Cloud project + OAuth + `videos.insert`; uploads stay
   private until Google's API audit passes, so submit the audit form early. Then the
   "Subscribe for more" YouTube render variants (`?platform=yt`).
+- **Meta app scope (decided 2026-10-15, changed 2026-10-19):** the publisher's Meta app now also reads and
+  sends Instagram DMs for the owner-only Inbox (`instagram_manage_messages`, migration 0012), founder-approved
+  with safeguards (CLAUDE.md decisions log). **WhatsApp:** Meta's "coexistence" now lets a WhatsApp
+  Business app number also run on the Cloud API with the phone app kept working (vendors say up to ~6 months of
+  history syncs), so 7020003600 may not need to move. See "WhatsApp in the Inbox" below before touching it. **Ads** via API only once ₹0-ads is lifted; Ads Manager needs no app.
+- **Comment-to-DM lead capture (Phase 2 idea, 2026-10-15):** "Comment NDA → get the free PDF in your
+  DMs". The messaging permission and the DM plumbing now exist (Inbox, 2026-10-19: webhook, send, store).
+  Still needs: comment webhooks (`comments` field), a private reply per comment, opt-out and rate limits.
+- **WhatsApp in the Inbox (founder asked 2026-10-19; check first, then build).** Goal: Click-to-WhatsApp ad chats
+  and WhatsApp leads in the same Inbox, with ad chats counted per ad automatically (CTWA messages carry
+  `referral.source_id` = ad id). Check before any code: (1) coexistence available for an Indian number and the
+  WhatsApp Business app on 7020003600 at v2.24.17+; (2) whether Meta lets us switch it on ourselves or needs a
+  Solution Partner / Tech Provider via Embedded Signup, and what that costs; (3) what it disables (broadcast
+  lists read-only, disappearing messages off). Then: `connected_accounts.platform` 'whatsapp', webhook object
+  `whatsapp_business_account` → the same `ingest_messages`.
+  **Check result (2026-10-19):** India is supported per vendors (Meta publishes no list; eligibility is checked
+  per number during signup). Meta's Embedded Signup page doesn't require Tech Provider status, but onboarding
+  needs Advanced Access to the WhatsApp permissions (App Review) and Business Verification raises the limits; the
+  phone-app number needs a customised flow ("WhatsApp Business app user onboarding"). Route to try first: our own
+  Meta app (combine with the Instagram messaging review). Fallback: a WhatsApp partner (monthly fee).
+  **Correction + build (2026-10-19, founder: 70200 03600):** Meta's current docs DO require Solution Partner or Tech
+  Provider status for the Business-app route; the portfolio is already verified, so what's left is App Review (Advanced
+  Access to both WhatsApp permissions). Built: Inbox → "Connect a WhatsApp Business app number" (Embedded Signup,
+  echoes + one-time history import), SETUP.md step 10. **PARKED by founder 2026-10-19 (too lengthy for now).** Done:
+  code live, webhook fields subscribed (API), Facebook Login for Business client OAuth settings, Tech Provider onboarding
+  started as **Independent Tech Provider** (business verification Approved). Stopped at App Review → "Review app
+  settings": upload `review/gopost-app-icon-1024.png` as the app icon, set category "Business and pages" (privacy URL
+  already set). Then: "Record video documentation" (2 videos: a message sent and received; a template created in
+  WhatsApp Manager), submit, wait for approval → create the WhatsApp Embedded Signup configuration (only "General" is
+  offered until then; don't create a General one: the variation can't be changed) → `META_WA_SIGNUP_CONFIG_ID` on
+  Vercel → connect 70200 03600, then link WhatsApp Web on the office PC (it used WhatsApp for Windows).
+  Embedded Signup v2/v3 retired 15 Oct 2026; Meta documents this route only with v3-style extras (`SIGNUP_EXTRAS`), so
+  if the v4 window doesn't offer it, that constant is the place to fix. Later: show `account_update` disconnections
+  (phone not opened for 14 days) as an account-health warning.
 - **Publisher: upload from the dashboard** (drag a reel in) instead of `npm run queue:add`.
 - **Publisher: account health**: warn on the dashboard when a token stops working.
+- **Publisher: small JPEG previews for the Queue (logged 2026-10-19).** Reel covers are PNGs of ~0.9 MB (up to 1.7 MB)
+  and the Queue shows them as previews; since 2026-10-19 they load only when scrolled to, but each is still full size.
+  `queue:add` could also upload a ~100 KB JPEG preview (sharp is already a dependency) for the cards, about 8× lighter.
+  Needs a `preview_path` column or a naming rule; Instagram keeps getting the full cover.
+- **Free AI voiceover on test (2026-10-20, founder-approved, L43).** Kokoro (`kokoro-js`, Apache 2.0, offline) in
+  `remotion/`: `npm run voice:<reel>` speaks the reel's `VOICE` lines (on-screen words only, framework F23),
+  `npm run mix:<reel>` makes a silent and a voiced mix, and the founder picks one. First reel: @pyqvault_ Chemistry #7.
+  If its American/British accent is the problem, try AI4Bharat's Indic Parler-TTS next. Decide after 3 voiced reels.
+  The own-voice ElevenLabs plan below stays parked until then.
+- **Hinglish AI voiceover in the founder's own voice (planned and parked 2026-10-15).** Route:
+  ElevenLabs Instant Voice Clone (founder confirmed the voice in `WhatsApp Video 2026-10-01 at 8.15.40 AM.mp4`
+  is theirs; that clip peaks at 0 dB and likely has music, so a clean 1–2 min phone recording is the
+  better sample). **Founder:** sign up, clone the voice (ticking the consent box themselves), put the API
+  key + voice ID in a gitignored `.env`. **Build:** `reels/<name>.voice.json` (timed Hinglish lines per
+  caption) → `reels/tools/voice.mjs` (calls the TTS API, caches unchanged lines, warns when a line
+  overruns its slot) → engine plays the clips with music ducked, packed as a script file so it works over
+  `file://` → test-first against a fake ElevenLabs server, `unchanged.mjs` SAME for all reels, voice-aware
+  loudness in `check-video`. **Rules:** "faceless + silent-first" becomes "faceless; AI voice optional;
+  captions carry everything" (CLAUDE.md, `lwspune-insta.md`, memory). Trial on reel 007 as a "voice vs
+  silent" format-test row. Only the script text leaves the machine; the key never enters a page or video.
 
 - Sequence writer (10-day nurture) as a fifth screen, exporting JSON the bot can run.
 - Weekly leads log inside the app (Phase 4).
@@ -112,6 +178,11 @@ would muddy the test · risk = low, text only, reversible in GoPost before appro
 **recommendation: do it for the 6 unposted reels** (edit each caption in GoPost before approving; then drop them from
 BEFORE_L45); **leave the 2 posted ones.** This also gives L45 six more test reels within days.
 
+### Opening orbit (the hook) on reels already made (logged 2026-10-20) DECLINED: founder, same day, "leave those now"
+Founder, 2026-10-20: "orbit is hook and should be there in first 3 sec", for @pyqvault_ and @lws.pune (framework F22
+v1.8 / v1.2). Made before the rule: @pyqvault_ Physics #5, #6, #7 and Chemistry #7 have no orbit, Chemistry #6 orbits at
+the close; Chemistry #5 and @lws.pune 014 already open with one. The founder chose to leave them; they post as made.
+
 ### Real glow / pen strokes on reels already made (logged 2026-10-20, not proposed)
 The reel toolkit (CLAUDE.md decisions log) adds real glow (bloom) to 3D reels and pen-pressure strokes to Sound Mind's
 drawings. Reels already made colour hot things bright (Physics #5 molecules, Chemistry #4/#6 flames) without glow, and
@@ -131,6 +202,24 @@ moving at 0.8 s: close enough. Reels already posted aren't touched.
 still with the question already on screen, vs the 2.6 s title card before · risk = re-render + re-upload hours before
 its slot · cost ≈ 20 min · **recommendation: leave it.** It's still a clean predict-first test (L28), and set against
 Physics #4 (moving at 0.8 s) it gives a first hint for L31.
+
+### Carousels upload PNG, which Instagram's API rejects (logged 2026-10-17, awaiting user confirmation)
+Found while building the daily quiz Story. A probe that only creates an unpublished Story container
+(never publishes) got `Meta API 400 (code 9004): Only photo or video can be accepted as media type` for
+a PNG and `FINISHED` for a JPEG. The publisher's carousel flow sends `image_url` PNG slides
+(`reels/*.post.json` slides, `lwspune-insta.md` "Image post … PNG"), so approving a carousel would most
+likely fail the same way. Not checked yet whether any carousel has gone through the publisher.
+**Proposed:** convert slides to JPEG at `queue:add` time (or render JPEG in `reels/tools`), and change
+the house setting to JPEG. Needs a 360 analysis before touching shipped carousels.
+
+### "One question per reel" vs the visual-candidates plan (logged 2026-10-14, awaiting user confirmation)
+New founder rule: one PYQ per reel, never two (`reels/lwspune-insta.md` → Content rules). No shipped
+reel breaks it (001–005 each solve one question). Two planning lines in `reels/visual-candidates.md`
+→ "Make next" do: #2 "Odd function = 0 … one reel, three PYQs on screen" and #4 "Two-dice grid … one
+grid, three questions". **Proposed:** reword both to one PYQ on screen, keeping "NDA asked this 3
+times" as the hook line. Docs only, no media to re-render; trivially reversible.
+**Update (same day):** #2 is resolved: reel 007 was made from one PYQ (24-I Q74). Only #4 (two-dice
+grid) still needs rewording.
 
 ### Wrong handle burned into reels 001–004 (logged 2026-10-12, DECLINED by user the same day)
 User: viewers can tap the account to follow, so the handle isn't needed; keep the Instagram files as
