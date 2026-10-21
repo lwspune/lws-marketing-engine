@@ -16,7 +16,7 @@ names the lesson that measures it.
 Baseline (typical @pyqvault_ reel, 9 reels, 2026-10-20): **133 views · 0 saves · 5.2 s watched**.
 Tests compare against this. Same day 23:20 the typical reel was 194 views · 1 save · 6.3 s (10 reels), lifted by the
 first two framework v1 reels and the calculus reel's second push.
-For scale: typical @lws.pune reel 788 views · 6.8 s; typical Sound Mind reel 399 views · 6.1 s (same day).
+For scale: typical @lws.pune reel 788 views · 6.8 s (same day).
 
 ---
 

@@ -133,7 +133,7 @@ caption, format and timing cover all 225 posts.
 
 - **✅ Long caption (E11):** more common in the top posts of 5 accounts (@komal_reads 73 % vs 27 %, @selfcarewithwall
   67 % vs 33 %, @habityra 67 % vs 40 %), the reverse in 2 (@myeasytherapy, @easybrilliantart). The second study in a row
-  to say so (run 1: 4 of 6 science accounts). Ours leans the same way (67 % vs 33 %). Still a lead: a long caption may
+  to say so (run 1: 4 of 6 science accounts). Ours leans the same way (figures: `analytics/soundmind-baseline.md`, local only). Still a lead: a long caption may
   just go with a meatier post. Note `brand.md` says Sound Mind captions are short.
 - **✅ The caption's first line speaks to "you" (E25):** top in 3 (@komal_reads 40 % vs 13 %, @selfcarewithwall
   67 % vs 47 %, @habityra 67 % vs 33 %), typical in 1 (@myeasytherapy).
@@ -146,7 +146,7 @@ caption, format and timing cover all 225 posts.
   cover leans *typical* at @myeasytherapy (7 % vs 40 %), as it did for two science accounts in run 1.
 - **Format** (from the exports, median likes per format, last year): where an account posts both, the still formats
   out-like its reels 3–11×: @komal_reads carousels 1,603 vs reels 303; @myeasytherapy single images 5,131, carousels
-  1,551, reels 459. Sound Mind's own: reels 25, carousels 26. Likes aren't reach (reels find non-followers), so L52
+  1,551, reels 459. Sound Mind's own reels and carousels get about the same likes (figures in the local baseline). Likes aren't reach (reels find non-followers), so L52
   decides on our own shares and reach.
 - **What the hits look like:** @komal_reads' best are metaphor-story carousels (*Your train is not late…* 607× its median,
   *Life of a lotus* 266×, *Life of a snail* 46×); @easybrilliantart's are reels of a one-line quote being drawn, about

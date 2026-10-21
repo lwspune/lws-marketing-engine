@@ -101,7 +101,7 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
 
 - **Sound Mind carousels (2026-10-19, founder-approved).** Sound Mind posts shareable carousels (quote cards +
   metaphor stories), modelled on @komal_reads / @myeasytherapy after a Business Discovery read of four accounts showed
-  their images and carousels beat reels, and Sound Mind's reels got 0 shares. Made in `soundmind/` (vanilla JS +
+  their images and carousels beat reels, and Sound Mind's reels were rarely shared. Made in `soundmind/` (vanilla JS +
   headless Edge, like the reels), queued with `queue:add`; Shivani judges finished posts, not drafts. Runbook:
   `soundmind/brand.md`.
 
@@ -179,7 +179,8 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   *.post.json            #   one per piece: manifest for publisher's `queue:add` (files + captions)
 soundmind/               # @soundmindwithshivani carousels (outside brand). Runbook + research: brand.md
   framework.md           #   POST FRAMEWORK (founder 2026-10-21): S1… points (carousels + ME reels), each with reason, check,
-                         #   status; "winning" = shares per 1,000 reached at 7 d; change only through its change log
+                         #   status, in three parts (both formats / carousels / reels, each with its own winning measure); change
+                         #   only through its change log. Sound Mind's numbers: analytics/soundmind-baseline.md (local only)
   learnings.md           #   Sound Mind LEARNINGS LOG (L52 on; one L-numbering with the LWS logs)
   cards.js               #   pure rules: batch validation, health-claim check, font sizes, GoPost manifest
   art.js                 #   line-drawing catalogue for story slides

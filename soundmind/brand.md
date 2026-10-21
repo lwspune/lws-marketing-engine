@@ -18,7 +18,8 @@ shares and saves of other accounts):
 | @therapypulse (372K) | stick-figure psychology reels; median fell from 5.8K likes (Aug 2025) to ~300 | the format is wearing out: don't make it the main bet |
 | @easybrilliantart (42.6K) | reels of a one-line quote being drawn (silence, being alone, peace): hits up to 445× its median, 174K likes; single images out-like its reels 1.7× | a hand-drawn line people want to send; read 2026-10-21 (`reels/analysis-framework.md` → run 2) |
 
-Sound Mind's own 80 reels (to 2026-06): median 399 views, **0 shares, 0 saves**, 6 s watch time.
+Sound Mind's own reels (to 2026-06) were rarely shared or saved (figures: `analytics/soundmind-baseline.md`, local only:
+Sound Mind's numbers stay out of the repo).
 GoPost can't post single images yet, so both formats are carousels.
 
 ## The two formats
@@ -99,6 +100,7 @@ JPEG. Page number top right, `@soundmindwithshivani` at the bottom. Drawings are
    GoPost's Ready tab under **Sound Mind with Shivani**. Approving puts each one in the next 18:00 IST slot
    (Instagram only: GoPost can't post carousels to Facebook yet).
 5. After 7 days, read each post's shares, saves and reach on its GoPost card and compare with the baseline
-   (`framework.md` → Winning means: 2.7 shares per 1,000 reached); write the result into its lesson in `learnings.md`.
+   (`framework.md` → Carousels / Reels → Winning means; the typical post is in `analytics/soundmind-baseline.md`, local); write
+   what happened into its lesson in `learnings.md` in words, and the figures into the local baseline.
 
 The JPEGs are not committed (`.gitignore`); re-make them from `batch.json` with step 2.
