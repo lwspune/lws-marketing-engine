@@ -20,6 +20,31 @@ test('every effect sounds at its own moment and not before', () => {
   }
 });
 
+// How high a sound sits: for a sine of frequency f the energy of its sample-to-sample differences is 4 sin²(πf/SR) of its
+// own, so this ratio gives a rough "brightness" in Hz without an FFT.
+const brightness = (a: Float32Array, t0: number, t1: number) => {
+  let e = 0, d = 0; const i0 = Math.round(t0 * SR), i1 = Math.round(t1 * SR);
+  for (let i = i0 + 1; i < i1; i++) { e += a[i] * a[i]; d += (a[i] - a[i - 1]) ** 2; }
+  return (SR / Math.PI) * Math.asin(Math.min(1, Math.sqrt(d / e) / 2));
+};
+
+// Modelled on a studied reel's sounds (2026-10-21, measured, never copied): a bright snap on a cut to a new screen
+// (centred near 5 kHz, gone in ~0.2 s) and an airy shimmer under a camera move (6–7 kHz, fading over ~2 s).
+test('snap: a bright, short hit for a pattern break (a flip to a new screen)', () => {
+  const out = renderSfx({ duration: 2, hits: [{ kind: 'snap', t: 0.5, gain: 1 }], beds: [] });
+  assert.ok(brightness(out, 0.5, 0.6) > 3000, `snap too dull: ${brightness(out, 0.5, 0.6).toFixed(0)} Hz`);
+  assert.ok(rms(out, 0.5, 0.55) > 0.05, 'snap too quiet');
+  assert.ok(rms(out, 0.8, 2) < 1e-4, 'snap still ringing after 0.3 s');
+});
+
+test('shimmer: an airy swell that rises, then fades over about 2 s', () => {
+  const out = renderSfx({ duration: 4, hits: [{ kind: 'shimmer', t: 0.5, gain: 1 }], beds: [] });
+  assert.ok(brightness(out, 0.5, 2.5) > 4500, `shimmer too dull: ${brightness(out, 0.5, 2.5).toFixed(0)} Hz`);
+  assert.ok(rms(out, 0.7, 0.9) > 2 * rms(out, 0.5, 0.55), 'shimmer should swell in, not start at full');
+  assert.ok(rms(out, 1.5, 1.8) > 0.2 * rms(out, 0.7, 0.9), 'shimmer gone too soon');
+  assert.ok(rms(out, 3.2, 4) < 1e-4, 'shimmer still sounding after 2.7 s');
+});
+
 test('the same score always renders the same sound', () => {
   const score: Score = { duration: 2, hits: [{ kind: 'tap', t: 0.5, gain: 0.7 }], beds: [{ kind: 'roar', t0: 0.2, t1: 1.5, level: () => 1 }] };
   assert.deepEqual(renderSfx(score), renderSfx(score));

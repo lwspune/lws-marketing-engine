@@ -5,7 +5,7 @@
 import type { Key } from './motion.ts';
 
 export const SR = 48000;
-export const HIT_KINDS = ['click', 'crack', 'thunk', 'whump', 'tap', 'boom', 'whoosh-in', 'whoosh-out'] as const;
+export const HIT_KINDS = ['click', 'crack', 'thunk', 'whump', 'tap', 'boom', 'whoosh-in', 'whoosh-out', 'snap', 'shimmer'] as const;
 export type HitKind = (typeof HIT_KINDS)[number];
 /** A one-off sound at time t. `pitch` scales the click / tap tone (1 = its normal pitch). */
 export type Hit = { kind: HitKind; t: number; gain: number; pitch?: number };
@@ -104,6 +104,26 @@ const HIT: Record<HitKind, (r: () => number, pitch: number) => Float32Array> = {
     }
     return out;
   },
+  // A pattern break (a cut to a new screen): a bright noise snap and a short high ping over a small low knock.
+  snap(r, pitch) {
+    const out = len(0.25), bp = new Biquad().set('band', 5000 * pitch, 0.9), f = 6200 * pitch;
+    for (let i = 0; i < out.length; i++) {
+      const t = i / SR;
+      out[i] = 1.1 * bp.run(white(r)) * Math.exp(-t / 0.012) + 0.22 * Math.sin(TAU * f * t) * Math.exp(-t / 0.02) + 0.18 * Math.sin(TAU * 180 * t) * Math.exp(-t / 0.025);
+    }
+    return out;
+  },
+  // Air and glints under a camera move: high noise and three high partials that swell in over 0.25 s, shimmer, and
+  // fade over about 2 s.
+  shimmer(r, pitch) {
+    const out = len(2.6), bp = new Biquad().set('band', 7000 * pitch, 0.7), parts = [5200, 6900, 8300].map(f => f * pitch);
+    for (let i = 0; i < out.length; i++) {
+      const t = i / SR, env = Math.min(1, (t / 0.25) ** 2) * Math.exp(-Math.max(0, t - 0.25) / 0.6) * Math.min(1, (2.6 - t) / 0.2);
+      const glint = parts.reduce((a, f, k) => a + Math.sin(TAU * f * t) * (0.5 + 0.5 * Math.sin(TAU * (3 + 2 * k) * t + k)), 0) / 3;
+      out[i] = env * (0.75 * bp.run(white(r)) + 0.1 * glint);
+    }
+    return out;
+  },
   'whoosh-in': (r) => whoosh(r, 350, 3200),
   'whoosh-out': (r) => whoosh(r, 3000, 300),
 };
@@ -161,6 +181,7 @@ const DUCK_HIT: Record<HitKind, { depth: number; hold: number }> = {
   click: { depth: 0, hold: 0 }, tap: { depth: 0, hold: 0 },
   crack: { depth: 0.35, hold: 0.3 }, thunk: { depth: 0.35, hold: 0.35 }, whump: { depth: 0.4, hold: 0.6 },
   boom: { depth: 0.4, hold: 1.2 }, 'whoosh-in': { depth: 0.25, hold: 0.55 }, 'whoosh-out': { depth: 0.2, hold: 0.55 },
+  snap: { depth: 0.2, hold: 0.25 }, shimmer: { depth: 0.15, hold: 1.2 },
 };
 const DUCK_BED = { roar: 0.25, scrape: 0.45 }, FLOOR = 0.5;
 

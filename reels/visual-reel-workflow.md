@@ -190,6 +190,9 @@ For a question whose picture is **3D** (a cone, a plane, a solid), make it in `r
 6. **Music:** write `remotion/music/<reel>.json` (`duration`, `music.style`, `music.hits`), then
    `node ../reels/tools/music.mjs music/<reel>.json public/<reel>.wav`: the house music from `engine.js`,
    rendered offline (sample-exact, hits on time). Then `npm run mix:<reel>`.
+   Effects (`src/lib/sfx.ts`, `HIT_KINDS`): click, tap, crack, thunk, whump, boom, whoosh-in/out, plus **snap** (a bright
+   hit for a cut or flip to a new screen) and **shimmer** (an airy 2 s swell under a reveal zoom), both modelled on a
+   studied reel's sounds (2026-10-21): measured, then made in code, never copied.
 7. **Check:** render the MP4 to `reels/` and run `check-video.mjs` as in step 4 (four PASS lines), and look at its
    strip.
 8. **Map reels (F28):** start from `Reel017.tsx` + `src/lib/reel017.ts`. A card is 330 px wide, so a formula line over
