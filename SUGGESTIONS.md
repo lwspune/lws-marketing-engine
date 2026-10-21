@@ -49,6 +49,14 @@ day with the @lws.pune reel framework (`reels/lwspune-framework.md` F1, lesson L
 Caption template reworded (a real PYQ named in the caption when one fits); `visual-reel-workflow.md` and the visual-reel
 skill point to the framework; the one-question rule is unchanged. First reel made this way: **015, f and f′ together**.
 
+- **Sound Mind: posts to analyse later (founder, 2026-10-21).** Theme to explore: **the problems Indian women face in
+  their daily lives.** Read each post (Business Discovery or Chrome, read-only), note its format, hook and numbers against
+  its account's typical post, and judge it against `soundmind/framework.md` before proposing anything to Shivani.
+  1. https://www.instagram.com/p/DewWisYGjq6/ (a carousel; the founder pointed at slide 8)
+- ~~**@pyqvault_ physics concept sweep (F28)**~~ DONE 2026-10-21: every MHT-CET physics chapter read in full, plus the 4
+  JEE Main chapters with no MHT-CET namesake; P47–P74 added, each chapter logged in `pyqvault-ideas.md` → Concept sweep.
+  Two left-outs worth the founder's eye: "drop one ball, throw another sideways: they land together" (close to P11) and
+  "a bottle's note rises as it fills" (a more everyday angle for P34).
 - **@pyqvault_ maths stories, next steps (started 2026-10-21, `stories/README.md`).** (1) "N of you got it right" on
   the 19:30 answer card, counted from that morning's story replies in the Inbox. It needs the card drawn on the day,
   not a week ahead, so it waits until replies actually come in (a "0 of you" card would hurt). (2) An auto-reply to a

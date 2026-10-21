@@ -77,7 +77,7 @@ with motion, comment prompt before the reveal, answer at the end (L3–L5; reel 
 
 **Music:** pick `music: { style }` per reel and rotate it (founder, 2026-10-17: different background music per reel): `lofi` (house default), `bright` (D-major pluck arpeggio + light beat, 100 BPM; reel 012), `calm` (soft piano, no drums, 72 BPM). All original, made in code. Check loudness with check-video after any new style. **Don't** sonify the maths (two tones at once sounded chaotic to the founder, L17); `music.tones` stays in the engine unused.
 
-**Choosing the topic:** start from `remake-backlog.md` (proven reels from the creators we studied, remade our way; founder, 2026-10-18). Take the idea, never their video or words.
+**Choosing the topic:** @pyqvault_ takes the tool's next pick from `pyqvault-ideas.md` (`node reels/tools/topic-scores.js pyqvault`; its card has the frame-0 question, the beats without words and the second hook); @lws.pune starts from `remake-backlog.md` (proven reels from the creators we studied, remade our way; founder, 2026-10-18). Take the idea, never their video or words.
 
 **Premium look checklist** (founder's brief: premium + soothing to the eyes):
 - [ ] At most **one maths colour + one area colour + one accent**; amber marks the correct answer and
@@ -170,7 +170,19 @@ For a question whose picture is **3D** (a cone, a plane, a solid), make it in `r
 
 1. **Storyboard first: a beat table** (founder, 2026-10-21), at the top of `src/lib/<reel>.ts`, one row per beat:
    time · what moves · the caption, and how long its voice line takes · what the camera must keep in frame · the key
-   objects' colours, from the board's `VIVID` set (F24; L22 decides white or dark). *Why:* on Physics #8 every first-render fault
+   objects' colours, each marked **real** (from `REAL` in `palette.ts`: copper, steel, flame, copper sulphate…; add a
+   missing material there first) or **VIVID** (for things with no real colour: particles, rays, arrows, bars), about 4 key
+   hues that sit well together, the same thing the same colour throughout; then **the pairs that must be told apart**,
+   each checked with `distinguishable()` in the reel's tests (colour-blind safe: never red–green, orange–yellow or
+   blue–violet for such a pair) (F24, founder 2026-10-22; L22 decides white or dark). **@pyqvault_: the hooks are rows of
+   their own** (founder, 2026-10-21), taken from the idea's card and its Hook queue row: **row 1 = the first hook**, from
+   frame 0 to 3 s (the A/B/C question, its hook type, the opening picture already moving behind it, and the tag; F4, F5,
+   F20, F25), including **its visual hook**: the eye-catching move from the Hook queue (an orbit, a punch-in,
+   parts assembling like a suit-up, an object splitting apart, a morph…; founder, 2026-10-21/22: every hook has a visual
+   layer) and **its sound** (the Hook sound: a snap per part of a suit-up, a crack for a split…; F14); **the answer row** (when the right option lights); **the second-hook row**, starting as the answer lands
+   (its question ≤ 7 words, which the rest of the reel answers; F26), with **its own attention-grabbing move**, the Second
+   visual from the Hook queue, and its sound (founder, 2026-10-22); and **the last row**, the loop back to frame 0 or the
+   end card (F27). *Why:* on Physics #8 every first-render fault
    was one a table catches: a cream candle and its image nearly invisible on the white board, the answer's image
    cropped at the band's edge, two voice lines longer than their captions. Remakes and rejections (Physics #4,
    Chemistry #4, Maths #3, the clay Sound Mind reel) each cost about an hour for a fault visible in a few frames.
@@ -185,9 +197,13 @@ For a question whose picture is **3D** (a cone, a plane, a solid), make it in `r
    the shared HTML pieces in `src/board.tsx` (same white look and Reel.WHITE colours, palette test-locked).
    Labels are HTML placed with `project()`, so they stay crisp Cambria.
 5. **Stills sheet before any sound or full render:** render 6–8 beat frames (the opening, the cover time, each beat,
-   the answer, the end card) with `npx remotion still <Comp> <out.png> --frame=<n>` into the scratchpad, put them on
+   the answer, the second hook on screen mid-move, and the last frame: the end card, or for a loop the last frame beside frame 0) with `npx remotion still <Comp> <out.png> --frame=<n>` into the scratchpad, put them on
    one sheet (an HTML grid screenshotted by headless Edge) and fix what it shows: anything hard to see on the board,
-   grey or washed out (F24), cropped, overlapping or late. **Claude's own check:** the founder judges the finished reel only, never the sheet
+   washed out, two neighbours hard to tell apart, a clash, or a fake colour where a real one exists (F24), cropped,
+   overlapping or late. Then read the sheet once **with the text hidden** (the
+   question, labels and captions; numbers, gauges and graphs stay): it must still show what happens and why (@pyqvault_
+   F29, founder 2026-10-21); if it doesn't, the picture is missing a beat, so add it rather than more words. The frames
+   from 0–3 s, text hidden, must show the visual hook's move doing something striking on every frame. **Claude's own check:** the founder judges the finished reel only, never the sheet
    (founder, 2026-10-21).
 6. **Music:** write `remotion/music/<reel>.json` (`duration`, `music.style`, `music.hits`), then
    `node ../reels/tools/music.mjs music/<reel>.json public/<reel>.wav`: the house music from `engine.js`,
@@ -196,7 +212,11 @@ For a question whose picture is **3D** (a cone, a plane, a solid), make it in `r
    hit for a cut or flip to a new screen) and **shimmer** (an airy 2 s swell under a reveal zoom), both modelled on a
    studied reel's sounds (2026-10-21): measured, then made in code, never copied.
 7. **Check:** render the MP4 to `reels/` and run `check-video.mjs` as in step 4 (four PASS lines), and look at its
-   strip.
+   strip. **@pyqvault_: then predict it before it's queued** (framework F30): `node reels/tools/virality-measure.mjs
+   reels/<reel>.post.json`, add its rows to `reels/virality-log.md` (Reels: the measured and storyboard points;
+   Predictions: today's score, band and weakest input, the record and the typical views now, Hindsight no) and run
+   `node reels/tools/virality.js`. While it's advisory, a "below typical" reel is flagged to the founder with its weakest
+   input; it doesn't stop the reel.
 8. **Map reels (F28):** start from `Reel017.tsx` + `src/lib/reel017.ts`. A card is 330 px wide, so a formula line over
    ~290 px at 34 px (about 18 Cambria characters) is cut off at its edge on the full map: give that node a smaller `size`
    (017's Bayes card: 31) or split the line. Check the full-map frame at full size, not only the stills sheet.

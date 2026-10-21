@@ -165,10 +165,21 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   visual-reel-workflow.md #  runbook for white-board animated-graph reels (skill: .claude/skills/visual-reel)
   visual-candidates.md   #   PYQs whose answer is a picture, by paper (pick visual reels from here)
   tools/                 #   headless-Edge scripts: frames, record, cover, check-video, unchanged (+ baseline.txt)
-  tools/topic-scores.js  #   next topic by score, per handle (framework F21; remake-backlog.md → Topic scores /
-                         #   @lws.pune topic scores); `node reels/tools/topic-scores.js [pyqvault|lwspune]`
+  pyqvault-ideas.md      #   @pyqvault_ IDEA LIST (founder 2026-10-21): every future reel comes from here. The test (F29 no
+                         #   words, F28 gate…), the score (weights × points /100, tuned at every analysis), Ideas table, one
+                         #   card per open idea (frame 0, beats without words, second hook), Hook queue, Concept sweep, Archive
+  remake-backlog.md      #   @lws.pune ideas (score /10) + the remake rules; @pyqvault_ moved to pyqvault-ideas.md
+  tools/topic-scores.js  #   next topic by score, per handle (framework F21); `node reels/tools/topic-scores.js
+                         #   [pyqvault|lwspune]`; `pyqvault --calibrate` = the weight tuning (48 h results from
+                         #   pyqvault-learnings.md → results, Idea column; needs 6 reels; prints, changes nothing)
+  virality-log.md        #   @pyqvault_ VIRALITY PREDICTOR (framework F30, founder 2026-10-22): inputs per reel, a score /100,
+                         #   band, weakest input; predictions frozen before posting, judged at 48 h; advisory until proven
+  tools/virality.js      #   the predictor (+ virality-measure.mjs: motion, colour, length, cover from the MP4 in headless
+                         #   Edge); `node reels/tools/virality.js [--update | --calibrate]`; --update at every analysis
+  tools/results-sync.js  #   copies GoPost's 48 h readings (publisher `npm run results`) into pyqvault-learnings.md's
+                         #   results table; the 4-step analysis routine is at the top of that table
   tools/hook-rotation.js #   @pyqvault_ hook, opening, second hook, loop per queued reel (framework F25–F27;
-                         #   remake-backlog.md → Hook queue): no repeat in a row, orbit ≤ 2 of any 4, loop alternates;
+                         #   pyqvault-ideas.md → Hook queue): no repeat in a row, orbit ≤ 2 of any 4, loop alternates;
                          #   `node reels/tools/hook-rotation.js`
   analysis-framework.md  #   REEL ELEMENT ANALYSIS: which elements go with hits (top vs typical reels per account), method +
                          #   decision rule + runs; tools/element-analysis.js (+ elements.js, cover-metrics.mjs, element-report.js),
@@ -228,7 +239,7 @@ response uses `{ ok, data | error: { code, message } }`. YouTube isn't wired yet
 it records a clear "not available yet" failure. **Scorecard (0004):** the same per-minute tick
 takes write-once snapshots of each published post at 48 h and 7 d (`publication_metrics`), shown
 on Done cards against `LWS_BASELINE` (src/lib/domain/metrics.ts, the median @lws.pune reel).
-`npm run insights -- --org=lws-pune` exports every reel's numbers to `../analytics/` (local only, git-ignored). **Insights tab
+`npm run insights -- --org=lws-pune` exports every reel's numbers to `../analytics/` (local only, git-ignored); `npm run results -- --org=lws-pune --project=pyqvault-insta` exports each reel's 48 h / 7 d readings by post slug for `reels/tools/results-sync.js` (`src/lib/domain/reelResults.ts`). **Insights tab
 (0005):** `/insights` lists every reel on the account (hand-posted too, `account_media`) against the
 typical reel computed live (`typicalReel`, median); refreshed nightly at 03:00 IST by pg_cron →
 `/api/cron/insights`, by the tab's Refresh button, or by `npm run insights` (same sync code).
