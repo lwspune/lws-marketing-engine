@@ -22,7 +22,8 @@
     "covers:fetch": "tsx scripts/covers-fetch.ts",
     "stories:plan": "tsx scripts/stories-plan.ts",
     "messages:backfill": "tsx scripts/messages-backfill.ts",
-    "messages:themes": "tsx scripts/messages-themes.ts"
+    "messages:themes": "tsx scripts/messages-themes.ts",
+    "leads:screen": "tsx scripts/leads-screen.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
