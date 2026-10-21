@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   findContact, formatPhone, guessCourse, instagramLead, leadsCsv, mergeFormLeads, parseFormEmail, parseScreening, sourceLabel, transcript,
-  whatsappContact,
+  whatsappContact, whatsappLink,
   type ChatMessage, type FormLead,
 } from "@/lib/domain/leads";
 
@@ -195,5 +195,12 @@ describe("sourceLabel for the website", () => {
   it("names the form's page", () => {
     expect(sourceLabel({ channel: "website", account: null, fromAd: false, page: "lwspune.com/ssb/" })).toBe("Website lwspune.com/ssb/");
     expect(sourceLabel({ channel: "website", account: null, fromAd: false, page: null })).toBe("Website");
+  });
+});
+
+describe("whatsappLink", () => {
+  it("opens a WhatsApp chat with a phone lead, and gives nothing for an email", () => {
+    expect(whatsappLink("+918356925351")).toBe("https://wa.me/918356925351");
+    expect(whatsappLink("a@b.co")).toBeNull();
   });
 });

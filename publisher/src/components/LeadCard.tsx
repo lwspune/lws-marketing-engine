@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useId, useState, useTransition } from "react";
 import { removeLead, updateLead } from "@/app/leads/actions";
+import { whatsappLink } from "@/lib/domain/leads";
 
 /** One lead: who, how to reach them, course, when and where from. Owners can correct the name and course, or remove it. */
 export function LeadCard({ lead, phone, date }: {
@@ -18,6 +19,8 @@ export function LeadCard({ lead, phone, date }: {
   const [pending, start] = useTransition();
   if (removed) return null;
   const who = saved.name || "No name yet";
+  // No chat in GoPost (website form): start one in WhatsApp instead.
+  const whatsapp = whatsappLink(lead.contact);
 
   return (
     <li className="px-4 py-3">
@@ -30,7 +33,13 @@ export function LeadCard({ lead, phone, date }: {
         <a className="link tabular-nums" href={phone ? `tel:${lead.contact}` : `mailto:${lead.contact}`}>{phone ?? lead.contact}</a>
         <span className="text-muted">{lead.source}</span>
         <span className="ml-auto flex gap-3">
-          {lead.conversationId && <Link className="link" href={`/inbox/${lead.conversationId}`}>Open chat</Link>}
+          {lead.conversationId
+            ? <Link className="link" href={`/inbox/${lead.conversationId}`}>Open chat</Link>
+            : whatsapp && (
+              <a className="link" href={whatsapp} target="_blank" rel="noopener noreferrer" aria-label={`Message ${who} on WhatsApp (opens WhatsApp)`}>
+                WhatsApp
+              </a>
+            )}
           {!editing && (
             <button type="button" className="link" onClick={() => { setDraft(saved); setError(null); setEditing(true); }}
               aria-label={`Edit ${who}`}>Edit</button>

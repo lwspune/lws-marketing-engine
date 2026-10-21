@@ -60,6 +60,9 @@ export function guessCourse(msgs: ChatMessage[]): string | null {
 /** A WhatsApp contact id is the number with its country code: "919876543210" → "+919876543210". */
 export const whatsappContact = (contactId: string): string | null => (/^[1-9]\d{7,14}$/.test(contactId) ? `+${contactId}` : null);
 
+/** A WhatsApp chat with a phone lead (wa.me opens the app with that number); null for an email. */
+export const whatsappLink = (contact: string): string | null => (/^\+\d{8,15}$/.test(contact) ? `https://wa.me/${contact.slice(1)}` : null);
+
 /** "+919876543210" → "+91 98765 43210"; other numbers and emails as they are. */
 export const formatPhone = (contact: string): string =>
   /^\+91[6-9]\d{9}$/.test(contact) ? `+91 ${contact.slice(3, 8)} ${contact.slice(8)}` : contact;
