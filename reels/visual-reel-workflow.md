@@ -102,7 +102,9 @@ with motion, comment prompt before the reveal, answer at the end (L3–L5; reel 
 
 Run from the project folder (`Digital_Marketing_AI`). They need Microsoft Edge and nothing else.
 Save every image the founder should look at (contact sheets, strips, before/after) inside the project
-folder, e.g. `reels/`, never a temp folder, so the links open from the editor.
+folder, e.g. `reels/`, never a temp folder, so the links open from the editor. **A change to how reels look** (a new
+on-screen tag, colours, layout) is shown as **two separate finished reels**, without and with the change, not a
+screenshot sheet: the founder watches both and picks (founder, 2026-10-21).
 
 ```
 node reels/tools/frames.mjs reels/<name>.render.html sheet.png 0 4 7.6 11 15 19 22.6 26.5

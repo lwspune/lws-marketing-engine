@@ -11,10 +11,10 @@ export function Logo({ size = "sm" }: { size?: "sm" | "lg" }) {
 }
 
 /**
- * Top bar shared by every page. `ads={false}` hides the Ads tab (staff logins); `inbox` shows the Inbox tab
- * (owners only: DMs, migration 0012).
+ * Top bar shared by every page. `ads={false}` hides the Ads tab (staff logins); `inbox` shows the Inbox and Leads
+ * tabs (owners only: DMs, migration 0012; leads, 0016).
  */
-export function Nav({ current, ads = true, inbox = false }: { current: "queue" | "inbox" | "ads" | "insights"; ads?: boolean; inbox?: boolean }) {
+export function Nav({ current, ads = true, inbox = false }: { current: "queue" | "inbox" | "leads" | "ads" | "insights"; ads?: boolean; inbox?: boolean }) {
   const item = (href: string, id: typeof current, label: string) => (
     <Link href={href} aria-current={current === id ? "page" : undefined} className="seg-item px-2 sm:px-3">{label}</Link>
   );
@@ -28,6 +28,7 @@ export function Nav({ current, ads = true, inbox = false }: { current: "queue" |
         <nav aria-label="Sections" className="seg sm:ml-4">
           {item("/", "queue", "Queue")}
           {inbox && item("/inbox", "inbox", "Inbox")}
+          {inbox && item("/leads", "leads", "Leads")}
           {ads && item("/ads", "ads", "Ads")}
           {item("/insights", "insights", "Insights")}
         </nav>

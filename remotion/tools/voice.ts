@@ -15,6 +15,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   pc007: { lib: '../src/lib/pc007.ts', file: 'public/pv-chem-007-halflife' },
   pp008: { lib: '../src/lib/pp008.ts', file: 'public/pv-physics-008-spoon' },
   pp009: { lib: '../src/lib/pp009.ts', file: 'public/pv-physics-009-wing-mirror' },
+  pp010: { lib: '../src/lib/pp010.ts', file: 'public/pv-physics-010-launch-angles' },
   pc008: { lib: '../src/lib/pc008.ts', file: 'public/pv-chem-008-packing' },
 };
 const id = process.argv[2], reel = REELS[id];

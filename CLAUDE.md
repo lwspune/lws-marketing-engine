@@ -164,6 +164,9 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   tools/                 #   headless-Edge scripts: frames, record, cover, check-video, unchanged (+ baseline.txt)
   tools/topic-scores.js  #   next topic by score, per handle (framework F21; remake-backlog.md → Topic scores /
                          #   @lws.pune topic scores); `node reels/tools/topic-scores.js [pyqvault|lwspune]`
+  tools/hook-rotation.js #   @pyqvault_ hook, opening, second hook, loop per queued reel (framework F25–F27;
+                         #   remake-backlog.md → Hook queue): no repeat in a row, orbit ≤ 2 of any 4, loop alternates;
+                         #   `node reels/tools/hook-rotation.js`
   analysis-framework.md  #   REEL ELEMENT ANALYSIS: which elements go with hits (top vs typical reels per account), method +
                          #   decision rule + runs; tools/element-analysis.js (+ elements.js, cover-metrics.mjs, element-report.js),
                          #   covers via publisher `npm run covers:fetch` (read-only, deleted after measuring); data in analytics/elements/
@@ -271,6 +274,23 @@ it): SETUP.md step 8. Live since 2026-10-19 for @lws.pune and @pyqvault_ (Sound 
 message is from an ad (Meta's ad mark, or one of Meta's ready-made ad questions, `adStarts`) gets the account's saved
 reply once (`src/lib/inbox/autoReply.ts`). `claim_auto_reply` (service role) is the gate: switched on, never claimed,
 nobody has replied yet; a failed send calls `release_auto_reply`. Owners set text + on/off in the Inbox box (`set_auto_reply`).
+**Leads (0016, founder 2026-10-21):** one list at `/leads` (owners only): name, contact, course, date, source, with
+"Download for Excel" (`/leads/export`, CSV) and Edit / "Not a lead" (marks the chat `not_lead` so it never comes back).
+Instagram chats become leads when the person shares a phone number or email (`findContact`, no AI); WhatsApp chats when
+judged genuine (Claude, `src/lib/leads/claude.ts`, only with `ANTHROPIC_API_KEY`; none is set yet, so the founder chose
+sorting in a Claude Code chat: `npm run leads:screen -- --org=lws-pune --whatsapp-out=<file>` → verdicts →
+`--whatsapp-in=<file>`). Hourly pg_cron `leads-hourly` → `/api/cron/leads` (`leads_to_check` → `screenLeads` →
+`record_lead_checks`); each chat is re-checked only after a new incoming message. One lead per contact per org.
+**Website leads (0017, founder 2026-10-21):** lwspune.com form entries (emailed from lws.adacoount@gmail.com, two layouts:
+"New message from" and "Request a Call Back") are read in a Claude Code chat through the Gmail connector, that sender
+only (no Gmail access for GoPost), and added with `npm run leads:website -- --org=lws-pune --file=<[{date,text}]>`
+(`parseFormEmail` + `mergeFormLeads` → `add_website_leads`): channel `website`, the form's page in `page`. Next time,
+search `from:lws.adacoount@gmail.com after:<newest website lead date>`. Skip test entries (first import: "test abc",
+"ABC XYZ", "LWS Foundation 8523697412", "Rajeev Thakkar 8526974562").
+**Leads from chats GoPost can't see (0018, founder 2026-10-21):** e.g. +91 91563 10546 (the SPI ad number, not connected):
+read in WhatsApp Web through Claude in Chrome, read-only; opening an unread chat marks it read, so judge unread ones by
+their preview or ask first. The founder approves the verdicts, then `npm run leads:add -- --org=lws-pune --channel=whatsapp
+--via="+91 91563 10546" --file=<[{phone,date,name?,course?,from_ad?,reason?}]>` → `add_outside_leads`.
 **WhatsApp Business app numbers (founder 2026-10-19, first: +91 70200 03600):** Meta "coexistence": the number stays on
 the phone app and also reaches GoPost. Inbox → "Connect a WhatsApp Business app number" opens Meta's Embedded Signup
 (`WhatsAppConnectBox`, env `META_WA_SIGNUP_CONFIG_ID`) → `connectWhatsAppBusinessApp` (owners) → `connectBusinessAppNumber`:
