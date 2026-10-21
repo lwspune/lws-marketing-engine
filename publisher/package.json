@@ -26,7 +26,8 @@
     "messages:themes": "tsx scripts/messages-themes.ts",
     "leads:screen": "tsx scripts/leads-screen.ts",
     "leads:website": "tsx scripts/leads-website.ts",
-    "leads:add": "tsx scripts/leads-add.ts"
+    "leads:add": "tsx scripts/leads-add.ts",
+    "results": "tsx scripts/reel-results.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",
