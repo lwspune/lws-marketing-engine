@@ -24,7 +24,8 @@
     "messages:backfill": "tsx scripts/messages-backfill.ts",
     "messages:themes": "tsx scripts/messages-themes.ts",
     "leads:screen": "tsx scripts/leads-screen.ts",
-    "leads:website": "tsx scripts/leads-website.ts"
+    "leads:website": "tsx scripts/leads-website.ts",
+    "leads:add": "tsx scripts/leads-add.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",

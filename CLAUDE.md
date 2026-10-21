@@ -270,6 +270,10 @@ only (no Gmail access for GoPost), and added with `npm run leads:website -- --or
 (`parseFormEmail` + `mergeFormLeads` → `add_website_leads`): channel `website`, the form's page in `page`. Next time,
 search `from:lws.adacoount@gmail.com after:<newest website lead date>`. Skip test entries (first import: "test abc",
 "ABC XYZ", "LWS Foundation 8523697412", "Rajeev Thakkar 8526974562").
+**Leads from chats GoPost can't see (0018, founder 2026-10-21):** e.g. +91 91563 10546 (the SPI ad number, not connected):
+read in WhatsApp Web through Claude in Chrome, read-only; opening an unread chat marks it read, so judge unread ones by
+their preview or ask first. The founder approves the verdicts, then `npm run leads:add -- --org=lws-pune --channel=whatsapp
+--via="+91 91563 10546" --file=<[{phone,date,name?,course?,from_ad?,reason?}]>` → `add_outside_leads`.
 **WhatsApp Business app numbers (founder 2026-10-19, first: +91 70200 03600):** Meta "coexistence": the number stays on
 the phone app and also reaches GoPost. Inbox → "Connect a WhatsApp Business app number" opens Meta's Embedded Signup
 (`WhatsAppConnectBox`, env `META_WA_SIGNUP_CONFIG_ID`) → `connectWhatsAppBusinessApp` (owners) → `connectBusinessAppNumber`:

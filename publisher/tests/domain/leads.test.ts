@@ -195,6 +195,7 @@ describe("sourceLabel for the website", () => {
   it("names the form's page", () => {
     expect(sourceLabel({ channel: "website", account: null, fromAd: false, page: "lwspune.com/ssb/" })).toBe("Website lwspune.com/ssb/");
     expect(sourceLabel({ channel: "website", account: null, fromAd: false, page: null })).toBe("Website");
+    expect(sourceLabel({ channel: "whatsapp", account: null, fromAd: true, page: "+91 91563 10546" })).toBe("WhatsApp +91 91563 10546 (ad)");
   });
 });
 
