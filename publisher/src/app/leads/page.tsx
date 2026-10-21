@@ -3,7 +3,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { memberAccess } from "@/lib/supabase/access";
 import { Nav, PageHeader } from "@/components/Nav";
 import { LeadCard } from "@/components/LeadCard";
-import { formatPhone } from "@/lib/domain/leads";
+import { formatPhone, whatsappLink } from "@/lib/domain/leads";
 import { loadLeads } from "./data";
 
 export const dynamic = "force-dynamic";
@@ -46,7 +46,8 @@ export default async function LeadsPage() {
         ) : (
           <ul className="card divide-y divide-line overflow-hidden" aria-label={`${leads.length} leads`}>
             {leads.map((l) => (
-              <LeadCard key={l.id} lead={l} date={DAY.format(new Date(l.lead_at))} phone={l.contact.startsWith("+") ? formatPhone(l.contact) : null} />
+              <LeadCard key={l.id} lead={l} date={DAY.format(new Date(l.lead_at))} phone={l.contact.startsWith("+") ? formatPhone(l.contact) : null}
+                whatsapp={l.conversationId ? null : whatsappLink(l.contact)} />
             ))}
           </ul>
         )}
