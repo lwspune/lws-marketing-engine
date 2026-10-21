@@ -206,13 +206,17 @@ on Done cards against `LWS_BASELINE` (src/lib/domain/metrics.ts, the median @lws
 typical reel computed live (`typicalReel`, median); refreshed nightly at 03:00 IST by pg_cron →
 `/api/cron/insights`, by the tab's Refresh button, or by `npm run insights` (same sync code).
 **Daily quiz Stories (0006/0007):** post kind `story` = one 1080×1920 **JPEG** card in `cover_path`
-(the Instagram API rejects PNG: code 9004), no caption, Instagram only, no scorecard, plus the
+(the Instagram API rejects PNG: code 9004), no caption, Instagram only, plus the
 `quiz` it shows (from PYQ Vault `/api/quiz/today?date=`, with per-place tagged `links`) so the
 story-reply DM and Telegram post link the same quiz. Saturdays 18:00 IST pg_cron → `/api/cron/stories`
 (or `npm run stories:plan`) queues next Mon–Sun as Ready; "Approve all stories" schedules each for
 07:30 IST on its day (`storyApproval`: posts now if its day started, refused once it's over). Card:
 `storyCard.ts` (satori + sharp, bundled Noto Sans in `assets/fonts`). `STORY_CTA=reply` switches the
-card from "link in bio" to "Reply QUIZ" once the reply DM exists.
+card from "link in bio" to "Reply QUIZ" once the reply DM exists. **Story scorecard (0015):** Instagram deletes
+a story's insights ~24 h after it goes up, so a story gets one `23h` snapshot (reach, views, replies, follows,
+profile visits, taps out; `record_story_metrics`, same write-once table and per-minute tick), shown on its card
+and in Insights → "Daily quiz stories" (typical story once 5 have numbers). No link-tap count: API stories can't
+carry a link sticker, so profile visits are the bio-link proxy; quiz visits are PYQ Vault's `utm_medium=story`.
 **Ads (0008):** the ad account is a `meta_ads` connected account (System User token, `npm run
 connect:ads`). Results (`ad_entities`, `ad_daily`: spend + WhatsApp chats per ad per day, in the ad
 account's own time zone: Asia/Kolkata for LWS Pune `act_570714718754453`) sync with the nightly insights job and show in the Insights
