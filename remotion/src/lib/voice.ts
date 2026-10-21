@@ -73,3 +73,59 @@ const norm = (s: string) => s.replace(/\s+/g, ' ').trim();
 /** True when the line's words are on screen, word for word, for the whole time it may play. */
 export const onScreen = (line: VoiceLine, shown: Shown[]) =>
   shown.some(s => norm(s.text) === norm(line.text) && line.t >= s.t0 && line.until <= s.t1);
+
+// ---- cadence (founder, 2026-10-21: "the voiceover doesn't seem to have cadence"). Measured on Chemistry #8: punctuating
+// the lines for speech and speaking the script in one pass didn't add pitch movement (7.1 and 7.4 semitones vs 8.3), and
+// Kokoro ignores "…" pauses: the flatness is the engine's. These helpers stay to judge other voices. -------------------
+
+const ONES = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen',
+  'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+function numberWords(n: number): string {
+  if (n < 20) return ONES[n];
+  if (n < 100) return TENS[Math.floor(n / 10)] + (n % 10 ? ` ${ONES[n % 10]}` : '');
+  if (n < 1000) return `${ONES[Math.floor(n / 100)]} hundred` + (n % 100 ? ` ${numberWords(n % 100)}` : '');
+  return String(n);
+}
+const words = (s: string) => s.toLowerCase().replace(/[’‘]/g, "'")
+  .replace(/(\d+)\s*%/g, (_, d: string) => `${numberWords(Number(d))} percent`)
+  .replace(/\d+/g, d => numberWords(Number(d)))
+  .replace(/[^a-z\s]/g, ' ').split(/\s+/).filter(Boolean).join(' ');
+/** True when a spoken form says exactly the on-screen words: only punctuation, case and numbers-as-words may differ
+ *  (F17: the voice never says what isn't on screen). */
+export const sameWords = (text: string, say: string) => words(text) === words(say);
+
+/** Pitch movement of a clip: the share of sounding frames that are voiced, the median pitch (Hz) and the spread between
+ *  its 10th and 90th percentiles in semitones. A flat, read-out-a-label line spreads little; a lively one more.
+ *  Autocorrelation on 40 ms frames every 10 ms, after averaging down to ~12 kHz; pitch searched over 75–400 Hz. */
+export function pitchStats(x: Float32Array, sr: number) {
+  const k = Math.max(1, Math.floor(sr / 12000)), rate = sr / k, y = new Float32Array(Math.floor(x.length / k));
+  for (let i = 0; i < y.length; i++) { let s = 0; for (let j = 0; j < k; j++) s += x[i * k + j]; y[i] = s / k; }
+  const win = Math.round(0.04 * rate), hop = Math.round(0.01 * rate), lo = Math.floor(rate / 400), hi = Math.ceil(rate / 75);
+  let peak = 0; for (const v of y) peak = Math.max(peak, Math.abs(v));
+  const f0s: number[] = []; let sounding = 0;
+  for (let at = 0; at + win + hi < y.length; at += hop) {
+    let e = 0; for (let i = 0; i < win; i++) e += y[at + i] ** 2;
+    if (peak === 0 || Math.sqrt(e / win) < 0.05 * peak) continue;
+    sounding++;
+    let best = 0, lag = 0;
+    for (let L = lo; L <= hi; L++) {
+      let c = 0, e2 = 0;
+      for (let i = 0; i < win; i++) { c += y[at + i] * y[at + i + L]; e2 += y[at + i + L] ** 2; }
+      const r = c / Math.sqrt(e * e2 + 1e-12);
+      if (r > best) { best = r; lag = L; }
+    }
+    if (best > 0.6) f0s.push(rate / lag);
+  }
+  if (!f0s.length) return { voiced: 0, median: 0, range: 0 };
+  const st = f0s.map(f => 12 * Math.log2(f)).sort((a, b) => a - b), q = (p: number) => st[Math.min(st.length - 1, Math.floor(p * st.length))];
+  return { voiced: f0s.length / sounding, median: 2 ** (q(0.5) / 12), range: q(0.9) - q(0.1) };
+}
+
+/** Sets the whole script's loudness with one gain, so each line keeps its own emphasis (instead of levelTo per line). */
+export function levelTogether(clips: Float32Array[], rms: number): Float32Array[] {
+  let s = 0, n = 0;
+  for (const c of clips) { for (const v of c) s += v * v; n += c.length; }
+  const g = s > 0 ? rms / Math.sqrt(s / n) : 1;
+  return clips.map(c => c.map(v => v * g));
+}

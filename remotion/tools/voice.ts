@@ -4,10 +4,12 @@
 // voice: Kokoro's Hindi voices (hf_alpha, hf_beta, hm_omega, hm_psi) read English with an Indian accent; their files are
 // written with the voice in the name, so the default voice's files stay as they are. Unchanged lines come from the cache
 // (public/voice/<key>.wav). Stops, without writing the track, if a line runs past the time its words are on screen.
+// Cadence (founder, 2026-10-21): `--together` sets one loudness for the script instead of per line. Each line's spoken
+// form (`say`) must keep its on-screen words. Prints each line's pitch spread (semitones, 10th–90th percentile).
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename } from 'node:path';
 import { SR, readWav, writeWav } from '../src/lib/sfx.ts';
-import { VOICE, VOICE_RMS, levelTo, overruns, placeVoice, trimSilence, upsample2x, voiceKey, type VoiceLine } from '../src/lib/voice.ts';
+import { VOICE, VOICE_RMS, levelTo, levelTogether, overruns, pitchStats, placeVoice, sameWords, trimSilence, upsample2x, voiceKey, type VoiceLine } from '../src/lib/voice.ts';
 
 const REELS: Record<string, { lib: string; file: string }> = {
   pc007: { lib: '../src/lib/pc007.ts', file: 'public/pv-chem-007-halflife' },
@@ -19,15 +21,18 @@ const id = process.argv[2], reel = REELS[id];
 if (!reel) throw new Error(`usage: node tools/voice.ts <${Object.keys(REELS).join(' | ')}>`);
 
 const arg = (k: string) => process.argv.find(a => a.startsWith(`--${k}=`))?.split('=')[1];
-const name = arg('voice') ?? VOICE.name, speed = Number(arg('speed') ?? VOICE.speed), tag = name === VOICE.name ? '' : `-${name}`;
+const name = arg('voice') ?? VOICE.name, speed = Number(arg('speed') ?? VOICE.speed);
+const together = process.argv.includes('--together');
+const tag = [name === VOICE.name ? '' : name, speed === VOICE.speed ? '' : `s${speed}`, together ? 'together' : '']
+  .filter(Boolean).map(p => `-${p}`).join('');
 const { VOICE: LINES, DURATION } = (await import(reel.lib)) as { VOICE: VoiceLine[]; DURATION: number };
+for (const l of LINES) if (l.say && !sameWords(l.text, l.say)) throw new Error(`"${l.say}" changes the words of "${l.text}" (F17)`);
 const dir = 'public/voice';
 mkdirSync(dir, { recursive: true });
 
 let tts: { generate: (text: string, o: { voice: string; speed: number }) => Promise<{ audio: Float32Array; sampling_rate: number }> } | null = null;
-const clips: Float32Array[] = [];
-for (const line of LINES) {
-  const cached = `${dir}/${voiceKey(line, name, speed)}.wav`;
+async function speak(text: string, key: string): Promise<Float32Array> {
+  const cached = `${dir}/${key}.wav`;
   if (!existsSync(cached)) {
     if (!tts) {
       const { KokoroTTS } = await import('kokoro-js');
@@ -38,15 +43,21 @@ for (const line of LINES) {
       if (/^h[fm]_/.test(name)) Object.assign(k, { _validate_voice: (v: string) => (/^h[fm]_/.test(v) ? v.at(0) : check(v)) });
       tts = k as unknown as typeof tts;
     }
-    const out = await tts!.generate(line.say ?? line.text, { voice: name, speed });
+    const out = await tts!.generate(text, { voice: name, speed });
     if (out.sampling_rate * 2 !== SR) throw new Error(`Kokoro gave ${out.sampling_rate} Hz, expected ${SR / 2}`);
-    writeFileSync(cached, writeWav([levelTo(trimSilence(upsample2x(out.audio)), VOICE_RMS)], SR));
+    writeFileSync(cached, writeWav([trimSilence(upsample2x(out.audio))], SR));
   }
-  clips.push(readWav(readFileSync(cached)).channels[0]);
+  return readWav(readFileSync(cached)).channels[0];
 }
 
+let clips: Float32Array[] = [];
+for (const line of LINES) clips.push(await speak(line.say ?? line.text, voiceKey(line, name, speed) + '-raw'));
+clips = together ? levelTogether(clips, VOICE_RMS) : clips.map(c => levelTo(c, VOICE_RMS));
+
 const seconds = clips.map(c => c.length / SR);
-LINES.forEach((l, i) => console.log(`${l.t.toFixed(2)} s  ${seconds[i].toFixed(2)} s of ${(l.until - l.t).toFixed(2)} s  "${l.say ?? l.text}"`));
+const spread = clips.map(c => pitchStats(c, SR).range);
+LINES.forEach((l, i) => console.log(`${l.t.toFixed(2)} s  ${seconds[i].toFixed(2)} s of ${(l.until - l.t).toFixed(2)} s  pitch ±${spread[i].toFixed(1)} st  "${l.say ?? l.text}"`));
+console.log(`pitch spread, median of lines: ${[...spread].sort((a, b) => a - b)[Math.floor(spread.length / 2)].toFixed(1)} semitones${tag ? ` (${tag.slice(1)})` : ''}`);
 const late = overruns(LINES, seconds);
 if (late.length) {
   for (const l of late) console.error(`too long: "${l.text}" takes ${l.seconds.toFixed(2)} s, has ${(l.until - l.t).toFixed(2)} s`);

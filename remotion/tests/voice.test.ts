@@ -81,3 +81,34 @@ test('the mix: music dips under the voice and comes back; the peak stays under �
   assert.ok(Math.abs(rms(wet.left, 4.6, 5.8) - rms(dry.left, 4.6, 5.8)) < 0.02, 'music did not come back');
   assert.ok(wet.peak <= 10 ** (-3 / 20), `peak ${wet.peak}`);
 });
+
+// Cadence (founder, 2026-10-21: "the voiceover doesn't seem to have cadence"). The spoken form may reshape a line for the
+// ear (punctuation, numbers in words) but never change its words (F17); lines can keep their natural loudness
+// differences; and pitch movement is measured, not guessed.
+test('a spoken form keeps the on-screen words: only punctuation and numbers-as-words may change', async () => {
+  const { sameWords } = await import('../src/lib/voice.ts');
+  assert.ok(sameWords('Straight rows: 52% filled', 'Straight rows… fifty-two percent filled.'));
+  assert.ok(sameWords('74%: the best way to stack', 'Seventy-four percent! The best way to stack.'));
+  assert.ok(sameWords('The fruit-seller’s pyramid is 74%', "The fruit-seller's pyramid is seventy-four percent."));
+  assert.ok(!sameWords('One in the middle: 68%', 'Put one in the middle: sixty-eight percent'), 'an added word');
+  assert.ok(!sameWords('One in the middle: 68%', 'One in the middle: sixty percent'), 'a different number');
+});
+
+test('pitch movement is measured: a steady tone barely moves, an octave glide moves about 12 semitones', async () => {
+  const { pitchStats } = await import('../src/lib/voice.ts');
+  const glide = (f0: number, f1: number, s: number) => { let ph = 0; return Float32Array.from({ length: Math.round(s * SR) }, (_, i) => { ph += (2 * Math.PI * (f0 * (f1 / f0) ** (i / (s * SR)))) / SR; return 0.4 * Math.sin(ph); }); };
+  const steady = pitchStats(glide(200, 200, 1), SR), octave = pitchStats(glide(150, 300, 1), SR);
+  assert.ok(steady.voiced > 0.9 && steady.range < 0.5, `steady range ${steady.range}`);
+  assert.ok(Math.abs(octave.range - 12 * 0.8) < 1.5, `glide p10–p90 range ${octave.range}`);   // the middle 80 % of an even glide
+  assert.ok(Math.abs(pitchStats(glide(150, 300, 1), SR).median - 212) < 12);
+  assert.equal(pitchStats(new Float32Array(SR), SR).voiced, 0);
+});
+
+test('lines share one level: the script\'s overall loudness is set, each line keeps its own emphasis', async () => {
+  const { levelTogether } = await import('../src/lib/voice.ts');
+  const out = levelTogether([tone(1, 0.2, SR), tone(1, 0.4, SR)], 0.1);
+  const r = out.map(c => rms(c, 0, 1));
+  assert.ok(Math.abs(r[1] / r[0] - 2) < 1e-6, 'the louder line stays twice as loud');
+  const all = Math.sqrt((r[0] ** 2 + r[1] ** 2) / 2);
+  assert.ok(Math.abs(all - 0.1) < 1e-6);
+});
