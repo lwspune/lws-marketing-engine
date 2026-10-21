@@ -1,4 +1,4 @@
-# @soundmindwithshivani post framework (v1, 2026-10-21)
+# @soundmindwithshivani post framework (v1.1, 2026-10-21)
 
 How every Sound Mind post is made, carousels and reels, one numbered point at a time. Same standard as @pyqvault_'s
 (`reels/pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or
@@ -51,6 +51,17 @@ standard
 comments*); reels carry the ask in the caption's last line. · *Why:* shares are the number we're moving, and asking is the
 cheapest lever we have; the model accounts all ask. · *Check:* `cards.js` requires the share slide last; the reel's caption
 has the line. · 📌 house standard (the element analysis, E14 / E23, tells us if asking goes with hits)
+**Never "comment KEYWORD"** on a post meant to spread; if Sound Mind sells something, the keyword goes in its own post.
+· *Why:* in run 2 of the element analysis, keyword asks went with *ordinary* posts in 3 accounts and with hits in none
+(@myeasytherapy 0 % of hits vs 27 % of ordinary posts): they're sales posts, and sales posts don't travel. · *Check:* read
+the caption. · 📌 founder, 2026-10-21 (no lesson: we don't post keyword asks; the next analysis run re-checks E24)
+
+**S16 · Captions of a few lines, opening on "you".** The first line speaks to the reader and names the feeling ("You
+don't have to earn rest."); then 2–4 short lines that open up the post's idea (what it looks like on a normal day, one
+small thing to try); then the share or save ask (S6); 1–5 hashtags. No more one-line captions. · *Why:* run 2 of the
+element analysis: long captions went with hits in 5 of 7 wellness accounts (and in 4 of 6 science accounts in run 1),
+a first line to "you" in 3 (one the other way). Still a lead: a long caption may just go with a meatier post, so our own
+numbers decide. · *Check:* the caption has a "you" first line and at least 3 lines before the hashtags. · 🧪 L56
 
 **S7 · Faceless, and it works muted.** Drawings and words, never Shivani's face or voice unless she chooses to record
 one. · *Why:* the house rule (no flows that assume face or voice), and most people scroll muted. · *Check:* watch it
@@ -117,3 +128,4 @@ the beats are checked instead of eyeballed. · *Check:* `npm test` in `remotion/
 | Version | Date | Change | Why |
 |---|---|---|---|
 | v1 | 2026-10-21 | Framework created from `brand.md`'s rules (S1–S15), each with a reason, a check and a status; "winning" set to shares per 1,000 reached at 7 days. Lessons L52–L55 measure the four points on test. | Founder: a framework like @pyqvault_'s, for Sound Mind. Nothing in it is new: it numbers what Sound Mind already does, so changes from here on have a trail. |
+| v1.1 | 2026-10-21 | S6: never "comment KEYWORD" on a post meant to spread. S16 added: captions of a few lines, opening on "you" (replaces the one-line caption); on test, L56. | Founder chose both from run 2 of the element analysis (`reels/analysis-framework.md`): keyword asks went with ordinary posts in 3 accounts; long captions with hits in 5, a "you" first line in 3. Week 43's posts keep their one-line captions and are L56's comparison (SUGGESTIONS.md → Backfill ledger). |

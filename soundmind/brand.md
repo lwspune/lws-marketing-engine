@@ -85,7 +85,8 @@ JPEG. Page number top right, `@soundmindwithshivani` at the bottom. Drawings are
 - **Original lines only.** Never present a borrowed quote as hers; never invent a client's or follower's words.
 - **No health claims:** no "cure", diagnosis, guarantees, medication or "you have <disorder>". `cards.js`
   refuses these words. Gentle practices (breathing, grounding, rest) are fine.
-- Captions are short (one line, a question, a save/share nudge) with 1–5 hashtags including `#soundmind`.
+- Captions (framework S16, from week 44): a first line that speaks to "you" and names the feeling, 2–4 short lines that
+  open up the idea, then the share or save ask; 1–5 hashtags including `#soundmind`. Never "comment KEYWORD" (S6).
 
 ## Weekly routine
 

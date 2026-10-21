@@ -70,6 +70,14 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### Sound Mind week-43 posts have one-line captions (logged 2026-10-21, declined)
+Framework v1.1 (S16) gives captions a "you" first line and 2–4 lines of the idea. The 11 week-43 posts (7 carousels,
+4 reels; 2 published, the rest approved or ready in GoPost) have one-line captions.
+**360:** scope = 11 captions · blast radius = their GoPost posts (2 already live; editing a live caption is possible but
+changes a post mid-measurement) · does it really apply: yes, but S16 is a 🧪 lead, not proven · risk: low, reversible ·
+cost: ~30 min · **recommendation: decline.** Week 43 is L56's comparison group: rewriting it would leave nothing to
+measure the new captions against.
+
 ### @lws.pune's daily quiz stories show only a chapter name and a link (logged 2026-10-21, not proposed)
 @pyqvault_'s new maths stories put the question on the card and ask for a reply. @lws.pune's daily quiz stories (since
 16 Oct) show only a chapter name and "Tap the link in our bio". The one with numbers (20 Oct) reached 163 people:
