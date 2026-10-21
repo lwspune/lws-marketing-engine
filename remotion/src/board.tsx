@@ -89,10 +89,11 @@ export const C = ({ color, children }: { color: string; children: React.ReactNod
 
 // Answer options as pills centred on the page. From `at` the answer fills with the accent and pulses once;
 // the wrong options step back so the eye lands on the answer.
-export function Chips({ t, labels, answer, at, top, w = 180, h = 72, gap = 20, size = 44 }:
-  { t: number; labels: string[]; answer: number; at: number; top: number; w?: number; h?: number; gap?: number; size?: number }) {
-  const P = usePalette();
-  const on = prog(t, at, 0.6), pulse = Math.sin(Math.PI * clamp01((t - at) / 0.7)), dim = 1 - 0.55 * prog(t, at + 0.3, 0.5);
+// `until`: a looping reel (F27) un-lights the answer from then, so its last frame matches its first.
+export function Chips({ t, labels, answer, at, top, w = 180, h = 72, gap = 20, size = 44, until = Infinity }:
+  { t: number; labels: string[]; answer: number; at: number; top: number; w?: number; h?: number; gap?: number; size?: number; until?: number }) {
+  const P = usePalette(), back = 1 - prog(t, until, 0.5);
+  const on = prog(t, at, 0.6) * back, pulse = Math.sin(Math.PI * clamp01((t - at) / 0.7)), dim = 1 - 0.55 * prog(t, at + 0.3, 0.5) * back;
   const x0 = 540 - (labels.length * w + (labels.length - 1) * gap) / 2;
   return <>{labels.map((label, i) => {
     const hit = i === answer && on > 0, s = hit ? 1 + 0.07 * pulse : 1;
@@ -138,18 +139,25 @@ export function TitleCard({ t, label, lines, color, size = 78 }: { t: number; la
 // The predict-first opening (learnings L28, 2026-10-19): from frame 0 a question the viewer can answer in two seconds,
 // with A/B/C pills and a nudge to comment a guess. No still title card (L29: viewers left within ~3–6 s). The right pill
 // lights at `at`, when the picture has shown the answer.
-export function PredictHeader({ t, label, lines, options, answer, at, size = 58, chipW = 200 }:
-  { t: number; label: string; lines: string[]; options: string[]; answer: number; at: number; size?: number; chipW?: number }) {
-  const P = usePalette(), nudge = 1 - prog(t, at - 0.4, 0.4), top = 150 + lines.length * size * 1.2;
+// `brand` (F20, founder 2026-10-21): "PYQ Vault · pyqvault.com" under the chips from frame 0, for the whole reel, quieter
+// than the question (muted: ≥ 4.5:1 on the board). `until` (F27): the card resets for a loop.
+export function PredictHeader({ t, label, lines, options, answer, at, size = 58, chipW = 200, brand, until = Infinity }:
+  { t: number; label: string; lines: string[]; options: string[]; answer: number; at: number; size?: number; chipW?: number; brand?: string; until?: number }) {
+  const P = usePalette(), nudge = Math.max(1 - prog(t, at - 0.4, 0.4), prog(t, until, 0.5)), top = 150 + lines.length * size * 1.2;
   return (
     <>
       <div style={{ position: 'absolute', left: 0, width: 1080, top: 96, textAlign: 'center', font: `700 34px ${SOFT_UI}`, color: P.muted, whiteSpace: 'pre' }}>{label}</div>
       {lines.map((l, i) => (
         <div key={l} style={{ position: 'absolute', left: 0, width: 1080, top: 150 + i * size * 1.2, textAlign: 'center', ...hand(size), color: P.ink, whiteSpace: 'pre' }}>{l}</div>
       ))}
-      <Chips t={t} labels={options} answer={answer} at={at} top={top + 26} w={chipW} h={76} gap={22} size={42} />
+      <Chips t={t} labels={options} answer={answer} at={at} top={top + 26} w={chipW} h={76} gap={22} size={42} until={until} />
+      {brand && (
+        <div style={{ position: 'absolute', left: 0, width: 1080, top: top + 120, textAlign: 'center', font: `600 30px ${SOFT_UI}`, color: P.muted, letterSpacing: 0.5 }}>
+          {brand}
+        </div>
+      )}
       {nudge > 0 && (
-        <div style={{ position: 'absolute', left: 0, width: 1080, top: top + 122, textAlign: 'center', opacity: nudge, font: `600 32px ${SOFT_UI}`, color: P.muted }}>
+        <div style={{ position: 'absolute', left: 0, width: 1080, top: top + (brand ? 166 : 122), textAlign: 'center', opacity: nudge, font: `600 32px ${SOFT_UI}`, color: P.muted }}>
           comment your guess 👇
         </div>
       )}
