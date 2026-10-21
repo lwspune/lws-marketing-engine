@@ -126,6 +126,13 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   how to use them in Remotion: `reels/visual-reel-workflow.md` → Reel toolkit). The path tracer was tried and dropped
   (too slow and unreliable on this laptop).
 
+- **@pyqvault_ daily maths question stories (2026-10-21, founder-approved).** For engagement and reach: an easy MHT-CET
+  maths MCQ at 07:30 IST ("Reply A, B, C or D") and its answer at 19:30. The cards never name an exam (founder: "just
+  q and options"). Replies, not a quiz sticker: the API can't add stickers, and replies land in the Inbox. Made a week
+  at a time in `stories/` (KaTeX in headless Edge, because the server's card maker can't set maths, and every answer
+  is re-derived first), queued with `queue:add`, approved with "Approve all stories". This is @pyqvault_'s one maths
+  format: its reels stay physics + chemistry. Runbook: `stories/README.md`.
+
 ## File structure
 
 ```
@@ -170,6 +177,12 @@ soundmind/               # @soundmindwithshivani carousels (outside brand). Runb
   reels/                 #   "ME" story reels made in remotion/ (MeStory.tsx shared, SoundMind00N.tsx each):
                          #   .post.json + cover; MP4 gitignored
 tests/soundmind-cards.test.js # node --test
+stories/                 # @pyqvault_ daily maths question stories. Runbook: stories/README.md
+  questions.js           #   pure rules: batch check (no exam names, A–D spread, re-derived), times, card words, manifests
+  card.html, render.mjs  #   KaTeX card (vendor/katex = pyqvault.com's version) → 1080×1920 JPEGs + .post.json per card
+  pick.mjs               #   shortlist easy MHT-CET maths MCQs from the question bank (anon key, read-only)
+  pyqvault/<year>-w<wk>/ #   batch.json + manifests (committed) + cards (gitignored)
+tests/stories-questions.test.js # node --test
 remotion/                # TRIAL: reels in Remotion (React + SVG, frame-by-frame render, Edge). `npm test`,
                          #   `npm run typecheck`, `npm run audio` (soundtrack from the engine MP4), `npm run render`,
                          #   `npm run compare:files && npm run compare` (old vs new side by side) → out/
@@ -217,6 +230,10 @@ a story's insights ~24 h after it goes up, so a story gets one `23h` snapshot (r
 profile visits, taps out; `record_story_metrics`, same write-once table and per-minute tick), shown on its card
 and in Insights → "Daily quiz stories" (typical story once 5 have numbers). No link-tap count: API stories can't
 carry a link sticker, so profile visits are the bio-link proxy; quiz visits are PYQ Vault's `utm_medium=story`.
+**Question stories (0017, founder 2026-10-21):** a story shows a `quiz` (the @lws.pune planner) OR a `question`
+(`{id, answer, part}`: @pyqvault_'s maths cards from `stories/`), never both, frozen once approved. Manifests take
+`kind: "story"` with `plannedFor` + `question` (`queue:add`). Insights keeps "Daily maths questions" apart from
+"Daily quiz stories".
 **Ads (0008):** the ad account is a `meta_ads` connected account (System User token, `npm run
 connect:ads`). Results (`ad_entities`, `ad_daily`: spend + WhatsApp chats per ad per day, in the ad
 account's own time zone: Asia/Kolkata for LWS Pune `act_570714718754453`) sync with the nightly insights job and show in the Insights

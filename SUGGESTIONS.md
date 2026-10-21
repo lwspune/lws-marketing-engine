@@ -37,6 +37,12 @@ day with the @lws.pune reel framework (`reels/lwspune-framework.md` F1, lesson L
 Caption template reworded (a real PYQ named in the caption when one fits); `visual-reel-workflow.md` and the visual-reel
 skill point to the framework; the one-question rule is unchanged. First reel made this way: **015, f and f′ together**.
 
+- **@pyqvault_ maths stories, next steps (started 2026-10-21, `stories/README.md`).** (1) "N of you got it right" on
+  the 19:30 answer card, counted from that morning's story replies in the Inbox. It needs the card drawn on the day,
+  not a week ahead, so it waits until replies actually come in (a "0 of you" card would hurt). (2) An auto-reply to a
+  story reply ("Got it! Answer at 7:30 pm" + a link to more questions in that chapter), built on the `question` the
+  card carries and the ad auto-reply's claim/release gate. Decide both after 2 weeks of numbers in Insights →
+  "Daily maths questions".
 - **Publisher phase 3: YouTube Shorts.** Google Cloud project + OAuth + `videos.insert`; uploads stay
   private until Google's API audit passes, so submit the audit form early. Then the
   "Subscribe for more" YouTube render variants (`?platform=yt`).
@@ -63,6 +69,17 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
   bank and draft the kit inside the app (still behind the approval gate).
 
 ## Backfill ledger
+
+### @lws.pune's daily quiz stories show only a chapter name and a link (logged 2026-10-21, not proposed)
+@pyqvault_'s new maths stories put the question on the card and ask for a reply. @lws.pune's daily quiz stories (since
+16 Oct) show only a chapter name and "Tap the link in our bio". The one with numbers (20 Oct) reached 163 people:
+0 replies, 17 profile visits, and 115 of ~206 views tapped away.
+**360:** scope = the weekly quiz-story planner (`storyPlanner.ts`, Saturday job) and its card · blast radius = @lws.pune's
+morning story, the bio-link quiz traffic to PYQ Vault (`utm_medium=story`) · does it apply? only if question cards beat
+link cards: one data point isn't enough, and the two audiences differ (NDA vs Class 11–12) · risk = low, reversible
+(the planner is one switch) · cost ≈ half a day: NDA questions are also LaTeX, so the card would come from
+`stories/render.mjs`, not the server · **recommendation: defer** until @pyqvault_ has 2 weeks of "Daily maths
+questions" numbers to compare against.
 
 ### Bright objects (F24) on reels already made (logged 2026-10-21, not proposed)
 New founder rule (framework F24, both handles): key objects take colours from the `VIVID` set. Made before it: every
