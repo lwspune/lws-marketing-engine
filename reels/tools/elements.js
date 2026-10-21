@@ -127,6 +127,7 @@ function analyse(reels, elements, { own } = {}) {
       const vals = rs.map((r) => e.get(r)), yes = e.numeric ? aboveMedian(vals) : vals.map(Boolean);
       const pick = (g) => yes.filter((_, i) => rs[i].group === g);
       const top = pick("top"), typ = pick("typical"), share = (a2) => Math.round((a2.filter(Boolean).length / a2.length) * 100) / 100;
+      if (!top.length || !typ.length) continue;                       // measured on one side only (e.g. covers missing)
       per[a] = { direction: direction(top, typ), top: share(top), typical: share(typ), n: rs.length };
     }
     const { verdict: v, counts } = verdict(Object.entries(per).filter(([a]) => a !== own).map(([, p]) => p.direction));

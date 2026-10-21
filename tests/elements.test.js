@@ -162,3 +162,13 @@ test("analyse: an 'own' account is shown per account but never counts towards th
   assert.deepEqual(res.counts, { top: 2, typical: 0, none: 0, constant: 0 });
   assert.equal(res.verdict, "unclear");                                                  // 2 accounts, not 3
 });
+
+test("analyse: an account with the element measured in only one group (covers missing) is left out, not 'never varies'", () => {
+  const reels = [
+    ...Array.from({ length: 4 }, () => ({ account: "a", group: "typical", dark: true })),
+    ...Array.from({ length: 4 }, () => ({ account: "a", group: "top", dark: null })),
+  ];
+  const [res] = el.analyse(reels, [{ id: "E1", name: "Dark", get: (r) => r.dark }]);
+  assert.equal(res.accounts.a, undefined);
+  assert.deepEqual(res.counts, { top: 0, typical: 0, none: 0, constant: 0 });
+});
