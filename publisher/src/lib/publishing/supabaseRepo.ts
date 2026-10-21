@@ -122,5 +122,15 @@ export function supabaseMetricsRepo(db: SupabaseClient): MetricsRepo {
       });
       if (error) throw new Error(`record_publication_metrics: ${error.message}`);
     },
+    async recordStoryMetrics(publicationId, m, raw) {
+      const rawObject = raw && typeof raw === "object" && !Array.isArray(raw) ? raw : { value: raw ?? null };
+      const { error } = await db.rpc("record_story_metrics", {
+        p_publication: publicationId,
+        p_views: m?.views ?? null, p_reach: m?.reach ?? null, p_shares: m?.shares ?? null, p_replies: m?.replies ?? null,
+        p_follows: m?.follows ?? null, p_profile_visits: m?.profileVisits ?? null, p_exits: m?.exits ?? null,
+        p_error: (rawObject as { error?: string }).error ?? null, p_raw: rawObject,
+      });
+      if (error) throw new Error(`record_story_metrics: ${error.message}`);
+    },
   };
 }

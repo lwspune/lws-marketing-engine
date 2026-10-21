@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
-  compareToBaseline, dueSnapshots, LWS_BASELINE, median, normalizeFacebookInsights, normalizeInstagramInsights, SNAPSHOTS, typicalReel,
+  compareToBaseline, dueSnapshots, LWS_BASELINE, median, normalizeFacebookInsights, normalizeInstagramInsights,
+  normalizeInstagramStoryInsights, SNAPSHOTS, STORY_SNAPSHOT, storyErrorText, typicalReel, typicalStory, type StoryMetrics,
 } from "@/lib/domain/metrics";
 
 describe("median", () => {
@@ -116,5 +117,66 @@ describe("compareToBaseline", () => {
 
   it("uses the typical @lws.pune reel measured on 2026-10-15", () => {
     expect(LWS_BASELINE).toMatchObject({ views: 779, saves: 1, avgWatchMs: 6906, measuredOn: "2026-10-15" });
+  });
+});
+
+// Instagram's real replies for the 20 Oct quiz story (read on 2026-10-21, descriptions and ids left out).
+const STORY_MAIN = { data: [
+  { name: "reach", period: "lifetime", title: "Accounts reached", values: [{ value: 163 }] },
+  { name: "views", period: "lifetime", title: "Views", values: [{ value: 206 }] },
+  { name: "replies", period: "lifetime", title: "Replies", values: [{ value: 0 }] },
+  { name: "shares", period: "lifetime", title: "Shares", values: [{ value: 0 }] },
+  { name: "follows", period: "lifetime", title: "Follows", values: [{ value: 1 }] },
+  { name: "profile_visits", period: "lifetime", title: "Profile visits", values: [{ value: 17 }] },
+] };
+const STORY_NAV = { data: [{ name: "navigation", period: "lifetime", title: "Navigation", values: [{ value: 195 }],
+  total_value: { value: 195, breakdowns: [{ dimension_keys: ["story_navigation_action_type"], results: [
+    { dimension_values: ["tap_forward"], value: 69 }, { dimension_values: ["tap_exit"], value: 115 },
+    { dimension_values: ["swipe_forward"], value: 10 }, { dimension_values: ["tap_back"], value: 1 },
+  ] }] } }] };
+
+describe("story snapshot", () => {
+  it("is taken at 23 hours, before Instagram deletes the story at 24", () => {
+    expect(STORY_SNAPSHOT).toEqual({ label: "23h", afterHours: 23 });
+    expect(SNAPSHOTS.map((s) => s.label)).not.toContain("23h");
+  });
+});
+
+describe("normalizeInstagramStoryInsights", () => {
+  it("reads the story's numbers and counts tap-exits as people leaving", () => {
+    expect(normalizeInstagramStoryInsights(STORY_MAIN, STORY_NAV)).toEqual({
+      views: 206, reach: 163, shares: 0, replies: 0, follows: 1, profileVisits: 17, exits: 115,
+    });
+  });
+
+  it("leaves a number empty when Instagram didn't send it", () => {
+    expect(normalizeInstagramStoryInsights({ data: [{ name: "reach", values: [{ value: 9 }] }] }, { data: [] })).toEqual({
+      views: null, reach: 9, shares: null, replies: null, follows: null, profileVisits: null, exits: null,
+    });
+  });
+});
+
+describe("typicalStory", () => {
+  const story = (reach: number | null, profileVisits: number, follows: number, replies: number): StoryMetrics =>
+    ({ views: null, reach, shares: null, replies, follows, profileVisits, exits: null });
+
+  it("is the median story once there are 5 with numbers", () => {
+    const rows = [story(100, 5, 0, 0), story(163, 17, 1, 0), story(90, 3, 0, 1), story(200, 20, 2, 0), story(150, 9, 0, 0)];
+    expect(typicalStory(rows)).toEqual({ reach: 150, profileVisits: 9, follows: 0, replies: 0, count: 5 });
+  });
+
+  it("isn't shown with fewer than 5 (one good morning would set the bar)", () => {
+    expect(typicalStory([story(100, 5, 0, 0), story(163, 17, 1, 0), story(null, 0, 0, 0), story(90, 3, 0, 1), story(200, 20, 2, 0)])).toBeNull();
+  });
+});
+
+describe("storyErrorText", () => {
+  it("says plainly when Instagram had already deleted the story", () => {
+    expect(storyErrorText("Unsupported get request. Object with ID '18022722398723166' does not exist, cannot be loaded due to missing permissions"))
+      .toBe("Instagram had already deleted it (stories last 24 hours).");
+  });
+
+  it("passes any other reason through", () => {
+    expect(storyErrorText("Instagram isn't connected for this project any more.")).toBe("Instagram isn't connected for this project any more.");
   });
 });

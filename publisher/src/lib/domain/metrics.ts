@@ -5,7 +5,9 @@ export const SNAPSHOTS = [
   { label: "48h", afterHours: 48 },
   { label: "7d", afterHours: 7 * 24 },
 ] as const;
-export type SnapshotLabel = (typeof SNAPSHOTS)[number]["label"];
+/** A story's one snapshot: Instagram deletes a story's insights about 24 hours after it goes up. */
+export const STORY_SNAPSHOT = { label: "23h", afterHours: 23 } as const;
+export type SnapshotLabel = (typeof SNAPSHOTS)[number]["label"] | typeof STORY_SNAPSHOT.label;
 
 export interface PostMetrics {
   views: number | null;
@@ -17,13 +19,28 @@ export interface PostMetrics {
   avgWatchMs: number | null;
 }
 
+export interface StoryMetrics {
+  views: number | null;
+  reach: number | null;
+  shares: number | null;
+  replies: number | null;
+  follows: number | null;
+  profileVisits: number | null;
+  /** Taps out of the story (Instagram's tap_exit). */
+  exits: number | null;
+}
+
 /** Snapshots whose time has come and that haven't been taken yet, oldest first. */
 export function dueSnapshots(publishedAt: Date, taken: string[], now: Date): SnapshotLabel[] {
   const age = now.getTime() - publishedAt.getTime();
   return SNAPSHOTS.filter((s) => age >= s.afterHours * 3_600_000 && !taken.includes(s.label)).map((s) => s.label);
 }
 
-interface InsightsRow { name: string; values?: { value: unknown }[]; total_value?: { value: unknown } }
+interface BreakdownResult { dimension_values?: string[]; value?: unknown }
+interface InsightsRow {
+  name: string; values?: { value: unknown }[];
+  total_value?: { value: unknown; breakdowns?: { results?: BreakdownResult[] }[] };
+}
 interface InsightsResponse { data?: InsightsRow[] }
 
 const count = (v: unknown): number | null => (typeof v === "number" && Number.isFinite(v) && v >= 0 ? v : null);
@@ -43,6 +60,21 @@ export function normalizeInstagramInsights(api: InsightsResponse): PostMetrics {
     likes: count(m.get("likes")),
     comments: count(m.get("comments")),
     avgWatchMs: count(m.get("ig_reels_avg_watch_time")),
+  };
+}
+
+/** A story's insights plus its navigation breakdown (story_navigation_action_type) → StoryMetrics. */
+export function normalizeInstagramStoryInsights(api: InsightsResponse, navigation: InsightsResponse): StoryMetrics {
+  const m = byName(api);
+  const taps = (navigation.data ?? []).find((r) => r.name === "navigation")?.total_value?.breakdowns?.[0]?.results ?? [];
+  return {
+    views: count(m.get("views")),
+    reach: count(m.get("reach")),
+    shares: count(m.get("shares")),
+    replies: count(m.get("replies")),
+    follows: count(m.get("follows")),
+    profileVisits: count(m.get("profile_visits")),
+    exits: count(taps.find((t) => t.dimension_values?.[0] === "tap_exit")?.value),
   };
 }
 
@@ -80,6 +112,21 @@ export function typicalReel(rows: PostMetrics[], now: Date): Baseline {
   const views = median(rows.map((r) => r.views)), saves = median(rows.map((r) => r.saves)), watch = median(rows.map((r) => r.avgWatchMs));
   if (views === null || saves === null || watch === null) return LWS_BASELINE;
   return { views, saves, avgWatchMs: watch, measuredOn: now.toISOString().slice(0, 10), note: `median of ${rows.length} reels` };
+}
+
+/** Why a story's numbers weren't saved, in plain words. */
+export function storyErrorText(error: string): string {
+  return /does not exist/i.test(error) ? "Instagram had already deleted it (stories last 24 hours)." : error;
+}
+
+export interface TypicalStory { reach: number; profileVisits: number; follows: number; replies: number; count: number }
+
+/** The median story, once 5 stories have numbers (fewer, and one good morning would set the bar). */
+export function typicalStory(rows: StoryMetrics[]): TypicalStory | null {
+  const known = rows.filter((r) => r.reach !== null);
+  if (known.length < 5) return null;
+  const mid = (f: (r: StoryMetrics) => number | null) => median(known.map(f)) ?? 0;
+  return { reach: mid((r) => r.reach), profileVisits: mid((r) => r.profileVisits), follows: mid((r) => r.follows), replies: mid((r) => r.replies), count: known.length };
 }
 
 export type Verdict = "above" | "even" | "below" | "n/a";

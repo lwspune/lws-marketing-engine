@@ -1,10 +1,10 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { startFakeMeta } from "../helpers/fakeMeta";
-import { fetchFacebookReelInsights, fetchInstagramInsights } from "@/lib/platforms/metaInsights";
+import { fetchFacebookReelInsights, fetchInstagramInsights, fetchInstagramStoryInsights } from "@/lib/platforms/metaInsights";
 import { runMetricsTick, type MetricsRepo, type DueMetric } from "@/lib/publishing/metrics";
 import type { PublishContext } from "@/lib/publishing/worker";
 import type { Publication } from "@/lib/domain/types";
-import type { PostMetrics } from "@/lib/domain/metrics";
+import type { PostMetrics, StoryMetrics } from "@/lib/domain/metrics";
 
 let fake: Awaited<ReturnType<typeof startFakeMeta>> | undefined;
 afterEach(async () => { await fake?.close(); fake = undefined; });
@@ -34,6 +34,22 @@ describe("fetchInstagramInsights", () => {
   });
 });
 
+describe("fetchInstagramStoryInsights", () => {
+  it("asks for the story's numbers and its tap breakdown, and combines them", async () => {
+    fake = await startFakeMeta({ igInsights: { data: [{ name: "reach", values: [{ value: 163 }] }, { name: "profile_visits", values: [{ value: 17 }] }] } });
+    const r = await fetchInstagramStoryInsights(fake.config, { mediaId: "m1", token: "T" });
+    expect(r).toMatchObject({ ok: true, metrics: { reach: 163, profileVisits: 17, exits: 30 } });
+    const [main, nav] = [fake.calls.find((c) => !c.params.breakdown)!, fake.calls.find((c) => c.params.breakdown)!];
+    expect(main.params.metric.split(",")).toEqual(["reach", "views", "replies", "shares", "follows", "profile_visits"]);
+    expect(nav.params).toMatchObject({ metric: "navigation", breakdown: "story_navigation_action_type" });
+  });
+
+  it("an expired story is a permanent failure", async () => {
+    fake = await startFakeMeta({ failOn: { path: /\/insights$/, status: 400, message: "Object with ID 'm1' does not exist" } });
+    expect(await fetchInstagramStoryInsights(fake.config, { mediaId: "m1", token: "T" })).toMatchObject({ ok: false, temporary: false });
+  });
+});
+
 describe("fetchFacebookReelInsights", () => {
   it("reads video_insights and normalizes them", async () => {
     fake = await startFakeMeta({ fbInsights: { data: [{ name: "fb_reels_total_plays", values: [{ value: 300 }] }, { name: "post_video_avg_time_watched", values: [{ value: 5000 }] }] } });
@@ -49,17 +65,18 @@ const pub = (over: Partial<Publication> = {}): Publication => ({
   id: "x1", postId: "p1", platform: "instagram", status: "published", scheduledAt: null,
   attempts: 1, externalRef: "c1", externalId: "m1", permalink: null, error: null, ...over,
 });
-const ctx = (platform: "instagram" | "facebook" = "instagram"): PublishContext => ({
-  post: { id: "p1", kind: "reel", captions: {}, videoPath: "o/v.mp4", coverPath: null, slidePaths: [] },
+const ctx = (platform: "instagram" | "facebook" = "instagram", kind: "reel" | "story" = "reel"): PublishContext => ({
+  post: { id: "p1", kind, captions: {}, videoPath: "o/v.mp4", coverPath: null, slidePaths: [] },
   account: { platform, externalId: platform === "instagram" ? "ig1" : "page1", token: "TOKEN" },
 });
 
 function memoryRepo(due: DueMetric[], context: PublishContext | null = ctx()) {
-  const recorded: { id: string; snapshot: string; metrics: PostMetrics | null; raw: unknown }[] = [];
+  const recorded: { id: string; snapshot: string; metrics: PostMetrics | StoryMetrics | null; raw: unknown }[] = [];
   const repo: MetricsRepo = {
     metricsDue: async () => due.splice(0),
     loadContext: async () => context,
     recordMetrics: async (id, snapshot, metrics, raw) => { recorded.push({ id, snapshot, metrics, raw }); },
+    recordStoryMetrics: async (id, metrics, raw) => { recorded.push({ id, snapshot: "23h", metrics, raw }); },
   };
   return { repo, recorded };
 }
@@ -72,6 +89,20 @@ describe("runMetricsTick", () => {
     const s = await runMetricsTick({ repo: m.repo, metaConfig: fake.config, logger: silent });
     expect(s).toEqual({ due: 1, recorded: 1, skipped: 0, errors: 0 });
     expect(m.recorded[0]).toMatchObject({ id: "x1", snapshot: "48h", metrics: { views: 1500, saves: 9 } });
+  });
+
+  it("records a story's 23h snapshot with its story numbers", async () => {
+    fake = await startFakeMeta({ igInsights: { data: [{ name: "reach", values: [{ value: 163 }] }, { name: "follows", values: [{ value: 1 }] }] } });
+    const m = memoryRepo([{ publication: pub(), snapshot: "23h" }], ctx("instagram", "story"));
+    expect(await runMetricsTick({ repo: m.repo, metaConfig: fake.config, logger: silent })).toMatchObject({ recorded: 1 });
+    expect(m.recorded[0]).toMatchObject({ id: "x1", snapshot: "23h", metrics: { reach: 163, follows: 1, exits: 30 } });
+  });
+
+  it("an expired story is recorded with its reason, not retried", async () => {
+    fake = await startFakeMeta({ failOn: { path: /\/insights$/, status: 400, message: "Object with ID 'm1' does not exist" } });
+    const m = memoryRepo([{ publication: pub(), snapshot: "23h" }], ctx("instagram", "story"));
+    await runMetricsTick({ repo: m.repo, metaConfig: fake.config, logger: silent });
+    expect(m.recorded[0]).toMatchObject({ snapshot: "23h", metrics: null, raw: { error: expect.stringMatching(/does not exist/) } });
   });
 
   it("records a Facebook snapshot from the video id", async () => {

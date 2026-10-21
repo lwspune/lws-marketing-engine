@@ -75,19 +75,76 @@ describe.skipIf(!TEST_DB_URL)("database: daily quiz stories", () => {
       .toMatch(/can only be edited while ready/);
   }));
 
-  it("stories never get a 48 h / 7 d scorecard (they're gone after 24 h)", () => withTx(async (q) => {
-    const f = await fixture(q);
+});
+
+// Story scorecard (migration 0015): one snapshot at 23 hours, an hour before Instagram deletes the story.
+async function publishedStory(q: Q, hoursAgo: number) {
+  const f = await fixture(q);
+  await asOwner(q);
+  const id = await insertStory(q, f.org, f.project);
+  await asUser(q, f.member);
+  const [pub] = await q<{ id: string }>("select id from public.approve_post($1, array['instagram'])", [id]);
+  await asService(q);
+  await q("select public.record_publication_event($1, 'processing', 'c1')", [pub.id]);
+  await q("select public.record_publication_event($1, 'published', null, 'm1', null)", [pub.id]);
+  await asOwner(q);
+  await q("update public.publications set published_at = now() - make_interval(mins => $2) where id = $1", [pub.id, Math.round(hoursAgo * 60)]);
+  await asService(q);
+  return { f, pub: pub.id };
+}
+const dueFor = async (q: Q, pubId: string) =>
+  (await q<{ publication_id: string; snapshot: string }>("select publication_id, snapshot from public.metrics_due(50)"))
+    .filter((r) => r.publication_id === pubId).map((r) => r.snapshot);
+const STORY_ROW = "select public.record_story_metrics($1, 206, 163, 0, 0, 1, 17, 115, null, '{}')";
+
+describe.skipIf(!TEST_DB_URL)("database: story scorecard", () => {
+  it("nothing is due before 23 hours", () => withTx(async (q) => {
+    const { pub } = await publishedStory(q, 22);
+    expect(await dueFor(q, pub)).toEqual([]);
+  }));
+
+  it("23h is due after 23 hours, and a story never gets 48 h / 7 d", () => withTx(async (q) => {
+    expect(await dueFor(q, (await publishedStory(q, 23.5)).pub)).toEqual(["23h"]);
+    expect(await dueFor(q, (await publishedStory(q, 8 * 24)).pub)).toEqual(["23h"]);
+  }));
+
+  it("stores the story's numbers once and they can't be edited", () => withTx(async (q) => {
+    const { pub } = await publishedStory(q, 23.5);
+    await q(STORY_ROW, [pub]);
+    await q("select public.record_story_metrics($1, 1, 1, 1, 1, 1, 1, 1, null, '{}')", [pub]);
+    const rows = await q("select snapshot, views, reach, replies, follows, profile_visits, exits from public.publication_metrics where publication_id = $1", [pub]);
+    expect(rows).toEqual([{ snapshot: "23h", views: "206", reach: "163", replies: "0", follows: "1", profile_visits: "17", exits: "115" }]);
+    expect(await dueFor(q, pub)).toEqual([]);
     await asOwner(q);
-    const id = await insertStory(q, f.org, f.project);
+    expect((await errorOf(q, "update public.publication_metrics set reach = 1 where publication_id = $1", [pub]))?.message).toMatch(/write-once/);
+  }));
+
+  it("an expired story is stored with its reason and no numbers", () => withTx(async (q) => {
+    const { pub } = await publishedStory(q, 30);
+    await q("select public.record_story_metrics($1, null, null, null, null, null, null, null, 'Object does not exist', '{}')", [pub]);
+    const [row] = await q("select reach, error from public.publication_metrics where publication_id = $1", [pub]);
+    expect(row).toEqual({ reach: null, error: "Object does not exist" });
+  }));
+
+  it("23h is for stories only, and story numbers only on 23h", () => withTx(async (q) => {
+    const { f, pub } = await publishedStory(q, 49);
+    expect((await errorOf(q, "select public.record_publication_metrics($1, '48h', 5, null, null, null, null, null, null, null, '{}')", [pub]))?.message)
+      .toMatch(/23h snapshot is for stories/);
     await asUser(q, f.member);
-    const [pub] = await q<{ id: string }>("select id from public.approve_post($1, array['instagram'])", [id]);
+    const [reel] = await q<{ id: string }>("select id from public.approve_post($1, array['instagram'])", [f.post]);
     await asService(q);
-    await q("select public.record_publication_event($1, 'processing', 'c1')", [pub.id]);
-    await q("select public.record_publication_event($1, 'published', null, 'm1', null)", [pub.id]);
+    await q("select public.record_publication_event($1, 'processing', 'c9')", [reel.id]);
+    await q("select public.record_publication_event($1, 'published', null, 'm9', null)", [reel.id]);
+    expect((await errorOf(q, STORY_ROW, [reel.id]))?.message).toMatch(/23h snapshot is for stories/);
     await asOwner(q);
-    await q("update public.publications set published_at = now() - interval '8 days' where id = $1", [pub.id]);
-    await asService(q);
-    const due = await q<{ publication_id: string }>("select publication_id from public.metrics_due(50)");
-    expect(due.some((r) => r.publication_id === pub.id)).toBe(false);
+    expect((await errorOf(q, "insert into public.publication_metrics (org_id, publication_id, snapshot, follows) values ($1, $2, '48h', 3)", [f.org, reel.id]))?.message)
+      .toMatch(/publication_metrics_story_columns/);
+  }));
+
+  it("rejects negative numbers; only the worker can record", () => withTx(async (q) => {
+    const { f, pub } = await publishedStory(q, 23.5);
+    expect(await errorOf(q, "select public.record_story_metrics($1, null, null, null, -1, null, null, null, null, '{}')", [pub])).not.toBeNull();
+    await asUser(q, f.member);
+    expect((await errorOf(q, STORY_ROW, [pub]))?.message).toMatch(/permission denied/);
   }));
 });

@@ -42,7 +42,7 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
 
   let postsQuery = supabase
     .from("posts")
-    .select("id, project_id, slug, kind, title, status, captions, video_path, cover_path, slide_paths, scheduled_at, planned_for, quiz, created_at, reject_reason, publications(id, platform, status, scheduled_at, attempts, permalink, error, published_at, publication_metrics(snapshot, views, reach, saves, shares, avg_watch_ms, error))")
+    .select("id, project_id, slug, kind, title, status, captions, video_path, cover_path, slide_paths, scheduled_at, planned_for, quiz, created_at, reject_reason, publications(id, platform, status, scheduled_at, attempts, permalink, error, published_at, publication_metrics(snapshot, views, reach, saves, shares, avg_watch_ms, replies, follows, profile_visits, exits, error))")
     .in("status", statuses as unknown as string[])
     .order("created_at", { ascending: !newestFirst(tab) })
     .order("slug", { ascending: !newestFirst(tab) })
@@ -86,7 +86,8 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
       id: x.id, platform: x.platform as Platform, status: x.status, scheduledAt: x.scheduled_at, attempts: x.attempts,
       permalink: x.permalink, error: x.error, publishedAt: x.published_at,
       metrics: (x.publication_metrics ?? []).map((s) => ({
-        snapshot: s.snapshot, views: s.views, reach: s.reach, saves: s.saves, shares: s.shares, avgWatchMs: s.avg_watch_ms, error: s.error,
+        snapshot: s.snapshot, views: s.views, reach: s.reach, saves: s.saves, shares: s.shares, avgWatchMs: s.avg_watch_ms,
+        replies: s.replies, follows: s.follows, profileVisits: s.profile_visits, exits: s.exits, error: s.error,
       })),
     })),
   }));

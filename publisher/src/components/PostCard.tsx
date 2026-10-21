@@ -4,7 +4,7 @@ import { useMemo, useState, useTransition } from "react";
 import { approvePost, approveStory, rejectPost, retryPublication, saveCaptions, unapprovePost } from "@/app/actions";
 import { captionErrors } from "@/lib/domain/captions";
 import { supportedPlatforms } from "@/lib/domain/workflow";
-import { compareToBaseline, LWS_BASELINE, type PostMetrics, type Verdict } from "@/lib/domain/metrics";
+import { compareToBaseline, LWS_BASELINE, storyErrorText, type PostMetrics, type Verdict } from "@/lib/domain/metrics";
 import { PLATFORM_LABEL, type Captions, type Platform, type PostKind } from "@/lib/domain/types";
 import type { Result } from "@/lib/publishing/result";
 import type { StoryQuiz } from "@/lib/domain/story";
@@ -29,6 +29,7 @@ export interface PostView {
 export interface Snapshot {
   snapshot: string; views: number | null; reach: number | null; saves: number | null; shares: number | null;
   avgWatchMs: number | null; error: string | null;
+  replies: number | null; follows: number | null; profileVisits: number | null; exits: number | null;
 }
 
 const IST = new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", dateStyle: "medium", timeStyle: "short" });
@@ -211,7 +212,7 @@ export function PostCard({ post }: { post: PostView }) {
                           onClick={() => run(() => retryPublication({ publicationId: p.id }), "Retrying within a minute.")}>Retry</button>
                       )}
                       {p.error && <p className="w-full text-xs text-danger">{p.error}</p>}
-                      {p.status === "published" && <Scorecard snapshots={p.metrics} />}
+                      {p.status === "published" && (story ? <StoryScorecard snapshots={p.metrics} /> : <Scorecard snapshots={p.metrics} />)}
                     </li>
                   ))}
                 </ul>
@@ -269,6 +270,8 @@ const VERDICT: Record<Verdict, { mark: string; cls: string; text: string }> = {
   "n/a": { mark: "", cls: "text-muted", text: "not available" },
 };
 
+const n = (x: number | null) => (x === null ? "–" : Number(x).toLocaleString("en-IN"));
+
 /** Latest snapshot (7 days, else 48 hours) against the account's typical reel. */
 function Scorecard({ snapshots }: { snapshots: Snapshot[] }) {
   const s = snapshots.find((x) => x.snapshot === "7d") ?? snapshots.find((x) => x.snapshot === "48h");
@@ -276,18 +279,6 @@ function Scorecard({ snapshots }: { snapshots: Snapshot[] }) {
   if (s.error) return <p className="w-full text-xs text-muted">{s.snapshot} stats unavailable: {s.error}</p>;
   const m: PostMetrics = { views: s.views, reach: s.reach, saves: s.saves, shares: s.shares, likes: null, comments: null, avgWatchMs: s.avgWatchMs };
   const v = compareToBaseline(m, LWS_BASELINE);
-  const n = (x: number | null) => (x === null ? "–" : Number(x).toLocaleString("en-IN"));
-  const cell = (label: string, value: string, verdict?: Verdict) => (
-    <div className="rounded-lg bg-bg/60 px-3 py-2">
-      <div className="stat-label">{label}</div>
-      <div className="mt-0.5 text-base font-semibold tabular-nums">
-        {value}
-        {verdict && verdict !== "n/a" && (
-          <span className={`ml-1 text-xs ${VERDICT[verdict].cls}`} title={VERDICT[verdict].text} aria-label={VERDICT[verdict].text}>{VERDICT[verdict].mark}</span>
-        )}
-      </div>
-    </div>
-  );
   return (
     <div className="w-full space-y-2 pt-1">
       <p className="text-xs text-muted">
@@ -298,6 +289,38 @@ function Scorecard({ snapshots }: { snapshots: Snapshot[] }) {
         {cell("Saves", n(s.saves), v.saves)}
         {cell("Shares", n(s.shares))}
         {cell("Watched", s.avgWatchMs === null ? "–" : `${(s.avgWatchMs / 1000).toFixed(1)} s`, v.avgWatchMs)}
+      </div>
+    </div>
+  );
+}
+
+/** A story's one snapshot, saved 23 hours after it went up (Instagram deletes it at 24). */
+function StoryScorecard({ snapshots }: { snapshots: Snapshot[] }) {
+  const s = snapshots.find((x) => x.snapshot === "23h");
+  if (!s) return <p className="w-full text-xs text-muted">Numbers are saved 23 hours after it went up.</p>;
+  if (s.error) return <p className="w-full text-xs text-muted">Numbers not saved: {storyErrorText(s.error)}</p>;
+  return (
+    <div className="w-full space-y-2 pt-1">
+      <p className="text-xs text-muted">After 23 h · {n(s.views)} views · {n(s.exits)} tapped out</p>
+      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {cell("Reached", n(s.reach))}
+        {cell("Profile visits", n(s.profileVisits))}
+        {cell("Follows", n(s.follows))}
+        {cell("Replies", n(s.replies))}
+      </div>
+    </div>
+  );
+}
+
+function cell(label: string, value: string, verdict?: Verdict) {
+  return (
+    <div className="rounded-lg bg-bg/60 px-3 py-2">
+      <div className="stat-label">{label}</div>
+      <div className="mt-0.5 text-base font-semibold tabular-nums">
+        {value}
+        {verdict && verdict !== "n/a" && (
+          <span className={`ml-1 text-xs ${VERDICT[verdict].cls}`} title={VERDICT[verdict].text} aria-label={VERDICT[verdict].text}>{VERDICT[verdict].mark}</span>
+        )}
       </div>
     </div>
   );

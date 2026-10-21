@@ -9,6 +9,7 @@ import { pickInstagramAccount, type InstagramAccount } from "@/lib/domain/accoun
 import { memberAccess } from "@/lib/supabase/access";
 import { InboxSummary } from "@/components/InboxSummary";
 import { summariseInbox, type InboxWeek } from "@/lib/domain/inbox";
+import { StorySummary, type StoryRow } from "@/components/StorySummary";
 
 export const dynamic = "force-dynamic";
 
@@ -90,6 +91,30 @@ async function loadInbox(supabase: Db, now: Date) {
   };
 }
 
+interface StoryDbRow {
+  id: string; title: string;
+  publications: {
+    published_at: string | null;
+    publication_metrics: { snapshot: string; views: number | null; reach: number | null; shares: number | null; replies: number | null;
+      follows: number | null; profile_visits: number | null; exits: number | null; error: string | null }[];
+  }[];
+}
+
+/** The last 14 published quiz stories with their 23h numbers (RLS: the member's own projects). */
+async function loadStories(supabase: Db): Promise<StoryRow[]> {
+  const { data } = await supabase.from("posts")
+    .select("id, title, publications(published_at, publication_metrics(snapshot, views, reach, shares, replies, follows, profile_visits, exits, error))")
+    .eq("kind", "story").eq("status", "published")
+    .order("planned_for", { ascending: false }).limit(14);
+  return ((data ?? []) as StoryDbRow[]).flatMap((p) => p.publications.filter((pb) => pb.published_at).map((pb) => {
+    const m = pb.publication_metrics.find((x) => x.snapshot === "23h");
+    return {
+      id: p.id, title: p.title, publishedAt: pb.published_at as string,
+      metrics: m ? { views: m.views, reach: m.reach, shares: m.shares, replies: m.replies, follows: m.follows, profileVisits: m.profile_visits, exits: m.exits, error: m.error } : null,
+    };
+  })).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+}
+
 export default async function InsightsPage({ searchParams }: { searchParams: { sort?: string; account?: string } }) {
   const supabase = createSupabaseServerClient();
   const access = await memberAccess(supabase);
@@ -110,11 +135,12 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
       : { data: [] };
     return { accounts, account, rows: (data ?? []) as Row[] };
   };
-  // The three sections don't depend on each other: load them together.
-  const [ads, { accounts, account, rows }, inbox] = await Promise.all([
+  // The sections don't depend on each other: load them together.
+  const [ads, { accounts, account, rows }, inbox, stories] = await Promise.all([
     showAds ? loadAds(supabase, new Date()) : null,
     loadReels(),
     access.inbox ? loadInbox(supabase, new Date()) : null,
+    loadStories(supabase),
   ]);
   const qs = (next: { sort?: SortId; account?: string }) => {
     const p = new URLSearchParams();
@@ -155,6 +181,7 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
         <PageHeader title="Insights">How your {ads ? "ads and reels are" : "reels are"} doing, against your own typical numbers.</PageHeader>
         {ads && <div className="mb-6"><AdsSummary {...ads} /></div>}
         {inbox && inbox.accounts.length > 0 && <div className="mb-6"><InboxSummary {...inbox} /></div>}
+        {stories.length > 0 && <div className="mb-6"><StorySummary rows={stories} /></div>}
 
         {accounts.length > 1 && (
           <nav aria-label="Instagram account" className="mb-4 flex flex-wrap gap-2">

@@ -16,6 +16,8 @@ export interface FakeMetaOptions {
   igMediaPageSize?: number;
   /** Payload for GET /{ig-media-id}/insights. */
   igInsights?: object;
+  /** Payload for GET /{ig-media-id}/insights?breakdown=story_navigation_action_type (a story's taps). */
+  igStoryNavigation?: object;
   /** Payload for GET /{fb-video-id}/video_insights. */
   fbInsights?: object;
   /** Force an error response for the first call whose path matches. */
@@ -69,6 +71,9 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
       return send(200, { status_code: s, status: s === "ERROR" ? "Error: video too short" : s, id: p.split("/").pop() });
     }
     if (req.method === "GET" && /^\/v[\d.]+\/m\d+$/.test(p)) return send(200, { permalink: "https://www.instagram.com/reel/FAKE/", id: p.split("/").pop() });
+    if (req.method === "GET" && /^\/v[\d.]+\/m\d+\/insights$/.test(p) && params.breakdown) {
+      return send(200, opts.igStoryNavigation ?? { data: [{ name: "navigation", total_value: { value: 50, breakdowns: [{ results: [{ dimension_values: ["tap_exit"], value: 30 }] }] } }] });
+    }
     if (req.method === "GET" && /^\/v[\d.]+\/m\d+\/insights$/.test(p)) {
       return send(200, opts.igInsights ?? { data: [{ name: "views", values: [{ value: 1500 }] }, { name: "saved", values: [{ value: 9 }] }] });
     }
