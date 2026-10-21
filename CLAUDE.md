@@ -170,6 +170,8 @@ soundmind/               # @soundmindwithshivani carousels (outside brand). Runb
   reels/                 #   "ME" story reels made in remotion/ (MeStory.tsx shared, SoundMind00N.tsx each):
                          #   .post.json + cover; MP4 gitignored
 tests/soundmind-cards.test.js # node --test
+study/reels/             # other accounts' reels saved for private study (git-ignored; never repost). How: memory
+                         #   reference-study-reel-downloads (snapinsta.to in Chrome)
 remotion/                # TRIAL: reels in Remotion (React + SVG, frame-by-frame render, Edge). `npm test`,
                          #   `npm run typecheck`, `npm run audio` (soundtrack from the engine MP4), `npm run render`,
                          #   `npm run compare:files && npm run compare` (old vs new side by side) → out/

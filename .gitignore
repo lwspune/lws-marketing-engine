@@ -26,3 +26,6 @@ soundmind/reels/*.mp4
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# other accounts' reels saved for private study only (never repost)
+study/
