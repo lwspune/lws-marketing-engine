@@ -4,17 +4,19 @@ import { memberAccess } from "@/lib/supabase/access";
 import { Nav, PageHeader } from "@/components/Nav";
 import { LeadCard } from "@/components/LeadCard";
 import { formatPhone, whatsappLink } from "@/lib/domain/leads";
-import { loadLeads } from "./data";
+import { lastDownload, loadLeads } from "./data";
 
 export const dynamic = "force-dynamic";
 
 const DAY = new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", year: "numeric" });
+const WHEN = new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", day: "numeric", month: "short", hour: "numeric", minute: "2-digit", hour12: true });
 
 export default async function LeadsPage() {
   const supabase = createSupabaseServerClient();
   const access = await memberAccess(supabase);
   if (!access.inbox) redirect("/");
-  const leads = await loadLeads(supabase);
+  const [leads, since] = await Promise.all([loadLeads(supabase), lastDownload(supabase)]);
+  const fresh = since ? leads.filter((l) => Date.parse(l.created_at) > Date.parse(since)).length : leads.length;
   const sortingWhatsApp = !!process.env.ANTHROPIC_API_KEY;
 
   return (
@@ -35,7 +37,27 @@ export default async function LeadsPage() {
 
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
           <p className="text-sm text-muted">{leads.length === 1 ? "1 lead" : `${leads.length} leads`}</p>
-          {leads.length > 0 && <a className="btn" href="/leads/export" download>Download for Excel</a>}
+          {leads.length > 0 && (
+            // Each choice is a POST: a download moves your download point (migration 0020).
+            <details className="relative">
+              <summary className="btn cursor-pointer list-none">Download for Excel</summary>
+              <form method="post" action="/leads/export"
+                className="card absolute right-0 z-10 mt-2 flex w-72 max-w-[calc(100vw-2rem)] flex-col gap-1 p-2 text-sm">
+                <button type="submit" name="kind" value="all" className="rounded-lg px-3 py-2 text-left hover:bg-white/[0.06] focus-visible:bg-white/[0.06]">
+                  <span className="block font-medium">All leads ({leads.length})</span>
+                </button>
+                {since ? (
+                  <button type="submit" name="kind" value="new" disabled={fresh === 0}
+                    className="rounded-lg px-3 py-2 text-left hover:bg-white/[0.06] focus-visible:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-50">
+                    <span className="block font-medium">New since your last download ({fresh})</span>
+                    <span className="block text-xs text-muted">Last download {WHEN.format(new Date(since))}</span>
+                  </button>
+                ) : (
+                  <p className="px-3 py-2 text-xs text-muted">This is your first download, so there&rsquo;s no &ldquo;new&rdquo; yet.</p>
+                )}
+              </form>
+            </details>
+          )}
         </div>
 
         {leads.length === 0 ? (

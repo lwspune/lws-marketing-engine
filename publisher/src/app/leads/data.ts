@@ -2,22 +2,39 @@ import "server-only";
 import { sourceLabel } from "@/lib/domain/leads";
 import type { createSupabaseServerClient } from "@/lib/supabase/server";
 
+type Db = ReturnType<typeof createSupabaseServerClient>;
+
 export interface LeadView {
   id: string; name: string | null; contact: string; course: string | null; lead_at: string; source: string;
-  conversationId: string | null;
+  conversationId: string | null; created_at: string;
 }
 
-/** Every lead the signed-in user may see, newest first (RLS: owners only). Shared by the page and the download. */
-export async function loadLeads(supabase: ReturnType<typeof createSupabaseServerClient>): Promise<LeadView[]> {
-  const { data, error } = await supabase.from("leads")
-    .select("id, name, contact, course, lead_at, channel, from_ad, page, conversation_id, connected_accounts(display_name)")
-    .order("lead_at", { ascending: false }).limit(5000);
+/**
+ * Every lead the signed-in user may see, newest first (RLS: owners only). Shared by the page and the download, which
+ * passes a window: added after `since` (null: from the start) and up to `until` (migration 0020).
+ */
+export async function loadLeads(supabase: Db, window?: { since: string | null; until: string }): Promise<LeadView[]> {
+  let query = supabase.from("leads")
+    .select("id, name, contact, course, lead_at, created_at, channel, from_ad, page, conversation_id, connected_accounts(display_name)");
+  if (window) {
+    query = query.lte("created_at", window.until);
+    if (window.since) query = query.gt("created_at", window.since);
+  }
+  const { data, error } = await query.order("lead_at", { ascending: false }).limit(5000);
   if (error) throw new Error(`reading leads: ${error.message}`);
   return (data ?? []).map((l) => {
     const account = (l.connected_accounts as unknown as { display_name: string } | null)?.display_name ?? null;
     return {
-      id: l.id, name: l.name, contact: l.contact, course: l.course, lead_at: l.lead_at, conversationId: l.conversation_id,
-      source: sourceLabel({ channel: l.channel, account, fromAd: l.from_ad, page: l.page }),
+      id: l.id, name: l.name, contact: l.contact, course: l.course, lead_at: l.lead_at, created_at: l.created_at,
+      conversationId: l.conversation_id, source: sourceLabel({ channel: l.channel, account, fromAd: l.from_ad, page: l.page }),
     };
   });
+}
+
+/** The signed-in user's download point: when their last download was read up to, or null before the first. */
+export async function lastDownload(supabase: Db): Promise<string | null> {
+  const { data, error } = await supabase.from("lead_downloads").select("downloaded_at")
+    .order("downloaded_at", { ascending: false }).limit(1).maybeSingle();
+  if (error) throw new Error(`reading downloads: ${error.message}`);
+  return (data?.downloaded_at as string | undefined) ?? null;
 }

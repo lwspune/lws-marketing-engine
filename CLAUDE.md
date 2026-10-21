@@ -291,6 +291,9 @@ search `from:lws.adacoount@gmail.com after:<newest website lead date>`. Skip tes
 read in WhatsApp Web through Claude in Chrome, read-only; opening an unread chat marks it read, so judge unread ones by
 their preview or ask first. The founder approves the verdicts, then `npm run leads:add -- --org=lws-pune --channel=whatsapp
 --via="+91 91563 10546" --file=<[{phone,date,name?,course?,from_ad?,reason?}]>` → `add_outside_leads`.
+**Lead downloads (0020, founder 2026-10-21):** "Download for Excel" asks: all leads, or only those added since your last
+download (by when they were added, `created_at`). A POST from the page (`src/lib/leads/export.ts`); either choice moves
+that owner's download point (`lead_downloads`, per person), saved only after the file is built.
 **WhatsApp Business app numbers (founder 2026-10-19, first: +91 70200 03600):** Meta "coexistence": the number stays on
 the phone app and also reaches GoPost. Inbox → "Connect a WhatsApp Business app number" opens Meta's Embedded Signup
 (`WhatsAppConnectBox`, env `META_WA_SIGNUP_CONFIG_ID`) → `connectWhatsAppBusinessApp` (owners) → `connectBusinessAppNumber`:
