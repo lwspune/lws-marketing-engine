@@ -77,6 +77,64 @@ describe.skipIf(!TEST_DB_URL)("database: daily quiz stories", () => {
 
 });
 
+// Question stories (migration 0017): a story shows either a quiz link or one question with its answer.
+const QUESTION = JSON.stringify({ id: "047abe4b-6c21-47e9-b26e-4d6e74258b74", answer: "D", part: "question" });
+
+async function insertQuestionStory(q: Q, org: string, project: string, question = QUESTION) {
+  const [row] = await q<{ id: string }>(
+    `insert into public.posts (org_id, project_id, slug, kind, title, cover_path, question, planned_for)
+     values ($1::uuid, $2, 'maths-q-2026-10-26', 'story', 'Maths question · Mon 26 Oct', $1::text || '/s/card.jpg', $3::jsonb, '2026-10-26T02:00:00Z') returning id`,
+    [org, project, question]);
+  return row.id;
+}
+
+describe.skipIf(!TEST_DB_URL)("database: question stories", () => {
+  it("a story can show one question instead of a quiz", () => withTx(async (q) => {
+    const f = await fixture(q);
+    await asOwner(q);
+    const id = await insertQuestionStory(q, f.org, f.project);
+    const [row] = await q<{ quiz: unknown; question: { answer: string } }>("select quiz, question from public.posts where id = $1", [id]);
+    expect(row.quiz).toBeNull();
+    expect(row.question.answer).toBe("D");
+  }));
+
+  it("a story shows a quiz or a question, never both", () => withTx(async (q) => {
+    const f = await fixture(q);
+    await asOwner(q);
+    const err = await errorOf(q,
+      `insert into public.posts (org_id, project_id, slug, kind, title, cover_path, quiz, question) values ($1::uuid, $2, 'both', 'story', 'x', $1::text || '/s/c.jpg', $3::jsonb, $4::jsonb)`,
+      [f.org, f.project, QUIZ, QUESTION]);
+    expect(err?.message).toMatch(/posts_story_quiz/);
+  }));
+
+  it("only a story carries a question", () => withTx(async (q) => {
+    const f = await fixture(q);
+    await asOwner(q);
+    expect((await errorOf(q, "update public.posts set question = $2::jsonb where id = $1", [f.post, QUESTION]))?.message).toMatch(/posts_story_quiz/);
+  }));
+
+  it("the question names its id, an answer A–D and which card it is", () => withTx(async (q) => {
+    const f = await fixture(q);
+    await asOwner(q);
+    for (const bad of [{ answer: "D", part: "question" }, { id: "x", answer: "E", part: "question" }, { id: "x", answer: "D", part: "hint" }, ["D"]]) {
+      expect((await errorOf(q,
+        `insert into public.posts (org_id, project_id, slug, kind, title, cover_path, question) values ($1::uuid, $2, 'bad', 'story', 'x', $1::text || '/s/c.jpg', $3::jsonb)`,
+        [f.org, f.project, JSON.stringify(bad)]))?.message, JSON.stringify(bad)).toMatch(/posts_story_question/);
+    }
+  }));
+
+  it("a story's question is frozen once approved", () => withTx(async (q) => {
+    const f = await fixture(q);
+    await asOwner(q);
+    const id = await insertQuestionStory(q, f.org, f.project);
+    await asUser(q, f.member);
+    await q("select * from public.approve_post($1, array['instagram'])", [id]);
+    await asOwner(q);
+    expect((await errorOf(q, `update public.posts set question = jsonb_set(question, '{answer}', '"A"') where id = $1`, [id]))?.message)
+      .toMatch(/can only be edited while ready/);
+  }));
+});
+
 // Story scorecard (migration 0015): one snapshot at 23 hours, an hour before Instagram deletes the story.
 async function publishedStory(q: Q, hoursAgo: number) {
   const f = await fixture(q);

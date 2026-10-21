@@ -21,6 +21,17 @@ const carousel = {
   captions: { instagram: "NDA 2026 Q42 #NDA" },
 };
 
+const story = {
+  slug: "maths-q-2026-10-26",
+  project: "pyqvault-insta",
+  kind: "story",
+  title: "Maths question · Mon 26 Oct",
+  cover: "maths-q-2026-10-26.jpg",
+  plannedFor: "2026-10-26T07:30:00+05:30",
+  question: { id: "047abe4b-6c21-47e9-b26e-4d6e74258b74", answer: "D", part: "question" },
+  captions: {},
+};
+
 function codeOf(fn: () => unknown): string | undefined {
   try { fn(); } catch (e) { return e instanceof DomainError ? e.code : "not-a-domain-error"; }
   return undefined;
@@ -44,6 +55,37 @@ describe("parseManifest", () => {
     expect(codeOf(() => parseManifest({ ...carousel, slides: eleven }))).toBe("invalid_manifest");
     expect(codeOf(() => parseManifest({ ...carousel, slides: ["a.png", "b.gif"] }))).toBe("invalid_manifest");
     expect(codeOf(() => parseManifest({ ...carousel, video: "x.mp4" }))).toBe("invalid_manifest");
+  });
+
+  it("accepts a question story: one JPEG card, its morning or evening, and the question it shows", () => {
+    const m = parseManifest(story);
+    expect(m).toMatchObject({ kind: "story", cover: "maths-q-2026-10-26.jpg", question: { answer: "D", part: "question" } });
+    expect(m.plannedFor).toBe("2026-10-26T07:30:00+05:30");
+  });
+
+  it("a story needs a JPEG card (Instagram rejects PNG), a time with its offset, and its question", () => {
+    expect(codeOf(() => parseManifest({ ...story, cover: undefined }))).toBe("invalid_manifest");
+    expect(codeOf(() => parseManifest({ ...story, cover: "card.png" }))).toBe("invalid_manifest");
+    expect(codeOf(() => parseManifest({ ...story, plannedFor: undefined }))).toBe("invalid_manifest");
+    expect(codeOf(() => parseManifest({ ...story, plannedFor: "2026-10-26T07:30:00" }))).toBe("invalid_manifest");
+    expect(codeOf(() => parseManifest({ ...story, question: undefined }))).toBe("invalid_manifest");
+  });
+
+  it("a story's question names a real id, an answer A–D and which card it is", () => {
+    expect(codeOf(() => parseManifest({ ...story, question: { ...story.question, id: "q1" } }))).toBe("invalid_manifest");
+    expect(codeOf(() => parseManifest({ ...story, question: { ...story.question, answer: "E" } }))).toBe("invalid_manifest");
+    expect(codeOf(() => parseManifest({ ...story, question: { ...story.question, part: "hint" } }))).toBe("invalid_manifest");
+  });
+
+  it("a story has no video, slides or caption", () => {
+    expect(codeOf(() => parseManifest({ ...story, video: "x.mp4" }))).toBe("invalid_manifest");
+    expect(codeOf(() => parseManifest({ ...story, slides: ["a.jpg", "b.jpg"] }))).toBe("invalid_manifest");
+    expect(codeOf(() => parseManifest({ ...story, captions: { instagram: "hello" } }))).toBe("invalid_manifest");
+  });
+
+  it("only a story carries a planned time or a question", () => {
+    expect(codeOf(() => parseManifest({ ...reel, plannedFor: story.plannedFor }))).toBe("invalid_manifest");
+    expect(codeOf(() => parseManifest({ ...carousel, question: story.question }))).toBe("invalid_manifest");
   });
 
   it("only allows plain file names next to the manifest (no paths)", () => {

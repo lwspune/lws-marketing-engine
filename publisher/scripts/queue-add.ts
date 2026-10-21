@@ -8,6 +8,8 @@
 // are removed again so nothing is left half-done. A slug already queued in the project is skipped,
 // unless --replace is given AND that post is still "ready": then its files, title and captions are
 // swapped for the new ones (a remade reel). Approved/published/rejected posts are never replaced.
+// A story (stories/render.mjs) also saves its planned time and the question it shows; approve it
+// with the dashboard's "Approve all stories", like the daily quiz stories.
 import { randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -33,6 +35,7 @@ run(async () => {
     if (!project) throw new Error(`${m.slug}: no project "${m.project}" in ${orgSlug}.`);
     const { data: existing } = await db.from("posts").select("id, status, kind").eq("project_id", project.id).eq("slug", m.slug).maybeSingle();
     const names = [m.video, m.cover, ...(m.slides ?? [])].filter((x): x is string => !!x);
+    const storyFields = m.kind === "story" ? { planned_for: m.plannedFor, question: m.question } : {};
 
     if (existing && !(replace && existing.status === "ready")) {
       console.log(`- ${m.slug}: already queued (${existing.status}), skipped${replace ? " (only a ready post can be replaced)" : ""}`);
@@ -50,7 +53,7 @@ run(async () => {
         if (error) throw new Error(`${m.slug}: uploading ${name}: ${error.message}`);
       }
       const { error } = await db.from("posts").update({
-        title: m.title, captions: m.captions,
+        title: m.title, captions: m.captions, ...storyFields,
         video_path: m.video ? key(m.video) : null, cover_path: m.cover ? key(m.cover) : null, slide_paths: (m.slides ?? []).map(key),
       }).eq("id", existing.id).eq("status", "ready");
       if (error) throw new Error(`${m.slug}: updating the post: ${error.message}`);
@@ -73,7 +76,7 @@ run(async () => {
       const { error } = await db.from("posts").insert({
         id: postId, org_id: org.id, project_id: project.id, slug: m.slug, kind: m.kind, title: m.title, captions: m.captions,
         video_path: m.video ? key(m.video) : null, cover_path: m.cover ? key(m.cover) : null,
-        slide_paths: (m.slides ?? []).map(key),
+        slide_paths: (m.slides ?? []).map(key), ...storyFields,
       });
       if (error) throw new Error(`saving the post: ${error.message}`);
       console.log(`✓ ${m.slug} queued as Ready (${names.length} files)`);

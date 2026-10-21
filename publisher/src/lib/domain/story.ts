@@ -12,6 +12,13 @@ export interface StoryQuiz {
   links: Record<string, string>;
 }
 
+/** A question story (@pyqvault_ daily maths, stories/questions.js): which question, its right answer, which card. */
+export interface StoryQuestion {
+  id: string;
+  answer: "A" | "B" | "C" | "D";
+  part: "question" | "answer";
+}
+
 /** How a viewer gets the link: the bio (until the reply DM exists) or by replying QUIZ. */
 export type StoryCta = "bio" | "reply";
 
