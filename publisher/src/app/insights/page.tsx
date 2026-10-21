@@ -100,11 +100,15 @@ interface StoryDbRow {
   }[];
 }
 
-/** The last 14 published quiz stories with their 23h numbers (RLS: the member's own projects). */
-async function loadStories(supabase: Db): Promise<StoryRow[]> {
+/**
+ * The last 14 published stories of one kind with their 23h numbers (RLS: the member's own projects):
+ * `quiz` = @lws.pune's daily quiz links, `question` = @pyqvault_'s daily maths questions. Kept apart so
+ * two audiences never blend into one typical story.
+ */
+async function loadStories(supabase: Db, shows: "quiz" | "question"): Promise<StoryRow[]> {
   const { data } = await supabase.from("posts")
     .select("id, title, publications(published_at, publication_metrics(snapshot, views, reach, shares, replies, follows, profile_visits, exits, error))")
-    .eq("kind", "story").eq("status", "published")
+    .eq("kind", "story").eq("status", "published").not(shows, "is", null)
     .order("planned_for", { ascending: false }).limit(14);
   return ((data ?? []) as StoryDbRow[]).flatMap((p) => p.publications.filter((pb) => pb.published_at).map((pb) => {
     const m = pb.publication_metrics.find((x) => x.snapshot === "23h");
@@ -136,11 +140,12 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
     return { accounts, account, rows: (data ?? []) as Row[] };
   };
   // The sections don't depend on each other: load them together.
-  const [ads, { accounts, account, rows }, inbox, stories] = await Promise.all([
+  const [ads, { accounts, account, rows }, inbox, stories, questionStories] = await Promise.all([
     showAds ? loadAds(supabase, new Date()) : null,
     loadReels(),
     access.inbox ? loadInbox(supabase, new Date()) : null,
-    loadStories(supabase),
+    loadStories(supabase, "quiz"),
+    loadStories(supabase, "question"),
   ]);
   const qs = (next: { sort?: SortId; account?: string }) => {
     const p = new URLSearchParams();
@@ -181,7 +186,8 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
         <PageHeader title="Insights">How your {ads ? "ads and reels are" : "reels are"} doing, against your own typical numbers.</PageHeader>
         {ads && <div className="mb-6"><AdsSummary {...ads} /></div>}
         {inbox && inbox.accounts.length > 0 && <div className="mb-6"><InboxSummary {...inbox} /></div>}
-        {stories.length > 0 && <div className="mb-6"><StorySummary rows={stories} /></div>}
+        {stories.length > 0 && <div className="mb-6"><StorySummary rows={stories} kind="quiz" /></div>}
+        {questionStories.length > 0 && <div className="mb-6"><StorySummary rows={questionStories} kind="question" /></div>}
 
         {accounts.length > 1 && (
           <nav aria-label="Instagram account" className="mb-4 flex flex-wrap gap-2">

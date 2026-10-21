@@ -7,15 +7,15 @@ import { supportedPlatforms } from "@/lib/domain/workflow";
 import { compareToBaseline, LWS_BASELINE, storyErrorText, type PostMetrics, type Verdict } from "@/lib/domain/metrics";
 import { PLATFORM_LABEL, type Captions, type Platform, type PostKind } from "@/lib/domain/types";
 import type { Result } from "@/lib/publishing/result";
-import type { StoryQuiz } from "@/lib/domain/story";
+import type { StoryQuestion, StoryQuiz } from "@/lib/domain/story";
 import { SlideViewer } from "@/components/SlideViewer";
 import { ReelPreview } from "@/components/ReelPreview";
 
 export interface PostView {
   id: string; title: string; slug: string; kind: PostKind; status: string; captions: Captions;
   scheduledAt: string | null; rejectReason: string | null; projectName: string;
-  /** Stories only: the morning it's meant for and the quiz its card shows. */
-  plannedFor: string | null; quiz: StoryQuiz | null;
+  /** Stories only: the time it's meant for and the quiz or question its card shows. */
+  plannedFor: string | null; quiz: StoryQuiz | null; question: StoryQuestion | null;
   /** Reels and carousels: the project's next free posting slot, where approving puts it (null: no slots). */
   nextSlotAt: string | null;
   videoUrl: string | null; coverUrl: string | null; slideUrls: string[];
@@ -118,6 +118,11 @@ export function PostCard({ post }: { post: PostView }) {
                 Quiz: {post.quiz.title}{" "}
                 <a href={`https://www.pyqvault.com/quiz/${encodeURIComponent(post.quiz.publicSlug)}`} target="_blank" rel="noopener noreferrer"
                   className="link">Check the quiz<span className="sr-only"> (opens in a new tab)</span></a>
+              </p>
+            )}
+            {story && post.question && (
+              <p className="text-sm text-muted">
+                {post.question.part === "question" ? "Morning question" : "Evening answer"} · right answer {post.question.answer}
               </p>
             )}
             {post.rejectReason && <p className="text-xs text-muted">Rejected: {post.rejectReason}</p>}

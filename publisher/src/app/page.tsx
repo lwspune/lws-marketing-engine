@@ -4,7 +4,7 @@ import { memberAccess } from "@/lib/supabase/access";
 import { PostCard, type PostView } from "@/components/PostCard";
 import { Nav, PageHeader } from "@/components/Nav";
 import { ApproveStoriesButton } from "@/components/ApproveStoriesButton";
-import type { StoryQuiz } from "@/lib/domain/story";
+import type { StoryQuestion, StoryQuiz } from "@/lib/domain/story";
 import { queueProjects } from "@/lib/domain/projects";
 import { newestFirst } from "@/lib/domain/queue";
 import type { Platform } from "@/lib/domain/types";
@@ -42,7 +42,7 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
 
   let postsQuery = supabase
     .from("posts")
-    .select("id, project_id, slug, kind, title, status, captions, video_path, cover_path, slide_paths, scheduled_at, planned_for, quiz, created_at, reject_reason, publications(id, platform, status, scheduled_at, attempts, permalink, error, published_at, publication_metrics(snapshot, views, reach, saves, shares, avg_watch_ms, replies, follows, profile_visits, exits, error))")
+    .select("id, project_id, slug, kind, title, status, captions, video_path, cover_path, slide_paths, scheduled_at, planned_for, quiz, question, created_at, reject_reason, publications(id, platform, status, scheduled_at, attempts, permalink, error, published_at, publication_metrics(snapshot, views, reach, saves, shares, avg_watch_ms, replies, follows, profile_visits, exits, error))")
     .in("status", statuses as unknown as string[])
     .order("created_at", { ascending: !newestFirst(tab) })
     .order("slug", { ascending: !newestFirst(tab) })
@@ -72,7 +72,7 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
   const views: PostView[] = (posts ?? []).map((p) => ({
     id: p.id, title: p.title, slug: p.slug, kind: p.kind, status: p.status, captions: p.captions ?? {},
     scheduledAt: p.scheduled_at, rejectReason: p.reject_reason,
-    plannedFor: p.planned_for, quiz: (p.quiz ?? null) as StoryQuiz | null,
+    plannedFor: p.planned_for, quiz: (p.quiz ?? null) as StoryQuiz | null, question: (p.question ?? null) as StoryQuestion | null,
     nextSlotAt: p.kind === "story" ? null : slotOf(p.project_id),
     projectName: projects?.find((x) => x.id === p.project_id)?.name ?? "",
     videoUrl: p.video_path ? signed.get(p.video_path) ?? null : null,
