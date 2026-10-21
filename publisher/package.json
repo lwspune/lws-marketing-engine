@@ -20,6 +20,7 @@
     "ads:add": "tsx scripts/ads-add.ts",
     "insights": "tsx scripts/insights.ts",
     "covers:fetch": "tsx scripts/covers-fetch.ts",
+    "competitors:export": "tsx scripts/competitors-export.ts",
     "stories:plan": "tsx scripts/stories-plan.ts",
     "messages:backfill": "tsx scripts/messages-backfill.ts",
     "messages:themes": "tsx scripts/messages-themes.ts",
