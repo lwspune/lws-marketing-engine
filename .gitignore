@@ -16,6 +16,8 @@ reels/*.mp4
 soundmind/*/*.jpg
 # Sound Mind reels, re-made in remotion/: npm run music:sm001 && npm run render:sm001 && npm run cover:sm001
 soundmind/reels/*.mp4
+# @pyqvault_ maths story cards, re-made from their batch: node stories/render.mjs stories/pyqvault/<week>/batch.json
+stories/pyqvault/*/*.jpg
 
 # Personal Claude Code settings
 .claude/settings.local.json

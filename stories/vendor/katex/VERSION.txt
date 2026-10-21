@@ -1,0 +1,1 @@
+KaTeX 0.16.45 (MIT), copied from PYQ Vault's install (Question_Bank/node_modules/katex/dist) so story cards set maths exactly as pyqvault.com does. woff2 fonts only (Edge loads those first).
