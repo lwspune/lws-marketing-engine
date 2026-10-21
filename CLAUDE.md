@@ -45,6 +45,9 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
 
 ## Non-negotiable constraints
 
+- **Write as if the repo were public** (founder, 2026-10-21: "assume it won't be private in future"). Never
+  commit secrets, `analytics/` exports (git-ignored), other accounts' material, an outside brand's numbers, or
+  anyone's personal details (students, leads, staff logins): tests use made-up names, numbers and emails.
 - **No slop.** Every idea and draft must name a real problem from the profile AND a real asset
   (or a flagged gap). Generic study-tip/motivation output is a failure.
 - **Faceless + silent-first.** Default Reel format is pen-and-paper solving filmed top-down, steps
@@ -224,7 +227,7 @@ response uses `{ ok, data | error: { code, message } }`. YouTube isn't wired yet
 it records a clear "not available yet" failure. **Scorecard (0004):** the same per-minute tick
 takes write-once snapshots of each published post at 48 h and 7 d (`publication_metrics`), shown
 on Done cards against `LWS_BASELINE` (src/lib/domain/metrics.ts, the median @lws.pune reel).
-`npm run insights -- --org=lws-pune` exports every reel's numbers to `../analytics/`. **Insights tab
+`npm run insights -- --org=lws-pune` exports every reel's numbers to `../analytics/` (local only, git-ignored). **Insights tab
 (0005):** `/insights` lists every reel on the account (hand-posted too, `account_media`) against the
 typical reel computed live (`typicalReel`, median); refreshed nightly at 03:00 IST by pg_cron →
 `/api/cron/insights`, by the tab's Refresh button, or by `npm run insights` (same sync code).

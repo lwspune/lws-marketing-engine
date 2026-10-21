@@ -9,6 +9,10 @@ out/
 .env.*
 !.env.example
 
+# The repo may go public (founder, 2026-10-21): numbers exports, competitors' material and DM reports stay
+# local. Files already tracked under analytics/ stay until the backfill decision (SUGGESTIONS.md).
+analytics/
+
 # Rendered videos are large and re-made from their page:
 #   node reels/tools/record.mjs reels/<name>.render.html
 reels/*.mp4

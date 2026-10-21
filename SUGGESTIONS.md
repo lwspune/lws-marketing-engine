@@ -136,6 +136,19 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### Make the repo safe to go public (logged 2026-10-21, awaiting user confirmation)
+Founder, 2026-10-21: "assume it won't be private in future". New work is covered (`analytics/` git-ignored, CLAUDE.md
+rule). Already committed: 35 files under `analytics/` (other creators' cover images and numbers in `competitors/`,
+Sound Mind's numbers incl. Shivani's contact numbers from her captions, element analyses), and Shivani's staff login
+email in CLAUDE.md. A history scan (187 commits) found **no secrets**: no API keys, tokens, DB passwords or `.env`.
+**360:** scope = 35 analytics files + one email line · blast radius = nothing reads analytics/ from git (scripts write
+it locally); removing it from history rewrites every commit hash, so every worktree and session must re-sync, and
+open branches need rebasing · does it apply? only before the repo actually goes public; while private nothing leaks ·
+risk = `git rm --cached` + email edit: none (files stay on disk); history rewrite (git filter-repo + force-push):
+high, not reversible once pushed, breaks other sessions mid-work · cost = 5 min for the first; ~30 min + a quiet
+moment with no other sessions for the history rewrite · **recommendation: partial now** (stop tracking analytics/,
+replace the email with "Shivani's staff login"); **defer the history rewrite** to the day before going public.
+
 ### Sound Mind week-43 posts have one-line captions (logged 2026-10-21, declined)
 Framework v1.1 (S16) gives captions a "you" first line and 2–4 lines of the idea. The 11 week-43 posts (7 carousels,
 4 reels; 2 published, the rest approved or ready in GoPost) have one-line captions.
