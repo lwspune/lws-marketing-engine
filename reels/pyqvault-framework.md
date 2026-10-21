@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.13, 2026-10-21)
+# @pyqvault_ reel framework (v1.15, 2026-10-21)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -60,6 +60,39 @@ cover with the answer kills it, and so does a caption: the first two predict-fir
 printed under the question (L45). · *Check:* cover time is before the answer lights and no answer number is on screen;
 `tests/caption-answer.test.js` checks every caption. · 🧪 L28 (part of predict-first), L45
 
+**F25 · Rotate the hook and the opening picture.** The A/B/C guess (F4) stays on every reel; what rotates is the
+**hook**, the angle of the question, and the **opening picture** of the first 3 s. No hook or opening twice in a row; the
+orbit (F22) opens at most 2 of any 4 reels; each reel's pair is set in `remake-backlog.md` → **Hook queue** before it's
+made. Hooks, each with the reel that proved it for another account: **Race** (two or three set-ups already running:
+which first?) · **Pick one** ("Pick one. Don't switch.": @ubilumapp's pick-a-number, 4.9 comments per 1,000 views, their
+best rate) · **Ending first** (open on the strange result, then "how?") · **Everyday puzzle** (@sciencevisualised topspin
+63×, bounce 52×; @mathsy.uk soda can 114×) · **You'd think** (the intuitive answer is wrong; never an invented "90 %
+get this wrong") · **Spot the mistake** (one wrong ray or arrow; our own idea, no proof yet) · **Put in order**
+(@sciencevisualised "Can you name all 8 chemical families?" 256×) · **Same start, two endings** (@bisal.physics "Same
+compression. Same starting gas. Two completely different outcomes." 21×). A countdown ("3 seconds") may be added to any
+of them, never on its own. Openings: Orbit 360° · Race running · Ending first · Zoom (scale, labelled "zoomed ×10⁹") ·
+Parts build · X-ray · Split screen · Colour flood. **Out:** the exam badge ("JEE asked this"; founder, 2026-10-21).
+· *Why:* watch time rose with the guess-first format (5.2 s → 7.4–9.5 s, L28/L31), but every reel now opens the same way;
+followers would learn the pattern and stop. The hooks are the ones that beat their own account's typical reel in our
+competitor data (`analytics/competitors/`); game hooks (pick one, solve this) bring 10–50× more comments per view than
+explainer hooks, and our comments are still 0. · *Check:* `node reels/tools/hook-rotation.js` (`tests/hook-rotation.test.js`
+also checks the real queue against Topic scores); the reel's row gets its hook and opening in the Hook column. · 🧪 L48
+
+**F26 · A second hook at the answer.** As the first answer lands, the next question appears (≤ 7 words, F7), and the
+reel's explanation becomes its answer: "Then which angle goes farthest?" (45°), "Swap them: copper rod, zinc liquid?"
+(nothing happens). Other forms: the picture rules one option out halfway ("Not A"), or a near miss ("Almost…") just before
+the answer. The second answer is re-derived in the tests like the first (F10). · *Why:* viewers leave at the answer:
+Physics #4 answers at 9.7 s and is watched 9.5 s, Chemistry #4 at 9.0 s and 7.4 s (L48); the answer ends the curiosity,
+so a new question has to open before it closes. · *Check:* the Second hook column of the Hook queue
+(`hook-rotation.js`: present, ≤ 7 words); the reel's tests put the second question on screen at the answer. · 🧪 L49
+
+**F27 · Loop or end card: on test.** Half the reels **loop**: the last second brings the scene back to its first frame
+(the question returns, the tag stays, F20), with no end card, so a replay runs on without a seam. The other half end on
+the end card as before. Never 3 the same in a row, both subjects on each side. · *Why:* a seamless replay adds watch
+time and invites a second look at the guess; the end card is a hard stop that ends the view. Only viewers who reach the
+end feel it, so it should pay off more once F26 keeps them longer. · *Check:* the Loop column of the Hook queue
+(`hook-rotation.js`); in a looping reel, a test that the last frame matches frame 0's scene. · 🧪 L50
+
 ## Picture
 
 **F7 · More picture, less text.** On-screen text is short labels, one line at a time, ≤ 7 words; no derivations, no
@@ -85,9 +118,9 @@ the big moment**, a zoom out to show the result. Written as tested keys (`CAMERA
 change of view restarts attention and makes the big moment feel big (founder). · *Check:* tests: at least 2 zooms in and
 1 out, no jump between frames, a punch-in on the big moment. · 🧪 L33
 
-**F22 · The orbit is the hook: every 3D reel opens with one.** From frame 0 the camera goes **all the way round the object, a full 360°** (front, side, back, side, front), eased in and out with no whoosh, while the question is up, and it **ends back at the front, the explaining view, by 3 s**, before anything is explained. One orbit per reel, in the opening only (no closing orbit, never during a punch-in). Written as a third camera value (orbit angle) on the same `CAMERA` keys. **Not for 2D reels** (founder, 2026-10-20: tried on @lws.pune 016, "doesn't look good"): a flat reel opens with its picture building from frame 0 instead (F5). · *Why:* the founder (2026-10-20): the orbit is the hook, so it belongs in the first 3 s; it shows the
+**F22 · The orbit: one of the openings (F25).** When a 3D reel opens with the orbit (at most 2 of any 4 reels, F25), from frame 0 the camera goes **all the way round the object, a full 360°** (front, side, back, side, front), eased in and out with no whoosh, while the question is up, and it **ends back at the front, the explaining view, by 3 s**, before anything is explained. One orbit per reel, in the opening only (no closing orbit, never during a punch-in). Written as a third camera value (orbit angle) on the same `CAMERA` keys. **Not for 2D reels** (founder, 2026-10-20: tried on @lws.pune 016, "doesn't look good"): a flat reel opens with its picture building from frame 0 instead (F5). · *Why:* the founder (2026-10-20): the orbit is the hook, so it belongs in the first 3 s; it shows the
 depth of the 3D we build and gives motion from frame 0 (F5). Back at the front by 3 s because a slope's angle, arrows
-and gauges only read from one view. · *Check:* the reel's tests (the orbit starts at frame 0, turns exactly 360°, ends at the front by 3 s, no jumps, no other orbit). · 📌 founder, measured by L37
+and gauges only read from one view. · *Check:* the reel's tests (the orbit starts at frame 0, turns exactly 360°, ends at the front by 3 s, no jumps, no other orbit). · 📌 founder, measured by L37 and L48
 
 **F10 · Honest.** The physics and maths are re-derived in tests; never fake counts, proportions or effects; label any
 scale change ("zoomed ×10⁹"). · *Why:* a wrong reel on an exam account costs trust we can't buy back; it's the no-slop
@@ -149,9 +182,15 @@ maths on @pyqvault_ (founder, 2026-10-20): maths ideas go to @lws.pune. · *Why:
 visual content (founder; our top reels are Boyle and the 8 families, L30), and maths has its home on @lws.pune; a numbered
 series gives a reason to follow and come back (L14; @ubilumapp's numbered series top their chart). · 📌 founder, 2026-10-18
 
-**F20 · End on the idea, then the end card with `pyqvault.com`.** No exam question on screen at the end; exam
-relevance lives in the caption. · *Why:* an MCQ at the end felt like homework (founder); the website is where a follower
-becomes a user. · *Check:* the end card. · 📌 founder, 2026-10-18
+**F20 · "PYQ Vault · pyqvault.com" on screen from frame 0; end on the idea.** A small tag under the question from the
+first frame, staying for the whole reel: smaller and quieter than the question (the question wins the 3-second decision)
+but at least 4.5:1 against the board (WCAG AA), no "www.". A reel that doesn't loop (F27) still ends on the end card with
+`pyqvault.com`. No exam question on screen at the end; exam relevance lives in the caption. · *Why:* the website is where
+a follower becomes a user (founder), but until now @pyqvault_ reels showed it only on the end card at ~18–20 s, which the
+average viewer never reaches (they leave at 7–9 s, L48), and the board's watermark is off on them (it reads "LWS Pune ·
+NDA Maths"). On screen from frame 0 everyone sees it, the cover carries it, and a looping reel no longer needs a hard stop
+(founder, 2026-10-21). An MCQ at the end felt like homework (founder). · *Check:* the reel's tests (the tag is on every
+frame; its contrast); the stills sheet. · 🧪 L51
 
 ---
 
@@ -183,3 +222,5 @@ becomes a user. · *Check:* the end card. · 📌 founder, 2026-10-18
 | v1.11 | 2026-10-20 | F6: the caption never gives the answer either ("Answer at the end of the reel 👀"), checked by `tests/caption-answer.test.js`. | Founder, 2026-10-20 (L45): Physics #4 and Chemistry #4 asked "Comment your guess" and got 0 comments at 1,403 and 340 views, with "→ B" printed a few lines down. First reel under the rule: Physics #8 (P24, the spoon). Reels made before it are in SUGGESTIONS.md → Backfill ledger. |
 | v1.12 | 2026-10-21 | F24 added: bright objects from the `VIVID` set (both handles). | Founder: "more vivid colour objects", for @pyqvault_ and @lws.pune. Measured by L46. First reel: Physics #8 remade (`PvPhysics008Vivid`), set beside the first version for the founder to compare. |
 | v1.13 | 2026-10-21 | F24: an everyday object people know by its material keeps it (steel, glass); the rest stays vivid. | Founder, 2026-10-21, comparing Physics #8's two versions: "original spoon colour was better, rest vivid is better". A steel spoon in cyan stopped looking like a spoon; the bright candle, rays and graph read better. Physics #8 goes out vivid with the steel spoon. |
+| v1.14 | 2026-10-21 | F25 added: rotate the hook (8 types) and the opening picture (8 types) around the A/B/C guess; the Hook queue in `remake-backlog.md`, checked by `hook-rotation.js`. F22: the orbit is now one of the openings, at most 2 of any 4 reels (was every 3D reel). | Founder, 2026-10-21: "think about more hooks before this becomes repetitive"; chose the rotation from Claude's analysis of the competitor data and dropped the exam badge ("hook 6 out"). No orbit reel has been posted yet, so the orbit stays in the mix and L37 still measures it. Measured by L48. First reels: P11, C8, P6, C9, P7, C15. Reels already made are left as they are. |
+| v1.15 | 2026-10-21 | F26 added: a second hook at the answer. F27 added: loop or end card, on test, alternating. F20: "PYQ Vault · pyqvault.com" under the question from frame 0 for the whole reel; the end card stays only on reels that don't loop. Hook queue gets Second hook and Loop columns, checked by `hook-rotation.js`. | Founder, 2026-10-21: "okay with both" (Claude's analysis: viewers leave at the answer, L48), and the founder's idea to put PYQ Vault and its address under the hook so a looping reel has no hard stop; Claude's additions: keep it for the whole reel, no "www.", AA contrast. Measured by L49, L50, L51. First reels: the six in the Hook queue. Reels already made are left as they are. |

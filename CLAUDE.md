@@ -157,6 +157,9 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   tools/                 #   headless-Edge scripts: frames, record, cover, check-video, unchanged (+ baseline.txt)
   tools/topic-scores.js  #   next topic by score, per handle (framework F21; remake-backlog.md → Topic scores /
                          #   @lws.pune topic scores); `node reels/tools/topic-scores.js [pyqvault|lwspune]`
+  tools/hook-rotation.js #   @pyqvault_ hook, opening, second hook, loop per queued reel (framework F25–F27;
+                         #   remake-backlog.md → Hook queue): no repeat in a row, orbit ≤ 2 of any 4, loop alternates;
+                         #   `node reels/tools/hook-rotation.js`
   analysis-framework.md  #   REEL ELEMENT ANALYSIS: which elements go with hits (top vs typical reels per account), method +
                          #   decision rule + runs; tools/element-analysis.js (+ elements.js, cover-metrics.mjs, element-report.js),
                          #   covers via publisher `npm run covers:fetch` (read-only, deleted after measuring); data in analytics/elements/
