@@ -57,3 +57,36 @@ test('palette: VIVID has one bright set per board, with the same roles', async (
     }
   }
 });
+
+// Real colours first (framework F24, founder 2026-10-22: "wherever possible they should be realistic"): a vetted fill per
+// material and board, plus an edge that is a shade of the same colour. A real colour too pale or dark for the board (glass,
+// steel, ice on white) stands out through its edge, never through a fake colour: one of the two must reach 3:1.
+test('palette: REAL materials have a true-to-life fill and an edge of their own colour that stands out on each board', async () => {
+  const { REAL, LAB } = await import('../src/lib/palette.ts') as { REAL?: Record<'white' | 'lab', Record<string, { fill: string; edge: string }>>; LAB: Record<string, string> };
+  assert.ok(REAL, 'palette.ts exports REAL');
+  assert.deepEqual(Object.keys(REAL.white), Object.keys(REAL.lab));
+  for (const m of ['copper', 'steel', 'zinc', 'gold', 'glass', 'water', 'flame', 'copperSulphate', 'chlorine']) assert.ok(REAL.white[m], m);
+  for (const [set, board] of [[REAL.white, WHITE.board], [REAL.lab, LAB.board]] as const) {
+    for (const [m, { fill, edge }] of Object.entries(set)) {
+      assert.ok(Math.max(contrast(fill, board), contrast(edge, board)) >= 3, `${m} vanishes on ${board}`);
+      const a = hueSat(fill), b = hueSat(edge), gap = Math.min(Math.abs(a.h - b.h), 360 - Math.abs(a.h - b.h));
+      if (a.s < 0.15) assert.ok(b.s < 0.2, `${m}: a grey metal's edge must stay grey (${edge})`);
+      else assert.ok(gap <= 25, `${m}: the edge ${edge} is not a shade of ${fill} (${gap.toFixed(0)}° apart)`);
+    }
+  }
+});
+
+// Colour-blind safety (F24, founder 2026-10-22): two things the viewer must tell apart must still differ for the 1 in 12 men
+// with red–green colour blindness. distinguishable() simulates protanopia and deuteranopia (Viénot 1999) and wants a CIE
+// colour difference of at least CVD_MIN under both.
+test('palette: distinguishable() catches the pairs red–green colour blindness merges', async () => {
+  const { distinguishable, VIVID } = await import('../src/lib/palette.ts') as { distinguishable?: (a: string, b: string) => boolean; VIVID: { white: Record<string, string>; lab: Record<string, string> } };
+  assert.ok(distinguishable, 'palette.ts exports distinguishable');
+  const w = VIVID.white;
+  assert.equal(distinguishable(w.red, w.green), false, 'red vs green');
+  assert.equal(distinguishable(w.blue, w.violet), false, 'blue vs violet');
+  assert.equal(distinguishable(w.orange, w.yellow), false, 'orange vs yellow');
+  assert.equal(distinguishable(w.blue, w.orange), true, 'blue vs orange');
+  assert.equal(distinguishable(w.cyan, w.red), true, 'cyan vs red');
+  assert.equal(distinguishable(VIVID.lab.red, VIVID.lab.green), false, 'lab red vs green');
+});
