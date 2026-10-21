@@ -23,7 +23,8 @@ export default async function LeadsPage() {
       <main className="mx-auto max-w-5xl px-4 pb-16 pt-8">
         <PageHeader title="Leads">
           Everyone worth calling back, in one list. Instagram chats join when the person shares a phone number or email;
-          WhatsApp chats when Claude judges them a genuine new enquiry. Checked every hour. Only owners can see this page.
+          WhatsApp chats when Claude judges them a genuine new enquiry, and lwspune.com form entries from their emails.
+          Only owners can see this page.
         </PageHeader>
 
         {!sortingWhatsApp && (

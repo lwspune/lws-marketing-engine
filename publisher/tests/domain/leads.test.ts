@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
-  findContact, formatPhone, guessCourse, instagramLead, leadsCsv, parseScreening, sourceLabel, transcript, whatsappContact,
-  type ChatMessage,
+  findContact, formatPhone, guessCourse, instagramLead, leadsCsv, mergeFormLeads, parseFormEmail, parseScreening, sourceLabel, transcript,
+  whatsappContact,
+  type ChatMessage, type FormLead,
 } from "@/lib/domain/leads";
 
 // One leads list (founder, 2026-10-21): name, contact, course, date, source. Instagram chats become leads when the
@@ -138,5 +139,61 @@ describe("leadsCsv", () => {
   it("never lets a cell start a spreadsheet formula", () => {
     const csv = leadsCsv([{ name: "=HYPERLINK(\"x\")", contact: "+447700900123", course: "@x", lead_at: "2026-10-20T08:00:00Z", source: "s" }]);
     expect(csv.split("\r\n")[1]).toBe("\"'=HYPERLINK(\"\"x\"\")\",'+447700900123,'@x,2026-10-20,s");
+  });
+});
+
+describe("parseFormEmail (lwspune.com form → lws.adacoount@gmail.com)", () => {
+  const AT = "2026-10-21T07:12:57Z";
+  it("reads name, mobile, course and the form's page", () => {
+    expect(parseFormEmail(
+      "Student&#39;s Full Name: Shubham Dalvi Mobile Number: 08356925351 Courses : NDA 6 months State: Maharashtra --- Date: October 21, 2026 Time: 7:12 am Page URL: https://lwspune.com/ssb/ User Agent: Mozilla/5.0",
+      AT,
+    )).toEqual({ name: "Shubham Dalvi", contact: "+918356925351", course: "NDA 6 months", lead_at: AT, page: "lwspune.com/ssb/" });
+  });
+
+  it("reads the older layout too, and drops tracking from the page", () => {
+    expect(parseFormEmail(
+      "Student's Full Name: Raj Patil Mobile Number: 9730010347 State: Maharashtra Courses : AFCAT Submission Date: June 19, 2026 4:11 pm --- Date: June 19, 2026 Time: 4:11 pm Page URL: https://lwspune.com/ssb/?utm_source=chatgpt.com",
+      AT,
+    )).toMatchObject({ name: "Raj Patil", contact: "+919730010347", course: "AFCAT", page: "lwspune.com/ssb/" });
+  });
+
+  it("leaves out an unchosen course, a blank name and a cut-off page", () => {
+    expect(parseFormEmail("Student's Full Name: Mobile Number: 8103810978 Courses : Courses State: Maharashtra --- Page URL: https://", AT))
+      .toEqual({ name: null, contact: "+918103810978", course: null, lead_at: AT, page: null });
+  });
+
+  it("reads the call-back form, which has no colons", () => {
+    expect(parseFormEmail("Student&#39;s full name Charvi Pravin Chaudhari Mobile Number 9730453355 Courses NDA State Maharashtra Sent from LWS Pune", AT))
+      .toEqual({ name: "Charvi Pravin Chaudhari", contact: "+919730453355", course: "NDA", lead_at: AT, page: null });
+  });
+
+  it("returns null when there's no usable mobile number", () => {
+    expect(parseFormEmail("Student's Full Name: X Mobile Number: 12345 Courses : NDA 1 year", AT)).toBeNull();
+    expect(parseFormEmail("Hello there", AT)).toBeNull();
+  });
+});
+
+describe("mergeFormLeads", () => {
+  const lead = (over: Partial<FormLead>): FormLead =>
+    ({ name: "Tirth Gunjal", contact: "+918830265502", course: "NDA 2 year", lead_at: "2026-08-09T06:02:06Z", page: "lwspune.com/", ...over });
+  it("keeps one per number: the first time they wrote, with a name and course from any of their entries", () => {
+    const merged = mergeFormLeads([
+      lead({ name: null, course: null, lead_at: "2026-08-12T03:39:37Z", contact: "+917357717380" }),
+      lead({ name: "Dilkhush Gurjar", course: "CAPF", lead_at: "2026-08-12T03:39:11Z", contact: "+917357717380" }),
+      lead({}),
+      lead({ lead_at: "2026-08-09T06:02:22Z" }),
+    ]);
+    expect(merged).toEqual([
+      lead({}),
+      lead({ name: "Dilkhush Gurjar", course: "CAPF", lead_at: "2026-08-12T03:39:11Z", contact: "+917357717380" }),
+    ]);
+  });
+});
+
+describe("sourceLabel for the website", () => {
+  it("names the form's page", () => {
+    expect(sourceLabel({ channel: "website", account: null, fromAd: false, page: "lwspune.com/ssb/" })).toBe("Website lwspune.com/ssb/");
+    expect(sourceLabel({ channel: "website", account: null, fromAd: false, page: null })).toBe("Website");
   });
 });

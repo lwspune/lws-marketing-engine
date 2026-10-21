@@ -23,7 +23,8 @@
     "stories:plan": "tsx scripts/stories-plan.ts",
     "messages:backfill": "tsx scripts/messages-backfill.ts",
     "messages:themes": "tsx scripts/messages-themes.ts",
-    "leads:screen": "tsx scripts/leads-screen.ts"
+    "leads:screen": "tsx scripts/leads-screen.ts",
+    "leads:website": "tsx scripts/leads-website.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.5.2",

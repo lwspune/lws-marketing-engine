@@ -64,8 +64,51 @@ export const whatsappContact = (contactId: string): string | null => (/^[1-9]\d{
 export const formatPhone = (contact: string): string =>
   /^\+91[6-9]\d{9}$/.test(contact) ? `+91 ${contact.slice(3, 8)} ${contact.slice(8)}` : contact;
 
-export const sourceLabel = (s: { channel: string; account: string | null; fromAd: boolean }): string =>
-  `${s.channel === "whatsapp" ? "WhatsApp" : "Instagram"}${s.account ? ` ${s.account}` : ""}${s.fromAd ? " (ad)" : ""}`;
+const CHANNEL: Record<string, string> = { instagram: "Instagram", whatsapp: "WhatsApp", website: "Website" };
+
+export const sourceLabel = (s: { channel: string; account: string | null; fromAd: boolean; page?: string | null }): string =>
+  `${CHANNEL[s.channel] ?? s.channel}${s.account ? ` ${s.account}` : ""}${s.page ? ` ${s.page}` : ""}${s.fromAd ? " (ad)" : ""}`;
+
+// Website form (founder, 2026-10-21; migration 0017). lwspune.com emails every entry from lws.adacoount@gmail.com as
+// "Student's Full Name: … Mobile Number: … Courses : … State: … --- Date: … Page URL: …" (older entries put State
+// before Courses and add a Submission Date). The "Request a Call Back" form writes the same labels without colons.
+export interface FormLead { name: string | null; contact: string; course: string | null; lead_at: string; page: string | null }
+
+const FORM_LABELS =
+  /\b(Student's Full Name|Mobile Number|Courses|State|Submission Date|Date|Time|Page URL|User Agent|Remote IP|Powered by|Sent from)\b\s*:?/gi;
+const decode = (t: string) => t.replace(/&#39;|&#x27;/g, "'").replace(/&quot;/g, '"').replace(/&amp;/g, "&");
+
+/** One form email's text (Gmail's preview is enough) → the entry, or null without a usable mobile number. */
+export function parseFormEmail(text: string, receivedAt: string): FormLead | null {
+  const t = decode(text);
+  const fields: Record<string, string> = {};
+  const marks = [...t.matchAll(FORM_LABELS)];
+  marks.forEach((m, i) => {
+    const end = i + 1 < marks.length ? marks[i + 1].index : t.length;
+    fields[m[1].toLowerCase()] ??= t.slice(m.index + m[0].length, end).replace(/-{3,}/g, "").trim();
+  });
+  const contact = fields["mobile number"] ? findContact(fields["mobile number"]) : null;
+  if (!contact?.startsWith("+")) return null;
+  const courses = fields.courses;
+  const course = courses && courses.toLowerCase() !== "courses" ? courses.slice(0, 80) : null;
+  let page: string | null = null;
+  try {
+    const u = new URL(fields["page url"] ?? "");
+    if (u.hostname) page = `${u.hostname}${u.pathname}`.slice(0, 200);
+  } catch { /* cut off or missing */ }
+  return { name: fields["student's full name"]?.slice(0, 200) || null, contact, course, lead_at: receivedAt, page };
+}
+
+/** One entry per number: the first time they wrote, with the name and course from whichever entry has them. */
+export function mergeFormLeads(leads: FormLead[]): FormLead[] {
+  const out = new Map<string, FormLead>();
+  for (const l of [...leads].sort((a, b) => a.lead_at.localeCompare(b.lead_at))) {
+    const seen = out.get(l.contact);
+    if (!seen) out.set(l.contact, { ...l });
+    else out.set(l.contact, { ...seen, name: seen.name ?? l.name, course: seen.course ?? l.course, page: seen.page ?? l.page });
+  }
+  return [...out.values()];
+}
 
 const MAX_LINE = 500;
 

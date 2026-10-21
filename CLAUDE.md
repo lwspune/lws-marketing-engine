@@ -264,6 +264,12 @@ judged genuine (Claude, `src/lib/leads/claude.ts`, only with `ANTHROPIC_API_KEY`
 sorting in a Claude Code chat: `npm run leads:screen -- --org=lws-pune --whatsapp-out=<file>` → verdicts →
 `--whatsapp-in=<file>`). Hourly pg_cron `leads-hourly` → `/api/cron/leads` (`leads_to_check` → `screenLeads` →
 `record_lead_checks`); each chat is re-checked only after a new incoming message. One lead per contact per org.
+**Website leads (0017, founder 2026-10-21):** lwspune.com form entries (emailed from lws.adacoount@gmail.com, two layouts:
+"New message from" and "Request a Call Back") are read in a Claude Code chat through the Gmail connector, that sender
+only (no Gmail access for GoPost), and added with `npm run leads:website -- --org=lws-pune --file=<[{date,text}]>`
+(`parseFormEmail` + `mergeFormLeads` → `add_website_leads`): channel `website`, the form's page in `page`. Next time,
+search `from:lws.adacoount@gmail.com after:<newest website lead date>`. Skip test entries (first import: "test abc",
+"ABC XYZ", "LWS Foundation 8523697412", "Rajeev Thakkar 8526974562").
 **WhatsApp Business app numbers (founder 2026-10-19, first: +91 70200 03600):** Meta "coexistence": the number stays on
 the phone app and also reaches GoPost. Inbox → "Connect a WhatsApp Business app number" opens Meta's Embedded Signup
 (`WhatsAppConnectBox`, env `META_WA_SIGNUP_CONFIG_ID`) → `connectWhatsAppBusinessApp` (owners) → `connectBusinessAppNumber`:
