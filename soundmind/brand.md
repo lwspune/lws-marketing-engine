@@ -2,6 +2,8 @@
 
 Runbook for the weekly Sound Mind batch. Outside brand: none of the LWS / PYQ rules or house styles apply here.
 Shivani judges the finished posts in GoPost (staff login) and approves or rejects them. She doesn't review drafts.
+The rules below are numbered, each with its reason, check and status, in **`framework.md`** (S1, S2…; change them only
+through its change log); the numbers that test them go in **`learnings.md`** (L52 on).
 
 ## Why carousels (research, 2026-10-19)
 
@@ -95,6 +97,7 @@ JPEG. Page number top right, `@soundmindwithshivani` at the bottom. Drawings are
 4. `cd publisher && npm run queue:add -- --org=lws-pune ../soundmind/<week>/*.post.json`. The posts appear in
    GoPost's Ready tab under **Sound Mind with Shivani**. Approving puts each one in the next 18:00 IST slot
    (Instagram only: GoPost can't post carousels to Facebook yet).
-5. After 7 days, compare shares and saves per post with her baseline (0 / 0) in the Insights tab.
+5. After 7 days, read each post's shares, saves and reach on its GoPost card and compare with the baseline
+   (`framework.md` → Winning means: 2.7 shares per 1,000 reached); write the result into its lesson in `learnings.md`.
 
 The JPEGs are not committed (`.gitignore`); re-make them from `batch.json` with step 2.

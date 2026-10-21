@@ -169,10 +169,15 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
                          #   `node reels/tools/hook-rotation.js`
   analysis-framework.md  #   REEL ELEMENT ANALYSIS: which elements go with hits (top vs typical reels per account), method +
                          #   decision rule + runs; tools/element-analysis.js (+ elements.js, cover-metrics.mjs, element-report.js),
-                         #   covers via publisher `npm run covers:fetch` (read-only, deleted after measuring); data in analytics/elements/
+                         #   covers via publisher `npm run covers:fetch` (read-only, deleted after measuring); data in analytics/elements/.
+                         #   Two sets: `science` (reels, views) and `soundmind` (every post, likes). Other accounts' posts:
+                         #   publisher `npm run competitors:export -- --org=lws-pune --handles=…` → analytics/competitors/
   assets/                #   V mascot poses (copied from Question_Bank/public/chat)
   *.post.json            #   one per piece: manifest for publisher's `queue:add` (files + captions)
 soundmind/               # @soundmindwithshivani carousels (outside brand). Runbook + research: brand.md
+  framework.md           #   POST FRAMEWORK (founder 2026-10-21): S1… points (carousels + ME reels), each with reason, check,
+                         #   status; "winning" = shares per 1,000 reached at 7 d; change only through its change log
+  learnings.md           #   Sound Mind LEARNINGS LOG (L52 on; one L-numbering with the LWS logs)
   cards.js               #   pure rules: batch validation, health-claim check, font sizes, GoPost manifest
   art.js                 #   line-drawing catalogue for story slides
   card.html, render.mjs  #   one template; render.mjs → 1080×1350 JPEGs + <slug>.post.json per post
