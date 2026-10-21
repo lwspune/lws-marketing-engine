@@ -1,4 +1,4 @@
-# Reel element analysis (v1, 2026-10-20)
+# Reel element analysis (v2, 2026-10-21)
 
 **What it's for** (founder, 2026-10-20): look at popular reels element by element (background, colour, text, the hook,
 the caption…), find which elements go with success and which don't, then decide carefully which to bring into the reel
@@ -73,6 +73,37 @@ Across accounts:
 
 Next versions add elements as we learn (e.g. topic type, everyday hook), each with its reason, like the framework.
 
+## Sound Mind set (v2, 2026-10-21)
+
+Same method and decision rule, for @soundmindwithshivani (founder: "a similar one for Sound Mind"); findings go into
+`soundmind/framework.md` only by the founder's choice. What's different:
+
+- **Accounts:** @komal_reads, @myeasytherapy, @selfcarewithwall, @therapypulse, @habityra, @silvabydebalina,
+  @easybrilliantart (`soundmind/brand.md` → research). **@soundmindwithshivani is in the sample as "ours":** shown in
+  its own column, never counted in the verdict (one account is a lead, not proof).
+- **Every post, judged on likes.** Meta gives views only for other accounts' reels; carousels and images only have
+  likes. So top/typical is each post's likes ÷ its account's median likes, across reels, carousels and images.
+  Exported with `npm run competitors:export -- --org=lws-pune --handles=…` (publisher; `--metric=likes`, last year).
+- **Run it:** `node reels/tools/element-analysis.js sample <out-dir> soundmind`, then the same steps as above.
+- **Elements:** E1–E19, plus:
+
+| # | Element | Measured how | Why we look |
+|---|---|---|---|
+| E20 | **Carousel** | post type (auto) | carousels vs reels (L52) |
+| E21 | **Reel** | post type (auto) | the same question from the other side |
+| E22 | **Many slides** | carousels only: slide count above the account's median (auto) | how long a carousel should be |
+| E23 | **Asks to send / tag someone** | "send this to / share this with / tag a…" (auto) | the share ask (S6) |
+| E24 | **"Comment KEYWORD"** | "comment" + a word of 3+ capitals (auto) | @myeasytherapy sells this way |
+| E25 | **First line speaks to "you"** | you / your / you're / yourself in the caption's first line (auto) | the voice (S5) |
+| E26 | **Handwritten lettering** | the main words look hand-written (eye, blind) | Sound Mind's Kalam headlines |
+| E27 | **Everyday object as a metaphor** | an object stands for a feeling (a slow truck, a cake that can't rise) (eye, blind) | story carousels (L55) |
+| E28 | **Drawn character / figure** | a drawn or painted person, animal or creature (eye, blind) | the ME figure (S11) |
+| E29 | **Quote card** | words on a plain or textured colour, at most a small decoration (eye, blind) | quote carousels (L55) |
+
+Eye-coding anchors for this set: E5 counts words on the cover (≤ 6 short, > 6 long); E6 is a question **or a named
+struggle** (anxiety, burnout, overwhelm); E7 is a real person's face or body in a photo (a hand counts; drawn people are
+E28); a photo with a quote over it is E10, not E29.
+
 ## Runs
 
 ### Run 1 · 2026-10-20 · covers + captions · 180 reels, 6 accounts
@@ -93,8 +124,40 @@ Full tables: `analytics/elements/2026-10-20/report.md` (raw: `results.json`; inp
 **Next:** v2 measures **our own reels' videos** (motion at frame 0, zooms, pace, sound, colour over time), where we
 know every choice and have every file, alongside our tests (L22, L33, L34, L35).
 
+### Run 2 · 2026-10-21 · Sound Mind set · 225 posts, 7 accounts + ours
+
+Full tables: `analytics/elements/2026-10-21-soundmind/report.md`. **Covers: 88 of 225.** Meta's hourly request limit
+stopped the download; @myeasytherapy, @selfcarewithwall and @silvabydebalina are complete, the rest have none (4 of
+@komal_reads, all typical). So the cover elements (E1–E10, E26–E29) are from 3 accounts and can't reach a verdict yet;
+caption, format and timing cover all 225 posts.
+
+- **✅ Long caption (E11):** more common in the top posts of 5 accounts (@komal_reads 73 % vs 27 %, @selfcarewithwall
+  67 % vs 33 %, @habityra 67 % vs 40 %), the reverse in 2 (@myeasytherapy, @easybrilliantart). The second study in a row
+  to say so (run 1: 4 of 6 science accounts). Ours leans the same way (67 % vs 33 %). Still a lead: a long caption may
+  just go with a meatier post. Note `brand.md` says Sound Mind captions are short.
+- **✅ The caption's first line speaks to "you" (E25):** top in 3 (@komal_reads 40 % vs 13 %, @selfcarewithwall
+  67 % vs 47 %, @habityra 67 % vs 33 %), typical in 1 (@myeasytherapy).
+- **❌ "Comment KEYWORD" (E24):** more common in *typical* posts in 3 accounts (@myeasytherapy 0 % vs 27 %, @habityra
+  0 % vs 27 %, @silvabydebalina 13 % vs 33 %), never in top. These are sales posts: they collect comments from people who
+  already follow, not likes from new ones. A keyword ask on a post meant to spread works against it.
+- **Leads** (2 accounts each, none the other way): a drawn character on the cover (E28: @selfcarewithwall 22 % vs 0 %,
+  @silvabydebalina 20 % vs 0 %); a save / share / follow ask (E14: @habityra, @silvabydebalina). @silvabydebalina's hits
+  show a real person or photo far less often (E7 27 % vs 73 %, E10 53 % vs 80 %). A question or named struggle on the
+  cover leans *typical* at @myeasytherapy (7 % vs 40 %), as it did for two science accounts in run 1.
+- **Format** (from the exports, median likes per format, last year): where an account posts both, the still formats
+  out-like its reels 3–11×: @komal_reads carousels 1,603 vs reels 303; @myeasytherapy single images 5,131, carousels
+  1,551, reels 459. Sound Mind's own: reels 25, carousels 26. Likes aren't reach (reels find non-followers), so L52
+  decides on our own shares and reach.
+- **What the hits look like:** @komal_reads' best are metaphor-story carousels (*Your train is not late…* 607× its median,
+  *Life of a lotus* 266×, *Life of a snail* 46×); @easybrilliantart's are reels of a one-line quote being drawn, about
+  silence, being alone and peace (up to 445×, 174K likes).
+
+**Next:** the other 137 covers when Meta's limit allows (`covers:fetch` skips the ones already saved), then the cover
+verdicts.
+
 ## Change log
 
 | Version | Date | Change | Why |
 |---|---|---|---|
+| v2 | 2026-10-21 | Sound Mind set: 7 wellness accounts + ours (shown, not counted), every post judged on likes, E20–E29 (format, slides, send / keyword asks, "you", handwriting, metaphor, drawn figure, quote card). Run 2. | Founder: an analysis like @pyqvault_'s for Sound Mind. Likes because Meta gives no views for other accounts' carousels; our own account kept out of the verdict because one account is a lead, not proof. |
 | v1 | 2026-10-20 | Created: method, decision rule, 19 cover/caption/timing elements. | Founder: analyse popular reels element by element before changing the framework. Cover + caption only, because Meta doesn't give other accounts' videos and we don't scrape. |
