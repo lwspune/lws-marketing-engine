@@ -263,7 +263,7 @@ slug `pyq-vault` is shown as **LWS Pune** (@lws.pune: NDA reels, daily stories),
 **Staff logins (0011, founder 2026-10-18):** role `staff` sees only the projects in `project_members` (their posts,
 channels, accounts, reels, media), never ads; owners/editors see the whole org. Enforced by RLS + `lock_member_post`
 (tests/db/staff.test.ts). Add one with `npm run staff:add -- --org=lws-pune --email=… --projects=<slug>` (asks for
-the password). First staff: connect.with.soundmind@gmail.com → `soundmind-shivani`. Slugs never
+the password). First staff: Shivani's Sound Mind login → `soundmind-shivani`. Slugs never
 change: manifests and the story planner name projects by slug.
 **Inbox (0012, founder 2026-10-19):** Instagram DMs reach `/api/webhooks/meta` (signed with `META_APP_SECRET`,
 checked by `verifyMetaSignature`; GET answers Meta's check with `META_WEBHOOK_VERIFY_TOKEN`; not behind sign-in) →

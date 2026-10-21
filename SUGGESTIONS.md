@@ -136,7 +136,7 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
-### Make the repo safe to go public (logged 2026-10-21, awaiting user confirmation)
+### Make the repo safe to go public (logged 2026-10-21; first part DONE 2026-10-21, history rewrite deferred)
 Founder, 2026-10-21: "assume it won't be private in future". New work is covered (`analytics/` git-ignored, CLAUDE.md
 rule). Already committed: 35 files under `analytics/` (other creators' cover images and numbers in `competitors/`,
 Sound Mind's numbers incl. Shivani's contact numbers from her captions, element analyses), and Shivani's staff login
@@ -148,6 +148,10 @@ risk = `git rm --cached` + email edit: none (files stay on disk); history rewrit
 high, not reversible once pushed, breaks other sessions mid-work · cost = 5 min for the first; ~30 min + a quiet
 moment with no other sessions for the history rewrite · **recommendation: partial now** (stop tracking analytics/,
 replace the email with "Shivani's staff login"); **defer the history rewrite** to the day before going public.
+**Done (founder OK, 2026-10-21):** analytics/ untracked (35 files, kept on disk) and the email replaced. Note: a checkout
+that still tracks them (e.g. the main folder on an old branch) deletes them from disk when it switches to main, so copy
+analytics/ aside first and put it back after. **Still to do before going public:** erase analytics/ and the old email
+from history (git filter-repo + force-push, with no other session running; back up analytics/ first).
 
 ### Sound Mind week-43 posts have one-line captions (logged 2026-10-21, declined)
 Framework v1.1 (S16) gives captions a "you" first line and 2–4 lines of the idea. The 11 week-43 posts (7 carousels,
