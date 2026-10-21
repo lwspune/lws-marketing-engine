@@ -19,29 +19,31 @@ function parseCsv(text) {
   return body.filter((r) => r.length >= head.length).map((r) => ({
     posted: r[at("posted_ist")], type: r[at("type")], views: Number(r[at("views")]), x: Number(r[at("x_their_median")]),
     likes: Number(r[at("likes")]), comments: Number(r[at("comments")]), permalink: r[at("permalink")], caption: r[at("caption")],
+    slides: at("slides") >= 0 && r[at("slides")] !== "" ? Number(r[at("slides")]) : null,
   }));
 }
 
-/** Top = the n reels with the highest ×median (at least 3×); typical = the n closest to 1×. Last `days` days only. */
-function pickSample(rows, { now, days = 180, n = 15 }) {
+/** Top = the n posts with the highest ×median (at least 3×); typical = the n closest to 1×. Last `days` days only.
+ *  `types`: which post types count (reels only for the science study; every post for Sound Mind, judged on likes). */
+function pickSample(rows, { now, days = 180, n = 15, types = ["REELS"] }) {
   const cutoff = new Date(Date.parse(now) - days * 86_400_000).toISOString().slice(0, 10);
-  const reels = rows.filter((r) => r.type === "REELS" && r.posted.slice(0, 10) >= cutoff && r.x > 0);
+  const reels = rows.filter((r) => types.includes(r.type) && r.posted.slice(0, 10) >= cutoff && r.x > 0);
   const top = reels.filter((r) => r.x >= 3).sort((a, b) => b.x - a.x).slice(0, n);
   const typical = reels.filter((r) => !top.includes(r)).sort((a, b) => Math.abs(Math.log(a.x)) - Math.abs(Math.log(b.x))).slice(0, n);
   return { top, typical };
 }
 
 /** pickSample over 180 days, widening to a year, then all time, until the account has at least `minTop` hits. */
-function pickSampleWidening(rows, { now, n = 15, minTop = 10 }) {
+function pickSampleWidening(rows, { now, n = 15, minTop = 10, types }) {
   let s;
   for (const days of [180, 365, Infinity]) {
-    s = { ...pickSample(rows, { now, days: days === Infinity ? 1e6 : days, n }), days };
+    s = { ...pickSample(rows, { now, days: days === Infinity ? 1e6 : days, n, types }), days };
     if (s.top.length >= minTop) return s;
   }
   return s;
 }
 
-/** Caption elements E11–E17. */
+/** Caption elements E11–E17, and Sound Mind's send / tag ask, "comment KEYWORD" and a first line to "you". */
 function captionFeatures(caption) {
   const text = caption || "", first = (text.split("\n").find((l) => l.trim()) || "").trim();
   return {
@@ -52,6 +54,9 @@ function captionFeatures(caption) {
     hashtags: (text.match(/#[^\s#\d][^\s#]*/gu) || []).length,
     hasEmoji: /\p{Extended_Pictographic}/u.test(text),
     series: /(#\s?\d+\b|\bpart\s?\d+|\bday\s?\d+|\bep(isode)?\.?\s?\d+)/i.test(text),
+    asksSend: /\b(send (this|it) to|share (this|it) with|tag (a|your|someone|that|the)\b)/i.test(text),
+    commentKeyword: /\b(?:comment|Comment|COMMENT)\s+["“'‘]?[A-Z]{3,}\b/.test(text),
+    firstLineYou: /\byou(r|'re|’re|rself)?\b/i.test(first),
   };
 }
 
@@ -110,8 +115,9 @@ function verdict(directions) {
 }
 
 /** Every element, every account: share of top vs typical reels with it, its direction, then the verdict.
- *  elements: [{ id, name, get(reel) → boolean | number | null, numeric? }]; numbers become "above the account's median". */
-function analyse(reels, elements) {
+ *  elements: [{ id, name, get(reel) → boolean | number | null, numeric? }]; numbers become "above the account's median".
+ *  `own`: our own account, shown beside the others but left out of the verdict (one account is a lead, not proof). */
+function analyse(reels, elements, { own } = {}) {
   const accounts = [...new Set(reels.map((r) => r.account))];
   return elements.map((e) => {
     const per = {};
@@ -123,7 +129,7 @@ function analyse(reels, elements) {
       const top = pick("top"), typ = pick("typical"), share = (a2) => Math.round((a2.filter(Boolean).length / a2.length) * 100) / 100;
       per[a] = { direction: direction(top, typ), top: share(top), typical: share(typ), n: rs.length };
     }
-    const { verdict: v, counts } = verdict(Object.values(per).map((p) => p.direction));
+    const { verdict: v, counts } = verdict(Object.entries(per).filter(([a]) => a !== own).map(([, p]) => p.direction));
     return { id: e.id, name: e.name, verdict: v, counts, accounts: per };
   });
 }

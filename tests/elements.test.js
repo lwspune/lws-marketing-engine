@@ -118,3 +118,47 @@ test("analyse: shares per account and group, numbers judged against each account
   assert.equal(res[1].verdict, "works");
   assert.equal(res[1].accounts.b.top, 1);                                      // every top caption is above b's median
 });
+
+// Sound Mind (2026-10-21): carousels and images join the sample (likes ×median), and the wellness elements.
+
+test("reads the slide count when the export has one; older exports have none", () => {
+  const csv = '﻿posted_ist,type,views,x_their_median,likes,comments,slides,permalink,caption\n' +
+    '2026-10-01 09:30,CAROUSEL,,3.2,640,4,10,https://i/p/A/,"one"\n2026-10-02 09:30,REELS,900,0.8,160,1,,https://i/r/B/,"two"\n';
+  const rows = el.parseCsv(csv);
+  assert.deepEqual(rows.map((r) => [r.type, r.slides, r.x]), [["CAROUSEL", 10, 3.2], ["REELS", null, 0.8]]);
+  assert.equal(el.parseCsv('posted_ist,type,views,x_their_median,likes,comments,permalink,caption\n2026-10-01 09:30,REELS,1,1,1,1,p,"c"\n')[0].slides, null);
+});
+
+test("sample: the post types to keep can be widened from reels to every post", () => {
+  const mk = (d, x, type) => ({ posted: d, type, x, views: 0, permalink: `p${d}${x}`, caption: "" });
+  const rows = [mk("2026-10-01", 9, "CAROUSEL"), mk("2026-09-01", 4, "REELS"), mk("2026-08-01", 5, "IMAGE"), mk("2026-07-01", 1, "CAROUSEL")];
+  assert.deepEqual(el.pickSample(rows, { now: "2026-10-20", n: 3 }).top.map((r) => r.x), [4]);
+  const all = el.pickSample(rows, { now: "2026-10-20", n: 3, types: ["REELS", "CAROUSEL", "IMAGE"] });
+  assert.deepEqual(all.top.map((r) => r.x), [9, 5, 4]);
+  assert.equal(el.pickSampleWidening(rows, { now: "2026-10-20", n: 3, minTop: 1, types: ["CAROUSEL"] }).top[0].x, 9);
+});
+
+test("wellness caption features: send / tag asks, 'comment KEYWORD', a first line that speaks to 'you'", () => {
+  const f = el.captionFeatures('You don\'t have to earn rest.\nSend this to someone who needs it 🤍\nComment "REST" and I\'ll DM you the guide');
+  assert.deepEqual([f.asksSend, f.commentKeyword, f.firstLineYou], [true, true, true]);
+  assert.equal(el.captionFeatures("Tag a friend who overthinks").asksSend, true);
+  assert.equal(el.captionFeatures("Share this with your sister").asksSend, true);
+  const g = el.captionFeatures("Calm isn't something we force.\nComment below what helps you.");
+  assert.deepEqual([g.asksSend, g.commentKeyword, g.firstLineYou], [false, false, false]);
+  assert.equal(el.captionFeatures("comment STEADY for the free kit").commentKeyword, true);
+  assert.equal(el.captionFeatures("Comment YES if this is you").commentKeyword, true);
+  assert.equal(el.captionFeatures("Comment OK").commentKeyword, false);                   // two letters: too short to be a keyword
+});
+
+test("analyse: an 'own' account is shown per account but never counts towards the verdict", () => {
+  const reels = [];
+  for (const account of ["a", "b", "own"])
+    for (let i = 0; i < 10; i++) {
+      reels.push({ account, group: "top", yes: i < 8 });
+      reels.push({ account, group: "typical", yes: i < 2 });
+    }
+  const [res] = el.analyse(reels, [{ id: "E1", name: "x", get: (r) => r.yes }], { own: "own" });
+  assert.equal(res.accounts.own.direction, "top");
+  assert.deepEqual(res.counts, { top: 2, typical: 0, none: 0, constant: 0 });
+  assert.equal(res.verdict, "unclear");                                                  // 2 accounts, not 3
+});

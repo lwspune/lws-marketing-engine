@@ -1,16 +1,27 @@
 "use strict";
 // Reel element analysis, step by step (reels/analysis-framework.md):
 //
-//   node reels/tools/element-analysis.js sample <out-dir>      15 top + 15 typical reels per account → sample.json
+//   node reels/tools/element-analysis.js sample <out-dir> [science|soundmind]   15 top + 15 typical per account → sample.json
 //   (publisher) npm run covers:fetch -- --sample=<out-dir>/sample.json --covers=<covers-dir>
 //   node reels/tools/cover-metrics.mjs <out-dir> <covers-dir>  cover pixels → covers.json (then delete the covers)
-//   eye.json: blind codes for E5–E10, made from shuffled contact sheets (ids only)
+//   eye.json: blind codes for the eye-coded elements, made from shuffled contact sheets (ids only)
 //   node reels/tools/element-analysis.js report <out-dir>      verdict per element → report.md
+//
+// A set is the accounts studied together. "science" (run 1): @pyqvault_ / @lws.pune's models, reels judged on views.
+// "soundmind" (2026-10-21): Sound Mind's models, every post judged on likes (Meta gives no views for other accounts'
+// carousels), with @soundmindwithshivani alongside as "own": shown, never counted in the verdict.
 const fs = require("node:fs");
 const path = require("node:path");
 const el = require("./elements.js");
 
-const ACCOUNTS = ["bisal.physics", "codematrixvishal", "sciencevisualised", "ubilumapp", "mathsy.uk", "maths_mentor24"];
+const SETS = {
+  science: { accounts: ["bisal.physics", "codematrixvishal", "sciencevisualised", "ubilumapp", "mathsy.uk", "maths_mentor24"], types: ["REELS"], seed: 20261020 },
+  soundmind: {
+    accounts: ["komal_reads", "myeasytherapy", "selfcarewithwall", "therapypulse", "habityra", "silvabydebalina", "easybrilliantart", "soundmindwithshivani"],
+    own: "soundmindwithshivani", types: ["REELS", "CAROUSEL", "IMAGE", "VIDEO"], seed: 20261021,
+  },
+};
+const ACCOUNTS = SETS.science.accounts;
 const COMPETITORS = path.join(__dirname, "..", "..", "analytics", "competitors");
 
 function latestExport(handle) {
@@ -28,26 +39,28 @@ function shuffle(list, seed) {
   return out;
 }
 
-function sample(outDir, now = new Date().toISOString().slice(0, 10)) {
+function sample(outDir, setName = "science", now = new Date().toISOString().slice(0, 10)) {
+  const set = SETS[setName];
+  if (!set) throw new Error(`unknown set "${setName}" (${Object.keys(SETS).join(", ")})`);
   const reels = [];
-  for (const handle of ACCOUNTS) {
-    const file = latestExport(handle), { top, typical, days } = el.pickSampleWidening(el.parseCsv(fs.readFileSync(file, "utf8")), { now });
+  for (const handle of set.accounts) {
+    const file = latestExport(handle), { top, typical, days } = el.pickSampleWidening(el.parseCsv(fs.readFileSync(file, "utf8")), { now, types: set.types });
     for (const [group, list] of [["top", top], ["typical", typical]])
-      for (const r of list) reels.push({ account: handle, group, posted: r.posted, x: r.x, views: r.views, permalink: r.permalink, caption: r.caption });
+      for (const r of list) reels.push({ account: handle, group, type: r.type, slides: r.slides, posted: r.posted, x: r.x, views: r.views, likes: r.likes, permalink: r.permalink, caption: r.caption });
     console.log(`@${handle}: ${top.length} top (${top.at(-1)?.x}×+) · ${typical.length} typical · ${days === Infinity ? "all time" : `last ${days} days`} · ${path.basename(file)}`);
   }
-  shuffle(reels, 20261020).forEach((r, i) => { r.id = `R${String(i + 1).padStart(3, "0")}`; });
+  shuffle(reels, set.seed).forEach((r, i) => { r.id = `R${String(i + 1).padStart(3, "0")}`; });
   reels.sort((a, b) => a.id.localeCompare(b.id));
   fs.mkdirSync(outDir, { recursive: true });
-  fs.writeFileSync(path.join(outDir, "sample.json"), JSON.stringify({ made: now, accounts: ACCOUNTS, reels }, null, 1));
-  console.log(`${reels.length} reels → ${path.join(outDir, "sample.json")}`);
+  fs.writeFileSync(path.join(outDir, "sample.json"), JSON.stringify({ made: now, set: setName, accounts: set.accounts, own: set.own ?? null, reels }, null, 1));
+  console.log(`${reels.length} posts → ${path.join(outDir, "sample.json")}`);
 }
 
-module.exports = { ACCOUNTS, shuffle };
+module.exports = { ACCOUNTS, SETS, shuffle };
 
 if (require.main === module) {
-  const [cmd, outDir] = process.argv.slice(2);
-  if (cmd === "sample" && outDir) sample(outDir);
+  const [cmd, outDir, setName] = process.argv.slice(2);
+  if (cmd === "sample" && outDir) sample(outDir, setName);
   else if (cmd === "report" && outDir) require("./element-report.js").report(outDir);
-  else { console.error("usage: element-analysis.js sample|report <out-dir>"); process.exit(1); }
+  else { console.error("usage: element-analysis.js sample <out-dir> [science|soundmind] | report <out-dir>"); process.exit(1); }
 }

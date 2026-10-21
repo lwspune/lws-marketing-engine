@@ -28,6 +28,21 @@ const ELEMENTS = [
   { id: "E19", name: "Posted on a weekend", get: (r) => r.time.weekend },
 ];
 
+// Sound Mind's set (2026-10-21) adds the format and the wellness elements its model accounts are known for.
+const SOUNDMIND = [
+  { id: "E20", name: "Carousel", get: (r) => r.type === "CAROUSEL" },
+  { id: "E21", name: "Reel", get: (r) => r.type === "REELS" },
+  { id: "E22", name: "Many slides (carousels only)", numeric: true, get: (r) => (r.type === "CAROUSEL" ? r.slides : null) },
+  { id: "E23", name: "Caption asks to send / tag someone", get: (r) => r.cap.asksSend },
+  { id: "E24", name: "Caption asks to comment a KEYWORD", get: (r) => r.cap.commentKeyword },
+  { id: "E25", name: "Caption's first line speaks to \"you\"", get: (r) => r.cap.firstLineYou },
+  { id: "E26", name: "Handwritten lettering", get: (r) => r.eye?.hand ?? null },
+  { id: "E27", name: "Everyday object as a metaphor", get: (r) => r.eye?.metaphor ?? null },
+  { id: "E28", name: "Drawn character / figure", get: (r) => r.eye?.figure ?? null },
+  { id: "E29", name: "Quote card (words on a plain colour)", get: (r) => r.eye?.quote ?? null },
+];
+const elementsFor = (set) => (set === "soundmind" ? [...ELEMENTS, ...SOUNDMIND] : ELEMENTS);
+
 const MARK = { works: "✅ works", doesnt: "❌ doesn't work", unclear: "❔ unclear" };
 const DIR = { top: "▲ top", typical: "▼ typical", none: "· same", constant: "– never varies" };
 const pct = (v) => `${Math.round(v * 100)}%`;
@@ -38,19 +53,21 @@ function report(outDir) {
   const reels = sample.reels.map((r) => ({
     ...r, cover: covers[r.id] ?? null, eye: eye[r.id] ?? null, cap: el.captionFeatures(r.caption), time: el.timeFeatures(r.posted),
   }));
-  const results = el.analyse(reels, ELEMENTS);
+  const set = sample.set ?? "science", own = sample.own ?? null, posts = set === "science" ? "reels" : "posts";
+  const results = el.analyse(reels, elementsFor(set), { own });
   fs.writeFileSync(path.join(outDir, "results.json"), JSON.stringify(results, null, 1));
 
   const accounts = sample.accounts;
   const lines = [
-    `# Reel element analysis: covers + captions (${sample.made})`, "",
-    `${reels.length} reels: 15 top + 15 typical from each of ${accounts.map((a) => "@" + a).join(", ")}. ` +
-      "Method and decision rule: `reels/analysis-framework.md`. ▲ = more common in that account's top reels (≥ 15 points), " +
-      "▼ = more common in its typical reels, · = no real difference, – = the account never varies on it.", "",
+    `# ${set === "science" ? "Reel" : "Sound Mind"} element analysis: covers + captions (${sample.made})`, "",
+    `${reels.length} ${posts}: 15 top + 15 typical from each of ${accounts.map((a) => "@" + a).join(", ")}` +
+      (own ? ` (@${own} is ours: shown, not counted in the verdict)` : "") + ". " +
+      `Method and decision rule: \`reels/analysis-framework.md\`. ▲ = more common in that account's top ${posts} (≥ 15 points), ` +
+      `▼ = more common in its typical ${posts}, · = no real difference, – = the account never varies on it.`, "",
     "| Element | Verdict | ▲ top | ▼ typical | · same | – no variation |", "|---|---|---|---|---|---|",
     ...results.map((x) => `| ${x.id} ${x.name} | ${MARK[x.verdict]} | ${x.counts.top} | ${x.counts.typical} | ${x.counts.none} | ${x.counts.constant} |`),
-    "", "## Per account (share of top reels vs typical reels with the element)", "",
-    `| Element | ${accounts.map((a) => "@" + a).join(" | ")} |`, `|---|${accounts.map(() => "---").join("|")}|`,
+    "", `## Per account (share of top ${posts} vs typical ${posts} with the element)`, "",
+    `| Element | ${accounts.map((a) => "@" + a + (a === own ? " (ours)" : "")).join(" | ")} |`, `|---|${accounts.map(() => "---").join("|")}|`,
     ...results.map((x) => `| ${x.id} ${x.name} | ${accounts.map((a) => {
       const p = x.accounts[a];
       return p ? `${DIR[p.direction]} ${pct(p.top)} vs ${pct(p.typical)}` : "n/a";
@@ -61,4 +78,4 @@ function report(outDir) {
   console.log(`→ ${path.join(outDir, "report.md")}`);
 }
 
-module.exports = { report, ELEMENTS };
+module.exports = { report, ELEMENTS, SOUNDMIND, elementsFor };
