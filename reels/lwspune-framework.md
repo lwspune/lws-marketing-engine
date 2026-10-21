@@ -1,4 +1,4 @@
-# @lws.pune reel framework (v1.6, 2026-10-21)
+# @lws.pune reel framework (v1.7, 2026-10-21)
 
 How every new @lws.pune reel is made, one numbered point at a time. Same standard as @pyqvault_'s
 (`pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or dropped
@@ -30,7 +30,7 @@ backlog row has the proof link and an NDA chapter. · 🧪 L39
 proof (−1–3, from their views multiple; a known flop, under 1×, is −1) + vivid (0–3) + a 2-second question (0–2) + concept live (0–1) + everyday hook
 (0–1), with @pyqvault_'s written anchors. **Gate:** NDA maths chapters only. No exam-weight criterion: the gate already
 keeps it on the syllabus, and the reel's job is reach. `node reels/tools/topic-scores.js lwspune` checks the table and
-names the next pick. · *Why:* the same choice whoever makes it, and testable; the criteria are F1–F4's reasons as
+names the next pick. **Map reels (F28) are picked by exam weight instead.** · *Why:* the same choice whoever makes it, and testable; the criteria are F1–F4's reasons as
 numbers. · *Check:* the tool passes (`tests/topic-scores.test.js` also checks the real table). · 🧪 L39
 
 **F2 · Vivid first.** The whole screen moves and changes: curves drawing, many strips or points at once, colour that
@@ -41,7 +41,7 @@ strip: something new every second, across the frame. · 🧪 L38
 **F3 · The concept shown live.** A moving picture + numbers that change with it + a graph that draws itself (a tangent
 sliding while f′ plots below; strips filling an area while the sum counts up). · *Why:* one formula + one moving picture
 + live numbers is what the big simulation reels share (@sciencevisualised L19, @bisal.physics L20). · *Check:* the reel
-has all three. · 🧪 L38
+has all three; a map reel (F28) shows a whole chapter instead. · 🧪 L38
 
 ## Hook (the first 3 seconds)
 
@@ -103,7 +103,7 @@ Reels made with `engine.js` (001–013) stay as they are. · *Why:* the engine's
 **F12 · White board.** The soft white board (`WHITE` palette: slate ink, one indigo maths colour, one accent for the answer).
 Dark isn't tried here yet: it switches only if @pyqvault_'s dark-vs-white test (L22) is called clearly for dark, and
 then as a test here first. · *Why:* @lws.pune has always been white; running the same test on both handles at once would
-leave each with half the evidence. · *Check:* the background goes in the Background column of the results table. · 📌
+leave each with half the evidence. A map reel's two flips to the indigo board (F28) are pattern breaks, not a second board. · *Check:* the background goes in the Background column of the results table. · 📌
 house, logged (L40)
 
 ## Sound
@@ -147,6 +147,25 @@ end felt like homework (founder, on @pyqvault_). · *Check:* the end card. · �
 
 ---
 
+## Map reels (a series, on test)
+
+**F28 · A whole chapter on one map, ending on a frame worth a screenshot.** For the chapter with the most NDA maths
+questions now (the PYQ Vault guide's trends: the last 3 papers), not by topic score (F21). Frame 0: the question of
+which chapter (F4) over the map already up and small: a hub with **?**, one spoke and one empty card per idea, each in
+its own VIVID colour (F24). The answer lands on the hub; then the camera goes close on each card in turn while its formula
+writes in, with a one-line "when to use it" caption (F7). **Two flips** to the indigo board with a real number or a real
+trap, at most 1.5 s each. Then the zoom out to the **whole map, every card written, held ≥ 3 s** with "Screenshot this" and
+"Follow for more" in place of the question (F20), and in the last 0.5 s the cards empty and the camera returns to frame
+0's view, so the reel **loops**. Every formula is tested (F10); ≤ 25 s (F18). Replaces F3's moving graph: the motion is
+the camera between cards. Template: `remotion/src/Reel017.tsx` + `src/lib/reel017.ts`. · *Why:* the founder
+(2026-10-21: "the most important NDA maths topic", after studying a formula-map reel). Saves are our weakest number
+(typical 3) and a whole chapter on one frame is made to be saved; the studied reel held its full map 3.4 s with
+"Screenshot this", flipped to black at its two "but…" moments, and opened on its own end frame with the labels hidden.
+· *Check:* `tests/reel017.test.ts` (the chapter count re-derived from the snapshot, each paper = 120; each formula by
+counting dice outcomes; cards never overlap or crop while explained; the hold ≥ 3 s; last frame = frame 0). · 🧪 L48
+
+---
+
 ## Changing the framework
 
 1. **Every change has a reason.** Add, change or drop a point only with a line in the change log below: what changed,
@@ -162,6 +181,7 @@ end felt like homework (founder, on @pyqvault_). · *Check:* the end card. · �
 
 | Version | Date | Change | Why |
 |---|---|---|---|
+| v1.7 | 2026-10-21 | F28 added: map reels, a series picked by exam weight (F21's exception), a whole chapter on one map in place of F3's moving graph, two indigo flips (noted under F12), the full map held for a screenshot and looping to frame 0 in place of the end card. First: 017, Probability (41 of the last 360). | Founder, 2026-10-21: a reel like a studied formula map, "for the most important NDA maths topic", approved with these three changes. Measured by L48 (saves). |
 | v1.6 | 2026-10-21 | F24: an everyday object people know by its material keeps it; the rest stays vivid (as @pyqvault_ v1.13). | Founder, 2026-10-21, comparing Physics #8's two versions: "original spoon colour was better, rest vivid is better". A steel spoon in cyan stopped looking like a spoon; the bright candle, rays and graph read better. |
 | v1.5 | 2026-10-21 | F24 added: bright objects from the `VIVID` set, as on @pyqvault_ (v1.12). | Founder: "more vivid colour objects", for both handles. Measured by L47. |
 | v1.4 | 2026-10-20 | F21: a known flop (under 1× their typical reel) scores −1 and loses a tie to an untested idea (the same tool as @pyqvault_ v1.10). No @lws.pune row changes. | Founder, 2026-10-20: the Ray Optics search found ideas that flopped for other accounts (prism 0.5×, mirage 0.4×, sliced lens 0.9×) scoring the same as untested ones, and winning ties against them. A flop is evidence against, so it costs a point; in a tie, no evidence counts as 1×. |

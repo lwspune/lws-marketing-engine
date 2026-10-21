@@ -192,6 +192,9 @@ For a question whose picture is **3D** (a cone, a plane, a solid), make it in `r
    rendered offline (sample-exact, hits on time). Then `npm run mix:<reel>`.
 7. **Check:** render the MP4 to `reels/` and run `check-video.mjs` as in step 4 (four PASS lines), and look at its
    strip.
+8. **Map reels (F28):** start from `Reel017.tsx` + `src/lib/reel017.ts`. A card is 330 px wide, so a formula line over
+   ~290 px at 34 px (about 18 Cambria characters) is cut off at its edge on the full map: give that node a smaller `size`
+   (017's Bayes card: 31) or split the line. Check the full-map frame at full size, not only the stills sheet.
 
 ### Reel toolkit (2026-10-20, founder-approved): reach for these before hand-rolling
 
