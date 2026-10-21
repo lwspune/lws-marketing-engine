@@ -47,7 +47,7 @@ order of this table. **P19–P29 (2026-10-20, founder: "take one physics chapter
 |---|---|---|---|---|---|---|---|---|---|
 | P5 | P | Adiabatic squeeze heats the gas (insulated vs open, side by side) | 125 | 3 | 2 | 1 | 1 | 10 | ✅ made 2026-10-20 (`pv-physics-005-adiabatic`) |
 | P9 | P | Heat flows hot → cold, never back (two chambers mixing) | 54 | 3 | 1 | 1 | 1 | 8 | ✅ made 2026-10-20 (`pv-physics-007-heat`) |
-| P11 | P | 30° and 60° land in the same spot (a fan of launch angles) | 11 | 3 | 2 | 1 | 1 | 8 | ⏭ queued 2026-10-21 (hook queue below) |
+| P11 | P | 30° and 60° land in the same spot (a fan of launch angles) | 11 | 3 | 2 | 1 | 1 | 8 | ✅ made 2026-10-21 (`pv-physics-010-launch-angles`, Physics #10) |
 | P12 | P | Topspin dips, slice floats (Magnus, streamlines) | 63 | 3 | 2 | 0 | 1 | 8 | ✅ made 2026-10-20 (`pv-physics-006-topspin`) |
 | P6 | P | Same lift, faster = more power | 76 | 1 | 2 | 1 | 1 | 7 | ⏭ queued 2026-10-21 (hook queue below) |
 | P7 | P | Tilt the rope: lift vs pull (drone towing a box) | 83 | 2 | 1 | 1 | 1 | 7 | ⏭ queued 2026-10-21 (hook queue below) |
@@ -97,7 +97,6 @@ hook, second hook and loop go in the Hook column of `pyqvault-learnings.md`).
 
 | Order | # | Hook | Opening | Second hook | Loop | Frame 0 (draft) |
 |---|---|---|---|---|---|---|
-| 1 | P11 | Pick one | Race running | Then which angle goes farthest? | yes | "Pick one. Don't switch." Which lands farther? A 30° · B 60° · C the same; the whole fan of balls already in flight. Second answer: 45° (no air). Loop: the fan relaunches |
 | 2 | C8 | Race | Zoom (scale) | Why exactly twice as fast? | no | "One battery, two tubes. Which fills first?" A hydrogen · B oxygen · C together; the zoom pulls out from water molecules splitting to the two tubes. Second answer: H₂O, two H for every O |
 | 3 | P6 | You'd think | Orbit 360° | So what did speed change? | no | "Same box, same height. The faster lift does more work. Right?" A more · B the same · C less. Second answer: power, work per second |
 | 4 | C9 | Put in order | Colour flood | Where does pure water sit? | yes | "Lemon, milk, soap, bleach: most acidic first?" three orders as A/B/C; indicator colours already spreading. Second answer: pH 7, green. Loop: the colours wash back to the start |
