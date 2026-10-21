@@ -257,6 +257,13 @@ it): SETUP.md step 8. Live since 2026-10-19 for @lws.pune and @pyqvault_ (Sound 
 message is from an ad (Meta's ad mark, or one of Meta's ready-made ad questions, `adStarts`) gets the account's saved
 reply once (`src/lib/inbox/autoReply.ts`). `claim_auto_reply` (service role) is the gate: switched on, never claimed,
 nobody has replied yet; a failed send calls `release_auto_reply`. Owners set text + on/off in the Inbox box (`set_auto_reply`).
+**Leads (0016, founder 2026-10-21):** one list at `/leads` (owners only): name, contact, course, date, source, with
+"Download for Excel" (`/leads/export`, CSV) and Edit / "Not a lead" (marks the chat `not_lead` so it never comes back).
+Instagram chats become leads when the person shares a phone number or email (`findContact`, no AI); WhatsApp chats when
+judged genuine (Claude, `src/lib/leads/claude.ts`, only with `ANTHROPIC_API_KEY`; none is set yet, so the founder chose
+sorting in a Claude Code chat: `npm run leads:screen -- --org=lws-pune --whatsapp-out=<file>` → verdicts →
+`--whatsapp-in=<file>`). Hourly pg_cron `leads-hourly` → `/api/cron/leads` (`leads_to_check` → `screenLeads` →
+`record_lead_checks`); each chat is re-checked only after a new incoming message. One lead per contact per org.
 **WhatsApp Business app numbers (founder 2026-10-19, first: +91 70200 03600):** Meta "coexistence": the number stays on
 the phone app and also reaches GoPost. Inbox → "Connect a WhatsApp Business app number" opens Meta's Embedded Signup
 (`WhatsAppConnectBox`, env `META_WA_SIGNUP_CONFIG_ID`) → `connectWhatsAppBusinessApp` (owners) → `connectBusinessAppNumber`:
