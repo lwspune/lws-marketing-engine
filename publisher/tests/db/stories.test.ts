@@ -77,7 +77,7 @@ describe.skipIf(!TEST_DB_URL)("database: daily quiz stories", () => {
 
 });
 
-// Question stories (migration 0017): a story shows either a quiz link or one question with its answer.
+// Question stories (migration 0019): a story shows either a quiz link or one question with its answer.
 const QUESTION = JSON.stringify({ id: "047abe4b-6c21-47e9-b26e-4d6e74258b74", answer: "D", part: "question" });
 
 async function insertQuestionStory(q: Q, org: string, project: string, question = QUESTION) {

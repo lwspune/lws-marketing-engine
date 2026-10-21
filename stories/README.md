@@ -46,4 +46,4 @@ kept apart from @lws.pune's quiz stories.
 - `render.mjs`: batch → JPEGs + manifests (headless Edge via `reels/tools/edge.mjs`).
 - `pick.mjs`: the shortlist from the question bank.
 - Publisher side: manifest `kind: "story"` (`publisher/src/lib/domain/manifest.ts`) and migration
-  `0017_question_stories.sql` (a story shows a quiz OR a question, frozen once approved).
+  `0019_question_stories.sql` (a story shows a quiz OR a question, frozen once approved).

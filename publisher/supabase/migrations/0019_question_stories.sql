@@ -1,4 +1,4 @@
--- 0017_question_stories — a story can show one maths question instead of a quiz link.
+-- 0019_question_stories — a story can show one maths question instead of a quiz link.
 --
 -- @pyqvault_'s daily maths stories (founder 2026-10-21): a 07:30 card with the question and its four
 -- options ("Reply A, B, C or D") and a 19:30 card with the answer. Made a week at a time by

@@ -230,7 +230,7 @@ a story's insights ~24 h after it goes up, so a story gets one `23h` snapshot (r
 profile visits, taps out; `record_story_metrics`, same write-once table and per-minute tick), shown on its card
 and in Insights → "Daily quiz stories" (typical story once 5 have numbers). No link-tap count: API stories can't
 carry a link sticker, so profile visits are the bio-link proxy; quiz visits are PYQ Vault's `utm_medium=story`.
-**Question stories (0017, founder 2026-10-21):** a story shows a `quiz` (the @lws.pune planner) OR a `question`
+**Question stories (0019, founder 2026-10-21):** a story shows a `quiz` (the @lws.pune planner) OR a `question`
 (`{id, answer, part}`: @pyqvault_'s maths cards from `stories/`), never both, frozen once approved. Manifests take
 `kind: "story"` with `plannedFor` + `question` (`queue:add`). Insights keeps "Daily maths questions" apart from
 "Daily quiz stories".
