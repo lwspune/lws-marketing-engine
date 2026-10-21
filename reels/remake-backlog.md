@@ -47,10 +47,10 @@ order of this table. **P19–P29 (2026-10-20, founder: "take one physics chapter
 |---|---|---|---|---|---|---|---|---|---|
 | P5 | P | Adiabatic squeeze heats the gas (insulated vs open, side by side) | 125 | 3 | 2 | 1 | 1 | 10 | ✅ made 2026-10-20 (`pv-physics-005-adiabatic`) |
 | P9 | P | Heat flows hot → cold, never back (two chambers mixing) | 54 | 3 | 1 | 1 | 1 | 8 | ✅ made 2026-10-20 (`pv-physics-007-heat`) |
-| P11 | P | 30° and 60° land in the same spot (a fan of launch angles) | 11 | 3 | 2 | 1 | 1 | 8 | |
+| P11 | P | 30° and 60° land in the same spot (a fan of launch angles) | 11 | 3 | 2 | 1 | 1 | 8 | ⏭ queued 2026-10-21 (hook queue below) |
 | P12 | P | Topspin dips, slice floats (Magnus, streamlines) | 63 | 3 | 2 | 0 | 1 | 8 | ✅ made 2026-10-20 (`pv-physics-006-topspin`) |
-| P6 | P | Same lift, faster = more power | 76 | 1 | 2 | 1 | 1 | 7 | |
-| P7 | P | Tilt the rope: lift vs pull (drone towing a box) | 83 | 2 | 1 | 1 | 1 | 7 | |
+| P6 | P | Same lift, faster = more power | 76 | 1 | 2 | 1 | 1 | 7 | ⏭ queued 2026-10-21 (hook queue below) |
+| P7 | P | Tilt the rope: lift vs pull (drone towing a box) | 83 | 2 | 1 | 1 | 1 | 7 | ⏭ queued 2026-10-21 (hook queue below) |
 | P8 | P | Why a bounced ball never comes back as high | 52 | 1 | 1 | 1 | 1 | 6 | |
 | P10 | P | One-screen sheet: Class 12 electricity & magnetism | 190 | 2 | 0 | 0 | 0 | 5 | |
 | P13 | P | Rolling race: ring, disc and ball down one slope (CET notes) | – | 3 | 2 | 1 | 1 | 7 | |
@@ -72,16 +72,37 @@ order of this table. **P19–P29 (2026-10-20, founder: "take one physics chapter
 | P29 | P | "Objects in mirror are closer than they appear" (convex mirror, Ray Optics) | 6.2 | 2 | 2 | 1 | 1 | 7 | ✅ made 2026-10-21 (`pv-physics-009-wing-mirror`) |
 | C5 | C | P, V and T together (combined gas law) | 11 | 2 | 2 | 1 | 1 | 7 | ✅ made 2026-10-20 (`pv-chem-005-pvt`) |
 | C7 | C | Flame colours: each metal burns its own colour (fireworks) | – | 3 | 2 | 0 | 1 | 6 | ✅ made 2026-10-20 (`pv-chem-006-flame`) |
-| C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | 3 | 2 | 1 | 0 | 6 | |
-| C9 | C | The pH rainbow: universal indicator from lemon to soap | – | 3 | 2 | 0 | 1 | 6 | |
+| C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | 3 | 2 | 1 | 0 | 6 | ⏭ queued 2026-10-21 (hook queue below) |
+| C9 | C | The pH rainbow: universal indicator from lemon to soap | – | 3 | 2 | 0 | 1 | 6 | ⏭ queued 2026-10-21 (hook queue below) |
 | C11 | C | Diffusion: dye in hot vs cold water | – | 2 | 2 | 0 | 1 | 5 | ⏸ parked: close to Chemistry #1, heat speeds things up (founder, 2026-10-20) |
 | C10 | C | Cool the brown gas: NO₂ ⇌ N₂O₄ shifts (Le Chatelier) | – | 2 | 2 | 0 | 0 | 4 | |
 | C12 | C | Heat it by 10 °C: the rate doubles (collisions over the energy hill, CET notes) | – | 3 | 2 | 1 | 1 | 7 | ⏸ parked: repeats Chemistry #1, heat → rate (founder, 2026-10-20) |
 | C13 | C | Half-life: 64 atoms, 2 half-lives, 16 left (CET notes) | – | 3 | 2 | 1 | 1 | 7 | ✅ made 2026-10-20 (`pv-chem-007-halflife`, first voiceover) |
 | C14 | C | Stack the oranges: 52%, 68% or 74% filled (packing efficiency, CET notes) | – | 3 | 2 | 1 | 1 | 7 | ✅ made 2026-10-21 (`pv-chem-008-packing`) |
-| C15 | C | A zinc rod in blue copper sulphate: copper coats it, the blue fades (CET notes) | – | 3 | 2 | 1 | 0 | 6 | |
+| C15 | C | A zinc rod in blue copper sulphate: copper coats it, the blue fades (CET notes) | – | 3 | 2 | 1 | 0 | 6 | ⏭ queued 2026-10-21 (hook queue below) |
 | C16 | C | Why water is bent: lone pairs squeeze 109.5° → 104.5° (VSEPR, CET notes) | – | 2 | 2 | 1 | 1 | 6 | |
 | C17 | C | Salt makes water boil hotter, not faster (boiling-point elevation, CET notes) | – | 2 | 2 | 1 | 1 | 6 | |
+
+## Hook queue
+
+**The next @pyqvault_ reels, in order** (founder 2026-10-21). The topics are F21's picks (Topic scores above); the A/B/C
+guess (F4) stays on every one. Per reel: the **hook** and the **opening picture** rotate (F25: no hook or opening twice in
+a row, the orbit opens at most 2 of any 4 reels, P → C); a **second hook** asks the next question as the first is
+answered, ≤ 7 words (F26: viewers leave at the answer); and the reel either **loops** back to its first frame or ends on
+the end card (F27: never 3 the same in a row, so the two can be compared). "PYQ Vault · pyqvault.com" sits under the
+question from frame 0 and stays (F20). The words are drafts: the options and answers are re-derived in each reel's tests
+(F10), and anything sped up is labelled ("time-lapse"). `node reels/tools/hook-rotation.js` checks this table;
+`tests/hook-rotation.test.js` keeps it in step with the queued rows above. Take a row out once its reel is made (its
+hook, second hook and loop go in the Hook column of `pyqvault-learnings.md`).
+
+| Order | # | Hook | Opening | Second hook | Loop | Frame 0 (draft) |
+|---|---|---|---|---|---|---|
+| 1 | P11 | Pick one | Race running | Then which angle goes farthest? | yes | "Pick one. Don't switch." Which lands farther? A 30° · B 60° · C the same; the whole fan of balls already in flight. Second answer: 45° (no air). Loop: the fan relaunches |
+| 2 | C8 | Race | Zoom (scale) | Why exactly twice as fast? | no | "One battery, two tubes. Which fills first?" A hydrogen · B oxygen · C together; the zoom pulls out from water molecules splitting to the two tubes. Second answer: H₂O, two H for every O |
+| 3 | P6 | You'd think | Orbit 360° | So what did speed change? | no | "Same box, same height. The faster lift does more work. Right?" A more · B the same · C less. Second answer: power, work per second |
+| 4 | C9 | Put in order | Colour flood | Where does pure water sit? | yes | "Lemon, milk, soap, bleach: most acidic first?" three orders as A/B/C; indicator colours already spreading. Second answer: pH 7, green. Loop: the colours wash back to the start |
+| 5 | P7 | Same start, two endings | Split screen | How steep before it lifts? | no | "Same drone, same box, same pull. One lifts it, one drags it. Why?" A rope angle · B rope length · C luck; both drones already flying. Second answer: the angle where F sin θ = mg, live |
+| 6 | C15 | Ending first | Ending first | Swap them: copper rod, zinc liquid? | yes | Open on a copper-coated rod in clear liquid: "This was zinc in blue liquid. Where did the blue go?" then rewind (time-lapse, labelled). Second answer: nothing happens (copper can't push zinc out). Loop: ends where it began |
 
 ## @pyqvault_ (Class 11–12 Physics and Chemistry): the proven ideas (pick by **Topic scores** above)
 
