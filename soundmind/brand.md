@@ -32,6 +32,27 @@ GoPost can't post single images yet, so both formats are carousels.
 
 Every post ends with a **share slide**: *send this to…*, *save this for…* or *tell me in the comments*.
 
+## Scene stories (2026-10-22, on test, framework S19)
+
+A third kind of carousel: an ordinary moment from an Indian woman's day, told over 8–10 illustrated slides so people
+swipe to the end. Written as `"format": "scene"` in the week's `batch.json`: each slide names its `scene` (the drawings
+in `remotion/src/SceneStory.tsx`; where faces, speakers and bubbles go in `remotion/src/lib/sceneStory.ts`), its `text`
+(on the paper above the picture), up to three `bubbles` (`{who, kind: "say" | "think", text}`) and, on a middle page, a
+`cliff` line (coral, with an arrow). `node soundmind/render.mjs` renders them through Remotion like any other batch.
+
+- **The shape:** the cover promises a turn → the everyday pressure builds, in the woman's own thoughts → two cliffhangers
+  → the turn comes from someone kind (the person viewers expect to be the villain makes the best twist) → one lesson →
+  the share slide. No villain to hate, no revenge: that's what turned the model post's comments into an argument.
+- **The look:** flat and warm, an Indian home (kurta and dupatta, toran, diya, rangoli, steel thalis), the same
+  hand-drawn wobble as the reels, the words on Sound Mind's paper (S8). Not the ME figures (founder: "it doesn't have to
+  be ME").
+- **A new scene:** add its drawing in `SceneStory.tsx` and its faces, speakers and bubble spots in `SCENES`; the tests
+  then check every slide of every scene story fits.
+
+| Post | Story | Turn |
+|---|---|---|
+| sm-008 the last one to eat (week 44) | Diwali: she cooks from 6 a.m., is told off for sitting, eats after everyone, as she has for nine Diwalis; her daughter asks why | her mother-in-law takes the ladle: "For thirty-five years I ate last too. Not anymore." |
+
 ## Reels: the "ME" story (2026-10-19, on test)
 
 Carousels mostly reach followers; reels reach people who don't follow yet. Model: @silvabydebalina's "protect your
@@ -58,8 +79,11 @@ then `queue:add` the `.post.json` beside it.
 | sm-r003v plant, vivid | the same reel in the **vivid** palette | same | same, with a coral bloom |
 | sm-r004 page (vivid) | ME beside her notebook; a pencil writes and strikes | the inner critic's lines (TOO LATE NOW, EVERYONE'S AHEAD…) write themselves and are struck out; second wave: a doodle grows beside each | I'M ENOUGH written and marker-highlighted, sun, smile |
 | sm-r005 hammock (vivid) | ME asleep in a hammock under a low, red battery | pressures on ropes (ONE MORE TASK, LAZY?, GUILT…) tug at the hammock; each gives up and floats off, and the battery charges a step | battery full and green, sun, ME wakes and smiles, plant blooms |
-| sm-r006 mirror (vivid) | ME beside a standing mirror that shows her reflection | sticky notes (FIX THIS, HIDE THAT, SUCK IT IN…) slap onto the glass; her cloth wipes each one off; second wave: a flower grows on the frame for each | flowers all round the frame, ME and her reflection smile, the glass sparkles |
+| sm-r006 mirror (vivid) | ME beside a standing mirror that shows her reflection | sticky notes (FIX THIS, HIDE THAT, NOT LIKE BEFORE…) slap onto the glass; her cloth wipes each one off; second wave: a flower grows on the frame for each | flowers all round the frame, ME and her reflection smile, the glass sparkles |
 | sm-r007 glitter jar (vivid) | ME holding a jar of glitter water | pressures (CALM DOWN!, JUST RELAX…) slam in and shake the jar; after the close-up ME sets it down and the second wave can't shake it | the glitter settles, the water clears, a flower blooms, sun, smile |
+| sm-r008 teacup (vivid) | ME holding her cup of tea | kettles of requests (JUST THIS ONCE, YOU'RE FREE, NA?, ADJUST KARO…) pour in until it overflows; after the close-up ME puts a lid on and the second wave splashes off | the lid lifts, steam curls into a heart, sun, smile, plant blooms |
+| sm-r009 kite (vivid) | ME flying a kite | storm clouds (WHAT'S YOUR PLAN?, BY 30 YOU SHOULD…) gust and jerk it about; after the close-up ME lets the string out and the second wave barely moves it | the kite climbs high into the sun, smile, plant blooms |
+| sm-r010 rain cloud (vivid) | a small rain cloud over ME | signs (STOP CRYING, BE STRONG, SMILE!…) pop up and ME holds it in: the cloud shrinks and darkens; after the close-up she lets it rain and the second wave's signs wash over, a flower for each | the cloud turns white and floats off, a rainbow, sun, smile |
 
 **Hand-drawn tools** (from sm-r004, 2026-10-20; details in `reels/visual-reel-workflow.md` → Reel toolkit): strikes,
 circles and marker highlights on words with `@remotion/rough-notation` (always pass `seed`); pen doodles that draw
