@@ -72,6 +72,12 @@ import { SoundMind006 } from './SoundMind006.tsx';
 import { DURATION as DURATION_SM006 } from './lib/sm006.ts';
 import { SoundMind007 } from './SoundMind007.tsx';
 import { DURATION as DURATION_SM007 } from './lib/sm007.ts';
+import { SoundMind008 } from './SoundMind008.tsx';
+import { DURATION as DURATION_SM008 } from './lib/sm008.ts';
+import { SoundMind009 } from './SoundMind009.tsx';
+import { DURATION as DURATION_SM009 } from './lib/sm009.ts';
+import { SoundMind010 } from './SoundMind010.tsx';
+import { DURATION as DURATION_SM010 } from './lib/sm010.ts';
 
 export const Root = () => (
   <>
@@ -161,5 +167,11 @@ export const Root = () => (
     <Still id="SoundMind006Cover" component={SoundMind006} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="SoundMind007" component={SoundMind007} durationInFrames={Math.round(DURATION_SM007 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="SoundMind007Cover" component={SoundMind007} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="SoundMind008" component={SoundMind008} durationInFrames={Math.round(DURATION_SM008 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="SoundMind008Cover" component={SoundMind008} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="SoundMind009" component={SoundMind009} durationInFrames={Math.round(DURATION_SM009 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="SoundMind009Cover" component={SoundMind009} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="SoundMind010" component={SoundMind010} durationInFrames={Math.round(DURATION_SM010 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="SoundMind010Cover" component={SoundMind010} width={1080} height={1920} defaultProps={{ cover: true }} />
   </>
 );
