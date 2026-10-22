@@ -43,7 +43,7 @@ const SPOTS = [{ x: 712, y: 905 }, { x: 728, y: 1110 }], ROTS = [-5, 4, -3, 6];
 const wave = (labels: string[], start: number, gap: number, first: number): Note[] =>
   labels.map((label, i) => ({ label, ...SPOTS[(i + first) % 2], rot: ROTS[(i + first) % 4], t0: start + i * gap }));
 export const NOTES: Note[] = [
-  ...wave(['FIX THIS', 'HIDE THAT', 'SUCK IT IN', 'TOO MUCH', 'COVER UP'], 0.6, 1.8, 0),
+  ...wave(['FIX THIS', 'HIDE THAT', 'NOT LIKE BEFORE', 'TOO MUCH', 'COVER UP'], 0.6, 1.8, 0),
   ...wave(['NOT PHOTO READY', 'TOO DARK? TOO PALE?', 'WHAT WILL PEOPLE SAY?'], 16.0, 2.0, 1),
 ];
 
