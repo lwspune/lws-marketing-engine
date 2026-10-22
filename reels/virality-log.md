@@ -3,7 +3,8 @@
 **Will a finished reel beat our record for views?** (founder, 2026-10-22; framework F30). Each reel gets a score out of 100
 from inputs measured on the finished reel or read from its storyboard, a band (record-breaker / above typical / below
 typical) and its weakest input, the thing to fix first. **The prediction is logged, frozen, before the reel is posted**, and
-judged at its 48 h reading. Tools: `node reels/tools/virality-measure.mjs reels/<reel>.post.json` (motion, colour, length,
+judged at its 48 h reading (a 24 h cutoff was considered and dropped, founder 2026-10-23: GoPost saves no 24 h reading, and
+Instagram only gives today's totals, so it would need a new snapshot and could misjudge reels that take off late). Tools: `node reels/tools/virality-measure.mjs reels/<reel>.post.json` (motion, colour, length,
 cover) · `node reels/tools/virality.js` (checks this log, shows accuracy) · `--calibrate` (weight changes the results
 support, the same rule as the idea score).
 
