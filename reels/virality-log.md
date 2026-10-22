@@ -19,7 +19,7 @@ logged but not counted yet, because which way it pushes isn't known; calibration
 
 | Input | Key | Points | Weight | Anchors |
 |---|---|---|---|---|
-| Idea | idea | 0–3 | 1 | the idea's score in `pyqvault-ideas.md`: ≥ 70 → 3 · ≥ 60 → 2 · ≥ 50 → 1 · below → 0 |
+| Idea | idea | 0–3 | 1.5 | the idea's score in `pyqvault-ideas.md`: ≥ 70 → 3 · ≥ 60 → 2 · ≥ 50 → 1 · below → 0 |
 | Motion 0–3 s | motion | 0–2 | 1 | share of frames (10 a second) where ≥ 0.2% of pixels change noticeably: ≥ 95% → 2 · ≥ 75% → 1 · below → 0 (L29, F5) |
 | Hook move | hookmove | 0–1 | 1 | a named attention move in 0–3 s (orbit, punch-in, assemble, split apart, morph, split screen, race, colour flood) → 1 (F25) |
 | Words 0–3 s | words | 0–2 | 1 | words on screen at frame 0 (label, question, options, tag): ≤ 10 → 2 · ≤ 18 → 1 · more → 0 (F7) |
@@ -74,8 +74,8 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 | C1 | pv-chem-001-heat-rate | 2026-10-22 | 14 | below typical | idea | 269 | 195 | yes | 133 | below typical | hindsight |
 | P3 | pv-physics-003-pendulum | 2026-10-22 | 29 | below typical | motion | 269 | 143 | yes | 118 | below typical | hindsight |
 | C3 | pv-chem-003-avogadro | 2026-10-22 | 21 | below typical | idea | 932 | 143 | yes | 121 | below typical | hindsight |
-| P4 | pv-physics-004-slope | 2026-10-22 | 57 | above typical | idea | 932 | 140 | yes | – | waiting | – |
-| C4 | pv-chem-004-charles | 2026-10-22 | 64 | above typical | idea | 1429 | 143 | yes | – | waiting | – |
+| P4 | pv-physics-004-slope | 2026-10-22 | 57 | above typical | idea | 932 | 140 | yes | 1,431 | record-breaker | hindsight |
+| C4 | pv-chem-004-charles | 2026-10-22 | 64 | above typical | idea | 1429 | 143 | yes | 1,298 | above typical | hindsight |
 | P5 | pv-physics-005-adiabatic | 2026-10-22 | 79 | above typical | words | 1429 | 169 | yes | – | waiting | – |
 | C5 | pv-chem-005-pvt | 2026-10-22 | 71 | above typical | idea | 1429 | 195 | yes | – | waiting | – |
 | P12 | pv-physics-006-topspin | 2026-10-22 | 71 | above typical | idea | 1455 | 232 | yes | – | waiting | – |
@@ -92,4 +92,4 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 
 | Date | Real predictions judged | Bands right | Rank correlation | Weight changes | Note |
 |---|---|---|---|---|---|
-| 2026-10-22 | 0 | – | – | none | calibrated on 6 reels, score vs result 0.36 |
+| 2026-10-22 | 0 | – | – | idea 1 → 1.5 | calibrated on 8 reels, score vs result 0.72 |

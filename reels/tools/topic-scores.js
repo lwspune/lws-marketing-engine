@@ -261,14 +261,17 @@ function confound(high, low) {
     views and watch time are the goals, to reach the most people; comments later). Typical = the median of every posted
     reel read at 48 h or more. A reel counts once its numbers are at least 48 h old; younger ones are listed in `tooYoung`. A criterion's
     reels split into above and at-or-below its average points. */
+/** A rebuilt reel's id (P29b) → its idea's id (P29): the same idea made again. */
+const baseIdea = (id) => id.replace(/[a-z]$/, "");
+
 function calibrate(ideaRows, weights, results) {
   const withNumbers = results.filter((x) => x.views != null && x.watch != null);
   const ripe = withNumbers.filter((x) => x.hours != null && x.hours >= CAL.minHours);
   const typical = ripe.length ? { views: median(ripe.map((x) => x.views)), watch: median(ripe.map((x) => x.watch)) } : null;
   const byId = Object.fromEntries(ideaRows.filter((r) => !r.broken).map((r) => [r.id, r]));
-  const tooYoung = withNumbers.filter((x) => x.idea && byId[x.idea] && !ripe.includes(x));
-  const reels = ripe.filter((x) => x.idea && byId[x.idea])
-    .map((x) => ({ ...x, row: byId[x.idea], result: (x.views / typical.views + x.watch / typical.watch) / 2 }));
+  const tooYoung = withNumbers.filter((x) => x.idea && byId[baseIdea(x.idea)] && !ripe.includes(x));
+  const reels = ripe.filter((x) => x.idea && byId[baseIdea(x.idea)])
+    .map((x) => ({ ...x, row: byId[baseIdea(x.idea)], result: (x.views / typical.views + x.watch / typical.watch) / 2 }));
   if (reels.length < CAL.minReels)
     return { refused: `${reels.length} scored reels with numbers at ${CAL.minHours} h or more; need ${CAL.minReels}`, n: reels.length, tooYoung };
   const rho = spearman(reels.map((x) => weightedScore(x.row, weights)), reels.map((x) => x.result));
@@ -292,7 +295,7 @@ function calibrate(ideaRows, weights, results) {
 }
 
 module.exports = { ACCOUNTS, CAL, proofPoints, parse, parseWeights, weightedScore, parseSweep, parseCards, validate, runwayErrors,
-  nextPicks, queued, parseResults, spearman, calibrate };
+  nextPicks, queued, parseResults, spearman, calibrate, baseIdea };
 
 if (require.main === module) {
   const read = (f) => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
