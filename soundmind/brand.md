@@ -57,6 +57,9 @@ then `queue:add` the `.post.json` beside it.
 | sm-r003 plant | ME watering her own plant | crows circle with remarks, give up | plant blooms, sun, smile |
 | sm-r003v plant, vivid | the same reel in the **vivid** palette | same | same, with a coral bloom |
 | sm-r004 page (vivid) | ME beside her notebook; a pencil writes and strikes | the inner critic's lines (TOO LATE NOW, EVERYONE'S AHEAD…) write themselves and are struck out; second wave: a doodle grows beside each | I'M ENOUGH written and marker-highlighted, sun, smile |
+| sm-r005 hammock (vivid) | ME asleep in a hammock under a low, red battery | pressures on ropes (ONE MORE TASK, LAZY?, GUILT…) tug at the hammock; each gives up and floats off, and the battery charges a step | battery full and green, sun, ME wakes and smiles, plant blooms |
+| sm-r006 mirror (vivid) | ME beside a standing mirror that shows her reflection | sticky notes (FIX THIS, HIDE THAT, SUCK IT IN…) slap onto the glass; her cloth wipes each one off; second wave: a flower grows on the frame for each | flowers all round the frame, ME and her reflection smile, the glass sparkles |
+| sm-r007 glitter jar (vivid) | ME holding a jar of glitter water | pressures (CALM DOWN!, JUST RELAX…) slam in and shake the jar; after the close-up ME sets it down and the second wave can't shake it | the glitter settles, the water clears, a flower blooms, sun, smile |
 
 **Hand-drawn tools** (from sm-r004, 2026-10-20; details in `reels/visual-reel-workflow.md` → Reel toolkit): strikes,
 circles and marker highlights on words with `@remotion/rough-notation` (always pass `seed`); pen doodles that draw
