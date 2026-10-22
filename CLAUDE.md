@@ -211,6 +211,8 @@ study/reels/             # other accounts' reels saved for private study (git-ig
 remotion/                # TRIAL: reels in Remotion (React + SVG, frame-by-frame render, Edge). `npm test`,
                          #   `npm run typecheck`, `npm run audio` (soundtrack from the engine MP4), `npm run render`,
                          #   `npm run compare:files && npm run compare` (old vs new side by side) → out/
+                         #   ONE RENDER AT A TIME; temp files in %TEMP%/remotion-lws-render, cleared at each render start
+                         #   (tools/tempDir.ts; `npm run clean:temp`); 4 browser tabs per render (remotion.config.ts)
   src/lib/               #   pure timelines (same prog/ease/caption timing as engine.js; palette test-locked to Reel.WHITE)
   src/lib/voice.ts       #   voiceover (F23): place, level, check lines; `npm run voice:<reel>` (tools/voice.ts, Kokoro,
                          #   offline) → public/voice/; `mix.ts <reel> --voice` → <reel>-voice-mix.wav
