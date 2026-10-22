@@ -59,6 +59,7 @@ loop; momentum from the reels posted before). The score shown by the tool is tod
 | P29 | pv-physics-009-wing-mirror | 2 | 2 | 1 | 0 | 2 | 1 | 0 | 2 | 2 | 1 | 0 | idea 69 · motion 100% · words 20 · colour 23.4 · 21.3 s · cover 24.2 |
 | C14 | pv-chem-008-packing | 2 | 2 | 1 | 1 | 2 | 1 | 0 | 2 | 2 | 1 | 0 | idea 62 · motion 100% · words 17 · colour 40.8 · 20.1 s · cover 27.7 |
 | P11 | pv-physics-010-launch-angles | 3 | 2 | 1 | 1 | 1 | 1 | 1 | 2 | 1 | 1 | 1 | idea 77 · motion 100% · words 16 · colour 12.3 · 18.5 s · cover 11.1 |
+| P29b | pv-physics-009b-wing-mirror | 2 | 2 | 1 | 1 | 2 | 1 | 1 | 2 | 2 | 1 | 1 | idea 69 · motion 100% · words 12 · colour 39.7 · 19 s · cover 37.9 · rebuild of P29 to v1.26 (You'd think + morph, split, loop) |
 
 ## Predictions
 
@@ -85,6 +86,7 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 | P29 | pv-physics-009-wing-mirror | 2026-10-22 | 71 | above typical | words | 1496 | 1429 | no | – | waiting | – |
 | C14 | pv-chem-008-packing | 2026-10-22 | 79 | above typical | idea | 1496 | 1429 | no | – | waiting | – |
 | P11 | pv-physics-010-launch-angles | 2026-10-22 | 86 | record-breaker | words | 1496 | 1429 | no | – | waiting | – |
+| P29b | pv-physics-009b-wing-mirror | 2026-10-22 | 86 | record-breaker | idea | 1496 | 1429 | no | – | waiting | – |
 
 ## Calibration and accuracy runs
 

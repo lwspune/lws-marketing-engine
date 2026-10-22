@@ -24,3 +24,12 @@ export const Compare008 = () => (
     <Side x={540} label="VIVID (F24)" color="#4fd1a5" src="pv-physics-008-spoon-vivid-voice.mp4" muted={false} />
   </AbsoluteFill>
 );
+
+// @pyqvault_ Physics #9 as queued (left) beside its rebuild to framework v1.26 (right), founder 2026-10-22: hook "You'd
+// think" + morph, second hook with a split, loop, 12 words on frame 0. The rebuild is 19.0 s, the original 21.3 s.
+export const Compare009 = () => (
+  <AbsoluteFill style={{ background: '#222' }}>
+    <Side x={0} label="FIRST (queued)" color="#ffffff" src="pv-physics-009-wing-mirror-voice.mp4" muted />
+    <Side x={540} label="REBUILT (v1.26)" color="#4fd1a5" src="pv-physics-009b-wing-mirror-voice.mp4" muted={false} />
+  </AbsoluteFill>
+);

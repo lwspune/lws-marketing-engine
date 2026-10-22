@@ -102,7 +102,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | P26 | P | A half-height mirror shows your whole body, at any distance | – | 1 | 2 | 2 | 1 | 2 | 62 | ⏸ parked: fails F28 (vivid 1: one person walking, one strip of mirror; 2026-10-21) | mht-cet-physics/ray-optics | ✓ |
 | P27 | P | A bigger telescope lens: a brighter moon, not a bigger one | – | 2 | 2 | 2 | 0 | 1 | 54 |  | mht-cet-physics/ray-optics | ✓ |
 | P28 | P | Turn a prism: the bend dips, then rises (minimum deviation) | – | 2 | 2 | 1 | 1 | 0 | 46 | ⏸ parked: fails F29 (it dips, then rises, but why needs words; 2026-10-21) | mht-cet-physics/ray-optics | ✗ |
-| P29 | P | "Objects in mirror are closer than they appear" (convex mirror) | 6.2 | 2 | 2 | 1 | 1 | 2 | 69 | ✅ made 2026-10-21 (`pv-physics-009-wing-mirror`) | mht-cet-physics/ray-optics | ✓ |
+| P29 | P | "Objects in mirror are closer than they appear" (convex mirror) | 6.2 | 2 | 2 | 1 | 1 | 2 | 69 | ✅ made 2026-10-21 (`pv-physics-009-wing-mirror`); rebuilt 2026-10-22 to v1.26 as P29b (`pv-physics-009b-wing-mirror`) | mht-cet-physics/ray-optics | ✓ |
 | P30 | P | A raindrop's speed levels off: drag catches up with weight (terminal velocity) | 36 | 2 | 2 | 1 | 1 | 2 | 77 |  | founder | ✓ |
 | P31 | P | Rainbow: red on top, made inside raindrops | – | 3 | 2 | 1 | 1 | 1 | 62 |  | founder | ✓ |
 | P32 | P | A skater pulls her arms in and spins faster (angular momentum) | – | 2 | 2 | 1 | 1 | 1 | 54 |  | founder | ✓ |
