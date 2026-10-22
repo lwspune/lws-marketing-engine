@@ -23,10 +23,17 @@
   const FORMATS = {
     quotes: { types: ["cover", "quote", "share"], min: 4, max: 8 },
     story: { types: ["cover", "page", "lesson", "share"], min: 6, max: 10 },
+    // A real everyday scene (framework S19): illustrated slides drawn in remotion/ (SceneStory.tsx), with speech and
+    // thought bubbles and cliffhanger lines that pull the reader on to the next slide.
+    scene: { types: ["cover", "page", "lesson", "share"], min: 8, max: 10 },
   };
 
   // Longest text (stars not counted) each slide type may carry; beyond it the card gets crowded.
-  const MAX_CHARS = { cover: 70, title: 50, subtitle: 60, quote: 170, page: 160, lesson: 200, share: 90 };
+  const MAX_CHARS = {
+    cover: 70, title: 50, subtitle: 60, quote: 170, page: 160, lesson: 200, share: 90,
+    sceneCover: 90, scenePage: 190, bubble: 80, cliff: 60,
+  };
+  const MAX_BUBBLES = 3;
 
   // Font size in px: `max` up to `ref` characters, then shrinking with the square root of length.
   const TYPE_SIZE = {
@@ -87,7 +94,7 @@
       problems.push("slug must look like sm-001-few-words (at most 80 characters)");
     }
     const fmt = FORMATS[post.format];
-    if (!fmt) problems.push(`format must be quotes or story, not "${post.format}"`);
+    if (!fmt) problems.push(`format must be quotes, story or scene, not "${post.format}"`);
     if (typeof post.title !== "string" || !post.title.trim() || post.title.length > 120) problems.push("title must be 1–120 characters");
 
     const slides = Array.isArray(post.slides) ? post.slides : [];
@@ -97,13 +104,15 @@
       }
       if (slides[0]?.type !== "cover") problems.push("the first slide must be the cover");
       if (slides[slides.length - 1]?.type !== "share") problems.push("the last slide must be the share slide");
-      if (post.format === "story") {
+      if (post.format === "story" || post.format === "scene") {
         const lessons = slides.filter((s) => s.type === "lesson").length;
         if (lessons !== 1 || slides[slides.length - 2]?.type !== "lesson") problems.push("a story needs one lesson slide, just before the share slide");
       }
+      if (post.format === "scene") checkScene(problems, slides);
       slides.forEach((s, i) => {
         const where = `slide ${i + 1}`;
         if (!fmt.types.includes(s.type)) return problems.push(`${where}: type "${s.type}" doesn't belong in a ${post.format} post`);
+        if (post.format === "scene") return;
         const needsArt = post.format === "story" && (s.type === "cover" || s.type === "page");
         if (needsArt && !artNames.includes(s.art)) problems.push(`${where}: art "${s.art}" isn't in the catalogue`);
         if (!needsArt && s.art !== undefined) problems.push(`${where}: this slide carries no art`);
@@ -125,6 +134,32 @@
       for (const c of unsafeClaims(post.caption)) problems.push(`caption: health claim "${c}"`);
     }
     return problems;
+  }
+
+  // Scene stories: every slide but the share needs its scene; bubbles and cliffhangers are checked like slide text.
+  function checkScene(problems, slides) {
+    const lesson = slides.findIndex((s) => s.type === "lesson");
+    slides.forEach((s, i) => {
+      const where = `slide ${i + 1}`;
+      if (s.type !== "share" && (typeof s.scene !== "string" || !s.scene.trim())) problems.push(`${where}: needs a scene`);
+      if (s.art !== undefined) problems.push(`${where}: a scene story draws scenes, not art`);
+      const limit = { cover: "sceneCover", page: "scenePage", lesson: "lesson", share: "share" }[s.type];
+      if (limit) checkText(problems, where, s.text, limit);
+      if (s.cliff !== undefined) {
+        if (s.type !== "page") problems.push(`${where}: only a page can end on a cliffhanger`);
+        else if (i === lesson - 1) problems.push(`${where}: the turn just before the lesson can't be a cliffhanger`);
+        checkText(problems, `${where} cliffhanger`, s.cliff, "cliff");
+      }
+      const bubbles = s.bubbles === undefined ? [] : s.bubbles;
+      if (!Array.isArray(bubbles) || bubbles.length > MAX_BUBBLES) return problems.push(`${where}: at most ${MAX_BUBBLES} bubbles`);
+      bubbles.forEach((b, k) => {
+        const at = `${where} bubble ${k + 1}`;
+        if (b?.kind !== "say" && b?.kind !== "think") problems.push(`${at}: kind must be say or think`);
+        if (typeof b?.who !== "string" || !b.who.trim()) problems.push(`${at}: needs who says it`);
+        checkText(problems, at, b?.text, "bubble");
+      });
+    });
+    if (slides.filter((s) => s.type === "page" && s.cliff !== undefined).length < 2) problems.push("a scene story needs at least two cliffhanger pages");
   }
 
   function validateBatch(batch, artNames) {
@@ -154,7 +189,7 @@
   }
 
   return {
-    PROJECT, SIZE, PALETTE, FORMATS, MAX_CHARS,
+    PROJECT, SIZE, PALETTE, FORMATS, MAX_CHARS, MAX_BUBBLES,
     unsafeClaims, parseEmphasis, fontSize, slideFile, captionText,
     validatePost, validateBatch, buildManifest,
   };

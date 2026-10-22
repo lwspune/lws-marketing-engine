@@ -63,6 +63,8 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
      art, body size as the first subject (a comment section Shivani would have to police). Fits S9's story carousel, but a
      real everyday scene instead of an object-metaphor is a new variant: the founder's call, with its own lesson.
      Figures: `analytics/competitors/black_thoughtss_-2026-10-22.csv` (local).
+     **Made 2026-10-22:** the founder chose it; framework S19 (scene stories), lesson L57, first post sm-008 "The last one
+     to eat" (week 44), in its own illustrated style (`remotion/src/SceneStory.tsx`).
 - ~~**@pyqvault_ physics concept sweep (F28)**~~ DONE 2026-10-21: every MHT-CET physics chapter read in full, plus the 4
   JEE Main chapters with no MHT-CET namesake; P47–P74 added, each chapter logged in `pyqvault-ideas.md` → Concept sweep.
   Two left-outs worth the founder's eye: "drop one ball, throw another sideways: they land together" (close to P11) and

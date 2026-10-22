@@ -209,3 +209,100 @@ test("text colours pass WCAG AA on the paper and the highlight", () => {
   assert.ok(contrast(P.ink, P.mark) >= 4.5);
   assert.ok(contrast(P.soft, P.paper) >= 4.5, "small print (handle, page number)");
 });
+
+// ---------- scene stories (framework S19, founder 2026-10-22) ----------
+
+// A real everyday scene told over 8–10 illustrated slides: speech and thought bubbles, cliffhanger lines that pull the
+// reader to the next slide, the turn, one lesson, the share slide. The pictures are drawn in remotion/ (SceneStory.tsx).
+function scenePost(over = {}) {
+  const page = (scene, text, extra = {}) => ({ type: "page", scene, text, ...extra });
+  return {
+    slug: "sm-008-last-to-eat",
+    format: "scene",
+    title: "The last one to eat",
+    slides: [
+      { type: "cover", scene: "stove", text: "Every Diwali, she was the last one to eat." },
+      page("morning", "6 a.m. Rangoli, chai for twelve."),
+      page("calls", "By noon the house was full.", { bubbles: [{ who: "off", kind: "say", text: "Beta, one more chai!" }] }),
+      page("stool", "Her feet hurt.", { cliff: "She stood straight back up." }),
+      page("thought", "She'd told herself that for nine Diwalis.", { bubbles: [{ who: "her", kind: "think", text: "Don't sit." }] }),
+      page("dinner", "Dinner.", { cliff: "Then her daughter walked in." }),
+      page("ladle", "Her mother-in-law took the ladle.", { bubbles: [{ who: "mil", kind: "say", text: "Tonight I'll make the puris." }] }),
+      { type: "lesson", scene: "table", text: "You're allowed a seat at the table." },
+      { type: "share", text: "Send this to the woman who always eats last." },
+    ],
+    caption: "You don't have to eat last.",
+    hashtags: ["#soundmind"],
+    ...over,
+  };
+}
+
+test("a valid scene story has no problems, and builds a GoPost carousel like the other formats", () => {
+  assert.deepEqual(cards.validatePost(scenePost(), ART), []);
+  const m = cards.buildManifest(scenePost());
+  assert.equal(m.kind, "carousel");
+  assert.equal(m.slides.length, 9);
+});
+
+test("a scene story needs 8–10 slides", () => {
+  const short = scenePost();
+  short.slides = [short.slides[0], ...short.slides.slice(3, 5), ...short.slides.slice(5)];
+  assert.ok(cards.validatePost(short, ART).some((p) => /8–10 slides/.test(p)));
+  const long = scenePost();
+  long.slides = [long.slides[0], ...Array(8).fill(long.slides[1]), ...long.slides.slice(3)];
+  assert.ok(cards.validatePost(long, ART).some((p) => /8–10 slides/.test(p)));
+});
+
+test("cover, pages and the lesson each need a scene; the share slide may have one", () => {
+  const s = scenePost();
+  delete s.slides[2].scene;
+  assert.ok(cards.validatePost(s, ART).some((p) => /slide 3: .*scene/.test(p)));
+  const lesson = scenePost();
+  delete lesson.slides[7].scene;
+  assert.ok(cards.validatePost(lesson, ART).some((p) => /slide 8: .*scene/.test(p)));
+  const share = scenePost();
+  share.slides[8] = { ...share.slides[8], scene: "diya" };
+  assert.deepEqual(cards.validatePost(share, ART), []);
+});
+
+test("at least two pages end on a cliffhanger, but not the turn just before the lesson, the cover or the lesson", () => {
+  const one = scenePost();
+  delete one.slides[3].cliff;
+  assert.ok(cards.validatePost(one, ART).some((p) => /cliffhanger/.test(p)));
+  const turn = scenePost();
+  turn.slides[6] = { ...turn.slides[6], cliff: "And then…" };
+  assert.ok(cards.validatePost(turn, ART).some((p) => /slide 7: .*cliffhanger/.test(p)));
+  const cover = scenePost();
+  cover.slides[0] = { ...cover.slides[0], cliff: "Swipe" };
+  assert.ok(cards.validatePost(cover, ART).some((p) => /slide 1: .*cliffhanger/.test(p)));
+});
+
+test("bubbles: at most three a slide, each said or thought by someone, short, and with no health claims", () => {
+  const many = scenePost();
+  many.slides[2] = { ...many.slides[2], bubbles: Array(4).fill({ who: "off", kind: "say", text: "Chai!" }) };
+  assert.ok(cards.validatePost(many, ART).some((p) => /bubbles/.test(p)));
+  const kind = scenePost();
+  kind.slides[2] = { ...kind.slides[2], bubbles: [{ who: "off", kind: "shout", text: "Chai!" }] };
+  assert.ok(cards.validatePost(kind, ART).some((p) => /say or think/.test(p)));
+  const who = scenePost();
+  who.slides[2] = { ...who.slides[2], bubbles: [{ kind: "say", text: "Chai!" }] };
+  assert.ok(cards.validatePost(who, ART).some((p) => /who/.test(p)));
+  const long = scenePost();
+  long.slides[2] = { ...long.slides[2], bubbles: [{ who: "off", kind: "say", text: "x".repeat(81) }] };
+  assert.ok(cards.validatePost(long, ART).some((p) => /too long/.test(p)));
+  const claim = scenePost();
+  claim.slides[2] = { ...claim.slides[2], bubbles: [{ who: "off", kind: "say", text: "Rest will cure you." }] };
+  assert.ok(cards.validatePost(claim, ART).some((p) => /health claim/.test(p)));
+});
+
+test("scene text limits: cover 90, page 190, cliffhanger 60 characters", () => {
+  const cover = scenePost();
+  cover.slides[0] = { ...cover.slides[0], text: "x".repeat(91) };
+  assert.ok(cards.validatePost(cover, ART).some((p) => /slide 1: text too long/.test(p)));
+  const page = scenePost();
+  page.slides[1] = { ...page.slides[1], text: "x".repeat(191) };
+  assert.ok(cards.validatePost(page, ART).some((p) => /slide 2: text too long/.test(p)));
+  const cliff = scenePost();
+  cliff.slides[3] = { ...cliff.slides[3], cliff: "x".repeat(61) };
+  assert.ok(cards.validatePost(cliff, ART).some((p) => /slide 4 cliffhanger: text too long/.test(p)));
+});

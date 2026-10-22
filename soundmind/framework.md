@@ -1,4 +1,4 @@
-# @soundmindwithshivani post framework (v1.2, 2026-10-21)
+# @soundmindwithshivani post framework (v1.3, 2026-10-22)
 
 How every Sound Mind post is made, one numbered point at a time, in three parts: **both formats**, **carousels** and
 **reels**. Carousels and reels do different jobs (founder, 2026-10-21: "different fundamentally"): a carousel mostly
@@ -91,6 +91,17 @@ Which one Sound Mind's audience shares more is measured. · *Check:* `cards.js` 
 squeezed slide is unreadable on a phone. · *Check:* `node soundmind/render.mjs` refuses a batch with a slide that doesn't
 fit. · 📌 house standard
 
+**S19 · Scene stories: a real everyday moment, told so people swipe to the end.** A third kind of carousel (`"format":
+"scene"`, 8–10 slides): an ordinary moment from an Indian woman's day (the Diwali kitchen, the family function), in its
+own flat illustrated style instead of line drawings, with speech and thought bubbles. The cover promises a turn; at least
+two middle slides end on a cliffhanger line (*Then her daughter walked into the kitchen.*); the turn comes from someone
+kind, with no villain to hate and no revenge; then one lesson, then the share slide. · *Why:* the founder pointed at an
+illustrated comic story (@black_thoughtss_, 2026-10-22; studied in `SUGGESTIONS.md`): its comments ran about 6× that
+account's typical carousel, but much of it was backlash at the villain, so the turn is kept and the villain dropped; the
+founder asked for "more detailed and relatable" stories that make viewers "swipe the cards to reach the end". · *Check:*
+`cards.js` (slide counts, scenes, cliffhangers, bubbles; `tests/soundmind-cards.test.js`) and
+`remotion/tests/sceneStory.test.ts` (text and bubbles fit, no bubble on a face, tails at the speaker). · 🧪 L57
+
 ---
 
 ## Reels: the "ME" story
@@ -151,4 +162,5 @@ the beats are checked instead of eyeballed. · *Check:* `npm test` in `remotion/
 |---|---|---|---|
 | v1 | 2026-10-21 | Framework created from `brand.md`'s rules (S1–S15), each with a reason, a check and a status; "winning" set to shares per 1,000 reached at 7 days. Lessons L52–L55 measure the four points on test. | Founder: a framework like @pyqvault_'s, for Sound Mind. Nothing in it is new: it numbers what Sound Mind already does, so changes from here on have a trail. |
 | v1.1 | 2026-10-21 | S6: never "comment KEYWORD" on a post meant to spread. S16 added: captions of a few lines, opening on "you" (replaces the one-line caption); on test, L56. | Founder chose both from run 2 of the element analysis (`reels/analysis-framework.md`): keyword asks went with ordinary posts in 3 accounts; long captions with hits in 5, a "you" first line in 3. Week 43's posts keep their one-line captions and are L56's comparison (SUGGESTIONS.md → Backfill ledger). |
+| v1.3 | 2026-10-22 | S19 added: scene stories, a third kind of carousel (an everyday moment, illustrated, cliffhangers, a kind turn). On test, L57. | Founder, after the study of an illustrated story carousel: "more detailed and relatable story. viewers should swipe the cards to reach end"; "it doesn't have to be ME". |
 | v1.2 | 2026-10-21 | Split into Both formats / Carousels / Reels, each format with its own winning measure: carousels on shares per 1,000 reached, reels on reach and watch time first. S6 is now the carousels' share slide; the reels' ask is the new S17. S8 is now the carousel look; the reel look is the new S18 (L54 measures S18). The keyword rule moved from S6 to S16 (captions, both formats). Sound Mind's numbers moved out to `analytics/soundmind-baseline.md` (local); a carousel baseline added there (her 44 carousels). | Founder: "separate sections for reels and carousels since those are different fundamentally". A carousel reaches followers who keep and send it; a reel is how Sound Mind reaches new people, and Instagram spreads a reel by watch time. Her own carousels get about twice the reels' shares per person reached. Numbers out: founder, 2026-10-21, "write as if the repo were public". |
