@@ -97,3 +97,4 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 | Date | Real predictions judged | Bands right | Rank correlation | Weight changes | Note |
 |---|---|---|---|---|---|
 | 2026-10-22 | 0 | – | – | idea 1 → 1.5 | calibrated on 8 reels, score vs result 0.72 |
+| 2026-10-23 | 0 | – | – | none | no new 48 h reading: still 8 reels, weights held (score vs result 0.72) |

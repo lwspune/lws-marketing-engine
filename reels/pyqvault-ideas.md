@@ -68,6 +68,7 @@ itself.
 | 2026-10-21 | set-up | – | all weights 1 | starting point: ranks ideas almost as the old score out of 10 did; Surprise added, Everyday widened to 0–2 |
 | 2026-10-21 | 4 of 8 (P1, C1, P2, C2); P3, C3, P4, C4 read at 5–36 h | – | none: refused (needs 6 at ≥ 48 h) | the results table's 20 Oct reading came too early for half the reels, and P5 on have no numbers yet. A preview on all 8 at any age gave 0.71 and leaned Vivid up (1.16 vs 0.87), not acted on: mixed ages, and these 8 were scored after posting |
 | 2026-10-22 | 8 at 48 h (P1, C1, P2, C2, P3, C3, P4, C4); P5, C5, P12, C7, C13 still under 48 h | 0.71 | Vivid 1 → 1.5; 89 ideas re-scored | high Vivid (P2, C1, C2) median result 1.32 vs low 1.00 (3 vs 5); no line-up: the high side's "before F5" opening is also on 3 of the 5 low reels. Other criteria too lopsided to judge (< 3 reels a side). Next after the queue unchanged: P36 (79), C18 (72) |
+| 2026-10-23 | the same 8 at 48 h; P5 (43 h), C5 (39 h), P12 (34 h), C7 (19 h), C13 (10 h), P29b (15 h) still under 48 h | 0.71 | none | no new 48 h reading since 2026-10-22, so the tool's "Vivid 1.5 → 2" is the same evidence counted twice; not acted on. P5 and C5 pass 48 h today, P12 tomorrow |
 
 ## Ideas
 
