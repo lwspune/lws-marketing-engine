@@ -1,0 +1,136 @@
+{
+  "week": "2026-w44",
+  "posts": [
+    {
+      "slug": "sm-008-the-last-one-to-eat",
+      "format": "scene",
+      "title": "The last one to eat (scene story)",
+      "slides": [
+        {
+          "type": "cover",
+          "scene": "stove",
+          "text": "Every Diwali, she was the last one to eat. This year, someone *noticed*."
+        },
+        {
+          "type": "page",
+          "scene": "morning",
+          "text": "6 a.m. Rangoli at the door, chai for twelve, the first batch of chakli on the stove.",
+          "bubbles": [
+            {
+              "who": "her",
+              "kind": "think",
+              "text": "Just a little more."
+            }
+          ]
+        },
+        {
+          "type": "page",
+          "scene": "calls",
+          "text": "By noon the house was full. Her name came from every direction.",
+          "bubbles": [
+            {
+              "who": "off",
+              "kind": "say",
+              "text": "Beta, one more chai!"
+            },
+            {
+              "who": "off",
+              "kind": "say",
+              "text": "The ladoos are finished!"
+            },
+            {
+              "who": "off",
+              "kind": "say",
+              "text": "Where's the puja thali?"
+            }
+          ]
+        },
+        {
+          "type": "page",
+          "scene": "stool",
+          "text": "Her feet hurt. She sat down for one minute. Then, from the living room:",
+          "bubbles": [
+            {
+              "who": "off",
+              "kind": "say",
+              "text": "Where's bahu? Resting, even today?"
+            }
+          ]
+        },
+        {
+          "type": "page",
+          "scene": "thought",
+          "text": "She stood straight back up. She'd told herself the same thing for nine Diwalis.",
+          "bubbles": [
+            {
+              "who": "her",
+              "kind": "think",
+              "text": "Don't sit. Don't complain. A good bahu doesn't get tired."
+            }
+          ]
+        },
+        {
+          "type": "page",
+          "scene": "dinner",
+          "text": "Dinner. Everyone on the floor together, the family photo under the lights. She was still at the stove.",
+          "bubbles": [
+            {
+              "who": "off",
+              "kind": "say",
+              "text": "You eat later, beta."
+            }
+          ],
+          "cliff": "Then her daughter walked into the kitchen."
+        },
+        {
+          "type": "page",
+          "scene": "daughter",
+          "text": "Her seven-year-old tugged at her hand. She had no answer.",
+          "bubbles": [
+            {
+              "who": "daughter",
+              "kind": "say",
+              "text": "Mumma, why do you always eat alone?"
+            }
+          ],
+          "cliff": "But her mother-in-law had heard."
+        },
+        {
+          "type": "page",
+          "scene": "ladle",
+          "text": "Her mother-in-law took the ladle from her hand.",
+          "bubbles": [
+            {
+              "who": "mil",
+              "kind": "say",
+              "text": "Tonight I'll make the puris. You sit."
+            },
+            {
+              "who": "mil",
+              "kind": "say",
+              "text": "For thirty-five years I ate last too. Not anymore."
+            }
+          ]
+        },
+        {
+          "type": "lesson",
+          "scene": "table",
+          "text": "That night she ate hot puris with everyone. You are not the help in your own home. *You're allowed a seat at the table.*"
+        },
+        {
+          "type": "share",
+          "scene": "diya",
+          "text": "Send this to the woman who always eats last."
+        }
+      ],
+      "caption": "You don't have to eat last to be a good bahu. 🪔\n\nSo many of us grew up watching the women at home eat after everyone else.\nRest, a hot meal, a seat at the table: they aren't rewards. They're yours too.\nThis Diwali, pull up a chair for the woman still in the kitchen.\n\nSend this to the woman who always eats last.",
+      "hashtags": [
+        "#diwali",
+        "#indianwomen",
+        "#selfworth",
+        "#emotionalwellness",
+        "#soundmind"
+      ]
+    }
+  ]
+}
