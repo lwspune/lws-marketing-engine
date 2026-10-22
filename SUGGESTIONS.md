@@ -52,7 +52,17 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 - **Sound Mind: posts to analyse later (founder, 2026-10-21).** Theme to explore: **the problems Indian women face in
   their daily lives.** Read each post (Business Discovery or Chrome, read-only), note its format, hook and numbers against
   its account's typical post, and judge it against `soundmind/framework.md` before proposing anything to Shivani.
-  1. https://www.instagram.com/p/DewWisYGjq6/ (a carousel; the founder pointed at slide 8)
+  1. https://www.instagram.com/p/DewWisYGjq6/ (a carousel; the founder pointed at slide 8). **Studied 2026-10-22.**
+     @black_thoughtss_ (a very large account; most of its posts are carousels), marked "AI content". A 10-slide comic, set
+     in a Western plane: a woman is mocked for her size by her seatmate, shrinks and apologises, then a flight attendant
+     gives *her* the business-class seat (slide 8, "The seat is for you"); last slide: "Up here you don't have to
+     apologize for anything." Comments at ~20 h about 6× the account's typical carousel (top sixth of its year), but many
+     are backlash: the most-liked calls it made up, others mock her weight. Worth taking: the inner-thought slide ("Don't
+     take up any space. Like every time."), the turn where someone kind steps in, the closing line said *to* her. Leave
+     out: a villain to hate plus a revenge slide (the backlash engine; against Sound Mind's kind tone, S12 in spirit), AI
+     art, body size as the first subject (a comment section Shivani would have to police). Fits S9's story carousel, but a
+     real everyday scene instead of an object-metaphor is a new variant: the founder's call, with its own lesson.
+     Figures: `analytics/competitors/black_thoughtss_-2026-10-22.csv` (local).
 - ~~**@pyqvault_ physics concept sweep (F28)**~~ DONE 2026-10-21: every MHT-CET physics chapter read in full, plus the 4
   JEE Main chapters with no MHT-CET namesake; P47–P74 added, each chapter logged in `pyqvault-ideas.md` → Concept sweep.
   Two left-outs worth the founder's eye: "drop one ball, throw another sideways: they land together" (close to P11) and
