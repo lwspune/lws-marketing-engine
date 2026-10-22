@@ -58,7 +58,9 @@ itself.
    one side share a background, music, voice or hook that ≤ 25% of the other side has).
 3. **Write it down, then re-score.** Each change gets a row below (date, reels, numbers, old → new); the Ideas table is
    re-scored with the new weights. A founder's call overrides the rule.
-4. Needs **6 scored reels with numbers** to run at all. The results table names each reel's idea (`pyqvault-learnings.md`,
+4. Needs **6 scored reels with numbers** to run at all, and moves a weight only when **a reel has reached 48 h since the
+   last row**: `--calibrate` prints its proposal on every run, so on the same readings log "none: no new 48 h reading"
+   (2026-10-23: acting on it again counts the same evidence twice). The results table names each reel's idea (`pyqvault-learnings.md`,
    Idea column).
 
 | Date | Reels | Rank correlation | Change | Why |

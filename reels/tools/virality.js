@@ -182,15 +182,31 @@ function logRun(md, row) {
   return lines.join("\n");
 }
 
-/** One analysis: fill outcomes, apply the weight changes the calibration rule allows, log the run. */
+/** The last logged run that calibrated: how many 48 h reels it used, and its date. */
+function lastCalibrated(md) {
+  const lines = md.split("\n"), { head, last } = tableAt(lines, "## Calibration and accuracy runs");
+  for (let i = last; i >= head + 2; i--) {
+    const m = /(?:calibrated on|still) (\d+) reels/.exec(lines[i]);
+    if (m) return { n: Number(m[1]), date: cellsOf(lines[i])[0] };
+  }
+  return null;
+}
+
+/** One analysis: fill outcomes, apply the weight changes the calibration rule allows, log the run. Weights move only on
+ *  new 48 h readings: the same readings never step a weight twice (48 h readings are write-once, so a count is enough). */
 function update(md, results, today) {
   const acc = accuracy(parsePredictions(md), results);
   let out = fillOutcomes(md, acc.rows);
-  const cal = ts.calibrate(parseReels(out), ts.parseWeights(out), results), moved = cal.refused ? [] : cal.criteria.filter((c) => c.change);
+  const cal = ts.calibrate(parseReels(out), ts.parseWeights(out), results), prev = lastCalibrated(md);
+  const held = !cal.refused && prev && prev.n === cal.n;
+  if (held && prev.date === today) return { md: out, summary: `weights held: already run today on these ${cal.n} reels` };
+  const moved = cal.refused || held ? [] : cal.criteria.filter((c) => c.change);
   if (moved.length) out = applyWeights(out, moved);
   const right = acc.n ? `${acc.hits} of ${acc.n}` : "–", rho = acc.rho == null ? "–" : acc.rho.toFixed(2);
   const changes = moved.length ? moved.map((c) => `${c.key} ${c.weight} → ${c.newWeight}`).join(", ") : "none";
-  const note = cal.refused ? `calibration refused: ${cal.refused}` : `calibrated on ${cal.n} reels, score vs result ${cal.rho.toFixed(2)}`;
+  const note = cal.refused ? `calibration refused: ${cal.refused}`
+    : held ? `no new 48 h reading: still ${cal.n} reels, weights held (score vs result ${cal.rho.toFixed(2)})`
+    : `calibrated on ${cal.n} reels, score vs result ${cal.rho.toFixed(2)}`;
   out = logRun(out, [today, String(acc.n), right, rho, changes, note]);
   return { md: out, summary: `${acc.n ? `${right} bands right` : "no real prediction judged yet"}; weights: ${changes}; ${note}` };
 }

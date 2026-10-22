@@ -170,6 +170,47 @@ test("update: the run row records what was judged and any weight changes", () =>
   assert.match(summary, /1 of 2 bands right/);
 });
 
+// 2026-10-23: the rule allows one step per analysis of NEW 48 h readings. Running --update again on the same readings
+// (the next day before any reel turns 48 h, or twice in a day) stepped the weight again on the same evidence.
+const SIX = LOG.replace(/## Reels[\s\S]*$/, `## Reels
+
+| Idea | Reel | Idea score | Motion | Hook move | Words | Answer | Measured |
+|---|---|---|---|---|---|---|---|
+${["P1", "P2", "P3", "P4", "P5", "P6", "P7"].map((id, i) => `| ${id} | r${i + 1} | ${[0, 1, 2, 6].includes(i) ? 3 : 0} | 1 | 1 | 1 | 0 | – |`).join("\n")}
+
+## Predictions
+
+| Idea | Reel | Logged | Score | Band | Weakest | Record then | Typical then | Hindsight |
+|---|---|---|---|---|---|---|---|---|
+| P1 | r1 | 2026-10-22 | 100 | record-breaker | – | 1496 | 1429 | yes |
+`);
+const sixResults = (n) => ts.parseResults(`
+## Reel-by-reel results (fill at 48 h and 7 d)
+
+| Reel | Idea | Background | Music | Voice | Hook · opening | Tests | Posted | Reach | Views | Watch | Saves | Shares | Comments |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+${["P1", "P2", "P3", "P4", "P5", "P6", "P7"].slice(0, n).map((id, i) => `| r${i + 1} | ${id} | ${i % 2 ? "dark" : "white"} | — | — | — | — | 20 Oct | 1 | ${[0, 1, 2, 6].includes(i) ? "1,000" : "100"} (49 h) | ${[0, 1, 2, 6].includes(i) ? 10 : 5} s | 0 | 0 | 0 |`).join("\n")}
+`);
+
+test("update: weights step once per new 48 h reading, never again on the same readings", () => {
+  const first = v.update(SIX + RUNS, sixResults(6), "2026-10-24").md;
+  assert.equal(ts.parseWeights(first).idea.weight, 1.5);
+  assert.match(first, /\| 2026-10-24 \|[^\n]*\| idea 1 → 1.5 \| calibrated on 6 reels/);
+
+  const sameDay = v.update(first, sixResults(6), "2026-10-24").md;
+  assert.equal(ts.parseWeights(sameDay).idea.weight, 1.5);
+  assert.match(sameDay, /\| 2026-10-24 \|[^\n]*\| idea 1 → 1.5 \|/);
+
+  const nextDay = v.update(first, sixResults(6), "2026-10-25").md;
+  assert.equal(ts.parseWeights(nextDay).idea.weight, 1.5);
+  assert.match(nextDay, /\| 2026-10-25 \|[^\n]*\| none \| no new 48 h reading: still 6 reels, weights held/);
+  assert.equal(v.update(nextDay, sixResults(6), "2026-10-25").md, nextDay);
+
+  const seventh = v.update(nextDay, sixResults(7), "2026-10-26").md;
+  assert.equal(ts.parseWeights(seventh).idea.weight, 2);
+  assert.match(seventh, /\| 2026-10-26 \|[^\n]*\| idea 1.5 → 2 \| calibrated on 7 reels/);
+});
+
 test("applyWeights writes a changed weight into the Scoring table", () => {
   const md = v.applyWeights(LOG, [{ key: "motion", change: 0.5, newWeight: 1.5 }, { key: "words", change: 0, newWeight: 1 }]);
   assert.equal(ts.parseWeights(md).motion.weight, 1.5);
