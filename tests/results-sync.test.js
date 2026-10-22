@@ -69,3 +69,16 @@ test("running it twice changes nothing the second time", () => {
   assert.equal(twice.md, once);
   assert.deepEqual(twice.changes, []);
 });
+
+// A rebuilt reel of an idea gets the idea's id plus a version letter (P29b, founder 2026-10-22: rebuild an approved reel
+// to compare it with the original), so both reels keep their own results row and prediction.
+test("a rebuilt reel (P29b) maps from the virality log and keeps its own results row", () => {
+  const ideas = rs.ideaMap("", "| P29 | pv-physics-009-wing-mirror | 2 |\n| P29b | pv-physics-009b-wing-mirror | 2 |\n");
+  assert.equal(ideas["pv-physics-009b-wing-mirror"], "P29b");
+  assert.equal(ideas["pv-physics-009-wing-mirror"], "P29");
+  const rebuilt = { slug: "pv-physics-009b-wing-mirror", title: "Physics #9 rebuilt", publishedAt: "2026-10-24T03:30:00Z", ageHours: 50, h48: n(900, 9.0), d7: null, latest: null };
+  const rows = ts.parseResults(rs.applyResults(TABLE, [rebuilt], ideas).md);
+  const row = rows.find((r) => r.idea === "P29b");
+  assert.ok(row, "P29b has its own row");
+  assert.equal(row.views, 900);
+});

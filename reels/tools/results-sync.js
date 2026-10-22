@@ -81,7 +81,7 @@ function ideaMap(ideasMd, viralityMd) {
   }
   for (const line of viralityMd.split("\n")) {
     const c = cellsOf(line);
-    if (/^[PC]\d+$/.test(c[0] || "") && /^pv-/.test(c[1] || "")) map[c[1]] = c[0];
+    if (/^[PC]\d+[a-z]?$/.test(c[0] || "") && /^pv-/.test(c[1] || "")) map[c[1]] = c[0];   // P29b: a rebuilt reel
   }
   return map;
 }

@@ -223,7 +223,7 @@ function parseResults(md) {
   const lines = section(md, "## Reel-by-reel results"), names = cellsOf(lines.find((l) => l.startsWith("| Reel |")) || "");
   const at = (c, name) => c[names.indexOf(name)] ?? "";
   return lines.map(cellsOf).filter((c) => c.length === names.length && c[0] !== "Reel" && !/^-+$/.test(c[0])).map((c) => ({
-    reel: plain(at(c, "Reel")), idea: /^[A-Z]\d+$/.test(plain(at(c, "Idea"))) ? plain(at(c, "Idea")) : null,
+    reel: plain(at(c, "Reel")), idea: /^[A-Z]\d+[a-z]?$/.test(plain(at(c, "Idea"))) ? plain(at(c, "Idea")) : null,
     views: leadingNumber(at(c, "Views")), watch: leadingNumber(at(c, "Watch")), viewsCell: at(c, "Views"),
     hours: readingHours(at(c, "Views")),
     background: plain(at(c, "Background")), music: plain(at(c, "Music")), voice: plain(at(c, "Voice")), hook: plain(at(c, "Hook · opening")),
