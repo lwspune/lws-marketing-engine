@@ -563,6 +563,7 @@ each answer is re-derived in its reel's tests (F10).
 ### C8 · Split water
 - **Frame 0:** One battery, two tubes. Which fills first? → hydrogen
 - **Without words:** water molecules at two electrodes → each splits: two H atoms go one way, one O the other → bubbles rise; the hydrogen tube fills twice as fast → the gas levels read 2 : 1
+- **Counter (L62 test):** an H₂ and an O₂ count racing above the tubes, a tick per molecule, landing on 2 : 1 and still running after it; post it silent
 - **Second hook:** Why exactly twice as fast? → H₂O: two H for every O
 - **From:** own
 

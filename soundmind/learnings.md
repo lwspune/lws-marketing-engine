@@ -10,7 +10,7 @@ S-numbers) changes only through its change log. Lessons are grouped like the fra
 The baselines and each lesson's figures go in **`analytics/soundmind-baseline.md`** (local only, git-ignored); a Result
 here says what happened in words ("above the typical carousel on shares"), never the figures.
 
-All three logs share **one numbering** (L1, L2, …), so a number always means one lesson. The next new lesson is **L62**,
+All three logs share **one numbering** (L1, L2, …), so a number always means one lesson. The next new lesson is **L63**,
 in whichever log it belongs to.
 
 **Status:** 🧪 testing · ✅ confirmed (do it from now on) · ❌ rejected (don't) · 📌 fact (no test needed)
