@@ -260,6 +260,14 @@ test("calibrate: a reel's result is the average of its views and its watch time 
   assert.equal(Math.round(p1.result * 1000) / 1000, Math.round(((200 / 155 + 2 / 4.25) / 2) * 1000) / 1000, "P1's short watch time pulls its result down");
 });
 
+// A rebuilt reel (P29b, 2026-10-22) is the same idea made again: it counts as its idea's row.
+test("calibrate: a rebuilt reel (P1b) counts as its idea P1", () => {
+  const md = ideas(CAL_ROWS), res = ts.parseResults(calResults(["white", "dark", "white", "dark", "white", "dark"]).replace("| P1 |", "| P1b |"));
+  const out = ts.calibrate(ts.parse(md), ts.parseWeights(md), res);
+  assert.equal(out.n, 6);
+  assert.equal(out.reels.find((x) => x.idea === "P1b").row.id, "P1");
+});
+
 test("calibrate: no weight moves when the split lines up with something else (here, the background)", () => {
   const md = ideas(CAL_ROWS), out = ts.calibrate(ts.parse(md), ts.parseWeights(md), ts.parseResults(calResults(["dark", "dark", "dark", "white", "white", "white"])));
   const vivid = out.criteria.find((c) => c.key === "vivid");
@@ -300,7 +308,7 @@ test("the real @pyqvault_ idea list is valid, has an open idea for each subject 
 
 test("every posted @pyqvault_ reel with an idea id points at a row of the idea list", () => {
   const ids = new Set(ts.parse(real("pyqvault-ideas.md")).map((x) => x.id));
-  for (const x of ts.parseResults(real("pyqvault-learnings.md"))) if (x.idea) assert.ok(ids.has(x.idea), `${x.reel}: idea ${x.idea} isn't in the list`);
+  for (const x of ts.parseResults(real("pyqvault-learnings.md"))) if (x.idea) assert.ok(ids.has(ts.baseIdea(x.idea)), `${x.reel}: idea ${x.idea} isn't in the list`);
 });
 
 // @lws.pune keeps its own table, the older unweighted score out of 10 (founder 2026-10-21: built separately later).
