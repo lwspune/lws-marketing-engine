@@ -58,7 +58,9 @@ itself.
    one side share a background, music, voice or hook that ≤ 25% of the other side has).
 3. **Write it down, then re-score.** Each change gets a row below (date, reels, numbers, old → new); the Ideas table is
    re-scored with the new weights. A founder's call overrides the rule.
-4. Needs **6 scored reels with numbers** to run at all. The results table names each reel's idea (`pyqvault-learnings.md`,
+4. Needs **6 scored reels with numbers** to run at all, and moves a weight only when **a reel has reached 48 h since the
+   last row**: `--calibrate` prints its proposal on every run, so on the same readings log "none: no new 48 h reading"
+   (2026-10-23: acting on it again counts the same evidence twice). The results table names each reel's idea (`pyqvault-learnings.md`,
    Idea column).
 
 | Date | Reels | Rank correlation | Change | Why |
@@ -66,6 +68,7 @@ itself.
 | 2026-10-21 | set-up | – | all weights 1 | starting point: ranks ideas almost as the old score out of 10 did; Surprise added, Everyday widened to 0–2 |
 | 2026-10-21 | 4 of 8 (P1, C1, P2, C2); P3, C3, P4, C4 read at 5–36 h | – | none: refused (needs 6 at ≥ 48 h) | the results table's 20 Oct reading came too early for half the reels, and P5 on have no numbers yet. A preview on all 8 at any age gave 0.71 and leaned Vivid up (1.16 vs 0.87), not acted on: mixed ages, and these 8 were scored after posting |
 | 2026-10-22 | 8 at 48 h (P1, C1, P2, C2, P3, C3, P4, C4); P5, C5, P12, C7, C13 still under 48 h | 0.71 | Vivid 1 → 1.5; 89 ideas re-scored | high Vivid (P2, C1, C2) median result 1.32 vs low 1.00 (3 vs 5); no line-up: the high side's "before F5" opening is also on 3 of the 5 low reels. Other criteria too lopsided to judge (< 3 reels a side). Next after the queue unchanged: P36 (79), C18 (72) |
+| 2026-10-23 | the same 8 at 48 h; P5 (43 h), C5 (39 h), P12 (34 h), C7 (19 h), C13 (10 h), P29b (15 h) still under 48 h | 0.71 | none | no new 48 h reading since 2026-10-22, so the tool's "Vivid 1.5 → 2" is the same evidence counted twice; not acted on. P5 and C5 pass 48 h today, P12 tomorrow |
 
 ## Ideas
 
@@ -560,6 +563,7 @@ each answer is re-derived in its reel's tests (F10).
 ### C8 · Split water
 - **Frame 0:** One battery, two tubes. Which fills first? → hydrogen
 - **Without words:** water molecules at two electrodes → each splits: two H atoms go one way, one O the other → bubbles rise; the hydrogen tube fills twice as fast → the gas levels read 2 : 1
+- **Counter (L62 test):** an H₂ and an O₂ count racing above the tubes, a tick per molecule, landing on 2 : 1 and still running after it; post it silent
 - **Second hook:** Why exactly twice as fast? → H₂O: two H for every O
 - **From:** own
 
