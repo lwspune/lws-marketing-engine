@@ -1,10 +1,10 @@
 {
-  "slug": "nda-6month-pune-oct",
+  "slug": "nda-6month-pune-oct-18",
   "project": "lws-coaching",
-  "title": "6-Month NDA Course – Pune 17–65, 22–30 Oct",
+  "title": "6-Month NDA Course – Pune 18–65, 22–30 Oct",
   "image": "nda-6month-poster.png",
-  "campaign": "6-Month NDA Course – Pune – Oct 2026",
-  "adset": "Ages 17–65 – Pune",
+  "campaign": "6-Month NDA Course – Pune 18–65 – Oct 2026",
+  "adset": "Ages 18–65 – Pune",
   "ad": "Poster – English",
   "primaryText": "For students in 12th or 12th passed who are aiming for NDA. The April 2027 exam is about 6 months away. That's enough time, if preparation starts now and follows a plan.\n\n🎯 Free counselling session for students and parents\n\n✅ 6-month structured plan: the full NDA Maths + GAT syllabus\n✅ Regular full-length mock tests with detailed analysis\n✅ Chapter-wise notes, PYQs and practice, in small batches with doubt support\n\n📍 Offline classes: LWS Pune Defence Academy, Sagar Arcade, FC Road, Pune\n\nTap \"Send message\" to book your free counselling on WhatsApp.",
   "headline": "6-Month NDA Course – Free Counselling",
@@ -18,7 +18,7 @@
     "latitude": 18.52,
     "longitude": 73.84,
     "radiusKm": 20,
-    "ageMin": 17,
+    "ageMin": 18,
     "ageMax": 65,
     "place": "Pune (20 km from FC Road)"
   },
