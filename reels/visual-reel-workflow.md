@@ -168,6 +168,11 @@ For a question whose picture is **3D** (a cone, a plane, a solid), make it in `r
 `.render.html`. Remotion renders every frame (the engine's real-time recording drops some, L25). Reel 014
 (`remotion/src/Reel014.tsx`) is the example. Steps 1, 2, 5 and 6 above are unchanged; steps 3–4 become:
 
+**One render at a time** (2026-10-22): never run a video render, a still or `check-video.mjs` alongside another one.
+Each opens headless browsers; two at once ran this 16 GB laptop out of memory and grew the page file to 12.6 GB, on a
+disk that was already nearly full. Renders keep their temp files in their own folder and clear its stale leftovers when
+they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm run clean:temp` clears it by hand.
+
 1. **Storyboard first: a beat table** (founder, 2026-10-21), at the top of `src/lib/<reel>.ts`, one row per beat:
    time · what moves · the caption, and how long its voice line takes · what the camera must keep in frame · the key
    objects' colours, each marked **real** (from `REAL` in `palette.ts`: copper, steel, flame, copper sulphate…; add a
