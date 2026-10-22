@@ -21,6 +21,8 @@ const REELS: Record<string, { lib: string; file: string }> = {
   pp010: { lib: '../src/lib/pp010.ts', file: 'public/pv-physics-010-launch-angles' },
   pp009b: { lib: '../src/lib/pp009b.ts', file: 'public/pv-physics-009b-wing-mirror' },
   pc008: { lib: '../src/lib/pc008.ts', file: 'public/pv-chem-008-packing' },
+  pf2: { lib: '../src/lib/pf2.ts', file: 'public/pv-f2-induction' },
+  pp011: { lib: '../src/lib/pp011.ts', file: 'public/pv-physics-011-induction' },
   '015': { lib: '../src/lib/reel015.ts', file: 'public/nda-maths-015-slope-graph' },
   '016': { lib: '../src/lib/reel016.ts', file: 'public/nda-maths-016-multiply' },
   '017': { lib: '../src/lib/reel017.ts', file: 'public/nda-maths-017-probability-map' },
