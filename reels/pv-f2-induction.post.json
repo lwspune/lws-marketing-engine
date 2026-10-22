@@ -1,0 +1,16 @@
+{
+  "slug": "pv-f2-induction",
+  "project": "pyqvault-insta",
+  "kind": "reel",
+  "title": "Framework-2 test A · induction, made by the bible (P18: assemble, formula, 30 s, dark, cinematic, silent)",
+  "video": "pv-f2-induction.mp4",
+  "cover": "pv-f2-induction-cover.png",
+  "captions": {
+    "instagram": "Can motion create voltage? ⚡\n\nWatch a coil, a magnet and a galvanometer build themselves, then move the magnet: in, the needle swings; still, it drops back to zero; out, it swings the other way.\n\nFaraday's law: ℰ = −N dΦ/dt. The minus sign is Lenz's law: the induced current opposes the change.\nNo change in flux → no induced EMF.\n\nClass 12 Physics · Electromagnetic induction\nAsked in JEE Main, NEET and MHT-CET.\n\nSave this for revision 📌\nPractise every PYQ chapter-wise, free → pyqvault.com (link in bio).\n\n#Physics #Class12 #Class12Physics #EMI #ElectromagneticInduction #FaradaysLaw #LenzsLaw #CBSE #JEEMain #NEET #MHTCET",
+    "facebook": "Can motion create voltage? ⚡\n\nA coil, a magnet and a galvanometer build themselves; move the magnet in, hold it still, pull it out, and watch the needle. Faraday's law: ℰ = −N dΦ/dt (the minus sign is Lenz's law).\nNo change in flux → no induced EMF.\n\nClass 12 Physics · Electromagnetic induction\nPractise PYQs free, chapter-wise: https://www.pyqvault.com\n\n#Physics #Class12 #ElectromagneticInduction",
+    "youtube": {
+      "title": "Can motion create voltage? Faraday's law, built #shorts",
+      "description": "A coil, a magnet and a galvanometer build themselves; move the magnet in, hold it still, pull it out. Faraday's law: ℰ = −N dΦ/dt, the minus sign is Lenz's law. No change in flux → no induced EMF. NCERT Class 12 Physics, Electromagnetic induction.\n\nPractise PYQs free, chapter-wise: pyqvault.com\n\n#Physics #Class12 #Shorts"
+    }
+  }
+}
