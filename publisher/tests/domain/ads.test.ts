@@ -48,14 +48,18 @@ describe("parseAdSpec (.ad.json files)", () => {
     expect(codeOf(() => parseAdSpec({ ...spec, start: "2026-11-01T13:00:00" }))).toBe("invalid_ad");
   });
 
-  it("checks the audience: ages 13–65 in order, a 1–80 km radius, a real place", () => {
+  it("checks the audience: ages 18–65 in order, a 1–80 km radius, a real place", () => {
     expect(codeOf(() => parseAdSpec({ ...spec, audience: { ...spec.audience, ageMin: 56 } }))).toBe("invalid_ad");
     expect(codeOf(() => parseAdSpec({ ...spec, audience: { ...spec.audience, ageMin: 12 } }))).toBe("invalid_ad");
     expect(codeOf(() => parseAdSpec({ ...spec, audience: { ...spec.audience, ageMax: 70 } }))).toBe("invalid_ad");
     expect(codeOf(() => parseAdSpec({ ...spec, audience: { ...spec.audience, radiusKm: 0 } }))).toBe("invalid_ad");
     expect(codeOf(() => parseAdSpec({ ...spec, audience: { ...spec.audience, radiusKm: 81 } }))).toBe("invalid_ad");
     expect(codeOf(() => parseAdSpec({ ...spec, audience: { ...spec.audience, latitude: 95 } }))).toBe("invalid_ad");
-    expect(parseAdSpec({ ...spec, audience: { ...spec.audience, ageMin: 15, ageMax: 17 } }).audience.ageMax).toBe(17);
+    expect(parseAdSpec({ ...spec, audience: { ...spec.audience, ageMin: 18, ageMax: 65 } }).audience.ageMin).toBe(18);
+  });
+
+  it("refuses under-18s: Meta allows them only with whole cities, and our audience is a pin + radius", () => {
+    expect(() => parseAdSpec({ ...spec, audience: { ...spec.audience, ageMin: 17 } })).toThrow(/18/);
   });
 
   it("the poster is a plain .png/.jpg next to the file; the WhatsApp number is digits with country code", () => {

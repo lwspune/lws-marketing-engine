@@ -43,7 +43,8 @@ const AdSpecSchema = z
         latitude: z.number().min(-90).max(90),
         longitude: z.number().min(-180).max(180),
         radiusKm: z.number().min(1, "must be at least 1 km").max(80, "must be at most 80 km"),
-        ageMin: z.number().int().min(13).max(65),
+        // Meta allows under-18s only with whole cities or larger, never a pin + radius (refused 2026-10-22)
+        ageMin: z.number().int().min(18, "must be at least 18: Meta refuses under-18s with a pin + radius").max(65),
         ageMax: z.number().int().min(13).max(65),
         /** Shown on the Ads tab only; Meta targets the pin. */
         place: text(80).optional(),
