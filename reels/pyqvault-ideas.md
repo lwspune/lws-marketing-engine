@@ -6,7 +6,7 @@ in only if it passes **the test** below; it is then **scored**, and the score is
 `--calibrate` runs the tuning. Framework: `pyqvault-framework.md` (F1, F21, F28, F29). @lws.pune's ideas stay in
 `remake-backlog.md` until it is rebuilt.
 
-**Open: 91 ideas · about 31 days at 3 reels a day.**
+**Open: 90 ideas · about 30 days at 3 reels a day.**
 
 Refill before it drops under two weeks. Sources (F1): the founder's ideas (Source `founder`, any time), a notes sweep
 (physics and chemistry are done; a new exam's notes next), and the next competitor read (`node reels/tools/remake-candidates.mjs`).
@@ -111,7 +111,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | P34 | P | Shake a string faster: more loops (standing waves) | – | 2 | 2 | 1 | 1 | 1 | 55 |  | founder | ✓ |
 | P35 | P | Heat a brass–steel strip: it bends toward the steel (bimetallic strip) | 1.2 | 2 | 2 | 1 | 1 | 1 | 55 |  | founder | ✓ |
 | P36 | P | Ice at the top cools a drink faster than ice at the bottom (convection) | – | 3 | 2 | 2 | 1 | 2 | 79 |  | founder | ✓ |
-| P37 | P | A magnet held still in a coil lights nothing (induction) | – | 2 | 2 | 2 | 1 | 1 | 62 |  | founder | ✓ |
+| P37 | P | A magnet held still in a coil lights nothing (induction) | – | 2 | 2 | 2 | 1 | 1 | 62 | ✅ made 2026-10-22 (`pv-physics-011-induction`, Physics #11; framework-2 test B, L61; reel A `pv-f2-induction` is the same topic made by framework 2) | founder | ✓ |
 | P38 | P | Two coils that never touch: the second bulb lights, on AC only (transformer) | – | 2 | 2 | 2 | 1 | 2 | 69 |  | founder | ✓ |
 | P39 | P | Flip the battery on a diode: the current stops (p-n junction) | – | 2 | 2 | 1 | 1 | 2 | 62 |  | founder | ✓ |
 | P40 | P | Blow between two hanging sheets: they swing together (Bernoulli) | 0.5 | 2 | 2 | 2 | 1 | 1 | 55 |  | founder | ✓ |

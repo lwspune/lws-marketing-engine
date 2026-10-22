@@ -60,6 +60,8 @@ loop; momentum from the reels posted before). The score shown by the tool is tod
 | C14 | pv-chem-008-packing | 2 | 2 | 1 | 1 | 2 | 1 | 0 | 2 | 2 | 1 | 0 | idea 62 · motion 100% · words 17 · colour 40.8 · 20.1 s · cover 27.7 |
 | P11 | pv-physics-010-launch-angles | 3 | 2 | 1 | 1 | 1 | 1 | 1 | 2 | 1 | 1 | 1 | idea 77 · motion 100% · words 16 · colour 12.3 · 18.5 s · cover 11.1 |
 | P29b | pv-physics-009b-wing-mirror | 2 | 2 | 1 | 1 | 2 | 1 | 1 | 2 | 2 | 1 | 1 | idea 69 · motion 100% · words 12 · colour 39.7 · 19 s · cover 37.9 · rebuild of P29 to v1.26 (You'd think + morph, split, loop) |
+| P37a | pv-f2-induction | 2 | 1 | 0 | 2 | 2 | 0 | 0 | 2 | 2 | 0 | 0 | idea 62 · motion 80% · words 4 · colour 37.6 · 30 s · cover 38.9 · framework-2 test A (L61): made by the bible, no guess, assembly from 3 s (no move in 0–3 s) |
+| P37 | pv-physics-011-induction | 2 | 2 | 1 | 1 | 2 | 1 | 1 | 2 | 1 | 1 | 0 | idea 62 · motion 100% · words 13 · colour 26.7 · 19 s · cover 18 · framework-2 test B (L61): our framework, assemble hook, second hook, end card |
 
 ## Predictions
 
@@ -87,6 +89,8 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 | C14 | pv-chem-008-packing | 2026-10-22 | 79 | above typical | idea | 1496 | 1429 | no | – | waiting | – |
 | P11 | pv-physics-010-launch-angles | 2026-10-22 | 86 | record-breaker | words | 1496 | 1429 | no | – | waiting | – |
 | P29b | pv-physics-009b-wing-mirror | 2026-10-22 | 86 | record-breaker | idea | 1496 | 1429 | no | – | waiting | – |
+| P37a | pv-f2-induction | 2026-10-22 | 65 | above typical | idea | 1883 | 1429 | no | – | waiting | – |
+| P37 | pv-physics-011-induction | 2026-10-22 | 84 | record-breaker | idea | 1883 | 1429 | no | – | waiting | – |
 
 ## Calibration and accuracy runs
 
