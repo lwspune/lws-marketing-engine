@@ -136,7 +136,16 @@
     "cover:sm003v": "remotion still SoundMind003VCover ../soundmind/reels/sm-r003v-plant-vivid-cover.jpg --image-format=jpeg",
     "music:sm004": "node ../reels/tools/music.mjs music/sm-r004-page.json public/sm-r004-page.wav",
     "render:sm004": "remotion render SoundMind004 ../soundmind/reels/sm-r004-page.mp4",
-    "cover:sm004": "remotion still SoundMind004Cover ../soundmind/reels/sm-r004-page-cover.jpg --image-format=jpeg"
+    "cover:sm004": "remotion still SoundMind004Cover ../soundmind/reels/sm-r004-page-cover.jpg --image-format=jpeg",
+    "music:sm005": "node ../reels/tools/music.mjs music/sm-r005-hammock.json public/sm-r005-hammock.wav",
+    "render:sm005": "remotion render SoundMind005 ../soundmind/reels/sm-r005-hammock.mp4",
+    "cover:sm005": "remotion still SoundMind005Cover ../soundmind/reels/sm-r005-hammock-cover.jpg --image-format=jpeg",
+    "music:sm006": "node ../reels/tools/music.mjs music/sm-r006-mirror.json public/sm-r006-mirror.wav",
+    "render:sm006": "remotion render SoundMind006 ../soundmind/reels/sm-r006-mirror.mp4",
+    "cover:sm006": "remotion still SoundMind006Cover ../soundmind/reels/sm-r006-mirror-cover.jpg --image-format=jpeg",
+    "music:sm007": "node ../reels/tools/music.mjs music/sm-r007-jar.json public/sm-r007-jar.wav",
+    "render:sm007": "remotion render SoundMind007 ../soundmind/reels/sm-r007-jar.mp4",
+    "cover:sm007": "remotion still SoundMind007Cover ../soundmind/reels/sm-r007-jar-cover.jpg --image-format=jpeg"
   },
   "dependencies": {
     "@dimforge/rapier3d-compat": "0.21.0",
