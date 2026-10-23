@@ -88,3 +88,9 @@ Independent agent, 2026-10-23: **fix first** (maths checked: the cycle, y″ = �
 - I4 the second derivative should draw itself (F3) → **taken**.
 - I5 whoosh on the punch-in (F15), cover y (F6), ghost not grey (F24) → **taken**: whoosh-in/out, cover at y 1590,
   ghost pale dashed blue.
+
+**Changed while building (2026-10-23):** nothing on the layout tests (no overlaps, panel in frame on every frame). The
+stills sheet and strip caught one fault: the trap tag sat on the waves' peaks at band y 228, so it moved to y 178, under
+the pill. The pill reads "y⁗ = sin x" until 6.4 s (not 5.6) so it is up long enough to read. Music: `drive` came out at
+−26 dB at this length (the bottom of the loudness range), so the reel uses `synthwave` (−20.8 dB). The fast steps morph
+(slide + grow) rather than redraw.
