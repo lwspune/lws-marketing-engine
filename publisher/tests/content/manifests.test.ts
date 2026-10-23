@@ -24,18 +24,23 @@ describe.skipIf(manifests.length === 0)("reels/*.post.json", () => {
   });
 });
 
-// The same guard for @pyqvault_'s maths question stories (../stories/pyqvault/<week>/), made by stories/render.mjs.
-const STORIES = path.resolve(__dirname, "../../../stories/pyqvault");
-const storyManifests = existsSync(STORIES)
-  ? readdirSync(STORIES).flatMap((w) => (existsSync(path.join(STORIES, w)) && !w.includes(".")
-    ? readdirSync(path.join(STORIES, w)).filter((f) => f.endsWith(".post.json")).map((f) => path.join(w, f)) : []))
-  : [];
+// The same guard for the maths question stories (../stories/<series>/<week>/), made by stories/render.mjs:
+// each series folder posts to its own account's project.
+const STORIES = path.resolve(__dirname, "../../../stories");
+const SERIES_PROJECT: Record<string, string> = { pyqvault: "pyqvault-insta", lwspune: "pyq-vault" };
+const storyManifests = Object.keys(SERIES_PROJECT).flatMap((s) => {
+  const dir = path.join(STORIES, s);
+  return existsSync(dir)
+    ? readdirSync(dir).flatMap((w) => (!w.includes(".")
+      ? readdirSync(path.join(dir, w)).filter((f) => f.endsWith(".post.json")).map((f) => path.join(s, w, f)) : []))
+    : [];
+});
 
-describe.skipIf(storyManifests.length === 0)("stories/pyqvault/*/*.post.json", () => {
+describe.skipIf(storyManifests.length === 0)("stories/<series>/*/*.post.json", () => {
   it.each(storyManifests)("%s is a valid question story with its card", (file) => {
     const m = parseManifest(JSON.parse(readFileSync(path.join(STORIES, file), "utf8")));
     expect(m.kind).toBe("story");
-    expect(m.project).toBe("pyqvault-insta");
+    expect(m.project).toBe(SERIES_PROJECT[file.split(path.sep)[0]]);
     expect(existsSync(path.join(STORIES, path.dirname(file), m.cover!)), `${file} → ${m.cover}`).toBe(true);
   });
 });

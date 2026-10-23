@@ -1,12 +1,13 @@
-// Render a week of @pyqvault_ maths question stories and write a GoPost manifest for each card.
+// Render a week of maths question stories and write a GoPost manifest for each card.
 //
 //   node stories/render.mjs stories/pyqvault/2026-w44/batch.json              → every day in the batch
 //   node stories/render.mjs stories/pyqvault/2026-w44/batch.json 2026-10-26   → just the named days
 //
+// The folder is the series: stories/pyqvault/ → @pyqvault_, stories/lwspune/ → @lws.pune (questions.js SERIES).
 // Checks the whole batch first (questions.js rules, including "never posted before" against every
-// other batch), then opens card.html in headless Edge and renders each day's question and answer card
+// other batch of the same series), then opens card.html in headless Edge and renders each day's question and answer card
 // to 1080×1920 JPEGs next to the batch file. Fails if any maths won't set or any card doesn't fit.
-// Queue the results with: cd publisher && npm run queue:add -- --org=lws-pune ../stories/pyqvault/<week>/*.post.json
+// Queue the results with: cd publisher && npm run queue:add -- --org=lws-pune ../stories/<series>/<week>/*.post.json
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, join, resolve } from 'node:path';
@@ -21,11 +22,12 @@ const [, , batchFile, ...only] = process.argv;
 if (!batchFile) { console.error('usage: node stories/render.mjs <batch.json> [YYYY-MM-DD …]'); process.exit(1); }
 const batchPath = resolve(batchFile);
 const batch = JSON.parse(readFileSync(batchPath, 'utf8'));
+const series = Q.seriesOf(batchPath);
 
-// Questions already used by any other week's batch.
-const series = join(here, 'pyqvault');
-const used = (existsSync(series) ? readdirSync(series) : [])
-  .map((w) => join(series, w, 'batch.json'))
+// Questions this account already used in any other week's batch.
+const seriesDir = join(here, series);
+const used = (existsSync(seriesDir) ? readdirSync(seriesDir) : [])
+  .map((w) => join(seriesDir, w, 'batch.json'))
   .filter((f) => existsSync(f) && resolve(f) !== batchPath)
   .flatMap((f) => JSON.parse(readFileSync(f, 'utf8')).days.map((d) => d.questionId));
 
@@ -39,7 +41,7 @@ const b = await openPage(join(here, 'card.html'));
 let failed = 0;
 try {
   for (const day of days) {
-    const manifests = Q.buildManifests(day);
+    const manifests = Q.buildManifests(day, series);
     for (const m of manifests) {
       const bad = await b.evaluate(`renderCard(${JSON.stringify(day)}, ${JSON.stringify(m.question.part)})`);
       if (bad.length) { failed++; console.error(`✗ ${m.slug}: ${bad.join('; ')}`); }
