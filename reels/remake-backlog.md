@@ -32,7 +32,7 @@ but a good concept isn't blocked for lack of one. Only NDA maths chapters go on 
 |---|---|---|---|---|---|
 | W6 | The soda-can problem: the best shape | @mathsy.uk 2.74M (114×) [link](https://www.instagram.com/reel/C4nXYzzKdHe/), their #1 ever | 3D can morphs tall ↔ wide at fixed volume; surface-area graph has a low point where h = 2r | Application of derivatives (max/min) | next |
 | W7 | Derivatives go round in a circle: sin → cos → −sin → −cos | @mathsy.uk 1.59M (66×) [link](https://www.instagram.com/reel/C4c9UQKq_UO/) | each derivative = the curve shifted a quarter turn; the wheel turns | Differentiation | |
-| W8 | What a derivative really is (secant → tangent) | @codematrixvishal 3.14M (115×) [link](https://www.instagram.com/reel/DXq3MMKiQWi/); @mathsy.uk 1.24M (52×) [link](https://www.instagram.com/reel/C4sodsGow6W/) | h shrinks live, the slope readout settles; f and f′ drawn together | Limits & differentiation | f and f′ part made as 015 (W15); secant → tangent still open |
+| W8 | What a derivative really is (secant → tangent) | @codematrixvishal 3.14M (115×) [link](https://www.instagram.com/reel/DXq3MMKiQWi/); @mathsy.uk 1.24M (52×) [link](https://www.instagram.com/reel/C4sodsGow6W/) | h shrinks live, the slope readout settles; f and f′ drawn together | Limits & differentiation | f and f′ part made as 015 (W15); secant → tangent ✅ made 2026-10-23 (reel 018) |
 | W9 | The whole unit circle on one screen | @codematrixvishal 21.3M (779×) [link](https://www.instagram.com/reel/DbXW1vxJ-7-/), the biggest reel we've seen | reference sheet that builds itself; the 30-45-60 triangles explain every value | Trigonometry | test format |
 | W10 | Area between two curves | @codematrixvishal 1.80M (66×) [link](https://www.instagram.com/reel/Dd0ByRkjOhZ/) | strips sweep between the curves; top minus bottom | Area under curves | |
 | W11 | Why do we multiply probabilities? | @mathsy.uk 822k (34×) [link](https://www.instagram.com/reel/DOqyBeBjbpu/) | the shrinking square: each "and" cuts the space | Probability | |
@@ -54,7 +54,7 @@ and the goal of the reel is reach. `node reels/tools/topic-scores.js lwspune` ch
 | W6 | M | The soda-can problem: the best shape | 114 | 2 | 2 | 1 | 1 | 9 | ⏸ parked (founder, 2026-10-20) |
 | W11 | M | Why do we multiply probabilities? (the shrinking square) | 34 | 2 | 2 | 1 | 1 | 8 | ✅ made 2026-10-20 (`nda-maths-016-multiply`) |
 | W14 | M | A matrix moves space (determinant = area scale) | 34 | 3 | 1 | 1 | 0 | 7 | |
-| W8 | M | What a derivative really is: secant → tangent | 115 | 1 | 1 | 1 | 0 | 6 | |
+| W8 | M | What a derivative really is: secant → tangent | 115 | 1 | 1 | 1 | 0 | 6 | ✅ made 2026-10-23 (`nda-maths-018-secant-tangent`) |
 | W7 | M | Derivatives go round: sin → cos → −sin → −cos | 66 | 2 | 1 | 1 | 0 | 6 | |
 | W10 | M | Area between two curves (strips sweep) | 66 | 2 | 1 | 1 | 0 | 6 | |
 | W9 | M | The whole unit circle on one screen | 779 | 2 | 0 | 0 | 0 | 5 | |

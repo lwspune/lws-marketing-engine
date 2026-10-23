@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-018-secant-tangent",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "018 · Why? #6: a chord slides into the tangent, slope 2 (what a derivative is; predict-first, white)",
+  "video": "nda-maths-018-secant-tangent.mp4",
+  "cover": "nda-maths-018-secant-tangent-cover.png",
+  "captions": {
+    "instagram": "NDA Maths · Derivatives. Slide the two points together on y = x². The line's slope becomes…? A 1 · B 2 · C ∞ 👇\n\nB. The line through (1, 1) and (1 + h, (1 + h)²) has slope ((1 + h)² − 1) ÷ h = 2 + h.\nShrink the gap h and the slope settles on 2: the line becomes the tangent. That limit IS the derivative: f′(1) = 2.\nZoom in far enough and the curve itself looks straight. That's why every smooth curve has a tangent.\nTrap: not ∞. 0 ÷ 0 looks scary, but the h cancels before it reaches 0.\n\nNDA asked it in 2021 (II), Q100: the tangent to x² = y at (1, 1) makes angle θ with the x-axis. tan θ = 2, so π/3 < θ < π/2.\n\nSave this 📌 Follow @lws.pune for one NDA maths idea every day.\nPractise every Differentiation PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Calculus #LWSPune",
+    "facebook": "NDA Maths · Derivatives. Slide the two points together on y = x². The line's slope becomes…? A 1 · B 2 · C ∞ 👇\n\nB. The line through (1, 1) and (1 + h, (1 + h)²) has slope 2 + h, so as the gap shrinks it settles on 2: the line becomes the tangent, and that limit is the derivative. Trap: not ∞, the h cancels first. NDA asked it in 2021 (II), Q100 (tan θ = 2, so π/3 < θ < π/2).\n\nPractise NDA PYQs free, chapter-wise: https://www.pyqvault.com\n\n#NDA #NDAMaths #LWSPune",
+    "youtube": {
+      "title": "What a derivative really is: slide two points together #shorts",
+      "description": "The line through (1, 1) and (1 + h, (1 + h)²) on y = x² has slope 2 + h. Shrink h and it settles on 2: the line becomes the tangent, and that limit is the derivative. Zoom in far enough and the curve looks straight. NDA 2021 (II) Q100 asks exactly this tangent.\n\nPractise NDA PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #Shorts"
+    }
+  }
+}
