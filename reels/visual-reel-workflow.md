@@ -202,8 +202,8 @@ they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm ru
    the shared HTML pieces in `src/board.tsx` (same white look and Reel.WHITE colours, palette test-locked).
    Labels are HTML placed with `project()`, so they stay crisp Cambria.
 5. **Stills sheet before any sound or full render:** render 6–8 beat frames (the opening, the cover time, each beat,
-   the answer, the second hook on screen mid-move, and the last frame: the end card, or for a loop the last frame beside frame 0) with `npx remotion still <Comp> <out.png> --frame=<n>` into the scratchpad, put them on
-   one sheet (an HTML grid screenshotted by headless Edge) and fix what it shows: anything hard to see on the board,
+   the answer, the second hook on screen mid-move, and the last frame: the end card, or for a loop the last frame beside frame 0) with `npm run stills -- <Comp> <scratchpad dir> <frame,frame,…>` (bundles once, renders every
+   frame and puts them on one sheet, `sheet.png`; `npx remotion still` re-bundles per frame, ~90 s each, 2026-10-23), and fix what it shows: anything hard to see on the board,
    washed out, two neighbours hard to tell apart, a clash, or a fake colour where a real one exists (F24), cropped,
    overlapping or late. Then read the sheet once **with the text hidden** (the
    question, labels and captions; numbers, gauges and graphs stay): it must still show what happens and why (@pyqvault_
