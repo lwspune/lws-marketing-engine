@@ -25,6 +25,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   pp011: { lib: '../src/lib/pp011.ts', file: 'public/pv-physics-011-induction' },
   pc009: { lib: '../src/lib/pc009.ts', file: 'public/pv-chem-009-electrolysis' },
   pp012: { lib: '../src/lib/pp012.ts', file: 'public/pv-physics-012-lift-power' },
+  pp013: { lib: '../src/lib/pp013.ts', file: 'public/pv-physics-013-lightning' },
   '015': { lib: '../src/lib/reel015.ts', file: 'public/nda-maths-015-slope-graph' },
   '016': { lib: '../src/lib/reel016.ts', file: 'public/nda-maths-016-multiply' },
   '017': { lib: '../src/lib/reel017.ts', file: 'public/nda-maths-017-probability-map' },

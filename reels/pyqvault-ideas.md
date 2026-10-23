@@ -6,7 +6,7 @@ in only if it passes **the test** below; it is then **scored**, and the score is
 `--calibrate` runs the tuning. Framework: `pyqvault-framework.md` (F1, F21, F28, F29). @lws.pune's ideas stay in
 `remake-backlog.md` until it is rebuilt.
 
-**Open: 88 ideas · about 30 days at 3 reels a day.**
+**Open: 87 ideas · about 29 days at 3 reels a day.**
 
 Refill before it drops under two weeks. Sources (F1): the founder's ideas (Source `founder`, any time), a notes sweep
 (physics and chemistry are done; a new exam's notes next), and the next competitor read (`node reels/tools/remake-candidates.mjs`).
@@ -129,7 +129,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | P48 | P | Charge a capacitor, connect a coil: the current swings back and forth (LC oscillation) | – | 2 | 2 | 2 | 1 | 0 | 55 |  | mht-cet-physics/ac-circuits | ✓ |
 | P49 | P | Two bulbs in series or in parallel: the parallel pair glows brighter | – | 2 | 2 | 1 | 1 | 2 | 62 |  | mht-cet-physics/current-electricity | ✓ |
 | P50 | P | Switch off a big coil and it sparks (self-inductance) | – | 2 | 2 | 2 | 1 | 1 | 62 |  | mht-cet-physics/electromagnetic-induction | ✓ |
-| P51 | P | Lightning hits a car: the metal body, not the tyres, keeps you safe | – | 2 | 2 | 2 | 0 | 1 | 55 |  | mht-cet-physics/electrostatics | ✓ |
+| P51 | P | Lightning hits a car: the metal body, not the tyres, keeps you safe | – | 2 | 2 | 2 | 0 | 1 | 55 | ✅ made 2026-10-23 (`pv-physics-013-lightning`, Physics #13; the first Shock opening, founder's pick) | mht-cet-physics/electrostatics | ✓ |
 | P52 | P | Fall to the Earth's centre and you'd weigh nothing | – | 2 | 2 | 2 | 1 | 0 | 55 |  | mht-cet-physics/gravitation | ✓ |
 | P53 | P | You weigh a little less at the equator than at the poles | – | 2 | 2 | 2 | 0 | 0 | 48 |  | mht-cet-physics/gravitation | ✓ |
 | P54 | P | A lift starting up: the scale under you reads more | – | 2 | 2 | 1 | 1 | 2 | 62 |  | mht-cet-physics/laws-of-motion | ✓ |
@@ -767,7 +767,7 @@ a **second hook** asks the next question as the first is
 answered, ≤ 7 words (F26: viewers leave at the answer); and the reel either **loops** back to its first frame or ends on
 the end card (F27: never 3 the same in a row, so the two can be compared). "PYQ Vault · pyqvault.com" sits under the
 question from frame 0 and stays (F20). The words are drafts: the options and answers are re-derived in each reel's tests
-(F10), and anything sped up is labelled ("time-lapse"). `node reels/tools/hook-rotation.js` checks this table;
+(F10), and anything sped up or not to scale is noted in the caption, not on screen (F10). `node reels/tools/hook-rotation.js` checks this table;
 `tests/hook-rotation.test.js` keeps it in step with the queued rows of Ideas. Take a row out once its reel is made (its
 hook, second hook and loop go in the Hook column of `pyqvault-learnings.md`).
 

@@ -22,7 +22,7 @@ logged but not counted yet, because which way it pushes isn't known; calibration
 |---|---|---|---|---|
 | Idea | idea | 0–3 | 2 | the idea's score in `pyqvault-ideas.md`: ≥ 70 → 3 · ≥ 60 → 2 · ≥ 50 → 1 · below → 0 |
 | Motion 0–3 s | motion | 0–2 | 1 | share of frames (10 a second) where ≥ 0.2% of pixels change noticeably: ≥ 95% → 2 · ≥ 75% → 1 · below → 0 (L29, F5) |
-| Hook move | hookmove | 0–1 | 1 | a named attention move in 0–3 s (orbit, punch-in, assemble, split apart, morph, split screen, race, colour flood) → 1 (F25) |
+| Hook move | hookmove | 0–1 | 1 | a named attention move in 0–3 s (orbit, punch-in, assemble, split apart, morph, split screen, race, colour flood, shock) → 1 (F25) |
 | Words 0–3 s | words | 0–2 | 1 | words on screen at frame 0 (label, question, options, tag): ≤ 10 → 2 · ≤ 18 → 1 · more → 0 (F7) |
 | Colour 0–3 s | colour | 0–2 | 1 | colourfulness (Hasler–Süsstrunk M, median over 0–3 s): ≥ 20 → 2 · ≥ 10 → 1 · below → 0 (L30, F24) |
 | Length | length | 0–1 | 1 | ≤ 25 s → 1 (F18) |
@@ -65,6 +65,7 @@ loop; momentum from the reels posted before). The score shown by the tool is tod
 | P37 | pv-physics-011-induction | 2 | 2 | 1 | 1 | 2 | 1 | 1 | 2 | 1 | 1 | 0 | idea 62 · motion 100% · words 13 · colour 26.7 · 19 s · cover 18 · framework-2 test B (L61): our framework, assemble hook, second hook, end card |
 | C8 | pv-chem-009-electrolysis | 1 | 2 | 1 | 1 | 1 | 1 | 1 | 2 | 2 | 0 | 0 | idea 59 · motion 100% · words 14 · colour 16.9 · 19.8 s · cover 37.4 · Race + split apart, second hook, end card; first L62 test (live mL counts past the answer), silent |
 | P6 | pv-physics-012-lift-power | 2 | 2 | 1 | 1 | 1 | 1 | 1 | 2 | 1 | 0 | 0 | idea 66 · motion 100% · words 18 · colour 17.1 · 19.2 s · cover 13.3 · You'd think + orbit 360°, second hook (replay paused on the meters), end card; second L62 test (joule counts), silent |
+| P51 | pv-physics-013-lightning | 1 | 2 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | idea 55 · motion 100% · words 17 · colour 19.5 · 17 s · cover 11.4 · You'd think + the first Shock opening (strike at 0.2 s), second hook (roof folds, second strike), loop; dark, trap, silent; momentum 1,367 ÷ 933 = 1.47 |
 
 ## Predictions
 
@@ -96,6 +97,7 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 | P37 | pv-physics-011-induction | 2026-10-22 | 84 | record-breaker | idea | 1883 | 1429 | no | – | waiting | – |
 | C8 | pv-chem-009-electrolysis | 2026-10-23 | 68 | above typical | idea | 1930 | 1429 | no | – | waiting | – |
 | P6 | pv-physics-012-lift-power | 2026-10-23 | 77 | above typical | idea | 1930 | 1429 | no | – | waiting | – |
+| P51 | pv-physics-013-lightning | 2026-10-23 | 58 | above typical | idea | 1989 | 1429 | no | – | waiting | – |
 
 ## Calibration and accuracy runs
 

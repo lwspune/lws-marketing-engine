@@ -21,6 +21,7 @@ import { PvF2Induction } from './PvF2Induction.tsx';
 import { PvPhysics011 } from './PvPhysics011.tsx';
 import { PvChem009 } from './PvChem009.tsx';
 import { PvPhysics012 } from './PvPhysics012.tsx';
+import { PvPhysics013 } from './PvPhysics013.tsx';
 import { PvChem006 } from './PvChem006.tsx';
 import { PvChem007 } from './PvChem007.tsx';
 import { PvChem008 } from './PvChem008.tsx';
@@ -61,6 +62,7 @@ import { DURATION as DURATION_PF2 } from './lib/pf2.ts';
 import { DURATION as DURATION_PP011 } from './lib/pp011.ts';
 import { DURATION as DURATION_PC009 } from './lib/pc009.ts';
 import { DURATION as DURATION_PP012 } from './lib/pp012.ts';
+import { DURATION as DURATION_PP013 } from './lib/pp013.ts';
 import { DURATION as DURATION_PC006 } from './lib/pc006.ts';
 import { DURATION as DURATION_PC007 } from './lib/pc007.ts';
 import { DURATION as DURATION_PC008 } from './lib/pc008.ts';
@@ -149,6 +151,8 @@ export const Root = () => (
     <Still id="PvChem009Cover" component={PvChem009} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="PvPhysics012" component={PvPhysics012} durationInFrames={Math.round(DURATION_PP012 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="PvPhysics012Cover" component={PvPhysics012} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="PvPhysics013" component={PvPhysics013} durationInFrames={Math.round(DURATION_PP013 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="PvPhysics013Cover" component={PvPhysics013} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Still id="PvPhysics009bCover" component={PvPhysics009b} width={1080} height={1920} defaultProps={{ cover: true, voice: false }} />
     <Composition id="Compare008" component={Compare008} durationInFrames={Math.round(DURATION_PP008 * 30)} fps={30} width={1080} height={1040} />
     <Composition id="Compare009" component={Compare009} durationInFrames={Math.round(DURATION_PP009 * 30)} fps={30} width={1080} height={1040} />
