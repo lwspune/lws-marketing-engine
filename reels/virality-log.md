@@ -64,6 +64,7 @@ loop; momentum from the reels posted before). The score shown by the tool is tod
 | P37a | pv-f2-induction | 2 | 1 | 0 | 2 | 2 | 0 | 0 | 2 | 2 | 0 | 0 | idea 62 · motion 80% · words 4 · colour 37.6 · 30 s · cover 38.9 · framework-2 test A (L61): made by the bible, no guess, assembly from 3 s (no move in 0–3 s) |
 | P37 | pv-physics-011-induction | 2 | 2 | 1 | 1 | 2 | 1 | 1 | 2 | 1 | 1 | 0 | idea 62 · motion 100% · words 13 · colour 26.7 · 19 s · cover 18 · framework-2 test B (L61): our framework, assemble hook, second hook, end card |
 | C8 | pv-chem-009-electrolysis | 1 | 2 | 1 | 1 | 1 | 1 | 1 | 2 | 2 | 0 | 0 | idea 59 · motion 100% · words 14 · colour 16.9 · 19.8 s · cover 37.4 · Race + split apart, second hook, end card; first L62 test (live mL counts past the answer), silent |
+| P6 | pv-physics-012-lift-power | 2 | 2 | 1 | 1 | 1 | 1 | 1 | 2 | 1 | 0 | 0 | idea 66 · motion 100% · words 18 · colour 17.1 · 19.2 s · cover 13.3 · You'd think + orbit 360°, second hook (replay paused on the meters), end card; second L62 test (joule counts), silent |
 
 ## Predictions
 
@@ -94,6 +95,7 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 | P37a | pv-f2-induction | 2026-10-22 | 65 | above typical | idea | 1883 | 1429 | no | – | waiting | – |
 | P37 | pv-physics-011-induction | 2026-10-22 | 84 | record-breaker | idea | 1883 | 1429 | no | – | waiting | – |
 | C8 | pv-chem-009-electrolysis | 2026-10-23 | 68 | above typical | idea | 1930 | 1429 | no | – | waiting | – |
+| P6 | pv-physics-012-lift-power | 2026-10-23 | 77 | above typical | idea | 1930 | 1429 | no | – | waiting | – |
 
 ## Calibration and accuracy runs
 
