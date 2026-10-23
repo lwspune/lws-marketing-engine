@@ -161,6 +161,15 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### RealLight's key-light prop never arrives (logged 2026-10-23, not proposed)
+`RealLight` (`remotion/src/realism.tsx`) names its key-light strength `key`, which React keeps for itself, so `<RealLight key={…} />`
+never changes the light: every reel that passes it (Physics #9 rebuilt passes `key={1.1}`) renders at the default 1.6.
+Physics #13 needed a dim moon, so it has its own `StormLight` instead.
+**360:** scope = rename the prop (`keyLight`) and the reels that pass `key` · blast radius = the light in every reel that passes a
+value would change on its next render (none is re-rendered on its own) · does it apply? only to reels re-made later; posted
+reels are untouched · risk = low, reversible · cost ≈ 15 min + a stills check per reel · **recommendation: do it for new
+reels** (rename + a test), leave posted reels as they are.
+
 ### Idea-score tuning mixes the two eras of reels (logged 2026-10-23, awaiting founder)
 Learning (pyqvault-ideas.md, 2026-10-23 evening tuning row): `topic-scores.js --calibrate` compares high vs low scorers
 across all 48 h reels, but framework reels score 3.4–4.3 and earlier ones 0.5–1.1, so any criterion that happens to split
