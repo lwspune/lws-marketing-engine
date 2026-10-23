@@ -136,6 +136,12 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   is re-derived first), queued with `queue:add`, approved with "Approve all stories". This is @pyqvault_'s one maths
   format: its reels stay physics + chemistry. Runbook: `stories/README.md`.
 
+- **@lws.pune daily NDA maths question stories (2026-10-23, founder-approved).** The daily quiz-link stories brought
+  zero leads ("quizzes are not at all effective"), so from 24 Oct @lws.pune posts @pyqvault_'s story format with easy NDA
+  maths MCQs (07:30 question, 19:30 answer, "Reply A, B, C or D": a reply opens an Inbox chat). `stories/` now holds one
+  series per account (`stories/<series>/`, `SERIES` in `questions.js`); the Saturday quiz planner is off (0022). Judge
+  after a week against the quiz stories' 23 h numbers (Insights).
+
 ## File structure
 
 ```
@@ -200,11 +206,13 @@ soundmind/               # @soundmindwithshivani carousels (outside brand). Runb
   reels/                 #   "ME" story reels made in remotion/ (MeStory.tsx shared, SoundMind00N.tsx each):
                          #   .post.json + cover; MP4 gitignored
 tests/soundmind-cards.test.js # node --test
-stories/                 # @pyqvault_ daily maths question stories. Runbook: stories/README.md
-  questions.js           #   pure rules: batch check (no exam names, A–D spread, re-derived), times, card words, manifests
+stories/                 # daily maths question stories, one series per account. Runbook: stories/README.md
+  questions.js           #   pure rules: SERIES (folder → project + exam), batch check (no exam names, A–D spread,
+                         #   re-derived), times, card words, manifests
   card.html, render.mjs  #   KaTeX card (vendor/katex = pyqvault.com's version) → 1080×1920 JPEGs + .post.json per card
-  pick.mjs               #   shortlist easy MHT-CET maths MCQs from the question bank (anon key, read-only)
-  pyqvault/<year>-w<wk>/ #   batch.json + manifests (committed) + cards (gitignored)
+  pick.mjs               #   shortlist easy MCQs from the question bank (anon key, read-only); --series picks the exam
+  pyqvault/<year>-w<wk>/ #   @pyqvault_ (MHT-CET): batch.json + manifests (committed) + cards (gitignored)
+  lwspune/<year>-w<wk>/  #   @lws.pune (NDA, from 2026-10-24, replacing the quiz-link stories)
 tests/stories-questions.test.js # node --test
 study/reels/             # other accounts' reels saved for private study (git-ignored; never repost). How: memory
                          #   reference-study-reel-downloads (snapinsta.to in Chrome)
@@ -249,7 +257,8 @@ on Done cards against `LWS_BASELINE` (src/lib/domain/metrics.ts, the median @lws
 (0005):** `/insights` lists every reel on the account (hand-posted too, `account_media`) against the
 typical reel computed live (`typicalReel`, median); refreshed nightly at 03:00 IST by pg_cron →
 `/api/cron/insights`, by the tab's Refresh button, or by `npm run insights` (same sync code).
-**Daily quiz Stories (0006/0007):** post kind `story` = one 1080×1920 **JPEG** card in `cover_path`
+**Daily quiz Stories (0006/0007; Saturday job off since 0022, 2026-10-23: zero leads, replaced by NDA question
+stories from `stories/lwspune/`):** post kind `story` = one 1080×1920 **JPEG** card in `cover_path`
 (the Instagram API rejects PNG: code 9004), no caption, Instagram only, plus the
 `quiz` it shows (from PYQ Vault `/api/quiz/today?date=`, with per-place tagged `links`) so the
 story-reply DM and Telegram post link the same quiz. Saturdays 18:00 IST pg_cron → `/api/cron/stories`
@@ -264,7 +273,7 @@ carry a link sticker, so profile visits are the bio-link proxy; quiz visits are 
 **Question stories (0019, founder 2026-10-21):** a story shows a `quiz` (the @lws.pune planner) OR a `question`
 (`{id, answer, part}`: @pyqvault_'s maths cards from `stories/`), never both, frozen once approved. Manifests take
 `kind: "story"` with `plannedFor` + `question` (`queue:add`). Insights keeps "Daily maths questions" apart from
-"Daily quiz stories".
+"Daily quiz stories", with one maths box per project (both @pyqvault_ and @lws.pune post them).
 **Ads (0008):** the ad account is a `meta_ads` connected account (System User token, `npm run
 connect:ads`). Results (`ad_entities`, `ad_daily`: spend + WhatsApp chats per ad per day, in the ad
 account's own time zone: Asia/Kolkata for LWS Pune `act_570714718754453`) sync with the nightly insights job and show in the Insights

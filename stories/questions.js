@@ -1,10 +1,12 @@
-/* Daily maths question stories for @pyqvault_ — pure rules.
+/* Daily maths question stories — pure rules.
  * No DOM, no fetch. Loaded by stories/card.html (browser, as window.StoryQuestions),
  * stories/render.mjs and tests/stories-questions.test.js (node).
  *
  * Each day is two Instagram stories: the question with its four options at 07:30 IST ("Reply A, B,
- * C or D") and the answer at 19:30 IST. Easy MHT-CET maths MCQs from the question bank, but the
- * cards never name an exam (founder 2026-10-21: just the question and options). Runbook: stories/README.md.
+ * C or D") and the answer at 19:30 IST. Easy maths MCQs from the question bank, but the cards never
+ * name an exam (founder 2026-10-21: just the question and options). One series per account, each in
+ * its own folder stories/<series>/<week>/: @pyqvault_ asks MHT-CET questions, @lws.pune NDA ones
+ * (founder 2026-10-23, replacing its quiz-link stories). Runbook: stories/README.md.
  */
 (function (root, factory) {
   if (typeof module === "object" && module.exports) module.exports = factory();
@@ -12,7 +14,11 @@
 })(typeof self !== "undefined" ? self : this, function () {
   "use strict";
 
-  const PROJECT = "pyqvault-insta";
+  // series (folder) → GoPost project, and the question bank's exam + subject names it draws on.
+  const SERIES = {
+    pyqvault: { project: "pyqvault-insta", exam: "MHT-CET", subject: "Maths" },
+    lwspune: { project: "pyq-vault", exam: "NDA", subject: "Mathematics" },
+  };
   const SIZE = [1080, 1920];
   const TIMES = { question: "07:30", answer: "19:30" };
   const LABELS = ["A", "B", "C", "D"];
@@ -109,11 +115,25 @@
     return { ...base, kicker: "Answer", correct: day.answer, step: day.step, cta: "New question tomorrow, 7:30 am" };
   }
 
+  function seriesConfig(series) {
+    if (!Object.prototype.hasOwnProperty.call(SERIES, series)) throw new Error(`unknown series "${series}"`);
+    return SERIES[series];
+  }
+
+  /** The series a batch belongs to: the folder above its week, stories/<series>/<week>/batch.json. */
+  function seriesOf(batchPath) {
+    const parts = String(batchPath).split(/[\\/]/);
+    const series = parts[parts.length - 3];
+    seriesConfig(series);
+    return series;
+  }
+
   /** The two GoPost manifests for a day (publisher/src/lib/domain/manifest.ts). */
-  function buildManifests(day) {
+  function buildManifests(day, series = "pyqvault") {
+    const { project } = seriesConfig(series);
     return ["question", "answer"].map((part) => ({
       slug: slugFor(day.date, part),
-      project: PROJECT,
+      project,
       kind: "story",
       title: `Maths ${part} · ${dayLabel(day.date)} · ${day.chapter}`.slice(0, 120),
       cover: `${slugFor(day.date, part)}.jpg`,
@@ -123,5 +143,5 @@
     }));
   }
 
-  return { PROJECT, SIZE, TIMES, MAX_CHARS, segments, visibleLength, examMentions, plannedFor, slugFor, dayLabel, validateBatch, cardText, buildManifests };
+  return { SERIES, SIZE, TIMES, MAX_CHARS, segments, visibleLength, examMentions, plannedFor, slugFor, dayLabel, validateBatch, cardText, seriesOf, buildManifests };
 });

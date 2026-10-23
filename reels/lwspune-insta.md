@@ -19,8 +19,8 @@ together.
 
 **Every new reel follows [`lwspune-framework.md`](lwspune-framework.md)** (founder, 2026-10-20): numbered points on
 topic, hook, picture, sound and shape, each with its reason, check and status, numbered like @pyqvault_'s. Change them
-only through its change log. The Look and Sound sections below describe the `engine.js` reels (001–013) and the daily
-Story; new reels are made in Remotion by the framework. Numbers and lessons go in `learnings.md`.
+only through its change log. The Look and Sound sections below describe the `engine.js` reels (001–013); the daily
+Story is in `stories/README.md`. New reels are made in Remotion by the framework. Numbers and lessons go in `learnings.md`.
 
 ## Content rules
 
@@ -74,19 +74,15 @@ Not yet approved as house style; it's day 5 of `format-test.md`. How to make one
 Everything else above (hook on frame 0, safe zones, no watermark, music) still applies. Best for
 questions with a picture: areas, periodic graphs, symmetry (`visual-candidates.md`).
 
-## Daily quiz Story (added 2026-10-17)
+## Daily maths question Story (from 2026-10-24)
 
-Made and posted by the publisher (`publisher/src/lib/publishing/storyCard.ts`), one a day at 7:30 am
-IST, approved a week at a time. No caption, no music.
-
-| Element | Setting |
-|---|---|
-| Size | 1080 × 1920 **JPEG** (the Instagram API rejects PNG) |
-| Look | the soft-white board (`#faf8f3` → `#f1ede4`), one white card with a soft shadow, Noto Sans |
-| Words | "Today's quiz · Mon 19 Oct", the chapter (ink, bold), the quiz name (indigo), "Free · see your score instantly" (muted) |
-| Call to action | sage `#2a736e` pill: **"Tap the link in our bio"** until the story-reply DM is live, then **"Reply QUIZ for the link"** |
-| Safe zones | nothing in the top ~250 px (profile bar) or bottom ~340 px (reply box) |
-| Rules | no handle on screen, no numbers we can't back up (same as reels) |
+Founder, 2026-10-23: the daily quiz-link Story (2026-10-17 to 2026-10-23: a card pointing at a PYQ Vault quiz
+through the bio link) brought **zero leads** (~130–160 reach, 0 replies, ~15 profile visits each). It is replaced by
+the same daily question @pyqvault_ posts, with NDA questions: an easy NDA maths MCQ at **07:30 IST** ("Reply A, B, C
+or D") and its answer at **19:30 IST**. A reply is a DM, so every answer opens a chat in GoPost's Inbox, which the
+bio link never did. Made a week at a time in `stories/lwspune/` and approved with "Approve all stories". Runbook,
+card look and rules: [`stories/README.md`](../stories/README.md). The cards never name an exam (same as @pyqvault_).
+The quiz planner (`/api/cron/stories`, `storyCard.ts`) is kept but its Saturday job is off (migration 0022).
 
 ## Sound
 

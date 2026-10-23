@@ -24,10 +24,11 @@ const KINDS = {
   },
 } as const;
 
-/** Insights tab: a daily story series' numbers, saved 23 hours after each went up (Instagram deletes them at 24). */
-export function StorySummary({ rows, kind }: { rows: StoryRow[]; kind: keyof typeof KINDS }) {
+/** Insights tab: a daily story series' numbers, saved 23 hours after each went up (Instagram deletes them at 24).
+ *  `account` names the project when more than one posts the same series (the daily maths questions). */
+export function StorySummary({ rows, kind, account }: { rows: StoryRow[]; kind: keyof typeof KINDS; account?: { id: string; name: string } }) {
   const k = KINDS[kind];
-  const headingId = `story-summary-${kind}`;
+  const headingId = `story-summary-${kind}${account ? `-${account.id}` : ""}`;
   const typical = typicalStory(rows.flatMap((r) => (r.metrics && !r.metrics.error ? [r.metrics] : [])));
   const tile = (label: string, value: number) => (
     <div className="tile"><dt className="stat-label">{label}</dt><dd className="stat-value">{n(value)}</dd></div>
@@ -35,7 +36,7 @@ export function StorySummary({ rows, kind }: { rows: StoryRow[]; kind: keyof typ
   return (
     <section aria-labelledby={headingId} className="card space-y-4 p-4 sm:p-6">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 id={headingId} className="text-lg font-semibold tracking-tight">{k.heading}</h2>
+        <h2 id={headingId} className="text-lg font-semibold tracking-tight">{account ? `${k.heading} · ${account.name}` : k.heading}</h2>
         <span className="text-xs text-muted">{typical ? `Typical story: median of ${typical.count}` : "A typical story shows once 5 have numbers"}</span>
       </div>
       {typical && (

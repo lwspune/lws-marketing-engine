@@ -206,3 +206,11 @@ describe.skipIf(!TEST_DB_URL)("database: story scorecard", () => {
     expect((await errorOf(q, STORY_ROW, [pub]))?.message).toMatch(/permission denied/);
   }));
 });
+
+// Founder, 2026-10-23: the quiz stories brought no leads, so @lws.pune posts NDA maths questions
+// (stories/lwspune/) instead, and the Saturday quiz planner no longer runs (migration 0022).
+describe.skipIf(!TEST_DB_URL)("database: the weekly quiz story planner", () => {
+  it("is switched off: nothing queues quiz stories on Saturdays", () => withTx(async (q) => {
+    expect(await q("select 1 from cron.job where jobname = 'stories-weekly'")).toHaveLength(0);
+  }));
+});

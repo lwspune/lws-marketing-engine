@@ -102,14 +102,16 @@ interface StoryDbRow {
 
 /**
  * The last 14 published stories of one kind with their 23h numbers (RLS: the member's own projects):
- * `quiz` = @lws.pune's daily quiz links, `question` = @pyqvault_'s daily maths questions. Kept apart so
- * two audiences never blend into one typical story.
+ * `quiz` = @lws.pune's daily quiz links (until 2026-10-23), `question` = the daily maths questions, which
+ * both @pyqvault_ and @lws.pune post, so they're read one project at a time. Kept apart so two audiences
+ * never blend into one typical story.
  */
-async function loadStories(supabase: Db, shows: "quiz" | "question"): Promise<StoryRow[]> {
-  const { data } = await supabase.from("posts")
+async function loadStories(supabase: Db, shows: "quiz" | "question", projectId?: string): Promise<StoryRow[]> {
+  let query = supabase.from("posts")
     .select("id, title, publications(published_at, publication_metrics(snapshot, views, reach, shares, replies, follows, profile_visits, exits, error))")
-    .eq("kind", "story").eq("status", "published").not(shows, "is", null)
-    .order("planned_for", { ascending: false }).limit(14);
+    .eq("kind", "story").eq("status", "published").not(shows, "is", null);
+  if (projectId) query = query.eq("project_id", projectId);
+  const { data } = await query.order("planned_for", { ascending: false }).limit(14);
   return ((data ?? []) as StoryDbRow[]).flatMap((p) => p.publications.filter((pb) => pb.published_at).map((pb) => {
     const m = pb.publication_metrics.find((x) => x.snapshot === "23h");
     return {
@@ -139,13 +141,19 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
       : { data: [] };
     return { accounts, account, rows: (data ?? []) as Row[] };
   };
+  // Daily maths questions, one box per account (project) that posts them.
+  const loadQuestionStories = async () => {
+    const { data: projects } = await supabase.from("projects").select("id, name").order("name");
+    const groups = await Promise.all((projects ?? []).map(async (p) => ({ account: { id: p.id as string, name: p.name as string }, rows: await loadStories(supabase, "question", p.id) })));
+    return groups.filter((g) => g.rows.length > 0);
+  };
   // The sections don't depend on each other: load them together.
   const [ads, { accounts, account, rows }, inbox, stories, questionStories] = await Promise.all([
     showAds ? loadAds(supabase, new Date()) : null,
     loadReels(),
     access.inbox ? loadInbox(supabase, new Date()) : null,
     loadStories(supabase, "quiz"),
-    loadStories(supabase, "question"),
+    loadQuestionStories(),
   ]);
   const qs = (next: { sort?: SortId; account?: string }) => {
     const p = new URLSearchParams();
@@ -187,7 +195,7 @@ export default async function InsightsPage({ searchParams }: { searchParams: { s
         {ads && <div className="mb-6"><AdsSummary {...ads} /></div>}
         {inbox && inbox.accounts.length > 0 && <div className="mb-6"><InboxSummary {...inbox} /></div>}
         {stories.length > 0 && <div className="mb-6"><StorySummary rows={stories} kind="quiz" /></div>}
-        {questionStories.length > 0 && <div className="mb-6"><StorySummary rows={questionStories} kind="question" /></div>}
+        {questionStories.map((g) => <div key={g.account.id} className="mb-6"><StorySummary rows={g.rows} kind="question" account={g.account} /></div>)}
 
         {accounts.length > 1 && (
           <nav aria-label="Instagram account" className="mb-4 flex flex-wrap gap-2">

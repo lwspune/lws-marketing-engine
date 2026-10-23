@@ -128,6 +128,24 @@ test("each day makes two GoPost story manifests for @pyqvault_", () => {
   assert.deepEqual(a.question, { id: ID, answer: "C", part: "answer" });
 });
 
+test("each series posts to its own account and draws on its own exam (founder 2026-10-23: @lws.pune gets NDA questions)", () => {
+  assert.deepEqual(Q.SERIES.pyqvault, { project: "pyqvault-insta", exam: "MHT-CET", subject: "Maths" });
+  assert.deepEqual(Q.SERIES.lwspune, { project: "pyq-vault", exam: "NDA", subject: "Mathematics" });
+  const [q, a] = Q.buildManifests(day({ date: "2026-10-24" }), "lwspune");
+  assert.equal(q.project, "pyq-vault");
+  assert.equal(a.project, "pyq-vault");
+  assert.equal(q.slug, "maths-q-2026-10-24");
+  assert.equal(q.plannedFor, "2026-10-24T07:30:00+05:30");
+  assert.equal(Q.buildManifests(day())[0].project, "pyqvault-insta", "@pyqvault_ stays the default");
+  assert.throws(() => Q.buildManifests(day(), "nope"), /unknown series/);
+});
+
+test("a batch's series is the folder it sits in: stories/<series>/<week>/batch.json", () => {
+  assert.equal(Q.seriesOf("stories/lwspune/2026-w43/batch.json"), "lwspune");
+  assert.equal(Q.seriesOf("C:\\repo\\stories\\pyqvault\\2026-w44\\batch.json"), "pyqvault");
+  assert.throws(() => Q.seriesOf("stories/other/2026-w44/batch.json"), /unknown series "other"/);
+});
+
 test("the card text says only what the founder asked for", () => {
   const t = Q.cardText(day(), "question");
   assert.equal(t.cta, "Reply A, B, C or D");
