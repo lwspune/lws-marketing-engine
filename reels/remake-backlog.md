@@ -34,7 +34,7 @@ but a good concept isn't blocked for lack of one. Only NDA maths chapters go on 
 | W7 | Derivatives go round in a circle: sin → cos → −sin → −cos | @mathsy.uk 1.59M (66×) [link](https://www.instagram.com/reel/C4c9UQKq_UO/) | each derivative = the curve shifted a quarter turn; the wheel turns | Differentiation | |
 | W8 | What a derivative really is (secant → tangent) | @codematrixvishal 3.14M (115×) [link](https://www.instagram.com/reel/DXq3MMKiQWi/); @mathsy.uk 1.24M (52×) [link](https://www.instagram.com/reel/C4sodsGow6W/) | h shrinks live, the slope readout settles; f and f′ drawn together | Limits & differentiation | f and f′ part made as 015 (W15); secant → tangent ✅ made 2026-10-23 (reel 018) |
 | W9 | The whole unit circle on one screen | @codematrixvishal 21.3M (779×) [link](https://www.instagram.com/reel/DbXW1vxJ-7-/), the biggest reel we've seen | reference sheet that builds itself; the 30-45-60 triangles explain every value | Trigonometry | test format |
-| W10 | Area between two curves | @codematrixvishal 1.80M (66×) [link](https://www.instagram.com/reel/Dd0ByRkjOhZ/) | strips sweep between the curves; top minus bottom | Area under curves | |
+| W10 | Area between two curves | @codematrixvishal 1.80M (66×) [link](https://www.instagram.com/reel/Dd0ByRkjOhZ/) | strips sweep between the curves; top minus bottom | Area under curves | ✅ made 2026-10-23 (reel 019) |
 | W11 | Why do we multiply probabilities? | @mathsy.uk 822k (34×) [link](https://www.instagram.com/reel/DOqyBeBjbpu/) | the shrinking square: each "and" cuts the space | Probability | |
 | W12 | What a logarithm is (exponential, flipped) | @mathsy.uk 1.10M (46×) [link](https://www.instagram.com/reel/DNrQxTaVBtF/) | y = aˣ reflected in y = x, live | Logarithms | |
 | W13 | Series formulas on one screen | @codematrixvishal 2.61M (95×) [link](https://www.instagram.com/reel/DZr28L5p89C/) | reference sheet; each sum shown as a picture (staircases, squares) | Sequences & series | test format |
@@ -56,7 +56,7 @@ and the goal of the reel is reach. `node reels/tools/topic-scores.js lwspune` ch
 | W14 | M | A matrix moves space (determinant = area scale) | 34 | 3 | 1 | 1 | 0 | 7 | |
 | W8 | M | What a derivative really is: secant → tangent | 115 | 1 | 1 | 1 | 0 | 6 | ✅ made 2026-10-23 (`nda-maths-018-secant-tangent`) |
 | W7 | M | Derivatives go round: sin → cos → −sin → −cos | 66 | 2 | 1 | 1 | 0 | 6 | |
-| W10 | M | Area between two curves (strips sweep) | 66 | 2 | 1 | 1 | 0 | 6 | |
+| W10 | M | Area between two curves (strips sweep) | 66 | 2 | 1 | 1 | 0 | 6 | ✅ made 2026-10-23 (`nda-maths-019-area-between`) |
 | W9 | M | The whole unit circle on one screen | 779 | 2 | 0 | 0 | 0 | 5 | |
 | W12 | M | What a logarithm is (exponential, flipped) | 46 | 1 | 1 | 1 | 0 | 5 | |
 | W13 | M | Series formulas on one screen | 95 | 2 | 0 | 0 | 0 | 4 | |
