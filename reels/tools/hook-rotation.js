@@ -12,9 +12,10 @@
 const HOOKS = ["Race", "Pick one", "Ending first", "Everyday puzzle", "You'd think", "Spot the mistake", "Put in order",
   "Same start, two endings"];
 // Openings are the visual layer, the move that grabs attention in the first 3 s (founder, 2026-10-22: "orbit shot, objects
-// splitting or coming together, just like an Iron Man suit"). Assemble (suit-up) replaced "Parts build".
+// splitting or coming together, just like an Iron Man suit"). Assemble (suit-up) replaced "Parts build". Shock: a dramatic
+// event from the topic in the first second, before anyone can read (founder, 2026-10-23).
 const OPENINGS = ["Orbit 360°", "Race running", "Ending first", "Zoom (scale)", "Assemble (suit-up)", "Split apart", "Morph",
-  "X-ray", "Split screen", "Colour flood"];
+  "X-ray", "Split screen", "Colour flood", "Shock"];
 // Out by the founder's call: the reason is in the framework's change log.
 const BANNED = { "Exam badge": "out (founder, 2026-10-21)" };
 const ORBIT = "Orbit 360°", ORBIT_MAX = 2, WINDOW = 4;

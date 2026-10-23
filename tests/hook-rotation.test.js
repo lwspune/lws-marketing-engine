@@ -74,6 +74,10 @@ test("the opening catalogue has the attention moves: orbit, zoom, assemble (suit
   assert.ok(!hr.OPENINGS.includes("Parts build"), "Parts build is now Assemble (suit-up)");
 });
 
+test("Shock is an opening: a dramatic event from the topic in the first second (founder, 2026-10-23)", () => {
+  assert.ok(hr.OPENINGS.includes("Shock"));
+});
+
 test("every reel has a visual hook: a picture, not a question in words", () => {
   const md = QUEUE.replace("| two lifts hauling the same box, one racing ahead |", "|  |")
     .replace("| two tubes side by side, bubbles already rising in both |", "| which tube fills first? |");

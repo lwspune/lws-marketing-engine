@@ -108,8 +108,11 @@ best rate) · **Ending first** (open on the strange result, then "how?") · **Ev
 get this wrong") · **Spot the mistake** (one wrong ray or arrow; our own idea, no proof yet) · **Put in order**
 (@sciencevisualised "Can you name all 8 chemical families?" 256×) · **Same start, two endings** (@bisal.physics "Same
 compression. Same starting gas. Two completely different outcomes." 21×). A countdown ("3 seconds") may be added to any
-of them, never on its own. Openings: Orbit 360° · Race running · Ending first · Zoom (scale, labelled "zoomed ×10⁹") ·
-Assemble (suit-up: parts fly in and lock together) · Split apart (an exploded view) · Morph · X-ray · Split screen · Colour flood. **Out:** the exam badge ("JEE asked this"; founder, 2026-10-21).
+of them, never on its own. Openings: Orbit 360° · Race running · Ending first · Zoom (scale; the scale goes in the caption,
+F10) · Assemble (suit-up: parts fly in and lock together) · Split apart (an exploded view) · Morph · X-ray · Split screen ·
+Colour flood · **Shock** (founder, 2026-10-23: a dramatic event from the topic inside the first second, seen before anything
+can be read: a strike, a crash, a burst, a flash; real physics, any moment of the topic, not only its climax; explosions and
+danger are judged by the founder case by case, never a real person hurt). **Out:** the exam badge ("JEE asked this"; founder, 2026-10-21).
 · *Why:* watch time rose with the guess-first format (5.2 s → 7.4–9.5 s, L28/L31), but every reel now opens the same way;
 followers would learn the pattern and stop. The hooks are the ones that beat their own account's typical reel in our
 competitor data (`analytics/competitors/`); game hooks (pick one, solve this) bring 10–50× more comments per view than
@@ -197,9 +200,14 @@ change of view restarts attention and makes the big moment feel big (founder). �
 depth of the 3D we build and gives motion from frame 0 (F5). Back at the front by 3 s because a slope's angle, arrows
 and gauges only read from one view. · *Check:* the reel's tests (the orbit starts at frame 0, turns exactly 360°, ends at the front by 3 s, no jumps, no other orbit). · 📌 founder, measured by L37 and L48
 
-**F10 · Honest.** The physics and maths are re-derived in tests; never fake counts, proportions or effects; label any
-scale change ("zoomed ×10⁹"). · *Why:* a wrong reel on an exam account costs trust we can't buy back; it's the no-slop
-rule. · *Check:* the reel's tests re-derive the answer. · 📌 founder
+**F10 · Entertainment first, the result real.** The motto (founder, 2026-10-23): **entertainment through physics and
+chemistry**; people on Instagram come to be entertained, not to learn. So anything that adds drama is in: slow motion,
+replays, crashes, flashes, sparks, colour floods, camera shake, bigger stakes in the setting, sizes exaggerated. The one
+floor: **the result and every number on screen are real**, re-derived in the reel's tests. No disclaimers on screen: "Objects
+not drawn to scale" (or "time-lapse", "zoomed ×10⁹") goes in the caption. · *Why:* the viewers are Class 11–12 students
+who sit exams, and the brand behind the reel is PYQ Vault: a wrong result costs them marks and costs us the trust leads come
+from, while drama costs nothing true. · *Check:* the reel's tests re-derive the answer and every number shown; the caption
+carries the scale note when sizes are exaggerated. · 📌 founder, 2026-10-23
 
 **F11 · Smooth, frame-exact video (Remotion).** Real three.js 3D, timeline as pure functions of t in
 `src/lib/<reel>.ts`, tests first. Template: `remotion/src/PvPhysics004.tsx` + `src/lib/pp004.ts` (the first reel with
@@ -335,3 +343,4 @@ never rewritten), moves the weights the rule allows, and logs the run. · 🧪 L
 | v1.25 | 2026-10-22 | F30 added, a new part "Before posting": every finished reel is scored by the virality predictor (`virality-log.md`, `virality.js`, `virality-measure.mjs`) and its prediction logged, frozen, before it's queued; advisory until ≥ 15 real predictions are judged with a rank correlation ≥ 0.5, then the go/no-go gate (the founder can overrule). | Founder, 2026-10-22: a virality predictor to decide whether a reel goes out, fine-tuned as we go. Measured by L60. First real test: the 7 reels made but not posted. |
 | v1.26 | 2026-10-22 | F30: the numbers come in by script and the predictor updates itself. Publisher `npm run results` (GoPost's write-once 48 h / 7 d readings by post slug) → `results-sync.js` (into the learnings results table) → `virality.js --update` (old predictions get their outcome beside them, weights move by the rule, the run is logged). The four-step analysis routine heads the results table. | Founder, 2026-10-22: "prediction is made every time a new reel is made and old predictions are updated to fine-tune the predictor". The results table had stopped at Physics #4 by hand, which hid the framework's 6–10× jump in views. |
 | v1.27 | 2026-10-22 | No point changed. Framework 2 (`pyqvault-framework-2.md`, an outside storyboard bible: suit-up builds, ~30 s, an explainer hook, the formula and a takeaway at the end) is put on test against this framework in one pair on one topic, electromagnetic induction: `pv-f2-induction` (made by it) vs `pv-physics-011-induction` (made by this one), 09:00 Fri 23 and Sat 24 Oct. | Founder, 2026-10-22: "let the data speak". Measured by L61, with its decision rule set before posting. |
+| v1.28 | 2026-10-23 | F10 rewritten: "Entertainment first, the result real". Drama of any kind is in (slow motion, crashes, flashes, shake, stakes, exaggerated sizes); the one floor is a real result and real numbers on screen; scale, speed and zoom notes move from the screen to the caption. F25: new opening **Shock**, a dramatic event from the topic inside the first second (any moment of the topic, not only the climax; explosions and danger judged by the founder case by case; never a real person hurt). First reel: P51, lightning hits a car. | Founder, 2026-10-23, after the retention-curve debate: Instagram viewers come for entertainment; nobody can read a reel in its first second, so a visual shock has to win it and the question carries seconds 1–3. Skip rate (viewers gone by 3 s) goes with reach on 179 @lws.pune reels (pyqvault-learnings.md L64). |
