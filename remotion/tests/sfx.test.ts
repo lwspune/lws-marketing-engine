@@ -50,13 +50,26 @@ test('the same score always renders the same sound', () => {
   assert.deepEqual(renderSfx(score), renderSfx(score));
 });
 
-test('a bed (burner roar, friction scrape) sounds only while it runs and follows its level', () => {
-  for (const kind of ['roar', 'scrape'] as const) {
+test('a bed (burner roar, friction scrape, rain) sounds only while it runs and follows its level', () => {
+  for (const kind of ['roar', 'scrape', 'rain'] as const) {
     const out = renderSfx({ duration: 4, hits: [], beds: [{ kind, t0: 1, t1: 2, level: t => (t < 1.5 ? 1 : 0) }] });
     assert.equal(rms(out, 0, 0.99), 0, `${kind} before it starts`);
     assert.ok(rms(out, 1.1, 1.4) > 0.01, `${kind} silent while on`);
     assert.ok(rms(out, 1.75, 4) < 1e-3, `${kind} after its level drops to 0`);
   }
+});
+
+test('rain: a steady hiss with the patter of drops, and the music stays put under it', () => {
+  const score: Score = { duration: 3, hits: [], beds: [{ kind: 'rain', t0: 0, t1: 3, level: () => 1 }] };
+  const out = renderSfx(score), w = [0.2, 0.7, 1.2, 1.7, 2.2].map(a => rms(out, a, a + 0.5));
+  for (const v of w) assert.ok(v > 0.02 && Math.abs(v - w[0]) / w[0] < 0.2, `rain isn't steady: ${w.map(x => x.toFixed(3))}`);
+  let ticks = 0;                                              // drops: short peaks well above the hiss
+  for (let i = Math.round(0.2 * SR); i < out.length; i += Math.round(0.02 * SR)) {
+    let m = 0; for (let j = i; j < i + Math.round(0.02 * SR) && j < out.length; j++) m = Math.max(m, Math.abs(out[j]));
+    if (m > 3.5 * w[0]) ticks++;
+  }
+  assert.ok(ticks >= 20, `only ${ticks} drops heard in 2.8 s`);
+  assert.ok(duckGain(score).every(g => g === 1), 'the music dips under the rain');
 });
 
 test('the music dips under effects, smoothly, and is untouched far from them', () => {
