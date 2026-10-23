@@ -1,5 +1,6 @@
 import type { PublicationEvent } from "@/lib/domain/workflow";
 import type { Publication } from "@/lib/domain/types";
+import type { InsightsResult } from "./metaInsights";
 
 // YouTube Shorts publishing over the YouTube Data API v3.
 //
@@ -147,6 +148,33 @@ export async function myChannel(cfg: YouTubeConfig, token: string): Promise<{ id
   if (!items.length) throw new Error("This Google account has no YouTube channel. Sign in with the account (or brand account) that owns it.");
   const c = items[0];
   return { id: c.id, title: c.snippet?.title ?? c.id, handle: c.snippet?.customUrl ?? null };
+}
+
+// ---------------------------------------------------------------------------------------------
+// Scorecard (48 h / 7 d): the public counts. Watch time would need the YouTube Analytics API and
+// another permission, so avgWatchMs stays empty for Shorts.
+
+export async function fetchYouTubeStats(cfg: YouTubeConfig, p: { videoId: string; refreshToken: string }): Promise<InsightsResult> {
+  const secrets = [p.refreshToken, cfg.clientSecret];
+  try {
+    const token = await accessToken(cfg, p.refreshToken);
+    secrets.push(token);
+    const res = await request(`${cfg.apiBase}/youtube/v3/videos?${new URLSearchParams({ part: "statistics", id: p.videoId })}`, {
+      method: "GET", headers: { authorization: `Bearer ${token}` }, secrets,
+    });
+    if (!res.ok) throw await errorFrom(res, secrets);
+    const raw = (await res.json()) as { items?: { statistics?: Record<string, string> }[] };
+    const st = raw.items?.[0]?.statistics;
+    if (!st) return { ok: false, temporary: false, error: `Video ${p.videoId} is no longer on YouTube (deleted?).` };
+    const n = (v?: string) => (v === undefined ? null : Number(v));
+    return {
+      ok: true, raw,
+      metrics: { views: n(st.viewCount), likes: n(st.likeCount), comments: n(st.commentCount), reach: null, saves: null, shares: null, avgWatchMs: null },
+    };
+  } catch (e) {
+    if (e instanceof YouTubeApiError) return { ok: false, temporary: e.temporary, error: e.message };
+    return { ok: false, temporary: false, error: redact(`Unexpected error: ${(e as Error).message ?? String(e)}`, secrets) };
+  }
 }
 
 // ---------------------------------------------------------------------------------------------

@@ -17,8 +17,9 @@ export async function POST(req: Request) {
     tick: async () => {
       const db = createSupabaseAdminClient();
       const metaConfig = metaConfigFromEnv();
-      const publishing = await runTick({ repo: supabaseRepo(db), metaConfig, youtubeConfig: youTubeConfigFromEnv() });
-      const metrics = await runMetricsTick({ repo: supabaseMetricsRepo(db), metaConfig });
+      const youtubeConfig = youTubeConfigFromEnv();
+      const publishing = await runTick({ repo: supabaseRepo(db), metaConfig, youtubeConfig });
+      const metrics = await runMetricsTick({ repo: supabaseMetricsRepo(db), metaConfig, youtubeConfig });
       return { ...publishing, metrics };
     },
   });

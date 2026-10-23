@@ -1,6 +1,7 @@
 import { STORY_SNAPSHOT, type PostMetrics, type SnapshotLabel, type StoryMetrics } from "@/lib/domain/metrics";
 import { PLATFORM_LABEL, type Publication } from "@/lib/domain/types";
 import type { MetaConfig } from "@/lib/platforms/meta";
+import { fetchYouTubeStats, type YouTubeConfig } from "@/lib/platforms/youtube";
 import {
   fetchFacebookReelInsights, fetchInstagramInsights, fetchInstagramStoryInsights, type InsightsResult,
 } from "@/lib/platforms/metaInsights";
@@ -24,7 +25,7 @@ export interface MetricsRepo {
 export interface MetricsSummary { due: number; recorded: number; skipped: number; errors: number }
 
 export async function runMetricsTick(opts: {
-  repo: MetricsRepo; metaConfig: MetaConfig; limit?: number; logger?: { error: (...a: unknown[]) => void };
+  repo: MetricsRepo; metaConfig: MetaConfig; youtubeConfig?: YouTubeConfig | null; limit?: number; logger?: { error: (...a: unknown[]) => void };
 }): Promise<MetricsSummary> {
   const { repo, logger = console } = opts;
   const due = await repo.metricsDue(opts.limit ?? 10);
@@ -37,7 +38,6 @@ export async function runMetricsTick(opts: {
       const fail = async (error: string) => {
         if (story) { await repo.recordStoryMetrics(pub.id, null, { error }); s.recorded++; } else await record(null, { error });
       };
-      if (pub.platform === "youtube") { await fail("YouTube statistics aren't available yet."); continue; }
       if (!pub.externalId) { await fail("The post has no platform id, so its statistics can't be read."); continue; }
       const ctx = await repo.loadContext(pub);
       if (!ctx) { await fail(`${PLATFORM_LABEL[pub.platform]} isn't connected for this project any more.`); continue; }
@@ -50,9 +50,12 @@ export async function runMetricsTick(opts: {
         continue;
       }
 
-      const res: InsightsResult = pub.platform === "instagram"
-        ? await fetchInstagramInsights(opts.metaConfig, { mediaId: pub.externalId, kind: ctx.post.kind, token: ctx.account.token })
-        : await fetchFacebookReelInsights(opts.metaConfig, { videoId: pub.externalId, token: ctx.account.token });
+      if (pub.platform === "youtube" && !opts.youtubeConfig) { s.skipped++; continue; } // no Google client yet: try later
+      const res: InsightsResult = pub.platform === "youtube"
+        ? await fetchYouTubeStats(opts.youtubeConfig!, { videoId: pub.externalId, refreshToken: ctx.account.token })
+        : pub.platform === "instagram"
+          ? await fetchInstagramInsights(opts.metaConfig, { mediaId: pub.externalId, kind: ctx.post.kind, token: ctx.account.token })
+          : await fetchFacebookReelInsights(opts.metaConfig, { videoId: pub.externalId, token: ctx.account.token });
 
       if (res.ok) await record(res.metrics, res.raw);
       else if (res.temporary) s.skipped++;
