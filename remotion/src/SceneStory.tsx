@@ -9,7 +9,7 @@ import {
   type BubbleLayout,
 } from './lib/sceneStory.ts';
 
-const C = {
+export const C = {
   wall: '#FCE6C4', tile: '#F6D7A6', tileLine: '#E5BE86', top: '#8A5A3B', cabinet: '#C8834F', cabinetLine: '#9C6034',
   floor: '#E9BC8D', glow: '#FFE3A1', room: '#FFD58A', day: '#BFE6F5', dusk: '#F6A880', night: '#2E3A66',
   skin: '#B97A56', skinMil: '#A56B4A', skinKid: '#C78C63', hair: '#2B1D16', grey: '#BDB6AE',
@@ -17,21 +17,21 @@ const C = {
   steel: '#9AA3AB', kadhai: '#33302D', puri: '#E8A73C', flame: '#FFB000', flameCore: '#FF6A00', clay: '#B5562D',
   leaf: '#4E9F3D', marigold: '#F39C12', mat: '#C0392B', matStripe: '#F2B134', white: '#FFFFFF', bulb: ['#FF4D6D', '#FFD23F', '#2EC4B6', '#7B61FF'],
 };
-const S = { stroke: INK, strokeWidth: 5, strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const };
+export const S = { stroke: INK, strokeWidth: 5, strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const };
 
 // ---------- people ----------
 
-type Mood = 'neutral' | 'tired' | 'sad' | 'surprised' | 'smile';
-function Face({ x, y, r, mood, skin, glasses = false }: { x: number; y: number; r: number; mood: Mood; skin: string; glasses?: boolean }) {
+export type Mood = 'neutral' | 'tired' | 'sad' | 'surprised' | 'smile' | 'content';   // content: eyes closed, smiling (reel sm011)
+export function Face({ x, y, r, mood, skin, glasses = false }: { x: number; y: number; r: number; mood: Mood; skin: string; glasses?: boolean }) {
   const k = r / 50, ey = y - 4 * k;
-  const eyes = mood === 'tired' || mood === 'sad'
+  const eyes = mood === 'tired' || mood === 'sad' || mood === 'content'
     ? <path d={`M${x - 26 * k} ${ey} q8 ${6 * k} ${16 * k} 0 M${x + 10 * k} ${ey} q8 ${6 * k} ${16 * k} 0`} fill="none" {...S} strokeWidth={4 * k} />
     : <><circle cx={x - 18 * k} cy={ey} r={5 * k} fill={INK} /><circle cx={x + 18 * k} cy={ey} r={5 * k} fill={INK} /></>;
   const brow = mood === 'sad' ? `M${x - 30 * k} ${ey - 14 * k} l${18 * k} ${-6 * k} M${x + 30 * k} ${ey - 14 * k} l${-18 * k} ${-6 * k}`
     : mood === 'surprised' ? `M${x - 30 * k} ${ey - 20 * k} q12 ${-8 * k} ${22 * k} 0 M${x + 8 * k} ${ey - 20 * k} q12 ${-8 * k} ${22 * k} 0`
     : `M${x - 30 * k} ${ey - 14 * k} q12 ${-6 * k} ${22 * k} 0 M${x + 8 * k} ${ey - 14 * k} q12 ${-6 * k} ${22 * k} 0`;
   const my = y + 22 * k;
-  const mouth = mood === 'smile' ? <path d={`M${x - 16 * k} ${my - 2} Q${x} ${my + 14 * k} ${x + 16 * k} ${my - 2}`} fill="none" {...S} strokeWidth={4 * k} />
+  const mouth = mood === 'smile' || mood === 'content' ? <path d={`M${x - 16 * k} ${my - 2} Q${x} ${my + 14 * k} ${x + 16 * k} ${my - 2}`} fill="none" {...S} strokeWidth={4 * k} />
     : mood === 'surprised' ? <ellipse cx={x} cy={my + 2} rx={6 * k} ry={8 * k} fill={INK} />
     : mood === 'sad' ? <path d={`M${x - 12 * k} ${my + 6 * k} Q${x} ${my - 2 * k} ${x + 12 * k} ${my + 6 * k}`} fill="none" {...S} strokeWidth={4 * k} />
     : <path d={`M${x - 10 * k} ${my} H${x + 10 * k}`} fill="none" {...S} strokeWidth={4 * k} />;
@@ -42,14 +42,14 @@ function Face({ x, y, r, mood, skin, glasses = false }: { x: number; y: number; 
       <path d={brow} fill="none" {...S} strokeWidth={3.5 * k} />
       {mouth}
       {glasses && <g fill="none" {...S} strokeWidth={3 * k}><circle cx={x - 18 * k} cy={ey} r={13 * k} /><circle cx={x + 18 * k} cy={ey} r={13 * k} /><path d={`M${x - 5 * k} ${ey} H${x + 5 * k}`} /></g>}
-      <circle cx={x - 30 * k} cy={y + 12 * k} r={7 * k} fill="#E8826B" opacity={mood === 'smile' ? 0.7 : 0.35} />
-      <circle cx={x + 30 * k} cy={y + 12 * k} r={7 * k} fill="#E8826B" opacity={mood === 'smile' ? 0.7 : 0.35} />
+      <circle cx={x - 30 * k} cy={y + 12 * k} r={7 * k} fill="#E8826B" opacity={mood === 'smile' || mood === 'content' ? 0.7 : 0.35} />
+      <circle cx={x + 30 * k} cy={y + 12 * k} r={7 * k} fill="#E8826B" opacity={mood === 'smile' || mood === 'content' ? 0.7 : 0.35} />
     </g>
   );
 }
 
 /** Her head: hair parted in the middle, a bun behind, a bindi and small gold earrings. */
-function HerHead({ x, y, r, mood }: { x: number; y: number; r: number; mood: Mood }) {
+export function HerHead({ x, y, r, mood }: { x: number; y: number; r: number; mood: Mood }) {
   const k = r / 50;
   return (
     <g>
@@ -66,7 +66,7 @@ function HerHead({ x, y, r, mood }: { x: number; y: number; r: number; mood: Moo
 
 type Arm = { from: [number, number]; to: [number, number] };
 /** A kurta sleeve to the elbow, then a bare forearm with two bangles. */
-function KurtaArm({ from, to, sleeve = C.kurta, skin = C.skin }: Arm & { sleeve?: string; skin?: string }) {
+export function KurtaArm({ from, to, sleeve = C.kurta, skin = C.skin }: Arm & { sleeve?: string; skin?: string }) {
   const [x0, y0] = from, [x1, y1] = to, ex = x0 + (x1 - x0) * 0.5, ey = y0 + (y1 - y0) * 0.5 + 10;
   return (
     <g>

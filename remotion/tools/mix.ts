@@ -38,6 +38,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   '011': { lib: '../src/lib/reel011.ts', file: 'public/nda-maths-011-why-det-area' },
   '012': { lib: '../src/lib/reel012.ts', file: 'public/nda-maths-012-why-sin-cos' },
   '014': { lib: '../src/lib/reel014.ts', file: 'public/nda-maths-014-cone' },
+  sm011: { lib: '../src/lib/sm011.ts', file: 'public/sm-r011-chai' },
 };
 const id = process.argv[2], reel = REELS[id];
 if (!reel) throw new Error(`usage: node tools/mix.ts <${Object.keys(REELS).join(' | ')}>`);

@@ -136,6 +136,11 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   is re-derived first), queued with `queue:add`, approved with "Approve all stories". This is @pyqvault_'s one maths
   format: its reels stay physics + chemistry. Runbook: `stories/README.md`.
 
+- **Sound Mind pause reels (2026-10-23, founder-approved).** After studying an AI-made anime "peace" reel, the founder
+  chose to make such reels our own way rather than with AI video (no "AI info" label on Shivani's brand): one calm
+  everyday scene, flat 2D in Remotion with the scene stories' people, 3–4 shots, 12–15 s, made to loop, rain made in code
+  (`sfx.ts` bed `rain`). Framework S20, lesson L66; first: sm-r011 "chai in the rain". Runbook: `soundmind/brand.md`.
+
 - **@lws.pune daily NDA maths question stories (2026-10-23, founder-approved).** The daily quiz-link stories brought
   zero leads ("quizzes are not at all effective"), so from 24 Oct @lws.pune posts @pyqvault_'s story format with easy NDA
   maths MCQs (07:30 question, 19:30 answer, "Reply A, B, C or D": a reply opens an Inbox chat). `stories/` now holds one
@@ -203,7 +208,7 @@ soundmind/               # @soundmindwithshivani carousels (outside brand). Runb
   art.js                 #   line-drawing catalogue for story slides
   card.html, render.mjs  #   one template; render.mjs → 1080×1350 JPEGs + <slug>.post.json per post
   <year>-w<week>/        #   batch.json (committed) + rendered slides (gitignored)
-  reels/                 #   "ME" story reels made in remotion/ (MeStory.tsx shared, SoundMind00N.tsx each):
+  reels/                 #   "ME" story reels (and pause reels, S20) made in remotion/ (MeStory.tsx shared, SoundMind0NN.tsx each):
                          #   .post.json + cover; MP4 gitignored
 tests/soundmind-cards.test.js # node --test
 stories/                 # daily maths question stories, one series per account. Runbook: stories/README.md

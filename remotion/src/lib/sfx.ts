@@ -9,8 +9,8 @@ export const HIT_KINDS = ['click', 'crack', 'thunk', 'whump', 'tap', 'boom', 'wh
 export type HitKind = (typeof HIT_KINDS)[number];
 /** A one-off sound at time t. `pitch` scales the click / tap tone (1 = its normal pitch). */
 export type Hit = { kind: HitKind; t: number; gain: number; pitch?: number };
-/** A sound that runs from t0 to t1, as loud as level(t) (0…1): a burner's roar, a friction scrape. */
-export type Bed = { kind: 'roar' | 'scrape'; t0: number; t1: number; level: (t: number) => number };
+/** A sound that runs from t0 to t1, as loud as level(t) (0…1): a burner's roar, a friction scrape, rain. */
+export type Bed = { kind: 'roar' | 'scrape' | 'rain'; t0: number; t1: number; level: (t: number) => number };
 export type Score = { duration: number; hits: Hit[]; beds: Bed[] };
 
 const TAU = 2 * Math.PI;
@@ -144,8 +144,10 @@ function bed(b: Bed, out: Float32Array, r: () => number) {
   const i0 = Math.max(0, Math.round(b.t0 * SR)), i1 = Math.min(out.length, Math.round((b.t1 + 0.3) * SR));
   const k = 1 - Math.exp(-1 / (0.015 * SR));                 // level smoothing (15 ms): no clicks when it changes
   const f1 = new Biquad(), f2 = new Biquad();
-  let lev = 0, brown = 0, grain = 0;
+  const f3 = new Biquad();
+  let lev = 0, brown = 0, grain = 0, drop = 0, dropF = 0, dropPh = 0;
   if (b.kind === 'roar') { f1.set('low', 700, 0.7); f2.set('band', 180, 0.8); }
+  if (b.kind === 'rain') { f1.set('band', 2400, 0.5); f2.set('low', 500, 0.7); f3.set('band', 6500, 0.9); }
   for (let i = i0; i < i1; i++) {
     const t = i / SR, target = t < b.t1 ? Math.max(0, Math.min(1, b.level(t))) : 0;
     lev += (target - lev) * k;
@@ -155,6 +157,13 @@ function bed(b: Bed, out: Float32Array, r: () => number) {
       brown = 0.985 * brown + 0.06 * n;
       const flicker = 1 + 0.18 * Math.sin(t * 17) + 0.08 * Math.sin(t * 31);
       out[i] += lev * flicker * (0.16 * f1.run(brown) + 0.16 * f2.run(n));   // sits ~8 dB under the music
+    } else if (b.kind === 'rain') {
+      // Rain on leaves and a balcony rail: a soft broadband hiss, a low wash, and ~40 drops a second, each a tiny
+      // pitched tick (1.5–5 kHz) that dies away in a few milliseconds.
+      brown = 0.985 * brown + 0.06 * n;
+      if (r() < 40 / SR) { drop = 0.25 + 0.75 * r(); dropF = 1500 + 3500 * r(); dropPh = 0; }
+      drop *= 0.9975; dropPh += (TAU * dropF) / SR;
+      out[i] += lev * (0.2 * f1.run(n) + 0.12 * f2.run(brown) + 0.06 * f3.run(n) + 0.35 * drop * Math.sin(dropPh));
     } else {
       // Kinetic friction: gritty noise whose pitch and stick-slip grain rate rise with speed.
       f1.set('band', 500 + 900 * lev, 1.5);
@@ -183,7 +192,7 @@ const DUCK_HIT: Record<HitKind, { depth: number; hold: number }> = {
   boom: { depth: 0.4, hold: 1.2 }, 'whoosh-in': { depth: 0.25, hold: 0.55 }, 'whoosh-out': { depth: 0.2, hold: 0.55 },
   snap: { depth: 0.2, hold: 0.25 }, shimmer: { depth: 0.15, hold: 1.2 },
 };
-const DUCK_BED = { roar: 0.25, scrape: 0.45 }, FLOOR = 0.5;
+const DUCK_BED = { roar: 0.25, scrape: 0.45, rain: 0 }, FLOOR = 0.5;   // rain is the room the music plays in: no dip
 
 // Under a voiceover (L43) the music drops to 0.4 (−8 dB), from just before each line until just after it.
 const VOICE_DUCK = 0.4, VOICE_LEAD = 0.12, VOICE_HOLD = 0.15;

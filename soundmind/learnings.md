@@ -10,7 +10,7 @@ S-numbers) changes only through its change log. Lessons are grouped like the fra
 The baselines and each lesson's figures go in **`analytics/soundmind-baseline.md`** (local only, git-ignored); a Result
 here says what happened in words ("above the typical carousel on shares"), never the figures.
 
-All three logs share **one numbering** (L1, L2, …), so a number always means one lesson. The next new lesson is **L64**,
+All three logs share **one numbering** (L1, L2, …), so a number always means one lesson. The next new lesson is **L67** (L64 and L65 are in the LWS logs),
 in whichever log it belongs to.
 
 **Status:** 🧪 testing · ✅ confirmed (do it from now on) · ❌ rejected (don't) · 📌 fact (no test needed)
@@ -40,3 +40,4 @@ Winning is judged per format (`framework.md`): a **carousel** against the typica
 |---|---|---|---|---|---|
 | L53 | (2026-10-19) @silvabydebalina's "protect your peace" reel: a cute illustrated metaphor, the whole message on the first frame, a conflict, a happy ending: **45.6K likes on a 4.6K account** (usually ~18). Sound Mind's viewers leave within the first few seconds. | The ME story structure (S11) can carry Sound Mind beyond its followers, if the message lands before viewers leave. | sm-r001 umbrella, r002 window, r003v plant, r004 page; then r005 hammock, r006 mirror, r007 glitter jar, r008 teacup, r009 kite, r010 rain cloud (made 2026-10-22). Beat the typical reel on reach and watch time, then on shares per 1,000 reached. | sm-r001 at ~12 h (21 Oct): watch time above the typical reel; no shares yet; too early to call (figures: local baseline → Results so far). | 🧪 testing (S11) |
 | L54 | (Founder, 2026-10-20) "More vibrant colours": the `VIVID` palette was made and sm-r003 was remade in it (r003v); r004 is vivid from the start. | Founder's call; vivid may stop the scroll better, or may feel less calm. | 2 muted reels (r001 umbrella, r002 window) vs 2 vivid (r003v plant, r004 page). Compare watch time and reach, then shares per 1,000 reached, at 7 days. Only 2 a side: a lead, not a verdict; the next 4 reels decide (r005–r008, all vivid; r009–r010 add to the vivid side). | — | 🧪 testing (S18) |
+| L66 | (2026-10-23) The founder pointed at an AI-made anime reel (@pixcraft_132): a man with chai under a big tree in the rain, 12 s, four shots, no words on screen, caption "Peace". People reposted it widely for its size. | A short, calm scene that loops may hold viewers longer (loops add watch time) and be sent on as a "take a break" message, reaching beyond followers better than a 27 s ME story. | sm-r011 "chai in the rain", the first pause reel (S20). At 7 days: reach and watch time against the typical reel and the ME reels (L53); then shares per 1,000 reached. | — | 🧪 testing (S20) |
