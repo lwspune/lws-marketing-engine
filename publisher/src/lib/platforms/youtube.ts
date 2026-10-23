@@ -100,7 +100,59 @@ export async function accessToken(cfg: YouTubeConfig, refreshToken: string): Pro
   return json.access_token;
 }
 
-const SIGN_IN_GONE = "YouTube sign-in has expired or was revoked. Run `npm run connect:youtube` again, then press Retry.";
+// ---------------------------------------------------------------------------------------------
+// Connecting a channel (`npm run connect:youtube`): Google sign-in on this computer, loopback redirect + PKCE.
+
+export const YOUTUBE_SCOPES = [
+  "https://www.googleapis.com/auth/youtube.upload",
+  "https://www.googleapis.com/auth/youtube.readonly",
+];
+
+export function connectAuthUrl(p: { clientId: string; redirectUri: string; state: string; codeChallenge: string }): string {
+  return `https://accounts.google.com/o/oauth2/v2/auth?${new URLSearchParams({
+    client_id: p.clientId, redirect_uri: p.redirectUri, response_type: "code",
+    scope: YOUTUBE_SCOPES.join(" "),
+    // offline + consent: Google only returns a refresh token on a fresh consent.
+    access_type: "offline", prompt: "consent",
+    state: p.state, code_challenge: p.codeChallenge, code_challenge_method: "S256",
+  })}`;
+}
+
+export async function exchangeCode(cfg: YouTubeConfig, p: { code: string; codeVerifier: string; redirectUri: string }) {
+  const secrets = [cfg.clientSecret, p.code];
+  const res = await request(`${cfg.oauthBase}/token`, {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "authorization_code", code: p.code, code_verifier: p.codeVerifier, redirect_uri: p.redirectUri,
+      client_id: cfg.clientId, client_secret: cfg.clientSecret,
+    }).toString(),
+    secrets,
+  });
+  if (!res.ok) throw await errorFrom(res, secrets);
+  const json = (await res.json()) as { access_token?: string; refresh_token?: string };
+  if (!json.access_token || !json.refresh_token) {
+    throw new Error("Google returned no refresh token. Remove GoPost at myaccount.google.com/permissions and connect again.");
+  }
+  return { accessToken: json.access_token, refreshToken: json.refresh_token };
+}
+
+/** The channel the sign-in picked (a Google account can manage several; Google asks which one). */
+export async function myChannel(cfg: YouTubeConfig, token: string): Promise<{ id: string; title: string; handle: string | null }> {
+  const res = await request(`${cfg.apiBase}/youtube/v3/channels?part=snippet&mine=true`, {
+    method: "GET", headers: { authorization: `Bearer ${token}` }, secrets: [token],
+  });
+  if (!res.ok) throw await errorFrom(res, [token]);
+  const items = ((await res.json()) as { items?: { id: string; snippet?: { title?: string; customUrl?: string } }[] }).items ?? [];
+  if (!items.length) throw new Error("This Google account has no YouTube channel. Sign in with the account (or brand account) that owns it.");
+  const c = items[0];
+  return { id: c.id, title: c.snippet?.title ?? c.id, handle: c.snippet?.customUrl ?? null };
+}
+
+// ---------------------------------------------------------------------------------------------
+// Publishing
+
+const SIGN_IN_GONE ="YouTube sign-in has expired or was revoked. Run `npm run connect:youtube` again, then press Retry.";
 const QUOTA_REASONS = new Set(["quotaExceeded", "uploadLimitExceeded", "dailyLimitExceeded", "rateLimitExceeded"]);
 
 function onError(e: unknown, secrets: string[]): PublicationEvent | null {

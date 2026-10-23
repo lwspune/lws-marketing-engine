@@ -16,6 +16,7 @@
     "staff:add": "tsx scripts/add-staff.ts",
     "connect:ads": "tsx scripts/connect-ads.ts",
     "connect:whatsapp": "tsx scripts/connect-whatsapp.ts",
+    "connect:youtube": "tsx scripts/connect-youtube.ts",
     "queue:add": "tsx scripts/queue-add.ts",
     "ads:add": "tsx scripts/ads-add.ts",
     "insights": "tsx scripts/insights.ts",

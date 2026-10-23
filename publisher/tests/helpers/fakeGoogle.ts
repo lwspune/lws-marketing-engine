@@ -8,6 +8,10 @@ import type { AddressInfo } from "node:net";
 export interface FakeGoogleCall { method: string; path: string; query: Record<string, string>; headers: http.IncomingHttpHeaders; body: Buffer; json?: unknown }
 
 export interface FakeGoogleOptions {
+  /** The code exchange returns no refresh token (Google omits it when the account had already consented). */
+  noRefreshToken?: boolean;
+  /** GET /channels?mine=true finds no channel. */
+  noChannel?: boolean;
   /** Size of the served video file in bytes (default 1000). */
   fileSize?: number;
   /** The only refresh token the fake accepts (default "REFRESH-OK"). */
@@ -79,6 +83,12 @@ export async function startFakeGoogle(opts: FakeGoogleOptions = {}) {
     }
     if (req.method === "POST" && p === "/token") {
       const form = new URLSearchParams(body.toString());
+      if (form.get("grant_type") === "authorization_code") {
+        if (form.get("code") === "CODE-OK" && form.get("code_verifier") === "VERIFIER-1" && form.get("client_secret") === "secret-1") {
+          return send(200, { access_token: "ya29.fake-access", expires_in: 3599, ...(opts.noRefreshToken ? {} : { refresh_token: "1//new-refresh" }) });
+        }
+        return send(400, { error: "invalid_grant", error_description: "Bad Request" });
+      }
       if (form.get("grant_type") === "refresh_token" && form.get("refresh_token") === (opts.refreshToken ?? "REFRESH-OK")
         && form.get("client_id") === "client-1" && form.get("client_secret") === "secret-1") {
         return send(200, { access_token: "ya29.fake-access", expires_in: 3599, token_type: "Bearer" });
@@ -125,6 +135,7 @@ export async function startFakeGoogle(opts: FakeGoogleOptions = {}) {
       } }] });
     }
     if (req.method === "GET" && p === "/youtube/v3/channels" && query.mine === "true") {
+      if (opts.noChannel) return send(200, { items: [] });
       return send(200, { items: [{ id: "UC-lws", snippet: { title: "LWS Pune", customUrl: "@lwspune" } }] });
     }
     send(404, { error: { code: 404, message: `fake: no route for ${req.method} ${p}` } });
