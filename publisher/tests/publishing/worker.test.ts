@@ -126,6 +126,19 @@ describe("runTick", () => {
     } finally { await google.close(); }
   });
 
+  it("sends YouTube the reel's YouTube copy when it has one (\"Subscribe for more\" end card)", async () => {
+    fake = await startFakeMeta();
+    const google = await startFakeGoogle();
+    try {
+      const ctx = reelContext("youtube");
+      ctx.post.youtubeVideoPath = "o1/p1/v-yt.mp4";
+      const m = memoryRepo([pub({ platform: "youtube" })], ctx, google.fileUrl);
+      await runTick({ repo: m.repo, metaConfig: fake.config, youtubeConfig: google.config, logger: silent });
+      expect(m.signed[0].paths).toEqual(["o1/p1/v-yt.mp4"]);
+      expect(m.recorded[0].ev).toMatchObject({ type: "started" });
+    } finally { await google.close(); }
+  });
+
   it("publishes a processed YouTube Short without downloading anything", async () => {
     fake = await startFakeMeta();
     const google = await startFakeGoogle({ uploadStatuses: ["processed"] });

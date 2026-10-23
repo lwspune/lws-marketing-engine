@@ -33,6 +33,8 @@ const ManifestSchema = z
     kind: z.enum(["reel", "carousel", "story"]),
     title: z.string().trim().min(1, "title is required").max(120),
     video: fileName(/\.mp4$/i, "video").optional(),
+    /** The same reel with YouTube's end card ("Subscribe for more"); YouTube gets this one. */
+    youtubeVideo: fileName(/\.mp4$/i, "youtubeVideo").optional(),
     cover: fileName(/\.(png|jpe?g)$/i, "cover").optional(),
     slides: z.array(fileName(/\.(png|jpe?g)$/i, "slide")).optional(),
     plannedFor: z.string().datetime({ offset: true, message: "plannedFor must be a time with its offset, e.g. 2026-10-26T07:30:00+05:30" }).optional(),
@@ -41,6 +43,7 @@ const ManifestSchema = z
   })
   .strict()
   .superRefine((m, ctx) => {
+    if (m.youtubeVideo && m.kind !== "reel") ctx.addIssue({ code: "custom", path: ["youtubeVideo"], message: "only a reel has a YouTube video" });
     if (m.kind !== "story") {
       if (m.plannedFor) ctx.addIssue({ code: "custom", path: ["plannedFor"], message: "only a story has a planned time" });
       if (m.question) ctx.addIssue({ code: "custom", path: ["question"], message: "only a story carries a question" });

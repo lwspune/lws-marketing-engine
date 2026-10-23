@@ -37,7 +37,7 @@ export function supabaseRepo(db: SupabaseClient): PublisherRepo {
     async loadContext(pub): Promise<PublishContext | null> {
       const { data: post, error } = await db
         .from("posts")
-        .select("id, project_id, kind, captions, video_path, cover_path, slide_paths")
+        .select("id, project_id, kind, captions, video_path, cover_path, slide_paths, youtube_video_path")
         .eq("id", pub.postId)
         .single();
       if (error || !post) throw new Error(`post ${pub.postId}: ${error?.message ?? "missing"}`);
@@ -58,6 +58,7 @@ export function supabaseRepo(db: SupabaseClient): PublisherRepo {
         post: {
           id: post.id, kind: post.kind as PostKind, captions: (post.captions ?? {}) as Captions,
           videoPath: post.video_path, coverPath: post.cover_path, slidePaths: post.slide_paths ?? [],
+          youtubeVideoPath: post.youtube_video_path,
         },
         account: { platform: account.platform, externalId: account.external_id, token: token as string },
       };

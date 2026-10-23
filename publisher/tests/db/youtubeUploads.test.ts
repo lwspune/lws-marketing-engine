@@ -48,6 +48,21 @@ describe.skipIf(!TEST_DB_URL)("database: YouTube upload sessions", () => {
     expect(await q("select * from public.upload_session($1)", [pub])).toEqual([]);
   }));
 
+  // 0024: a reel can carry a YouTube copy of its video (end card "Subscribe for more" instead of "Follow for more").
+  it("a reel's YouTube video lives in the org's folder and is frozen once approved", () => withTx(async (q) => {
+    const { f } = await approvedYouTube(q);
+    await asOwner(q);
+    expect((await errorOf(q, "update public.posts set youtube_video_path = 'elsewhere/v-yt.mp4' where id = $1", [f.carousel]))?.message).toBeTruthy();
+    expect((await errorOf(q, "update public.posts set youtube_video_path = $2 || '/c/v-yt.mp4' where id = $1", [f.carousel, f.org]))?.message)
+      .toMatch(/posts_youtube_video/); // only reels
+    expect((await errorOf(q, "update public.posts set youtube_video_path = $2 || '/p/v-yt.mp4' where id = $1", [f.post, f.org]))?.message)
+      .toMatch(/only be edited while ready/); // the reel is approved
+    const [{ id: ready }] = await q<{ id: string }>(
+      `insert into public.posts (org_id, project_id, slug, kind, title, captions, video_path, youtube_video_path)
+       values ($1::uuid, $2, 'reel-2', 'reel', 'Reel 2', '{}', $1::text || '/r/v.mp4', $1::text || '/r/v-yt.mp4') returning id`, [f.org, f.project]);
+    expect(ready).toBeTruthy();
+  }));
+
   it("signed-in users can neither read nor write sessions", () => withTx(async (q) => {
     const { f, pub } = await approvedYouTube(q);
     await q("select public.save_upload_session($1, $2, 1000)", [pub, URI]);

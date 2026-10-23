@@ -34,7 +34,7 @@ run(async () => {
     const { data: project } = await db.from("projects").select("id").eq("org_id", org.id).eq("slug", m.project).single();
     if (!project) throw new Error(`${m.slug}: no project "${m.project}" in ${orgSlug}.`);
     const { data: existing } = await db.from("posts").select("id, status, kind").eq("project_id", project.id).eq("slug", m.slug).maybeSingle();
-    const names = [m.video, m.cover, ...(m.slides ?? [])].filter((x): x is string => !!x);
+    const names = [m.video, m.youtubeVideo, m.cover, ...(m.slides ?? [])].filter((x): x is string => !!x);
     const storyFields = m.kind === "story" ? { planned_for: m.plannedFor, question: m.question } : {};
 
     if (existing && !(replace && existing.status === "ready")) {
@@ -55,6 +55,7 @@ run(async () => {
       const { error } = await db.from("posts").update({
         title: m.title, captions: m.captions, ...storyFields,
         video_path: m.video ? key(m.video) : null, cover_path: m.cover ? key(m.cover) : null, slide_paths: (m.slides ?? []).map(key),
+        youtube_video_path: m.youtubeVideo ? key(m.youtubeVideo) : null,
       }).eq("id", existing.id).eq("status", "ready");
       if (error) throw new Error(`${m.slug}: updating the post: ${error.message}`);
       console.log(`✓ ${m.slug} replaced with the new version (${names.length} files), still Ready`);
@@ -76,6 +77,7 @@ run(async () => {
       const { error } = await db.from("posts").insert({
         id: postId, org_id: org.id, project_id: project.id, slug: m.slug, kind: m.kind, title: m.title, captions: m.captions,
         video_path: m.video ? key(m.video) : null, cover_path: m.cover ? key(m.cover) : null,
+        youtube_video_path: m.youtubeVideo ? key(m.youtubeVideo) : null,
         slide_paths: (m.slides ?? []).map(key), ...storyFields,
       });
       if (error) throw new Error(`saving the post: ${error.message}`);

@@ -49,6 +49,13 @@ describe("parseManifest", () => {
     expect(codeOf(() => parseManifest({ ...reel, slides: ["a.png", "b.png"] }))).toBe("invalid_manifest");
   });
 
+  it("lets a reel carry a YouTube copy of its video (an .mp4), and only a reel", () => {
+    expect(parseManifest({ ...reel, youtubeVideo: "nda-maths-002-hook-yt.mp4" }).youtubeVideo).toBe("nda-maths-002-hook-yt.mp4");
+    expect(() => parseManifest({ ...reel, youtubeVideo: "nda-maths-002-hook-yt.mov" })).toThrow(/youtubeVideo/);
+    expect(() => parseManifest({ ...reel, youtubeVideo: "../x.mp4" })).toThrow(/youtubeVideo/);
+    expect(() => parseManifest({ ...carousel, youtubeVideo: "x-yt.mp4" })).toThrow(/only a reel/);
+  });
+
   it("requires 2–10 image slides for a carousel, and no video", () => {
     expect(codeOf(() => parseManifest({ ...carousel, slides: ["only.png"] }))).toBe("invalid_manifest");
     const eleven = Array.from({ length: 11 }, (_, i) => `s${i}.png`);

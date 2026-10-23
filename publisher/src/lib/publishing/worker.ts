@@ -13,7 +13,11 @@ import { stepYouTube, type UploadSession, type YouTubeConfig } from "@/lib/platf
 export const SIGNED_URL_TTL_SECONDS = 2 * 60 * 60;
 
 export interface PublishContext {
-  post: { id: string; kind: PostKind; captions: Captions; videoPath: string | null; coverPath: string | null; slidePaths: string[] };
+  post: {
+    id: string; kind: PostKind; captions: Captions; videoPath: string | null; coverPath: string | null; slidePaths: string[];
+    /** The reel rendered with YouTube's end card (0024); YouTube gets it when present. */
+    youtubeVideoPath?: string | null;
+  };
   account: { platform: Platform; externalId: string; token: string };
 }
 
@@ -76,7 +80,8 @@ async function stepYouTubeShort(pub: Publication, ctx: PublishContext, opts: Tic
   if (post.kind !== "reel") return { type: "failed", error: `A ${post.kind} can't be published to YouTube.` };
   const yt = post.captions.youtube ?? { title: "", description: "" };
   // Only a pending upload downloads the video; Shorts take no cover through the API.
-  const [videoUrl] = pub.status === "pending" && post.videoPath ? await opts.repo.signUrls([post.videoPath], SIGNED_URL_TTL_SECONDS) : [];
+  const video = post.youtubeVideoPath ?? post.videoPath;
+  const [videoUrl] = pub.status === "pending" && video ? await opts.repo.signUrls([video], SIGNED_URL_TTL_SECONDS) : [];
   return stepYouTube(pub, {
     config: opts.youtubeConfig,
     account: { channelId: account.externalId, refreshToken: account.token },
