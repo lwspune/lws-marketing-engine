@@ -99,3 +99,9 @@ spot values, the pixel map).
 - I4 cover text alone was meaningless → **taken**: "Flip 2ˣ over y = x → ?".
 - I5 "no log here" too wide for the strip → **taken**: "no log", set vertically.
 - Layout: whooshes on the punch-in and zoom out (F15) → **taken**; 4.6–8.0 now changes every ~0.7 s (F2).
+
+**Changed while building (2026-10-23):** the fold starts as the drawing ends (1.5–4.4 s, crossing at 2.95 s) so no
+frame of the first 3 s stands still; the cover moved to 1.45 s (still before the fold). The overlap test caught the
+non-(3, 8) labels leaving the frame mid punch-in: they now hide as soon as the zoom starts. The stills sheet showed
+"y = log₂x" crowding "log₂4 = 2": moved to (6.2, 1.4). "no log" set at 44 px. The left-end pulse was dropped (the
+strip landing carries the beat).

@@ -36,7 +36,7 @@ but a good concept isn't blocked for lack of one. Only NDA maths chapters go on 
 | W9 | The whole unit circle on one screen | @codematrixvishal 21.3M (779×) [link](https://www.instagram.com/reel/DbXW1vxJ-7-/), the biggest reel we've seen | reference sheet that builds itself; the 30-45-60 triangles explain every value | Trigonometry | test format |
 | W10 | Area between two curves | @codematrixvishal 1.80M (66×) [link](https://www.instagram.com/reel/Dd0ByRkjOhZ/) | strips sweep between the curves; top minus bottom | Area under curves | ✅ made 2026-10-23 (reel 019) |
 | W11 | Why do we multiply probabilities? | @mathsy.uk 822k (34×) [link](https://www.instagram.com/reel/DOqyBeBjbpu/) | the shrinking square: each "and" cuts the space | Probability | |
-| W12 | What a logarithm is (exponential, flipped) | @mathsy.uk 1.10M (46×) [link](https://www.instagram.com/reel/DNrQxTaVBtF/) | y = aˣ reflected in y = x, live | Logarithms | |
+| W12 | What a logarithm is (exponential, flipped) | @mathsy.uk 1.10M (46×) [link](https://www.instagram.com/reel/DNrQxTaVBtF/) | y = aˣ reflected in y = x, live | Logarithms | ✅ made 2026-10-23 (reel 021) |
 | W13 | Series formulas on one screen | @codematrixvishal 2.61M (95×) [link](https://www.instagram.com/reel/DZr28L5p89C/) | reference sheet; each sum shown as a picture (staircases, squares) | Sequences & series | test format |
 | W14 | A matrix moves space | @codematrixvishal 916k (34×) [link](https://www.instagram.com/reel/DbZeJpoJKmm/) | a grid transforms; the determinant = how much area scales (links to reel 011) | Matrices & determinants | ✅ made 2026-10-23 (reel 020) |
 | W15 | f and f′ together: the slope becomes a graph | @codematrixvishal (115×), as @pyqvault_ M4 | slope 0 at every peak and valley | Application of derivatives | ✅ made 2026-10-20 (reel 015) |
@@ -58,7 +58,7 @@ and the goal of the reel is reach. `node reels/tools/topic-scores.js lwspune` ch
 | W7 | M | Derivatives go round: sin → cos → −sin → −cos | 66 | 2 | 1 | 1 | 0 | 6 | |
 | W10 | M | Area between two curves (strips sweep) | 66 | 2 | 1 | 1 | 0 | 6 | ✅ made 2026-10-23 (`nda-maths-019-area-between`) |
 | W9 | M | The whole unit circle on one screen | 779 | 2 | 0 | 0 | 0 | 5 | |
-| W12 | M | What a logarithm is (exponential, flipped) | 46 | 1 | 1 | 1 | 0 | 5 | |
+| W12 | M | What a logarithm is (exponential, flipped) | 46 | 1 | 1 | 1 | 0 | 5 | ✅ made 2026-10-23 (`nda-maths-021-log-flip`) |
 | W13 | M | Series formulas on one screen | 95 | 2 | 0 | 0 | 0 | 4 | |
 | W16 | M | The quadratic formula is a square, completed (tiles) | 40 | 2 | 1 | 0 | 0 | 5 | |
 | W15 | M | f and f′ together: the slope becomes a graph | 115 | 2 | 1 | 1 | 0 | 7 | ✅ made 2026-10-20 (reel 015) |

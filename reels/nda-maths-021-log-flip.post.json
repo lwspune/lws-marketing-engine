@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-021-log-flip",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "021 · Why? #9: fold y = 2ˣ over y = x and get log₂x; 2³ = 8 flips to log₂8 = 3 (predict-first, white)",
+  "video": "nda-maths-021-log-flip.mp4",
+  "cover": "nda-maths-021-log-flip-cover.png",
+  "captions": {
+    "instagram": "NDA Maths · Logarithms. Flip y = 2ˣ over the line y = x. You get…? A x² · B log₂x · C 2⁻ˣ 👇\n\nB. Folding over y = x swaps every point: (3, 8) lands on (8, 3).\n2³ = 8 becomes log₂8 = 3. A log just runs the power backwards.\nAnd 2ˣ is never 0 or negative, so its flip, log₂x, has no 0 or negative inputs.\nTraps: x² mixes up the power of x with the power of 2; 2⁻ˣ is the mirror in the y-axis, not in y = x.\n\nNDA asks logs like this: 2024 (I), Q27. log₄(x − 1) = log₂(x − 3) gives x = 2 or 5, but x = 2 makes x − 3 negative. One solution.\n\nSave this 📌 Follow @lws.pune for one NDA maths idea every day.\nPractise every Logarithms PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Logarithms #LWSPune",
+    "facebook": "NDA Maths · Logarithms. Flip y = 2ˣ over the line y = x. You get…? A x² · B log₂x · C 2⁻ˣ 👇\n\nB. Folding over y = x swaps every point, so 2³ = 8 becomes log₂8 = 3: a log runs the power backwards. 2ˣ is never 0 or negative, so log₂x takes no 0 or negative inputs. That's why NDA 2024 (I) Q27 has one solution (x = 5), not two.\n\nPractise NDA PYQs free, chapter-wise: https://www.pyqvault.com\n\n#NDA #NDAMaths #LWSPune",
+    "youtube": {
+      "title": "What a logarithm really is: fold 2ˣ over y = x #shorts",
+      "description": "Fold the graph of 2ˣ over the line y = x and you get log₂x: every point swaps, so 2³ = 8 becomes log₂8 = 3. And since 2ˣ is never 0 or negative, log₂x has no 0 or negative inputs (that's what NDA 2024 (I) Q27 tests).\n\nPractise NDA PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #Shorts"
+    }
+  }
+}
