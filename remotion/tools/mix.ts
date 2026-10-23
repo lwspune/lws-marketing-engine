@@ -29,6 +29,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   '016': { lib: '../src/lib/reel016.ts', file: 'public/nda-maths-016-multiply' },
   '017': { lib: '../src/lib/reel017.ts', file: 'public/nda-maths-017-probability-map' },
   '019': { lib: '../src/lib/reel019.ts', file: 'public/nda-maths-019-area-between' },
+  '020': { lib: '../src/lib/reel020.ts', file: 'public/nda-maths-020-matrix-grid' },
   '018': { lib: '../src/lib/reel018.ts', file: 'public/nda-maths-018-secant-tangent' },
   '010': { lib: '../src/lib/reel010.ts', file: 'public/nda-maths-010-why-seven' },
   '011': { lib: '../src/lib/reel011.ts', file: 'public/nda-maths-011-why-det-area' },
