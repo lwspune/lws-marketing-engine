@@ -6,7 +6,7 @@ in only if it passes **the test** below; it is then **scored**, and the score is
 `--calibrate` runs the tuning. Framework: `pyqvault-framework.md` (F1, F21, F28, F29). @lws.pune's ideas stay in
 `remake-backlog.md` until it is rebuilt.
 
-**Open: 90 ideas · about 30 days at 3 reels a day.**
+**Open: 89 ideas · about 30 days at 3 reels a day.**
 
 Refill before it drops under two weeks. Sources (F1): the founder's ideas (Source `founder`, any time), a notes sweep
 (physics and chemistry are done; a new exam's notes next), and the next competitor read (`node reels/tools/remake-candidates.mjs`).
@@ -158,7 +158,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | C4 | C | Charles's law: heat 0 → 273 °C, the volume doubles | 30 | 2 | 2 | 1 | 1 | 1 | 69 | ✅ made 2026-10-20 (`pv-chem-004-charles`, remade; scored after posting) | remake | ✓ |
 | C5 | C | P, V and T together (combined gas law) | 11 | 2 | 2 | 1 | 1 | 1 | 62 | ✅ made 2026-10-20 (`pv-chem-005-pvt`) | remake | ✓ |
 | C7 | C | Flame colours: each metal burns its own colour (fireworks) | – | 3 | 2 | 1 | 0 | 1 | 59 | ✅ made 2026-10-20 (`pv-chem-006-flame`) | own | ✓ |
-| C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | 3 | 2 | 1 | 1 | 0 | 59 | ⏭ queued 2026-10-21 (Hook queue) | own | ✓ |
+| C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | 3 | 2 | 1 | 1 | 0 | 59 | ✅ made 2026-10-23 (`pv-chem-009-electrolysis`) | own | ✓ |
 | C9 | C | The pH rainbow: universal indicator from lemon to bleach | – | 3 | 2 | 1 | 0 | 2 | 66 | ⏭ queued 2026-10-21 (Hook queue) | own | ✓ |
 | C10 | C | Squeeze the brown gas: darker at once, then lighter (Le Chatelier) | – | 2 | 2 | 2 | 0 | 0 | 48 |  | own | ✓ |
 | C11 | C | Diffusion: dye in hot vs cold water | – | 2 | 2 | 0 | 0 | 2 | 48 | ⏸ parked: close to Chemistry #1, heat speeds things up (founder, 2026-10-20) | own | ✓ |
@@ -772,7 +772,6 @@ hook, second hook and loop go in the Hook column of `pyqvault-learnings.md`).
 
 | Order | # | Hook | Opening | Visual hook | Hook sound | Second hook | Second visual | Second sound | Loop | Frame 0 (draft) |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 2 | C8 | Race | Split apart | a water molecule fills the frame and bursts apart: two H fly one way, one O the other; the camera pulls back to two tubes, bubbles rising, one tube visibly faster | crack (the molecule bursts) + tap (each bubble reaching the top) | Why exactly twice as fast? | punch-in on one molecule; it splits again in slow motion and the two H atoms light up | whoosh-in (the punch-in) + crack (the slow-motion split) + music hit | no | "One battery, two tubes. Which fills first?" A hydrogen · B oxygen · C together; the molecule splits behind the question, then the two tubes race. Second answer: H₂O, two H for every O |
 | 3 | P6 | You'd think | Orbit 360° | the camera orbits two lifts hauling the same box up side by side, one racing ahead; both energy bars climbing | silent (a slow orbit; the music carries it, F15) | So what did speed change? | both lifts freeze mid-climb; the camera punches in on the power meters as the fast lift's needle shoots up | thunk (both lifts stop) + whoosh-in (the punch-in on the meters) + music hit | no | "Same box, same height. The faster lift does more work. Right?" A more · B the same · C less. Second answer: power, work per second |
 | 4 | C9 | Put in order | Colour flood | four glasses on a shelf flooding with colour, four empty numbered slots waiting below them | shimmer (the colours flood in) | Where does pure water sit? | a clear glass of water slides into the empty middle slot and floods green | tap (the glass lands) + shimmer (it floods green) | yes | "Lemon, milk, soap, bleach: most acidic first?" three orders as A/B/C; indicator colours already spreading. Second answer: pH 7, green. Loop: the colours wash back to the start |
 | 5 | P7 | Same start, two endings | Assemble (suit-up) | two drones build themselves part by part (frame, arms, rotors spinning up, ropes clipping on), then pull identical boxes; one box lifts off, the other scrapes along the ground | snap ×8 (one per part locking, pitch rising) + shimmer (both drones complete) | How steep before it lifts? | the dragging drone's rope swings steeper, live, until its box peels off the ground | click (one per degree as the rope steepens) + whump (the box peels off) + music hit | no | "Same drone, same box, same pull. One lifts it, one drags it. Why?" A rope angle · B rope length · C luck; the drones assemble behind the question, then fly. Second answer: the angle where F sin θ = mg, live |
