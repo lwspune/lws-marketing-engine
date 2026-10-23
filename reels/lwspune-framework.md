@@ -1,4 +1,4 @@
-# @lws.pune reel framework (v1.7, 2026-10-21)
+# @lws.pune reel framework (v1.8, 2026-10-23)
 
 How every new @lws.pune reel is made, one numbered point at a time. Same standard as @pyqvault_'s
 (`pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or dropped
@@ -42,6 +42,20 @@ strip: something new every second, across the frame. · 🧪 L38
 sliding while f′ plots below; strips filling an area while the sum counts up). · *Why:* one formula + one moving picture
 + live numbers is what the big simulation reels share (@sciencevisualised L19, @bisal.physics L20). · *Check:* the reel
 has all three; a map reel (F28) shows a whole chapter instead. · 🧪 L38
+
+**F31 · Storyboard first, reviewed by an independent agent.** Before any code, the reel gets a written storyboard,
+`reels/<slug>.storyboard.md` (template in `lwspune-storyboard.md`): the idea in one sentence, the viewer and the trap,
+the question with **everything needed to answer it on frame 0**, frame 0 and the cover, the beats, a layout map (which
+zone holds what, which side of each line its label sits on, what stays in frame at each zoom, the widest value in each
+number box), the story told without words, every on-screen number and its test, and the risks. Then one fresh agent that
+didn't write it reviews it (the brief in `lwspune-storyboard.md`, nothing else from the session) as a first-time NDA
+aspirant and as a maths teacher. Every blocker is fixed or declined with a reason in the storyboard's Review section
+before the tests and code are written. The founder still judges finished reels only. · *Why:* the founder (2026-10-23:
+"storyboarding be better; one independent agent should review the story"). 018–020 surfaced seven faults only after
+building (an empty frame 0, label collisions, a cropped punch-in, a cell off-screen, numbers running together, and a
+question whose matrix wasn't on screen), each a re-render; 016 was rejected as "confusing". A reader who didn't write the
+story sees the confusion its writer can't. · *Check:* the storyboard, with its Review section filled, is committed before
+`src/lib/<reel>.ts`; L63 counts the faults found after the review. · 📌 founder, measured by L63
 
 ## Hook (the first 3 seconds)
 
@@ -181,6 +195,7 @@ counting dice outcomes; cards never overlap or crop while explained; the hold �
 
 | Version | Date | Change | Why |
 |---|---|---|---|
+| v1.8 | 2026-10-23 | F31 added: a written storyboard (`reels/<slug>.storyboard.md`, template in `lwspune-storyboard.md`) before any code, reviewed by one independent agent; every blocker fixed or declined in writing before the build. | Founder, 2026-10-23: "for future reels storyboarding for lwspune be better. one independent agent should review the story." Seven faults in 018–020 were found only after building; one of them (020's question matrix not on frame 0) made the question unanswerable. Measured by L63. |
 | v1.7 | 2026-10-21 | F28 added: map reels, a series picked by exam weight (F21's exception), a whole chapter on one map in place of F3's moving graph, two indigo flips (noted under F12), the full map held for a screenshot and looping to frame 0 in place of the end card. First: 017, Probability (41 of the last 360). | Founder, 2026-10-21: a reel like a studied formula map, "for the most important NDA maths topic", approved with these three changes. Measured by L57 (saves). |
 | v1.6 | 2026-10-21 | F24: an everyday object people know by its material keeps it; the rest stays vivid (as @pyqvault_ v1.13). | Founder, 2026-10-21, comparing Physics #8's two versions: "original spoon colour was better, rest vivid is better". A steel spoon in cyan stopped looking like a spoon; the bright candle, rays and graph read better. |
 | v1.5 | 2026-10-21 | F24 added: bright objects from the `VIVID` set, as on @pyqvault_ (v1.12). | Founder: "more vivid colour objects", for both handles. Measured by L47. |

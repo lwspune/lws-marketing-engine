@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-020-matrix-grid",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "020 · Why? #8: a matrix moves the grid, the square's area ×5 = det; det 0 goes flat (predict-first, white)",
+  "video": "nda-maths-020-matrix-grid.mp4",
+  "cover": "nda-maths-020-matrix-grid-cover.png",
+  "captions": {
+    "instagram": "NDA Maths · Determinants. The matrix [[2, 1], [1, 3]] reshapes the grid. The square's area becomes…? A 6 · B 5 · C 7 👇\n\nB. A 2×2 matrix moves the whole plane: î lands on its first column (2, 1), ĵ on its second (1, 3).\nThe unit square becomes a parallelogram of area 2·3 − 1·1 = 5. That's the determinant: how much every area scales.\nTraps: 6 uses the diagonal only (forgets the lean); 7 adds the entries.\ndet = 0? The plane is squashed onto a line: no area left, and no inverse to undo it.\n\nNDA used it in 2026 (II), Q69: unit vectors a, b at 30°, sides a + 3b and 3a + b. Area = |1·1 − 3·3| × ½ = 4.\n\nSave this 📌 Follow @lws.pune for one NDA maths idea every day.\nPractise every Matrices & Determinants PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Matrices #LWSPune",
+    "facebook": "NDA Maths · Determinants. The matrix [[2, 1], [1, 3]] reshapes the grid. The square's area becomes…? A 6 · B 5 · C 7 👇\n\nB. The matrix sends î to (2, 1) and ĵ to (1, 3), so the unit square becomes a parallelogram of area 2·3 − 1·1 = 5: the determinant is how much every area scales. det = 0 squashes the plane flat, so there's no inverse. NDA used it in 2026 (II), Q69 (area 8 × ½ = 4).\n\nPractise NDA PYQs free, chapter-wise: https://www.pyqvault.com\n\n#NDA #NDAMaths #LWSPune",
+    "youtube": {
+      "title": "What a determinant really is: watch a matrix move the grid #shorts",
+      "description": "The matrix [[2, 1], [1, 3]] sends î to (2, 1) and ĵ to (1, 3): the unit square becomes a parallelogram of area 2·3 − 1·1 = 5. The determinant is how much every area scales, and det 0 squashes the plane flat (no inverse). NDA 2026 (II) Q69 uses exactly this.\n\nPractise NDA PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #Shorts"
+    }
+  }
+}

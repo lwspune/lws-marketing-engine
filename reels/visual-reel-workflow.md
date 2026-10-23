@@ -173,7 +173,9 @@ Each opens headless browsers; two at once ran this 16 GB laptop out of memory an
 disk that was already nearly full. Renders keep their temp files in their own folder and clear its stale leftovers when
 they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm run clean:temp` clears it by hand.
 
-1. **Storyboard first: a beat table** (founder, 2026-10-21), at the top of `src/lib/<reel>.ts`, one row per beat:
+1. **@lws.pune: a written storyboard + an independent review come first** (framework F31, founder 2026-10-23): fill
+   `reels/<slug>.storyboard.md` from `lwspune-storyboard.md`, have one fresh agent review it with the brief there, fix
+   every blocker, then go on. **Storyboard first: a beat table** (founder, 2026-10-21), at the top of `src/lib/<reel>.ts`, one row per beat:
    time · what moves · the caption, and how long its voice line takes · what the camera must keep in frame · the key
    objects' colours, each marked **real** (from `REAL` in `palette.ts`: copper, steel, flame, copper sulphate…; add a
    missing material there first) or **VIVID** (for things with no real colour: particles, rays, arrows, bars), about 4 key
@@ -202,8 +204,8 @@ they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm ru
    the shared HTML pieces in `src/board.tsx` (same white look and Reel.WHITE colours, palette test-locked).
    Labels are HTML placed with `project()`, so they stay crisp Cambria.
 5. **Stills sheet before any sound or full render:** render 6–8 beat frames (the opening, the cover time, each beat,
-   the answer, the second hook on screen mid-move, and the last frame: the end card, or for a loop the last frame beside frame 0) with `npx remotion still <Comp> <out.png> --frame=<n>` into the scratchpad, put them on
-   one sheet (an HTML grid screenshotted by headless Edge) and fix what it shows: anything hard to see on the board,
+   the answer, the second hook on screen mid-move, and the last frame: the end card, or for a loop the last frame beside frame 0) with `npm run stills -- <Comp> <scratchpad dir> <frame,frame,…>` (bundles once, renders every
+   frame and puts them on one sheet, `sheet.png`; `npx remotion still` re-bundles per frame, ~90 s each, 2026-10-23), and fix what it shows: anything hard to see on the board,
    washed out, two neighbours hard to tell apart, a clash, or a fake colour where a real one exists (F24), cropped,
    overlapping or late. Then read the sheet once **with the text hidden** (the
    question, labels and captions; numbers, gauges and graphs stay): it must still show what happens and why (@pyqvault_

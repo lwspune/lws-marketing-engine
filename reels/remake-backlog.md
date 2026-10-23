@@ -38,7 +38,7 @@ but a good concept isn't blocked for lack of one. Only NDA maths chapters go on 
 | W11 | Why do we multiply probabilities? | @mathsy.uk 822k (34×) [link](https://www.instagram.com/reel/DOqyBeBjbpu/) | the shrinking square: each "and" cuts the space | Probability | |
 | W12 | What a logarithm is (exponential, flipped) | @mathsy.uk 1.10M (46×) [link](https://www.instagram.com/reel/DNrQxTaVBtF/) | y = aˣ reflected in y = x, live | Logarithms | |
 | W13 | Series formulas on one screen | @codematrixvishal 2.61M (95×) [link](https://www.instagram.com/reel/DZr28L5p89C/) | reference sheet; each sum shown as a picture (staircases, squares) | Sequences & series | test format |
-| W14 | A matrix moves space | @codematrixvishal 916k (34×) [link](https://www.instagram.com/reel/DbZeJpoJKmm/) | a grid transforms; the determinant = how much area scales (links to reel 011) | Matrices & determinants | |
+| W14 | A matrix moves space | @codematrixvishal 916k (34×) [link](https://www.instagram.com/reel/DbZeJpoJKmm/) | a grid transforms; the determinant = how much area scales (links to reel 011) | Matrices & determinants | ✅ made 2026-10-23 (reel 020) |
 | W15 | f and f′ together: the slope becomes a graph | @codematrixvishal (115×), as @pyqvault_ M4 | slope 0 at every peak and valley | Application of derivatives | ✅ made 2026-10-20 (reel 015) |
 | W16 | The quadratic formula is a square, completed | @codematrixvishal 1.10M (40×) [link](https://www.instagram.com/reel/DZPH3WfpKcB/), as @pyqvault_ M5 | x² + 6x as tiles: the 6x strip splits in two and wraps the square; the missing corner (3² = 9) completes it; the same move with b gives the formula | Quadratic equations | moved from @pyqvault_ (founder 2026-10-20) |
 
@@ -53,7 +53,7 @@ and the goal of the reel is reach. `node reels/tools/topic-scores.js lwspune` ch
 |---|---|---|---|---|---|---|---|---|---|
 | W6 | M | The soda-can problem: the best shape | 114 | 2 | 2 | 1 | 1 | 9 | ⏸ parked (founder, 2026-10-20) |
 | W11 | M | Why do we multiply probabilities? (the shrinking square) | 34 | 2 | 2 | 1 | 1 | 8 | ✅ made 2026-10-20 (`nda-maths-016-multiply`) |
-| W14 | M | A matrix moves space (determinant = area scale) | 34 | 3 | 1 | 1 | 0 | 7 | |
+| W14 | M | A matrix moves space (determinant = area scale) | 34 | 3 | 1 | 1 | 0 | 7 | ✅ made 2026-10-23 (`nda-maths-020-matrix-grid`) |
 | W8 | M | What a derivative really is: secant → tangent | 115 | 1 | 1 | 1 | 0 | 6 | ✅ made 2026-10-23 (`nda-maths-018-secant-tangent`) |
 | W7 | M | Derivatives go round: sin → cos → −sin → −cos | 66 | 2 | 1 | 1 | 0 | 6 | |
 | W10 | M | Area between two curves (strips sweep) | 66 | 2 | 1 | 1 | 0 | 6 | ✅ made 2026-10-23 (`nda-maths-019-area-between`) |
