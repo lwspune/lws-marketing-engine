@@ -44,6 +44,10 @@ export interface Publication {
   externalId: string | null;
   permalink: string | null;
   error: string | null;
+  /** Times the worker has picked it up while pending (0021); a run cut off mid-upload leaves only this trace. */
+  claims?: number;
+  /** A carousel's slide containers uploaded so far, in slide order ("" = not yet), so a cut-off run resumes. */
+  childRefs?: string[];
 }
 
 /** A rule violation with a stable machine-readable code and a human message. */

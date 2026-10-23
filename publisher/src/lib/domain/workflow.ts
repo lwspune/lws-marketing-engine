@@ -9,6 +9,8 @@ import { DomainError, PLATFORM_LABEL, type Platform, type Post, type PostKind, t
 //                    └────────failed────────┴──▶ failed ──retry (≤ MAX_ATTEMPTS)──▶ pending
 
 export const MAX_ATTEMPTS = 3;
+/** Pick-ups allowed while pending before giving up: each one that ends with nothing recorded was cut off or hit a Meta hiccup. */
+export const MAX_START_TRIES = 5;
 export const MAX_SCHEDULE_DAYS = 75;
 
 export function supportedPlatforms(kind: PostKind): Platform[] {
@@ -84,7 +86,7 @@ export function applyEvent(pub: Publication, ev: PublicationEvent): Publication 
     case "retry":
       if (pub.status !== "failed") throw invalid();
       if (pub.attempts >= MAX_ATTEMPTS) throw new DomainError("retry_limit", `Gave up after ${MAX_ATTEMPTS} attempts.`);
-      return { ...pub, status: "pending", externalRef: null, error: null };
+      return { ...pub, status: "pending", externalRef: null, error: null, claims: 0, childRefs: [] };
   }
 }
 

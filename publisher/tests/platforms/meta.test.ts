@@ -102,6 +102,54 @@ describe("stepInstagram — carousel", () => {
     expect(parent.caption).toBe("Q42 #NDA");
     expect(parent.children.split(",")).toHaveLength(3);
   });
+
+  // 2026-10-23: uploading 9 slides one by one ran past the scheduler's time limit, every run started
+  // over from slide 1, and ~50 runs later Instagram blocked the account (code 9).
+  const nine: MetaPostMedia = { ...carousel, slideUrls: Array.from({ length: 9 }, (_, i) => `https://files.example/${i + 1}.jpg`) };
+
+  it("uploads slides five at a time, not one by one", async () => {
+    fake = await startFakeMeta({ mediaDelayMs: 40 });
+    const ev = await stepInstagram(pub(), { config: fake.config, account: ig, media: nine });
+    expect(ev).toMatchObject({ type: "started" });
+    expect(fake.media.maxInFlight).toBe(5);
+  });
+
+  it("saves each uploaded slide's container, in slide order", async () => {
+    fake = await startFakeMeta();
+    const saved: string[][] = [];
+    await stepInstagram(pub(), { config: fake.config, account: ig, media: nine, saveChildren: async (refs) => { saved.push(refs); } });
+    const last = saved.at(-1)!;
+    expect(last).toHaveLength(9);
+    expect(last.every((r) => /^c\d+$/.test(r))).toBe(true);
+    const parent = fake.calls.find((c) => c.params.media_type === "CAROUSEL")!;
+    expect(parent.params.children).toBe(last.join(","));
+  });
+
+  it("picks up where an earlier run stopped: uploads only the missing slides, keeps the order", async () => {
+    fake = await startFakeMeta();
+    const ev = await stepInstagram(pub({ childRefs: ["c1", "", "c3"] }), { config: fake.config, account: ig, media: carousel });
+    expect(ev).toMatchObject({ type: "started" });
+    const children = fake.calls.filter((c) => c.params.is_carousel_item);
+    expect(children.map((c) => c.params.image_url)).toEqual([carousel.slideUrls![1]]);
+    const parent = fake.calls.find((c) => c.params.media_type === "CAROUSEL")!;
+    expect(parent.params.children).toMatch(/^c1,c\d+,c3$/);
+  });
+
+  it("keeps the slides that did upload when another one hits a temporary error", async () => {
+    fake = await startFakeMeta({ failOn: { path: /\/ig1\/media$/, status: 503, message: "Service temporarily unavailable", once: true } });
+    const saved: string[][] = [];
+    const ev = await stepInstagram(pub(), { config: fake.config, account: ig, media: carousel, saveChildren: async (refs) => { saved.push(refs); } });
+    expect(ev).toBeNull();
+    expect(saved.at(-1)!.filter(Boolean)).toHaveLength(2);
+    expect(fake.calls.some((c) => c.params.media_type === "CAROUSEL")).toBe(false);
+  });
+
+  it("explains Meta's 'too many actions' block (code 9) in plain words", async () => {
+    fake = await startFakeMeta({ failOn: { path: /\/ig1\/media$/, status: 400, code: 9, message: "User is performing too many actions" } });
+    const ev = await stepInstagram(pub(), { config: fake.config, account: ig, media: carousel });
+    expect(ev).toEqual({ type: "failed", error: expect.stringMatching(/paused new uploads.*24 hours.*Retry/) });
+    expect(ev && "error" in ev ? ev.error : "").toMatch(/code 9/);
+  });
 });
 
 describe("stepFacebook — Page reel", () => {

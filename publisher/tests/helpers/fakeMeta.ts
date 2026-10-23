@@ -20,6 +20,8 @@ export interface FakeMetaOptions {
   igStoryNavigation?: object;
   /** Payload for GET /{fb-video-id}/video_insights. */
   fbInsights?: object;
+  /** Delay before answering POST /{ig-user-id}/media, to see how many uploads run at once. */
+  mediaDelayMs?: number;
   /** Force an error response for the first call whose path matches. */
   failOn?: { path: RegExp; status: number; message: string; once?: boolean; userTitle?: string; userMsg?: string; code?: number };
   /** Ad account act_1: its campaigns / ad sets / ads (GET lists) and daily insights rows, served in pages. */
@@ -38,6 +40,7 @@ export interface FakeMetaOptions {
 export async function startFakeMeta(opts: FakeMetaOptions = {}) {
   const calls: FakeCall[] = [];
   let containerPoll = 0, fbPoll = 0, nextId = 100, failUsed = false;
+  const media = { inFlight: 0, maxInFlight: 0 };
   const id = () => String(nextId++);
 
   const server = http.createServer(async (req, res) => {
@@ -58,7 +61,12 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
 
     const p = url.pathname;
     // --- Instagram
-    if (req.method === "POST" && /^\/v[\d.]+\/ig1\/media$/.test(p)) return send(200, { id: `c${id()}` });
+    if (req.method === "POST" && /^\/v[\d.]+\/ig1\/media$/.test(p)) {
+      media.maxInFlight = Math.max(media.maxInFlight, ++media.inFlight);
+      if (opts.mediaDelayMs) await new Promise((r) => setTimeout(r, opts.mediaDelayMs));
+      media.inFlight--;
+      return send(200, { id: `c${id()}` });
+    }
     if (req.method === "POST" && /^\/v[\d.]+\/ig1\/media_publish$/.test(p)) return send(200, { id: `m${id()}` });
     if (req.method === "GET" && /^\/v[\d.]+\/ig1\/media$/.test(p)) {
       const all = opts.igMedia ?? [], size = opts.igMediaPageSize ?? 100, from = Number(params.after ?? 0);
@@ -156,6 +164,7 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
   const base = `http://127.0.0.1:${(server.address() as AddressInfo).port}`;
   return {
     calls,
+    media,
     config: { graphBase: base, ruploadBase: base, version: "v24.0" },
     close: () => new Promise<void>((r) => server.close(() => r())),
   };

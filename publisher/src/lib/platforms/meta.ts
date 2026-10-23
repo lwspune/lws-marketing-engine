@@ -12,7 +12,7 @@ import type { PostKind, Publication } from "@/lib/domain/types";
 // Flows:
 //   Instagram reel      POST /{ig}/media (REELS, video_url, cover_url) → poll container → POST /{ig}/media_publish
 //   Instagram story     POST /{ig}/media (STORIES, image_url, no caption) → same
-//   Instagram carousel  POST /{ig}/media per slide (is_carousel_item) → POST /{ig}/media (CAROUSEL) → same
+//   Instagram carousel  POST /{ig}/media per slide (is_carousel_item, 5 at once, saved) → POST /{ig}/media (CAROUSEL) → same
 //   Facebook Page reel  POST /{page}/video_reels start → rupload file_url → finish (PUBLISHED) → poll status
 
 export interface MetaConfig {
@@ -42,10 +42,12 @@ export interface StepContext<A> {
   config: MetaConfig;
   account: A;
   media: MetaPostMedia;
+  /** Called with a carousel's slide containers (slide order, "" = not uploaded) after each batch. */
+  saveChildren?: (refs: string[]) => Promise<void>;
 }
 
 export class MetaApiError extends Error {
-  constructor(message: string, public readonly status: number) {
+  constructor(message: string, public readonly status: number, public readonly code?: number) {
     super(message);
     this.name = "MetaApiError";
   }
@@ -85,7 +87,7 @@ async function call(
     // `message` is often just "Invalid parameter"; Meta's real explanation is in error_user_msg.
     const detail = err.error_user_msg && err.error_user_msg !== err.message ? ` — ${err.error_user_msg}` : "";
     const msg = `Meta API ${res.status}${err.code ? ` (code ${err.code})` : ""}: ${err.message ?? res.statusText}${detail}`;
-    throw new MetaApiError(redact(msg, init.token), res.status);
+    throw new MetaApiError(redact(msg, init.token), res.status, err.code);
   }
   return json;
 }
@@ -95,8 +97,16 @@ const graph = (cfg: MetaConfig, path: string) => `${cfg.graphBase}/${cfg.version
 /** Shared with metaInsights.ts: one Graph request with token redaction and typed errors. */
 export { call as metaCall, graph as graphUrl };
 
+/** Meta's anti-spam block ("User is performing too many actions"); it lifts by itself, typically within 24 hours. */
+const TOO_MANY_ACTIONS = 9;
+/** Carousel slides uploaded at once: each upload waits while Meta fetches the image, so one by one is too slow. */
+export const SLIDE_UPLOADS_AT_ONCE = 5;
+
 /** Turn an API failure into the event to record: temporary → try again next tick, otherwise fail. */
 function onError(e: unknown, token: string): PublicationEvent | null {
+  if (e instanceof MetaApiError && e.code === TOO_MANY_ACTIONS) {
+    return { type: "failed", error: `Meta has paused new uploads for this account after too many tries. Wait 24 hours, then press Retry. (${e.message})` };
+  }
   if (e instanceof MetaApiError) return e.temporary ? null : { type: "failed", error: e.message };
   return { type: "failed", error: redact(`Unexpected error: ${(e as Error).message ?? String(e)}`, token) };
 }
@@ -129,12 +139,18 @@ export async function stepInstagram(pub: Publication, ctx: StepContext<Instagram
       }
       const slides = media.slideUrls ?? [];
       if (slides.length < 2) return { type: "failed", error: "Carousel needs at least 2 slides." };
-      const children: string[] = [];
-      for (const url of slides) {
-        const child = await call(graph(cfg, `${account.igUserId}/media`), {
-          method: "POST", params: { image_url: url, is_carousel_item: "true", access_token: token }, token,
-        });
-        children.push(String(child.id));
+      // Resume from the slides an earlier, cut-off run already uploaded; save after each batch.
+      const children = slides.map((_, i) => pub.childRefs?.[i] ?? "");
+      const missing = children.flatMap((ref, i) => (ref ? [] : [i]));
+      for (let b = 0; b < missing.length; b += SLIDE_UPLOADS_AT_ONCE) {
+        const batch = missing.slice(b, b + SLIDE_UPLOADS_AT_ONCE);
+        const results = await Promise.allSettled(batch.map((i) => call(graph(cfg, `${account.igUserId}/media`), {
+          method: "POST", params: { image_url: slides[i], is_carousel_item: "true", access_token: token }, token,
+        })));
+        results.forEach((r, k) => { if (r.status === "fulfilled") children[batch[k]] = String(r.value.id); });
+        if (results.some((r) => r.status === "fulfilled")) await ctx.saveChildren?.(children);
+        const failed = results.find((r): r is PromiseRejectedResult => r.status === "rejected");
+        if (failed) throw failed.reason;
       }
       const parent = await call(graph(cfg, `${account.igUserId}/media`), {
         method: "POST", params: { media_type: "CAROUSEL", children: children.join(","), caption: media.caption, access_token: token }, token,

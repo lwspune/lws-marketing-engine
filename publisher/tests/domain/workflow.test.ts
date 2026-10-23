@@ -141,6 +141,11 @@ describe("applyEvent — publication state machine", () => {
     expect(codeOf(() => applyEvent(pub({ status: "failed", attempts: MAX_ATTEMPTS }), { type: "retry" }))).toBe("retry_limit");
   });
 
+  it("retry starts the pick-up count and uploaded slides afresh (Instagram drops unused slides after 24 h)", () => {
+    const failed = pub({ status: "failed", claims: 6, childRefs: ["c1", "c2"], error: "cut off" });
+    expect(applyEvent(failed, { type: "retry" })).toMatchObject({ claims: 0, childRefs: [] });
+  });
+
   it("never leaves published (the never-post-twice guard)", () => {
     const done = pub({ status: "published" });
     for (const ev of [{ type: "started", externalRef: "c2" }, { type: "retry" }, { type: "failed", error: "x" }, { type: "published" }] as const) {
