@@ -2,6 +2,7 @@ import { effectiveCaption } from "@/lib/domain/captions";
 import { applyEvent, MAX_START_TRIES, type PublicationEvent } from "@/lib/domain/workflow";
 import { PLATFORM_LABEL, type Captions, type Platform, type PostKind, type Publication } from "@/lib/domain/types";
 import { stepFacebook, stepInstagram, type MetaConfig, type MetaPostMedia } from "@/lib/platforms/meta";
+import { stepYouTube, type UploadSession, type YouTubeConfig } from "@/lib/platforms/youtube";
 
 // One scheduler tick: claim due publications, move each forward one step, record the result.
 // Called every minute by /api/cron/publish (triggered from Supabase pg_cron). Each publication is
@@ -25,6 +26,9 @@ export interface PublisherRepo {
   release(publicationId: string): Promise<void>;
   /** Save a carousel's uploaded slide containers so a run that gets cut off doesn't upload them again. */
   saveChildren(publicationId: string, refs: string[]): Promise<void>;
+  /** A YouTube upload's resumable session for the publication's current attempt (0023), so a cut-off run resumes. */
+  loadUploadSession(publicationId: string): Promise<UploadSession | null>;
+  saveUploadSession(publicationId: string, session: UploadSession): Promise<void>;
 }
 
 export interface TickSummary { claimed: number; recorded: number; released: number; errors: number }
@@ -32,6 +36,8 @@ export interface TickSummary { claimed: number; recorded: number; released: numb
 export interface TickOptions {
   repo: PublisherRepo;
   metaConfig: MetaConfig;
+  /** null when the server has no Google client (GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET). */
+  youtubeConfig?: YouTubeConfig | null;
   limit?: number;
   logger?: { error: (...args: unknown[]) => void };
   /** Milliseconds now; injectable for tests. */
@@ -62,12 +68,30 @@ async function mediaFor(pub: Publication, ctx: PublishContext, repo: PublisherRe
   return { ...media, slideUrls: await repo.signUrls(post.slidePaths, SIGNED_URL_TTL_SECONDS) };
 }
 
+async function stepYouTubeShort(pub: Publication, ctx: PublishContext, opts: TickOptions): Promise<PublicationEvent | null> {
+  if (!opts.youtubeConfig) {
+    return { type: "failed", error: "YouTube isn't set up on the server yet (GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET). Press Retry once it is." };
+  }
+  const { post, account } = ctx;
+  if (post.kind !== "reel") return { type: "failed", error: `A ${post.kind} can't be published to YouTube.` };
+  const yt = post.captions.youtube ?? { title: "", description: "" };
+  // Only a pending upload downloads the video; Shorts take no cover through the API.
+  const [videoUrl] = pub.status === "pending" && post.videoPath ? await opts.repo.signUrls([post.videoPath], SIGNED_URL_TTL_SECONDS) : [];
+  return stepYouTube(pub, {
+    config: opts.youtubeConfig,
+    account: { channelId: account.externalId, refreshToken: account.token },
+    media: { videoUrl, title: yt.title, description: yt.description },
+    loadSession: () => opts.repo.loadUploadSession(pub.id),
+    saveSession: (s) => opts.repo.saveUploadSession(pub.id, s),
+  });
+}
+
 async function stepOne(pub: Publication, ctx: PublishContext, opts: TickOptions): Promise<PublicationEvent | null> {
   const { platform, externalId, token } = ctx.account;
-  if (platform === "youtube") return { type: "failed", error: "YouTube publishing isn't available yet." };
   if (pub.status === "pending" && (pub.claims ?? 0) > MAX_START_TRIES) {
-    return { type: "failed", error: `Couldn't get this started after ${MAX_START_TRIES} tries (each run was cut off or Meta was busy). Press Retry.` };
+    return { type: "failed", error: `Couldn't get this started after ${MAX_START_TRIES} tries (each run was cut off or the platform was busy). Press Retry.` };
   }
+  if (platform === "youtube") return stepYouTubeShort(pub, ctx, opts);
   const media = await mediaFor(pub, ctx, opts.repo);
   if (platform === "instagram") {
     // Best effort: if saving fails, the worst case is uploading those slides again next run.

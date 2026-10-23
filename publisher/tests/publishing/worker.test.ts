@@ -1,8 +1,10 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { startFakeMeta } from "../helpers/fakeMeta";
+import { startFakeGoogle } from "../helpers/fakeGoogle";
 import { runTick, type PublishContext, type PublisherRepo } from "@/lib/publishing/worker";
 import type { Publication } from "@/lib/domain/types";
 import type { PublicationEvent } from "@/lib/domain/workflow";
+import type { UploadSession } from "@/lib/platforms/youtube";
 
 const pub = (over: Partial<Publication> = {}): Publication => ({
   id: "x1", postId: "p1", platform: "instagram", status: "pending", scheduledAt: null,
@@ -12,26 +14,29 @@ const pub = (over: Partial<Publication> = {}): Publication => ({
 const reelContext = (platform: "instagram" | "facebook" | "youtube" = "instagram"): PublishContext => ({
   post: {
     id: "p1", kind: "reel", videoPath: "o1/p1/v.mp4", coverPath: "o1/p1/c.png", slidePaths: [],
-    captions: { instagram: "IG caption #NDA", facebook: "FB caption" },
+    captions: { instagram: "IG caption #NDA", facebook: "FB caption", youtube: { title: "Q74 #shorts", description: "pyqvault.com" } },
   },
-  account: { platform, externalId: platform === "instagram" ? "ig1" : "page1", token: "TOKEN" },
+  account: { platform, externalId: { instagram: "ig1", facebook: "page1", youtube: "UC-lws" }[platform], token: platform === "youtube" ? "REFRESH-OK" : "TOKEN" },
 });
 
 /** In-memory stand-in for the Supabase repo: hands out the given publications once, records what happens. */
-function memoryRepo(pubs: Publication[], ctx: PublishContext | null | ((p: Publication) => PublishContext | null)) {
+function memoryRepo(pubs: Publication[], ctx: PublishContext | null | ((p: Publication) => PublishContext | null), fileUrl?: string) {
   const recorded: { id: string; ev: PublicationEvent }[] = [];
   const released: string[] = [];
   const signed: { paths: string[]; ttl: number }[] = [];
   const children: { id: string; refs: string[] }[] = [];
+  const sessions = new Map<string, UploadSession>();
   const repo: PublisherRepo = {
     claimDue: async () => pubs.splice(0),
     loadContext: async (p) => (typeof ctx === "function" ? ctx(p) : ctx),
-    signUrls: async (paths, ttl) => { signed.push({ paths, ttl }); return paths.map((x) => `https://signed.example/${x}?t=1`); },
+    signUrls: async (paths, ttl) => { signed.push({ paths, ttl }); return paths.map((x) => fileUrl ?? `https://signed.example/${x}?t=1`); },
     record: async (id, ev) => { recorded.push({ id, ev }); },
     release: async (id) => { released.push(id); },
     saveChildren: async (id, refs) => { children.push({ id, refs }); },
+    loadUploadSession: async (id) => sessions.get(id) ?? null,
+    saveUploadSession: async (id, s) => { sessions.set(id, s); },
   };
-  return { repo, recorded, released, signed, children };
+  return { repo, recorded, released, signed, children, sessions };
 }
 
 const silent = { error: () => {} };
@@ -106,11 +111,37 @@ describe("runTick", () => {
     expect(m.recorded[0].ev).toEqual({ type: "failed", error: expect.stringMatching(/isn't connected/) });
   });
 
-  it("fails YouTube cleanly until that phase is built", async () => {
+  it("uploads a pending YouTube reel with its YouTube title, saving the upload session through the repo", async () => {
+    fake = await startFakeMeta();
+    const google = await startFakeGoogle();
+    try {
+      const m = memoryRepo([pub({ platform: "youtube" })], reelContext("youtube"), google.fileUrl);
+      await runTick({ repo: m.repo, metaConfig: fake.config, youtubeConfig: google.config, logger: silent });
+      expect(m.recorded[0].ev).toEqual({ type: "started", externalRef: expect.stringMatching(/^vid\d+$/) });
+      expect(m.signed[0].paths).toEqual(["o1/p1/v.mp4"]); // the video only: Shorts take no cover through the API
+      expect(m.sessions.get("x1")).toEqual({ uri: expect.stringContaining("upload_id="), size: 1000 });
+      const init = google.calls.find((c) => c.method === "POST" && c.path.startsWith("/upload"))!;
+      expect(init.json).toMatchObject({ snippet: { title: "Q74 #shorts", description: "pyqvault.com" } });
+      expect(fake.calls).toHaveLength(0);
+    } finally { await google.close(); }
+  });
+
+  it("publishes a processed YouTube Short without downloading anything", async () => {
+    fake = await startFakeMeta();
+    const google = await startFakeGoogle({ uploadStatuses: ["processed"] });
+    try {
+      const m = memoryRepo([pub({ platform: "youtube", status: "processing", externalRef: "vid5", attempts: 1 })], reelContext("youtube"), google.fileUrl);
+      await runTick({ repo: m.repo, metaConfig: fake.config, youtubeConfig: google.config, logger: silent });
+      expect(m.recorded[0].ev).toEqual({ type: "published", externalId: "vid5", permalink: "https://www.youtube.com/shorts/vid5" });
+      expect(m.signed).toHaveLength(0);
+    } finally { await google.close(); }
+  });
+
+  it("fails YouTube clearly when the Google client isn't set up on the server", async () => {
     fake = await startFakeMeta();
     const m = memoryRepo([pub({ platform: "youtube" })], reelContext("youtube"));
-    await runTick({ repo: m.repo, metaConfig: fake.config, logger: silent });
-    expect(m.recorded[0].ev).toEqual({ type: "failed", error: expect.stringMatching(/YouTube/) });
+    await runTick({ repo: m.repo, metaConfig: fake.config, youtubeConfig: null, logger: silent });
+    expect(m.recorded[0].ev).toEqual({ type: "failed", error: expect.stringMatching(/GOOGLE_CLIENT_ID/) });
   });
 
   it("an unexpected crash on one publication is logged and released; the others still run", async () => {

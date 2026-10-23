@@ -96,6 +96,18 @@ export function supabaseRepo(db: SupabaseClient): PublisherRepo {
       const { error } = await db.rpc("save_carousel_children", { p_publication: publicationId, p_refs: refs });
       if (error) throw new Error(`save_carousel_children: ${error.message}`);
     },
+
+    async loadUploadSession(publicationId) {
+      const { data, error } = await db.rpc("upload_session", { p_publication: publicationId });
+      if (error) throw new Error(`upload_session: ${error.message}`);
+      const row = (data as { session_uri: string; size_bytes: number }[] | null)?.[0];
+      return row ? { uri: row.session_uri, size: Number(row.size_bytes) } : null;
+    },
+
+    async saveUploadSession(publicationId, s) {
+      const { error } = await db.rpc("save_upload_session", { p_publication: publicationId, p_uri: s.uri, p_size: s.size });
+      if (error) throw new Error(`save_upload_session: ${error.message}`);
+    },
   };
 }
 

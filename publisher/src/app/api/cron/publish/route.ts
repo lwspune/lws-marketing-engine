@@ -4,6 +4,7 @@ import { supabaseMetricsRepo, supabaseRepo } from "@/lib/publishing/supabaseRepo
 import { runTick } from "@/lib/publishing/worker";
 import { runMetricsTick } from "@/lib/publishing/metrics";
 import { metaConfigFromEnv } from "@/lib/platforms/meta";
+import { youTubeConfigFromEnv } from "@/lib/platforms/youtube";
 
 // Called every minute by Supabase pg_cron (migrations 0003/0004) with `Authorization: Bearer <CRON_SECRET>`.
 // One tick = publish what's due, then take any scorecard snapshots that are due.
@@ -16,7 +17,7 @@ export async function POST(req: Request) {
     tick: async () => {
       const db = createSupabaseAdminClient();
       const metaConfig = metaConfigFromEnv();
-      const publishing = await runTick({ repo: supabaseRepo(db), metaConfig });
+      const publishing = await runTick({ repo: supabaseRepo(db), metaConfig, youtubeConfig: youTubeConfigFromEnv() });
       const metrics = await runMetricsTick({ repo: supabaseMetricsRepo(db), metaConfig });
       return { ...publishing, metrics };
     },
