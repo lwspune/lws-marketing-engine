@@ -97,3 +97,10 @@ Independent agent, 2026-10-23: **fix first** (maths checked: tile areas, the ide
 - I4 end card vs takeaway mismatch → **taken**: one line, "add (half the x number)²".
 - I5 labels too small after the ×0.5 shrink → **taken**: they hide.
 - Layout: vertex near the bottom fade → **taken**: y range [−11, 5], push centred on the vertex.
+
+**Changed while building (2026-10-23):** the overlap test caught three faults before any render: the slow push lifted the
+top "x" label out of the picture (push re-centred at band y 540); the "x + 3" side label appeared during the punch-in and
+left the frame (it now appears after the zoom out, 5.6 s); the tile labels were still fading as the identity line moved
+(they're gone by 9.0 s). The stills sheet caught three more: the identity line slid across the shrinking tiles (it now
+fades out and reappears top-right), "(x + 3)² = 0 here" crossed the parabola's arm (moved below the vertex), and the "−3"
+tick sat on the dashed drop line (moved to its left). The dot rides from x = 0 (x = 1 is above the y ≤ 5 window). The first render's cover still gave the method away: the halves read "3x", "3x" and the dividing line cut through the strip. Now the strip is one "6x" piece until the split visibly opens (~0.4 s), the halves read "3x" only from 1.3 s, and the cover is at 0.15 s (tested: no "3", "3x" or "9" on it).

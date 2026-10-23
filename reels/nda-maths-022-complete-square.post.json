@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-022-complete-square",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "022 · Why? #10: completing the square with tiles, add 9; lowest value −9 (predict-first, white)",
+  "video": "nda-maths-022-complete-square.mp4",
+  "cover": "nda-maths-022-complete-square-cover.png",
+  "captions": {
+    "instagram": "NDA Maths · Quadratic equations. x² + 6x: add what to make a perfect square? A 6 · B 9 · C 36 👇\n\nB. Draw it: x² is a square, 6x is a strip. Split the strip in two (3x and 3x) and wrap it round the square.\nOne corner is missing: 3 × 3 = 9. So x² + 6x + 9 = (x + 3)².\nTake the 9 back out: x² + 6x = (x + 3)² − 9. A square is never negative, so the lowest value is −9, at x = −3.\nTraps: 6 just adds the middle number; 36 squares the 6 instead of half of it.\n\nNDA asked it in 2026 (I), Q42: the minimum of x² + kx + k² = (x + k/2)² + 3k²/4, so 3k²/4.\n\nSave this 📌 Follow @lws.pune for one NDA maths idea every day.\nPractise every Quadratic Equations PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Quadratics #LWSPune",
+    "facebook": "NDA Maths · Quadratic equations. x² + 6x: add what to make a perfect square? A 6 · B 9 · C 36 👇\n\nB. Split the 6x strip in two and wrap it round the x² square: the missing corner is 3 × 3 = 9, so x² + 6x + 9 = (x + 3)². That's also why x² + 6x is never below −9. NDA asked the same move in 2026 (I), Q42 (minimum of x² + kx + k² = 3k²/4).\n\nPractise NDA PYQs free, chapter-wise: https://www.pyqvault.com\n\n#NDA #NDAMaths #LWSPune",
+    "youtube": {
+      "title": "Completing the square, as an actual square #shorts",
+      "description": "x² + 6x as tiles: split the 6x strip in two, wrap it round the square, and the missing corner is 3 × 3 = 9. So x² + 6x = (x + 3)² − 9, never below −9. NDA 2026 (I) Q42 uses exactly this.\n\nPractise NDA PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #Shorts"
+    }
+  }
+}
