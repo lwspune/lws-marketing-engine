@@ -1,0 +1,194 @@
+{
+  "week": "2026-w44",
+  "days": [
+    {
+      "date": "2026-10-26",
+      "questionId": "a3e7165a-dc3a-4eb5-85eb-f38a626c9add",
+      "chapter": "Matrices & Determinants",
+      "question": "\\(A\\) is a square matrix of order 3 and \\(|A| = 4\\). What is \\(|\\text{adj}\\,A|\\)?",
+      "options": [
+        {
+          "label": "A",
+          "text": "\\(64\\)"
+        },
+        {
+          "label": "B",
+          "text": "\\(16\\)"
+        },
+        {
+          "label": "C",
+          "text": "\\(8\\)"
+        },
+        {
+          "label": "D",
+          "text": "\\(4\\)"
+        }
+      ],
+      "answer": "B",
+      "step": "For order \\(n\\), \\(|\\text{adj}\\,A| = |A|^{n-1}\\), so \\(|\\text{adj}\\,A| = 4^{2} = 16\\).",
+      "checked": "A·adj A = |A| I → |A|·|adj A| = |A|³ → |adj A| = |A|² = 16. Matches the bank (B)."
+    },
+    {
+      "date": "2026-10-27",
+      "questionId": "1dc08e50-6548-4778-986f-a07278ad8ed2",
+      "chapter": "Inverse Trigonometry",
+      "question": "What is \\(\\sin(\\tan^{-1} 0.75)\\)?",
+      "options": [
+        {
+          "label": "A",
+          "text": "\\(1\\)"
+        },
+        {
+          "label": "B",
+          "text": "\\(4/5\\)"
+        },
+        {
+          "label": "C",
+          "text": "\\(3/5\\)"
+        },
+        {
+          "label": "D",
+          "text": "\\(1/2\\)"
+        }
+      ],
+      "answer": "C",
+      "step": "\\(\\tan\\theta = 3/4\\): a 3-4-5 right triangle, so \\(\\sin\\theta = 3/5\\).",
+      "checked": "tan θ = 3/4 with θ in (0, π/2) → opposite 3, adjacent 4, hypotenuse 5 → sin θ = 3/5. Matches the bank (C)."
+    },
+    {
+      "date": "2026-10-28",
+      "questionId": "6dbb904e-453a-4cf6-9216-223898a8709b",
+      "chapter": "Permutation & Combination",
+      "question": "There are 15 points in a plane, no three of them in a line. How many triangles can be formed by joining them?",
+      "options": [
+        {
+          "label": "A",
+          "text": "\\(455\\)"
+        },
+        {
+          "label": "B",
+          "text": "\\(2730\\)"
+        },
+        {
+          "label": "C",
+          "text": "\\(355\\)"
+        },
+        {
+          "label": "D",
+          "text": "\\(454\\)"
+        }
+      ],
+      "answer": "A",
+      "step": "Any 3 of the points make a triangle: \\(^{15}C_{3} = \\dfrac{15 \\times 14 \\times 13}{6} = 455\\).",
+      "checked": "15C3 = 2730/6 = 455 (2730 is 15P3, the ordered count). Matches the bank (A)."
+    },
+    {
+      "date": "2026-10-29",
+      "questionId": "cb78e767-0d02-486f-8613-d5c88e703373",
+      "chapter": "Sets & Relations",
+      "question": "Set \\(A\\) has 2 elements and set \\(B\\) has 3. How many mappings are there from \\(A\\) to \\(B\\)?",
+      "options": [
+        {
+          "label": "A",
+          "text": "\\(4\\)"
+        },
+        {
+          "label": "B",
+          "text": "\\(6\\)"
+        },
+        {
+          "label": "C",
+          "text": "\\(8\\)"
+        },
+        {
+          "label": "D",
+          "text": "\\(9\\)"
+        }
+      ],
+      "answer": "D",
+      "step": "Each of the 2 elements of \\(A\\) can go to any of 3 elements of \\(B\\): \\(3 \\times 3 = 3^{2} = 9\\).",
+      "checked": "Number of functions A → B = |B|^|A| = 3² = 9 (8 = 2³ is the B → A count). Matches the bank (D)."
+    },
+    {
+      "date": "2026-10-30",
+      "questionId": "79f34968-571a-4e5d-8896-87765eb6b6c3",
+      "chapter": "Properties of Triangle",
+      "question": "A triangle has sides 13, 14 and 15. What is its inradius \\(r\\)?",
+      "options": [
+        {
+          "label": "A",
+          "text": "\\(3\\)"
+        },
+        {
+          "label": "B",
+          "text": "\\(4\\)"
+        },
+        {
+          "label": "C",
+          "text": "\\(5\\)"
+        },
+        {
+          "label": "D",
+          "text": "\\(4.5\\)"
+        }
+      ],
+      "answer": "B",
+      "step": "\\(s = 21\\), area \\(= \\sqrt{21 \\cdot 8 \\cdot 7 \\cdot 6} = 84\\), so \\(r = \\dfrac{84}{21} = 4\\).",
+      "checked": "s = 21; Heron: 21·8·7·6 = 7056 = 84² → area 84; r = area/s = 4. Matches the bank (B)."
+    },
+    {
+      "date": "2026-10-31",
+      "questionId": "12858a52-6f54-4690-a16e-d906c55d3da7",
+      "chapter": "Height & Distance",
+      "question": "A pole's shadow is \\(\\sqrt{3}\\) times the pole's height. What is the Sun's angle of elevation?",
+      "options": [
+        {
+          "label": "A",
+          "text": "\\(30^{\\circ}\\)"
+        },
+        {
+          "label": "B",
+          "text": "\\(40^{\\circ}\\)"
+        },
+        {
+          "label": "C",
+          "text": "\\(45^{\\circ}\\)"
+        },
+        {
+          "label": "D",
+          "text": "None of these"
+        }
+      ],
+      "answer": "A",
+      "step": "\\(\\tan\\theta = \\dfrac{h}{\\sqrt{3}\\,h} = \\dfrac{1}{\\sqrt{3}}\\), so \\(\\theta = 30^{\\circ}\\).",
+      "checked": "tan θ = height/shadow = 1/√3 → θ = 30°. Matches the bank (A)."
+    },
+    {
+      "date": "2026-11-01",
+      "questionId": "9b36dbd5-e618-403e-8192-d36eeb06a0ce",
+      "chapter": "Probability",
+      "question": "Two fair dice are thrown. What is the probability that the sum is neither 5 nor 7?",
+      "options": [
+        {
+          "label": "A",
+          "text": "\\(11/18\\)"
+        },
+        {
+          "label": "B",
+          "text": "\\(2/3\\)"
+        },
+        {
+          "label": "C",
+          "text": "\\(13/18\\)"
+        },
+        {
+          "label": "D",
+          "text": "\\(5/6\\)"
+        }
+      ],
+      "answer": "C",
+      "step": "Sum 5 in 4 ways, sum 7 in 6 ways: 10 of 36. The rest: \\(\\dfrac{26}{36} = \\dfrac{13}{18}\\).",
+      "checked": "Sum 5: (1,4)(2,3)(3,2)(4,1) = 4; sum 7: 6; 36 − 10 = 26 → 26/36 = 13/18. Matches the bank (C)."
+    }
+  ]
+}

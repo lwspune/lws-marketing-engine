@@ -22,6 +22,7 @@ soundmind/*/*.jpg
 soundmind/reels/*.mp4
 # @pyqvault_ maths story cards, re-made from their batch: node stories/render.mjs stories/pyqvault/<week>/batch.json
 stories/pyqvault/*/*.jpg
+stories/lwspune/*/*.jpg
 
 # Personal Claude Code settings
 .claude/settings.local.json

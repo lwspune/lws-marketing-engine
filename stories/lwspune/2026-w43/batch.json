@@ -1,0 +1,59 @@
+{
+  "week": "2026-w43",
+  "days": [
+    {
+      "date": "2026-10-24",
+      "questionId": "d6faecd8-cec8-4ac2-8daf-66f917684c56",
+      "chapter": "Trigonometric Identities",
+      "question": "Find the value of \\(\\sin 12^{\\circ}\\cos 78^{\\circ} + \\cos 12^{\\circ}\\sin 78^{\\circ}\\)",
+      "options": [
+        {
+          "label": "A",
+          "text": "\\(0\\)"
+        },
+        {
+          "label": "B",
+          "text": "\\(1\\)"
+        },
+        {
+          "label": "C",
+          "text": "\\(-1\\)"
+        },
+        {
+          "label": "D",
+          "text": "\\(2\\)"
+        }
+      ],
+      "answer": "B",
+      "step": "It is \\(\\sin(A+B)\\) with \\(A = 12^{\\circ}\\), \\(B = 78^{\\circ}\\): \\(\\sin 90^{\\circ} = 1\\).",
+      "checked": "sin A cos B + cos A sin B = sin(A + B) = sin 90° = 1. Matches the bank (B)."
+    },
+    {
+      "date": "2026-10-25",
+      "questionId": "71c826fb-9c73-47e9-b0eb-82018e5fbee6",
+      "chapter": "Binary Numbers",
+      "question": "If \\((1010)_{2} \\times (111)_{2} = (X)_{10}\\), what is \\(X\\)?",
+      "options": [
+        {
+          "label": "A",
+          "text": "\\(80\\)"
+        },
+        {
+          "label": "B",
+          "text": "\\(60\\)"
+        },
+        {
+          "label": "C",
+          "text": "\\(70\\)"
+        },
+        {
+          "label": "D",
+          "text": "\\(75\\)"
+        }
+      ],
+      "answer": "C",
+      "step": "\\((1010)_{2} = 8 + 2 = 10\\) and \\((111)_{2} = 4 + 2 + 1 = 7\\), so \\(X = 10 \\times 7 = 70\\).",
+      "checked": "1010₂ = 10, 111₂ = 7, 10 × 7 = 70 (check in binary: 1010 × 111 = 1000110₂ = 64 + 4 + 2 = 70). Matches the bank (C)."
+    }
+  ]
+}
