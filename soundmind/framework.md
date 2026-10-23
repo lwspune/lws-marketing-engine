@@ -1,4 +1,4 @@
-# @soundmindwithshivani post framework (v1.3, 2026-10-22)
+# @soundmindwithshivani post framework (v1.4, 2026-10-23)
 
 How every Sound Mind post is made, one numbered point at a time, in three parts: **both formats**, **carousels** and
 **reels**. Carousels and reels do different jobs (founder, 2026-10-21: "different fundamentally"): a carousel mostly
@@ -143,6 +143,25 @@ the beats are checked instead of eyeballed. · *Check:* `npm test` in `remotion/
 
 ---
 
+## Reels: the pause reel
+
+**Their job and winning:** the same as the ME story's (reach people who don't follow yet; at 7 days, more people reached
+and longer watch time than the typical reel, then shares per 1,000 reached with at least 2 shares). S11 and S13's length
+don't apply to a pause reel; S1, S4, S5, S7, S12, S14, S16, S17 and S18's colours do.
+
+**S20 · Pause reels: a calm moment to watch, 12–15 s, made to loop.** One everyday scene (chai on a rainy balcony, phone
+face down), drawn flat (S18), filmed as 3–4 shots from the one drawing with dissolves between them: wide → close-ups
+with no text and the background in soft focus → wide again. Layers move at their own depth as the camera drifts, and
+something always moves (rain, steam, breeze, blinks). The person is a young woman (early 20s; founder, 2026-10-23). The message is on frame 0 (it names the
+feeling, S1), one line comes back at the end, and the camera ends where it began, so the loop doesn't jump. Rain and
+piano are made in code. · *Why:* the founder pointed at an AI-made anime reel (@pixcraft_132, 2026-10-23: a man with
+chai under a tree in the rain, 12 s, four shots, no words, caption "Peace") that people reposted widely: a mood they send
+on, and a short loop adds watch time. Made our way, not with AI video: no "AI info" label on Shivani's brand, and the
+founder's rules for reels (flat 2D, S18; Remotion, S15). · *Check:* `remotion/tests/sm011.test.ts` (message at frame 0,
+the shots, close-ups that hold their subject, the loop, constant motion, words WCAG AA). · 🧪 L66
+
+---
+
 ## Changing the framework
 
 1. **Every change has a reason.** Add, change or drop a point only with a line in the change log below: what changed,
@@ -162,5 +181,6 @@ the beats are checked instead of eyeballed. · *Check:* `npm test` in `remotion/
 |---|---|---|---|
 | v1 | 2026-10-21 | Framework created from `brand.md`'s rules (S1–S15), each with a reason, a check and a status; "winning" set to shares per 1,000 reached at 7 days. Lessons L52–L55 measure the four points on test. | Founder: a framework like @pyqvault_'s, for Sound Mind. Nothing in it is new: it numbers what Sound Mind already does, so changes from here on have a trail. |
 | v1.1 | 2026-10-21 | S6: never "comment KEYWORD" on a post meant to spread. S16 added: captions of a few lines, opening on "you" (replaces the one-line caption); on test, L56. | Founder chose both from run 2 of the element analysis (`reels/analysis-framework.md`): keyword asks went with ordinary posts in 3 accounts; long captions with hits in 5, a "you" first line in 3. Week 43's posts keep their one-line captions and are L56's comparison (SUGGESTIONS.md → Backfill ledger). |
+| v1.4 | 2026-10-23 | S20 added: pause reels, a second kind of reel (one calm everyday scene in 3–4 shots, 12–15 s, made to loop, the message on frame 0). On test, L66; first: sm-r011 "chai in the rain". | Founder, after the study of an AI-made "peace" reel: "how can such reels be made for soundmind?", then chose our own flat 2D way over AI video. |
 | v1.3 | 2026-10-22 | S19 added: scene stories, a third kind of carousel (an everyday moment, illustrated, cliffhangers, a kind turn). On test, L57. | Founder, after the study of an illustrated story carousel: "more detailed and relatable story. viewers should swipe the cards to reach end"; "it doesn't have to be ME". |
 | v1.2 | 2026-10-21 | Split into Both formats / Carousels / Reels, each format with its own winning measure: carousels on shares per 1,000 reached, reels on reach and watch time first. S6 is now the carousels' share slide; the reels' ask is the new S17. S8 is now the carousel look; the reel look is the new S18 (L54 measures S18). The keyword rule moved from S6 to S16 (captions, both formats). Sound Mind's numbers moved out to `analytics/soundmind-baseline.md` (local); a carousel baseline added there (her 44 carousels). | Founder: "separate sections for reels and carousels since those are different fundamentally". A carousel reaches followers who keep and send it; a reel is how Sound Mind reaches new people, and Instagram spreads a reel by watch time. Her own carousels get about twice the reels' shares per person reached. Numbers out: founder, 2026-10-21, "write as if the repo were public". |

@@ -85,6 +85,35 @@ then `queue:add` the `.post.json` beside it.
 | sm-r009 kite (vivid) | ME flying a kite | storm clouds (WHAT'S YOUR PLAN?, BY 30 YOU SHOULD…) gust and jerk it about; after the close-up ME lets the string out and the second wave barely moves it | the kite climbs high into the sun, smile, plant blooms |
 | sm-r010 rain cloud (vivid) | a small rain cloud over ME | signs (STOP CRYING, BE STRONG, SMILE!…) pop up and ME holds it in: the cloud shrinks and darkens; after the close-up she lets it rain and the second wave's signs wash over, a flower for each | the cloud turns white and floats off, a rainbow, sun, smile |
 
+## Reels: the pause reel (2026-10-23, on test, framework S20)
+
+A second kind of reel: no conflict and no ME, just a calm everyday moment to watch for a few seconds and send on. Model:
+an AI-made anime "peace" reel (@pixcraft_132, studied 2026-10-23). We keep its shape (one scene, four shots, a loop) and
+make it our own way: flat 2D in Remotion (the scene stories' `Face` from `SceneStory.tsx`), no AI video.
+
+**Her (founder, 2026-10-23):** a young woman in her **early 20s**, not a middle-aged one: loose shoulder-length hair, a
+lighter warm skin tone (`#E2AE88`), an oversized sweatshirt, sitting cosily on a floor cushion with her knees drawn up.
+The scene stories' homemaker (bun, bindi, kurta, darker `#B97A56`) read as middle-aged and too dark here, and a
+front-on pose on a stool made the legs look stiff.
+
+**Animation that makes it feel alive** (from the first cut, which the founder found too still): layers at their own
+depth (`LAYERS`, parallax as the camera drifts), soft focus behind the close-ups, a 0.5 s dissolve at each cut, rain in
+two depths, trees and hair and the fairy-light wire in a light breeze, blinks, the head tipping back to sip and turning
+toward the rain, steam, splashes on the ledge, rings on a puddle.
+
+1. **Frame 0:** the wide shot with the message on top, naming the feeling ("You don't have to earn rest.").
+2. **Two close-ups with no text**, 3 s each: something small and alive (the glass and its steam; the tulsi as drops hit it).
+3. **Wide again:** she leans back, eyes closed; one line on a card ("Ten minutes. Just you and the rain.").
+4. 12–15 s; the camera ends where it began (the loop); rain, steam and lights always moving; rain (`sfx.ts` bed `rain`)
+   under calm piano; a soft tap as each drop lands.
+
+Rules are tests (`remotion/tests/sm011.test.ts`); timeline in `src/lib/sm011.ts`, drawing in `src/SoundMind011.tsx`.
+`cd remotion && npm run music:sm011 && npm run mix:sm011 && npm run render:sm011 && npm run cover:sm011`.
+
+| Reel | Scene | Close-ups | Ending |
+|---|---|---|---|
+| sm-r011 chai in the rain | she sips chai on her balcony at a rainy dusk, phone face down, fairy lights, tulsi on the ledge | the glass and its steam; the tulsi as drops hit its leaves | she leans back, eyes closed, smiling |
+
 **Hand-drawn tools** (from sm-r004, 2026-10-20; details in `reels/visual-reel-workflow.md` → Reel toolkit): strikes,
 circles and marker highlights on words with `@remotion/rough-notation` (always pass `seed`); pen doodles that draw
 themselves with `perfect-freehand`; gentle sway with `@remotion/noise`. The pencil moves on its own (storybook style):
