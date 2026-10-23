@@ -49,6 +49,11 @@ day with the @lws.pune reel framework (`reels/lwspune-framework.md` F1, lesson L
 Caption template reworded (a real PYQ named in the caption when one fits); `visual-reel-workflow.md` and the visual-reel
 skill point to the framework; the one-question rule is unchanged. First reel made this way: **015, f and f′ together**.
 
+- **Publisher tests need the story card JPEGs (found 2026-10-23).** `tests/content/manifests.test.ts` checks each
+  `stories/pyqvault/*/*.post.json` has its card on disk, but cards are git-ignored and were cleaned up after queuing, so
+  20 tests fail on this laptop (and on any fresh clone). Fix: skip the file check once a story's date has passed, or
+  when the card is missing and the manifest is already queued.
+
 - **Sound Mind: posts to analyse later (founder, 2026-10-21).** Theme to explore: **the problems Indian women face in
   their daily lives.** Read each post (Business Discovery or Chrome, read-only), note its format, hook and numbers against
   its account's typical post, and judge it against `soundmind/framework.md` before proposing anything to Shivani.

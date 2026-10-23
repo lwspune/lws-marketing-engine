@@ -238,7 +238,11 @@ publisher/               # HOSTED approve → publish app (Next.js 14 + Supabase
 typecheck`, `npm run lint`, `npm run build`. Writes only through the 0002 database functions; the
 worker uses the service role. Tokens live in Supabase Vault, never in code or the browser. Every
 response uses `{ ok, data | error: { code, message } }`. YouTube isn't wired yet (phase 3): approving
-it records a clear "not available yet" failure. **Scorecard (0004):** the same per-minute tick
+it records a clear "not available yet" failure. **Cut-off runs (0021, 2026-10-23):** a run that outlasts the cron's
+55 s records nothing, so the next one starts again; a 9-slide carousel did that ~50 times and Instagram blocked the
+account's uploads for a day (code 9). Now carousel slides upload 5 at once and are saved as they go (`child_refs`,
+resumed next run), a tick starts nothing new after 30 s (`TICK_BUDGET_MS`), and a pending post picked up more than 5
+times fails with "Press Retry" (`claims`, `MAX_START_TRIES`). Retry clears both. **Scorecard (0004):** the same per-minute tick
 takes write-once snapshots of each published post at 48 h and 7 d (`publication_metrics`), shown
 on Done cards against `LWS_BASELINE` (src/lib/domain/metrics.ts, the median @lws.pune reel).
 `npm run insights -- --org=lws-pune` exports every reel's numbers to `../analytics/` (local only, git-ignored); `npm run results -- --org=lws-pune --project=pyqvault-insta` exports each reel's 48 h / 7 d readings by post slug for `reels/tools/results-sync.js` (`src/lib/domain/reelResults.ts`). **Insights tab
