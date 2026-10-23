@@ -6,7 +6,7 @@ in only if it passes **the test** below; it is then **scored**, and the score is
 `--calibrate` runs the tuning. Framework: `pyqvault-framework.md` (F1, F21, F28, F29). @lws.pune's ideas stay in
 `remake-backlog.md` until it is rebuilt.
 
-**Open: 89 ideas · about 30 days at 3 reels a day.**
+**Open: 88 ideas · about 30 days at 3 reels a day.**
 
 Refill before it drops under two weeks. Sources (F1): the founder's ideas (Source `founder`, any time), a notes sweep
 (physics and chemistry are done; a new exam's notes next), and the next competitor read (`node reels/tools/remake-candidates.mjs`).
@@ -83,7 +83,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | P3 | P | Pendulum: energy trades places, the total never moves | 150 | 2 | 1 | 0 | 1 | 1 | 62 | ✅ made 2026-10-19 (`pv-physics-003-pendulum`; scored after posting) | remake | ✓ |
 | P4 | P | Block on a tilting ramp: it slips when sin θ wins | 63 | 2 | 2 | 1 | 1 | 1 | 69 | ✅ made 2026-10-20 (`pv-physics-004-slope`, remade; scored after posting) | remake | ✓ |
 | P5 | P | Adiabatic squeeze heats the gas (insulated vs open, side by side) | 125 | 3 | 2 | 1 | 1 | 1 | 86 | ✅ made 2026-10-20 (`pv-physics-005-adiabatic`) | remake | ✓ |
-| P6 | P | Same lift, faster = more power | 76 | 1 | 2 | 1 | 1 | 2 | 66 | ⏭ queued 2026-10-21 (Hook queue) | remake | ✓ |
+| P6 | P | Same lift, faster = more power | 76 | 1 | 2 | 1 | 1 | 2 | 66 | ✅ made 2026-10-23 (`pv-physics-012-lift-power`) | remake | ✓ |
 | P7 | P | Tilt the rope: lift vs pull (drone towing a box) | 83 | 2 | 1 | 1 | 1 | 1 | 62 | ⏭ queued 2026-10-21 (Hook queue) | remake | ✓ |
 | P8 | P | Why a bounced ball never comes back as high | 52 | 1 | 1 | 0 | 1 | 2 | 52 |  | remake | ✓ |
 | P9 | P | Heat flows hot → cold, never back (two chambers mixing) | 54 | 3 | 1 | 0 | 1 | 2 | 72 | ✅ made 2026-10-20 (`pv-physics-007-heat`) | remake | ✓ |
@@ -772,7 +772,6 @@ hook, second hook and loop go in the Hook column of `pyqvault-learnings.md`).
 
 | Order | # | Hook | Opening | Visual hook | Hook sound | Second hook | Second visual | Second sound | Loop | Frame 0 (draft) |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 3 | P6 | You'd think | Orbit 360° | the camera orbits two lifts hauling the same box up side by side, one racing ahead; both energy bars climbing | silent (a slow orbit; the music carries it, F15) | So what did speed change? | both lifts freeze mid-climb; the camera punches in on the power meters as the fast lift's needle shoots up | thunk (both lifts stop) + whoosh-in (the punch-in on the meters) + music hit | no | "Same box, same height. The faster lift does more work. Right?" A more · B the same · C less. Second answer: power, work per second |
 | 4 | C9 | Put in order | Colour flood | four glasses on a shelf flooding with colour, four empty numbered slots waiting below them | shimmer (the colours flood in) | Where does pure water sit? | a clear glass of water slides into the empty middle slot and floods green | tap (the glass lands) + shimmer (it floods green) | yes | "Lemon, milk, soap, bleach: most acidic first?" three orders as A/B/C; indicator colours already spreading. Second answer: pH 7, green. Loop: the colours wash back to the start |
 | 5 | P7 | Same start, two endings | Assemble (suit-up) | two drones build themselves part by part (frame, arms, rotors spinning up, ropes clipping on), then pull identical boxes; one box lifts off, the other scrapes along the ground | snap ×8 (one per part locking, pitch rising) + shimmer (both drones complete) | How steep before it lifts? | the dragging drone's rope swings steeper, live, until its box peels off the ground | click (one per degree as the rope steepens) + whump (the box peels off) + music hit | no | "Same drone, same box, same pull. One lifts it, one drags it. Why?" A rope angle · B rope length · C luck; the drones assemble behind the question, then fly. Second answer: the angle where F sin θ = mg, live |
 | 6 | C15 | Ending first | Ending first | a copper-coated rod standing in clear liquid; the picture starts running backwards and the liquid turns blue | shimmer (the rewind) | Swap them: copper rod, zinc liquid? | the rod and the liquid swap places in one morph: a copper rod standing in clear zinc liquid | shimmer (the swap) + snap (both land in place) | yes | Open on a copper-coated rod in clear liquid: "This was zinc in blue liquid. Where did the blue go?" then rewind (time-lapse, labelled). Second answer: nothing happens (copper can't push zinc out). Loop: ends where it began |
