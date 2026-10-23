@@ -96,3 +96,13 @@ It reads and reports; it never edits files.
 Then, in the main session: fix every blocker in the storyboard (or decline it with a reason), take the improvements
 that are worth it, and fill section 10 with each issue → what was done. Re-derive any maths the reviewer disputes
 before deciding who is right. Only then write the tests and the code (runbook steps 2 on).
+
+## 3. Then test the layout (from 021–023, 2026-10-23)
+
+The review catches story, maths and confusion; it can't see pixels. So every reel's lib exports one list of its labels
+(`labelsAt(t)`: text, position, anchor, size, alpha) used by both the picture and the tests, and `labelBox()`; its tests
+check, on every frame, that every visible label is inside the picture and no two overlap (copy the test from
+`remotion/tests/reel021.test.ts`). On 021–023 it caught 6 faults before any render (a label leaving the frame in a
+punch-in, labels still fading while another moved through them). Moving objects that must not cross (a turning tile)
+get their own separating-axis test (`tests/reel022.test.ts`). The cover gets a test too: it shows nothing that gives
+the answer or the method away.
