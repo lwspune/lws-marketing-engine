@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-019-area-between",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "019 · Why? #7: area between y = x and y = x³ is ¼, strips + ½ − ¼ (NDA 2022 (I) Q78; predict-first, white)",
+  "video": "nda-maths-019-area-between.mp4",
+  "cover": "nda-maths-019-area-between-cover.png",
+  "captions": {
+    "instagram": "NDA Maths · Area under curves. The area between y = x and y = x³ from 0 to 1 is…? A ½ · B ¼ · C ⅛ 👇\n\nB. Between 0 and 1 the line is on top, so every strip is top minus bottom: (x − x³).\nAdd the strips: ∫₀¹ (x − x³) dx = ½ − ¼ = ¼.\nOr in pictures: ½ under the line, take away the ¼ under x³.\nTraps: ½ forgets to subtract; ⅛ multiplies instead.\n\nThis is NDA 2022 (I), Q78, word for word.\n\nSave this 📌 Follow @lws.pune for one NDA maths idea every day.\nPractise every Area PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Integration #LWSPune",
+    "facebook": "NDA Maths · Area under curves. The area between y = x and y = x³ from 0 to 1 is…? A ½ · B ¼ · C ⅛ 👇\n\nB. The line is on top between 0 and 1, so the area is ∫₀¹ (x − x³) dx = ½ − ¼ = ¼: the ½ under the line minus the ¼ under x³. Traps: ½ forgets to subtract, ⅛ multiplies. This is NDA 2022 (I), Q78.\n\nPractise NDA PYQs free, chapter-wise: https://www.pyqvault.com\n\n#NDA #NDAMaths #LWSPune",
+    "youtube": {
+      "title": "Area between two curves in 19 seconds: top minus bottom #shorts",
+      "description": "The area between y = x and y = x³ from 0 to 1: strips of (top − bottom) add up to ∫₀¹ (x − x³) dx = ½ − ¼ = ¼. That's NDA 2022 (I) Q78.\n\nPractise NDA PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #Shorts"
+    }
+  }
+}
