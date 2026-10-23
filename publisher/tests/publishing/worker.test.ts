@@ -22,14 +22,16 @@ function memoryRepo(pubs: Publication[], ctx: PublishContext | null | ((p: Publi
   const recorded: { id: string; ev: PublicationEvent }[] = [];
   const released: string[] = [];
   const signed: { paths: string[]; ttl: number }[] = [];
+  const children: { id: string; refs: string[] }[] = [];
   const repo: PublisherRepo = {
     claimDue: async () => pubs.splice(0),
     loadContext: async (p) => (typeof ctx === "function" ? ctx(p) : ctx),
     signUrls: async (paths, ttl) => { signed.push({ paths, ttl }); return paths.map((x) => `https://signed.example/${x}?t=1`); },
     record: async (id, ev) => { recorded.push({ id, ev }); },
     release: async (id) => { released.push(id); },
+    saveChildren: async (id, refs) => { children.push({ id, refs }); },
   };
-  return { repo, recorded, released, signed };
+  return { repo, recorded, released, signed, children };
 }
 
 const silent = { error: () => {} };
@@ -122,6 +124,43 @@ describe("runTick", () => {
     expect(summary).toEqual({ claimed: 2, recorded: 1, released: 1, errors: 1 });
     expect(m.released).toEqual(["boom"]);
     expect(errors).toHaveLength(1);
+  });
+
+  it("gives up on a post picked up more than 5 times without getting started (each run was cut off)", async () => {
+    fake = await startFakeMeta();
+    const m = memoryRepo([pub({ claims: 6 })], reelContext());
+    await runTick({ repo: m.repo, metaConfig: fake.config, logger: silent });
+    expect(m.recorded[0].ev).toEqual({ type: "failed", error: expect.stringMatching(/5 tries.*Retry/) });
+    expect(fake.calls).toHaveLength(0);
+  });
+
+  it("still tries on the fifth pick-up", async () => {
+    fake = await startFakeMeta();
+    const m = memoryRepo([pub({ claims: 5 })], reelContext());
+    await runTick({ repo: m.repo, metaConfig: fake.config, logger: silent });
+    expect(m.recorded[0].ev).toMatchObject({ type: "started" });
+  });
+
+  it("stops starting new work once the run's time budget is spent; the rest wait for the next minute", async () => {
+    fake = await startFakeMeta();
+    const times = [0, 1_000, 31_000];
+    const m = memoryRepo([pub({ id: "a" }), pub({ id: "b" })], reelContext());
+    const summary = await runTick({ repo: m.repo, metaConfig: fake.config, logger: silent, clock: () => times.shift() ?? 99_000 });
+    expect(m.recorded.map((r) => r.id)).toEqual(["a"]);
+    expect(m.released).toEqual(["b"]);
+    expect(summary).toEqual({ claimed: 2, recorded: 1, released: 1, errors: 0 });
+  });
+
+  it("saves a carousel's uploaded slides through the repo", async () => {
+    fake = await startFakeMeta();
+    const ctx: PublishContext = {
+      post: { id: "p1", kind: "carousel", videoPath: null, coverPath: null, slidePaths: ["o1/p1/1.jpg", "o1/p1/2.jpg"], captions: { instagram: "Q42" } },
+      account: { platform: "instagram", externalId: "ig1", token: "TOKEN" },
+    };
+    const m = memoryRepo([pub()], ctx);
+    await runTick({ repo: m.repo, metaConfig: fake.config, logger: silent });
+    expect(m.children.at(-1)).toEqual({ id: "x1", refs: [expect.stringMatching(/^c\d+$/), expect.stringMatching(/^c\d+$/)] });
+    expect(m.recorded[0].ev).toMatchObject({ type: "started" });
   });
 
   it("refuses to record an event the state machine doesn't allow", async () => {

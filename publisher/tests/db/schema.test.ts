@@ -163,5 +163,45 @@ describe.skipIf(!TEST_DB_URL)("database: publishing worker", () => {
     await asUser(q, f.member);
     expect((await errorOf(q, "select * from public.claim_due_publications(5)"))?.message).toMatch(/permission denied/);
     expect((await errorOf(q, "select public.record_publication_event($1, 'processing', 'c')", [pub]))?.message).toMatch(/permission denied/);
+    expect((await errorOf(q, "select public.save_carousel_children($1, array['c1'])", [pub]))?.message).toMatch(/permission denied/);
+  }));
+
+  // 0021: a run cut off mid-upload left no trace, so the next run started over, ~50 times (2026-10-23).
+  it("counts each pick-up while pending (not while processing)", () => withTx(async (q) => {
+    const { pub } = await approved(q);
+    const claimsOf = async () => (await q<{ claims: number }>("select claims from public.publications where id = $1", [pub]))[0].claims;
+    const [claimed] = await q<{ id: string; claims: number }>("select id, claims from public.claim_due_publications(50) where id = $1", [pub]);
+    expect(claimed.claims).toBe(1);
+    await q("select public.release_publication($1)", [pub]);
+    await q("select id from public.claim_due_publications(50)");
+    expect(await claimsOf()).toBe(2);
+    await q("select public.record_publication_event($1, 'processing', 'c1')", [pub]);
+    await q("select id from public.claim_due_publications(50)");
+    expect(await claimsOf()).toBe(2);
+  }));
+
+  it("saves a carousel's uploaded slides while pending, and only then", () => withTx(async (q) => {
+    const f = await fixture(q);
+    await asUser(q, f.member);
+    const [{ id: pub }] = await q<{ id: string }>("select id from public.approve_post($1, array['instagram'], null)", [f.carousel]);
+    await asService(q);
+    await q("select public.save_carousel_children($1, array['c1', ''])", [pub]);
+    const [row] = await q<{ child_refs: string[] }>("select child_refs from public.publications where id = $1", [pub]);
+    expect(row.child_refs).toEqual(["c1", ""]);
+    expect((await errorOf(q, "select public.save_carousel_children($1, array_fill('c'::text, array[21]))", [pub]))?.message).toBeTruthy();
+    await q("select public.record_publication_event($1, 'processing', 'p1')", [pub]);
+    expect((await errorOf(q, "select public.save_carousel_children($1, array['c9'])", [pub]))?.hint).toBe("invalid_transition");
+  }));
+
+  it("retry starts the pick-up count and uploaded slides afresh", () => withTx(async (q) => {
+    const { f, pub } = await approved(q);
+    await q("select id from public.claim_due_publications(50)");
+    await q("select public.save_carousel_children($1, array['c1'])", [pub]);
+    await q("select public.record_publication_event($1, 'failed', null, null, null, 'cut off')", [pub]);
+    await asUser(q, f.member);
+    await q("select public.retry_publication($1)", [pub]);
+    await asService(q);
+    const [p] = await q<{ claims: number; child_refs: string[] }>("select claims, child_refs from public.publications where id = $1", [pub]);
+    expect(p).toEqual({ claims: 0, child_refs: [] });
   }));
 });

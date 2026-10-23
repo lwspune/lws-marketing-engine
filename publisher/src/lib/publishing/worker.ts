@@ -1,5 +1,5 @@
 import { effectiveCaption } from "@/lib/domain/captions";
-import { applyEvent, type PublicationEvent } from "@/lib/domain/workflow";
+import { applyEvent, MAX_START_TRIES, type PublicationEvent } from "@/lib/domain/workflow";
 import { PLATFORM_LABEL, type Captions, type Platform, type PostKind, type Publication } from "@/lib/domain/types";
 import { stepFacebook, stepInstagram, type MetaConfig, type MetaPostMedia } from "@/lib/platforms/meta";
 
@@ -23,6 +23,8 @@ export interface PublisherRepo {
   signUrls(paths: string[], ttlSeconds: number): Promise<string[]>;
   record(publicationId: string, ev: PublicationEvent): Promise<void>;
   release(publicationId: string): Promise<void>;
+  /** Save a carousel's uploaded slide containers so a run that gets cut off doesn't upload them again. */
+  saveChildren(publicationId: string, refs: string[]): Promise<void>;
 }
 
 export interface TickSummary { claimed: number; recorded: number; released: number; errors: number }
@@ -32,7 +34,15 @@ export interface TickOptions {
   metaConfig: MetaConfig;
   limit?: number;
   logger?: { error: (...args: unknown[]) => void };
+  /** Milliseconds now; injectable for tests. */
+  clock?: () => number;
 }
+
+/**
+ * Start no new step after this long: the cron request gives up at 55 s and Vercel stops the function
+ * at 60 s, and a step cut off mid-upload is repeated from scratch by the next run.
+ */
+export const TICK_BUDGET_MS = 30_000;
 
 async function mediaFor(pub: Publication, ctx: PublishContext, repo: PublisherRepo): Promise<MetaPostMedia> {
   const { post } = ctx;
@@ -55,17 +65,31 @@ async function mediaFor(pub: Publication, ctx: PublishContext, repo: PublisherRe
 async function stepOne(pub: Publication, ctx: PublishContext, opts: TickOptions): Promise<PublicationEvent | null> {
   const { platform, externalId, token } = ctx.account;
   if (platform === "youtube") return { type: "failed", error: "YouTube publishing isn't available yet." };
+  if (pub.status === "pending" && (pub.claims ?? 0) > MAX_START_TRIES) {
+    return { type: "failed", error: `Couldn't get this started after ${MAX_START_TRIES} tries (each run was cut off or Meta was busy). Press Retry.` };
+  }
   const media = await mediaFor(pub, ctx, opts.repo);
-  if (platform === "instagram") return stepInstagram(pub, { config: opts.metaConfig, account: { igUserId: externalId, token }, media });
+  if (platform === "instagram") {
+    // Best effort: if saving fails, the worst case is uploading those slides again next run.
+    const saveChildren = (refs: string[]) => opts.repo.saveChildren(pub.id, refs).catch((e) => {
+      (opts.logger ?? console).error("publisher: saving carousel progress failed", { publicationId: pub.id, error: (e as Error).message });
+    });
+    return stepInstagram(pub, { config: opts.metaConfig, account: { igUserId: externalId, token }, media, saveChildren });
+  }
   return stepFacebook(pub, { config: opts.metaConfig, account: { pageId: externalId, token }, media });
 }
 
 export async function runTick(opts: TickOptions): Promise<TickSummary> {
-  const { repo, logger = console } = opts;
+  const { repo, logger = console, clock = Date.now } = opts;
+  const startedAt = clock();
   const due = await repo.claimDue(opts.limit ?? 10);
   const summary: TickSummary = { claimed: due.length, recorded: 0, released: 0, errors: 0 };
 
   for (const pub of due) {
+    if (clock() - startedAt > TICK_BUDGET_MS) {
+      await repo.release(pub.id).then(() => summary.released++, () => {});
+      continue;
+    }
     try {
       const ctx = await repo.loadContext(pub);
       const ev: PublicationEvent | null = ctx

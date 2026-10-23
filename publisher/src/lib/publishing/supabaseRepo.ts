@@ -12,12 +12,14 @@ import type { SnapshotLabel } from "@/lib/domain/metrics";
 interface PublicationRow {
   id: string; post_id: string; platform: Platform; status: PublicationStatus; scheduled_at: string | null;
   attempts: number; external_ref: string | null; external_id: string | null; permalink: string | null; error: string | null;
+  claims?: number; child_refs?: string[];
 }
 
 export const toPublication = (r: PublicationRow): Publication => ({
   id: r.id, postId: r.post_id, platform: r.platform, status: r.status,
   scheduledAt: r.scheduled_at ? new Date(r.scheduled_at) : null, attempts: r.attempts,
   externalRef: r.external_ref, externalId: r.external_id, permalink: r.permalink, error: r.error,
+  claims: r.claims ?? 0, childRefs: r.child_refs ?? [],
 });
 
 const STATUS_OF: Record<PublicationEvent["type"], PublicationStatus | null> = {
@@ -88,6 +90,11 @@ export function supabaseRepo(db: SupabaseClient): PublisherRepo {
     async release(publicationId) {
       const { error } = await db.rpc("release_publication", { p_publication: publicationId });
       if (error) throw new Error(`release_publication: ${error.message}`);
+    },
+
+    async saveChildren(publicationId, refs) {
+      const { error } = await db.rpc("save_carousel_children", { p_publication: publicationId, p_refs: refs });
+      if (error) throw new Error(`save_carousel_children: ${error.message}`);
     },
   };
 }
