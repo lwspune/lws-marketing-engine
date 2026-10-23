@@ -20,7 +20,7 @@ logged but not counted yet, because which way it pushes isn't known; calibration
 
 | Input | Key | Points | Weight | Anchors |
 |---|---|---|---|---|
-| Idea | idea | 0–3 | 1.5 | the idea's score in `pyqvault-ideas.md`: ≥ 70 → 3 · ≥ 60 → 2 · ≥ 50 → 1 · below → 0 |
+| Idea | idea | 0–3 | 2 | the idea's score in `pyqvault-ideas.md`: ≥ 70 → 3 · ≥ 60 → 2 · ≥ 50 → 1 · below → 0 |
 | Motion 0–3 s | motion | 0–2 | 1 | share of frames (10 a second) where ≥ 0.2% of pixels change noticeably: ≥ 95% → 2 · ≥ 75% → 1 · below → 0 (L29, F5) |
 | Hook move | hookmove | 0–1 | 1 | a named attention move in 0–3 s (orbit, punch-in, assemble, split apart, morph, split screen, race, colour flood) → 1 (F25) |
 | Words 0–3 s | words | 0–2 | 1 | words on screen at frame 0 (label, question, options, tag): ≤ 10 → 2 · ≤ 18 → 1 · more → 0 (F7) |
@@ -28,7 +28,7 @@ logged but not counted yet, because which way it pushes isn't known; calibration
 | Length | length | 0–1 | 1 | ≤ 25 s → 1 (F18) |
 | Second hook | secondhook | 0–1 | 1 | a second question with its own move at the answer → 1 (F26, L49) |
 | Momentum | momentum | 0–2 | 1 | median views of the 3 reels posted before ÷ the median of all reels posted before: ≥ 1.5 → 2 · ≥ 0.8 → 1 · below → 0 |
-| Cover | cover | 0–2 | 0 | the cover's colourfulness, same anchors as Colour |
+| Cover | cover | 0–2 | 0.5 | the cover's colourfulness, same anchors as Colour |
 | Answer after 8 s | answer | 0–1 | 0 | the A/B/C answer lands after 8 s → 1 (L48: viewers leave at the answer) |
 | Loop | loop | 0–1 | 0 | loops back to frame 0 → 1 (F27, L50) |
 
@@ -81,9 +81,9 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 | C3 | pv-chem-003-avogadro | 2026-10-22 | 21 | below typical | idea | 932 | 143 | yes | 121 | below typical | hindsight |
 | P4 | pv-physics-004-slope | 2026-10-22 | 57 | above typical | idea | 932 | 140 | yes | 1,431 | record-breaker | hindsight |
 | C4 | pv-chem-004-charles | 2026-10-22 | 64 | above typical | idea | 1429 | 143 | yes | 1,298 | above typical | hindsight |
-| P5 | pv-physics-005-adiabatic | 2026-10-22 | 79 | above typical | words | 1429 | 169 | yes | – | waiting | – |
-| C5 | pv-chem-005-pvt | 2026-10-22 | 71 | above typical | idea | 1429 | 195 | yes | – | waiting | – |
-| P12 | pv-physics-006-topspin | 2026-10-22 | 71 | above typical | idea | 1455 | 232 | yes | – | waiting | – |
+| P5 | pv-physics-005-adiabatic | 2026-10-22 | 79 | above typical | words | 1429 | 169 | yes | 1,325 | above typical | hindsight |
+| C5 | pv-chem-005-pvt | 2026-10-22 | 71 | above typical | idea | 1429 | 195 | yes | 1,510 | record-breaker | hindsight |
+| P12 | pv-physics-006-topspin | 2026-10-22 | 71 | above typical | idea | 1455 | 232 | yes | 1,566 | record-breaker | hindsight |
 | C7 | pv-chem-006-flame | 2026-10-22 | 57 | above typical | idea | 1496 | 1429 | no | – | waiting | – |
 | P9 | pv-physics-007-heat | 2026-10-22 | 71 | above typical | idea | 1496 | 1429 | no | – | waiting | – |
 | C13 | pv-chem-007-halflife | 2026-10-22 | 71 | above typical | idea | 1496 | 1429 | no | – | waiting | – |
@@ -102,4 +102,4 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 | Date | Real predictions judged | Bands right | Rank correlation | Weight changes | Note |
 |---|---|---|---|---|---|
 | 2026-10-22 | 0 | – | – | idea 1 → 1.5 | calibrated on 8 reels, score vs result 0.72 |
-| 2026-10-23 | 0 | – | – | none | no new 48 h reading: still 8 reels, weights held (score vs result 0.72) |
+| 2026-10-23 | 0 | – | – | idea 1.5 → 2, cover 0 → 0.5 | calibrated on 11 reels, score vs result 0.83 |

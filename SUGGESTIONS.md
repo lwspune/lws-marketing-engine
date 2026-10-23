@@ -161,6 +161,17 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### Idea-score tuning mixes the two eras of reels (logged 2026-10-23, awaiting founder)
+Learning (pyqvault-ideas.md, 2026-10-23 evening tuning row): `topic-scores.js --calibrate` compares high vs low scorers
+across all 48 h reels, but framework reels score 3.4–4.3 and earlier ones 0.5–1.1, so any criterion that happens to split
+along the eras looks decisive (Vivid "down", Proof "up"; within each era neither separates, and applying both drops the
+rank correlation 0.70 → 0.59). The confound guard checks hook/background/music/voice at 75% / 25% and misses it (60%).
+**360:** scope = the calibration rule in pyqvault-ideas.md + `calibrate()` in `reels/tools/topic-scores.js` · blast radius
+= future weight moves → idea order; no posted reel changes · does it apply? yes while pre-framework reels are in the 48 h
+set (6 of 11 today); fades as framework reels pile up · risk = low, reversible (a rule + a test) · cost ≈ 30 min test-first
+(compare within era, or drop pre-framework reels from tuning) · **recommendation: do it**, after the founder rules on
+today's held change.
+
 ### Make the repo safe to go public (logged 2026-10-21; first part DONE 2026-10-21, history rewrite deferred)
 Founder, 2026-10-21: "assume it won't be private in future". New work is covered (`analytics/` git-ignored, CLAUDE.md
 rule). Already committed: 35 files under `analytics/` (other creators' cover images and numbers in `competitors/`,
