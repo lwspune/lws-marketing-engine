@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-023-derivative-cycle",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "023 · Why? #11: four derivatives of sin x go round to sin x; y″ = −y, (sin 2x)″ = −4 sin 2x (predict-first, white)",
+  "video": "nda-maths-023-derivative-cycle.mp4",
+  "cover": "nda-maths-023-derivative-cycle-cover.png",
+  "captions": {
+    "instagram": "NDA Maths · Differentiation. Differentiate sin x four times. You get…? A sin x · B −sin x · C cos x 👇\n\nA. Each derivative slides the sine wave a quarter of its length to the left: sin → cos → −sin → −cos → sin.\nFour quarter turns = one full turn, so you're back where you started.\nTwo turns flip it upside down: y″ = −y. For sin 2x each turn also doubles it, so y″ = −4y.\nTraps: −sin x stops after two derivatives; cos x after one.\n\nNDA asked it in 2019 (I), Q83: y = a cos 2x + b sin 2x gives y″ = −4y, so y″ + 4y = 0.\n\nSave this 📌 Follow @lws.pune for one NDA maths idea every day.\nPractise every Differentiation PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Calculus #LWSPune",
+    "facebook": "NDA Maths · Differentiation. Differentiate sin x four times. You get…? A sin x · B −sin x · C cos x 👇\n\nA. Each derivative slides the sine wave a quarter turn: sin → cos → −sin → −cos → sin, so four of them bring it back. Two turns give y″ = −y; for sin 2x each turn doubles it, so y″ = −4y. That's NDA 2019 (I), Q83: y″ + 4y = 0.\n\nPractise NDA PYQs free, chapter-wise: https://www.pyqvault.com\n\n#NDA #NDAMaths #LWSPune",
+    "youtube": {
+      "title": "Derivatives of sin x go round in a circle #shorts",
+      "description": "Each derivative of sin x slides its wave a quarter turn left: sin → cos → −sin → −cos → sin. Two turns give y″ = −y, and for sin 2x each turn doubles it, so y″ = −4y (NDA 2019 (I) Q83: y″ + 4y = 0).\n\nPractise NDA PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #Shorts"
+    }
+  }
+}
