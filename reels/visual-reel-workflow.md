@@ -140,6 +140,11 @@ Only after an *intended* change to an existing reel: `node reels/tools/unchanged
   `cd publisher && npx vitest run tests/content` already checks every `reels/*.post.json`, so no
   throwaway test file is needed.
 - Add the reel to `format-test.md` (schedule + scorecard row) while the format is on test.
+- **YouTube copy** (Remotion reels): YouTube's end card says "Subscribe for more" (`lwspune-insta.md`).
+  Pass the reel's `platform` prop to `<EndCard … platform={platform} />` (`src/lib/platform.ts` swaps only the
+  "Follow for …" line), add `"render:NNN:yt": "remotion render ReelNNN ../reels/<name>-yt.mp4 --props=props/youtube.json"`,
+  render it after the Instagram one (one render at a time), and add `"youtubeVideo": "<name>-yt.mp4"` to the
+  manifest. `queue:add` uploads both; the publisher sends YouTube the `-yt` copy.
 - Queue it in the publisher: `cd publisher && npm run queue:add -- --org=lws-pune ../reels/<name>.post.json`.
   **Remade** a reel that's still Ready in the queue? Add `--replace`: it swaps the files and captions in
   place (refused once the post is approved, published or rejected). Check Instagram first: a reel

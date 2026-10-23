@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { AbsoluteFill, continueRender, delayRender, spring, useVideoConfig } from 'remotion';
 import { WHITE, tint, TEXT_FONT, MATH_FONT, SOFT_UI, UI, type Palette } from './lib/palette.ts';
 import { clamp01, prog } from './lib/motion.ts';
+import { endLineFor, type Platform } from './lib/platform.ts';
 
 // System fonts are not loaded until first used: hold the render until they are, as engine.js does.
 const FONTS = ['600 40px Cambria', '40px "Cambria Math"', '800 40px "Segoe UI"', '600 40px "Segoe UI"',
@@ -167,7 +168,8 @@ export function PredictHeader({ t, label, lines, options, answer, at, size = 58,
 
 export type EndLine = { at: number; size: number; weight: number; color: string; text: string };
 // The white end card: fades into the same soft board, then each line rises in on a spring.
-export function EndCard({ t, at, lines }: { t: number; at: number; lines: EndLine[] }) {
+// `platform` swaps the follow line for YouTube ("Subscribe for more"); Instagram is the default.
+export function EndCard({ t, at, lines, platform = 'instagram' }: { t: number; at: number; lines: EndLine[]; platform?: Platform }) {
   const { fps } = useVideoConfig();
   const p = clamp01((t - at) / 0.5); if (p <= 0) return null;
   let y = 820;
@@ -178,7 +180,7 @@ export function EndCard({ t, at, lines }: { t: number; at: number; lines: EndLin
         const a = clamp01((t - at - l.at) / 0.35), s = spring({ frame: (t - at - l.at) * fps, fps, config: { damping: 16 } });
         const top = y; y += l.size * (l.size > 70 ? 2.0 : 1.75);
         return <div key={l.text} style={{ position: 'absolute', left: 0, width: 1080, top: top - l.size * 0.6, textAlign: 'center', opacity: a,
-          font: `${l.weight} ${l.size}px/${l.size * 1.2}px ${SOFT_UI}`, color: l.color, transform: `translateY(${(1 - s) * 22}px)` }}>{l.text}</div>;
+          font: `${l.weight} ${l.size}px/${l.size * 1.2}px ${SOFT_UI}`, color: l.color, transform: `translateY(${(1 - s) * 22}px)` }}>{endLineFor(l.text, platform)}</div>;
       })}
     </AbsoluteFill>
   );
