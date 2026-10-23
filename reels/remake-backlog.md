@@ -40,7 +40,7 @@ but a good concept isn't blocked for lack of one. Only NDA maths chapters go on 
 | W13 | Series formulas on one screen | @codematrixvishal 2.61M (95×) [link](https://www.instagram.com/reel/DZr28L5p89C/) | reference sheet; each sum shown as a picture (staircases, squares) | Sequences & series | test format |
 | W14 | A matrix moves space | @codematrixvishal 916k (34×) [link](https://www.instagram.com/reel/DbZeJpoJKmm/) | a grid transforms; the determinant = how much area scales (links to reel 011) | Matrices & determinants | ✅ made 2026-10-23 (reel 020) |
 | W15 | f and f′ together: the slope becomes a graph | @codematrixvishal (115×), as @pyqvault_ M4 | slope 0 at every peak and valley | Application of derivatives | ✅ made 2026-10-20 (reel 015) |
-| W16 | The quadratic formula is a square, completed | @codematrixvishal 1.10M (40×) [link](https://www.instagram.com/reel/DZPH3WfpKcB/), as @pyqvault_ M5 | x² + 6x as tiles: the 6x strip splits in two and wraps the square; the missing corner (3² = 9) completes it; the same move with b gives the formula | Quadratic equations | moved from @pyqvault_ (founder 2026-10-20) |
+| W16 | The quadratic formula is a square, completed | @codematrixvishal 1.10M (40×) [link](https://www.instagram.com/reel/DZPH3WfpKcB/), as @pyqvault_ M5 | x² + 6x as tiles: the 6x strip splits in two and wraps the square; the missing corner (3² = 9) completes it; the same move with b gives the formula | Quadratic equations | moved from @pyqvault_ (founder 2026-10-20); ✅ made 2026-10-23 (reel 022) |
 
 ## @lws.pune topic scores
 
@@ -60,7 +60,7 @@ and the goal of the reel is reach. `node reels/tools/topic-scores.js lwspune` ch
 | W9 | M | The whole unit circle on one screen | 779 | 2 | 0 | 0 | 0 | 5 | |
 | W12 | M | What a logarithm is (exponential, flipped) | 46 | 1 | 1 | 1 | 0 | 5 | ✅ made 2026-10-23 (`nda-maths-021-log-flip`) |
 | W13 | M | Series formulas on one screen | 95 | 2 | 0 | 0 | 0 | 4 | |
-| W16 | M | The quadratic formula is a square, completed (tiles) | 40 | 2 | 1 | 0 | 0 | 5 | |
+| W16 | M | The quadratic formula is a square, completed (tiles) | 40 | 2 | 1 | 0 | 0 | 5 | ✅ made 2026-10-23 (`nda-maths-022-complete-square`) |
 | W15 | M | f and f′ together: the slope becomes a graph | 115 | 2 | 1 | 1 | 0 | 7 | ✅ made 2026-10-20 (reel 015) |
 
 Anchors as above. The soda can's question: "Which can uses the least metal: tall, wide or equal?" (h = 2r); the
