@@ -8,6 +8,8 @@ description: Make an @lws.pune "visual" reel — an NDA maths concept (or a real
 Follow **`reels/visual-reel-workflow.md`** step by step. It is the source of truth; this skill only
 makes sure it gets used.
 
+**Before any code: the storyboard + its independent review** (framework F31, `reels/lwspune-storyboard.md`).
+
 **First read `reels/lwspune-framework.md`** (2026-10-20): every new @lws.pune reel follows it, and where it differs from
 the workflow (concepts first, a PYQ only in the caption when one fits; Remotion), the framework wins.
 

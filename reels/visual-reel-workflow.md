@@ -173,7 +173,9 @@ Each opens headless browsers; two at once ran this 16 GB laptop out of memory an
 disk that was already nearly full. Renders keep their temp files in their own folder and clear its stale leftovers when
 they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm run clean:temp` clears it by hand.
 
-1. **Storyboard first: a beat table** (founder, 2026-10-21), at the top of `src/lib/<reel>.ts`, one row per beat:
+1. **@lws.pune: a written storyboard + an independent review come first** (framework F31, founder 2026-10-23): fill
+   `reels/<slug>.storyboard.md` from `lwspune-storyboard.md`, have one fresh agent review it with the brief there, fix
+   every blocker, then go on. **Storyboard first: a beat table** (founder, 2026-10-21), at the top of `src/lib/<reel>.ts`, one row per beat:
    time · what moves · the caption, and how long its voice line takes · what the camera must keep in frame · the key
    objects' colours, each marked **real** (from `REAL` in `palette.ts`: copper, steel, flame, copper sulphate…; add a
    missing material there first) or **VIVID** (for things with no real colour: particles, rays, arrows, bars), about 4 key
