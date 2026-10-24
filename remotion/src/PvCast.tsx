@@ -17,11 +17,12 @@ const Grad = ({ id, p, angle = 25, radial = false }: { id: string; p: { light: s
 const g = (k: keyof typeof PAINT) => `url(#c_${k})`;
 const e = (k: keyof typeof PAINT, w = 3) => ({ stroke: P[k].edge, strokeWidth: w, strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const });
 
-function Defs() {
+export function Defs() {
   return (
     <defs>
       {Object.entries(P).map(([k, p]) => <Grad key={k} id={`c_${k}`} p={p} />)}
       <Grad id="c_sparkR" p={P.spark} radial />
+      <Grad id="c_heat" p={P.heat} />
       <radialGradient id="c_glow"><stop offset="0" stopColor="#FFE79A" stopOpacity="0.9" /><stop offset="0.35" stopColor="#FFC93F" stopOpacity="0.35" /><stop offset="1" stopColor="#FFC93F" stopOpacity="0" /></radialGradient>
       <radialGradient id="c_cyan"><stop offset="0" stopColor="#9FF0FF" stopOpacity="0.7" /><stop offset="1" stopColor="#4FD2FF" stopOpacity="0" /></radialGradient>
       <radialGradient id="c_hot"><stop offset="0" stopColor="#FF9D7A" stopOpacity="0.75" /><stop offset="1" stopColor="#FF6A3D" stopOpacity="0" /></radialGradient>
@@ -65,7 +66,7 @@ function Eyes({ x, y, s = 1, mood, look = 0 }: { x: number; y: number; s?: numbe
 const Shadow = ({ x, y, w }: { x: number; y: number; w: number }) => <ellipse cx={x} cy={y} rx={w} ry={w * 0.14} fill="#000000" opacity="0.35" filter="url(#c_blur)" />;
 
 /** Volt, the battery cell: blue body, copper cap and terminal, a + on the chest. */
-function Volt({ x, y, pose }: { x: number; y: number; pose: string }) {
+export function Volt({ x, y, pose }: { x: number; y: number; pose: string }) {
   const lean = pose === 'push' ? 14 : 0, w = 140, h = 210, top = y - 60 - h;
   const arms = pose === 'push'
     ? [`M${x + 60} ${top + 110} Q${x + 110} ${top + 120} ${x + 140} ${top + 100}`, `M${x - 60} ${top + 120} Q${x + 30} ${top + 150} ${x + 140} ${top + 130}`]
@@ -97,7 +98,7 @@ function Volt({ x, y, pose }: { x: number; y: number; pose: string }) {
 }
 
 /** Amp, the current: a glowing spark with a comet tail of dots. */
-function Amp({ x, y, pose }: { x: number; y: number; pose: string }) {
+export function Amp({ x, y, pose }: { x: number; y: number; pose: string }) {
   const cy = y - 130, sx = pose === 'squeezed' ? 1.35 : pose === 'race' ? 1.2 : 1, sy = pose === 'squeezed' ? 0.62 : pose === 'race' ? 0.88 : 1;
   return (
     <g>
@@ -118,7 +119,7 @@ function Amp({ x, y, pose }: { x: number; y: number; pose: string }) {
 }
 
 /** Ohm, the resistor: a beige body striped with its colour bands, metal leads for arms and legs. */
-function Ohm({ x, y, pose }: { x: number; y: number; pose: string }) {
+export function Ohm({ x, y, pose }: { x: number; y: number; pose: string }) {
   const w = 170, h = 220, top = y - 66 - h, hot = pose === 'hot';
   const bands: (keyof typeof PAINT)[] = ['bandBrown', 'bandViolet', 'bandRed', 'bandGold'];
   const arm = (k: number) => pose === 'block'
@@ -151,7 +152,6 @@ export function PvCast() {
     <AbsoluteFill style={{ background: BOARD }}>
       <svg width="1080" height="1350" viewBox="0 0 1080 1350" style={{ position: 'absolute', inset: 0 }}>
         <Defs />
-        <defs><Grad id="c_heat" p={P.heat} /></defs>
         <rect width="1080" height="1350" fill="url(#c_spot)" />
         {CAST.map((c, row) => c.poses.map((p, col) => {
           const x = CELL_W * col + CELL_W / 2, y = TOP + ROW_H * row + ROW_H - 70;

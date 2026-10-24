@@ -97,6 +97,8 @@ import { DURATION as DURATION_SM008 } from './lib/sm008.ts';
 import { SoundMind009 } from './SoundMind009.tsx';
 import { DURATION as DURATION_SM009 } from './lib/sm009.ts';
 import { PvCast } from './PvCast.tsx';
+import { PvOhm } from './PvOhm.tsx';
+import { DURATION as DURATION_OHM } from './lib/pvOhm.ts';
 import { SoundMind010 } from './SoundMind010.tsx';
 import { DURATION as DURATION_SM010 } from './lib/sm010.ts';
 import { SoundMind011 } from './SoundMind011.tsx';
@@ -218,6 +220,8 @@ export const Root = () => (
     <Composition id="SoundMind009" component={SoundMind009} durationInFrames={Math.round(DURATION_SM009 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="SoundMind009Cover" component={SoundMind009} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Still id="PvCast" component={PvCast} width={1080} height={1350} />
+    <Composition id="PvOhm" component={PvOhm} durationInFrames={Math.round(DURATION_OHM * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="PvOhmCover" component={PvOhm} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="SoundMind010" component={SoundMind010} durationInFrames={Math.round(DURATION_SM010 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="SoundMind010Cover" component={SoundMind010} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="SoundMind011" component={SoundMind011} durationInFrames={Math.round(DURATION_SM011 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
