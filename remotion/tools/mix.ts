@@ -40,6 +40,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   '014': { lib: '../src/lib/reel014.ts', file: 'public/nda-maths-014-cone' },
   sm011: { lib: '../src/lib/sm011.ts', file: 'public/sm-r011-chai' },
   sm012: { lib: '../src/lib/sm012.ts', file: 'public/sm-r012-tapri' },
+  sm013: { lib: '../src/lib/sm013.ts', file: 'public/sm-r013-window' },
 };
 const id = process.argv[2], reel = REELS[id];
 if (!reel) throw new Error(`usage: node tools/mix.ts <${Object.keys(REELS).join(' | ')}>`);

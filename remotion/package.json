@@ -211,7 +211,11 @@
     "music:sm012": "node ../reels/tools/music.mjs music/sm-r012-tapri.json public/sm-r012-tapri.wav",
     "mix:sm012": "node tools/mix.ts sm012",
     "render:sm012": "remotion render SoundMind012 ../soundmind/reels/sm-r012-tapri.mp4",
-    "cover:sm012": "remotion still SoundMind012Cover ../soundmind/reels/sm-r012-tapri-cover.jpg --image-format=jpeg"
+    "cover:sm012": "remotion still SoundMind012Cover ../soundmind/reels/sm-r012-tapri-cover.jpg --image-format=jpeg",
+    "music:sm013": "node ../reels/tools/music.mjs music/sm-r013-window.json public/sm-r013-window.wav",
+    "mix:sm013": "node tools/mix.ts sm013",
+    "render:sm013": "remotion render SoundMind013 ../soundmind/reels/sm-r013-window.mp4",
+    "cover:sm013": "remotion still SoundMind013Cover ../soundmind/reels/sm-r013-window-cover.jpg --image-format=jpeg"
   },
   "dependencies": {
     "@dimforge/rapier3d-compat": "0.21.0",
