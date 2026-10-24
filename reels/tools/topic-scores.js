@@ -12,7 +12,8 @@
 // founder idea must pass the F28 gate and a notes chapter must be in the Concept sweep log; every idea to make must pass F29
 // (explained without a single word) and have an idea card.
 // @lws.pune (reels/remake-backlog.md) keeps the older unweighted score out of 10 until it is rebuilt (founder, 2026-10-21).
-// The goal is engagement and reach, so exam weight is never a criterion (founder, 2026-10-20).
+// The goal is engagement and reach, so exam weight is never a criterion (founder, 2026-10-20), except @lws.pune's core
+// chapters: one Probability and one Statistics reel every week, each watched happening (lwspune-framework.md F32–F33).
 
 const fs = require("node:fs"), path = require("node:path");
 
@@ -22,8 +23,11 @@ const RANGES = { vivid: 3, question: 2, law: 1, everyday: 1 };
 const SUBJECTS = ["P", "C"];
 const ACCOUNTS = {
   pyqvault: { handle: "@pyqvault_", file: "pyqvault-ideas.md", heading: "## Ideas", subjects: SUBJECTS, weighted: true },
-  lwspune: { handle: "@lws.pune", file: "remake-backlog.md", heading: "## @lws.pune topic scores", subjects: ["M"] },
+  // Core chapters (lwspune-framework.md F32, founder 2026-10-24): the biggest NDA maths chapters get a reel each every week.
+  lwspune: { handle: "@lws.pune", file: "remake-backlog.md", heading: "## @lws.pune topic scores", subjects: ["M"],
+    core: ["Probability", "Statistics"] },
 };
+const CORE_RUNWAY = 2;                 // ideas to make kept waiting in each core chapter
 const REELS_A_DAY = 3;                 // @pyqvault_ posts at 09:00, 13:00 and 18:00 IST (pyqvault-insta.md)
 // Calibration rules (pyqvault-ideas.md → Scoring): enough reels, a 20% gap, one half-step at a time, weights 0–3.
 const CAL = { minReels: 6, minHours: 48, minSide: 3, gap: 1.2, step: 0.5, minWeight: 0, maxWeight: 3, confound: [0.75, 0.25] };
@@ -203,14 +207,41 @@ function queued(rows) {
 
 /** The best open idea per subject (not queued): highest score, then the better-proven one (bigger views multiple), then
     the one that shows its law live (F3). */
+const byPick = (a, b) => b.score - a.score || proofRank(b) - proofRank(a) || b.law - a.law;
+
 function nextPicks(rows, subjects = SUBJECTS) {
   const out = {};
   for (const s of subjects) {
-    const open = rows.filter((r) => r.subject === s && isOpen(r))
-      .sort((a, b) => b.score - a.score || proofRank(b) - proofRank(a) || b.law - a.law);
-    out[s] = open[0] || null;
+    out[s] = rows.filter((r) => r.subject === s && isOpen(r)).sort(byPick)[0] || null;
   }
   return out;
+}
+
+/** A core idea's chapter, named before " · " in its idea ("Probability · Galton board" → "Probability"), or null. */
+function chapterOf(r, core = ACCOUNTS.lwspune.core) {
+  const m = (r.idea || "").match(/^([^·]+?) · /);
+  return m && core.includes(m[1]) ? m[1] : null;
+}
+
+/** The best open idea in each core chapter, ranked like nextPicks (F32: one reel each every week). */
+function corePicks(rows, core) {
+  const out = {};
+  for (const c of core) out[c] = rows.filter((r) => chapterOf(r, core) === c && isOpen(r)).sort(byPick)[0] || null;
+  return out;
+}
+
+/** F32: each core chapter keeps CORE_RUNWAY ideas to make. F33: a core idea to make is watched happening (vivid ≥ 2 and
+    the concept live), never a formula or a word card (founder, 2026-10-24: "beautiful ways to visualize probability"). */
+function coreErrors(rows, core) {
+  const errors = [];
+  for (const c of core) {
+    const n = rows.filter((r) => !r.broken && chapterOf(r, core) === c && toMake(r)).length;
+    if (n < CORE_RUNWAY) errors.push(`${c}: ${n} idea${n === 1 ? "" : "s"} to make, keep ≥ ${CORE_RUNWAY} (framework F32)`);
+  }
+  for (const r of rows)
+    if (!r.broken && chapterOf(r, core) && toMake(r) && (r.vivid < 2 || r.law < 1))
+      errors.push(`${r.id}: a ${chapterOf(r, core)} idea must be watched happening (F33): vivid ${r.vivid} (needs ≥ 2), concept live ${r.law} (needs 1)`);
+  return errors;
 }
 
 // ---- Calibration (founder, 2026-10-21: "fine-tuned during every analysis of our posted list") ----
@@ -295,18 +326,18 @@ function calibrate(ideaRows, weights, results) {
 }
 
 module.exports = { ACCOUNTS, CAL, proofPoints, parse, parseWeights, weightedScore, parseSweep, parseCards, validate, runwayErrors,
-  nextPicks, queued, parseResults, spearman, calibrate, baseIdea };
+  nextPicks, queued, parseResults, spearman, calibrate, baseIdea, chapterOf, corePicks, coreErrors };
 
 if (require.main === module) {
   const read = (f) => fs.readFileSync(path.join(__dirname, "..", f), "utf8");
   const [only, flag] = process.argv.slice(2), name = { P: "Physics", C: "Chemistry", M: "Maths" };
   if (only && !ACCOUNTS[only]) { console.error(`unknown handle "${only}": use ${Object.keys(ACCOUNTS).join(" or ")}`); process.exit(1); }
   let failed = false;
-  for (const [key, { handle, file, heading, subjects, weighted }] of Object.entries(ACCOUNTS)) {
+  for (const [key, { handle, file, heading, subjects, weighted, core }] of Object.entries(ACCOUNTS)) {
     if (only && only !== key) continue;
     const md = read(file), rows = parse(md, heading), weights = weighted ? parseWeights(md) : undefined;
     const errors = [...validate(rows, subjects, weighted ? { weights, swept: parseSweep(md), cards: parseCards(md) } : {}),
-      ...(weighted ? runwayErrors(md, rows) : [])];
+      ...(weighted ? runwayErrors(md, rows) : []), ...(core ? coreErrors(rows, core) : [])];
     const out = weighted ? "/100" : "/10";
     console.log(`\n${handle} (${file})`);
     if (errors.length) { console.error(errors.join("\n")); failed = true; continue; }
@@ -332,6 +363,10 @@ if (require.main === module) {
     console.log(`Queued to make: ${q.map((r) => `${r.id} "${r.idea}" (${r.score}${out})`).join(" · ") || "none"}`);
     const next = nextPicks(rows, subjects);
     console.log("Next after the queue:", subjects.map((s) => next[s] ? `${name[s]} ${next[s].id} "${next[s].idea}" (${next[s].score}${out})` : `${name[s]} —`).join(" · "));
+    if (core) {
+      const picks = corePicks(rows, core);
+      console.log("This week's core reels (F32, one each):", core.map((c) => picks[c] ? `${picks[c].id} "${picks[c].idea}" (${picks[c].score}${out})` : `${c} —`).join(" · "));
+    }
   }
   if (failed) process.exit(1);
 }

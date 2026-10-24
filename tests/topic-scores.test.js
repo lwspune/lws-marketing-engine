@@ -335,9 +335,55 @@ test("@lws.pune: its own table, subject M only, score out of 10, made and parked
   assert.match(ts.validate(ts.parse(LWS.replace("| 34 | 3 | 1 | 1 | 0 | 7 |", "| 34 | 3 | 1 | 1 | 0 | 8 |"), LH), LS).join("\n"), /W14: score 8 should be 7/);
 });
 
+// Core chapters (lwspune-framework.md F32–F33, founder 2026-10-24): Probability and Statistics get a reel each every week,
+// whatever the reach score says, so each keeps ideas waiting; and each must be watched happening (vivid ≥ 2, concept live).
+const CORE = ts.ACCOUNTS.lwspune.core;
+const CORE_LWS = `
+## @lws.pune topic scores
+
+| # | Subject | Idea | Proof (×) | Vivid | Question | Concept live | Everyday | Score | Status |
+|---|---|---|---|---|---|---|---|---|---|
+| W6 | M | The soda can | 114 | 2 | 2 | 1 | 1 | 9 | |
+| W17 | M | Probability · Galton board | — | 3 | 2 | 1 | 0 | 6 | |
+| W18 | M | Probability · Darts find π | 2.9 | 3 | 1 | 1 | 0 | 5 | |
+| W24 | M | Statistics · Mean = balance point | — | 2 | 2 | 1 | 1 | 6 | |
+| W25 | M | Statistics · Add 5 to every mark | — | 2 | 2 | 1 | 1 | 6 | |
+| W26 | M | Statistics · Old one | — | 2 | 2 | 1 | 1 | 6 | ✅ made |
+
+## Re-run
+`;
+
+test("@lws.pune core chapters: Probability and Statistics, the chapter read from the idea's name", () => {
+  assert.deepEqual(CORE, ["Probability", "Statistics"]);
+  const rows = ts.parse(CORE_LWS, LH);
+  assert.deepEqual(ts.validate(rows, LS), []);
+  assert.equal(ts.chapterOf(rows[1]), "Probability");
+  assert.equal(ts.chapterOf(rows[0]), null);
+});
+
+test("core picks: the best open idea in each core chapter, beside the overall pick", () => {
+  const rows = ts.parse(CORE_LWS, LH), picks = ts.corePicks(rows, CORE);
+  assert.equal(ts.nextPicks(rows, LS).M.id, "W6");
+  assert.equal(picks.Probability.id, "W17");
+  assert.equal(picks.Statistics.id, "W24");
+  assert.equal(ts.corePicks(rows.filter((r) => r.id !== "W17" && r.id !== "W18"), CORE).Probability, null);
+});
+
+test("core errors: fewer than 2 ideas to make in a core chapter, or a core idea that isn't shown live", () => {
+  const rows = ts.parse(CORE_LWS, LH);
+  assert.deepEqual(ts.coreErrors(rows, CORE), []);
+  assert.match(ts.coreErrors(rows.filter((r) => r.id !== "W25"), CORE).join("\n"), /Statistics: 1 idea to make, keep ≥ 2/);
+  const flat = ts.parse(CORE_LWS.replace("| 2 | 2 | 1 | 1 | 6 | |\n| W25", "| 1 | 2 | 0 | 1 | 4 | |\n| W25"), LH);
+  assert.match(ts.coreErrors(flat, CORE).join("\n"), /W24: .*vivid 1.*concept live 0/);
+  const made = ts.parse(CORE_LWS.replace("| 1 | 1 | 6 | ✅ made |", "| 0 | 1 | 5 | ✅ made |"), LH);
+  assert.deepEqual(ts.coreErrors(made, CORE), [], "a made idea isn't held to the live rule");
+});
+
 test("the real @lws.pune table is valid and has an open idea", () => {
   const rows = ts.parse(real("remake-backlog.md"), LH);
   assert.ok(rows.length >= 9);
   assert.deepEqual(ts.validate(rows, LS), []);
   assert.ok(ts.nextPicks(rows, LS).M);
+  assert.deepEqual(ts.coreErrors(rows, CORE), []);
+  for (const c of CORE) assert.ok(ts.corePicks(rows, CORE)[c], `${c} has an open idea`);
 });
