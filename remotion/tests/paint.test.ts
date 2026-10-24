@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { paintProblems } from '../src/lib/paint.ts';
+import { paintProblems, paintOf } from '../src/lib/paint.ts';
 
 // "Painted 2D" (founder, 2026-10-24: sm-r012 "looks much better"): no black ink outlines. Every colour in a painted
 // palette has a light side, a shadow side and an edge that is a darker shade of itself. paintProblems() is the shared
@@ -27,4 +27,10 @@ test('shading must run light → fill → shade, and the edge must be darker tha
 
 test('near-grey colours are not held to a hue (only to light, shade and edge order)', () => {
   assert.deepEqual(paintProblems({ steel: { fill: '#A9B2BA', light: '#D7DDE2', shade: '#7F8991', edge: '#626B73' } }), []);
+});
+
+test('paintOf(colour) derives a painted set from one base colour: same hue, lighter light, darker shade and edge', () => {
+  const set = { wall: paintOf('#4A3A4E'), sweater: paintOf('#C8632F'), cushion: paintOf('#2E8C86'), pages: paintOf('#EFE4CC'), lamp: paintOf('#D9A441') };
+  assert.deepEqual(paintProblems(set), []);
+  assert.equal(set.sweater.fill, '#C8632F');
 });
