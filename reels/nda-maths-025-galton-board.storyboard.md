@@ -88,7 +88,7 @@ outline built from those numbers drops onto the heaps and fits them.
 ## 8. Honest numbers
 - The balls: a real simulation, 256 balls, each peg a fair 50–50 from a seeded generator (+ − × ÷ only, so tests and
   render get the same run). Every count on screen is that run's own count. The seed is chosen from the first 50 so the
-  run is a typical one (middle tallest, every bin within 2 standard deviations of ⁸Cₖ, an edge bin may be 0; chosen by a rule in the tests, not by eye);
+  run is a typical one (middle tallest, every bin within 1 standard deviation of ⁸Cₖ, an edge bin may be 0; chosen by a rule in the tests, not by eye);
   said in the caption kit. A ball's bin = its number of rights (test).
 - Path numbers: counted by enumerating all 2⁸ = 256 left/right sequences; each peg's number = the sequences reaching it =
   ʳCⱼ, each bin's = ⁸Cₖ; they sum to 256 (tests).
@@ -119,3 +119,11 @@ landed at 5 s, last landing ≈ 7.3 s).
 - I4 discs vs bin labels; digits in the disc → **taken**: 32 px in r 22 discs, discs in the overlap test.
 - I5 the 0.6 s zoom out needs its whoosh (F15) → **taken** (`whooshesFor` adds it).
 - Also: "≈ 43 in flight at frame 0" (was 35); the seed rule allows an empty edge bin (37% of runs).
+
+**Changed while building (2026-10-24):** the web is VIVID **green**, not pink: blue balls and pink fail `distinguishable()`
+(colour-blind test); the bin path numbers and the expected outlines take the same green, so "paths → expected pile" reads
+as one colour. The seed rule is tighter than planned: every bin within **1** standard deviation of ⁸Cₖ (seed 11: 1 6 26
+59 72 54 27 10 1 against 1 8 28 56 70 56 28 8 1); the 2-sd rule picked a run with 81 in the middle. The stills sheet
+caught two faults: the bin numbers on the bin mouths (y 628) read as one jumbled row with row 7's peg numbers, so they
+moved inside the bins (y 700, tested clear of the pile and its outline); the "C: all equal" tag was readable for only
+~1.2 s, so the flat line comes in at 5.5 s and the tag holds until 7.8 s, bold on a soft pill.
