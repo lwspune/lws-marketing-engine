@@ -161,6 +161,13 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### Sound Mind: repaint the flat reels in Painted 2D? (logged 2026-10-24, not started)
+New learning: the founder prefers the painted look (framework S21) to the flat, outlined one. Candidates: the ME reels
+sm-r001–r010 and the pause reel sm-r011, all flat with black outlines. Before any rework, a 360: most are already posted
+or queued, so repainting means new uploads, not edits; L67 should first show whether painted actually reaches or holds
+viewers better than flat. Recommendation for now: **defer** until L67 has a result; then repaint only the ME reels that
+are not yet posted. Needs the founder's yes.
+
 ### Idea-score tuning mixes the two eras of reels (logged 2026-10-23, awaiting founder)
 Learning (pyqvault-ideas.md, 2026-10-23 evening tuning row): `topic-scores.js --calibrate` compares high vs low scorers
 across all 48 h reels, but framework reels score 3.4–4.3 and earlier ones 0.5–1.1, so any criterion that happens to split

@@ -1,4 +1,4 @@
-# @soundmindwithshivani post framework (v1.4, 2026-10-23)
+# @soundmindwithshivani post framework (v1.5, 2026-10-24)
 
 How every Sound Mind post is made, one numbered point at a time, in three parts: **both formats**, **carousels** and
 **reels**. Carousels and reels do different jobs (founder, 2026-10-21: "different fundamentally"): a carousel mostly
@@ -160,6 +160,14 @@ on, and a short loop adds watch time. Made our way, not with AI video: no "AI in
 founder's rules for reels (flat 2D, S18; Remotion, S15). · *Check:* `remotion/tests/sm011.test.ts` (message at frame 0,
 the shots, close-ups that hold their subject, the loop, constant motion, words WCAG AA). · 🧪 L66
 
+**S21 · Painted 2D: the look of every new reel.** No black ink outlines: each colour has a light side, a shadow
+side and an edge that is a darker shade of itself (`remotion/src/lib/paint.ts`). Mood light (dusk, a warm lamp) with a
+glow, reflections on wet or shiny surfaces, layers at their own depth with soft focus behind close-ups, a fine grain.
+White text on dark skies, the ink on light ones, both WCAG AA. · *Why:* the founder, comparing the two pause reels
+(2026-10-24): sm-r012 "tapri at dusk" (painted) "looks much better" than sm-r011 (flat, outlined); earlier he read
+outlined drawings as "kids drawing". · *Check:* the reel's palette passes `paintProblems()` in its test (sm-r012:
+`remotion/tests/sm012.test.ts`). · 📌 founder; painted vs flat measured by L67
+
 ---
 
 ## Changing the framework
@@ -181,6 +189,7 @@ the shots, close-ups that hold their subject, the loop, constant motion, words W
 |---|---|---|---|
 | v1 | 2026-10-21 | Framework created from `brand.md`'s rules (S1–S15), each with a reason, a check and a status; "winning" set to shares per 1,000 reached at 7 days. Lessons L52–L55 measure the four points on test. | Founder: a framework like @pyqvault_'s, for Sound Mind. Nothing in it is new: it numbers what Sound Mind already does, so changes from here on have a trail. |
 | v1.1 | 2026-10-21 | S6: never "comment KEYWORD" on a post meant to spread. S16 added: captions of a few lines, opening on "you" (replaces the one-line caption); on test, L56. | Founder chose both from run 2 of the element analysis (`reels/analysis-framework.md`): keyword asks went with ordinary posts in 3 accounts; long captions with hits in 5, a "you" first line in 3. Week 43's posts keep their one-line captions and are L56's comparison (SUGGESTIONS.md → Backfill ledger). |
+| v1.5 | 2026-10-24 | S21 added: Painted 2D, the look of every new reel (no black outlines, light and shadow sides, mood light, reflections, depth and soft focus); checked by `paint.ts`. S18's vivid palette still sets the colours of ME reels. L67 measures painted vs flat. | Founder, comparing pause reel #2 (painted) with #1 (flat, outlined): "this looks much better ... lets save it". |
 | v1.4 | 2026-10-23 | S20 added: pause reels, a second kind of reel (one calm everyday scene in 3–4 shots, 12–15 s, made to loop, the message on frame 0). On test, L66; first: sm-r011 "chai in the rain". | Founder, after the study of an AI-made "peace" reel: "how can such reels be made for soundmind?", then chose our own flat 2D way over AI video. |
 | v1.3 | 2026-10-22 | S19 added: scene stories, a third kind of carousel (an everyday moment, illustrated, cliffhangers, a kind turn). On test, L57. | Founder, after the study of an illustrated story carousel: "more detailed and relatable story. viewers should swipe the cards to reach end"; "it doesn't have to be ME". |
 | v1.2 | 2026-10-21 | Split into Both formats / Carousels / Reels, each format with its own winning measure: carousels on shares per 1,000 reached, reels on reach and watch time first. S6 is now the carousels' share slide; the reels' ask is the new S17. S8 is now the carousel look; the reel look is the new S18 (L54 measures S18). The keyword rule moved from S6 to S16 (captions, both formats). Sound Mind's numbers moved out to `analytics/soundmind-baseline.md` (local); a carousel baseline added there (her 44 carousels). | Founder: "separate sections for reels and carousels since those are different fundamentally". A carousel reaches followers who keep and send it; a reel is how Sound Mind reaches new people, and Instagram spreads a reel by watch time. Her own carousels get about twice the reels' shares per person reached. Numbers out: founder, 2026-10-21, "write as if the repo were public". |
