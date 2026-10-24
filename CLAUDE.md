@@ -141,6 +141,11 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   everyday scene, flat 2D in Remotion with the scene stories' people, 3–4 shots, 12–15 s, made to loop, rain made in code
   (`sfx.ts` bed `rain`). Framework S20, lesson L66; first: sm-r011 "chai in the rain". Runbook: `soundmind/brand.md`.
 
+- **Painted 2D look for Sound Mind (2026-10-24, founder-approved).** Pause reel #2 "tapri at dusk" (no black outlines,
+  shaded shapes, dusk light, wet reflections, depth and soft focus) "looks much better" than the flat outlined style:
+  every new Sound Mind reel is made this way (framework S21; recipe in `soundmind/brand.md`; palette check
+  `remotion/src/lib/paint.ts`). Older flat reels are a backfill candidate in `SUGGESTIONS.md`, not reworked.
+
 - **@lws.pune daily NDA maths question stories (2026-10-23, founder-approved).** The daily quiz-link stories brought
   zero leads ("quizzes are not at all effective"), so from 24 Oct @lws.pune posts @pyqvault_'s story format with easy NDA
   maths MCQs (07:30 question, 19:30 answer, "Reply A, B, C or D": a reply opens an Inbox chat). `stories/` now holds one

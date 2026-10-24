@@ -113,6 +113,25 @@ Rules are tests (`remotion/tests/sm011.test.ts`); timeline in `src/lib/sm011.ts`
 | Reel | Scene | Close-ups | Ending |
 |---|---|---|---|
 | sm-r011 chai in the rain | she sips chai on her balcony at a rainy dusk, phone face down, fairy lights, tulsi on the ledge | the glass and its steam; the tulsi as drops hit its leaves | she leans back, eyes closed, smiling |
+| sm-r012 tapri at dusk (**Painted 2D**, S21) | a street-side tea stall under a tin roof at dusk in the rain; she sits with a kulhad of chai, her scooter outside | the kettle, its steam and the bulb; the scooter's tail light in a rippling puddle | she leans back against the post, eyes closed |
+
+## Painted 2D (2026-10-24, framework S21): the look of every new reel
+
+The founder's pick after comparing the two pause reels ("this looks much better"). Recipe, as built in
+`remotion/src/SoundMind012.tsx` (timeline and palette in `src/lib/sm012.ts`):
+
+1. **No black ink.** A palette of `{fill, light, shade, edge}` per material, the edge a darker shade of the fill;
+   `paintProblems(PAINT)` in the reel's test must return `[]` (`src/lib/paint.ts`).
+2. **Every shape shaded:** a gradient from its light side to its shadow side (`Grad`), a small highlight on round things.
+3. **Mood light:** a dusk sky gradient (deep blue → violet → warm horizon), one warm practical light (a bulb) with a
+   blurred glow and a soft pool of light on what's near it (`mixBlendMode: screen`), a slight flicker.
+4. **Wet reflections:** the street drawn a second time, flipped about the road surface, dimmed (~30 %) and softened,
+   clipped below the waterline; light streaks under lamps; a puddle with spreading rings.
+5. **Depth:** layers at their own depth (`layerCam`), soft focus on the far layers in close-ups, rain at 2–3 depths,
+   out-of-focus bokeh lights in the distance, mist over the far town, a vignette and grain over everything.
+6. **People:** the young Sound Mind woman (memory: early 20s, lighter warm skin), drawn painted too (no outline on the
+   face; lids, brows and blush do the expression), scaled so she reads in the wide shot.
+7. **Text:** white on the dark sky (WCAG AA, tested), the second line on Sound Mind's white card.
 
 **Hand-drawn tools** (from sm-r004, 2026-10-20; details in `reels/visual-reel-workflow.md` → Reel toolkit): strikes,
 circles and marker highlights on words with `@remotion/rough-notation` (always pass `seed`); pen doodles that draw
