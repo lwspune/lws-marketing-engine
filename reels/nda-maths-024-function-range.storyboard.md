@@ -21,25 +21,25 @@
 - Lines: "f(x) = x², from set X to set Y." (31 chars) / "What is the range of f?" (23 chars).
 - Options: A {0, 1, 4} · B {0, …, 4} · C {−2, …, 2} (chips 300 px wide). The sets are X and Y, never A/B, so a letter
   always means an option (review B1).
-- On frame 0: the rule (question line 1); set X = {−2, −1, 0, 1, 2} drawn as a blue oval with its five numbers, labelled
+- On frame 0: the rule (question line 1); set X = {−2, −1, 0, 1, 2} drawn as a cyan oval with its five numbers, labelled
   "X"; set Y = {0, 1, 2, 3, 4} as a pink oval with its five numbers, labelled "Y". Every element is visible.
 - 2-second answer: square the five inputs: 4, 1, 0, 1, 4 → {0, 1, 4}. Or just watch the arrows land.
 
 ## 4. Frame 0 and the cover
 - Frame 0: both ovals and all ten numbers drawn; the first ball (from −2) has already left X and its arrow is drawing
   itself towards 4; the readout under the ovals already says "Outputs:" with nothing after it; a slow push-in has started.
-- Cover: 0.5 s: the first ball half-way across, nothing in Y lit yet, the readout still "Outputs:". Text "What's the
+- Cover: 0.3 s: the first ball half-way across, nothing in Y lit yet, the readout still "Outputs:". Text "What's the
   range?" at y 1590 (inside 240–1680; the ovals at screen 610–1310 also sit inside the 3:4 crop). The cover render hides
   the caption (as on 023), so the two never meet. No spoiler: no output is lit yet.
 
 ## 5. Beats
 | time | picture: what moves | on-screen words (≤ 7) | camera | sound | key colours (VIVID) |
 |---|---|---|---|---|---|
-| 0–3.8 | five balls, one per input (−2, −1, 0, 1, 2), leave X every 0.7 s and fly 1.0 s each to their output, drawing an arrow behind them; each lands with a pop, its output dot fills green, and its value joins the readout list: "Outputs: 4", "Outputs: 4, 1", … "Outputs: 4, 1, 0, 1, 4" | "Each input → exactly one output" (0.3–3.0) | slow push in 1 → 1.04 (0–4.6) | a click per landing, pitch up with the output | ball + arrows blue (domain), Y pink, hit outputs green |
+| 0–3.8 | five balls, one per input (−2, −1, 0, 1, 2), leave X every 0.7 s and fly 1.0 s each to their output, drawing an arrow behind them; each lands with a pop, its output dot fills green, and its value joins the readout list: "Outputs: 4", "Outputs: 4, 1", … "Outputs: 4, 1, 0, 1, 4" | "Each input → exactly one output" (0.3–3.0) | slow push in 1 → 1.04 (0–4.6) | a click per landing, pitch up with the output | ball + arrows cyan (domain), Y pink, hit outputs green |
 | 3.8–4.2 | Y's 2 and 3 turn to dashed rings; "2, 3: never hit" fades in between them | (none: the tag says it) | | a soft tap | dashed ring = muted |
 | 4.0–4.8 | the list's repeats merge: the second 1 and second 4 fade out, the list turns into the green pill "Range = {0, 1, 4}" | | punch-in 1.04 → 1.1 (4.65–5.0) | whoosh-in | range pill green |
 | 5.0 | **A lights**; the pill pulses | "Range: only the outputs hit" (5.0–7.2) | zoom out to 1.0 (5.4–6.0) | thunk + music hit; whoosh-out | |
-| 7.2–9.4 | X's oval glows blue; its label grows to "X · domain"; the five inputs pulse in turn | "C is X, the domain: every input" | still | tap | blue |
+| 7.2–9.4 | X's oval glows cyan; its label grows to "X · domain"; the five inputs pulse in turn | "C is X, the domain: every input" | still | tap | cyan |
 | 9.4–11.6 | Y's oval glows pink; label "Y · codomain"; all five outputs pulse, the dashed 2 and 3 included | "B is Y, the codomain: allowed outputs" | still | tap | pink |
 | 11.6–13.8 | second beat: the arrows from −2 and 2 thicken and glow, both into the one 4; a green ✓ pops on 4 | "Two inputs, one output: still fine" | push in 1.0 → 1.06 (11.6–13.6) | click | |
 | 13.8–16.4 | a dashed muted arrow grows from 1 to 0, so 1 has two arrows; a muted ✗ pops on it; it fades by 16.0 | "One input, two arrows: not a function" | zoom out 1.06 → 1.0 (13.8–14.4) | snap as ✗ pops; whoosh-out | muted dashed |
@@ -97,7 +97,7 @@ every part named.
 - Letters: options are A/B/C and the sets X/Y, so no letter means two things (review B1).
 - Labels under a zoom: the set labels and readout aren't in the zoomed layer (the labels' x follows the ovals), and the
   oval tops stay below them at 1.1.
-- Colour-blind: blue (domain), pink (codomain), green (range) must be told apart: `distinguishable()` per pair in the
+- Colour-blind: cyan (domain; blue failed `distinguishable()` against pink, 2026-10-24), pink (codomain), green (range) must be told apart: `distinguishable()` per pair in the
   tests; each is also named by a label, so colour isn't the only cue.
 - Amber is the answer chip only; the ✗ and ghost arrow are muted and dashed, never amber.
 
@@ -114,3 +114,9 @@ the ✓ and ✗ cases, Q13's six prime factors; layout: the 1.1 punch-in stays i
 - I3 "never hit" between 2 and 3 is ambiguous → **taken**: "2, 3: never hit", in the zoomed layer with the dots.
 - I4 set labels drift off their ovals under the zoom → **taken**: their x follows the oval centre; y stays put.
 - I5 the end isn't worth saving → **taken**: a 2 s hold of the whole named picture before the end card.
+
+**Changed while building (2026-10-24):** the colour test failed blue (domain) against pink (codomain) for colour-blind
+viewers, so the domain is VIVID cyan. The stills sheet caught two faults: frame 0's ball still sat on the −2 dot (the
+first flight now starts 0.2 s before frame 0, so it is already in the air), and the ✗ glyph came out thin and off its
+line (✓ and ✗ are now drawn as thick strokes centred on their spot). The cover moved from 0.5 s to 0.3 s: at 0.5 the
+ball sat beside 3 and read as landing there. The layout tests found no overlaps.

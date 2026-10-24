@@ -33,6 +33,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   '021': { lib: '../src/lib/reel021.ts', file: 'public/nda-maths-021-log-flip' },
   '022': { lib: '../src/lib/reel022.ts', file: 'public/nda-maths-022-complete-square' },
   '023': { lib: '../src/lib/reel023.ts', file: 'public/nda-maths-023-derivative-cycle' },
+  '024': { lib: '../src/lib/reel024.ts', file: 'public/nda-maths-024-function-range' },
   '018': { lib: '../src/lib/reel018.ts', file: 'public/nda-maths-018-secant-tangent' },
   '010': { lib: '../src/lib/reel010.ts', file: 'public/nda-maths-010-why-seven' },
   '011': { lib: '../src/lib/reel011.ts', file: 'public/nda-maths-011-why-det-area' },
