@@ -1,4 +1,4 @@
-# @soundmindwithshivani post framework (v1.5, 2026-10-24)
+# @soundmindwithshivani post framework (v1.6, 2026-10-24)
 
 How every Sound Mind post is made, one numbered point at a time, in three parts: **both formats**, **carousels** and
 **reels**. Carousels and reels do different jobs (founder, 2026-10-21: "different fundamentally"): a carousel mostly
@@ -157,7 +157,7 @@ feeling, S1), one line comes back at the end, and the camera ends where it began
 piano are made in code. · *Why:* the founder pointed at an AI-made anime reel (@pixcraft_132, 2026-10-23: a man with
 chai under a tree in the rain, 12 s, four shots, no words, caption "Peace") that people reposted widely: a mood they send
 on, and a short loop adds watch time. Made our way, not with AI video: no "AI info" label on Shivani's brand, and the
-founder's rules for reels (flat 2D, S18; Remotion, S15). · *Check:* `remotion/tests/sm011.test.ts` (message at frame 0,
+founder's rules for reels (flat 2D, S18; Remotion, S15). **The scene is in season** (founder, 2026-10-24: "since it is not monsoon, we need to have different setup"): rain only in the monsoon (June–September), indoor and evening scenes otherwise. · *Check:* `remotion/tests/sm011.test.ts` (message at frame 0,
 the shots, close-ups that hold their subject, the loop, constant motion, words WCAG AA). · 🧪 L66
 
 **S21 · Painted 2D: the look of every new reel.** No black ink outlines: each colour has a light side, a shadow
@@ -189,6 +189,7 @@ outlined drawings as "kids drawing". · *Check:* the reel's palette passes `pain
 |---|---|---|---|
 | v1 | 2026-10-21 | Framework created from `brand.md`'s rules (S1–S15), each with a reason, a check and a status; "winning" set to shares per 1,000 reached at 7 days. Lessons L52–L55 measure the four points on test. | Founder: a framework like @pyqvault_'s, for Sound Mind. Nothing in it is new: it numbers what Sound Mind already does, so changes from here on have a trail. |
 | v1.1 | 2026-10-21 | S6: never "comment KEYWORD" on a post meant to spread. S16 added: captions of a few lines, opening on "you" (replaces the one-line caption); on test, L56. | Founder chose both from run 2 of the element analysis (`reels/analysis-framework.md`): keyword asks went with ordinary posts in 3 accounts; long captions with hits in 5, a "you" first line in 3. Week 43's posts keep their one-line captions and are L56's comparison (SUGGESTIONS.md → Backfill ledger). |
+| v1.6 | 2026-10-24 | S20: a pause reel's scene is in season (rain only June–September); sm-r013 "window seat" is the first indoor one, and its test refuses a rain bed. | Founder, 2026-10-24: "since it is not monsoon, we need to have different setup like chai in cozy room besides window with book in hand". |
 | v1.5 | 2026-10-24 | S21 added: Painted 2D, the look of every new reel (no black outlines, light and shadow sides, mood light, reflections, depth and soft focus); checked by `paint.ts`. S18's vivid palette still sets the colours of ME reels. L67 measures painted vs flat. | Founder, comparing pause reel #2 (painted) with #1 (flat, outlined): "this looks much better ... lets save it". |
 | v1.4 | 2026-10-23 | S20 added: pause reels, a second kind of reel (one calm everyday scene in 3–4 shots, 12–15 s, made to loop, the message on frame 0). On test, L66; first: sm-r011 "chai in the rain". | Founder, after the study of an AI-made "peace" reel: "how can such reels be made for soundmind?", then chose our own flat 2D way over AI video. |
 | v1.3 | 2026-10-22 | S19 added: scene stories, a third kind of carousel (an everyday moment, illustrated, cliffhangers, a kind turn). On test, L57. | Founder, after the study of an illustrated story carousel: "more detailed and relatable story. viewers should swipe the cards to reach end"; "it doesn't have to be ME". |
