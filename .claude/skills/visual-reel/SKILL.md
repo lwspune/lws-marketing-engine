@@ -18,8 +18,10 @@ Non-negotiables while doing it:
 1. **One real PYQ, re-derived.** Exactly one question per reel, never two (not even a linked pair on
    one set-up). Read it from the question bank (read-only, anon key) and solve it yourself before
    building anything. Write the working and traps into the caption kit.
-2. **Template, not scratch.** Copy `reels/nda-maths-007-cancel.render.html`, keep `theme: 'white'`,
-   and use only `Reel.WHITE` colours.
+2. **3D, from a template** (framework F34, founder 2026-10-24: "3D reels only for lwspune"). Start from
+   `remotion/src/Reel025.tsx` + `src/lib/reel025.ts` (3D on the white board, `RealLight`, an opening orbit, physics via
+   `reel025Physics.ts` where things fall or collide). The engine template (`nda-maths-007-cancel.render.html`) is for
+   re-making old engine reels only.
 3. **Tools, not ad-hoc scripts.** Use `reels/tools/` (frames → record → cover → check-video). Look at
    the contact sheet and the decoded strip before calling it done; `check-video` must print 4 PASS.
 4. **Engine changes:** test-first in `tests/`, then `node reels/tools/unchanged.mjs` must say SAME for
