@@ -65,6 +65,7 @@ loop; momentum from the reels posted before). The score shown by the tool is tod
 | P37 | pv-physics-011-induction | 2 | 2 | 1 | 1 | 2 | 1 | 1 | 2 | 1 | 1 | 0 | idea 62 · motion 100% · words 13 · colour 26.7 · 19 s · cover 18 · framework-2 test B (L61): our framework, assemble hook, second hook, end card |
 | C8 | pv-chem-009-electrolysis | 1 | 2 | 1 | 1 | 1 | 1 | 1 | 2 | 2 | 0 | 0 | idea 59 · motion 100% · words 14 · colour 16.9 · 19.8 s · cover 37.4 · Race + split apart, second hook, end card; first L62 test (live mL counts past the answer), silent |
 | P6 | pv-physics-012-lift-power | 2 | 2 | 1 | 1 | 1 | 1 | 1 | 2 | 1 | 0 | 0 | idea 66 · motion 100% · words 18 · colour 17.1 · 19.2 s · cover 13.3 · You'd think + orbit 360°, second hook (replay paused on the meters), end card; second L62 test (joule counts), silent |
+| P75 | pv-physics-014-ohm | 3 | 2 | 1 | 0 | 2 | 1 | 1 | 1 | 2 | 0 | 1 | idea 79 · motion 100% · words ≈23 (label, two-line question, options, tag, nudge, the cast's names) · colour 39 · 14 s · cover 34.1 · Pick one + race running (sparks racing from frame 0), second hook "Now double Ohm?" (a second resistor slides in), loop; dark, drive, silent; first Painted 2D reel and first with the cast (Volt, Amp, Ohm); momentum as P51's 1.47 (no reel posted since) |
 
 ## Predictions
 
@@ -96,6 +97,7 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 | P37 | pv-physics-011-induction | 2026-10-22 | 84 | record-breaker | idea | 1883 | 1429 | no | – | waiting | – |
 | C8 | pv-chem-009-electrolysis | 2026-10-23 | 68 | above typical | idea | 1930 | 1429 | no | – | waiting | – |
 | P6 | pv-physics-012-lift-power | 2026-10-23 | 77 | above typical | idea | 1930 | 1429 | no | – | waiting | – |
+| P75 | pv-physics-014-ohm | 2026-10-24 | 83 | record-breaker | words | 1989 | 1429 | no | – | waiting | – |
 
 ## Calibration and accuracy runs
 
