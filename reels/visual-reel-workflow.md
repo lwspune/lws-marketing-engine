@@ -244,6 +244,17 @@ Installed in `remotion/` only, pinned. First used in @pyqvault_ Physics #7 (`PvP
 | `@dimforge/rapier3d-compat` (Rapier physics, Apache 2.0) | real collisions: molecules bouncing off each other, balls, dice, a piston hit by particles. Demo: `remotion/src/DemoPhysics.tsx` (`review/realism/4 …`) | Remotion draws frames out of order: simulate **once**, fixed step (1/120 s), in `src/lib/` (`demoPhysics.ts`) → `node tools/simulate.ts` writes `public/*.json` → the reel only plays it back. Test that two runs are identical. A fast ball can sink ~0.02 into a wall for a frame. It's for how the motion **looks**: any number the reel states (pressure, speed, count) still comes from the re-derived law (F10), never from the engine. |
 | `three.quarks` (particles, MIT) | fire, sparks, smoke, steam, heat haze. Demo: `remotion/src/DemoParticles.tsx` (`review/realism/5 …`) | It moves by clock time and `Math.random`: rebuild and replay from 0 every frame with `withSeed` (`demoParticles.ts`), plus one throwaway build at module load (its first build draws extra random numbers). Emitters must sit in a `Scene`. Additive glow vanishes on the white board: **dark (lab) only**. Forces are in the emitter's own axes (turned to point up: down = local −z). |
 
+**Scripted flight + physics piles** (reel 025 v2, a 3D Galton board, 2026-10-24): when a count on screen must follow an
+honest rule (fair 50–50 choices) but the motion should look physical, script the part the rule decides (gravity arcs
+between the pegs each ball chose: `ballAt` in `src/lib/reel025.ts`) and hand each ball to Rapier only where the rule no
+longer matters (the bins: `reel025Physics.ts`, with the speed of its last hop), so the piles form by real collisions.
+Learned on the way: (1) scripted balls pass through each other: give them lanes front to back and one bounce for all, so
+each stays one hop behind the ball before it in its lane, and test the gap every frame; (2) from a front camera the
+lanes' depth is invisible, so size the balls for the pile heights you need (025: r 0.12 gave heaps too low to show the
+answer; r 0.16 fixed it); (3) a solid back panel is a flat grey slab in the opening orbit (F22): make the back glass too;
+(4) a lone ball on a floor rolls for ever: give the balls linear and angular damping; (5) `useLayoutEffect`, never
+`useEffect`, for instanced meshes (in 025 every marble was drawn at the origin).
+
 **Not used, and why** (checked 2026-10-20): `@react-three/drei` (pulls in 21 packages incl. face tracking and a GPU check
 that downloads data; three.js's own `TubeGeometry` / `Line2` cover trails and thick lines), tegaki (handwriting only in
 its 13 bundled fonts, not Kalam), Remotion's `@remotion/effects` (needs `HtmlInCanvas`, behind a Chrome flag), matter-js
