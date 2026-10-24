@@ -41,6 +41,7 @@ but a good concept isn't blocked for lack of one. Only NDA maths chapters go on 
 | W14 | A matrix moves space | @codematrixvishal 916k (34×) [link](https://www.instagram.com/reel/DbZeJpoJKmm/) | a grid transforms; the determinant = how much area scales (links to reel 011) | Matrices & determinants | ✅ made 2026-10-23 (reel 020) |
 | W15 | f and f′ together: the slope becomes a graph | @codematrixvishal (115×), as @pyqvault_ M4 | slope 0 at every peak and valley | Application of derivatives | ✅ made 2026-10-20 (reel 015) |
 | W16 | The quadratic formula is a square, completed | @codematrixvishal 1.10M (40×) [link](https://www.instagram.com/reel/DZPH3WfpKcB/), as @pyqvault_ M5 | x² + 6x as tiles: the 6x strip splits in two and wraps the square; the missing corner (3² = 9) completes it; the same move with b gives the formula | Quadratic equations | moved from @pyqvault_ (founder 2026-10-20); ✅ made 2026-10-23 (reel 022) |
+| W17 | Domain, codomain, range: the outputs you actually hit | none: the founder's own ask (2026-10-24) | an arrow diagram fills live; the outputs list merges into the range; B and C are the codomain and the domain | Functions | ✅ made 2026-10-24 (reel 024) |
 
 ## @lws.pune topic scores
 
