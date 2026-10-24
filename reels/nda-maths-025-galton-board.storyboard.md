@@ -1,129 +1,131 @@
-# nda-maths-025-galton-board storyboard
+# nda-maths-025-galton-board storyboard (v2: 3D)
+
+**Why v2:** the founder watched the finished 2D reel (2026-10-24): "galton board is bland and 2D. hardly any movements.
+make it 3D with movement effects". v1 (2D, small dots on a flat diagram, a near-still camera) was never posted; its
+storyboard and review are in git history (commit 7b37fcb). v2 keeps v1's question, answer, maths and honesty rules, and
+remakes the picture as a real 3D board with physical motion.
 
 ## 1. The idea
-- One sentence: every peg is a fair 50–50, yet the balls pile up in the middle, because far more paths lead to the
-  middle bin (70 of the 256) than to an edge bin (1); the path counts are Pascal's triangle, and each peg is a coin toss.
+- One sentence: every peg is a fair 50–50, yet the balls pile up in the middle, because 70 of the 256 equally likely
+  paths lead to the middle bin and 1 to each edge; the counts are Pascal's triangle, and each peg is a coin toss.
 - End-card takeaway: "Most paths, most balls." Chapter: NDA MATHS · PROBABILITY.
-- Source idea: remake-backlog W18 (core chapter, F32), no proven remake (proof "—"), score 6/10. Framework F33: watched
-  happening, the formula last.
-- Caption PYQ: NDA 2018 (II) Q107 (id `7150efc9-ecdc-4b4b-ae0e-81040547bf98`): "8 coins are tossed simultaneously. The
-  probability of getting at least 6 heads is" → (c) 37/256. Re-derived: ⁸C₆ + ⁸C₇ + ⁸C₈ = 28 + 8 + 1 = 37 of 2⁸ = 256.
-  On the board: right = heads, so the three right-hand bins hold 37 of the 256 paths. Named in the caption only (F20).
+- Source: remake-backlog W18 (core chapter, F32), no proven remake, score 6/10. F33 (watched happening, formula last).
+- Caption PYQ: NDA 2018 (II) Q107 (id `7150efc9-ecdc-4b4b-ae0e-81040547bf98`): 8 coins, at least 6 heads → (c) 37/256.
+  Re-derived: ⁸C₆ + ⁸C₇ + ⁸C₈ = 28 + 8 + 1 = 37 of 256. Caption only (F20).
 
 ## 2. The viewer
-- An NDA aspirant who has met ⁿCᵣ and "probability = favourable / total", but thinks of them as formulas. Has probably
-  never seen a Galton board.
-- Likely answers: **C all equal** (each peg is fair, so each bin must be fair: the strongest pull, and the trap the reel is
-  built around); **B edges** (balls "bounce outwards"; weak). Right: **A middle**.
+- NDA aspirant, knows ⁿCᵣ as a formula; has probably never seen a Galton board.
+- Likely answers: **C all equal** (each peg fair → each bin fair: the trap); **B edges** (weak). Right: **A middle**.
 
 ## 3. The question (frame 0)
-- Lines: "256 balls, 8 rows of pegs." (26 chars) / "Which bin fills most?" (21) · Options: A middle · B edges ·
-  C all equal.
-- On frame 0: the whole board (8 rows of pegs, 9 bins) and balls already falling through the pegs. The caption from 0.3 s
-  says each peg is 50–50 (the fact the trap rests on). Nothing else is needed.
-- 2-second answer: gut feeling, or "the middle can be reached many ways". The piles settle it within 5 s either way.
+- "256 balls, 8 rows of pegs." / "Which bin fills most?" · A middle · B edges · C all equal (header, as v1).
+- Frame 0: the whole 3D board front-on (the orbit starts there), the first ~40 balls already bouncing down the pegs.
 
 ## 4. Frame 0 and the cover
-- Frame 0: about 43 balls already in flight between the pegs (released from t = −1.2 s, so the rain is under way); the
-  bins are empty (the first ball lands at ≈ 0.1 s). Readout "0 / 256 balls".
-- Cover: t = 0.15 s, before the first caption (0.3 s): balls in the pegs, about 2 in the bins (no pile shape yet). Text
-  "Middle, edges or all equal?" at y 1590 (inside 240–1680), alone in the caption zone. No spoiler: no pile.
+- Frame 0: front-on, camera just starting to turn, balls in the pegs, **0 balls in the bins** (the first lands ≈ 0.9 s).
+- Cover: t = 0 (frame 0). No spoiler: empty bins (tested: 0 landed at the cover time). Text "Middle, edges or all
+  equal?" at y 1590.
 
-## 5. Beats
+## 5. The board (3D, real materials, F24)
+- Units: peg spacing DX = 1 across, DY = 0.55 between rows. Width: 9 bins of 1 + a wood frame 0.2 each side = 9.4.
+  Height: top frame 0.2 + funnel 0.7 + pegs 7 × 0.55 = 3.85 + 0.55 to the bin tops + bins 1.4 + floor frame 0.2 = 6.9.
+  At 1000 px across the board (106 px a unit) it stands ≈ 731 px tall, inside the 940 px 3D band (tested).
+- A **wood** frame (REAL wood, RoundBox, F8) 1.5 deep with a pale backboard, a **glass** front (REAL glass), 36 **steel**
+  pegs (REAL steel) running front to back, 9 bins with thin steel walls, a funnel at the top. `RealLight`.
+- 256 glossy marbles, **VIVID blue**, radius 0.12 (≈ 25 px across), in **five lanes front to back** (z = −0.48 … +0.48,
+  0.24 apart; the gap between glass and backboard is 1.26): ball i rides lane i mod 5. A bin holds 4 across × 5 deep, so
+  the tallest pile (≤ 84 balls) stands ≈ 1.1 (tested ≤ 1.25 under the 1.4 walls). Why five: every ball passes the top
+  peg, and two balls in one lane must be a full hop apart there (0.16 s) or they'd overlap; five lanes let 256 balls fall
+  in 8.2 s.
+- **How a ball moves.** Above the bins: each ball makes a seeded fair 50–50 choice at every peg (the same honest rule as
+  v1); between pegs it flies a true gravity arc off the peg it hit (time-scaled gravity, g = 60, the same bounce for every
+  ball, so a hop always takes the same 0.16 s and each ball stays exactly one row behind the one before it in its lane),
+  with a brief squash on each impact. Balls in the same lane stay ≥ 1.8 radii apart (tested on every frame, so none
+  visibly pass through another); lanes are a full diameter apart. Into the bins: from the bin mouth each
+  ball is handed to the **Rapier physics engine** (balls, bin walls, floor, glass and backboard as real colliders), so the
+  piles form by real collisions: balls land, bounce, roll off the heap and settle. Tested: every ball ends in the bin its
+  choices give; everything is at rest before 8.8 s; two runs are identical.
+- **Movement effects:** each peg flashes (white rim glow, 0.15 s) and pulses 3 % when hit, so the top pegs shimmer; fast
+  balls leave a short fading trail (3 ghosts at −1, −2, −3 frames); the piles jostle as balls land; the camera opens with
+  a tilted full orbit (F22), pushes, punches in on the answer, and rides along with one ball in the coin-toss beat.
+
+## 6. Beats
 | time | picture: what moves | on-screen words (≤ 7) | camera | sound | key colours |
 |---|---|---|---|---|---|
-| 0–5.0 | 256 balls rain through the pegs at a steady rate (released −1.2 … 6.0 s), hopping peg to peg, landing and stacking in the bins; live count under each bin; readout counts up | "Each peg: left or right, 50–50" (0.3–3.0) | slow push 1.00 → 1.04 | soft tap every 8th landing | balls VIVID blue; pegs ink 45%; bin walls axis |
-| 5.0 | **A lights**: the middle pile is clearly tallest (≈ 50 there vs ≈ 1 in each edge bin) | | punch-in ×1.12 on the bins, landing at 5.0 | whoosh-in + thunk + music hit | |
-| 5.0–7.6 | the rain finishes (last ball lands ≈ 7.4); a muted dashed flat line draws across all bins at 256 ÷ 9 ≈ 28 balls, tagged "C: all equal" | "Middle wins. But each peg is fair…" (second hook) | zoom out to 1.00 (5.6–6.2) | whoosh-out | flat line muted, dashed |
-| 7.6–8.0 | the flat line fades; balls fade to 25% (piles and counts stay) | | still | | |
-| 8.0–9.8 | ONE path draws itself from the top peg to the left edge bin's wall top (y 640), all lefts; readout "1 path" | "Edge: only all-left gets there" | still | click per peg (8, rising) | edge path VIVID orange |
-| 9.8–12.8 | the 70 paths into the middle bin draw one after another, fast (each in 0.3 s, a new one every 0.037 s), thin and see-through: the web thickens where many paths share a step; every path ends at the bin's wall top (y 640); readout counts "1 path" → "70 paths" (no label at the bin mouth while the web is up) | "Middle: 70 different ways in" | slow push 1.00 → 1.05 | tap every 5th path, pitch rising; shimmer under the web | middle paths VIVID pink |
-| 12.8–15.0 | the paths fade; the ball counts under the bins dim to 20%; on each peg its number of paths writes in, row by row (0.22 s a row): 1 · 1 1 · 1 2 1 · … · 1 7 21 35 35 21 7 1; then on the bin mouths 1 8 28 56 70 56 28 8 1; readout "256 paths in all" | "Each peg adds the two above" | zoom out to 1.00 (12.8–13.4) | whoosh-out; soft click per row | numbers ink on small white discs over the pegs; bin numbers pink |
-| 15.0–17.4 | balls back to full colour, counts back; a green dashed outline (the expected pile) drops onto each pile at the height of its path number: every path is equally likely (1 in 256), so 256 balls expect ⁸Cₖ in bin k; the real piles sit close to it, a few balls over or under; readout "expected balls = paths" | "Every path equally likely: 1 in 256" | still | whump as the outlines land | outline WHITE green, dashed |
-| 17.4–19.8 | one path draws again (H T H H T T H T: right = H, left = T), each letter appearing beside its peg as the path passes; 4 H land it in the middle bin; readout "k heads: ⁸Cₖ ways" | "Each peg is a coin toss" | gentle push 1.00 → 1.04 | click per row | path VIVID orange, H/T ink |
-| 19.8–22.8 | end card | "Most paths, / most balls. / Follow for more" | – | – | |
-Answer at 5.0 s. Second hook at 5.0 ("But each peg is fair…"), answered 8.0–17.4. Something new every second: the rain and
-counts (0–7.4), the flat line (5.6), the lone path (8.0), the web (9.8), the numbers (12.8), the outlines (15.0), the
-tosses (17.4).
+| 0–3.0 | the orbit: front → side → back → side → front, looking down 18° easing to 8° (the frame's depth and the pegs read from the side), while the rain starts; pegs flash as they're hit | "Each peg: left or right, 50–50" (0.3–3.0) | orbit 360°, eased, front by 3.0 | soft ping per ~6th peg hit, pitch by row | balls VIVID blue; pegs steel; frame wood; glass |
+| 3.0–5.0 | front view: the rain thickens (releases run −1.6 … 6.6 s), piles rise and jostle; live counts under the bins fade in at 3.0 | | slow push ×1.04 | pings + landing taps | |
+| 5.0 | **A lights**; the middle pile is clearly tallest | | punch-in ×1.1 on the bins (all 9 bins and counts stay in frame), landing at 5.0 | whoosh-in + thunk + music hit | |
+| 5.0–8.6 | the last balls fall and settle (all at rest by 8.6) | "Middle wins. But each peg is fair…" (5.0–7.6) | fast zoom out (5.6–6.2) | whoosh-out; taps | |
+| 8.8–10.6 | a frosted glass sheet slides in across all bins at the height a pile of 256 ÷ 9 ≈ 28.4 balls stands, tagged "C: all equal"; the middle pile pokes far through it, the edges sit far below | "All equal would only reach here" | still | soft whoosh of the sheet (tap) | sheet frosted white, muted tag |
+| 10.8–12.4 | the balls dim; one glowing **orange** tube grows from the funnel down the far-left pegs into the edge bin | "Edge: only all-left gets there" · readout "edge: 1 path" | still | a ping per peg as it passes | tube VIVID orange |
+| 12.4–15.2 | 70 glowing **green** tubes pour down the pegs into the middle bin, one after another, a bead of light at each head; the bundle thickens where paths share a step | "Middle: 70 different ways in" · readout counts to 70 | slow push ×1.06 | shimmer + a tap per 5th tube | tubes VIVID green, see-through |
+| 15.2–17.2 | the tubes fade; a white number pill pops up on every peg, row by row (1 · 1 1 · … · 1 7 21 35 35 21 7 1), then green numbers inside the bins (1 8 28 56 70 56 28 8 1); counts dim | "Paths to here = two above added" · readout "256 paths in all" | fast zoom out (15.2–15.8) | whoosh-out; a click per row | ink on white pills; bin numbers green |
+| 17.2–19.4 | the pills fade (gone by 17.6); the balls brighten; a see-through green glass column rises in each bin to the height ⁸Cₖ balls stand; the real piles sit close to their columns | "Every path equally likely: 1 in 256" · readout "256 balls, 256 paths" | still | whump as the columns land | columns VIVID green glass |
+| 19.4–21.8 | one **orange** ball drops from the funnel and bounces down the pegs, H T H H T T H T: a letter pops beside each peg it hits, the first two reading "H = right", "T = left"; 4 H → it lands on the middle pile | "Each peg is a coin toss" · readout "k heads: ⁸Cₖ ways" | **ride-along**: the camera follows the orange ball down at ×1.3, then eases back as it lands | a ping per peg; a thunk as it lands | coin ball VIVID orange |
+| 21.8–24.8 | end card | "Most paths, / most balls. / Follow for more" | – | – | |
 
-## 6. Layout map (1080 × 1920)
+Answer at 5.0 s. Second hook at 5.0, answered 8.8–19.4. Something moves on every frame: balls from frame 0 until 8.6,
+then the sheet, tubes, pills, columns and the orange ball.
+
+## 7. Layout map (1080 × 1920)
 | zone | y range (px) | what sits there |
 |---|---|---|
-| header | 96 – 440 | label, question (2 lines at 54 px), chips (w 240: "C   all equal"), nudge |
-| picture band | 470 – 1500 (band y 0 – 1030) | readout top-left; pegs, bins, piles, counts (below) |
-| caption | ~1540 – 1640 | |
-| nothing important | > 1680; < 240 on the cover | |
-Inside the band (band px; the board is centred on x 540):
-- Readout: band (60, 70), anchor start, 44 px, ink. Widest "8 tosses: ⁸Cₖ ways" / "256 paths in all" ≈ 17 chars ≈ 375 px
-  → x 60 … 435, clear of the ball stream at x 540 ± 20 above the first peg.
-- Balls enter through the soft top edge at x 540 and fall to the top peg. Ball radius 8.
-- Pegs: row r = 0…7 has r + 1 pegs at x = 540 + (j − r/2)·104, y = 190 + 58r (row 7 at y 596, x 176 … 904). Peg radius 7.
-- Bins: 9, centred at x = 540 + (k − 4)·104 (124 … 956), walls at the half-steps (72 … 1008), wall tops y 640, floor
-  y 900 (pile room 260 px: hex-packed, 6 balls a row, 13.9 px a row; the tallest real pile, ≤ 85, is ≤ 15 rows = 224 px,
-  top ≥ 676).
-- Ball counts under the floor: y 948, 36 px, muted, centred on each bin ("85" widest, ≈ 36 px of the 104 px bin).
-- Path numbers above the bins: y 676 is too close to a tall pile (top ≥ 676), so they sit on the bin mouths at y 628,
-  36 px (box 599 … 635), between row 7's pegs (y 596, discs r 7 → 603) and the wall tops (640). Row 7's peg numbers
-  replace those pegs' dots, so the two rows are 32 px apart vertically and offset half a step (52 px) horizontally; both
-  ≤ 2 digits at 36 px (≈ 36 px wide). Row 7's discs (r 22, y 574 … 618) sit 52 px sideways from each bin label (half
-  widths 22 + 18 = 40 < 52). Checked by the overlap test (discs included).
-- Peg numbers: centred on the pegs, 32 px on white discs r 22 (rows are 58 apart, discs 78 apart along a diagonal).
-- "C: all equal" tag: 34 px, right end of the flat line, anchor end at x 1000, baseline 6 px above the line (≈ 810);
-  ≈ 204 px wide → x 796 … 1000, over bins 7–8 (bin 6's walls end at 800). In the overlap test, with the real pile tops
-  of the bins under it as boxes.
-- The lone path's and the web's counts are in the readout only; the paths end at the wall tops (y 640).
-- H/T letters (17.4): 34 px, beside each peg on the side away from the path's next step, inside the board.
-- Zooms (whole board layer, readout and labels in a still layer except counts and numbers, which sit with the board):
-  punch-in ×1.12 about (540, 770): board x 72 … 1008 → 16 … 1064 (inside 0–1080); floor counts y 948 → 969 (inside the
-  band, above the bottom soft edge at 1000). Slow push ×1.05 about (540, 520) for the web: x 72 … 1008 → 49 … 1031; the
-  top peg y 190 → 173 and the floor 900 → 919, both inside.
-- Soft edges: top 5 %, bottom 3 % (so counts at 948 stay crisp).
+| header | 96 – 440 | label, question, chips (w 240), nudge (as v1) |
+| readout | 470 – 540 | top-left, x 60, 44 px, fixed (not in the 3D) |
+| 3D band | 560 – 1500 | the board; counts, numbers, tag and H/T are HTML placed with `project()` |
+| caption | ~1540 – 1640 | the widest, "Middle wins. But each peg is fair…" (34 chars at 50 px ≈ 850 px), fits 960 |
+| nothing important | > 1680 | |
+- From 3.0 s the board is front-on, ≈ 1000 px across and ≈ 806 px tall, centred in the band (tested with `project()`:
+  the board's corners inside the band at zoom 1; at the ×1.1 punch-in all 9 bins and their counts stay inside).
+- Labels hidden during the orbit (they'd swing); counts fade in at 3.0. Tested inside the band and non-overlapping on every
+  frame, except during the ride-along (19.4–21.6), when the counts and bin numbers are hidden and only the H/T letters
+  (next to the orange ball, tested inside) and the readout show.
+- Counts under each bin, 36 px, muted. Bin numbers inside the bins near the wall tops, above the tallest pile and its
+  column (tested). Peg pills on the pegs (32 px digits), gone before the columns and the coin beat. The "C: all equal"
+  tag on the sheet's right end over bins 7–8, whose piles stay under the sheet (tested). H/T beside each peg on the side
+  away from the ball's next step.
 
-## 7. The story without words
-Balls rain through a triangle of pegs and pile into bins: a tall heap in the middle, almost nothing at the edges, far
-from a flat line across all bins. One lonely path reaches the edge bin; then a dense web of paths pours into the middle,
-a counter running to 70. Numbers bloom on every peg, growing towards the centre, and the bins read 1 … 70 … 1. A dashed
-outline built from those numbers drops onto the heaps and fits them.
+## 8. The story without words
+A 3D board turns once in the light while marbles rain through steel pegs that flash as they're hit; the marbles heap up,
+tallest in the middle, almost nothing at the edges, and a flat sheet marking "all equal" shows how far off that is. One
+orange thread of light reaches the edge bin; a thick green bundle of 70 pours into the middle. Numbers pop up on every
+peg, growing towards the centre; glass columns rise to the size those numbers predict and match the heaps. Then one
+orange marble bounces down alone and lands in the middle.
 
-## 8. Honest numbers
-- The balls: a real simulation, 256 balls, each peg a fair 50–50 from a seeded generator (+ − × ÷ only, so tests and
-  render get the same run). Every count on screen is that run's own count. The seed is chosen from the first 50 so the
-  run is a typical one (middle tallest, every bin within 1 standard deviation of ⁸Cₖ, an edge bin may be 0; chosen by a rule in the tests, not by eye);
-  said in the caption kit. A ball's bin = its number of rights (test).
-- Path numbers: counted by enumerating all 2⁸ = 256 left/right sequences; each peg's number = the sequences reaching it =
-  ʳCⱼ, each bin's = ⁸Cₖ; they sum to 256 (tests).
-- The outline ("expected"): 256 balls × ⁸Cₖ / 256 = ⁸Cₖ expected balls; each path's chance 1/256 (tests).
-- The flat line: 256 / 9 = 28.4 balls (test), drawn at that height.
-- The PYQ: 28 + 8 + 1 = 37, by enumeration (test).
+## 9. Honest numbers
+- Each ball's 8 choices: a seeded fair generator (as v1); its bin = its number of rights (test). The bounce arcs only
+  carry it between the pegs it chose. The piles: Rapier, from each ball's real arrival position and speed; every ball
+  ends in its bin and at rest (tests). The seed: the first (from 1) whose run is typical (every bin within 1 standard
+  deviation of ⁸Cₖ, middle tallest at the end and clearly tallest at the answer), as v1.
+- Path counts: enumerated (all 2⁸ sequences); pegs ʳCⱼ, bins ⁸Cₖ (tests). The PYQ: 37 by enumeration (test).
+- The columns and the sheet: the height a pile of n balls stands in a bin, from a straight-line fit (height against
+  count) to the run's own settled piles, so they use the same packing the piles have (test: each real pile within 0.25
+  of its fitted height); columns at n = ⁸Cₖ, the sheet at n = 256 ÷ 9.
+- Every count on screen is that run's own count.
 
-## 9. Risks
-- 256 moving balls could read as noise: one colour, small, on clean pegs; the piles are the focus by 5 s.
-- The web of 70 paths could look like a scribble: thin, see-through, drawn in order, the counter carries the count.
-- Two rows of numbers near the bin mouths (row 7's pegs and the bins): offset half a step and 32 px apart; overlap test.
-- A random run that looks lopsided would fight the message: the seed rule (8) and the expected outline make it honest.
-- Too many words: captions ≤ 7 words, one at a time; the readout is the only other text.
-- Colour-blind: blue balls vs pink web vs orange path, each pair checked with `distinguishable()`.
+## 10. Risks
+- Physics runs out of order in Remotion: simulated once (`npm run simulate:025` → `public/nda-maths-025-physics.json`,
+  git-ignored), played back; two runs identical (test).
+- A ball bouncing out of its bin or through the glass: walls above any bounce, CCD on; tested at rest in its bin.
+- The orbit's back view: tilted 18°, so the frame's depth and pegs read from the side and behind; ends front-on by 3.0.
+- White board + bright tubes: VIVID colours (no bloom on white); they read by colour and thickness.
+- 256 balls + trails + 70 tubes: instanced meshes; render 5–10 min, one render at a time; disk ≈ 3 GB free.
+- Colour-blind: blue balls / orange path / green web pairwise `distinguishable()` (tested).
 
-## 10. Review
-Independent agent, 2026-10-24: **fix first** (maths checked: Pascal rows 0–7, ⁸Cₖ summing to 256, 256 ÷ 9, 37/256, ≈ 174
-landed at 5 s, last landing ≈ 7.3 s).
-- B1 "256 balls, 256 paths: they match" is false for one run (≈ 66 vs 70) and skips why paths matter → **fixed**: caption
-  "Every path equally likely: 1 in 256", the outline is the *expected* pile (readout "expected balls = paths"), the ball
-  counts dim while the path numbers write in.
-- B2 cover at 0.4 s collides with the first caption and has ≈ 11 balls landed, not 3 → **fixed**: cover at 0.15 s
-  (≈ 2 landed), before the caption.
-- B3 the "70" label sits on the web's densest point → **fixed**: counts in the readout only; paths end at the wall tops.
-- I1 H/T on all row-7 pegs is crowded → **taken**: H/T letters along one middle path, 4 H → the middle bin.
-- I2 k undefined → **taken**: "k heads: ⁸Cₖ ways".
-- I3 tag size + reach over bin 6 → **taken**: 34 px, ends at x 796 (bin 6's wall at 800), tested against the real piles.
-- I4 discs vs bin labels; digits in the disc → **taken**: 32 px in r 22 discs, discs in the overlap test.
-- I5 the 0.6 s zoom out needs its whoosh (F15) → **taken** (`whooshesFor` adds it).
-- Also: "≈ 43 in flight at frame 0" (was 35); the seed rule allows an empty edge bin (37% of runs).
-
-**Changed while building (2026-10-24):** the web is VIVID **green**, not pink: blue balls and pink fail `distinguishable()`
-(colour-blind test); the bin path numbers and the expected outlines take the same green, so "paths → expected pile" reads
-as one colour. The seed rule is tighter than planned: every bin within **1** standard deviation of ⁸Cₖ (seed 11: 1 6 26
-59 72 54 27 10 1 against 1 8 28 56 70 56 28 8 1); the 2-sd rule picked a run with 81 in the middle. The stills sheet
-caught two faults: the bin numbers on the bin mouths (y 628) read as one jumbled row with row 7's peg numbers, so they
-moved inside the bins (y 700, tested clear of the pile and its outline); the "C: all equal" tag was readable for only
-~1.2 s, so the flat line comes in at 5.5 s and the tag holds until 7.8 s, bold on a soft pill.
+## 11. Review
+v2 reviewed by an independent agent, 2026-10-24: **fix first** (maths checked: Pascal rows, ⁸Cₖ sum 256, 256 ÷ 9, 4 H in
+H T H H T T H T, 37/256, middle sd ≈ 7.1).
+- B1 the cover at 2.9 s shows the middle bulge and its rule could never pass → **fixed**: cover = frame 0 (front-on, 0
+  balls landed, tested).
+- B2 the "all equal" sheet drawn at the full-run height while balls still land → **fixed**: all at rest by 8.6 (tested),
+  the sheet slides in at 8.8.
+- B3 the board can't fill both the width and the band → **fixed**: dimensions stated (9.4 × 6.9 units, ≈ 1000 × 731 px);
+  lanes front to back make piles shorter and the balls bigger (r 0.12).
+- I1 orbit edge-on / from behind while "50–50" is up → **taken**: tilted 18° → 8°, frame 0.8 deep.
+- I2 scripted balls would pass through each other → **taken**: five lanes (three were too few: the top peg needs a full
+  hop between same-lane balls), one bounce for all; same-lane gap ≥ 1.8 radii tested every frame. Reel 24.8 s (≤ 25).
+- I3 peg numbers unexplained → **taken**: "Paths to here = two above added".
+- I4 256 balls ↔ 256 paths → **taken**: readout "256 balls, 256 paths".
+- I5 say H = right → **taken**: the first H and T read "H = right", "T = left".
+- Layout: punch-in keeps all 9 bins + counts (×1.1, tested); ride-along exemptions stated (counts and bin numbers hidden);
+  pills gone by 17.6, before the coin beat; widest caption ≈ 850 px.
