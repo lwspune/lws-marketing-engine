@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-024-function-range",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "024 · Why? #12: f(x) = x² from X to Y; range {0, 1, 4} vs codomain and domain (predict-first, white)",
+  "video": "nda-maths-024-function-range.mp4",
+  "cover": "nda-maths-024-function-range-cover.png",
+  "captions": {
+    "instagram": "NDA Maths · Functions. f(x) = x², from X = {−2, −1, 0, 1, 2} to Y = {0, 1, 2, 3, 4}. What is the range of f? A {0, 1, 4} · B {0, …, 4} · C {−2, …, 2} 👇\n\nA. Square every input: 4, 1, 0, 1, 4. The range is only the outputs actually hit: {0, 1, 4}.\nDomain = every input (all of X: that's C). Codomain = every output allowed (all of Y: that's B). The range sits inside the codomain; here 2 and 3 are never hit.\nTwo inputs on one output (−2 and 2 → 4) is fine. One input with two outputs is not a function.\n\nNDA asked it in 2022 (II), Q13: f(x) = the highest prime factor of x on A = {7, …, 16}, f: A → N. The codomain N never ends, but the range is {2, 3, 5, 7, 11, 13}: 6 elements.\n\nSave this 📌 Follow @lws.pune for one NDA maths idea every day.\nPractise every Functions PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Functions #LWSPune",
+    "facebook": "NDA Maths · Functions. f(x) = x², from X = {−2, −1, 0, 1, 2} to Y = {0, 1, 2, 3, 4}. What is the range? A {0, 1, 4} · B {0, …, 4} · C {−2, …, 2} 👇\n\nA. The squares are 4, 1, 0, 1, 4, so the range is {0, 1, 4}: only the outputs actually hit. All of X is the domain, all of Y the codomain. NDA 2022 (II), Q13 asks the same idea: highest prime factor on {7, …, 16} gives a range of 6 elements.\n\nPractise NDA PYQs free, chapter-wise: https://www.pyqvault.com\n\n#NDA #NDAMaths #LWSPune",
+    "youtube": {
+      "title": "Domain, codomain, range: what's the difference? #shorts",
+      "description": "f(x) = x² from X = {−2, …, 2} to Y = {0, …, 4}: the outputs are 4, 1, 0, 1, 4, so the range is {0, 1, 4}. All of X is the domain, all of Y the codomain; the range is only what's actually hit. Two inputs on one output is fine; one input with two outputs is not a function (NDA 2022 (II) Q13: highest prime factor on {7, …, 16} has a range of 6).\n\nPractise NDA PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #Shorts"
+    }
+  }
+}
