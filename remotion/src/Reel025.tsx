@@ -1,100 +1,209 @@
-// @lws.pune · reel 025 (predict-first, F32–F33): 256 balls, 8 rows of pegs; which bin fills most? A Galton board on the
-// white look. From frame 0 blue balls rain through the pegs and stack in nine bins with live counts; the middle wins
-// (A). Then one orange path to the edge bin, a green web of 70 paths into the middle, Pascal's numbers on the pegs and
-// bins, the expected piles (⁸Cₖ) dropping onto the real ones, and one path as coin tosses (H/T). Timeline: lib/reel025.ts.
-import { AbsoluteFill, Html5Audio, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
-import { WHITE as P, tint } from './lib/palette.ts';
-import { captionAt, prog, tween } from './lib/motion.ts';
+// @lws.pune · reel 025 v2 (3D, predict-first, F32–F33): 256 balls, 8 rows of pegs; which bin fills most? A real 3D
+// Galton board on the white look: a wood frame, steel pegs that flash when hit, a glass front, glossy blue marbles in
+// five lanes. A tilted orbit opens (F22) while the rain starts; the balls bounce down the pegs and the Rapier physics
+// engine piles them in the bins (played back from public/nda-maths-025-physics.json, `npm run simulate:025`). Then an
+// "all equal" sheet, one orange tube to the edge, 70 green tubes to the middle, Pascal's numbers, glass columns at the
+// expected heights, and one orange ball as coin tosses with a ride-along camera. Timeline: lib/reel025.ts.
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { AbsoluteFill, Html5Audio, continueRender, delayRender, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
+import { ThreeCanvas } from '@remotion/three';
+import { useThree } from '@react-three/fiber';
+import * as THREE from 'three';
+import { WHITE as P, REAL, tint } from './lib/palette.ts';
+import { captionAt, prog } from './lib/motion.ts';
 import {
-  END_AT, ANSWER_AT, CAPTIONS, OPTIONS, ANSWER, COVER_T, COLORS, CAMERA, ROWS, BALLS, BALL_R, PEG_R, DISC_R, WALL_TOP, FLOOR,
-  FLAT_AT, EXPECTED_AT, EDGE_PATH, MIDDLE_PATHS, COIN_PATH, FLAT, TRAP_OUT, DIM, EDGE, EXPECTED, COIN, ballAt, pegX, pegY, binX,
-  pileHeight, pathPoints, webPathAt, numberAlpha, labelsAt, labelBox,
+  END_AT, ANSWER_AT, CAPTIONS, OPTIONS, ANSWER, COVER_T, COLORS, ROWS, BALLS, COIN_BALL, R, PEG_R, WALL_TOP, GLASS_Z, BACK_Z,
+  FRAME_TOP, FRAME_X, SPAWN_Y, FUNNEL_TOP, BAND, EXPECTED_AT, EDGE_PATH, MIDDLE_PATHS, EDGE, TUBES_OUT, SHEET, SHEET_OUT,
+  COLUMNS, ballAt, ballDim, pegFlash, pegX, pegY, binX, pathPoints, webPathAt, cameraAt, labelsAt, labelBox,
+  heightFor, sheetYFor, type RunInfo, type V3,
 } from './lib/reel025.ts';
 import { Board, Caption, EndCard, PredictHeader, Theme, hand, useFonts, type EndLine } from './board.tsx';
-import { softEdges } from './shapes.tsx';
+import { RealLight } from './realism.tsx';
+import { RoundBox, softEdges } from './shapes.tsx';
 
+type Phys = RunInfo & { start: number[]; frames: number[][] };
 const COVER = { text: 'Middle, edges or all equal?', y: 1590, size: 60 };
-const BAND = { top: 470, height: 1030 };
-type Pt = { x: number; y: number };
+const DEPTH = GLASS_Z - BACK_Z, WOOD = REAL.white.wood, STEEL = REAL.white.steel, GLASS = REAL.white.glass;
 
-/** The first fraction p (by length) of a polyline, as an SVG path, plus where its head is. */
-function partial(pts: Pt[], p: number) {
-  const seg = pts.slice(1).map((q, i) => Math.hypot(q.x - pts[i].x, q.y - pts[i].y)), total = seg.reduce((a, b) => a + b, 0);
-  let left = total * Math.max(0, Math.min(1, p)), d = `M${pts[0].x},${pts[0].y}`, head = pts[0];
-  for (let i = 0; i < seg.length && left > 0; i++) {
-    const f = Math.min(1, left / seg[i]), a = pts[i], b = pts[i + 1];
-    head = { x: a.x + (b.x - a.x) * f, y: a.y + (b.y - a.y) * f };
-    d += ` L${head.x.toFixed(1)},${head.y.toFixed(1)}`; left -= seg[i];
-  }
-  return { d, head };
+/** Ball i's position at t: its flight above the bins, then the physics run's, held once it rests. */
+function ballPos(i: number, t: number, phys: Phys): { p: V3; squash: number; flying: boolean } | null {
+  const b = i < BALLS.length ? BALLS[i] : COIN_BALL, a = ballAt(b, t);
+  if (a) return { p: [a.x, a.y, a.z], squash: a.squash, flying: true };
+  if (t < b.release) return null;
+  const f = Math.round(t * 30), s = phys.start[i], fr = phys.frames[i];
+  if (s < 0 || f < s || !fr.length) return { p: [b.hand.x, b.hand.y, b.z], squash: 1, flying: false };
+  const k = Math.min(f - s, fr.length / 3 - 1);
+  return { p: [fr[3 * k], fr[3 * k + 1], fr[3 * k + 2]], squash: 1, flying: false };
 }
 
-function BoardLayer({ t }: { t: number }) {
-  const [z, fx, fy] = tween(t, CAMERA.start, CAMERA.keys);
-  const ballA = 1 - 0.75 * prog(t, DIM.t, DIM.dur) + 0.75 * prog(t, EXPECTED.t, 0.4);
-  const flatY = FLOOR - pileHeight(FLAT_AT), flatA = prog(t, FLAT.t, 0.2) * (1 - prog(t, TRAP_OUT, 0.3));
-  const pathsA = 1 - prog(t, 12.8, 0.4), drop = prog(t, EXPECTED.t, EXPECTED.dur);
-  const labels = labelsAt(t).filter(l => l.role !== 'readout' && l.alpha > 0.01);
-  const flash = Math.sin(Math.PI * Math.min(1, Math.max(0, (t - ANSWER_AT) / 0.8)));
+function CameraRig({ t }: { t: number }) {
+  const { camera } = useThree(), c = cameraAt(t), cam = camera as THREE.PerspectiveCamera;
+  cam.up.set(...c.up); cam.position.set(...c.position); cam.fov = c.fov; cam.aspect = c.aspect;
+  cam.lookAt(...c.target); cam.updateProjectionMatrix();
+  return null;
+}
+
+function Frame() {
+  const bar = (x: number, y: number, w: number, h: number) => (
+    <mesh position={[x, y, 0]} castShadow receiveShadow><RoundBox size={[w, h, DEPTH + 0.24]} radius={0.06} />
+      <meshStandardMaterial color={WOOD.fill} roughness={0.55} /></mesh>);
+  const funnel = (s: number) => {
+    const x0 = s * 1.3, y0 = FUNNEL_TOP, x1 = s * (R + 0.08), y1 = SPAWN_Y - 0.12, len = Math.hypot(x1 - x0, y1 - y0);
+    return <mesh position={[(x0 + x1) / 2, (y0 + y1) / 2, 0]} rotation={[0, 0, Math.atan2(y1 - y0, x1 - x0)]} castShadow>
+      <RoundBox size={[len, 0.08, DEPTH]} radius={0.03} /><meshStandardMaterial color={WOOD.fill} roughness={0.55} /></mesh>;
+  };
   return (
-    <g transform={`translate(540 515) scale(${z}) translate(${-fx} ${-fy})`}>
-      {/* bins: ten walls on a floor */}
-      {Array.from({ length: ROWS + 2 }, (_, i) => 72 + 104 * i).map(x =>
-        <line key={x} x1={x} y1={WALL_TOP} x2={x} y2={FLOOR} stroke={P.axis} strokeWidth={4} strokeLinecap="round" />)}
-      <line x1={72} y1={FLOOR + 2} x2={1008} y2={FLOOR + 2} stroke={P.axis} strokeWidth={4} strokeLinecap="round" />
-      {/* pegs */}
-      {Array.from({ length: ROWS }, (_, r) => Array.from({ length: r + 1 }, (_, j) =>
-        <circle key={`${r}-${j}`} cx={pegX(r, j)} cy={pegY(r)} r={PEG_R} fill={tint(P.ink, 0.45)} />))}
-      {/* the trap: every bin equal */}
-      {flatA > 0 && <line x1={72} y1={flatY} x2={72 + 936 * prog(t, FLAT.t, FLAT.dur)} y2={flatY} stroke={P.muted} strokeWidth={4}
-        strokeDasharray="14 10" opacity={flatA} />}
-      {/* the balls */}
-      <g opacity={ballA} style={{ filter: flash > 0 ? `drop-shadow(0 0 ${10 * flash}px ${tint(COLORS.ball, 0.6 * flash)})` : undefined }}>
-        {BALLS.map((b, i) => { const p = ballAt(b, t); return p && <circle key={i} cx={p.x} cy={p.y} r={BALL_R} fill={COLORS.ball} />; })}
-      </g>
-      {/* the expected piles: ⁸Cₖ balls each */}
-      {drop > 0 && EXPECTED_AT.map((n, k) => {
-        const h = pileHeight(n) + 4;
-        return <rect key={k} x={binX(k) - 49} y={FLOOR - h - 120 * (1 - drop)} width={98} height={h} rx={10} fill="none"
-          stroke={COLORS.web} strokeWidth={4} strokeDasharray="12 8" opacity={drop} />;
-      })}
-      {/* one path to the edge; the web of 70 into the middle */}
-      {t >= EDGE.t && pathsA > 0 && (() => {
-        const e = partial(pathPoints(EDGE_PATH), prog(t, EDGE.t, EDGE.dur));
-        return <g opacity={pathsA}>
-          {MIDDLE_PATHS.map((s, i) => { const p = webPathAt(i, t); if (p <= 0) return null; const w = partial(pathPoints(s), p);
-            return <g key={i}><path d={w.d} fill="none" stroke={COLORS.web} strokeWidth={6} strokeLinecap="round" strokeLinejoin="round" opacity={0.16} />
-              {p < 1 && <circle cx={w.head.x} cy={w.head.y} r={7} fill={COLORS.web} />}</g>; })}
-          <path d={e.d} fill="none" stroke={COLORS.edge} strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
-        </g>;
-      })()}
-      {/* the coin path */}
-      {t >= COIN.t && (() => {
-        const c = partial(pathPoints(COIN_PATH), prog(t, COIN.t, COIN.dur));
-        return <g opacity={1 - prog(t, END_AT - 0.3, 0.3)}>
-          <path d={c.d} fill="none" stroke={COLORS.edge} strokeWidth={7} strokeLinecap="round" strokeLinejoin="round" />
-          <circle cx={c.head.x} cy={c.head.y} r={9} fill={COLORS.edge} />
-        </g>;
-      })()}
-      {/* white discs under the peg numbers */}
-      {Array.from({ length: ROWS }, (_, r) => Array.from({ length: r + 1 }, (_, j) => {
-        const a = numberAlpha(r, t) * (1 - prog(t, EXPECTED.t, 0.4));
-        return a > 0.01 && <circle key={`d${r}-${j}`} cx={pegX(r, j)} cy={pegY(r)} r={DISC_R * (0.6 + 0.4 * a)} fill="#ffffff" opacity={a}
-          style={{ filter: `drop-shadow(0 3px 6px ${tint(P.ink, 0.12)})` }} />;
-      }))}
-      {labels.filter(l => l.role === 'tag').map(l => { const b = labelBox(l);
-        return <rect key="tagpill" x={b.x0 - 12} y={b.y0 - 6} width={b.x1 - b.x0 + 24} height={b.y1 - b.y0 + 12} rx={18} fill={tint(P.board, 0.92)} opacity={l.alpha} />; })}
-      {labels.map((l, i) => (
-        <text key={i} x={l.x} y={l.y} textAnchor={l.anchor} opacity={l.alpha} style={{ ...hand(l.size), fontWeight: l.role === 'bin' || l.role === 'tag' ? 800 : 600 }}
-          fill={l.role === 'count' ? P.muted : l.role === 'bin' ? COLORS.web : l.role === 'tag' ? P.muted : P.ink}>{l.text}</text>
-      ))}
-    </g>
+    <>
+      {/* glass on both faces, so the orbit's back view still shows the pegs and the balls */}
+      <mesh position={[0, (FRAME_TOP - 0.2) / 2, BACK_Z - 0.01]}>
+        <boxGeometry args={[2 * FRAME_X - 0.4, FRAME_TOP - 0.2, 0.02]} />
+        <meshPhysicalMaterial color={GLASS.fill} transparent opacity={0.14} roughness={0.05} metalness={0} clearcoat={1} depthWrite={false} />
+      </mesh>
+      {bar(-FRAME_X + 0.1, (FRAME_TOP - 0.2) / 2, 0.2, FRAME_TOP + 0.2)}{bar(FRAME_X - 0.1, (FRAME_TOP - 0.2) / 2, 0.2, FRAME_TOP + 0.2)}
+      {bar(0, -0.1, 2 * FRAME_X, 0.2)}{bar(0, FRAME_TOP - 0.1, 2 * FRAME_X, 0.2)}
+      {funnel(-1)}{funnel(1)}
+      {Array.from({ length: ROWS + 2 }, (_, i) => binX(i) - 0.5).map(x => (
+        <mesh key={x} position={[x, WALL_TOP / 2, 0]} castShadow receiveShadow><RoundBox size={[0.04, WALL_TOP, DEPTH]} radius={0.015} />
+          <meshStandardMaterial color={STEEL.fill} metalness={0.7} roughness={0.3} /></mesh>))}
+      <mesh position={[0, (FRAME_TOP - 0.2) / 2, GLASS_Z + 0.01]}>
+        <boxGeometry args={[2 * FRAME_X - 0.4, FRAME_TOP - 0.2, 0.02]} />
+        <meshPhysicalMaterial color={GLASS.fill} transparent opacity={0.1} roughness={0.05} metalness={0} clearcoat={1} depthWrite={false} />
+      </mesh>
+    </>
   );
 }
 
-function Readout({ t }: { t: number }) {
-  const l = labelsAt(t).find(x => x.role === 'readout')!;
-  return <text x={l.x} y={l.y} textAnchor="start" fill={P.ink} style={hand(l.size)}>{l.text}</text>;
+function Pegs({ t }: { t: number }) {
+  return <>{Array.from({ length: ROWS }, (_, r) => Array.from({ length: r + 1 }, (_, j) => {
+    const f = pegFlash(r, j, t);
+    return <mesh key={`${r}-${j}`} position={[pegX(r, j), pegY(r), 0]} rotation={[Math.PI / 2, 0, 0]} scale={1 + 0.03 * f} castShadow>
+      <cylinderGeometry args={[PEG_R, PEG_R, DEPTH, 20]} />
+      <meshStandardMaterial color={STEEL.edge} metalness={0.6} roughness={0.3} emissive="#ffffff" emissiveIntensity={0.9 * f} />
+    </mesh>;
+  }))}</>;
+}
+
+const GHOSTS = [{ k: 1, a: 0.3, s: 0.92 }, { k: 2, a: 0.18, s: 0.84 }, { k: 3, a: 0.08, s: 0.76 }];
+function Balls({ t, phys }: { t: number; phys: Phys }) {
+  const main = useRef<THREE.InstancedMesh>(null), ghosts = useRef<(THREE.InstancedMesh | null)[]>([]);
+  const geo = useMemo(() => new THREE.SphereGeometry(R, 28, 20), []);
+  const dim = ballDim(t), color = useMemo(() => new THREE.Color(), []);
+  useLayoutEffect(() => {                                     // before the frame is drawn (runbook: instanced meshes)
+    const m = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(), v = new THREE.Vector3(), hide = new THREE.Matrix4().makeScale(0, 0, 0);
+    if (!main.current) return;
+    for (let i = 0; i < BALLS.length; i++) {
+      const b = ballPos(i, t, phys);
+      if (!b) { main.current.setMatrixAt(i, hide); ghosts.current.forEach(g => g?.setMatrixAt(i, hide)); continue; }
+      const w = 1 + (1 - b.squash) * 0.8;
+      main.current.setMatrixAt(i, m.compose(v.set(...b.p), q, s.set(w, b.squash, w)));
+      GHOSTS.forEach((g, n) => {
+        const mesh = ghosts.current[n]; if (!mesh) return;
+        const p = b.flying ? ballAt(BALLS[i], t - g.k / 30) : null;
+        mesh.setMatrixAt(i, p ? m.compose(v.set(p.x, p.y, p.z), q, s.setScalar(g.s)) : hide);
+      });
+    }
+    main.current.instanceMatrix.needsUpdate = true;
+    ghosts.current.forEach(g => { if (g) g.instanceMatrix.needsUpdate = true; });
+  }, [t, phys]);
+  color.set(COLORS.ball).lerp(new THREE.Color(P.board), 1 - dim);
+  return (
+    <>
+      <instancedMesh ref={main} args={[geo, undefined, BALLS.length]} castShadow receiveShadow>
+        <meshStandardMaterial color={color} roughness={0.14} metalness={0.05} envMapIntensity={1.2} />
+      </instancedMesh>
+      {GHOSTS.map((g, n) => (
+        <instancedMesh key={n} ref={el => { ghosts.current[n] = el; }} args={[geo, undefined, BALLS.length]}>
+          <meshBasicMaterial color={COLORS.ball} transparent opacity={g.a * dim} depthWrite={false} />
+        </instancedMesh>))}
+    </>
+  );
+}
+
+function CoinBall({ t, phys }: { t: number; phys: Phys }) {
+  const b = ballPos(BALLS.length, t, phys);
+  if (!b || t > END_AT) return null;
+  const w = 1 + (1 - b.squash) * 0.8;
+  return <mesh position={b.p} scale={[w, b.squash, w]} castShadow>
+    <sphereGeometry args={[R * 1.05, 32, 24]} /><meshStandardMaterial color={COLORS.edge} roughness={0.14} emissive={COLORS.edge} emissiveIntensity={0.15} />
+  </mesh>;
+}
+
+/** A path as a tube that grows along its length (fraction p), with a bead of light at its head. */
+function Tube({ pts, p, color, radius, opacity }: { pts: V3[]; p: number; color: string; radius: number; opacity: number }) {
+  const { geo, curve, segs } = useMemo(() => {
+    const curve = new THREE.CurvePath<THREE.Vector3>();
+    for (let i = 1; i < pts.length; i++) curve.add(new THREE.LineCurve3(new THREE.Vector3(...pts[i - 1]), new THREE.Vector3(...pts[i])));
+    const segs = 180;
+    return { geo: new THREE.TubeGeometry(curve, segs, radius, 10, false), curve, segs };
+  }, [pts, radius]);
+  geo.setDrawRange(0, Math.floor(segs * Math.min(1, p)) * 10 * 6);
+  const head = curve.getPointAt(Math.min(1, Math.max(0, p)));
+  return (
+    <>
+      <mesh geometry={geo}><meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.35} transparent opacity={opacity} depthWrite={false} /></mesh>
+      {p > 0 && p < 1 && <mesh position={head}><sphereGeometry args={[radius * 2.2, 16, 12]} /><meshBasicMaterial color={color} /></mesh>}
+    </>
+  );
+}
+
+function Paths({ t }: { t: number }) {
+  const edge = useMemo(() => pathPoints(EDGE_PATH), []), webs = useMemo(() => MIDDLE_PATHS.map(pathPoints), []);
+  const fade = 1 - prog(t, TUBES_OUT, 0.4);
+  if (t < EDGE.t || fade <= 0) return null;
+  return (
+    <>
+      {webs.map((pts, i) => { const p = webPathAt(i, t); return p > 0 && <Tube key={i} pts={pts} p={p} color={COLORS.web} radius={0.036} opacity={0.45 * fade} />; })}
+      <Tube pts={edge} p={prog(t, EDGE.t, EDGE.dur)} color={COLORS.edge} radius={0.045} opacity={0.95 * fade} />
+    </>
+  );
+}
+
+function SheetAndColumns({ t, phys }: { t: number; phys: Phys }) {
+  const s = prog(t, SHEET.t, SHEET.dur) * (1 - prog(t, SHEET_OUT, 0.3)), c = prog(t, COLUMNS.t, COLUMNS.dur), y = sheetYFor(phys);
+  return (
+    <>
+      {s > 0 && <mesh position={[(1 - prog(t, SHEET.t, SHEET.dur)) * 10, y, 0]}>
+        <RoundBox size={[9, 0.05, DEPTH - 0.04]} radius={0.02} />
+        <meshPhysicalMaterial color={P.muted} transparent opacity={0.4 * s} roughness={0.6} depthWrite={false} />
+      </mesh>}
+      {c > 0 && EXPECTED_AT.map((n, k) => {
+        const h = heightFor(phys.fit, n) * c;
+        return h > 0.01 && <mesh key={k} position={[binX(k), h / 2, 0]}>
+          <RoundBox size={[0.9, h, DEPTH - 0.06]} radius={Math.min(0.05, h / 2 - 1e-3)} />
+          <meshPhysicalMaterial color={COLORS.web} transparent opacity={0.2} roughness={0.15} depthWrite={false} />
+        </mesh>;
+      })}
+    </>
+  );
+}
+
+function Scene({ t, phys }: { t: number; phys: Phys }) {
+  return (
+    <>
+      <CameraRig t={t} />
+      <RealLight env={0.9} at={[-4, 10, 12]} span={8} />
+      <Frame />
+      <Pegs t={t} />
+      <Balls t={t} phys={phys} />
+      <CoinBall t={t} phys={phys} />
+      <Paths t={t} />
+      <SheetAndColumns t={t} phys={phys} />
+    </>
+  );
+}
+
+// Labels: HTML in Cambria on top of the canvas, placed with project() (the same perspective as three.js).
+function Labels({ t, phys }: { t: number; phys: Phys }) {
+  const cam = cameraAt(t);
+  return <>{labelsAt(t, phys).filter(l => l.alpha > 0.01).map((l, i) => {
+    const b = labelBox(l, cam), pill = l.role === 'peg' || l.role === 'tag' || l.role === 'readout';
+    const color = l.role === 'count' || l.role === 'tag' ? P.muted : l.role === 'bin' ? COLORS.web : P.ink;
+    return <div key={i} style={{ position: 'absolute', left: b.x0 - (pill ? 10 : 0), top: b.y0 - (pill ? 2 : 0), width: b.x1 - b.x0 + (pill ? 20 : 0),
+      height: b.y1 - b.y0 + (pill ? 4 : 0), display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: l.alpha,
+      ...hand(l.size), fontWeight: l.role === 'bin' || l.role === 'coin' ? 800 : 600, color, whiteSpace: 'pre',
+      background: pill ? tint('#ffffff', l.role === 'readout' ? 0.75 : 0.92) : undefined, borderRadius: 999,
+      boxShadow: l.role === 'peg' ? `0 3px 8px ${tint(P.ink, 0.15)}` : undefined }}>{l.text}</div>;
+  })}</>;
 }
 
 const END: EndLine[] = [
@@ -107,18 +216,23 @@ export function Reel025({ cover = false }: { cover?: boolean }) {
   useFonts();
   const frame = useCurrentFrame(), { fps } = useVideoConfig();
   const t = cover ? COVER_T : frame / fps, cap = cover ? null : captionAt(CAPTIONS, t);
+  const [phys, setPhys] = useState<Phys | null>(null), [handle] = useState(() => delayRender('physics data'));
+  useEffect(() => {
+    fetch(staticFile('nda-maths-025-physics.json')).then(r => r.json()).then((j: Phys) => { setPhys(j); continueRender(handle); });
+  }, [handle]);
+  if (!phys) return null;
   return (
     <Theme value={P}>
       <AbsoluteFill>
         <Board watermark={false} />
         <PredictHeader t={t} label={'NDA MATHS  ·  PROBABILITY'} lines={['256 balls, 8 rows of pegs.', 'Which bin fills most?']}
           options={OPTIONS} answer={ANSWER} at={ANSWER_AT} size={54} chipW={240} />
-        <div style={{ position: 'absolute', left: 0, top: BAND.top, width: 1080, height: BAND.height, overflow: 'hidden', ...softEdges({ top: 0.05, bottom: 0.03 }) }}>
-          <svg width={1080} height={BAND.height} style={{ position: 'absolute', left: 0, top: 0 }}>
-            <BoardLayer t={t} />
-            <Readout t={t} />
-          </svg>
+        <div style={{ position: 'absolute', left: 0, top: BAND.top, width: BAND.width, height: BAND.height, ...softEdges({ top: 0.03, bottom: 0.03 }) }}>
+          <ThreeCanvas width={BAND.width} height={BAND.height} shadows gl={{ antialias: true, alpha: true }}>
+            <Scene t={t} phys={phys} />
+          </ThreeCanvas>
         </div>
+        <Labels t={t} phys={phys} />
         {cover
           ? <Caption text={COVER.text} alpha={1} age={0} size={COVER.size} y={COVER.y} rise={false} />
           : cap && <Caption text={cap.caption.text} alpha={cap.alpha} age={cap.age} size={cap.caption.size ?? 50} y={cap.caption.y ?? 1580} />}

@@ -153,6 +153,7 @@
     "mix:023": "node tools/mix.ts 023",
     "render:023": "remotion render Reel023 ../reels/nda-maths-023-derivative-cycle.mp4",
     "cover:023": "remotion still Reel023Cover ../reels/nda-maths-023-derivative-cycle-cover.png",
+    "simulate:025": "node tools/simulate025.ts",
     "music:025": "node ../reels/tools/music.mjs music/nda-maths-025-galton-board.json public/nda-maths-025-galton-board.wav",
     "mix:025": "node tools/mix.ts 025",
     "render:025": "remotion render Reel025 ../reels/nda-maths-025-galton-board.mp4",

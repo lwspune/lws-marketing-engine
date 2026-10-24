@@ -44,7 +44,7 @@ remakes the picture as a real 3D board with physical motion.
   visibly pass through another); lanes are a full diameter apart. Into the bins: from the bin mouth each
   ball is handed to the **Rapier physics engine** (balls, bin walls, floor, glass and backboard as real colliders), so the
   piles form by real collisions: balls land, bounce, roll off the heap and settle. Tested: every ball ends in the bin its
-  choices give; everything is at rest before 8.8 s; two runs are identical.
+  choices give; everything is at rest before 9.1 s; two runs are identical.
 - **Movement effects:** each peg flashes (white rim glow, 0.15 s) and pulses 3 % when hit, so the top pegs shimmer; fast
   balls leave a short fading trail (3 ghosts at −1, −2, −3 frames); the piles jostle as balls land; the camera opens with
   a tilted full orbit (F22), pushes, punches in on the answer, and rides along with one ball in the coin-toss beat.
@@ -55,8 +55,8 @@ remakes the picture as a real 3D board with physical motion.
 | 0–3.0 | the orbit: front → side → back → side → front, looking down 18° easing to 8° (the frame's depth and the pegs read from the side), while the rain starts; pegs flash as they're hit | "Each peg: left or right, 50–50" (0.3–3.0) | orbit 360°, eased, front by 3.0 | soft ping per ~6th peg hit, pitch by row | balls VIVID blue; pegs steel; frame wood; glass |
 | 3.0–5.0 | front view: the rain thickens (releases run −1.6 … 6.6 s), piles rise and jostle; live counts under the bins fade in at 3.0 | | slow push ×1.04 | pings + landing taps | |
 | 5.0 | **A lights**; the middle pile is clearly tallest | | punch-in ×1.1 on the bins (all 9 bins and counts stay in frame), landing at 5.0 | whoosh-in + thunk + music hit | |
-| 5.0–8.6 | the last balls fall and settle (all at rest by 8.6) | "Middle wins. But each peg is fair…" (5.0–7.6) | fast zoom out (5.6–6.2) | whoosh-out; taps | |
-| 8.8–10.6 | a frosted glass sheet slides in across all bins at the height a pile of 256 ÷ 9 ≈ 28.4 balls stands, tagged "C: all equal"; the middle pile pokes far through it, the edges sit far below | "All equal would only reach here" | still | soft whoosh of the sheet (tap) | sheet frosted white, muted tag |
+| 5.0–8.6 | the last balls fall and settle (all at rest by 9.1) | "Middle wins. But each peg is fair…" (5.0–7.6) | fast zoom out (5.6–6.2) | whoosh-out; taps | |
+| 9.1–10.6 | a frosted glass sheet slides in across all bins at the height a pile of 256 ÷ 9 ≈ 28.4 balls stands, tagged "C: all equal"; the middle pile pokes far through it, the edges sit far below | "All equal would only reach here" | still | soft whoosh of the sheet (tap) | sheet frosted white, muted tag |
 | 10.8–12.4 | the balls dim; one glowing **orange** tube grows from the funnel down the far-left pegs into the edge bin | "Edge: only all-left gets there" · readout "edge: 1 path" | still | a ping per peg as it passes | tube VIVID orange |
 | 12.4–15.2 | 70 glowing **green** tubes pour down the pegs into the middle bin, one after another, a bead of light at each head; the bundle thickens where paths share a step | "Middle: 70 different ways in" · readout counts to 70 | slow push ×1.06 | shimmer + a tap per 5th tube | tubes VIVID green, see-through |
 | 15.2–17.2 | the tubes fade; a white number pill pops up on every peg, row by row (1 · 1 1 · … · 1 7 21 35 35 21 7 1), then green numbers inside the bins (1 8 28 56 70 56 28 8 1); counts dim | "Paths to here = two above added" · readout "256 paths in all" | fast zoom out (15.2–15.8) | whoosh-out; a click per row | ink on white pills; bin numbers green |
@@ -64,7 +64,7 @@ remakes the picture as a real 3D board with physical motion.
 | 19.4–21.8 | one **orange** ball drops from the funnel and bounces down the pegs, H T H H T T H T: a letter pops beside each peg it hits, the first two reading "H = right", "T = left"; 4 H → it lands on the middle pile | "Each peg is a coin toss" · readout "k heads: ⁸Cₖ ways" | **ride-along**: the camera follows the orange ball down at ×1.3, then eases back as it lands | a ping per peg; a thunk as it lands | coin ball VIVID orange |
 | 21.8–24.8 | end card | "Most paths, / most balls. / Follow for more" | – | – | |
 
-Answer at 5.0 s. Second hook at 5.0, answered 8.8–19.4. Something moves on every frame: balls from frame 0 until 8.6,
+Answer at 5.0 s. Second hook at 5.0, answered 9.1–19.4. Something moves on every frame: balls from frame 0 until 8.6,
 then the sheet, tubes, pills, columns and the orange ball.
 
 ## 7. Layout map (1080 × 1920)
@@ -117,8 +117,8 @@ v2 reviewed by an independent agent, 2026-10-24: **fix first** (maths checked: P
 H T H H T T H T, 37/256, middle sd ≈ 7.1).
 - B1 the cover at 2.9 s shows the middle bulge and its rule could never pass → **fixed**: cover = frame 0 (front-on, 0
   balls landed, tested).
-- B2 the "all equal" sheet drawn at the full-run height while balls still land → **fixed**: all at rest by 8.6 (tested),
-  the sheet slides in at 8.8.
+- B2 the "all equal" sheet drawn at the full-run height while balls still land → **fixed**: all at rest by 9.1 (tested),
+  the sheet slides in at 9.1 (built: 8.8 was too early; the last ball settles at ≈ 9.0).
 - B3 the board can't fill both the width and the band → **fixed**: dimensions stated (9.4 × 6.9 units, ≈ 1000 × 731 px);
   lanes front to back make piles shorter and the balls bigger (r 0.12).
 - I1 orbit edge-on / from behind while "50–50" is up → **taken**: tilted 18° → 8°, frame 0.8 deep.
