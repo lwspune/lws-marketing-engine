@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-025-galton-board",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "025 · Why? #13: Galton board, fair pegs but the middle wins (70 of 256 paths; predict-first, white)",
+  "video": "nda-maths-025-galton-board.mp4",
+  "cover": "nda-maths-025-galton-board-cover.png",
+  "captions": {
+    "instagram": "NDA Maths · Probability. 256 balls, 8 rows of pegs. Which bin fills most? A middle · B edges · C all equal 👇\n\nA. Every peg is a fair 50–50, yet the middle wins.\nWhy? There are 256 left/right paths, each equally likely. Only 1 reaches an edge bin (all lefts). 70 reach the middle.\nThe paths per bin are Pascal's triangle: 1, 8, 28, 56, 70, 56, 28, 8, 1 = ⁸Cₖ.\nTrap: \"each peg is fair, so each bin is fair\" (C). Fair steps, unfair bins.\n\nEach peg is a coin toss, so NDA asked it in 2018 (II), Q107: 8 coins, at least 6 heads = (28 + 8 + 1)/256 = 37/256.\n\nSave this 📌 Follow @lws.pune for one NDA maths idea every day.\nPractise every Probability PYQ free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Probability #LWSPune",
+    "facebook": "NDA Maths · Probability. 256 balls, 8 rows of pegs. Which bin fills most? A middle · B edges · C all equal 👇\n\nA. Every peg is a fair 50–50, but 70 of the 256 equally likely paths end in the middle and only 1 at each edge: Pascal's triangle, ⁸Cₖ. Each peg is a coin toss, which is NDA 2018 (II), Q107: 8 coins, at least 6 heads = 37/256.\n\nPractise NDA PYQs free, chapter-wise: https://www.pyqvault.com\n\n#NDA #NDAMaths #LWSPune",
+    "youtube": {
+      "title": "Fair pegs, but the middle always wins #shorts",
+      "description": "256 balls fall through 8 rows of fair pegs and pile up in the middle: 70 of the 256 equally likely paths end there, only 1 at each edge (Pascal's triangle, 8Ck). Each peg is a coin toss: NDA 2018 (II) Q107, 8 coins, at least 6 heads = 37/256.\n\nPractise NDA PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #Shorts"
+    }
+  }
+}
