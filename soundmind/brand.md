@@ -113,6 +113,7 @@ Rules are tests (`remotion/tests/sm011.test.ts`); timeline in `src/lib/sm011.ts`
 | Reel | Scene | Close-ups | Ending |
 |---|---|---|---|
 | sm-r011 chai in the rain | she sips chai on her balcony at a rainy dusk, phone face down, fairy lights, tulsi on the ledge | the glass and its steam; the tulsi as drops hit its leaves | she leans back, eyes closed, smiling |
+| sm-r013 window seat (Painted 2D, **in season**: no rain) | a cosy room at golden hour: she reads curled in the window seat, chai on the sill, a lamp, a plant, fairy lights, the town at sunset outside | the mug and its steam in the window light; the book, a page turning in the breeze | she leans her head on the window, eyes closed, the book open on her knees |
 | sm-r012 tapri at dusk (**Painted 2D**, S21) | a street-side tea stall under a tin roof at dusk in the rain; she sits with a kulhad of chai, her scooter outside | the kettle, its steam and the bulb; the scooter's tail light in a rippling puddle | she leans back against the post, eyes closed |
 
 ## Painted 2D (2026-10-24, framework S21): the look of every new reel
