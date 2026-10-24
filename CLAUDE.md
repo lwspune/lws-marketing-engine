@@ -187,7 +187,8 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   remake-backlog.md      #   @lws.pune ideas (score /10) + the remake rules; @pyqvault_ moved to pyqvault-ideas.md
   tools/topic-scores.js  #   next topic by score, per handle (framework F21); `node reels/tools/topic-scores.js
                          #   [pyqvault|lwspune]`; `pyqvault --calibrate` = the weight tuning (48 h results from
-                         #   pyqvault-learnings.md → results, Idea column; needs 6 reels; prints, changes nothing)
+                         #   pyqvault-learnings.md → results, Idea column; needs 6 reels; prints, changes nothing); lwspune also
+                         #   prints the week's Probability + Statistics picks (F32–F33, ideas "Probability · …")
   virality-log.md        #   @pyqvault_ VIRALITY PREDICTOR (framework F30, founder 2026-10-22): inputs per reel, a score /100,
                          #   band, weakest input; predictions frozen before posting, judged at 48 h; advisory until proven
   tools/virality.js      #   the predictor (+ virality-measure.mjs: motion, colour, length, cover from the MP4 in headless

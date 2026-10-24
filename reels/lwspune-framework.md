@@ -1,4 +1,4 @@
-# @lws.pune reel framework (v1.8, 2026-10-23)
+# @lws.pune reel framework (v1.9, 2026-10-24)
 
 How every new @lws.pune reel is made, one numbered point at a time. Same standard as @pyqvault_'s
 (`pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or dropped
@@ -29,7 +29,7 @@ backlog row has the proof link and an NDA chapter. · 🧪 L39
 **F21 · Pick by topic score.** Each open idea is scored out of 10 in `remake-backlog.md` → **@lws.pune topic scores**:
 proof (−1–3, from their views multiple; a known flop, under 1×, is −1) + vivid (0–3) + a 2-second question (0–2) + concept live (0–1) + everyday hook
 (0–1), with @pyqvault_'s written anchors. **Gate:** NDA maths chapters only. No exam-weight criterion: the gate already
-keeps it on the syllabus, and the reel's job is reach. `node reels/tools/topic-scores.js lwspune` checks the table and
+keeps it on the syllabus, and the reel's job is reach (except F32's weekly Probability and Statistics reels). `node reels/tools/topic-scores.js lwspune` checks the table and
 names the next pick. **Map reels (F28) are picked by exam weight instead.** · *Why:* the same choice whoever makes it, and testable; the criteria are F1–F4's reasons as
 numbers. · *Check:* the tool passes (`tests/topic-scores.test.js` also checks the real table). · 🧪 L39
 
@@ -56,6 +56,24 @@ building (an empty frame 0, label collisions, a cropped punch-in, a cell off-scr
 question whose matrix wasn't on screen), each a re-render; 016 was rejected as "confusing". A reader who didn't write the
 story sees the confusion its writer can't. · *Check:* the storyboard, with its Review section filled, is committed before
 `src/lib/<reel>.ts`; L63 counts the faults found after the review. · 📌 founder, measured by L63
+
+**F32 · Probability and Statistics every week.** One Probability reel and one Statistics reel each week, the best open
+idea in that chapter (`remake-backlog.md`, ideas named "Probability · …" / "Statistics · …"), whatever F21's overall score
+says; the rest of the week stays with F21. Each chapter keeps at least 2 ideas waiting. · *Why:* the founder (2026-10-24:
+"they are the most important NDA maths topics"). Probability is the biggest chapter now (41 of the last 360 questions,
+first in each of the last 3 papers) and Statistics is #3 over all 19 papers. F21 alone would rarely pick them: almost no
+proven remakes exist for either, and 010 and 017 stayed with followers (L58). · *Check:* `node reels/tools/topic-scores.js
+lwspune` prints "This week's core reels" and fails when a chapter has fewer than 2 ideas to make. · 📌 founder, measured by L68
+
+**F33 · Probability and statistics are watched happening.** The chance is something you see: balls, darts, dice, tosses
+or marks doing it on screen, many times, and the answer read off the picture (a share of an area, a pile's height, a line
+settling, a seesaw levelling). The formula comes last, as the name for what was just seen. No word cards, no
+formula-first walk-throughs. · *Why:* the founder (2026-10-24: "there are beautiful ways to visualize probability … you are
+not able to make probability as much visual"). Our own: 017 (word cards on a map) was watched 3.5 s, the lowest of any
+recent reel, and 016 (formula-led) was rejected as "confusing"; 010, the one with 360 real rolls racing, was watched 8.0 s.
+Other accounts: simulations travelled (Monte Carlo darts 2.9×, Monopoly dice 4×), explainers flopped (bell curve 0.6×,
+Bayes 0.1×, mean/median/mode 0.3×). · *Check:* the topic-score tool refuses a core idea with vivid under 2 or no concept
+live; the storyboard's frame 0 shows the objects, not a sentence. · 📌 founder, measured by L68
 
 ## Hook (the first 3 seconds)
 
@@ -195,6 +213,7 @@ counting dice outcomes; cards never overlap or crop while explained; the hold �
 
 | Version | Date | Change | Why |
 |---|---|---|---|
+| v1.9 | 2026-10-24 | F32 added: one Probability and one Statistics reel every week, picked within the chapter (F21's second exception, after F28). F33 added: probability and statistics are watched happening, the formula last. 11 core ideas added to `remake-backlog.md` (W18–W28); the topic-score tool prints the week's core picks and checks both points. | Founder, 2026-10-24: "add probability and statistics … they are most imp nda maths topics"; "there are beautiful ways to visualize probability. i think you are not able to make probability as much visual". Measured by L68. |
 | v1.8 | 2026-10-23 | F31 added: a written storyboard (`reels/<slug>.storyboard.md`, template in `lwspune-storyboard.md`) before any code, reviewed by one independent agent; every blocker fixed or declined in writing before the build. | Founder, 2026-10-23: "for future reels storyboarding for lwspune be better. one independent agent should review the story." Seven faults in 018–020 were found only after building; one of them (020's question matrix not on frame 0) made the question unanswerable. Measured by L63. |
 | v1.7 | 2026-10-21 | F28 added: map reels, a series picked by exam weight (F21's exception), a whole chapter on one map in place of F3's moving graph, two indigo flips (noted under F12), the full map held for a screenshot and looping to frame 0 in place of the end card. First: 017, Probability (41 of the last 360). | Founder, 2026-10-21: a reel like a studied formula map, "for the most important NDA maths topic", approved with these three changes. Measured by L57 (saves). |
 | v1.6 | 2026-10-21 | F24: an everyday object people know by its material keeps it; the rest stays vivid (as @pyqvault_ v1.13). | Founder, 2026-10-21, comparing Physics #8's two versions: "original spoon colour was better, rest vivid is better". A steel spoon in cyan stopped looking like a spoon; the bright candle, rays and graph read better. |
