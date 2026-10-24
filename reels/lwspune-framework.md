@@ -1,4 +1,4 @@
-# @lws.pune reel framework (v1.8, 2026-10-23)
+# @lws.pune reel framework (v1.10, 2026-10-24)
 
 How every new @lws.pune reel is made, one numbered point at a time. Same standard as @pyqvault_'s
 (`pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or dropped
@@ -29,7 +29,7 @@ backlog row has the proof link and an NDA chapter. · 🧪 L39
 **F21 · Pick by topic score.** Each open idea is scored out of 10 in `remake-backlog.md` → **@lws.pune topic scores**:
 proof (−1–3, from their views multiple; a known flop, under 1×, is −1) + vivid (0–3) + a 2-second question (0–2) + concept live (0–1) + everyday hook
 (0–1), with @pyqvault_'s written anchors. **Gate:** NDA maths chapters only. No exam-weight criterion: the gate already
-keeps it on the syllabus, and the reel's job is reach. `node reels/tools/topic-scores.js lwspune` checks the table and
+keeps it on the syllabus, and the reel's job is reach (except F32's weekly Probability and Statistics reels). `node reels/tools/topic-scores.js lwspune` checks the table and
 names the next pick. **Map reels (F28) are picked by exam weight instead.** · *Why:* the same choice whoever makes it, and testable; the criteria are F1–F4's reasons as
 numbers. · *Check:* the tool passes (`tests/topic-scores.test.js` also checks the real table). · 🧪 L39
 
@@ -56,6 +56,33 @@ building (an empty frame 0, label collisions, a cropped punch-in, a cell off-scr
 question whose matrix wasn't on screen), each a re-render; 016 was rejected as "confusing". A reader who didn't write the
 story sees the confusion its writer can't. · *Check:* the storyboard, with its Review section filled, is committed before
 `src/lib/<reel>.ts`; L63 counts the faults found after the review. · 📌 founder, measured by L63
+
+**F32 · Probability and Statistics every week.** One Probability reel and one Statistics reel each week, the best open
+idea in that chapter (`remake-backlog.md`, ideas named "Probability · …" / "Statistics · …"), whatever F21's overall score
+says; the rest of the week stays with F21. Each chapter keeps at least 2 ideas waiting. · *Why:* the founder (2026-10-24:
+"they are the most important NDA maths topics"). Probability is the biggest chapter now (41 of the last 360 questions,
+first in each of the last 3 papers) and Statistics is #3 over all 19 papers. F21 alone would rarely pick them: almost no
+proven remakes exist for either, and 010 and 017 stayed with followers (L58). · *Check:* `node reels/tools/topic-scores.js
+lwspune` prints "This week's core reels" and fails when a chapter has fewer than 2 ideas to make. · 📌 founder, measured by L68
+
+**F33 · Probability and statistics are watched happening.** The chance is something you see: balls, darts, dice, tosses
+or marks doing it on screen, many times, and the answer read off the picture (a share of an area, a pile's height, a line
+settling, a seesaw levelling). The formula comes last, as the name for what was just seen. No word cards, no
+formula-first walk-throughs. · *Why:* the founder (2026-10-24: "there are beautiful ways to visualize probability … you are
+not able to make probability as much visual"). Our own: 017 (word cards on a map) was watched 3.5 s, the lowest of any
+recent reel, and 016 (formula-led) was rejected as "confusing"; 010, the one with 360 real rolls racing, was watched 8.0 s.
+Other accounts: simulations travelled (Monte Carlo darts 2.9×, Monopoly dice 4×), explainers flopped (bell curve 0.6×,
+Bayes 0.1×, mean/median/mode 0.3×). · *Check:* the topic-score tool refuses a core idea with vivid under 2 or no concept
+live; the storyboard's frame 0 shows the objects, not a sentence. · 📌 founder, measured by L68
+
+**F34 · 3D reels only.** Every new @lws.pune reel is made in real 3D (Remotion + three.js): the idea's objects as real
+things with depth and light (`RealLight`), moving from frame 0, opening on the orbit (F22), with physics where things
+fall, roll or collide (Rapier, scripted where an honest rule decides: runbook → "Scripted flight + physics piles"). A
+graph or a flat diagram becomes an object in space (a curve as a tube or a ribbon, an area as a slab, a matrix's grid as
+a plane that tilts). Template: `remotion/src/Reel025.tsx` + `src/lib/reel025.ts` (+ `reel025Physics.ts`). · *Why:* the
+founder (2026-10-24, after the 2D Galton board, "bland and 2D, hardly any movements", and its 3D remake: "lets make 3D
+reels only for lwspune"). · *Check:* the reel's component renders a `ThreeCanvas`; its tests check the orbit (F22) and
+that the board / figure stays in frame. · 📌 founder, measured by L69
 
 ## Hook (the first 3 seconds)
 
@@ -98,7 +125,7 @@ the question and labels still. · *Why:* a change of view restarts attention (fo
 and looked jerky to the founder (L11). · *Check:* tests: at least 2 zooms in and 1 out, no jump between frames, a
 punch-in on the big moment. · 🧪 L38
 
-**F22 · The orbit is the hook: every 3D reel opens with one.** From frame 0 the camera goes **all the way round the object, a full 360°** (front, side, back, side, front), eased in and out with no whoosh, while the question is up, and it **ends back at the front, the explaining view, by 3 s**, before anything is explained. One orbit per reel, in the opening only (no closing orbit, never during a punch-in). Written as a third camera value (orbit angle) on the same `CAMERA` keys. **Not for 2D reels** (founder, 2026-10-20: tried on @lws.pune 016, "doesn't look good"): a flat reel opens with its picture building from frame 0 instead (F5). 3D reels are the solids, surfaces and 3D geometry topics. · *Why:* the founder (2026-10-20): the orbit
+**F22 · The orbit is the hook: every 3D reel opens with one.** From frame 0 the camera goes **all the way round the object, a full 360°** (front, side, back, side, front), eased in and out with no whoosh, while the question is up, and it **ends back at the front, the explaining view, by 3 s**, before anything is explained. One orbit per reel, in the opening only (no closing orbit, never during a punch-in). Written as a third camera value (orbit angle) on the same `CAMERA` keys. **Not for 2D reels** (founder, 2026-10-20: tried on @lws.pune 016, "doesn't look good"): a flat reel opens with its picture building from frame 0 instead (F5). Since F34 (2026-10-24) every new @lws.pune reel is 3D, so every new reel opens with the orbit. · *Why:* the founder (2026-10-20): the orbit
 is the hook, so it belongs in the first 3 s; it shows the 3D's depth and gives motion from frame 0 (reel 014 opens
 with one, L25). Back at the front by 3 s because an angle or a slope only reads from one view. · *Check:* the reel's
 tests (the orbit starts at frame 0, turns exactly 360°, ends at the front by 3 s, no jumps, no other orbit). · 📌 founder,
@@ -109,7 +136,7 @@ the question bank (read-only); no made-up numbers ("90% get this wrong"); label 
 an exam account costs trust we can't buy back; the no-slop rule. · *Check:* the tests re-derive the answer. · 📌 founder
 
 **F11 · Smooth, frame-exact video (Remotion).** New reels are made in `remotion/`: timeline as pure functions of t in
-`src/lib/<reel>.ts`, tests first. Template: `remotion/src/Reel015.tsx` + `src/lib/reel015.ts` (2D) or `Reel014.tsx` (3D).
+`src/lib/<reel>.ts`, tests first. Template: `remotion/src/Reel025.tsx` + `src/lib/reel025.ts` (3D, F34); `Reel015.tsx` (2D) for older reels only.
 Reels made with `engine.js` (001–013) stay as they are. · *Why:* the engine's 005 averaged 29.2 fps with gaps up to
 0.4 s in the first second; the founder judged Remotion "far better" (L25). · *Check:* rendered by `npm run render:<reel>`.
 · 📌 founder, 2026-10-18
@@ -195,6 +222,8 @@ counting dice outcomes; cards never overlap or crop while explained; the hold �
 
 | Version | Date | Change | Why |
 |---|---|---|---|
+| v1.10 | 2026-10-24 | F34 added: 3D reels only (template Reel025); F11's template and F22's scope follow. Reels 018–023, already made in 2D and not yet posted, are a backfill question (SUGGESTIONS.md), not changed here. | Founder, 2026-10-24: "lets make 3D reels only for lwspune", after the 2D Galton board ("bland and 2D, hardly any movements") was remade in 3D. Measured by L69. |
+| v1.9 | 2026-10-24 | F32 added: one Probability and one Statistics reel every week, picked within the chapter (F21's second exception, after F28). F33 added: probability and statistics are watched happening, the formula last. 11 core ideas added to `remake-backlog.md` (W18–W28); the topic-score tool prints the week's core picks and checks both points. | Founder, 2026-10-24: "add probability and statistics … they are most imp nda maths topics"; "there are beautiful ways to visualize probability. i think you are not able to make probability as much visual". Measured by L68. |
 | v1.8 | 2026-10-23 | F31 added: a written storyboard (`reels/<slug>.storyboard.md`, template in `lwspune-storyboard.md`) before any code, reviewed by one independent agent; every blocker fixed or declined in writing before the build. | Founder, 2026-10-23: "for future reels storyboarding for lwspune be better. one independent agent should review the story." Seven faults in 018–020 were found only after building; one of them (020's question matrix not on frame 0) made the question unanswerable. Measured by L63. |
 | v1.7 | 2026-10-21 | F28 added: map reels, a series picked by exam weight (F21's exception), a whole chapter on one map in place of F3's moving graph, two indigo flips (noted under F12), the full map held for a screenshot and looping to frame 0 in place of the end card. First: 017, Probability (41 of the last 360). | Founder, 2026-10-21: a reel like a studied formula map, "for the most important NDA maths topic", approved with these three changes. Measured by L57 (saves). |
 | v1.6 | 2026-10-21 | F24: an everyday object people know by its material keeps it; the rest stays vivid (as @pyqvault_ v1.13). | Founder, 2026-10-21, comparing Physics #8's two versions: "original spoon colour was better, rest vivid is better". A steel spoon in cyan stopped looking like a spoon; the bright candle, rays and graph read better. |

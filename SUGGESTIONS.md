@@ -161,6 +161,16 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### Reels 018–023 were made in 2D before "3D reels only" (logged 2026-10-24, awaiting founder)
+Learning (framework F34, founder 2026-10-24): every new @lws.pune reel is 3D. 018–023 (secant → tangent, area between
+curves, matrix grid, log flip, completing the square, derivative cycle) are finished 2D Remotion reels, not yet posted.
+**360:** scope = 6 finished reels (code, renders, kits, manifests; whatever the publisher queue holds for them) · blast
+radius = only those posts; nothing depends on them · does it apply? partly: F34 is for new reels, and these already pass
+every check; posting them also gives L69 its 2D comparison set · risk = low either way (remakes are new renders; the 2D
+files stay in git) · cost = about half a day per reel in 3D (025 took most of a session) · **recommendation: decline the
+remake; post them as they are, and judge 3D against them (L69)**. Remake one only if its 48 h numbers are weak and its
+topic suits 3D (020's grid and 019's area would).
+
 ### Sound Mind: repaint the flat reels in Painted 2D? (logged 2026-10-24, not started)
 New learning: the founder prefers the painted look (framework S21) to the flat, outlined one. Candidates: the ME reels
 sm-r001–r010 and the pause reel sm-r011, all flat with black outlines. Before any rework, a 360: most are already posted
