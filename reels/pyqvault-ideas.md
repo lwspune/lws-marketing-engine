@@ -153,6 +153,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | P72 | P | Two crossed polaroids block all light; a third between them lets light back | 0.1 | 2 | 2 | 2 | 1 | 1 | 55 |  | mht-cet-physics/wave-optics | ✓ |
 | P73 | P | Double your speed and your braking distance goes up four times | – | 2 | 2 | 2 | 1 | 2 | 69 |  | jee-mains-physics/motion-in-a-straight-line | ✓ |
 | P74 | P | Radio, light and X-rays are one kind of wave, at different spacings | – | 2 | 2 | 1 | 0 | 2 | 55 |  | jee-mains-physics/electromagnetic-waves | ✓ |
+| P75 | P | Double the battery: the current doubles (Ohm's law acted by our own cast: Volt the battery, Amp the sparks, Ohm the resistor, red-hot at 4x heat) | 829 | 3 | 2 | 1 | 0 | 1 | 79 | ✅ made 2026-10-24 (`pv-physics-014-ohm`, Physics #14; Painted 2D; the topic hit 29.2M on @qubit.exe, 829x its typical reel; our own characters and scene) | founder | ✓ |
 | C1 | C | Heat speeds up a reaction: faster molecules, more hits | – | 3 | 1 | 0 | 1 | 1 | 52 | ✅ made 2026-10-18 (`pv-chem-001-heat-rate`; scored after posting) | own | ✓ |
 | C2 | C | The periodic table's 8 families | 256 | 3 | 1 | 0 | 0 | 0 | 59 | ✅ made 2026-10-18 (`pv-chem-002-families`; scored after posting) | remake | ✓ |
 | C3 | C | Avogadro: add gas, the volume grows | 50 | 2 | 1 | 0 | 1 | 1 | 55 | ✅ made 2026-10-19 (`pv-chem-003-avogadro`; scored after posting) | remake | ✓ |
