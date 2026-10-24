@@ -1,6 +1,6 @@
 # @lws.pune · 025, Why? #13: 256 balls, 8 rows of pegs. Which bin fills most? (a 3D Galton board)
 
-**Handle:** @lws.pune (project `pyq-vault`) · **Kind:** the first weekly **core Probability** reel (framework F32), made to
+**Handle:** @lws.pune (project `pyq-vault`, post slug `nda-maths-025-galton-board-v2`: the 2D post was rejected in the app) · **Kind:** the first weekly **core Probability** reel (framework F32), made to
 F33 (watched happening, the formula last) · **Series:** Why? #13 · **Version:** v2, **3D** (the founder found the 2D v1
 "bland and 2D, hardly any movements", 2026-10-24; v1 was never posted) · **Storyboard:**
 [nda-maths-025-galton-board.storyboard.md](nda-maths-025-galton-board.storyboard.md), v2 reviewed by an independent agent
