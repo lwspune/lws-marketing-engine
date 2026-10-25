@@ -1,5 +1,6 @@
 import "server-only";
 import { sourceLabel } from "@/lib/domain/leads";
+import { allRows } from "@/lib/supabase/pages";
 import type { createSupabaseServerClient } from "@/lib/supabase/server";
 
 type Db = ReturnType<typeof createSupabaseServerClient>;
@@ -14,15 +15,17 @@ export interface LeadView {
  * passes a window: added after `since` (null: from the start) and up to `until` (migration 0020).
  */
 export async function loadLeads(supabase: Db, window?: { since: string | null; until: string }): Promise<LeadView[]> {
-  let query = supabase.from("leads")
-    .select("id, name, contact, course, class_level, lead_at, created_at, channel, from_ad, page, conversation_id, connected_accounts(display_name)");
-  if (window) {
-    query = query.lte("created_at", window.until);
-    if (window.since) query = query.gt("created_at", window.since);
-  }
-  const { data, error } = await query.order("lead_at", { ascending: false }).limit(5000);
-  if (error) throw new Error(`reading leads: ${error.message}`);
-  return (data ?? []).map((l) => {
+  // Page by page: Supabase returns at most 1,000 rows per request. id breaks ties so no lead is skipped or repeated.
+  const rows = await allRows((from, to) => {
+    let query = supabase.from("leads")
+      .select("id, name, contact, course, class_level, lead_at, created_at, channel, from_ad, page, conversation_id, connected_accounts(display_name)");
+    if (window) {
+      query = query.lte("created_at", window.until);
+      if (window.since) query = query.gt("created_at", window.since);
+    }
+    return query.order("lead_at", { ascending: false }).order("id").range(from, to);
+  }).catch((e: Error) => { throw new Error(`reading leads: ${e.message}`); });
+  return rows.map((l) => {
     const account = (l.connected_accounts as unknown as { display_name: string } | null)?.display_name ?? null;
     return {
       id: l.id, name: l.name, contact: l.contact, course: l.course, class_level: l.class_level, lead_at: l.lead_at, created_at: l.created_at,
