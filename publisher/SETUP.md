@@ -244,12 +244,12 @@ GoPost reads the sheet as a **service account**: a robot login that sees only wh
 
 1. [console.cloud.google.com](https://console.cloud.google.com), project **GoPost (gopost-512510)** → **APIs & Services →
    Library** → **Google Sheets API** → **Enable**.
-2. **IAM & Admin → Service Accounts → Create service account**: name `gopost-leads`, no roles (skip both optional
+2. **IAM & Admin → Service Accounts → Create service account**: name `google-leads`, no roles (skip both optional
    steps) → Done. Open it → **Keys → Add key → Create new key → JSON**: a file downloads.
 3. Put the file's whole contents on one line in `.env.local` as `GOOGLE_SHEETS_KEY='<json>'`, and on Vercel (same name,
    Production) → redeploy. Then delete the downloaded file. (Org policy "Disable service account key creation" blocks
    step 2; turn it off for this project if you see it.)
-4. Open the sheet → **Share** → paste the service account's email (`gopost-leads@gopost-512510.iam.gserviceaccount.com`)
+4. Open the sheet → **Share** → paste the service account's email (`google-leads@gopost-512510.iam.gserviceaccount.com`, created 2026-10-25)
    → **Viewer**, untick "Notify" → Share.
 5. Register each tab once (re-running is safe):
    `npm run leads:sheet:add -- --org=lws-pune --sheet=<id from the sheet's URL> --tab="Age Calculator" --kind=age_calculator --page="lwspune.com NDA age calculator"`
