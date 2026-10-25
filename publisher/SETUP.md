@@ -258,6 +258,20 @@ GoPost reads the sheet as a **service account**: a robot login that sees only wh
    backlog. From then on it runs every hour. If it breaks (sheet unshared, renamed, a column heading changed), the
    Leads page says so in one line.
 
+## 13. PYQ Vault leads: NDA, CDS and AFCAT students (owners only, ~5 min)
+
+PYQ Vault students who chose NDA, CDS or AFCAT, gave a mobile and ticked "I agree to be contacted" (on their account or
+at a public NDA quiz) reach Leads every hour (migration 0028). PYQ Vault decides who counts and serves them at
+`https://www.pyqvault.com/api/leads/defence` behind a shared secret; GoPost holds no key to PYQ Vault's database.
+
+1. Make a secret: `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`.
+2. Put it on PYQ Vault's Vercel project (`question-bank`) as `GOPOST_LEADS_SECRET` (Production, Sensitive), and on
+   GoPost's (`lws-marketing-engine`) as `PYQVAULT_LEADS_SECRET`, plus `PYQVAULT_LEADS_SECRET` in `.env.local`. Redeploy
+   both. Without it PYQ Vault answers 401 and GoPost skips the feed.
+3. `npm run leads:pyqvault -- --org=lws-pune --dry-run` shows what would be added; then without `--dry-run` it registers
+   the two feeds (account, quiz) and imports everyone so far. From then on it runs every hour. If PYQ Vault can't be read,
+   the Leads page says so in one line.
+
 ## Adding another Facebook Page later
 
 The app is granted **current Pages only** (by choice, so a new Page never gets connected by

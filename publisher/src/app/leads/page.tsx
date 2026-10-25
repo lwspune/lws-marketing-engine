@@ -16,13 +16,15 @@ export default async function LeadsPage() {
   const supabase = createSupabaseServerClient();
   const access = await memberAccess(supabase);
   if (!access.inbox) redirect("/");
-  // RLS: owners read the lead sheets' status (0026).
-  const [leads, since, { data: sheets }] = await Promise.all([
+  // RLS: owners read the lead sheets' and PYQ Vault feeds' status (0026, 0028).
+  const [leads, since, { data: sheets }, { data: feeds }] = await Promise.all([
     loadLeads(supabase), lastDownload(supabase), supabase.from("lead_sheets").select("tab, last_error, last_synced_at").order("created_at"),
+    supabase.from("lead_feeds").select("page, last_error, last_synced_at").order("created_at"),
   ]);
   const fresh = since ? leads.filter((l) => Date.parse(l.created_at) > Date.parse(since)).length : leads.length;
   const sortingWhatsApp = !!process.env.ANTHROPIC_API_KEY;
   const sheetProblem = sheetWarning(sheets ?? [], new Date());
+  const feedProblem = sheetWarning((feeds ?? []).map((f) => ({ ...f, tab: f.page })), new Date());
 
   return (
     <>
@@ -31,12 +33,19 @@ export default async function LeadsPage() {
         <PageHeader title="Leads">
           Everyone worth calling back, in one list. Instagram and Facebook chats join when the person shares a phone number or email;
           WhatsApp chats when Claude judges them a genuine new enquiry; lwspune.com form entries from their emails, and the NDA
-          age calculator and popup form from their Google Sheet every hour. Only owners can see this page.
+          age calculator and popup form from their Google Sheet every hour, and NDA, CDS and AFCAT students who agreed to be
+          contacted on PYQ Vault every hour. Only owners can see this page.
         </PageHeader>
 
         {sheetProblem && (
           <p role="alert" className="card mb-4 p-4 text-sm text-warn">
             Website lead sheet: {sheetProblem} New calculator and popup-form leads won&rsquo;t arrive until it&rsquo;s fixed (publisher/SETUP.md step 12).
+          </p>
+        )}
+
+        {feedProblem && (
+          <p role="alert" className="card mb-4 p-4 text-sm text-warn">
+            {feedProblem} New PYQ Vault leads won&rsquo;t arrive until it&rsquo;s fixed (publisher/SETUP.md step 13).
           </p>
         )}
 
