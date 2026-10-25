@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { InboxRow } from "@/lib/domain/inbox";
 import type { MetaConfig } from "@/lib/platforms/meta";
-import { fetchInstagramProfile, sendInstagramText } from "@/lib/platforms/metaMessages";
+import { fetchFacebookProfile, fetchInstagramProfile, sendInstagramText } from "@/lib/platforms/metaMessages";
 import type { AutoReplyDeps } from "./autoReply";
 import type { InboxPlatform, NeedsProfile } from "./webhook";
 
@@ -35,7 +35,8 @@ export async function fillProfiles(
     const token = tokens.get(n.accountId);
     if (!token) continue;
     try {
-      const p = await fetchInstagramProfile(cfg, { token, contactId: n.contactId });
+      const lookup = n.platform === "facebook" ? fetchFacebookProfile : fetchInstagramProfile;
+      const p = await lookup(cfg, { token, contactId: n.contactId });
       const { error } = await db.rpc("set_contact_profile", { p_conversation: n.conversationId, p_name: p.name ?? "", p_username: p.username ?? "" });
       if (error) throw new Error(`set_contact_profile: ${error.message}`);
     } catch (e) {

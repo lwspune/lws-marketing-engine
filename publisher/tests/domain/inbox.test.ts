@@ -1,8 +1,8 @@
 import { createHmac } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import {
-  attachmentLabel, canReply, contactLabel, LEAD_STATUSES, MAX_BODY, needsReply, parseInstagramWebhook, parseWhatsAppWebhook, redactForThemes,
-  summariseInbox, verifyMetaSignature,
+  attachmentLabel, canReply, contactLabel, LEAD_STATUSES, MAX_BODY, needsReply, parseFacebookWebhook, parseInstagramWebhook, parseWhatsAppWebhook,
+  redactForThemes, summariseInbox, verifyMetaSignature,
 } from "@/lib/domain/inbox";
 
 // Instagram DMs pulled into GoPost (founder, 2026-10-19). Shapes follow Meta's Instagram messaging webhooks:
@@ -80,6 +80,57 @@ describe("parseInstagramWebhook", () => {
   });
 });
 
+// Facebook Page (Messenger) chats (founder, 2026-10-25): Meta sends them as object "page", entry[].id = the Page,
+// messaging[] in the same shape as Instagram's, with the person's page-scoped id (PSID) as sender.
+describe("parseFacebookWebhook", () => {
+  const PAGE = "104000000000001";
+  const page = (messaging: object) => ({ object: "page", entry: [{ id: PAGE, time: 1760860800000, messaging: [messaging] }] });
+
+  it("reads an incoming Messenger text as one row for the Page", () => {
+    expect(parseFacebookWebhook(page({
+      sender: { id: "7001" }, recipient: { id: PAGE }, timestamp: 1760860800000, message: { mid: "m_fb1", text: "NDA batch kab start hai?" },
+    }))).toEqual([{
+      accountExternalId: PAGE,
+      rows: [{
+        contact_id: "7001", mid: "m_fb1", direction: "in", body: "NDA batch kab start hai?", attachment: null,
+        sent_at: "2025-10-19T08:00:00.000Z", source: "direct", ad_id: null, deleted: false,
+      }],
+    }]);
+  });
+
+  it("reads the Page's own replies (echoes) as outgoing, and keeps attachment types", () => {
+    const [{ rows: [out] }] = parseFacebookWebhook(page({
+      sender: { id: PAGE }, recipient: { id: "7001" }, timestamp: 1760860800000, message: { mid: "m_fb2", text: "Monday 5 pm", is_echo: true },
+    }));
+    expect(out).toMatchObject({ contact_id: "7001", direction: "out", body: "Monday 5 pm" });
+    const [{ rows: [pic] }] = parseFacebookWebhook(page({
+      sender: { id: "7001" }, recipient: { id: PAGE }, timestamp: 1, message: { mid: "m_fb3", attachments: [{ type: "image", payload: { url: "https://cdn/x" } }] },
+    }));
+    expect(pic).toMatchObject({ body: "", attachment: "image" });
+  });
+
+  it("marks a chat from a Click-to-Messenger ad, whether the referral rides on the message or the event", () => {
+    const onMessage = parseFacebookWebhook(page({ sender: { id: "7001" }, recipient: { id: PAGE }, timestamp: 1,
+      message: { mid: "m1", text: "Price?", referral: { source: "ADS", ad_id: "120231234567890", type: "OPEN_THREAD" } } }));
+    expect(onMessage[0].rows[0]).toMatchObject({ source: "ad", ad_id: "120231234567890" });
+    const onEvent = parseFacebookWebhook(page({ sender: { id: "7001" }, recipient: { id: PAGE }, timestamp: 1,
+      referral: { source: "ADS", ad_id: "120231234567891", type: "OPEN_THREAD" }, message: { mid: "m2", text: "Price?" } }));
+    expect(onEvent[0].rows[0]).toMatchObject({ source: "ad", ad_id: "120231234567891" });
+  });
+
+  it("leaves Instagram and WhatsApp deliveries, and Page events that aren't messages, alone", () => {
+    expect(parseFacebookWebhook({ object: "instagram", entry: [{ id: PAGE, messaging: [{ sender: { id: "1" }, recipient: { id: PAGE }, timestamp: 1, message: { mid: "x", text: "a" } }] }] })).toEqual([]);
+    expect(parseFacebookWebhook({ object: "page", entry: [] })).toEqual([]);
+    expect(parseFacebookWebhook(page({ sender: { id: "7001" }, recipient: { id: PAGE }, timestamp: 1, delivery: { mids: ["m1"] } }))).toEqual([]);
+    // A Page post or comment change (feed) carries no messaging[].
+    expect(parseFacebookWebhook({ object: "page", entry: [{ id: PAGE, changes: [{ field: "feed", value: {} }] }] })).toEqual([]);
+  });
+
+  it("and Instagram's parser leaves Page deliveries alone", () => {
+    expect(parseInstagramWebhook(page({ sender: { id: "7001" }, recipient: { id: PAGE }, timestamp: 1, message: { mid: "m1", text: "a" } }))).toEqual([]);
+  });
+});
+
 describe("verifyMetaSignature", () => {
   const secret = "app-secret", raw = JSON.stringify(incoming({ text: "hi" }));
   const sign = (body: string, key = secret) => `sha256=${createHmac("sha256", key).update(body).digest("hex")}`;
@@ -152,6 +203,10 @@ describe("contactLabel / attachmentLabel", () => {
   it("shows a WhatsApp contact's name, else their number", () => {
     expect(contactLabel({ contact_name: "Parent A", contact_username: null, contact_id: "919800000001", channel: "whatsapp" })).toBe("Parent A");
     expect(contactLabel({ contact_name: null, contact_username: null, contact_id: "919800000001", channel: "whatsapp" })).toBe("+919800000001");
+  });
+  it("shows a Facebook contact's name, else 'Facebook user' and the id's last digits", () => {
+    expect(contactLabel({ contact_name: "Priya K", contact_username: null, contact_id: "25000000007001", channel: "facebook" })).toBe("Priya K");
+    expect(contactLabel({ contact_name: null, contact_username: null, contact_id: "25000000007001", channel: "facebook" })).toBe("Facebook user …7001");
   });
   it("names attachments in plain words", () => {
     expect(attachmentLabel("image")).toBe("Photo");

@@ -1,14 +1,15 @@
 import { timingSafeEqual } from "node:crypto";
-import { parseInstagramWebhook, parseWhatsAppWebhook, verifyMetaSignature, type InboxRow } from "@/lib/domain/inbox";
+import { parseFacebookWebhook, parseInstagramWebhook, parseWhatsAppWebhook, verifyMetaSignature, type InboxRow } from "@/lib/domain/inbox";
 import { fail, ok } from "@/lib/publishing/result";
 
 // The /api/webhooks/meta handler, kept free of Next and Supabase so it can be tested directly (like cron.ts).
-// GET: Meta checks the address once with our verify token. POST: one signed delivery of Instagram DMs or WhatsApp
-// messages (the same address serves both products). Storing failures
+// GET: Meta checks the address once with our verify token. POST: one signed delivery of Instagram DMs, Facebook Page
+// (Messenger) messages or WhatsApp messages (the same address serves all three). Storing failures
 // answer 500 so Meta delivers again (the database ignores duplicates); a failed auto-reply or name lookup doesn't.
 
-export interface NeedsProfile { accountId: string; conversationId: string; contactId: string }
-export type InboxPlatform = "instagram" | "whatsapp";
+export type InboxPlatform = "instagram" | "whatsapp" | "facebook";
+/** `platform` says where to look the name up (set by the webhook; the backfill fills names itself). */
+export interface NeedsProfile { accountId: string; conversationId: string; contactId: string; platform?: InboxPlatform }
 
 export interface WebhookDeps {
   appSecret: string;
@@ -48,15 +49,17 @@ export async function handleMetaWebhook(req: Request, deps: WebhookDeps): Promis
   }
 
   const instagram = parseInstagramWebhook(body);
-  const groups: [InboxPlatform, typeof instagram][] = [["instagram", instagram], ["whatsapp", parseWhatsAppWebhook(body)]];
+  const groups: [InboxPlatform, typeof instagram][] = [
+    ["instagram", instagram], ["facebook", parseFacebookWebhook(body)], ["whatsapp", parseWhatsAppWebhook(body)],
+  ];
   const needs: NeedsProfile[] = [];
   let stored = 0;
   try {
     for (const [platform, list] of groups) {
       for (const g of list) {
         const missing = await deps.ingest(platform, g.accountExternalId, g.rows);
-        // WhatsApp sends names with the message; only Instagram contacts are looked up.
-        if (platform === "instagram") needs.push(...missing);
+        // WhatsApp sends names with the message; Instagram and Messenger contacts are looked up.
+        if (platform !== "whatsapp") needs.push(...missing.map((n) => ({ ...n, platform })));
         stored += g.rows.length;
       }
     }

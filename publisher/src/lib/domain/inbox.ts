@@ -62,7 +62,8 @@ function rowFrom(account: string, ev: Obj): InboxRow | null {
   if (!mid || !sender || !recipient || !sentAt) return null;
   const out = m.is_echo === true || sender === account;
   const attachments = Array.isArray(m.attachments) ? m.attachments.filter(isObj) : [];
-  const referral = isObj(m.referral) ? m.referral : null;
+  // Messenger may put a Click-to-Messenger ad's referral on the event rather than the message.
+  const referral = isObj(m.referral) ? m.referral : isObj(ev.referral) ? ev.referral : null;
   const adId = referral && referral.source === "ADS" && typeof referral.ad_id === "string" && AD_ID.test(referral.ad_id) ? referral.ad_id : null;
   const storyReply = isObj(m.reply_to) && isObj(m.reply_to.story);
   return {
@@ -79,8 +80,16 @@ function rowFrom(account: string, ev: Obj): InboxRow | null {
 }
 
 /** Meta's Instagram webhook body → messages per account (entry.id). Anything that isn't a message is skipped. */
-export function parseInstagramWebhook(body: unknown): InboxGroup[] {
-  if (!isObj(body) || body.object !== "instagram" || !Array.isArray(body.entry)) return [];
+export const parseInstagramWebhook = (body: unknown): InboxGroup[] => parseMessaging(body, "instagram");
+
+/**
+ * Meta's Facebook Page webhook body (Messenger, founder 2026-10-25) → messages per Page (entry.id). Same event shape as
+ * Instagram's; the contact is the person's page-scoped id. Feed changes and other Page events are skipped.
+ */
+export const parseFacebookWebhook = (body: unknown): InboxGroup[] => parseMessaging(body, "page");
+
+function parseMessaging(body: unknown, object: "instagram" | "page"): InboxGroup[] {
+  if (!isObj(body) || body.object !== object || !Array.isArray(body.entry)) return [];
   const groups = new Map<string, InboxRow[]>();
   for (const entry of body.entry) {
     if (!isObj(entry) || !Array.isArray(entry.messaging)) continue;
@@ -226,7 +235,7 @@ export function summariseInbox(
 
 export const contactLabel = (c: { contact_name: string | null; contact_username: string | null; contact_id: string; channel?: string }): string =>
   c.contact_name || (c.channel === "whatsapp" ? `+${c.contact_id}`
-    : c.contact_username ? `@${c.contact_username}` : `Instagram user …${c.contact_id.slice(-4)}`);
+    : c.contact_username ? `@${c.contact_username}` : `${c.channel === "facebook" ? "Facebook" : "Instagram"} user …${c.contact_id.slice(-4)}`);
 
 const ATTACHMENT_LABEL: Record<string, string> = {
   image: "Photo", video: "Video", audio: "Voice note", file: "File", share: "Shared post", ig_post: "Shared post",
