@@ -236,6 +236,28 @@ its messages to GoPost; only step 5 does.
 If the window doesn't offer the WhatsApp Business app option, Meta has changed how the route is picked:
 `SIGNUP_EXTRAS` in `src/components/WhatsAppConnectBox.tsx` is the one place to update.
 
+## 12. Website lead sheets: NDA age calculator + popup form (owners only, ~10 min)
+
+lwspune.com writes its NDA age calculator and popup-form entries to a Google Sheet ("Defence Age Calculator Data- LWS
+Pune", kept by the web agency). The hourly leads job reads each tab's new rows and adds them to Leads (migration 0026).
+GoPost reads the sheet as a **service account**: a robot login that sees only what is shared with it, read-only.
+
+1. [console.cloud.google.com](https://console.cloud.google.com), project **GoPost (gopost-512510)** → **APIs & Services →
+   Library** → **Google Sheets API** → **Enable**.
+2. **IAM & Admin → Service Accounts → Create service account**: name `gopost-leads`, no roles (skip both optional
+   steps) → Done. Open it → **Keys → Add key → Create new key → JSON**: a file downloads.
+3. Put the file's whole contents on one line in `.env.local` as `GOOGLE_SHEETS_KEY='<json>'`, and on Vercel (same name,
+   Production) → redeploy. Then delete the downloaded file. (Org policy "Disable service account key creation" blocks
+   step 2; turn it off for this project if you see it.)
+4. Open the sheet → **Share** → paste the service account's email (`gopost-leads@gopost-512510.iam.gserviceaccount.com`)
+   → **Viewer**, untick "Notify" → Share.
+5. Register each tab once (re-running is safe):
+   `npm run leads:sheet:add -- --org=lws-pune --sheet=<id from the sheet's URL> --tab="Age Calculator" --kind=age_calculator --page="lwspune.com NDA age calculator"`
+   and the same with `--tab="Popup Form Data" --kind=popup_form --page="lwspune.com popup form"`.
+6. `npm run leads:sheets -- --org=lws-pune --dry-run` shows what would be added; then without `--dry-run` it imports the
+   backlog. From then on it runs every hour. If it breaks (sheet unshared, renamed, a column heading changed), the
+   Leads page says so in one line.
+
 ## Adding another Facebook Page later
 
 The app is granted **current Pages only** (by choice, so a new Page never gets connected by

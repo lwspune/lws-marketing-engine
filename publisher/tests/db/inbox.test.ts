@@ -90,7 +90,7 @@ describe.skipIf(!TEST_DB_URL)("database: inbox", () => {
     await inboxFixture(q);
     await asService(q);
     expect(await ingest(q, [row()], "999")).toEqual([]);
-    expect((await errorOf(q, "select * from public.ingest_messages('facebook', $1, '[]'::jsonb)", [IG]))?.hint).toBe("invalid_input");
+    expect((await errorOf(q, "select * from public.ingest_messages('sms', $1, '[]'::jsonb)", [IG]))?.hint).toBe("invalid_input");
     expect((await errorOf(q, "select * from public.ingest_messages('instagram', $1, '{}'::jsonb)", [IG]))?.hint).toBe("invalid_input");
     expect(await errorOf(q, "select * from public.ingest_messages('instagram', $1, $2::jsonb)", [IG, JSON.stringify([row({ direction: "sideways" })])])).not.toBeNull();
     expect(await errorOf(q, "select * from public.ingest_messages('instagram', $1, $2::jsonb)", [IG, JSON.stringify([row({ source: "ad", ad_id: null })])])).not.toBeNull();
@@ -144,7 +144,9 @@ describe.skipIf(!TEST_DB_URL)("database: inbox", () => {
     const old = new Date(Date.now() - 400 * 86_400_000).toISOString(), recent = new Date(Date.now() - 86_400_000).toISOString();
     await ingest(q, [row({ mid: "old", sent_at: old }), row({ contact_id: "9002", mid: "new", sent_at: recent })]);
     await asOwner(q);
-    expect(await q("select private.purge_old_messages(12) as n")).toEqual([{ n: 1 }]);
+    // The live schema holds real chats too (rolled back with the test), so count every message past 12 months.
+    const [{ due }] = await q<{ due: number }>("select count(*)::int as due from public.messages where sent_at < now() - interval '12 months'");
+    expect(await q("select private.purge_old_messages(12) as n")).toEqual([{ n: due }]);
     expect(await q("select external_id from public.messages m join public.conversations c on c.id = m.conversation_id where c.account_id = $1",
       [f.igAccount])).toEqual([{ external_id: "new" }]);
     expect(await q("select contact_id, preview from public.conversations where account_id = $1 order by contact_id", [f.igAccount]))

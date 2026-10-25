@@ -27,6 +27,8 @@
     "leads:screen": "tsx scripts/leads-screen.ts",
     "leads:website": "tsx scripts/leads-website.ts",
     "leads:add": "tsx scripts/leads-add.ts",
+    "leads:sheet:add": "tsx scripts/leads-sheet-add.ts",
+    "leads:sheets": "tsx scripts/leads-sheets.ts",
     "results": "tsx scripts/reel-results.ts"
   },
   "dependencies": {
