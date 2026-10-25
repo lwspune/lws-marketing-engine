@@ -341,6 +341,14 @@ only (no Gmail access for GoPost), and added with `npm run leads:website -- --or
 (`parseFormEmail` + `mergeFormLeads` → `add_website_leads`): channel `website`, the form's page in `page`. Next time,
 search `from:lws.adacoount@gmail.com after:<newest website lead date>`. Skip test entries (first import: "test abc",
 "ABC XYZ", "LWS Foundation 8523697412", "Rajeev Thakkar 8526974562").
+**Website lead sheets (0026, founder 2026-10-25):** lwspune.com's NDA age calculator and popup form write to a Google Sheet
+kept by the web agency ("Defence Age Calculator Data- LWS Pune", tabs "Age Calculator" and "Popup Form Data"). The hourly
+leads job reads each tab's rows after its marker (`lead_sheets.next_row`) as a Google service account (`GOOGLE_SHEETS_KEY`,
+read-only, sees only sheets shared with it; `src/lib/platforms/googleSheets.ts`, no Google package) → `sheetLeads`
+(`src/lib/domain/leadSheets.ts`: columns by heading, valid Indian mobiles only, made-up numbers and repeats dropped, sheet
+times are UTC) → `import_sheet_rows` (leads + marker in one transaction; channel `website`, `page` = the tab's label). A
+broken tab records `last_error`; the Leads page shows one line (`sheetWarning`). `npm run leads:sheets -- --org=lws-pune
+[--dry-run]` runs it by hand; `npm run leads:sheet:add` registers a tab. SETUP.md step 12.
 **Leads from chats GoPost can't see (0018, founder 2026-10-21):** e.g. +91 91563 10546 (the SPI ad number, not connected):
 read in WhatsApp Web through Claude in Chrome, read-only; opening an unread chat marks it read, so judge unread ones by
 their preview or ask first. The founder approves the verdicts, then `npm run leads:add -- --org=lws-pune --channel=whatsapp
