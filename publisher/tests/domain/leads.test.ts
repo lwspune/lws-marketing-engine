@@ -53,6 +53,8 @@ describe("guessCourse", () => {
     expect(guessCourse([msg("Sir SPI ka mock test kab hai?"), msg("NDA bhi")])).toBe("SPI");
     expect(guessCourse([msg("nda maths coaching?")])).toBe("NDA");
     expect(guessCourse([msg("CDS 2027")])).toBe("CDS");
+    // Facebook lead form, 2026-09-27: "Courses: CAPF".
+    expect(guessCourse([msg("Hello! I filled out your form. Courses: CAPF Email: a@b.co")])).toBe("CAPF");
   });
 
   it("only reads what they wrote, and leaves it empty when nothing matches", () => {
