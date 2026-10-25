@@ -40,6 +40,7 @@ const COURSES: [RegExp, string][] = [
   [/\bNDA\b/i, "NDA"],
   [/\bCDS\b/i, "CDS"],
   [/\bAFCAT\b/i, "AFCAT"],
+  [/\bCAPF\b/i, "CAPF"],
   [/\bPYQ\s*Vault\b/i, "PYQ Vault"],
 ];
 
