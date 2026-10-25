@@ -43,7 +43,7 @@ describe("handleMetaWebhook: messages (POST)", () => {
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual({ ok: true, data: { stored: 1 } });
     expect(d.ingest).toHaveBeenCalledWith("instagram", "ig1", [expect.objectContaining({ mid: "mid.1", direction: "in", body: "Hi" })]);
-    expect(d.fillProfiles).toHaveBeenCalledWith([{ accountId: "acc1", conversationId: "conv1", contactId: "9001" }]);
+    expect(d.fillProfiles).toHaveBeenCalledWith([{ accountId: "acc1", conversationId: "conv1", contactId: "9001", platform: "instagram" }]);
   });
 
   it("turns away an unsigned or wrongly signed delivery without storing anything", async () => {
@@ -99,6 +99,26 @@ describe("handleMetaWebhook: auto-reply to ad chats", () => {
     expect((await handleMetaWebhook(post(body), d)).status).toBe(200);
     expect(d.fillProfiles).toHaveBeenCalled();
     expect(d.logger!.error).toHaveBeenCalledWith("inbox: auto-reply failed", expect.anything());
+  });
+});
+
+describe("handleMetaWebhook: Facebook Page (Messenger)", () => {
+  const fbBody = JSON.stringify({ object: "page", entry: [{ id: "page1", time: 1760860800000, messaging: [
+    { sender: { id: "7001" }, recipient: { id: "page1" }, timestamp: 1760860800000, message: { mid: "m_fb1", text: "Batch?" } },
+  ] }] });
+
+  it("stores Messenger messages under the Page and looks new contacts' names up on Facebook", async () => {
+    const d = deps({ ingest: vi.fn(async () => [{ accountId: "fb1", conversationId: "conv9", contactId: "7001" }]) });
+    const res = await handleMetaWebhook(post(fbBody), d);
+    expect(await res.json()).toEqual({ ok: true, data: { stored: 1 } });
+    expect(d.ingest).toHaveBeenCalledWith("facebook", "page1", [expect.objectContaining({ mid: "m_fb1", direction: "in", body: "Batch?" })]);
+    expect(d.fillProfiles).toHaveBeenCalledWith([{ accountId: "fb1", conversationId: "conv9", contactId: "7001", platform: "facebook" }]);
+  });
+
+  it("doesn't auto-reply on Messenger (Instagram only)", async () => {
+    const autoReply = vi.fn(async () => 0);
+    await handleMetaWebhook(post(fbBody), deps({ autoReply }));
+    expect(autoReply).not.toHaveBeenCalled();
   });
 });
 

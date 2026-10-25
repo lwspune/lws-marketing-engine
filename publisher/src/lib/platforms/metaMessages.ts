@@ -22,38 +22,68 @@ export async function fetchInstagramProfile(cfg: MetaConfig, input: { token: str
   return { name: typeof res.name === "string" ? res.name : null, username: typeof res.username === "string" ? res.username : null };
 }
 
-interface ApiMessage {
-  id: string; created_time: string; message?: string;
-  from?: { id: string; username?: string }; to?: { data?: { id: string; username?: string }[] };
+/** Send one Messenger text reply from the Page (inside the 24-hour window); returns Meta's message id. */
+export async function sendFacebookText(cfg: MetaConfig, input: { token: string; recipientId: string; text: string }): Promise<string> {
+  const res = await metaCall(graphUrl(cfg, "me/messages"), {
+    method: "POST",
+    params: {
+      recipient: JSON.stringify({ id: input.recipientId }), message: JSON.stringify({ text: input.text }), messaging_type: "RESPONSE",
+      access_token: input.token,
+    },
+    token: input.token,
+  });
+  return String(res.message_id);
 }
+
+/** A Messenger contact's name (page-scoped id; Messenger has no usernames). */
+export async function fetchFacebookProfile(cfg: MetaConfig, input: { token: string; contactId: string }): Promise<{ name: string | null; username: null }> {
+  const res = await metaCall(graphUrl(cfg, input.contactId), {
+    method: "GET", params: { fields: "first_name,last_name", access_token: input.token }, token: input.token,
+  });
+  const name = [res.first_name, res.last_name].filter((s): s is string => typeof s === "string" && s.length > 0).join(" ");
+  return { name: name || null, username: null };
+}
+
+interface ApiPerson { id: string; username?: string; name?: string }
+interface ApiMessage { id: string; created_time: string; message?: string; from?: ApiPerson; to?: { data?: ApiPerson[] } }
 interface ApiConversation { id: string; messages?: { data?: ApiMessage[] } }
 
+/** Meta's answer when one page of chats holds too much (seen live 2026-10-25: 500, code 1). */
+const tooMuchData = (e: unknown) => e instanceof MetaApiError && e.code === 1 && /reduce the amount of data/i.test(e.message);
+
 /**
- * The account's existing chats, newest first, with each one's recent messages (Meta returns about 20 per chat).
- * Used once by `npm run messages:backfill`; how a chat started isn't known for old chats, so they count as direct.
+ * An Instagram account's or a Facebook Page's existing chats, newest first, with each one's recent messages (Meta returns
+ * about 20 per chat). Used by `npm run messages:backfill`; how a chat started isn't known for old chats, so they count as
+ * direct. When Meta says a page is too much data, asks for half as many chats per page, down to one.
  */
-export async function fetchInstagramConversations(
-  cfg: MetaConfig, input: { token: string; igUserId: string; maxConversations?: number },
-): Promise<{ rows: InboxRow[]; usernames: Record<string, string> }> {
+export async function fetchConversations(
+  cfg: MetaConfig, input: { platform: "instagram" | "messenger"; token: string; ownId: string; maxConversations?: number },
+): Promise<{ rows: InboxRow[]; usernames: Record<string, string>; names: Record<string, string> }> {
   const max = input.maxConversations ?? 200;
-  const rows: InboxRow[] = [], usernames: Record<string, string> = {};
-  let seen = 0, after: string | undefined;
-  do {
+  const rows: InboxRow[] = [], usernames: Record<string, string> = {}, names: Record<string, string> = {};
+  let seen = 0, after: string | undefined, limit = 25;
+  for (;;) {
     const params: Record<string, string> = {
-      platform: "instagram", fields: "id,updated_time,messages.limit(20){id,created_time,from,to,message}", limit: "25", access_token: input.token,
+      platform: input.platform, fields: "id,updated_time,messages.limit(20){id,created_time,from,to,message}", limit: String(limit), access_token: input.token,
     };
     if (after) params.after = after;
-    const page = (await metaCall(graphUrl(cfg, "me/conversations"), { method: "GET", params, token: input.token })) as {
-      data?: ApiConversation[]; paging?: { cursors?: { after?: string }; next?: string };
-    };
+    let page: { data?: ApiConversation[]; paging?: { cursors?: { after?: string }; next?: string } };
+    try {
+      page = await metaCall(graphUrl(cfg, "me/conversations"), { method: "GET", params, token: input.token });
+    } catch (e) {
+      if (!tooMuchData(e) || limit === 1) throw e;
+      limit = Math.max(1, Math.floor(limit / 2));
+      continue;
+    }
     for (const c of page.data ?? []) {
       if (seen++ >= max) break;
       for (const m of c.messages?.data ?? []) {
-        const out = m.from?.id === input.igUserId;
+        const out = m.from?.id === input.ownId;
         const other = out ? m.to?.data?.[0] : m.from;
         const sentAt = new Date(m.created_time.replace(/\+0000$/, "Z"));
         if (!other?.id || Number.isNaN(sentAt.getTime())) continue;
         if (other.username) usernames[other.id] = other.username;
+        if (input.platform === "messenger" && other.name) names[other.id] = other.name;
         const body = (m.message ?? "").slice(0, MAX_BODY);
         rows.push({
           contact_id: other.id, mid: m.id, direction: out ? "out" : "in", body,
@@ -64,8 +94,9 @@ export async function fetchInstagramConversations(
       }
     }
     after = seen < max && page.paging?.next ? page.paging.cursors?.after : undefined;
-  } while (after);
-  return { rows, usernames };
+    if (!after) break;
+  }
+  return { rows, usernames, names };
 }
 
 // ---------------------------------------------------------------------------------------------

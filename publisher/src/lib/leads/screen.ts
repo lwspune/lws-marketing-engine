@@ -1,11 +1,12 @@
 import { guessCourse, instagramLead, parseScreening, transcript, whatsappContact, type ChatMessage } from "@/lib/domain/leads";
 
 // The hourly leads job (migration 0016), kept free of Next and Supabase so it can be tested directly (like cron.ts).
-// Instagram: a chat where the person shared a phone number or email is a lead. WhatsApp: Claude reads the new chats
-// and only the genuine ones become leads; without a Claude key WhatsApp is skipped (and nothing there is marked checked).
+// Instagram and Facebook (Messenger): a chat where the person shared a phone number or email is a lead. WhatsApp: Claude
+// reads the new chats and only the genuine ones become leads; without a Claude key WhatsApp is skipped (and nothing there
+// is marked checked).
 
 export interface Candidate {
-  conversationId: string; channel: "instagram" | "whatsapp"; contactId: string;
+  conversationId: string; channel: "instagram" | "facebook" | "whatsapp"; contactId: string;
   contactName: string | null; contactUsername: string | null; lastIncomingAt: string;
 }
 export interface FoundLead { contact: string; name: string | null; course: string | null; leadAt: string; reason: string }
@@ -24,17 +25,21 @@ export interface ScreenDeps {
 }
 
 export type WhatsAppResult = { checked: number; leads: number } | { skipped: "no_key" } | { error: string };
-export interface ScreenResult { instagram: { checked: number; leads: number }; whatsapp: WhatsAppResult }
+export interface ScreenResult { instagram: { checked: number; leads: number }; facebook: { checked: number; leads: number }; whatsapp: WhatsAppResult }
 
 // One Claude call per run keeps the job well inside Vercel's 60 s; the backfill script loops until nothing is left.
-export const LIMITS = { instagram: 200, whatsapp: 15 };
+export const LIMITS = { instagram: 200, facebook: 200, whatsapp: 15 };
 
 export async function screenLeads(deps: ScreenDeps, limits = LIMITS): Promise<ScreenResult> {
-  return { instagram: await screenInstagram(deps, limits.instagram), whatsapp: await screenWhatsApp(deps, limits.whatsapp) };
+  return {
+    instagram: await screenSharedContact(deps, "instagram", limits.instagram),
+    facebook: await screenSharedContact(deps, "facebook", limits.facebook),
+    whatsapp: await screenWhatsApp(deps, limits.whatsapp),
+  };
 }
 
-async function screenInstagram(deps: ScreenDeps, limit: number) {
-  const chats = await deps.candidates("instagram", limit);
+async function screenSharedContact(deps: ScreenDeps, channel: "instagram" | "facebook", limit: number) {
+  const chats = await deps.candidates(channel, limit);
   if (!chats.length) return { checked: 0, leads: 0 };
   const msgs = await deps.messages(chats.map((c) => c.conversationId));
   const checks = chats.map((c): LeadCheck => {

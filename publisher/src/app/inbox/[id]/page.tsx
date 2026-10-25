@@ -39,7 +39,7 @@ export default async function ConversationPage({ params }: { params: { id: strin
           <p className="page-sub">
             {c.channel === "whatsapp" && c.contact_name ? `+${c.contact_id} · ` : ""}
             {c.contact_username && c.contact_name ? `@${c.contact_username} · ` : ""}
-            {c.channel === "whatsapp" ? "WhatsApp " : ""}{account?.display_name ?? "Instagram"}
+            {c.channel === "whatsapp" ? "WhatsApp " : c.channel === "facebook" ? "Facebook " : ""}{account?.display_name ?? "Instagram"}
             {c.source === "ad" ? " · started from an ad" : c.source === "story" ? " · started as a story reply" : ""}
             {c.channel === "instagram" && c.contact_username && (
               <> · <a className="link" href={`https://www.instagram.com/${encodeURIComponent(c.contact_username)}/`} target="_blank" rel="noopener noreferrer"
@@ -74,7 +74,7 @@ export default async function ConversationPage({ params }: { params: { id: strin
         </section>
 
         <ReplyBox conversationId={c.id} open={canReply(c.last_incoming_at, new Date())} maxLength={MAX_REPLY} contact={name}
-          channel={c.channel === "whatsapp" ? "whatsapp" : "instagram"} />
+          channel={c.channel === "whatsapp" || c.channel === "facebook" ? c.channel : "instagram"} />
       </main>
     </>
   );

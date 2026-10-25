@@ -4,7 +4,8 @@ import { autoReplyStore, fillProfiles, ingestRows } from "@/lib/inbox/store";
 import { autoReplyToAds } from "@/lib/inbox/autoReply";
 import { metaConfigFromEnv } from "@/lib/platforms/meta";
 
-// Meta calls this for every Instagram DM (app dashboard → Webhooks → Instagram → messages) and every WhatsApp message
+// Meta calls this for every Instagram DM (app dashboard → Webhooks → Instagram → messages), every Facebook Page
+// Messenger message (Webhooks → Page → messages; stored only for Pages whose inbox is on, 0025) and every WhatsApp message
 // to a connected number (Webhooks → Whatsapp Business Account → messages; for a WhatsApp Business app number also
 // smb_message_echoes = sent from the phone, and history = its old chats, once). Not behind sign-in
 // (see middleware); each delivery is checked against the app secret instead. Migration 0012 has the rules.

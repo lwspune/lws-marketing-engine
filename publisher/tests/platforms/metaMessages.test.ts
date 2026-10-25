@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { startFakeMeta } from "../helpers/fakeMeta";
 import {
-  exchangeSignupCode, fetchInstagramConversations, fetchInstagramProfile, findWhatsAppNumber, listWabaNumbers, requestWhatsAppHistory,
-  sendInstagramText, sendWhatsAppText, subscribeAppToWaba,
+  exchangeSignupCode, fetchConversations, fetchFacebookProfile, fetchInstagramProfile, findWhatsAppNumber, listWabaNumbers, requestWhatsAppHistory,
+  sendFacebookText, sendInstagramText, sendWhatsAppText, subscribeAppToWaba,
 } from "@/lib/platforms/metaMessages";
 import { MetaApiError } from "@/lib/platforms/meta";
 
@@ -38,7 +38,7 @@ describe("fetchInstagramProfile", () => {
   });
 });
 
-describe("fetchInstagramConversations", () => {
+describe("fetchConversations: Instagram", () => {
   const conv = (id: string, contact: string, msgs: [string, "in" | "out", string, string][]) => ({
     id, updated_time: "2026-10-18T10:00:00+0000",
     messages: { data: msgs.map(([mid, dir, text, at]) => ({
@@ -57,7 +57,7 @@ describe("fetchInstagramConversations", () => {
       ],
       igConversationsPageSize: 2,
     });
-    const out = await fetchInstagramConversations(fake.config, { token: "T", igUserId: "ig1" });
+    const out = await fetchConversations(fake.config, { platform: "instagram", token: "T", ownId: "ig1" });
     expect(out.rows).toEqual([
       { contact_id: "9001", mid: "m2", direction: "out", body: "Yes, ₹499", attachment: null, sent_at: "2026-10-18T10:00:00.000Z", source: "direct", ad_id: null, deleted: false },
       { contact_id: "9001", mid: "m1", direction: "in", body: "Fees?", attachment: null, sent_at: "2026-10-18T09:00:00.000Z", source: "direct", ad_id: null, deleted: false },
@@ -75,8 +75,72 @@ describe("fetchInstagramConversations", () => {
       igConversations: Array.from({ length: 5 }, (_, i) => conv(`c${i}`, `90${i}`, [[`m${i}`, "in", "x", "2026-10-16T09:00:00+0000"]])),
       igConversationsPageSize: 2,
     });
-    const out = await fetchInstagramConversations(fake.config, { token: "T", igUserId: "ig1", maxConversations: 3 });
+    const out = await fetchConversations(fake.config, { platform: "instagram", token: "T", ownId: "ig1", maxConversations: 3 });
     expect(new Set(out.rows.map((r) => r.contact_id)).size).toBe(3);
+  });
+
+  // Seen live on 2026-10-25: @lws.pune's first page (25 chats × 20 messages) came back 500, code 1.
+  it("asks for fewer chats per page when Meta says it's too much data, and still gets them all", async () => {
+    fake = await startFakeMeta({
+      igConversations: Array.from({ length: 7 }, (_, i) => conv(`c${i}`, `90${i}`, [[`m${i}`, "in", "x", "2026-10-16T09:00:00+0000"]])),
+      conversationsMaxLimit: 6,
+    });
+    const out = await fetchConversations(fake.config, { platform: "instagram", token: "T", ownId: "ig1" });
+    expect(out.rows.map((r) => r.mid)).toEqual(["m0", "m1", "m2", "m3", "m4", "m5", "m6"]);
+    const limits = fake.calls.filter((c) => c.path.endsWith("/me/conversations")).map((c) => c.params.limit);
+    expect(limits).toEqual(["25", "12", "6", "6"]);
+  });
+
+  it("gives up with Meta's reason when even one chat per page is too much", async () => {
+    fake = await startFakeMeta({ igConversations: [conv("c1", "9001", [["m1", "in", "x", "2026-10-16T09:00:00+0000"]])], conversationsMaxLimit: 0 });
+    const err = await fetchConversations(fake.config, { platform: "instagram", token: "T", ownId: "ig1" }).catch((e) => e);
+    expect(err).toBeInstanceOf(MetaApiError);
+    expect(err.message).toMatch(/reduce the amount of data/);
+  });
+});
+
+// Facebook Page (Messenger) chats, with the Page token. Contacts are page-scoped ids (PSIDs); Messenger gives names, not usernames.
+describe("fetchConversations: Messenger", () => {
+  const PAGE = "page1";
+  const fbConv = (id: string, contact: string, name: string, msgs: [string, "in" | "out", string, string][]) => ({
+    id, updated_time: "2026-10-18T10:00:00+0000",
+    messages: { data: msgs.map(([mid, dir, text, at]) => ({
+      id: mid, created_time: at, message: text,
+      from: dir === "in" ? { id: contact, name } : { id: PAGE, name: "LWS Pune" },
+      to: { data: [dir === "in" ? { id: PAGE, name: "LWS Pune" } : { id: contact, name }] },
+    })) },
+  });
+
+  it("reads the Page's Messenger chats into rows, with each person's name", async () => {
+    fake = await startFakeMeta({ fbConversations: [
+      fbConv("t1", "7001", "Priya K", [["m_2", "out", "Yes, Monday", "2026-10-18T10:00:00+0000"], ["m_1", "in", "Batch?", "2026-10-18T09:00:00+0000"]]),
+    ] });
+    const out = await fetchConversations(fake.config, { platform: "messenger", token: "PT", ownId: PAGE });
+    expect(out.rows).toEqual([
+      { contact_id: "7001", mid: "m_2", direction: "out", body: "Yes, Monday", attachment: null, sent_at: "2026-10-18T10:00:00.000Z", source: "direct", ad_id: null, deleted: false },
+      { contact_id: "7001", mid: "m_1", direction: "in", body: "Batch?", attachment: null, sent_at: "2026-10-18T09:00:00.000Z", source: "direct", ad_id: null, deleted: false },
+    ]);
+    expect(out.names).toEqual({ "7001": "Priya K" });
+    expect(out.usernames).toEqual({});
+    const list = fake.calls.find((c) => c.path.endsWith("/me/conversations"))!;
+    expect(list.params.platform).toBe("messenger");
+  });
+});
+
+describe("Messenger replies and names", () => {
+  it("sends a text reply as a RESPONSE (Messenger's 24-hour window) and returns the message id", async () => {
+    fake = await startFakeMeta();
+    expect(await sendFacebookText(fake.config, { token: "PT", recipientId: "7001", text: "Monday 5 pm" })).toBe("mid.sent1");
+    const call = fake.calls.find((c) => c.method === "POST" && c.path.endsWith("/me/messages"))!;
+    expect(call.params.messaging_type).toBe("RESPONSE");
+    expect(JSON.parse(call.params.recipient)).toEqual({ id: "7001" });
+    expect(JSON.parse(call.params.message)).toEqual({ text: "Monday 5 pm" });
+  });
+
+  it("reads a person's name from their first and last name (Messenger has no usernames)", async () => {
+    fake = await startFakeMeta();
+    expect(await fetchFacebookProfile(fake.config, { token: "PT", contactId: "7001" })).toEqual({ name: "Priya K", username: null });
+    expect(fake.calls.find((c) => c.path.endsWith("/7001"))!.params.fields).toBe("first_name,last_name");
   });
 });
 

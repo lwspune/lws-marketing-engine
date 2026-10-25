@@ -31,6 +31,10 @@ export interface FakeMetaOptions {
   /** Items for GET /me/conversations?platform=instagram (Instagram DMs), served in pages. */
   igConversations?: object[];
   igConversationsPageSize?: number;
+  /** Items for GET /me/conversations?platform=messenger (Facebook Page chats). */
+  fbConversations?: object[];
+  /** Above this many chats per page, /me/conversations answers 500 code 1 "reduce the amount of data". */
+  conversationsMaxLimit?: number;
   /** debug_token without target_ids, as Meta returns for system user tokens. */
   debugTokenNoTargets?: boolean;
   /** debug_token's WhatsApp account ids (default ["WABA1"]). */
@@ -93,11 +97,17 @@ export async function startFakeMeta(opts: FakeMetaOptions = {}) {
       return send(200, { recipient_id: JSON.parse(params.recipient ?? "{}").id, message_id: "mid.sent1" });
     }
     if (req.method === "GET" && /^\/v[\d.]+\/me\/conversations$/.test(p)) {
-      const all = opts.igConversations ?? [], size = opts.igConversationsPageSize ?? 25, from = Number(params.after ?? 0);
+      if (opts.conversationsMaxLimit !== undefined && Number(params.limit) > opts.conversationsMaxLimit) {
+        return send(500, { error: { message: "Please reduce the amount of data you're asking for, then retry your request", code: 1 } });
+      }
+      const all = (params.platform === "messenger" ? opts.fbConversations : opts.igConversations) ?? [];
+      const size = Math.min(opts.igConversationsPageSize ?? 25, Number(params.limit ?? 25)), from = Number(params.after ?? 0);
       const next = from + size < all.length;
       return send(200, { data: all.slice(from, from + size), paging: next ? { cursors: { after: String(from + size) }, next: "more" } : { cursors: {} } });
     }
     if (req.method === "GET" && /^\/v[\d.]+\/9001$/.test(p)) return send(200, { name: "Rahul S", username: "rahul_07", id: "9001" });
+    // A Messenger contact (PSID): first and last name only.
+    if (req.method === "GET" && /^\/v[\d.]+\/7001$/.test(p)) return send(200, { first_name: "Priya", last_name: "K", id: "7001" });
     // --- WhatsApp Cloud API (system user token; WhatsApp account WABA1 with numbers PN1, PN2)
     if (req.method === "POST" && /^\/v[\d.]+\/PN1\/messages$/.test(p)) {
       return send(200, { messaging_product: "whatsapp", contacts: [{ input: "x", wa_id: "x" }], messages: [{ id: "wamid.sent1" }] });
