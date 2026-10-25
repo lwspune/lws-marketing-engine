@@ -365,6 +365,9 @@ swap the 30-s code, save the number (platform `whatsapp`, business token in Vaul
 (Meta allows it only within 24 h). Never call `/register` on such a number (it would leave the phone). The webhook also
 reads `smb_message_echoes` (sent from the phone → `out`) and `history` (old chats). No migration. Meta requires Tech
 Provider status (App Review; the portfolio is verified): SETUP.md step 10.
+**1,000-row cap (found 2026-10-25):** Supabase returns at most 1,000 rows per request whatever `.limit()` says (the Leads page
+showed "1000 leads" of ~2,300). Any list that can grow past that reads through `allRows` (`src/lib/supabase/pages.ts`) with a
+unique tie-breaker in the order.
 **Note:** `TEST_DATABASE_URL` is the same database as `DATABASE_URL` (tests roll back), so
 `db:migrate` changes the live schema; dry-run a new migration in a rolled-back transaction first.
 **Address and name (2026-10-19, founder):** the app is **GoPost** at **https://gopostapp.vercel.app** (no "LWS":
