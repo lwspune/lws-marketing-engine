@@ -39,20 +39,21 @@ run(async () => {
     store.ask = async () => verdicts;
     limits.whatsapp = ALL;
   } else if (!store.ask) {
-    console.log("No ANTHROPIC_API_KEY in .env.local: checking Instagram only (sort WhatsApp with --whatsapp-out / --whatsapp-in).");
+    console.log("No ANTHROPIC_API_KEY in .env.local: checking Instagram and Facebook only (sort WhatsApp with --whatsapp-out / --whatsapp-in).");
   }
 
-  const total = { instagram: 0, whatsapp: 0, leads: 0 };
+  const total = { instagram: 0, facebook: 0, whatsapp: 0, leads: 0 };
   for (;;) {
     const r = await screenLeads(store, limits);
     const wa = "checked" in r.whatsapp ? r.whatsapp : { checked: 0, leads: 0 };
     total.instagram += r.instagram.checked;
+    total.facebook += r.facebook.checked;
     total.whatsapp += wa.checked;
-    total.leads += r.instagram.leads + wa.leads;
-    console.log(`  Instagram ${r.instagram.checked} checked, ${r.instagram.leads} leads · WhatsApp ${"checked" in r.whatsapp
-      ? `${wa.checked} checked, ${wa.leads} leads` : "error" in r.whatsapp ? `failed: ${r.whatsapp.error}` : "skipped"}`);
+    total.leads += r.instagram.leads + r.facebook.leads + wa.leads;
+    console.log(`  Instagram ${r.instagram.checked} checked, ${r.instagram.leads} leads · Facebook ${r.facebook.checked} checked, ${r.facebook.leads} leads`
+      + ` · WhatsApp ${"checked" in r.whatsapp ? `${wa.checked} checked, ${wa.leads} leads` : "error" in r.whatsapp ? `failed: ${r.whatsapp.error}` : "skipped"}`);
     if ("error" in r.whatsapp) throw new Error(r.whatsapp.error);
-    if (r.instagram.checked + wa.checked === 0) break;
+    if (r.instagram.checked + r.facebook.checked + wa.checked === 0) break;
   }
-  console.log(`✓ ${total.instagram} Instagram and ${total.whatsapp} WhatsApp chats checked, ${total.leads} leads added.`);
+  console.log(`✓ ${total.instagram} Instagram, ${total.facebook} Facebook and ${total.whatsapp} WhatsApp chats checked, ${total.leads} leads added.`);
 });

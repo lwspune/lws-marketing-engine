@@ -24,14 +24,14 @@ export default async function LeadsPage() {
       <Nav current="leads" ads={access.ads} inbox />
       <main className="mx-auto max-w-5xl px-4 pb-16 pt-8">
         <PageHeader title="Leads">
-          Everyone worth calling back, in one list. Instagram chats join when the person shares a phone number or email;
+          Everyone worth calling back, in one list. Instagram and Facebook chats join when the person shares a phone number or email;
           WhatsApp chats when Claude judges them a genuine new enquiry, and lwspune.com form entries from their emails.
           Only owners can see this page.
         </PageHeader>
 
         {!sortingWhatsApp && (
           <p role="status" className="card mb-4 p-4 text-sm text-warn">
-            WhatsApp chats aren&rsquo;t being sorted yet: the server has no Claude API key (ANTHROPIC_API_KEY). Instagram leads still arrive.
+            WhatsApp chats aren&rsquo;t being sorted yet: the server has no Claude API key (ANTHROPIC_API_KEY). Instagram and Facebook leads still arrive.
           </p>
         )}
 
@@ -63,7 +63,7 @@ export default async function LeadsPage() {
         {leads.length === 0 ? (
           <section className="card space-y-2 p-4 sm:p-6">
             <p className="text-sm">No leads yet.</p>
-            <p className="text-sm text-muted">They appear here within an hour of someone sharing their number on Instagram or sending a genuine enquiry on WhatsApp.</p>
+            <p className="text-sm text-muted">They appear here within an hour of someone sharing their number on Instagram or Facebook, or sending a genuine enquiry on WhatsApp.</p>
           </section>
         ) : (
           <ul className="card divide-y divide-line overflow-hidden" aria-label={`${leads.length} leads`}>

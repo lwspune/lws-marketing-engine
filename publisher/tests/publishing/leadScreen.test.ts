@@ -52,6 +52,24 @@ describe("screenLeads: Instagram", () => {
   });
 });
 
+// Facebook Page chats (2026-10-25) follow Instagram's rule: sharing a phone number or email makes a lead, no AI.
+describe("screenLeads: Facebook", () => {
+  it("makes a lead of a Messenger chat where the person shared a number, named by their Facebook name", async () => {
+    const fb = cand({ conversationId: "fb-1", channel: "facebook", contactId: "7001", contactName: "Priya K", contactUsername: null });
+    const { d, recorded } = deps({
+      "fb-1": { c: fb, msgs: [m("NDA batch? 9123456789")] },
+      "ig-1": { c: cand(), msgs: [m("nice reel")] },
+    });
+    const r = await screenLeads(d);
+    expect(r.facebook).toEqual({ checked: 1, leads: 1 });
+    expect(r.instagram).toEqual({ checked: 1, leads: 0 });
+    expect(recorded).toContainEqual({
+      conversationId: "fb-1", checkedAt: "2026-10-20T10:00:00Z",
+      lead: { contact: "+919123456789", name: "Priya K", course: "NDA", leadAt: "2026-10-20T09:00:00Z", reason: "Shared a phone number" },
+    });
+  });
+});
+
 describe("screenLeads: WhatsApp", () => {
   const wa = (id: string, over: Partial<Candidate> = {}) =>
     cand({ conversationId: id, channel: "whatsapp", contactId: "919876543210", contactName: "Priya", contactUsername: null, ...over });

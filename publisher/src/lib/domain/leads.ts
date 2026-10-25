@@ -67,7 +67,7 @@ export const whatsappLink = (contact: string): string | null => (/^\+\d{8,15}$/.
 export const formatPhone = (contact: string): string =>
   /^\+91[6-9]\d{9}$/.test(contact) ? `+91 ${contact.slice(3, 8)} ${contact.slice(8)}` : contact;
 
-const CHANNEL: Record<string, string> = { instagram: "Instagram", whatsapp: "WhatsApp", website: "Website" };
+const CHANNEL: Record<string, string> = { instagram: "Instagram", facebook: "Facebook", whatsapp: "WhatsApp", website: "Website" };
 
 export const sourceLabel = (s: { channel: string; account: string | null; fromAd: boolean; page?: string | null }): string =>
   `${CHANNEL[s.channel] ?? s.channel}${s.account ? ` ${s.account}` : ""}${s.page ? ` ${s.page}` : ""}${s.fromAd ? " (ad)" : ""}`;
