@@ -4,6 +4,7 @@ import { memberAccess } from "@/lib/supabase/access";
 import { Nav, PageHeader } from "@/components/Nav";
 import { LeadCard } from "@/components/LeadCard";
 import { formatPhone, whatsappLink } from "@/lib/domain/leads";
+import { sheetWarning } from "@/lib/domain/leadSheets";
 import { lastDownload, loadLeads } from "./data";
 
 export const dynamic = "force-dynamic";
@@ -15,9 +16,13 @@ export default async function LeadsPage() {
   const supabase = createSupabaseServerClient();
   const access = await memberAccess(supabase);
   if (!access.inbox) redirect("/");
-  const [leads, since] = await Promise.all([loadLeads(supabase), lastDownload(supabase)]);
+  // RLS: owners read the lead sheets' status (0026).
+  const [leads, since, { data: sheets }] = await Promise.all([
+    loadLeads(supabase), lastDownload(supabase), supabase.from("lead_sheets").select("tab, last_error, last_synced_at").order("created_at"),
+  ]);
   const fresh = since ? leads.filter((l) => Date.parse(l.created_at) > Date.parse(since)).length : leads.length;
   const sortingWhatsApp = !!process.env.ANTHROPIC_API_KEY;
+  const sheetProblem = sheetWarning(sheets ?? [], new Date());
 
   return (
     <>
@@ -25,9 +30,15 @@ export default async function LeadsPage() {
       <main className="mx-auto max-w-5xl px-4 pb-16 pt-8">
         <PageHeader title="Leads">
           Everyone worth calling back, in one list. Instagram and Facebook chats join when the person shares a phone number or email;
-          WhatsApp chats when Claude judges them a genuine new enquiry, and lwspune.com form entries from their emails.
-          Only owners can see this page.
+          WhatsApp chats when Claude judges them a genuine new enquiry; lwspune.com form entries from their emails, and the NDA
+          age calculator and popup form from their Google Sheet every hour. Only owners can see this page.
         </PageHeader>
+
+        {sheetProblem && (
+          <p role="alert" className="card mb-4 p-4 text-sm text-warn">
+            Website lead sheet: {sheetProblem} New calculator and popup-form leads won&rsquo;t arrive until it&rsquo;s fixed (publisher/SETUP.md step 12).
+          </p>
+        )}
 
         {!sortingWhatsApp && (
           <p role="status" className="card mb-4 p-4 text-sm text-warn">
