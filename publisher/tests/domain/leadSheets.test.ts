@@ -19,11 +19,18 @@ describe("sheetLeads: NDA age calculator", () => {
   it("makes an NDA lead with what the calculator worked out, dated in UTC", () => {
     expect(sheetLeads("age_calculator", CALC, [calcRow()])).toEqual({
       leads: [{
-        name: "Test Student", contact: "+919800000001", course: "NDA", lead_at: "2026-03-30T04:33:23.000Z", from_ad: false,
+        name: "Test Student", contact: "+919800000001", course: "NDA", class_level: "12 passed", lead_at: "2026-03-30T04:33:23.000Z", from_ad: false,
         reason: "NDA age calculator: age 17.9, class 12passed, 2 attempts (NDA I 2026, NDA II 2026)",
       }],
       skipped: { noNumber: 0, fake: 0, noDate: 0, repeats: 0 },
     });
+  });
+
+  it("keeps the class as the calculator gives it, spelling out 'passed', and leaves it blank when missing", () => {
+    const out = sheetLeads("age_calculator", CALC, [
+      calcRow({ "Class Level": "10" }), calcRow({ "Mobile Number": "9800000002", "Class Level": "12Passed" }), calcRow({ "Mobile Number": "9800000003", "Class Level": "" }),
+    ]);
+    expect(out.leads.map((l) => l.class_level)).toEqual(["10", "12 passed", null]);
   });
 
   it("skips rows with no usable mobile (blank, 9 or 11 digits) and made-up ones", () => {
@@ -66,8 +73,8 @@ describe("sheetLeads: popup form", () => {
       ["Second Parent", "9800000002", "Goa", "Courses", "May 8, 2026 1:56 PM"],
     ]);
     expect(out.leads).toEqual([
-      { name: "Test Parent", contact: "+919800000001", course: "NDA 2 year", lead_at: "2026-04-21T11:52:00.000Z", from_ad: false, reason: "Popup form, Maharashtra" },
-      { name: "Second Parent", contact: "+919800000002", course: null, lead_at: "2026-05-08T13:56:00.000Z", from_ad: false, reason: "Popup form, Goa" },
+      { name: "Test Parent", contact: "+919800000001", course: "NDA 2 year", class_level: null, lead_at: "2026-04-21T11:52:00.000Z", from_ad: false, reason: "Popup form, Maharashtra" },
+      { name: "Second Parent", contact: "+919800000002", course: null, class_level: null, lead_at: "2026-05-08T13:56:00.000Z", from_ad: false, reason: "Popup form, Goa" },
     ]);
   });
 

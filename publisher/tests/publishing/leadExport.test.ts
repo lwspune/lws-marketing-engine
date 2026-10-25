@@ -7,7 +7,7 @@ import type { LeadRow } from "@/lib/domain/leads";
 
 const NOW = new Date("2026-10-21T10:35:00Z");
 const LAST = "2026-10-20T12:00:00Z";
-const lead: LeadRow = { name: "Priya", contact: "+919876543210", course: "NDA", lead_at: "2026-10-19T08:00:00Z", source: "Website lwspune.com/" };
+const lead: LeadRow = { name: "Priya", contact: "+919876543210", course: "NDA", class_level: null, lead_at: "2026-10-19T08:00:00Z", source: "Website lwspune.com/" };
 
 const post = (kind: string | null, origin: string | null = "https://gopostapp.vercel.app") => {
   const body = new FormData();

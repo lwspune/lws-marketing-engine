@@ -5,18 +5,21 @@ import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { fail, fromRpcError, ok, type Result } from "@/lib/publishing/result";
 
-/** Correct a lead's name and course (owners only; the database checks). Blank clears it. */
-export async function updateLead(input: { leadId: string; name: string; course: string }): Promise<Result<null>> {
+/** Correct a lead's name, course and class (owners only; the database checks). Blank clears it. */
+export async function updateLead(input: { leadId: string; name: string; course: string; classLevel: string }): Promise<Result<null>> {
   const parsed = z.object({
     leadId: z.string().uuid(),
     name: z.string().trim().max(200, "Names can be up to 200 characters."),
     course: z.string().trim().max(80, "Courses can be up to 80 characters."),
+    classLevel: z.string().trim().max(20, "Classes can be up to 20 characters."),
   }).safeParse(input);
   if (!parsed.success) return fail("invalid_input", parsed.error.issues.map((i) => i.message).join("; "));
   const supabase = createSupabaseServerClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return fail("unauthorized", "Please sign in again.");
-  const { error } = await supabase.rpc("update_lead", { p_lead: parsed.data.leadId, p_name: parsed.data.name, p_course: parsed.data.course });
+  const { error } = await supabase.rpc("update_lead", {
+    p_lead: parsed.data.leadId, p_name: parsed.data.name, p_course: parsed.data.course, p_class: parsed.data.classLevel,
+  });
   if (error) return fromRpcError(error);
   revalidatePath("/leads");
   return ok(null);

@@ -5,7 +5,7 @@ import type { createSupabaseServerClient } from "@/lib/supabase/server";
 type Db = ReturnType<typeof createSupabaseServerClient>;
 
 export interface LeadView {
-  id: string; name: string | null; contact: string; course: string | null; lead_at: string; source: string;
+  id: string; name: string | null; contact: string; course: string | null; class_level: string | null; lead_at: string; source: string;
   conversationId: string | null; created_at: string;
 }
 
@@ -15,7 +15,7 @@ export interface LeadView {
  */
 export async function loadLeads(supabase: Db, window?: { since: string | null; until: string }): Promise<LeadView[]> {
   let query = supabase.from("leads")
-    .select("id, name, contact, course, lead_at, created_at, channel, from_ad, page, conversation_id, connected_accounts(display_name)");
+    .select("id, name, contact, course, class_level, lead_at, created_at, channel, from_ad, page, conversation_id, connected_accounts(display_name)");
   if (window) {
     query = query.lte("created_at", window.until);
     if (window.since) query = query.gt("created_at", window.since);
@@ -25,7 +25,7 @@ export async function loadLeads(supabase: Db, window?: { since: string | null; u
   return (data ?? []).map((l) => {
     const account = (l.connected_accounts as unknown as { display_name: string } | null)?.display_name ?? null;
     return {
-      id: l.id, name: l.name, contact: l.contact, course: l.course, lead_at: l.lead_at, created_at: l.created_at,
+      id: l.id, name: l.name, contact: l.contact, course: l.course, class_level: l.class_level, lead_at: l.lead_at, created_at: l.created_at,
       conversationId: l.conversation_id, source: sourceLabel({ channel: l.channel, account, fromAd: l.from_ad, page: l.page }),
     };
   });

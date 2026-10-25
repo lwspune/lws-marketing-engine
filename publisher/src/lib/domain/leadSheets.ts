@@ -8,7 +8,9 @@ export const SHEET_KINDS = ["age_calculator", "popup_form"] as const;
 export type SheetKind = (typeof SHEET_KINDS)[number];
 
 /** One lead in the shape public.import_sheet_rows (→ add_outside_leads) expects. */
-export interface SheetLead { name: string | null; contact: string; course: string | null; lead_at: string; from_ad: false; reason: string | null }
+export interface SheetLead {
+  name: string | null; contact: string; course: string | null; class_level: string | null; lead_at: string; from_ad: false; reason: string | null;
+}
 export interface SheetResult { leads: SheetLead[]; skipped: { noNumber: number; fake: number; noDate: number; repeats: number } }
 
 export class SheetFormatError extends Error {}
@@ -29,7 +31,10 @@ export function sheetTime(s: string): string | null {
 }
 
 type Row = Record<string, string>;
-const SPEC: Record<SheetKind, { name: string; details: (r: Row) => { course: string | null; reason: string } }> = {
+/** "12passed" → "12 passed"; blank → null (migration 0027). */
+const classLevel = (s: string | undefined) => tidy(s).replace(/(\d)\s*passed$/i, "$1 passed").slice(0, 20) || null;
+
+const SPEC: Record<SheetKind, { name: string; details: (r: Row) => { course: string | null; class_level: string | null; reason: string } }> = {
   age_calculator: {
     name: "full name",
     details: (r) => {
@@ -37,14 +42,14 @@ const SPEC: Record<SheetKind, { name: string; details: (r: Row) => { course: str
         r["current age"] && `age ${r["current age"]}`, r["class level"] && `class ${r["class level"]}`,
         r["total attempts"] && `${r["total attempts"]} attempts${r["attempt details"] ? ` (${r["attempt details"]})` : ""}`,
       ].filter(Boolean);
-      return { course: "NDA", reason: `NDA age calculator${parts.length ? `: ${parts.join(", ")}` : ""}`.slice(0, 300) };
+      return { course: "NDA", class_level: classLevel(r["class level"]), reason: `NDA age calculator${parts.length ? `: ${parts.join(", ")}` : ""}`.slice(0, 300) };
     },
   },
   popup_form: {
     name: "student's full name",
     details: (r) => {
       const course = r["courses"] && r["courses"].toLowerCase() !== "courses" ? r["courses"].slice(0, 80) : null;
-      return { course, reason: r["state"] ? `Popup form, ${r["state"]}`.slice(0, 300) : "Popup form" };
+      return { course, class_level: null, reason: r["state"] ? `Popup form, ${r["state"]}`.slice(0, 300) : "Popup form" };
     },
   },
 };

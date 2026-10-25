@@ -126,21 +126,21 @@ describe("parseScreening", () => {
 });
 
 describe("leadsCsv", () => {
-  it("writes the five columns for Excel: India dates, phones Excel keeps as text, quotes where needed", () => {
+  it("writes the six columns for Excel: India dates, phones Excel keeps as text, quotes where needed", () => {
     const csv = leadsCsv([
-      { name: "Priya, Pune", contact: "+919876543210", course: "NDA", lead_at: "2026-10-19T20:00:00Z", source: "WhatsApp +91 76206 99213" },
-      { name: null, contact: "a@b.co", course: null, lead_at: "2026-10-20T08:00:00Z", source: "Instagram @lws.pune" },
+      { name: "Priya, Pune", contact: "+919876543210", course: "NDA", class_level: "12 passed", lead_at: "2026-10-19T20:00:00Z", source: "WhatsApp +91 76206 99213" },
+      { name: null, contact: "a@b.co", course: null, class_level: null, lead_at: "2026-10-20T08:00:00Z", source: "Instagram @lws.pune" },
     ]);
     expect(csv).toBe(
-      "﻿Name,Contact,Course,Date,Source\r\n" +
-      "\"Priya, Pune\",98765 43210,NDA,2026-10-20,WhatsApp +91 76206 99213\r\n" +
-      ",a@b.co,,2026-10-20,Instagram @lws.pune\r\n",
+      "﻿Name,Contact,Course,Class,Date,Source\r\n" +
+      "\"Priya, Pune\",98765 43210,NDA,12 passed,2026-10-20,WhatsApp +91 76206 99213\r\n" +
+      ",a@b.co,,,2026-10-20,Instagram @lws.pune\r\n",
     );
   });
 
   it("never lets a cell start a spreadsheet formula", () => {
-    const csv = leadsCsv([{ name: "=HYPERLINK(\"x\")", contact: "+447700900123", course: "@x", lead_at: "2026-10-20T08:00:00Z", source: "s" }]);
-    expect(csv.split("\r\n")[1]).toBe("\"'=HYPERLINK(\"\"x\"\")\",'+447700900123,'@x,2026-10-20,s");
+    const csv = leadsCsv([{ name: "=HYPERLINK(\"x\")", contact: "+447700900123", course: "@x", class_level: "-1", lead_at: "2026-10-20T08:00:00Z", source: "s" }]);
+    expect(csv.split("\r\n")[1]).toBe("\"'=HYPERLINK(\"\"x\"\")\",'+447700900123,'@x,'-1,2026-10-20,s");
   });
 });
 
