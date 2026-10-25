@@ -168,7 +168,7 @@ export function parseScreening(raw: unknown, ids: string[]): Map<string, Verdict
   return out;
 }
 
-export interface LeadRow { name: string | null; contact: string; course: string | null; lead_at: string; source: string }
+export interface LeadRow { name: string | null; contact: string; course: string | null; class_level: string | null; lead_at: string; source: string }
 
 const DAY = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata", year: "numeric", month: "2-digit", day: "2-digit" });
 export const leadDate = (at: string): string => DAY.format(new Date(at));
@@ -183,7 +183,9 @@ const csvContact = (c: string) => (/^\+91[6-9]\d{9}$/.test(c) ? `${c.slice(3, 8)
 
 /** The Leads download: UTF-8 with a BOM so Excel shows Hindi names and ₹ correctly. */
 export function leadsCsv(rows: LeadRow[]): string {
-  const lines = [["Name", "Contact", "Course", "Date", "Source"].join(",")];
-  for (const r of rows) lines.push([cell(r.name), cell(csvContact(r.contact)), cell(r.course), leadDate(r.lead_at), cell(r.source)].join(","));
+  const lines = [["Name", "Contact", "Course", "Class", "Date", "Source"].join(",")];
+  for (const r of rows) {
+    lines.push([cell(r.name), cell(csvContact(r.contact)), cell(r.course), cell(r.class_level), leadDate(r.lead_at), cell(r.source)].join(","));
+  }
   return `﻿${lines.join("\r\n")}\r\n`;
 }
