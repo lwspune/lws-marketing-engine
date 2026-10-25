@@ -20,13 +20,13 @@ logged but not counted yet, because which way it pushes isn't known; calibration
 
 | Input | Key | Points | Weight | Anchors |
 |---|---|---|---|---|
-| Idea | idea | 0–3 | 2 | the idea's score in `pyqvault-ideas.md`: ≥ 70 → 3 · ≥ 60 → 2 · ≥ 50 → 1 · below → 0 |
+| Idea | idea | 0–3 | 2.5 | the idea's score in `pyqvault-ideas.md`: ≥ 70 → 3 · ≥ 60 → 2 · ≥ 50 → 1 · below → 0 |
 | Motion 0–3 s | motion | 0–2 | 1 | share of frames (10 a second) where ≥ 0.2% of pixels change noticeably: ≥ 95% → 2 · ≥ 75% → 1 · below → 0 (L29, F5) |
-| Hook move | hookmove | 0–1 | 1 | a named attention move in 0–3 s (orbit, punch-in, assemble, split apart, morph, split screen, race, colour flood) → 1 (F25) |
+| Hook move | hookmove | 0–1 | 1.5 | a named attention move in 0–3 s (orbit, punch-in, assemble, split apart, morph, split screen, race, colour flood) → 1 (F25) |
 | Words 0–3 s | words | 0–2 | 1 | words on screen at frame 0 (label, question, options, tag): ≤ 10 → 2 · ≤ 18 → 1 · more → 0 (F7) |
 | Colour 0–3 s | colour | 0–2 | 1 | colourfulness (Hasler–Süsstrunk M, median over 0–3 s): ≥ 20 → 2 · ≥ 10 → 1 · below → 0 (L30, F24) |
 | Length | length | 0–1 | 1 | ≤ 25 s → 1 (F18) |
-| Second hook | secondhook | 0–1 | 1 | a second question with its own move at the answer → 1 (F26, L49) |
+| Second hook | secondhook | 0–1 | 1.5 | a second question with its own move at the answer → 1 (F26, L49) |
 | Momentum | momentum | 0–2 | 1 | median views of the 3 reels posted before ÷ the median of all reels posted before: ≥ 1.5 → 2 · ≥ 0.8 → 1 · below → 0 |
 | Cover | cover | 0–2 | 0.5 | the cover's colourfulness, same anchors as Colour |
 | Answer after 8 s | answer | 0–1 | 0 | the A/B/C answer lands after 8 s → 1 (L48: viewers leave at the answer) |
@@ -85,17 +85,17 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 | P5 | pv-physics-005-adiabatic | 2026-10-22 | 79 | above typical | words | 1429 | 169 | yes | 1,325 | above typical | hindsight |
 | C5 | pv-chem-005-pvt | 2026-10-22 | 71 | above typical | idea | 1429 | 195 | yes | 1,510 | record-breaker | hindsight |
 | P12 | pv-physics-006-topspin | 2026-10-22 | 71 | above typical | idea | 1455 | 232 | yes | 1,566 | record-breaker | hindsight |
-| C7 | pv-chem-006-flame | 2026-10-22 | 57 | above typical | idea | 1496 | 1429 | no | – | waiting | – |
+| C7 | pv-chem-006-flame | 2026-10-22 | 57 | above typical | idea | 1496 | 1429 | no | 2,137 | record-breaker | ✗ |
 | P9 | pv-physics-007-heat | 2026-10-22 | 71 | above typical | idea | 1496 | 1429 | no | – | waiting | – |
-| C13 | pv-chem-007-halflife | 2026-10-22 | 71 | above typical | idea | 1496 | 1429 | no | – | waiting | – |
+| C13 | pv-chem-007-halflife | 2026-10-22 | 71 | above typical | idea | 1496 | 1429 | no | 1,417 | below typical | ✗ |
 | P24 | pv-physics-008-spoon | 2026-10-22 | 64 | above typical | words | 1496 | 1429 | no | – | waiting | – |
 | P29 | pv-physics-009-wing-mirror | 2026-10-22 | 71 | above typical | words | 1496 | 1429 | no | – | waiting | – |
 | C14 | pv-chem-008-packing | 2026-10-22 | 79 | above typical | idea | 1496 | 1429 | no | – | waiting | – |
-| P11 | pv-physics-010-launch-angles | 2026-10-22 | 86 | record-breaker | words | 1496 | 1429 | no | – | waiting | – |
-| P29b | pv-physics-009b-wing-mirror | 2026-10-22 | 86 | record-breaker | idea | 1496 | 1429 | no | – | waiting | – |
+| P11 | pv-physics-010-launch-angles | 2026-10-22 | 86 | record-breaker | words | 1496 | 1429 | no | 1,840 | record-breaker | ✓ |
+| P29b | pv-physics-009b-wing-mirror | 2026-10-22 | 86 | record-breaker | idea | 1496 | 1429 | no | 322 | below typical | ✗ |
 | P37a | pv-f2-induction | 2026-10-22 | 65 | above typical | idea | 1883 | 1429 | no | – | waiting | – |
-| P37 | pv-physics-011-induction | 2026-10-22 | 84 | record-breaker | idea | 1883 | 1429 | no | – | waiting | – |
-| C8 | pv-chem-009-electrolysis | 2026-10-23 | 68 | above typical | idea | 1930 | 1429 | no | – | waiting | – |
+| P37 | pv-physics-011-induction | 2026-10-22 | 84 | record-breaker | idea | 1883 | 1429 | no | 1,353 | below typical | ✗ |
+| C8 | pv-chem-009-electrolysis | 2026-10-23 | 68 | above typical | idea | 1930 | 1429 | no | 1,512 | above typical | ✓ |
 | P6 | pv-physics-012-lift-power | 2026-10-23 | 77 | above typical | idea | 1930 | 1429 | no | – | waiting | – |
 | P75 | pv-physics-014-ohm | 2026-10-24 | 83 | record-breaker | words | 1989 | 1429 | no | – | waiting | – |
 
@@ -105,3 +105,4 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 |---|---|---|---|---|---|
 | 2026-10-22 | 0 | – | – | idea 1 → 1.5 | calibrated on 8 reels, score vs result 0.72 |
 | 2026-10-23 | 0 | – | – | idea 1.5 → 2, cover 0 → 0.5 | calibrated on 11 reels, score vs result 0.83 |
+| 2026-10-26 | 6 | 2 of 6 | -0.55 | idea 2 → 2.5, hookmove 1 → 1.5, secondhook 1 → 1.5 | calibrated on 17 reels, score vs result 0.71 |
