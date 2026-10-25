@@ -17,7 +17,7 @@ export class SheetFormatError extends Error {}
 
 // Numbers people type to get past a form.
 const FAKE = new Set(["+919876543210", "+919123456789", "+918765432109"]);
-const isFake = (contact: string) => FAKE.has(contact) || /^\+91(\d)\1{9}$/.test(contact);
+export const isFake = (contact: string) => FAKE.has(contact) || /^\+91(\d)\1{9}$/.test(contact);
 
 const tidy = (s: string | undefined) => (s ?? "").replace(/\s+/g, " ").trim();
 

@@ -351,6 +351,15 @@ broken tab records `last_error`; the Leads page shows one line (`sheetWarning`).
 [--dry-run]` runs it by hand; `npm run leads:sheet:add` registers a tab. SETUP.md step 12. **Class (0027):** `leads.class_level`
 ("10", "12 passed"…) comes from the calculator's "Class Level"; owners can type it for any lead (Edit); it is in the Excel
 download. Calculator leads imported before 0027 got it from their note (`private.class_from_note`).
+**PYQ Vault leads (0028, founder 2026-10-25):** PYQ Vault students who chose NDA, CDS or AFCAT, gave a mobile and ticked
+"I agree to be contacted" (account) or took a public NDA quiz. PYQ Vault decides who counts (`defence_leads_after`, its
+migration 0185) and serves them at `https://www.pyqvault.com/api/leads/defence` behind a shared secret (`GOPOST_LEADS_SECRET`
+there, `PYQVAULT_LEADS_SECRET` here); GoPost holds no key to PYQ Vault's database. The hourly leads job reads two feeds
+(`lead_feeds`: `pyqvault_account`, `pyqvault_quiz`) after their cursor (`<timestamp>~<id>`) → `feedLeads`
+(`src/lib/domain/pyqvaultLeads.ts`: course "NDA, CDS…", class from stage, city in the note) → `import_feed_rows` (leads +
+cursor in one transaction; channel `website`, `page` "PYQ Vault · account" / "PYQ Vault · quiz"). A feed that can't be read
+shows one line on the Leads page. `npm run leads:pyqvault -- --org=lws-pune [--dry-run]` runs it by hand and registers the
+feeds. SETUP.md step 13. A student marked "Not a lead" comes back only if they change their PYQ Vault profile again.
 **Leads from chats GoPost can't see (0018, founder 2026-10-21):** e.g. +91 91563 10546 (the SPI ad number, not connected):
 read in WhatsApp Web through Claude in Chrome, read-only; opening an unread chat marks it read, so judge unread ones by
 their preview or ask first. The founder approves the verdicts, then `npm run leads:add -- --org=lws-pune --channel=whatsapp

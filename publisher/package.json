@@ -29,6 +29,7 @@
     "leads:add": "tsx scripts/leads-add.ts",
     "leads:sheet:add": "tsx scripts/leads-sheet-add.ts",
     "leads:sheets": "tsx scripts/leads-sheets.ts",
+    "leads:pyqvault": "tsx scripts/leads-pyqvault.ts",
     "results": "tsx scripts/reel-results.ts"
   },
   "dependencies": {
