@@ -77,16 +77,18 @@ async function loadInbox(supabase: Db, now: Date) {
   const from = new Date(new Date(`${weekStart}T00:00:00Z`).getTime() - 5.5 * 3_600_000).toISOString();
   const [{ data }, { data: rows }] = await Promise.all([
     supabase.from("conversations").select("account_id, first_message_at, status, source").gte("first_message_at", from).limit(5000),
-    supabase.from("connected_accounts").select("id, platform, display_name, created_at").in("platform", ["instagram", "whatsapp"]),
+    supabase.from("connected_accounts").select("id, platform, display_name, created_at, inbox").in("platform", ["instagram", "whatsapp", "facebook"]),
   ]);
   const byAccount = summariseInbox(data ?? [], weekStart);
-  const accounts: InstagramAccount[] = (rows ?? []).map((a) => ({
-    id: a.id, displayName: a.platform === "whatsapp" ? `WhatsApp ${a.display_name}` : a.display_name, createdAt: a.created_at,
+  // Facebook Pages only once their inbox is on (0025); listed after the others.
+  const accounts: (InstagramAccount & { page: boolean })[] = (rows ?? []).filter((a) => a.platform !== "facebook" || a.inbox).map((a) => ({
+    id: a.id, createdAt: a.created_at, page: a.platform === "facebook",
+    displayName: a.platform === "whatsapp" ? `WhatsApp ${a.display_name}` : a.platform === "facebook" ? `Facebook ${a.display_name}` : a.display_name,
   }));
   const empty: InboxWeek = { newChats: 0, fromAds: 0, leads: 0, booked: 0 };
   return {
     weekStart,
-    accounts: [...accounts].sort((a, b) => a.createdAt.localeCompare(b.createdAt))
+    accounts: [...accounts].sort((a, b) => Number(a.page) - Number(b.page) || a.createdAt.localeCompare(b.createdAt))
       .map((a) => ({ id: a.id, name: a.displayName, week: byAccount[a.id] ?? empty })),
   };
 }

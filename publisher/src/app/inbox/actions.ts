@@ -8,10 +8,16 @@ import { canReply, checkAutoReplyText, LEAD_STATUSES, MAX_REPLY } from "@/lib/do
 import { ingestRows } from "@/lib/inbox/store";
 import { connectBusinessAppNumber, type HistoryState } from "@/lib/inbox/connectWhatsApp";
 import { MetaApiError, metaConfigFromEnv } from "@/lib/platforms/meta";
-import { sendInstagramText, sendWhatsAppText } from "@/lib/platforms/metaMessages";
+import { sendFacebookText, sendInstagramText, sendWhatsAppText } from "@/lib/platforms/metaMessages";
 import { fail, fromRpcError, ok, type Result } from "@/lib/publishing/result";
 
-/** Reply to one chat on Instagram or WhatsApp, then store the reply (an Instagram echo of it is ignored as a duplicate). */
+const WINDOW_CLOSED = {
+  instagram: "Instagram only allows replies within 24 hours of their last message. Reply from the Instagram app instead.",
+  facebook: "Messenger only allows replies within 24 hours of their last message. Reply from Meta Business Suite instead.",
+  whatsapp: "WhatsApp only allows replies within 24 hours of their last message (after that, approved templates only).",
+};
+
+/** Reply to one chat on Instagram, Messenger or WhatsApp, then store the reply (Meta's echo of it is ignored as a duplicate). */
 export async function sendReply(input: { conversationId: string; text: string }): Promise<Result<null>> {
   const parsed = z.object({
     conversationId: z.string().uuid(),
@@ -25,25 +31,23 @@ export async function sendReply(input: { conversationId: string; text: string })
   const { data: c } = await supabase.from("conversations")
     .select("id, account_id, channel, contact_id, last_incoming_at").eq("id", parsed.data.conversationId).maybeSingle();
   if (!c) return fail("not_found", "Conversation not found.");
-  const channel = c.channel as "instagram" | "whatsapp";
-  if (!canReply(c.last_incoming_at, new Date())) {
-    return fail("window_closed", channel === "whatsapp"
-      ? "WhatsApp only allows replies within 24 hours of their last message (after that, approved templates only)."
-      : "Instagram only allows replies within 24 hours of their last message. Reply from the Instagram app instead.");
-  }
+  const channel = c.channel as keyof typeof WINDOW_CLOSED;
+  if (!canReply(c.last_incoming_at, new Date())) return fail("window_closed", WINDOW_CLOSED[channel]);
   const { data: account } = await supabase.from("connected_accounts").select("external_id").eq("id", c.account_id).maybeSingle();
   if (!account) return fail("not_found", "Account not found.");
 
   const admin = createSupabaseAdminClient();
   const { data: token } = await admin.rpc("get_account_token", { p_account: c.account_id });
-  const app = channel === "whatsapp" ? "WhatsApp" : "Instagram";
+  const app = channel === "whatsapp" ? "WhatsApp" : channel === "facebook" ? "Messenger" : "Instagram";
   if (!token) return fail("not_connected", `The ${app} connection needs renewing (SETUP.md step 8).`);
   let mid: string;
   try {
-    const cfg = metaConfigFromEnv();
+    const cfg = metaConfigFromEnv(), text = parsed.data.text;
     mid = channel === "whatsapp"
-      ? await sendWhatsAppText(cfg, { token: token as string, phoneNumberId: account.external_id, to: c.contact_id, text: parsed.data.text })
-      : await sendInstagramText(cfg, { token: token as string, recipientId: c.contact_id, text: parsed.data.text });
+      ? await sendWhatsAppText(cfg, { token: token as string, phoneNumberId: account.external_id, to: c.contact_id, text })
+      : channel === "facebook"
+        ? await sendFacebookText(cfg, { token: token as string, recipientId: c.contact_id, text })
+        : await sendInstagramText(cfg, { token: token as string, recipientId: c.contact_id, text });
   } catch (e) {
     console.error("inbox: reply failed", { conversationId: c.id, channel, error: (e as Error).message });
     return fail("send_failed", e instanceof MetaApiError ? `${app} refused the reply: ${e.message}` : `Couldn't reach ${app}. Try again.`);

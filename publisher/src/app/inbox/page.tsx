@@ -31,13 +31,21 @@ export default async function InboxPage({ searchParams }: { searchParams: { acco
   if (!access.inbox) redirect("/");
   const view: ViewId = (VIEWS.find((v) => v.id === searchParams.view)?.id ?? "reply") as ViewId;
 
-  // Instagram accounts and WhatsApp numbers, one chip each.
-  const { data: accountRows } = await supabase.from("connected_accounts").select("id, platform, display_name, created_at").in("platform", ["instagram", "whatsapp"]);
-  const accounts: InstagramAccount[] = (accountRows ?? []).map((a) => ({
-    id: a.id, displayName: a.platform === "whatsapp" ? `WhatsApp ${a.display_name}` : a.display_name, createdAt: a.created_at,
-  }));
-  const account = pickInstagramAccount(accounts, searchParams.account);
-  const isInstagram = accountRows?.find((a) => a.id === account?.id)?.platform === "instagram";
+  // Instagram accounts, WhatsApp numbers and Facebook Pages whose inbox is on (0025), one chip each. Pages come last,
+  // so the first Instagram account stays the default.
+  const { data: accountRows } = await supabase.from("connected_accounts").select("id, platform, display_name, created_at, inbox")
+    .in("platform", ["instagram", "whatsapp", "facebook"]);
+  const chip = (a: { id: string; platform: string; display_name: string; created_at: string }): InstagramAccount => ({
+    id: a.id, createdAt: a.created_at,
+    displayName: a.platform === "whatsapp" ? `WhatsApp ${a.display_name}` : a.platform === "facebook" ? `Facebook ${a.display_name}` : a.display_name,
+  });
+  const listed = (accountRows ?? []).filter((a) => a.platform !== "facebook" || a.inbox);
+  const pages = listed.filter((a) => a.platform === "facebook").map(chip);
+  const others = listed.filter((a) => a.platform !== "facebook").map(chip);
+  const byAge = (list: InstagramAccount[]) => [...list].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
+  const accounts = [...byAge(others), ...byAge(pages)];
+  const account = accounts.find((a) => a.id === searchParams.account) ?? pickInstagramAccount(others, undefined) ?? accounts[0] ?? null;
+  const isInstagram = listed.find((a) => a.id === account?.id)?.platform === "instagram";
   // RLS: owners only, for both. Fetched together (one round trip each).
   const [{ data: autoReply }, { data }] = await Promise.all([
     account && isInstagram
@@ -66,11 +74,11 @@ export default async function InboxPage({ searchParams }: { searchParams: { acco
     <>
       <Nav current="inbox" ads={access.ads} inbox />
       <main className="mx-auto max-w-5xl px-4 pb-16 pt-8">
-        <PageHeader title="Inbox">Instagram and WhatsApp messages, in one place. Only owners can see this page.</PageHeader>
+        <PageHeader title="Inbox">Instagram, Facebook and WhatsApp messages, in one place. Only owners can see this page.</PageHeader>
 
         {accounts.length > 1 && (
-          <nav aria-label="Instagram account" className="mb-4 flex flex-wrap gap-2">
-            {[...accounts].sort((a, b) => a.createdAt.localeCompare(b.createdAt)).map((a) => (
+          <nav aria-label="Account" className="mb-4 flex flex-wrap gap-2">
+            {accounts.map((a) => (
               <Link key={a.id} href={qs({ account: a.id })} aria-current={account?.id === a.id ? "page" : undefined}
                 className={`chip py-1 ${account?.id === a.id ? "chip-accent" : "chip-muted hover:text-fg"}`}>{a.displayName}</Link>
             ))}

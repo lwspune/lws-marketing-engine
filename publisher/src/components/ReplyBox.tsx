@@ -3,11 +3,11 @@
 import { useId, useState, useTransition } from "react";
 import { sendReply } from "@/app/inbox/actions";
 
-/** Reply to one Instagram or WhatsApp chat. Closed (with the reason) once the platform's 24-hour window has passed. */
+/** Reply to one Instagram, Messenger or WhatsApp chat. Closed (with the reason) once the platform's 24-hour window has passed. */
 export function ReplyBox({ conversationId, open, maxLength, contact, channel }: {
-  conversationId: string; open: boolean; maxLength: number; contact: string; channel: "instagram" | "whatsapp";
+  conversationId: string; open: boolean; maxLength: number; contact: string; channel: "instagram" | "facebook" | "whatsapp";
 }) {
-  const app = channel === "whatsapp" ? "WhatsApp" : "Instagram";
+  const app = channel === "whatsapp" ? "WhatsApp" : channel === "facebook" ? "Messenger" : "Instagram";
   const id = useId();
   const [text, setText] = useState("");
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
@@ -18,7 +18,9 @@ export function ReplyBox({ conversationId, open, maxLength, contact, channel }: 
       <p className="card p-4 text-sm text-muted" role="note">
         {channel === "whatsapp"
           ? "WhatsApp only allows replies within 24 hours of their last message; after that, approved templates only (not in GoPost yet)."
-          : "Instagram only allows replies from here within 24 hours of their last message. Reply from the Instagram app instead."}
+          : channel === "facebook"
+            ? "Messenger only allows replies from here within 24 hours of their last message. Reply from Meta Business Suite instead."
+            : "Instagram only allows replies from here within 24 hours of their last message. Reply from the Instagram app instead."}
       </p>
     );
   }
