@@ -144,8 +144,7 @@ connecting an outside brand's account (e.g. Sound Mind).
 2. App dashboard → use cases → **Manage messaging & content on Instagram** → Customize → Permissions →
    add **`instagram_manage_messages`**; **Manage everything on your Page** → add **`pages_manage_metadata`**;
    **Add use cases** → the Messenger one → add **`pages_messaging`**. Meta refuses to subscribe a Page to DMs
-   without `pages_messaging` until the app has Advanced Access (found 2026-10-19). Facebook Page chats still
-   don't reach GoPost: the webhook only listens to Instagram.
+   without `pages_messaging` until the app has Advanced Access (found 2026-10-19). Facebook Page chats: step 7.
 3. App dashboard → **Webhooks** → product **Instagram** → callback URL
    `https://gopostapp.vercel.app/api/webhooks/meta`, verify token from step 1 → **Verify and save** →
    subscribe to the **messages** field.
@@ -157,6 +156,12 @@ connecting an outside brand's account (e.g. Sound Mind).
    Connected tools → Allow access to messages** (on).
 6. `npm run messages:backfill -- --org=lws-pune --accounts=@lws.pune,@pyqvault_` pulls in recent existing chats (about the last 20
    messages of each). Send the account a test DM from another profile: it appears in the Inbox.
+7. **Facebook Page (Messenger) chats** (migration 0025, 2026-10-25). `connect:meta` already subscribes every Page
+   to `messages`, an outside brand's Page too, so GoPost stores a Page's chats only once its **inbox is on**:
+   `npm run messages:backfill -- --org=lws-pune --pages="LWS Pune"` switches it on and pulls the old chats. The app
+   must also listen to Pages: App dashboard → **Webhooks** → product **Page** → same callback URL and verify token
+   → subscribe to **messages**. Chats show as "Facebook LWS Pune" in the Inbox; replies go through Messenger
+   (24-hour window); a shared phone number or email makes a lead, as on Instagram.
 
 Meta may ask for App Review of `instagram_manage_messages` before DMs from the public arrive (only
 people with a role on the app would get through until then). The review wants a screen recording
