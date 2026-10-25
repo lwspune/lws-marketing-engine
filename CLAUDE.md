@@ -318,6 +318,12 @@ ad ids are kept, replies via `/{phone-number-id}/messages` (JSON, 24-hour window
 76206 99213 (ads still point to +91 91563 10546, outside the portfolio, so their chats don't reach GoPost yet). Needs `instagram_manage_messages` + `pages_manage_metadata` + `pages_messaging`
 (Meta refuses the Page subscription without it before Advanced Access) and the Page subscribed (`connect:meta` does
 it): SETUP.md step 8. Live since 2026-10-19 for @lws.pune and @pyqvault_ (Sound Mind not connected: needs Shivani's OK). Pure rules: `src/lib/domain/inbox.ts`.
+**Facebook Page chats (0025, founder 2026-10-25):** Messenger messages to a Page are channel `facebook` (contact = page-scoped
+id; webhook object `page`, `parseFacebookWebhook`), replies via `sendFacebookText` (`messaging_type: RESPONSE`, 24-hour
+window), and a shared number or email makes a lead, as on Instagram. `connect:meta` subscribes every Page, Sound Mind's too,
+so a Page's chats are stored only while `connected_accounts.inbox` is on: `npm run messages:backfill -- --org=lws-pune
+--pages="LWS Pune"` switches it on (`set_account_inbox`) and pulls old chats. On for LWS Pune only. Old-chat pages that Meta
+calls too much data (500, code 1) are retried at half size (`fetchConversations`).
 **Auto-reply to ad chats (0014, founder 2026-10-19):** Instagram only. After the webhook stores a delivery, anyone whose
 message is from an ad (Meta's ad mark, or one of Meta's ready-made ad questions, `adStarts`) gets the account's saved
 reply once (`src/lib/inbox/autoReply.ts`). `claim_auto_reply` (service role) is the gate: switched on, never claimed,
