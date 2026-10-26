@@ -23,6 +23,7 @@ import { PvChem009 } from './PvChem009.tsx';
 import { PvPhysics012 } from './PvPhysics012.tsx';
 import { PvPhysics013 } from './PvPhysics013.tsx';
 import { PvChem010 } from './PvChem010.tsx';
+import { PvPhysics015 } from './PvPhysics015.tsx';
 import { PvChem006 } from './PvChem006.tsx';
 import { PvChem007 } from './PvChem007.tsx';
 import { PvChem008 } from './PvChem008.tsx';
@@ -68,6 +69,7 @@ import { DURATION as DURATION_PC009 } from './lib/pc009.ts';
 import { DURATION as DURATION_PP012 } from './lib/pp012.ts';
 import { DURATION as DURATION_PP013 } from './lib/pp013.ts';
 import { DURATION as DURATION_PC010 } from './lib/pc010.ts';
+import { DURATION as DURATION_PP015 } from './lib/pp015.ts';
 import { DURATION as DURATION_PC006 } from './lib/pc006.ts';
 import { DURATION as DURATION_PC007 } from './lib/pc007.ts';
 import { DURATION as DURATION_PC008 } from './lib/pc008.ts';
@@ -172,6 +174,8 @@ export const Root = () => (
     <Still id="PvPhysics013Cover" component={PvPhysics013} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="PvChem010" component={PvChem010} durationInFrames={Math.round(DURATION_PC010 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="PvChem010Cover" component={PvChem010} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="PvPhysics015" component={PvPhysics015} durationInFrames={Math.round(DURATION_PP015 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="PvPhysics015Cover" component={PvPhysics015} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Still id="PvPhysics009bCover" component={PvPhysics009b} width={1080} height={1920} defaultProps={{ cover: true, voice: false }} />
     <Composition id="Compare008" component={Compare008} durationInFrames={Math.round(DURATION_PP008 * 30)} fps={30} width={1080} height={1040} />
     <Composition id="Compare009" component={Compare009} durationInFrames={Math.round(DURATION_PP009 * 30)} fps={30} width={1080} height={1040} />
