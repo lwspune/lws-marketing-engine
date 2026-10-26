@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.33, 2026-10-26)
+# @pyqvault_ reel framework (v1.34, 2026-10-26)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -275,6 +275,20 @@ NDA Maths"). On screen from frame 0 everyone sees it, the cover carries it, and 
 (founder, 2026-10-21). An MCQ at the end felt like homework (founder). · *Check:* the reel's tests (the tag is on every
 frame; its contrast); the stills sheet. · 🧪 L51
 
+**F39 · Made to send.** The payoff is a **complete set** a student has to know (all five flame colours, the whole pH
+chart, every band of the spectrum), not a single answer. The guess (F4) asks about one member; the reel shows them all.
+It ends on a **cheat-sheet frame**: the whole set on one clean screen, every member labelled, held still for ~2 s
+(screenshot-able: inside the safe area, F35), and then it loops back to frame 0 (F27). The caption lists the whole set,
+then one line asking for a share that names who it's for ("Send this to your lab partner before the practical"). ·
+*Why:* shares are what take a reel past Instagram's first batch of ~1,100–1,400 accounts (L64). Of 32 shares on 27 reels,
+21 went to one: the flame test (10.9 per 1,000 reach; every other framework reel ≤ 2.2), the only reel whose payoff was
+a full table students learn for the practical, with the set listed in its caption (also 21 saves). The next most shared,
+"all of calculus in one curve" (4 shares, 4 saves), is a whole topic in one picture too. @codematrixvishal's 20M+ reels
+are reference sheets (L27). Students share what helps a friend study. · *Check:* the storyboard's last row is the sheet
+(≥ 3 members, each labelled, ≥ 1.8 s still); the reel's tests hold it still; the caption has the set and the send line. ·
+🧪 L64: the first package is C9, P74, C49 (the set, the sheet and the send line together); confirmed when at least 2 of
+the 3 reach **≥ 5 shares per 1,000 reach** at 48 h, dropped if all 3 stay at 2.2 or below
+
 ## Before posting
 
 **F38 · Four critics before it goes out.** Every new reel is read by a review panel of four fresh agents, each one harsh
@@ -354,3 +368,4 @@ before `queue:add`. · 📌 founder, measured by L73
 | v1.31 | 2026-10-26 | F38 the review panel added (📌): four critics (Drama, Colour, Motion, Sound) read every new reel before it's queued; `reels/review-panel.md`, `remotion/tools/sound-report.ts`, `virality-measure.mjs --frames`. F37's check amended: an opening fades only when seconds 1–3 move under 0.6 of the first second **and** under 5% of the pixels a frame (`AFTER_FLOOR`, Physics #13's level). | F38: founder, 2026-10-26, after Chemistry #11 passed every check and was still "pretty bland": "there should be agents to review dramatic effect, colors, motions, sound effects", measured by L73. F37: the dramatic remake's flash and whip-pan moved 30–70% of the pixels a frame, so its busy seconds 1–3 (16%, 3× Physics #13) still scored 0.39; every earlier verdict stands (Chemistry #10, Physics #9b and #15 fade, Physics #13 passes). Founder approved both. |
 | v1.32 | 2026-10-26 | F38's pass rule: no defect left (not "every score ≥ 7"); scores logged, not a gate, until L73; at most two passes, then the founder judges. | Chemistry #11 took three passes from 5, 5, 6 to 6, 6, 6 at ~300k agent tokens a pass, and the critics began to contradict each other (red push arrows back after pass 1 had moved them to yellow for colour-blind viewers; uneven shards for a salt that cleaves into cubes). Founder approved. |
 | v1.33 | 2026-10-26 | **Pruned on the data** (founder: "too many rules… delete rules based on data"). Rule 5 added: the framework is reviewed at every reel review (founder: "every time we review reels, let's review the framework as well"). Dropped: F12 dark/white alternation, F22 the orbit as its own rule (Orbit 360° stays one of F25's openings; its "2 of any 4" cap goes, already implied by no opening twice in a row), F23 voiceover (reels are silent), F26 the second hook, F30 the virality predictor (`virality-measure.mjs` stays for F37's aftershock). F13 keeps music by mood, without the fair rotation or "never twice in a row". F15 and F16 merged into F14 (same content). F27 from "loop or end card" to **every reel loops** (✅). F21's weights frozen, no calibration at each analysis. On notice for the next prune: F4, F21, F25. 34 points → 27. | Medians of the 18 framework reels (20–26 Oct; with / without): voice 9.0 / 8.4 s watched, 1,378 / 1,510 views (5 voiced, L43); second hook 8.5 / 8.7 s, 1,498 / 1,424 (8 reels, L49); orbit 8.7 / 8.5 s, 1,427 / 1,472 (6, L37); white 9.3 / 8.3 s, 1,497 / 1,366 (8 white, 10 dark: far under the 1.5× bar, L22); every music style at both ends (L34). The predictor's real predictions rank views at −0.47, 3 of 8 bands right (L60); the idea score ranks views at −0.33, watch at 0.07 (L35). Loops: 1.35 views per account reached vs 1.16 (L50). Views sit at 1,300–1,640 whatever the rules (L64), and the reel made without most of them tied (L61). Rule 3 of this framework: a point is dropped when ≥ 3 reels show no gain. |
+| v1.34 | 2026-10-26 | F39 made to send added (🧪): the payoff is a complete set, the reel ends on a cheat-sheet frame held ~2 s before the loop, and the caption lists the set plus one send line. First package: C9 (the pH chart), P74 (the spectrum), C49 (hydroxide precipitates), ahead of P7 and C15. | Founder: "let's work on increasing reels shares, that is our real growth lever." Views sit in a batch of ~1,100–1,400 accounts whatever the rules (L64); the only framework reel that left it, the flame test, had 21 of our 32 shares and was a complete exam table (10.9 shares per 1,000 reach vs ≤ 2.2 for every other). Measured by L64 (the bar is set in F39). |
