@@ -177,8 +177,9 @@ test("F29: an open or queued ✗ is refused; a parked one isn't; the cell must b
   assert.match(errors, /C7: wordless "maybe" should be ✓ or ✗/);
 });
 
-// Idea cards: every open or queued idea has one, with frame 0 (question → answer), ≥ 3 beats told without words, a
-// second hook (F26) and where it came from; every card belongs to a row.
+// Idea cards: every open or queued idea has one, with frame 0 (question → answer), ≥ 3 beats told without words and
+// where it came from; every card belongs to a row. A second hook is read when a card has one, but no longer required
+// (F26 dropped in framework v1.33).
 test("cards are read: frame 0, the wordless beats, the second hook and the source", () => {
   const c = ts.parseCards(MD);
   assert.deepEqual(Object.keys(c), ["P5", "P6", "C7", "C8"]);
@@ -195,7 +196,7 @@ test("an open idea without a card, or with a thin card, is refused; a card with 
     .replace("- **Frame 0:** Same box, same height, one lift faster: more work? → the same work, more power", "- **Frame 0:** Same box, same height?");
   const errors = check(thin).join("\n");
   assert.match(errors, /P6: card has 2 wordless beats, needs ≥ 3/);
-  assert.match(errors, /P6: card has no second hook/);
+  assert.doesNotMatch(errors, /second hook/);
   assert.match(errors, /P6: card's frame 0 needs "question → answer"/);
   const orphan = MD.replace("## Concept sweep", "### C99 · Ghost\n- **Frame 0:** ? → !\n- **Without words:** a → b → c\n- **Second hook:** ? → !\n- **From:** own\n\n## Concept sweep");
   assert.match(check(orphan).join("\n"), /C99: card has no row in Ideas/);

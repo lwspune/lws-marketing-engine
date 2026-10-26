@@ -168,7 +168,6 @@ function validate(rows, subjects = SUBJECTS, { weights, swept, cards } = {}) {
       else {
         if (!/\S.*→.*\S/.test(c.frame0)) errors.push(`${r.id}: card's frame 0 needs "question → answer"`);
         if (c.beats.length < 3) errors.push(`${r.id}: card has ${c.beats.length} wordless beats, needs ≥ 3`);
-        if (!c.secondHook) errors.push(`${r.id}: card has no second hook`);
         if (!c.from) errors.push(`${r.id}: card doesn't say where it's from`);
       }
     }
