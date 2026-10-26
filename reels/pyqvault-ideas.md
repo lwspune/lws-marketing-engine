@@ -6,7 +6,7 @@ in only if it passes **the test** below; it is then **scored**, and the score is
 `--calibrate` runs the tuning. Framework: `pyqvault-framework.md` (F1, F21, F28, F29). @lws.pune's ideas stay in
 `remake-backlog.md` until it is rebuilt.
 
-**Open: 85 ideas · about 29 days at 3 reels a day.**
+**Open: 84 ideas · about 28 days at 3 reels a day.**
 
 Refill before it drops under two weeks. Sources (F1): the founder's ideas (Source `founder`, any time), a notes sweep
 (physics and chemistry are done; a new exam's notes next), and the next competitor read (`node reels/tools/remake-candidates.mjs`).
@@ -71,6 +71,7 @@ itself.
 | 2026-10-23 | the same 8 at 48 h; P5 (43 h), C5 (39 h), P12 (34 h), C7 (19 h), C13 (10 h), P29b (15 h) still under 48 h | 0.71 | none | no new 48 h reading since 2026-10-22, so the tool's "Vivid 1.5 → 2" is the same evidence counted twice; not acted on. P5 and C5 pass 48 h today, P12 tomorrow |
 | 2026-10-23 (evening) | 11 at 48 h (+ P5, C5, P12); C7, C13, P29b, P37, C8, P11 still under 48 h | 0.70 | none: **held for the founder** | the rule asks Proof 1 → 1.5 (high 2.24 vs low 0.71, 8 vs 3) and Vivid 1.5 → 1 (low 2.06 vs high 1.06, 6 vs 5), but both splits are the two eras mixed: framework reels score 3.4–4.3, earlier ones 0.5–1.1. Within each era neither separates: Vivid 3 vs less, framework 3.9 vs 3.86, earlier 0.94 vs 0.58 (vivid ahead); Proof, framework ~3.7 vs 3.89, earlier 0.76 vs 0.64. Applied, the rank correlation falls 0.70 → 0.59 (step 1 wants it rising). The confound check misses it: "before F5" is on 3 of 5 high-Vivid reels (60%, under the 75% bar). Founder's call; until then the weights stay |
 | 2026-10-26 | 17 at 48 h (+ C7, C13, P29b, P37, C8, P11); P24, P29, C14, P6, P37a under 48 h | 0.49 | none: same era mix, still held | the tool asks Proof 1 → 0.5, Vivid 1.5 → 2, Law 1 → 0.5, Everyday 1 → 1.5, but on the 11 framework reels alone (P4 on) the rank correlation is **−0.06** (0.17 without C7 and P29b) and no criterion moves: Proof 1.01 vs 1.00, Vivid 1.17 vs 0.98 (both within 20%), the rest too lopsided. Framework reels all land at reach 1,093–1,368 (L64), so results barely vary and there is little for the score to rank; the 0.49 is mostly old reels vs new |
+| 2026-10-26 (evening) | 19 at 48 h (+ P37a, P51); P24, P29, C14, P6, P75, C44 under 48 h | 0.33 | none: same era mix, still held | the tool asks Proof 1 → 0.5, Law 1 → 0.5, Everyday 1 → 1.5. On the 13 framework reels alone (P4 on) the rank correlation is **−0.20** (−0.06 without C7 and P29b) and no criterion clears 20%: Vivid high 1.26 vs low 1.06 (6 vs 7, +19%), Law low 1.28 vs high 1.07 (3 vs 10, +19.6%: P12, C7, P51), Proof low 1.19 vs high 1.05, Surprise 1.22 vs 1.08; Guess and Everyday too lopsided. Vivid and Law are the two to watch next run |
 
 ## Ideas
 
@@ -198,7 +199,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | C42 | C | Liquid oxygen sticks to a magnet, nitrogen pours through (MO theory) | – | 2 | 2 | 2 | 0 | 0 | 48 | ⏸ parked: fails F29 (it sticks, but why, unpaired electrons, needs words; 2026-10-21) | mht-cet-chemistry/chemical-bonding | ✗ |
 | C43 | C | Solid wax sinks, solid water floats: ice's open lattice (hydrogen bonds) | – | 2 | 2 | 2 | 1 | 2 | 69 |  | founder | ✓ |
 | C44 | C | An explosive metal and a poison gas make table salt (ionic bond) | – | 2 | 2 | 2 | 0 | 2 | 62 | ✅ made 2026-10-26 (`pv-chem-010-salt`, Chemistry #10; the second Shock opening, founder's pick) | founder | ✓ |
-| C45 | C | Hit metal and salt with a hammer: the salt shatters (metallic bond) | – | 2 | 2 | 1 | 0 | 2 | 55 |  | founder | ✓ |
+| C45 | C | Hit metal and salt with a hammer: the salt shatters (metallic bond) | – | 2 | 2 | 1 | 0 | 2 | 55 | ✅ made 2026-10-26 (`pv-chem-011-hammer`, Chemistry #11; the third Shock opening and the first F37 reel) | founder | ✓ |
 | C46 | C | Iron nails in dry air, water and salt water: salt water rusts first | – | 2 | 2 | 1 | 0 | 2 | 55 |  | founder | ✓ |
 | C47 | C | A laser beam shows in milky water, not salt water (Tyndall) | 3.0 | 2 | 2 | 1 | 0 | 2 | 62 |  | founder | ✓ |
 | C48 | C | s and p orbitals blend into methane's four equal bonds (hybridisation) | – | 2 | 1 | 1 | 0 | 0 | 34 | ⏸ parked: fails F29 (the blend shows; why it happens needs words; founder's list, 2026-10-21) | founder | ✗ |
@@ -741,7 +742,7 @@ each answer is re-derived in its reel's tests (F10).
 ### C45 · Metal bends, salt shatters
 - **Frame 0:** Hit a metal and a salt crystal with a hammer: which shatters? → the salt
 - **Without words:** a metal: + ions in a sea of moving electrons; a salt: + and − ions in a grid → the hammer hits the metal; layers slide and the electron sea flows with them: it bends → the hammer hits the salt; a layer slides; + meets +, − meets − → they push apart; the crystal shatters
-- **Second hook:** Why do metals conduct? → the electron sea moves
+- **Second hook:** So why didn't the copper break? → the electron sea holds its sliding layers (made, 2026-10-26: it is answered by the reel's own explanation, F26; the draft "Why do metals conduct?" would have needed a scene of its own)
 - **From:** founder · mht-cet-chemistry/solid-state · metallic vs ionic solids
 
 ### C46 · Rusting

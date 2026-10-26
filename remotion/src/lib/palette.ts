@@ -35,6 +35,7 @@ export const REAL = {
     water: { fill: '#6fb7d6', edge: '#2b7499' }, ice: { fill: '#dff3fa', edge: '#4f8fa8' }, flame: { fill: '#f59e0b', edge: '#b45309' },
     copperSulphate: { fill: '#1e88e5', edge: '#1565c0' }, chlorine: { fill: '#c5d64a', edge: '#66741a' }, rust: { fill: '#b7410e', edge: '#8a3009' },
     wood: { fill: '#a0703f', edge: '#6e4a26' }, leaf: { fill: '#3f9b3a', edge: '#2a6e27' }, sodium: { fill: '#d2d4d6', edge: '#62676e' },
+    salt: { fill: '#eef1f4', edge: '#6b7682' },
   },
   lab: {
     copper: { fill: '#c98146', edge: '#e8a978' }, steel: { fill: '#8f98a3', edge: '#c6cdd5' }, zinc: { fill: '#9aa1a9', edge: '#cdd3d9' },
@@ -42,6 +43,7 @@ export const REAL = {
     water: { fill: '#4fa3c7', edge: '#8ccbe5' }, ice: { fill: '#bfe6f3', edge: '#e6f6fb' }, flame: { fill: '#f8a92a', edge: '#fcd27a' },
     copperSulphate: { fill: '#3b8fe0', edge: '#82b8f1' }, chlorine: { fill: '#c8d94e', edge: '#e2ec8a' }, rust: { fill: '#c4521c', edge: '#e88b5c' },
     wood: { fill: '#a87a48', edge: '#d2a679' }, leaf: { fill: '#4caf47', edge: '#8ad485' }, sodium: { fill: '#d2d4d6', edge: '#eef0f2' },
+    salt: { fill: '#e8ecf0', edge: '#f8fafc' },
   },
 } as const;
 

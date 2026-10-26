@@ -168,6 +168,16 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### Queued Physics #15 (ice) fades after its opening (logged 2026-10-26; DECIDED 2026-10-26: posts as it is, already scheduled)
+Learning (framework F37, L72): the opening keeps building to 3 s, with no settle before 3 s. `virality-measure.mjs` gives
+Physics #15 an aftershock of **0.05** (bar 0.6): its pull-back moves 20–27% of the pixels a frame to 1.7 s, then 1.8–3 s
+is a slow colour change in the glasses (~1% a frame). **360:** scope = P36 only (queued in GoPost, not approved); posted
+reels can't be changed, and Physics #14 (Ohm) couldn't be measured (`pv-physics-014-ohm.mp4` isn't in `reels/`) ·
+blast radius = this one post; it's also L71's first studio reel, so a new opening adds a second change to that test ·
+does it apply? yes by the check, though its opening is a zoom, not a Shock · risk = low (re-render; the old MP4 stays in
+git) · cost = ~1–2 h (events at ~1.2 and ~2.2 s, re-render, re-measure, swap the post in GoPost) · **recommendation: do,
+before approval**: 1.8–3 s is where viewers go, and the look L71 tests is unchanged.
+
 ### Earlier reels use the stacked layout, not full frame (logged 2026-10-26, awaiting founder)
 Learning (framework F35 + F36, L71): the picture fills the page on a soft studio set; the question shrinks to one line;
 text sits beside what it names. Every earlier @pyqvault_ reel (and @lws.pune's, which share the F-numbers) stacks a

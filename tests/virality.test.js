@@ -74,6 +74,21 @@ test("motion: the share of pixels that change noticeably; a frame moves when at 
   assert.equal(v.motionShare([0.003, 0.001, 0.002, 0.0005]), 0.5, "default threshold: 0.2% of pixels");
 });
 
+// Framework F37 (L72): after a shock the event keeps building to 3 s. Chemistry #10's smoke kept "moving" (motion 100%)
+// while the change per frame halved from the first second to seconds 1–3; viewers fell ~11 points a second. Lightning held.
+test("aftershock: motion in 1–3 s against the first second; under 60% means the opening fades", () => {
+  const steps = (first, rest) => [...Array(9).fill(first), ...Array(30).fill(rest)];   // changes at 0.1, 0.2 … 3.9 s
+  assert.equal(v.aftershock(steps(0.05, 0.05)), 1);
+  const salt = steps(0.042, 0.022);
+  assert.ok(Math.abs(v.aftershock(salt) - 0.52) < 0.01, "Chemistry #10's numbers");
+  assert.equal(v.fades(v.aftershock(salt)), true);
+  assert.equal(v.fades(v.aftershock(steps(0.049, 0.05))), false, "Lightning");
+  assert.equal(v.fades(0.6), false, "60% passes");
+  const late = [...Array(9).fill(0.03), ...Array(10).fill(0.03), ...Array(10).fill(0.005), ...Array(10).fill(0.08)];
+  assert.ok(v.aftershock(late) < 1, "only 1–3 s counts: motion after 3 s doesn't rescue a fade");
+  assert.equal(v.aftershock(steps(0, 0.05)), null, "no motion in the first second: F5's job, not this check");
+});
+
 test("the Reels table is read by header, and each input stays in its range", () => {
   const rows = v.parseReels(LOG);
   assert.deepEqual(rows[0], { id: "P24", reel: "pv-physics-008-spoon", idea: 3, motion: 2, hookmove: 1, words: 2, answer: 1, measured: "motion 100% · 9 words" });

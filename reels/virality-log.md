@@ -20,13 +20,13 @@ logged but not counted yet, because which way it pushes isn't known; calibration
 
 | Input | Key | Points | Weight | Anchors |
 |---|---|---|---|---|
-| Idea | idea | 0–3 | 2.5 | the idea's score in `pyqvault-ideas.md`: ≥ 70 → 3 · ≥ 60 → 2 · ≥ 50 → 1 · below → 0 |
+| Idea | idea | 0–3 | 3 | the idea's score in `pyqvault-ideas.md`: ≥ 70 → 3 · ≥ 60 → 2 · ≥ 50 → 1 · below → 0 |
 | Motion 0–3 s | motion | 0–2 | 1 | share of frames (10 a second) where ≥ 0.2% of pixels change noticeably: ≥ 95% → 2 · ≥ 75% → 1 · below → 0 (L29, F5) |
-| Hook move | hookmove | 0–1 | 1.5 | a named attention move in 0–3 s (orbit, punch-in, assemble, split apart, morph, split screen, race, colour flood, shock) → 1 (F25) |
+| Hook move | hookmove | 0–1 | 2 | a named attention move in 0–3 s (orbit, punch-in, assemble, split apart, morph, split screen, race, colour flood, shock) → 1 (F25) |
 | Words 0–3 s | words | 0–2 | 1 | words on screen at frame 0 (label, question, options, tag): ≤ 10 → 2 · ≤ 18 → 1 · more → 0 (F7) |
 | Colour 0–3 s | colour | 0–2 | 1 | colourfulness (Hasler–Süsstrunk M, median over 0–3 s): ≥ 20 → 2 · ≥ 10 → 1 · below → 0 (L30, F24) |
 | Length | length | 0–1 | 1 | ≤ 25 s → 1 (F18) |
-| Second hook | secondhook | 0–1 | 1.5 | a second question with its own move at the answer → 1 (F26, L49) |
+| Second hook | secondhook | 0–1 | 2 | a second question with its own move at the answer → 1 (F26, L49) |
 | Momentum | momentum | 0–2 | 1 | median views of the 3 reels posted before ÷ the median of all reels posted before: ≥ 1.5 → 2 · ≥ 0.8 → 1 · below → 0 |
 | Cover | cover | 0–2 | 0.5 | the cover's colourfulness, same anchors as Colour |
 | Answer after 8 s | answer | 0–1 | 0 | the A/B/C answer lands after 8 s → 1 (L48: viewers leave at the answer) |
@@ -69,6 +69,7 @@ loop; momentum from the reels posted before). The score shown by the tool is tod
 | P75 | pv-physics-014-ohm | 3 | 2 | 1 | 0 | 2 | 1 | 1 | 1 | 2 | 0 | 1 | idea 79 · motion 100% · words ≈23 (label, two-line question, options, tag, nudge, the cast's names) · colour 39 · 14 s · cover 34.1 · Pick one + race running (sparks racing from frame 0), second hook "Now double Ohm?" (a second resistor slides in), loop; dark, drive, silent; first Painted 2D reel and first with the cast (Volt, Amp, Ohm); momentum as P51's 1.47 (no reel posted since) |
 | C44 | pv-chem-010-salt | 2 | 2 | 1 | 0 | 1 | 1 | 1 | 1 | 2 | 0 | 0 | idea 62 · motion 100% · words ≈20 (label, two-line question, three options) · colour 18 · 17 s · cover 22.9 · You'd think + the second Shock opening (sodium bursts in chlorine at 0.2 s), second hook (pan to the beaker, water pours, the bulb lights), end card; dark, trap, silent; momentum 1,377 ÷ 1,354 = 1.02 |
 | P36 | pv-physics-015-ice | 3 | 2 | 0 | 0 | 2 | 1 | 1 | 1 | 2 | 1 | 0 | idea 79 · motion 100% · words ≈25 (label, two-line question, three options, tag, nudge) · colour 33.7 · 17.6 s · cover 31.9 · Everyday puzzle + a Zoom opening (a pull-back from the ice: not one of the named moves), second hook (swing to the fridge), answer at 8.6 s, end card; the first full-frame studio reel (F35–F36); lofi, silent; momentum as C44 today (1,377 ÷ 1,354 = 1.02) |
+| C45 | pv-chem-011-hammer | 1 | 2 | 1 | 0 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | idea 55 · motion 100% · words ≈22 (label, two-line question, three options, tag, nudge) · colour 13.3 · 15 s · cover 11.6 · Same start, two endings + the third Shock opening (both hammers land at 0.2 s), the first F37 reel (aftershock 0.84: events at 0.2, 1.2, 1.3, 2.2, 3.2 s), second hook (a dive into the bend, then the atoms), loop (a rewind to frame 0); studio, cinematic, silent; momentum 1,513 ÷ 1,354 = 1.12 |
 
 ## Predictions
 
@@ -96,14 +97,15 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 | C14 | pv-chem-008-packing | 2026-10-22 | 79 | above typical | idea | 1496 | 1429 | no | – | waiting | – |
 | P11 | pv-physics-010-launch-angles | 2026-10-22 | 86 | record-breaker | words | 1496 | 1429 | no | 1,840 | record-breaker | ✓ |
 | P29b | pv-physics-009b-wing-mirror | 2026-10-22 | 86 | record-breaker | idea | 1496 | 1429 | no | 322 | below typical | ✗ |
-| P37a | pv-f2-induction | 2026-10-22 | 65 | above typical | idea | 1883 | 1429 | no | – | waiting | – |
+| P37a | pv-f2-induction | 2026-10-22 | 65 | above typical | idea | 1883 | 1429 | no | 1,353 | below typical | ✗ |
 | P37 | pv-physics-011-induction | 2026-10-22 | 84 | record-breaker | idea | 1883 | 1429 | no | 1,353 | below typical | ✗ |
 | C8 | pv-chem-009-electrolysis | 2026-10-23 | 68 | above typical | idea | 1930 | 1429 | no | 1,512 | above typical | ✓ |
 | P6 | pv-physics-012-lift-power | 2026-10-23 | 77 | above typical | idea | 1930 | 1429 | no | – | waiting | – |
-| P51 | pv-physics-013-lightning | 2026-10-23 | 58 | above typical | idea | 1989 | 1429 | no | – | waiting | – |
+| P51 | pv-physics-013-lightning | 2026-10-23 | 58 | above typical | idea | 1989 | 1429 | no | 1,637 | above typical | ✓ |
 | P75 | pv-physics-014-ohm | 2026-10-24 | 83 | record-breaker | words | 1989 | 1429 | no | – | waiting | – |
 | C44 | pv-chem-010-salt | 2026-10-26 | 68 | above typical | idea | 2141 | 1429 | no | – | waiting | – |
 | P36 | pv-physics-015-ice | 2026-10-26 | 78 | above typical | words | 2141 | 1429 | no | – | waiting | – |
+| C45 | pv-chem-011-hammer | 2026-10-26 | 54 | below typical | idea | 2141 | 1429 | no | – | waiting | – |
 
 ## Calibration and accuracy runs
 
@@ -111,4 +113,4 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 |---|---|---|---|---|---|
 | 2026-10-22 | 0 | – | – | idea 1 → 1.5 | calibrated on 8 reels, score vs result 0.72 |
 | 2026-10-23 | 0 | – | – | idea 1.5 → 2, cover 0 → 0.5 | calibrated on 11 reels, score vs result 0.83 |
-| 2026-10-26 | 6 | 2 of 6 | -0.55 | idea 2 → 2.5, hookmove 1 → 1.5, secondhook 1 → 1.5 | calibrated on 17 reels, score vs result 0.71 |
+| 2026-10-26 | 8 | 3 of 8 | -0.47 | idea 2 → 2.5 → 3, hookmove 1 → 1.5 → 2, secondhook 1 → 1.5 → 2 | two runs today (the script keeps one row a day): morning on 17 reels (6 judged, 2 of 6 bands right, −0.55, score vs result 0.71); evening on 19 reels after P37a and P51 reached 48 h, score vs result 0.62 |
