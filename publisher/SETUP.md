@@ -272,6 +272,18 @@ at a public NDA quiz) reach Leads every hour (migration 0028). PYQ Vault decides
    the two feeds (account, quiz) and imports everyone so far. From then on it runs every hour. If PYQ Vault can't be read,
    the Leads page says so in one line.
 
+## 14. Admissions AI reads LWS Pune's leads (owners only, ~5 min)
+
+Admissions AI (the aptitude test app, where counsellors and telecallers call leads) reads every LWS Pune lead with an
+Indian mobile from `/api/feeds/admissions` every hour (migration 0029), behind a shared secret; it holds no key to this
+database. This is GoPost serving, the other way round from step 13.
+
+1. `npm run db:migrate` (adds `admissions_leads_after`).
+2. Make a secret: `node -e "console.log(require('crypto').randomBytes(32).toString('base64url'))"`.
+3. Put it on GoPost's Vercel project (`lws-marketing-engine`) as `ADMISSIONS_LEADS_SECRET` (Production, Sensitive) and on
+   Admissions AI's (`admissions-ai`) as `GOPOST_LEADS_SECRET`. Redeploy GoPost. Without it the feed answers 401 to everyone.
+4. Admissions AI's side (its import, schedule and first run) is in that repo.
+
 ## Adding another Facebook Page later
 
 The app is granted **current Pages only** (by choice, so a new Page never gets connected by
