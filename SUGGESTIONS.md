@@ -161,6 +161,9 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### Earlier 3D reels may show VIVID colours pastel (logged 2026-10-26, awaiting founder)
+Learning (027, runbook → "Shapes that morph"): solid VIVID objects on the white board lose saturation under the renderer's film tone curve; 027 fixed it with `toneMapped={false}` and a matt finish. **360:** scope = the 3D reels made before it (@lws.pune 014, 025; @pyqvault_'s 3D physics reels) · blast radius = only those renders; nothing depends on them · does it apply? unclear: glossy marbles and glowing objects (025, Bloom) were judged fine by the founder, and tone mapping also keeps highlights from clipping · risk = low (a re-render; old files stay in git) · cost = ~10 min per reel to compare one frame, ~10 min to re-render · **recommendation: decline for posted reels; for any finished, unposted 3D reel compare one frame both ways before it's queued.**
+
 ### Reels 018–023 were made in 2D before "3D reels only" (logged 2026-10-24, awaiting founder)
 Learning (framework F34, founder 2026-10-24): every new @lws.pune reel is 3D. 018–023 (secant → tangent, area between
 curves, matrix grid, log flip, completing the square, derivative cycle) are finished 2D Remotion reels, not yet posted.
