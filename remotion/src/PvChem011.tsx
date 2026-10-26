@@ -39,7 +39,7 @@ function Rig({ t }: { t: number }) {
 // thing in frame (cool white, bright edges), polished salmon copper, a dark wooden handle that doesn't pull the eye.
 const steel = <meshPhysicalMaterial color={C.steel} metalness={0.75} roughness={0.28} clearcoat={0.4} />;
 const gunmetal = <meshPhysicalMaterial color="#474e58" metalness={0.8} roughness={0.38} clearcoat={0.3} />;
-const copper = <meshPhysicalMaterial color={C.copperEdge} metalness={0.9} roughness={0.22} clearcoat={0.6} envMapIntensity={2.6} emissive={C.copper} emissiveIntensity={0.12} />;   // bright enough to read as copper on the dark set
+const copper = <meshPhysicalMaterial color={C.copperEdge} metalness={0.7} roughness={0.24} clearcoat={0.7} envMapIntensity={3} emissive="#b5602f" emissiveIntensity={0.28} />;   // salmon copper, not a brown plank (all three critics)
 const salt = <meshPhysicalMaterial color="#e4eaf2" roughness={0.1} clearcoat={1} transmission={0.25} thickness={0.4} ior={1.54} />;
 /** A colour pushed above 1 so Bloom makes it glow (toneMapped off). */
 const hot = (hex: string, k: number) => new THREE.Color(hex).multiplyScalar(k);
@@ -57,6 +57,7 @@ function DarkSet({ t }: { t: number }) {
       <fog attach="fog" args={[C.board, 9, 15]} />
       <RealLight env={0.35} key={0.5} at={[-3, 7, 6]} span={6} />
       <primitive object={spot} /><primitive object={target} />
+      <pointLight position={[BAR.x + 0.3, 1.4, 1.2]} intensity={7} distance={3.5} color="#ffd0a8" />
       <directionalLight position={[1, 4, -6]} intensity={2.8} color="#7fd4ff" />
       <hemisphereLight args={['#5b6a88', '#05070b', 0.25]} />
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow><planeGeometry args={[40, 40]} /><meshStandardMaterial color={C.floor} roughness={0.85} /></mesh>
@@ -79,12 +80,12 @@ function Segment({ a, b, r, colour, opacity = 1 }: { a: V3; b: V3; r: number; co
 }
 
 /** A cube with dark edges so the clear-white salt reads on the white studio (F24: an edge of its own colour). */
-function SaltCube({ pos, rot, size }: { pos: V3; rot: V3; size: number }) {
+function SaltCube({ pos, rot, size, edge = C.saltEdge }: { pos: V3; rot: V3; size: number; edge?: string }) {
   const edges = useMemo(() => new THREE.EdgesGeometry(new THREE.BoxGeometry(size, size, size)), [size]);
   return (
     <group position={pos} rotation={rot}>
       <mesh castShadow><RoundBox size={[size, size, size]} radius={size * 0.04} />{salt}</mesh>
-      <lineSegments geometry={edges}><lineBasicMaterial color={C.saltEdge} /></lineSegments>
+      <lineSegments geometry={edges}><lineBasicMaterial color={edge} /></lineSegments>
     </group>
   );
 }
@@ -92,14 +93,11 @@ function SaltCube({ pos, rot, size }: { pos: V3; rot: V3; size: number }) {
 /** A hammer at its striking pose: a steel head (face down), a wooden handle out to the side and up. */
 function Hammer({ k, s }: { k: 'copper' | 'salt'; s: number }) {
   const h = hammerAt(k, s), side = k === 'copper' ? -1 : 1, head = { r: 0.14, h: 0.42 };
-  const trail = [1, 2, 3].map(n => hammerAt(k, s - 0.02 * n)).filter(g => Math.abs(g.face - h.face) > 0.02);
   // the handle leaves the head's side at mid-height, out and 25° up (a cylinder's axis is +y: turned by θ it points
   // (−sin θ, cos θ), so θ = −side·(90° − 25°))
   const up = 0.44, len = 1.3, dir = [side * Math.cos(up), Math.sin(up)], from = [side * head.r * 0.8, head.h * 0.55];
   return (
     <>
-    {trail.map((g, n) => <mesh key={n} position={[g.x, g.face + head.h / 2, 0]}><cylinderGeometry args={[head.r, head.r, head.h, 32]} />
-      <meshBasicMaterial color="#9aa6b4" transparent opacity={0.16 - 0.04 * n} depthWrite={false} /></mesh>)}
     <group position={[h.x, h.face, 0]} rotation={[0, 0, h.tilt]}>
       <mesh position={[0, head.h / 2, 0]} castShadow><cylinderGeometry args={[head.r, head.r, head.h, 40]} />{steel}</mesh>
       <mesh position={[0, 0.02, 0]}><cylinderGeometry args={[head.r * 1.04, head.r * 1.04, 0.04, 40]} />
@@ -142,7 +140,7 @@ const puff = (() => {
 })();
 
 function Bench({ s, t }: { s: number; t: number }) {
-  const pieces = piecesAt(s), white = <meshStandardMaterial color="#d8e7fb" roughness={0.2} />;   // cool white shards, no glow (the panel)
+  const pieces = piecesAt(s), white = <meshStandardMaterial color="#c6d5ea" roughness={0.35} />;   // cool white shards, no glow (the panel)
   return (
     <>
       <DarkSet t={t} />
@@ -157,7 +155,7 @@ function Bench({ s, t }: { s: number; t: number }) {
       <Bar s={s} />
       {s < T_BURST
         ? <SaltCube pos={[SALT.x + shiverAt(s)[0], SALT.base + SALT.side / 2, shiverAt(s)[1]]} rot={[0, 0, 0]} size={SALT.side} />
-        : pieces.map((p, i) => <SaltCube key={i} pos={p.pos} rot={p.rot} size={PIECE * 0.985} />)}
+        : pieces.map((p, i) => <SaltCube key={i} pos={p.pos} rot={p.rot} size={PIECE * 0.985} edge="#5d6b7d" />)}   // dark edges: each piece reads
       <group position={[shiverAt(s)[0], 0, shiverAt(s)[1]]}>
         {cracksAt(s).map((c, i) => c.slice(1).map((p, j) => <Segment key={`${i}-${j}`} a={[c[j][0], c[j][1], c[j][2] + 0.006]} b={[p[0], p[1], p[2] + 0.006]} r={0.004} colour="#2f3b4a" />))}
         {cracksAt(s).map((c, i) => c.slice(1).map((p, j) => <Segment key={`h${i}-${j}`} a={[c[j][0] + 0.006, c[j][1] + 0.006, c[j][2] + 0.008]} b={[p[0] + 0.006, p[1] + 0.006, p[2] + 0.008]} r={0.0022} colour="#bfe9ff" />))}
@@ -171,7 +169,7 @@ function Bench({ s, t }: { s: number; t: number }) {
       {chipsAt(s).map((p, i) => <mesh key={'c' + i} position={p.pos} rotation={p.rot} castShadow><boxGeometry args={[p.size, p.size, p.size]} />{white}</mesh>)}
       {shardsAt(s).map((p, i) => <mesh key={'s' + i} position={p.pos} rotation={p.rot} castShadow><boxGeometry args={[p.size, p.size, p.size]} />{white}</mesh>)}
       {dustCloudAt(s).map((d, i) => <sprite key={'d' + i} position={d.pos} scale={[d.r * 2.6, d.r * 2.6, 1]}>
-        <spriteMaterial map={puff} color="#e6ebf2" transparent opacity={d.alpha * 0.55} depthWrite={false} /></sprite>)}
+        <spriteMaterial map={puff} color="#9fb3cc" transparent opacity={d.alpha * 0.4} depthWrite={false} /></sprite>)}
       <Hammer k="copper" s={s} />
       <Hammer k="salt" s={s} />
     </>
@@ -248,7 +246,7 @@ function Scene({ t }: { t: number }) {
     <>
       <Rig t={t} />
       {sceneAt(t) === 'macro' ? <Bench s={storyTime(t)} t={t} /> : <Atoms t={t} />}
-      <EffectComposer multisampling={4}><Bloom mipmapBlur luminanceThreshold={1.0} luminanceSmoothing={0.2} intensity={0.8} radius={0.55} /></EffectComposer>
+      <EffectComposer multisampling={4}><Bloom mipmapBlur luminanceThreshold={1.15} luminanceSmoothing={0.2} intensity={0.8} radius={0.55} /></EffectComposer>
       <BloomWarmUp />
     </>
   );
@@ -279,8 +277,8 @@ function Words({ t }: { t: number }) {
           case 'tag': return line(x, { font: `600 30px ${SOFT_UI}`, letterSpacing: 0.5 }, P.muted);
           case 'line': return line(x, { font: `600 44px ${SOFT_UI}` });
           case 'caption': return pill(x, 'rgba(0,0,0,0)', 'rgba(10,14,20,0.72)', P.ink, { font: `600 ${x.size}px ${SOFT_UI}` });
-          case 'setTag': return pill(x, tint(P.ink, 0.35), 'rgba(27,35,48,0.9)', P.ink, { font: `600 ${x.size}px ${SOFT_UI}` });
-          case 'answer': return pill(x, tint(P.amber, 0.85), 'rgba(40,30,18,0.92)', P.amber, { ...hand(x.size), boxShadow: `0 0 26px ${tint(P.amber, 0.35)}` });
+          case 'setTag': return pill(x, tint(P.ink, 0.55), 'rgba(12,16,22,0.95)', '#ffffff', { font: `600 ${x.size}px ${SOFT_UI}` });
+          case 'answer': return pill(x, P.amber, 'rgba(12,16,22,0.95)', '#ffd79a', { ...hand(x.size), boxShadow: `0 0 26px ${tint(P.amber, 0.35)}` });
         }
       })}
     </>

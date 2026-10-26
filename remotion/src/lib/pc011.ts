@@ -499,7 +499,7 @@ export const CAPTIONS: Caption[] = [
   { t0: CUT2 + 0.2, t1: T_LIKE, text: 'Salt: + and − take turns' },
   { t0: T_LIKE, t1: T_SPLIT, text: 'Slide one step: + meets +' },
   { t0: T_SPLIT, t1: CUT3, text: 'Like charges push. It splits.' },
-  { t0: CUT3 + 0.2, t1: REW0, text: 'Metals bend. Salts shatter.' },
+  { t0: CUT3 + 0.05, t1: REW0, text: 'Metals bend. Salts shatter.' },   // on the cut (pass 3: it came late)
 ];
 export type Kind = 'label' | 'header' | 'chip' | 'tag' | 'nudge' | 'line' | 'caption' | 'setTag' | 'answer';
 export type Text = { name: string; kind: Kind; text: string; size: number; x: number; y: number; alpha: number; box: Box };
@@ -511,7 +511,7 @@ export const bigAt = (t: number) => (t < REW0 ? 1 - prog(t, T_SHRINK, 0.15) : pr
 // the tag drops back to its frame-0 place before the big question returns over it
 const upAt = (t: number) => (t < REW0 ? prog(t, T_SHRINK + 0.15, 0.3) : 1 - prog(t, REW0 + 0.3, 0.5));
 /** The set-ups' tags: only on the wide shots (a close-up has one set-up), out before the rewind. */
-const tagsAt = (t: number) => Math.max(...WIDE.map(([a, b]) => clamp01((t - a) / 0.25) * (b === REW0 ? 1 - prog(t, REW0, 0.4) : clamp01((b - t) / 0.2))));
+const tagsAt = (t: number) => Math.max(...WIDE.map(([a, b]) => clamp01((t - a) / 0.12) * (b === REW0 ? 1 - prog(t, REW0, 0.4) : clamp01((b - t) / 0.2))));
 
 /** Every text on screen at t, with its box (tests: inside Instagram's safe area, no two colliding). */
 export function textsAt(t: number): Text[] {
@@ -540,7 +540,7 @@ export function textsAt(t: number): Text[] {
     const cam = cameraAt(t);
     for (const [k, x] of [['copper', BAR.x], ['salt', SALT.x]] as const) {
       const foot = project([x, 0, SALT_BLOCK.hd + 0.05], cam, FULL), answer = k === 'salt' && t >= ANSWER_AT;
-      const size = answer ? 52 : 42, text = answer ? OPTIONS[ANSWER] : k, half = textBox(text, size, 0, 0, 20).w / 2;
+      const size = answer ? 56 : 46, text = answer ? OPTIONS[ANSWER] : k, half = textBox(text, size, 0, 0, 20).w / 2;
       // kept clear of Instagram's buttons (the bigger answer pill reached into them)
       add({ name: `tag ${k}`, kind: answer ? 'answer' : 'setTag', text, size, x: Math.min(foot.x, SAFE.right - 10 - half), y: foot.y + 56, pad: 20, alpha: vis, pinned: true });
     }

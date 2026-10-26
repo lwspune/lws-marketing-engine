@@ -9,7 +9,7 @@ bursts at 3.2 s (aftershock 0.64, seconds 1–3 moving 15% of the pixels a frame
 break?" (a dive into the bend, then the atoms) · **Loop:** yes, a rewind back to frame 0 (F27: Chemistry #10 and Physics #15
 both end on the end card) · **Framework v1.31** · **Look:** dark set under a spotlight (not the studio: the founder found the
 studio version "not dramatic enough, pretty bland"; F35 full frame kept) · **Music:** `cinematic`, shaped by a level curve
-(a riser into the burst, a hole for it, a lift for the second question) · **Voice:** none (silent) · **Length:** 15.5 s ·
+(a riser into the burst, a hole for it, a lift for the second question) · **Voice:** none (silent) · **Length:** 14.45 s ·
 **Review panel (F38):** first reel through it (see below) · **Made in Remotion** (`remotion/src/PvChem011.tsx`; timeline,
 beat table, chemistry, burst and shard simulation, sound `src/lib/pc011.ts`; tests `tests/pc011.test.ts`).
 
@@ -58,11 +58,12 @@ salt the brightest thing in frame. Na⁺ vs Cl⁻ and copper vs its electrons ar
 
 ## Review panel (F38)
 
-Pass 1 (the dramatic remake, before these fixes): Drama 5 · Colour 5 · Motion 6 · Sound 5. Every must-fix and what was done
-is in `reels/review-panel.md` → Log. Declined: a split-screen frame 0 with both set-ups (keeps the close-up shock; the copper
-comes 0.6 s later) · a run-up whoosh into the hit (a whoosh peaks 0.45 s after it starts, so it would begin before frame 0)
-· a lighter Na⁺ violet (the VIVID set is test-locked; the +/− marks carry the difference) · bigger lattices (they already
-fill 75–90% of the width).
+The first reel through it: three passes, Drama · Colour · Motion · Sound **5 · 5 · 6 · 5 → 5 · 5 · 6 · 5 → 6 · 6 · 6 · –**,
+then the four defects every critic named fixed (copper reading as wood, the shatter white on white, a motion trail that
+looked like a glitch, faint closing labels). That run set the panel's pass rule (F38, v1.32): no defect left, scores logged
+but not a gate, at most two passes. Every must-fix and what was done: `reels/review-panel.md` → Log. Declined, with reasons
+there: red push arrows (yellow is the colour-blind-safe choice pass 1 asked for), uneven shards (salt cleaves into cubes),
+a split-screen first blow, the copper in the cover, a shorter atom section, a run-up whoosh before frame 0.
 
 ## Files
 
