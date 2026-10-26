@@ -29,6 +29,8 @@ that used to be here moved there unchanged (plus the 2026-10-20 points); change 
 
 ## Posting
 
-- **Three reels a day at 09:00, 13:00 and 18:00 IST** (founder, 2026-10-20; was 11:00 / 17:30 / 21:30 until then,
-  L32). Approving in GoPost puts the reel in the next free slot (`publisher/src/lib/domain/slots.ts`).
+- **One reel a day at 18:00 IST** (founder, 2026-10-26: each reel now takes longer to make, with the review panel, F38).
+  Was three a day at 09:00, 13:00 and 18:00 from 2026-10-20 (11:00 / 17:30 / 21:30 before, L32). 18:00 kept: the three
+  slots' framework-reel medians were within ~10% (09:00 ~1,360 views, 13:00 ~1,510, 18:00 ~1,480) and students are free
+  after school. Approving in GoPost puts the reel in the next free slot (`publisher/src/lib/domain/slots.ts`).
 - Numbers and lessons for this handle go in **`pyqvault-learnings.md`**, not @lws.pune's `learnings.md`.

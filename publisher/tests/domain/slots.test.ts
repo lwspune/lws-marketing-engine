@@ -4,12 +4,13 @@ import { nextSlot, slotsFor, POST_SLOTS } from "@/lib/domain/slots";
 // Founder, 2026-10-18: @pyqvault_ posts 3 reels a day at fixed times and the founder only approves or rejects.
 // Approving puts a post in the next free slot of its project (times in IST).
 // Founder, 2026-10-20: 09:00, 13:00, 18:00 (was 11:00, 17:30, 21:30: the 21:30 reels had the lowest watch time;
-// reels/pyqvault-learnings.md L32).
+// reels/pyqvault-learnings.md L32). Founder, 2026-10-26: one reel a day, 18:00 (each reel now takes longer to make: the review
+// panel, F38).
 const ist = (s: string) => new Date(`${s}+05:30`);
 
 describe("slotsFor", () => {
-  it("has three daily slots for PYQ Vault (@pyqvault_) and one for LWS Pune (@lws.pune)", () => {
-    expect(slotsFor("pyqvault-insta")).toEqual(["09:00", "13:00", "18:00"]);
+  it("has one daily slot for PYQ Vault (@pyqvault_), 18:00, and one for LWS Pune (@lws.pune)", () => {
+    expect(slotsFor("pyqvault-insta")).toEqual(["18:00"]);
     expect(slotsFor("pyq-vault")).toEqual(["15:40"]);
   });
   it("has one evening slot for Sound Mind with Shivani (@soundmindwithshivani)", () => {

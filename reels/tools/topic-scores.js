@@ -28,7 +28,7 @@ const ACCOUNTS = {
     core: ["Probability", "Statistics"] },
 };
 const CORE_RUNWAY = 2;                 // ideas to make kept waiting in each core chapter
-const REELS_A_DAY = 3;                 // @pyqvault_ posts at 09:00, 13:00 and 18:00 IST (pyqvault-insta.md)
+const REELS_A_DAY = 1;                 // @pyqvault_ posts one reel a day, 18:00 IST (pyqvault-insta.md; 3 a day until 2026-10-26)
 // Calibration rules (pyqvault-ideas.md → Scoring): enough reels, a 20% gap, one half-step at a time, weights 0–3.
 const CAL = { minReels: 6, minHours: 48, minSide: 3, gap: 1.2, step: 0.5, minWeight: 0, maxWeight: 3, confound: [0.75, 0.25] };
 
@@ -191,10 +191,10 @@ function validate(rows, subjects = SUBJECTS, { weights, swept, cards } = {}) {
   return errors;
 }
 
-/** The "**Open: N ideas · about D days at 3 reels a day.**" line must count the open and queued ideas. */
+/** The "**Open: N ideas · about D days at 1 reel a day.**" line must count the open and queued ideas. */
 function runwayErrors(md, rows) {
-  const m = md.match(/\*\*Open: (\d+) ideas · about (\d+) days at \d+ reels a day\.\*\*/);
-  if (!m) return [`no "Open: N ideas · about D days at ${REELS_A_DAY} reels a day." line`];
+  const m = md.match(/\*\*Open: (\d+) ideas · about (\d+) days at \d+ reels? a day\.\*\*/);
+  if (!m) return [`no "Open: N ideas · about D days at ${REELS_A_DAY} reel${REELS_A_DAY === 1 ? "" : "s"} a day." line`];
   const n = rows.filter((r) => !r.broken && toMake(r)).length, days = Math.ceil(n / REELS_A_DAY);
   return Number(m[1]) === n && Number(m[2]) === days ? []
     : [`the Open line says ${m[1]} ideas and ${m[2]} days; the list has ${n} open or queued (about ${days} days)`];
