@@ -222,8 +222,8 @@ they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm ru
 7. **Check:** render the MP4 to `reels/` and run `check-video.mjs` as in step 4 (four PASS lines), and look at its
    strip. **@pyqvault_: then predict it before it's queued** (framework F30): `node reels/tools/virality-measure.mjs
    reels/<reel>.post.json` (an "F37: the opening fades" warning means the first 3 s settle too early: fix the opening and
-   re-render before going on). **Panel pass 2** (F38): Sound on `tools/sound-report.ts`, Motion on `--frames`; every score
-   ≥ 7 and no must-fix left before it's queued. Then add its rows to `reels/virality-log.md` (Reels: the measured and storyboard points;
+   re-render before going on). **Panel pass 2** (F38): Sound on `tools/sound-report.ts`, Motion on `--frames`; no defect left
+   before it's queued (scores are logged, not a gate; at most two passes). Then add its rows to `reels/virality-log.md` (Reels: the measured and storyboard points;
    Predictions: today's score, band and weakest input, the record and the typical views now, Hindsight no) and run
    `node reels/tools/virality.js`. While it's advisory, a "below typical" reel is flagged to the founder with its weakest
    input; it doesn't stop the reel.
