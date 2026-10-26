@@ -1,0 +1,16 @@
+{
+  "slug": "nda-maths-027-circle-area",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "027 · Why? #15: why a circle's area is πr² (3D rings unroll into a triangle; predict-first)",
+  "video": "nda-maths-027-circle-area.mp4",
+  "cover": "nda-maths-027-circle-area-cover.png",
+  "captions": {
+    "instagram": "NDA Maths · Area. Unroll each ring of a circle and stack them. What shape do they make? A rectangle · B triangle · C semicircle 👇\n\nB, a triangle. You learned area = πr². Here's why.\nEach ring keeps its length when it's straightened. The rim is the longest (2πr), and the rings shrink to nothing at the centre, so they stack into a triangle: base 2πr, height r.\nArea = ½ × 2πr × r = πr².\nTrap: \"a rectangle\" (A). That needs every strip the same length, but the inner rings are shorter, so the triangle fills exactly half of the 2πr × r rectangle. (Cutting a circle into slices makes a rough rectangle. Cutting it into rings makes a triangle.)\nAdding up thin rings is integration: ∫₀ʳ 2πx dx = πr².\n\nNDA asked about this in 2019 (I), Q76: f(r) = perimeter ÷ area of a circle of radius r. f(1) + f(2) = ? Perimeter ÷ area = 2πr ÷ πr² = 2/r, so 2 + 1 = 3 → (c).\n\nSave this 📌 Follow @lws.pune for one NDA maths idea every day.\nPractise NDA maths PYQs free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Integration #LWSPune",
+    "facebook": "NDA Maths · Area. Unroll each ring of a circle and stack them. What shape do they make? A rectangle · B triangle · C semicircle 👇\n\nB. Each ring keeps its length, so they stack into a triangle with base 2πr (the rim) and height r: area = ½ × 2πr × r = πr². Adding the rings is ∫₀ʳ 2πx dx. NDA 2019 (I), Q76: perimeter ÷ area = 2/r, so f(1) + f(2) = 3.\n\nPractise NDA PYQs free, chapter-wise: https://www.pyqvault.com\n\n#NDA #NDAMaths #LWSPune",
+    "youtube": {
+      "title": "Why is a circle's area πr²? Unroll it #shorts",
+      "description": "Cut a circle's rings at the top and straighten them: they stack into a triangle with base 2πr and height r, so the area is ½ × 2πr × r = πr². Adding the rings is the integral of 2πx from 0 to r. NDA 2019 (I) Q76: perimeter ÷ area = 2/r, so f(1) + f(2) = 3.\n\nPractise NDA PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #Shorts"
+    }
+  }
+}
