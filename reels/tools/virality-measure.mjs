@@ -1,5 +1,6 @@
 // Measure a finished reel for the virality predictor (framework F30): motion and colourfulness over the first 3 s, its
-// length, and its cover's colourfulness, decoded from the files the manifest posts (what Instagram gets).
+// length, its cover's colourfulness and F37's aftershock (does the opening keep building to 3 s?), decoded from the
+// files the manifest posts (what Instagram gets).
 // node reels/tools/virality-measure.mjs reels/<reel>.post.json [more.post.json …]
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -30,9 +31,10 @@ for (const file of manifests) {
   })()`);
   const px = (s) => new Uint8ClampedArray(Buffer.from(s, 'base64'));
   const frames = r.frames.map(px), diffs = frames.slice(1).map((f, i) => v.changedShare(frames[i], f));
-  const share = v.motionShare(diffs), colour = median(frames.map(v.colourfulness)), coverColour = r.coverPx ? v.colourfulness(px(r.coverPx)) : null;
+  const share = v.motionShare(diffs), after = v.aftershock(diffs), colour = median(frames.map(v.colourfulness)), coverColour = r.coverPx ? v.colourfulness(px(r.coverPx)) : null;
   console.log(JSON.stringify({ reel: file.replace(/^.*[\\/]/, '').replace('.post.json', ''), seconds: +r.seconds.toFixed(1),
-    motion03: +share.toFixed(2), colour03: +colour.toFixed(1), coverColour: coverColour == null ? null : +coverColour.toFixed(1),
+    motion03: +share.toFixed(2), aftershock: after == null ? null : +after.toFixed(2), colour03: +colour.toFixed(1), coverColour: coverColour == null ? null : +coverColour.toFixed(1),
     points: { motion: v.points.motion(share), colour: v.points.colour(colour), length: v.points.length(r.seconds) } }));
+  if (v.fades(after)) console.log(`  ⚠ F37: the opening fades: motion in 1–3 s is ${Math.round(after * 100)}% of the first second (needs ≥ ${v.AFTERSHOCK * 100}%)`);
 }
 b.close();

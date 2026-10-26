@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.29, 2026-10-26)
+# @pyqvault_ reel framework (v1.30, 2026-10-26)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -130,6 +130,19 @@ hauling the same box, one racing ahead). · *Why:* viewers decide in 3 s, many w
 seen before any words are read, and motion from frame 0 is what holds them (F5, L29, L31). · *Check:* the Hook queue's
 Opening and **Visual hook** columns (`hook-rotation.js` refuses an empty visual hook, or one written as a question); the
 storyboard's first row; the stills sheet's frames from 0–3 s, read with the text hidden. · 📌 founder, 2026-10-21
+
+**F37 · The aftershock: the opening keeps building to 3 s.** The opening move (a Shock above all) doesn't end when it
+lands: from ~0.4 s to 3 s its own consequences grow and spread (charge races over the car, crystals start forming on the
+glass), with **a new event about every second**, each with its own sound (F14): the opening at ~0.2 s, a second around
+1.2 s, a third around 2.2 s. Nothing settles, fades or washes out before 3 s (no slow smoke fill, white wash, dissolve or
+slow cut; those come after 3 s). Around 2–3 s one event hints that the answer is coming without giving it (F6): the
+salt crystals start to look like salt. · *Why:* our two Shock reels started alike (96% and 94% still watching at 1 s) and
+split after: Physics #13's strike kept unfolding (78% at 3 s), Chemistry #10's burst settled into smoke and a white wash
+(71% at 3 s, ~11 points lost a second from 1.5 to 5 s). F5's "something changes on every frame" passed both: drifting
+smoke changes every frame. Each new event is a small reason to stay, as each tick of a running count is (L62). · *Check:*
+the storyboard lists ≥ 3 events in 0–3 s, each with a sound; `virality-measure.mjs` prints the **aftershock** (median
+motion in 1–3 s ÷ in 0.2–1 s) and warns under 0.6 (`virality.js` `AFTERSHOCK`: Chemistry #10 0.52 and Physics #9b 0.28
+fade, every other framework reel 0.8 or more); fix the opening before queuing. · 🧪 L72
 
 **F26 · A second hook at the answer.** As the first answer lands, the next question appears (≤ 7 words, F7), and the
 reel's explanation becomes its answer: "Then which angle goes farthest?" (45°), "Swap them: copper rod, zinc liquid?"
@@ -363,3 +376,4 @@ never rewritten), moves the weights the rule allows, and logs the run. · 🧪 L
 | v1.27 | 2026-10-22 | No point changed. Framework 2 (`pyqvault-framework-2.md`, an outside storyboard bible: suit-up builds, ~30 s, an explainer hook, the formula and a takeaway at the end) is put on test against this framework in one pair on one topic, electromagnetic induction: `pv-f2-induction` (made by it) vs `pv-physics-011-induction` (made by this one), 09:00 Fri 23 and Sat 24 Oct. | Founder, 2026-10-22: "let the data speak". Measured by L61, with its decision rule set before posting. |
 | v1.28 | 2026-10-23 | F10 rewritten: "Entertainment first, the result real". Drama of any kind is in (slow motion, crashes, flashes, shake, stakes, exaggerated sizes); the one floor is a real result and real numbers on screen; scale, speed and zoom notes move from the screen to the caption. F25: new opening **Shock**, a dramatic event from the topic inside the first second (any moment of the topic, not only the climax; explosions and danger judged by the founder case by case; never a real person hurt). First reel: P51, lightning hits a car. | Founder, 2026-10-23, after the retention-curve debate: Instagram viewers come for entertainment; nobody can read a reel in its first second, so a visual shock has to win it and the question carries seconds 1–3. Skip rate (viewers gone by 3 s) goes with reach on 179 @lws.pune reels (pyqvault-learnings.md L64). |
 | v1.29 | 2026-10-26 | F35 one picture, full frame and F36 soft studio added (🧪); F3, F4 and F7 amended to fit them (the graph, the A/B/C chips and the captions leave their fixed boxes; the question shrinks to one line at ~3 s). On test as one package in Physics #15 (P36, ice at the top). | Founder, 2026-10-26, after the study of @studyhacks09's quantum-numbers reel (`study/reels/DdjNcuvomWl.mp4`, study only): "our videos are at the center of reel while top and bottom is occupied by content/text"; the founder approved the plan (layout + studio look in one test reel). Measured by L71. |
+| v1.30 | 2026-10-26 | F37 the aftershock added (🧪): the opening keeps building to 3 s, a new event about every second, no fade or wash before 3 s, a hint of the answer at 2–3 s. `virality-measure.mjs` prints the aftershock ratio and warns under 0.6. First reel: the third Shock reel. | Chemistry #10's retention curve (founder's screenshot, 26 Oct): 94% at 1 s like Physics #13's 96%, but 71% at 3 s vs 78%, falling fastest while smoke filled the jar and the screen washed white. Founder, 2026-10-26: "we have answer for 1st [second]. now lets work on 2–3 sec"; approved the plan. Measured by L72. |
