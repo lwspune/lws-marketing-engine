@@ -238,7 +238,7 @@ If the window doesn't offer the WhatsApp Business app option, Meta has changed h
 
 ## 11. YouTube Shorts (~20 min, then Google's audit)
 
-Done 2026-10-23 for LWS Pune; repeat only steps 5–7 for another channel.
+Done for LWS Pune (2026-10-23 to 26); for another channel repeat only step 5.
 
 1. **Google Cloud project** `GoPost` (`gopost-512510`, signed in as the account that owns the LWS Pune channel) →
    APIs & Services → Library → **YouTube Data API v3** → Enable.
@@ -256,8 +256,10 @@ Done 2026-10-23 for LWS Pune; repeat only steps 5–7 for another channel.
    first. Being added under YouTube Studio → Permissions is **not** enough for the API.
 6. **Privacy policy**: lwspune.in/privacy-policy/ needs the "YouTube and Google" section (uses YouTube API Services,
    links to the YouTube Terms and Google's Privacy Policy, what's stored, how to revoke). The auditors read it.
-7. **Audit**: support.google.com/youtube/contact/yt_api_form → audit. **Until it passes, every API upload is Private
-   (locked)**: GoPost still records it as published (uploading again would only make a second private copy).
+7. **Audit, only if needed**: Google says API uploads from unaudited projects are locked Private, but the first upload
+   (2026-10-26) went out public, so it wasn't submitted. Do it (support.google.com/youtube/contact/yt_api_form) if a
+   Short ever arrives "Private (locked)", or for more than ~6 uploads a day. It wants your legal details, an
+   architecture + user-flow diagram, and a screen recording of queue → approve → the Short live on YouTube.
 
 Quota: about 6 uploads a day per Google project (shared by every channel); over it, the card says to press Retry
 tomorrow. A reel with a `-yt` copy (end card "Subscribe for more", `youtubeVideo` in its manifest) sends that copy.
