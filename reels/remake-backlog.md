@@ -53,7 +53,7 @@ but a good concept isn't blocked for lack of one. Only NDA maths chapters go on 
 | W26 | Grace marks: +5 to everyone | none: core chapter (F32) | the dots slide, the spread bar stays (σ same); ×2 doubles it | Statistics (dispersion) | |
 | W27 | Same average, two classes | none: core chapter (F32) | each mark's gap to the mean drawn as a real square; their total area is the variance | Statistics (dispersion) | |
 | W28 | Correlation: the cloud becomes a line | none: core chapter (F32) | 200 cadets' height vs weight; the cloud squeezes into a line as r climbs to 1 | Statistics (correlation) | |
-| W29 | Why is a circle's area πr²? (rings unroll into a triangle) | @proof.motion 126k (30×) [link](https://www.instagram.com/reel/DcVE1Qxqr7-/), their #1 by far | the circle's rings peel off and lie flat, stacking into a triangle: base 2πr, height r, so ½ · 2πr · r; the same sum of rings is ∫₀ʳ 2πx dx | Area by integration (NDA 2019 (I) Q76: perimeter ÷ area = 2/r) | next |
+| W29 | Why is a circle's area πr²? (rings unroll into a triangle) | @proof.motion 126k (30×) [link](https://www.instagram.com/reel/DcVE1Qxqr7-/), their #1 by far | the circle's rings peel off and lie flat, stacking into a triangle: base 2πr, height r, so ½ · 2πr · r; the same sum of rings is ∫₀ʳ 2πx dx | Area by integration (NDA 2019 (I) Q76: perimeter ÷ area = 2/r) | ✅ made 2026-10-26 (reel 027) |
 | W30 | Why is C ÷ d always π? (roll the circle out) | @proof.motion 6.8k (1.6×) [link](https://www.instagram.com/reel/DcfgBdrqz6k/) | a wheel rolls one turn; its track is laid off in diameters: 3 and a bit, for every size of wheel | Trigonometry (radian measure) | |
 | W31 | Why a² + b² = c² (the squares pour across) | @proof.motion 10.2k (2.5×) [link](https://www.instagram.com/reel/Dc233N3AwPu/) | squares on the sides as 3D tanks; the two small ones pour into the big one and fill it exactly | Coordinate geometry (distance formula) | |
 
@@ -88,7 +88,7 @@ and the goal of the reel is reach. `node reels/tools/topic-scores.js lwspune` ch
 | W26 | M | Statistics · Grace marks: +5 to everyone slides the dots, the spread bar doesn't move (σ same); ×2 stretches it to double | — | 2 | 2 | 1 | 1 | 6 | |
 | W27 | M | Statistics · Same average, two classes: each mark's gap to the mean drawn as a real square; the squares' total area is the variance | — | 3 | 1 | 1 | 1 | 6 | |
 | W28 | M | Statistics · Correlation: a cloud of 200 cadets' height vs weight squeezes into a line as r climbs to 1 | — | 2 | 2 | 1 | 0 | 5 | |
-| W29 | M | Why is a circle's area πr²? The rings unroll and stack into a triangle: ½ · 2πr · r | 30.4 | 3 | 2 | 1 | 1 | 9 | |
+| W29 | M | Why is a circle's area πr²? The rings unroll and stack into a triangle: ½ · 2πr · r | 30.4 | 3 | 2 | 1 | 1 | 9 | ✅ made 2026-10-26 (`nda-maths-027-circle-area`) |
 | W30 | M | Why is C ÷ d always π? A wheel rolls one turn and its track is measured in diameters | 1.64 | 2 | 2 | 1 | 1 | 6 | |
 | W31 | M | Why a² + b² = c²: the squares on the two short sides pour into the big one | 2.47 | 2 | 1 | 1 | 1 | 5 | |
 
