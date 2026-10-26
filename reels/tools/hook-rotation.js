@@ -1,8 +1,7 @@
 "use strict";
 // Hook rotation (framework F25, @pyqvault_, founder 2026-10-21): the A/B/C guess (F4) stays on every reel, but the hook
-// around it and the opening picture rotate, so the first 3 seconds don't become the same every reel. Each reel also asks a
-// second question as the first is answered (F26: viewers leave at the answer) and either loops back to its first frame
-// or ends on the end card (F27), never 3 the same in a row so the two can be compared. Every hook has a visual layer: the
+// around it and the opening picture rotate, so the first 3 seconds don't become the same every reel. Every reel loops back
+// to its first frame (F27, confirmed 2026-10-26: loops earn rewatches). Every hook has a visual layer: the
 // picture that poses the question with the text hidden (founder, 2026-10-21). Reads the
 // "## Hook queue" table in reels/pyqvault-ideas.md and checks it against the rules and the ideas queued in its Ideas table.
 //
@@ -18,12 +17,10 @@ const OPENINGS = ["Orbit 360°", "Race running", "Ending first", "Zoom (scale)",
   "X-ray", "Split screen", "Colour flood", "Shock"];
 // Out by the founder's call: the reason is in the framework's change log.
 const BANNED = { "Exam badge": "out (founder, 2026-10-21)" };
-const ORBIT = "Orbit 360°", ORBIT_MAX = 2, WINDOW = 4;
-const MAX_WORDS = 7, LOOP_RUN = 3;   // F7: on-screen lines ≤ 7 words
 const HEADING = "## Hook queue";
 
-// The sound kit both hooks' sounds come from (founder, 2026-10-22; F14: only what's on screen): the hits and beds of
-// remotion/src/lib/sfx.ts (a test keeps this list equal to it), a music hit (F13), or silent for a slow move (F15).
+// The sound kit the hook's sound comes from (founder, 2026-10-22; F14: only what's on screen): the hits and beds of
+// remotion/src/lib/sfx.ts (a test keeps this list equal to it), a music hit (F13), or silent for a slow move.
 const SOUNDS = ["click", "crack", "thunk", "whump", "tap", "boom", "whoosh-in", "whoosh-out", "snap", "shimmer", "clang", "roar", "scrape", "rain",
   "music hit", "silent"];
 
@@ -32,7 +29,6 @@ const soundsIn = (cell) => cell.split("+").map((s) => s.replace(/\([^)]*\)/g, ""
 
 // Column header → field (columns are read by name, so one can be added without breaking the rest).
 const FIELDS = { Order: "order", "#": "id", Hook: "hook", Opening: "opening", "Visual hook": "visual", "Hook sound": "sound",
-  "Second hook": "secondHook", "Second visual": "secondVisual", "Second sound": "secondSound",
   Loop: "loop", "Frame 0 (draft)": "words" };
 
 /** Rows of the hook queue, in order (the table under HEADING; stops at the next ## heading). */
@@ -68,33 +64,16 @@ function rotationErrors(q) {
     // column describes what we see that move do, so it can't be a question in words.
     if (!r.visual) errors.push(`${r.id}: no visual hook (what eye-catching move opens the reel: an orbit, a suit-up assembly, a split…?)`);
     else if (r.visual.includes("?")) errors.push(`${r.id}: the visual hook reads as a question; describe what we see the move do`);
-    // Founder, 2026-10-22: "second should also have attention grabbing visual": a striking move as the second question appears.
-    if (!r.secondVisual) errors.push(`${r.id}: no second visual (what striking move comes with the second hook: a punch-in, a split, a swap…?)`);
-    else if (r.secondVisual.includes("?")) errors.push(`${r.id}: the second visual reads as a question; describe what we see`);
-    // Founder, 2026-10-22: each hook's move has its sound, from the kit.
-    for (const [key, label] of [["sound", "hook sound"], ["secondSound", "second sound"]]) {
-      if (!r[key]) { errors.push(`${r.id}: no ${label} (which kit sound goes with the move? ${SOUNDS.join(", ")})`); continue; }
-      for (const s of soundsIn(r[key])) if (!SOUNDS.includes(s)) errors.push(`${r.id}: ${label} "${s}" is not in the sound kit`);
-    }
-    const words = (r.secondHook || "").split(/\s+/).filter(Boolean).length;
-    if (!words) errors.push(`${r.id}: no second hook (F26)`);
-    else if (words > MAX_WORDS) errors.push(`${r.id}: second hook has ${words} words (at most ${MAX_WORDS})`);
-    if (!["yes", "no"].includes(r.loop)) errors.push(`${r.id}: loop "${r.loop}" should be yes or no (F27)`);
+    // Founder, 2026-10-22: the hook's move has its sound, from the kit.
+    if (!r.sound) errors.push(`${r.id}: no hook sound (which kit sound goes with the move? ${SOUNDS.join(", ")})`);
+    else for (const s of soundsIn(r.sound)) if (!SOUNDS.includes(s)) errors.push(`${r.id}: hook sound "${s}" is not in the sound kit`);
+    if (r.loop !== "yes") errors.push(`${r.id}: loop "${r.loop}": every reel loops (F27)`);
     const prev = q[i - 1];
     if (!prev) return;
     if (r.hook === prev.hook) errors.push(`${r.id}: hook "${r.hook}" again right after ${prev.id}`);
     if (r.opening === prev.opening) errors.push(`${r.id}: opening "${r.opening}" again right after ${prev.id}`);
     if (r.id[0] === prev.id[0]) errors.push(`${r.id}: two ${subjectName[r.id[0]] ?? r.id[0]} reels in a row (F19: P → C)`);
   });
-  for (let i = 0; i + LOOP_RUN <= q.length; i++) {
-    const w = q.slice(i, i + LOOP_RUN);
-    if (w.every((r) => r.loop === w[0].loop) && ["yes", "no"].includes(w[0].loop))
-      errors.push(`loop "${w[0].loop}" on ${LOOP_RUN} reels in a row (${w[0].id}–${w[LOOP_RUN - 1].id})`);
-  }
-  for (let i = 0; i + WINDOW <= q.length; i++) {
-    const w = q.slice(i, i + WINDOW), n = w.filter((r) => r.opening === ORBIT).length;
-    if (n > ORBIT_MAX) errors.push(`orbit opens ${n} of the ${WINDOW} reels ${w[0].id}–${w[WINDOW - 1].id} (at most ${ORBIT_MAX})`);
-  }
   return errors;
 }
 
@@ -113,7 +92,7 @@ if (require.main === module) {
   const md = require("node:fs").readFileSync(require("node:path").join(__dirname, "..", "pyqvault-ideas.md"), "utf8");
   const ts = require("./topic-scores.js");
   const q = parseQueue(md), errors = [...rotationErrors(q), ...syncErrors(q, ts.queued(ts.parse(md)))];
-  for (const r of q) console.log(`${r.order}. ${r.id} · ${r.hook} · ${r.opening} · then "${r.secondHook}" · loop ${r.loop}`);
+  for (const r of q) console.log(`${r.order}. ${r.id} · ${r.hook} · ${r.opening} · loop ${r.loop}`);
   if (errors.length) { console.error(errors.join("\n")); process.exit(1); }
   console.log(q.length ? "✓ rotation OK" : "hook queue is empty");
 }

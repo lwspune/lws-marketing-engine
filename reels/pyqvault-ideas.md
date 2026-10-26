@@ -761,24 +761,21 @@ each answer is re-derived in its reel's tests (F10).
 
 **The next @pyqvault_ reels, in order** (founder 2026-10-21). The topics are F21's picks (Ideas above); the A/B/C
 guess (F4) stays on every one. Per reel: the **hook** and the **opening picture** rotate (F25: no hook or opening twice in
-a row, the orbit opens at most 2 of any 4 reels, P → C); **every hook has a visual layer** (founder, 2026-10-21): the
-**Visual hook** column says what the eye-catching move in the first 3 s does (an orbit, a punch-in, parts assembling like
-a suit-up, an object splitting apart, a morph, a colour flood; framework F25), best when it also sets up the question;
-the **Second visual** column gives the second hook its own striking move as it appears, and **Hook sound** / **Second sound**
-name the kit sound each move gets (founder, 2026-10-22; F14);
-a **second hook** asks the next question as the first is
-answered, ≤ 7 words (F26: viewers leave at the answer); and the reel either **loops** back to its first frame or ends on
-the end card (F27: never 3 the same in a row, so the two can be compared). "PYQ Vault · pyqvault.com" sits under the
+a row, P → C); **every hook has a visual layer** (founder, 2026-10-21): the **Visual hook** column says what the
+eye-catching move in the first 3 s does (an orbit, a punch-in, parts assembling like a suit-up, an object splitting apart,
+a morph, a colour flood; framework F25), best when it also sets up the question; **Hook sound** names the kit sound the move
+gets (founder, 2026-10-22; F14); and every reel **loops** back to its first frame (F27). No second hook and no orbit cap
+since framework v1.33 (2026-10-26: no gain in the data). "PYQ Vault · pyqvault.com" sits under the
 question from frame 0 and stays (F20). The words are drafts: the options and answers are re-derived in each reel's tests
 (F10), and anything sped up or not to scale is noted in the caption, not on screen (F10). `node reels/tools/hook-rotation.js` checks this table;
 `tests/hook-rotation.test.js` keeps it in step with the queued rows of Ideas. Take a row out once its reel is made (its
-hook, second hook and loop go in the Hook column of `pyqvault-learnings.md`).
+hook and opening go in the Hook column of `pyqvault-learnings.md`).
 
-| Order | # | Hook | Opening | Visual hook | Hook sound | Second hook | Second visual | Second sound | Loop | Frame 0 (draft) |
-|---|---|---|---|---|---|---|---|---|---|---|
-| 4 | C9 | Put in order | Colour flood | four glasses on a shelf flooding with colour, four empty numbered slots waiting below them | shimmer (the colours flood in) | Where does pure water sit? | a clear glass of water slides into the empty middle slot and floods green | tap (the glass lands) + shimmer (it floods green) | yes | "Lemon, milk, soap, bleach: most acidic first?" three orders as A/B/C; indicator colours already spreading. Second answer: pH 7, green. Loop: the colours wash back to the start |
-| 5 | P7 | Same start, two endings | Assemble (suit-up) | two drones build themselves part by part (frame, arms, rotors spinning up, ropes clipping on), then pull identical boxes; one box lifts off, the other scrapes along the ground | snap ×8 (one per part locking, pitch rising) + shimmer (both drones complete) | How steep before it lifts? | the dragging drone's rope swings steeper, live, until its box peels off the ground | click (one per degree as the rope steepens) + whump (the box peels off) + music hit | no | "Same drone, same box, same pull. One lifts it, one drags it. Why?" A rope angle · B rope length · C luck; the drones assemble behind the question, then fly. Second answer: the angle where F sin θ = mg, live |
-| 6 | C15 | Ending first | Ending first | a copper-coated rod standing in clear liquid; the picture starts running backwards and the liquid turns blue | shimmer (the rewind) | Swap them: copper rod, zinc liquid? | the rod and the liquid swap places in one morph: a copper rod standing in clear zinc liquid | shimmer (the swap) + snap (both land in place) | yes | Open on a copper-coated rod in clear liquid: "This was zinc in blue liquid. Where did the blue go?" then rewind (time-lapse, labelled). Second answer: nothing happens (copper can't push zinc out). Loop: ends where it began |
+| Order | # | Hook | Opening | Visual hook | Hook sound | Loop | Frame 0 (draft) |
+|---|---|---|---|---|---|---|---|
+| 4 | C9 | Put in order | Colour flood | four glasses on a shelf flooding with colour, four empty numbered slots waiting below them | shimmer (the colours flood in) | yes | "Lemon, milk, soap, bleach: most acidic first?" three orders as A/B/C; indicator colours already spreading. Loop: the colours wash back to the start |
+| 5 | P7 | Same start, two endings | Assemble (suit-up) | two drones build themselves part by part (frame, arms, rotors spinning up, ropes clipping on), then pull identical boxes; one box lifts off, the other scrapes along the ground | snap ×8 (one per part locking, pitch rising) + shimmer (both drones complete) | yes | "Same drone, same box, same pull. One lifts it, one drags it. Why?" A rope angle · B rope length · C luck; the drones assemble behind the question, then fly. Loop: both drones land back on the start |
+| 6 | C15 | Ending first | Ending first | a copper-coated rod standing in clear liquid; the picture starts running backwards and the liquid turns blue | shimmer (the rewind) | yes | Open on a copper-coated rod in clear liquid: "This was zinc in blue liquid. Where did the blue go?" then rewind (time-lapse, labelled). Loop: ends where it began |
 
 ## Concept sweep
 
