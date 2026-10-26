@@ -360,6 +360,13 @@ there, `PYQVAULT_LEADS_SECRET` here); GoPost holds no key to PYQ Vault's databas
 cursor in one transaction; channel `website`, `page` "PYQ Vault · account" / "PYQ Vault · quiz"). A feed that can't be read
 shows one line on the Leads page. `npm run leads:pyqvault -- --org=lws-pune [--dry-run]` runs it by hand and registers the
 feeds. SETUP.md step 13. A student marked "Not a lead" comes back only if they change their PYQ Vault profile again.
+**Admissions feed (0029, founder 2026-10-26):** Admissions AI (the aptitude test app, where LWS's counsellors and
+telecallers call leads) reads every `lws-pune` lead with an Indian mobile, whatever the course, from `GET
+/api/feeds/admissions` every hour, behind `ADMISSIONS_LEADS_SECRET` (`GOPOST_LEADS_SECRET` there); it holds no key to this
+database. `admissions_leads_after` (service role) decides who counts; the cursor is `(created_at, id)`, not `lead_at`, so a
+lead added late with an old date isn't passed by, and a lead added in the last two minutes is held back so one still being
+saved can't land behind the cursor. `src/lib/domain/admissionsFeed.ts`. Only new leads travel: an edit here afterwards
+doesn't reach Admissions AI. The middleware lets `api/feeds/` through, so each feed guards itself. SETUP.md step 14.
 **Leads from chats GoPost can't see (0018, founder 2026-10-21):** e.g. +91 91563 10546 (the SPI ad number, not connected):
 read in WhatsApp Web through Claude in Chrome, read-only; opening an unread chat marks it read, so judge unread ones by
 their preview or ask first. The founder approves the verdicts, then `npm run leads:add -- --org=lws-pune --channel=whatsapp
