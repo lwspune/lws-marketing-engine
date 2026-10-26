@@ -54,7 +54,7 @@
   const ease = p => p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
   // A tone's gain curve: fn(t) clamped to 0…1, sampled `rate` times a second from t0 to t1, faded over
   // 0.25 s at both ends so it never clicks (tests/reel-tones.test.js).
-  const MUSIC_STYLES = ['lofi', 'bright', 'calm', 'drive', 'synthwave', 'trap', 'cinematic'];
+  const MUSIC_STYLES = ['lofi', 'bright', 'calm', 'drive', 'synthwave', 'trap', 'cinematic', 'anthem'];
   // Where each riser-into-impact goes (tests/reel-music.test.js): a riser runs up to 2 s into its hit; hits in the
   // first second, in the fade-out, or within 1.5 s of the previous hit are dropped.
   function hitWindows(hits, duration) {
@@ -64,6 +64,21 @@
       out.push({ from: Math.max(0.3, at - 2), at });
     }
     return out;
+  }
+  // The anthem's drum plan (tests/reel-music.test.js), in seconds from the start: a march at 100 BPM (kick on 1 and 3,
+  // snare on 2 and 4, ghost 16ths, a low tom on 1 and the "and" of 4), resting inside every `music.calm` span, with a
+  // 32nd-note snare roll filling the 1.2 s before each hit.
+  function anthemPlan(config) {
+    const M = config.music ?? {}, D = config.duration, bt = 60 / 100, calm = M.calm ?? [];
+    const resting = t => calm.some(([a, b]) => t >= a && t < b), drums = [];
+    for (let at = 0; at < D; at += bt * 4) {
+      const put = (kind, b, peak) => { const t = at + b * bt; if (t < D && !resting(t)) drums.push({ kind, t, peak }); };
+      put('kick', 0, 0.9); put('kick', 2, 0.8); put('tom', 0, 0.5); put('tom', 3.5, 0.4);
+      put('snare', 1, 0.34); put('snare', 3, 0.34);
+      for (const b of [0.75, 1.5, 1.75, 2.75, 3.25, 3.75]) put('ghost', b, 0.07);
+    }
+    const rolls = hitWindows(M.hits ?? [], D).map(({ at }) => ({ from: Math.max(0, Math.round((at - 1.2) * 1000) / 1000), to: at }));
+    return { bpm: 100, drums, rolls };
   }
   function toneCurve(fn, t0, t1, rate = 100) {
     const n = Math.round((t1 - t0) * rate) + 1, out = new Float32Array(n);
@@ -494,7 +509,7 @@
         comp.threshold.value = -16; comp.ratio.value = 4; comp.attack.value = 0.004; comp.release.value = 0.2;
         // master → compressor → per-style level → limiter → out, so every style lands at the house loudness
         // (body ≈ −22 dB RMS, peaks ≤ −3 dB; measured with reels/tools/check-video.mjs).
-        const TRIM = { drive: 0.18, synthwave: 2.2, trap: 0.85, cinematic: 2.6 }, trim = ac.createGain(), lim = ac.createDynamicsCompressor();
+        const TRIM = { drive: 0.18, synthwave: 2.2, trap: 0.85, cinematic: 2.6, anthem: 1 }, trim = ac.createGain(), lim = ac.createDynamicsCompressor();
         trim.gain.value = TRIM[name]; lim.threshold.value = -9; lim.knee.value = 0; lim.ratio.value = 20; lim.attack.value = 0.001; lim.release.value = 0.1;
         tone.frequency.value = 14000; master.disconnect(); master.connect(comp); comp.connect(trim); const post = ac.createGain(); post.gain.value = 0.56; // the limiter adds make-up gain: take 5 dB back
         trim.connect(lim); lim.connect(post); post.connect(tone);
@@ -601,6 +616,34 @@
               }
             }
           }
+        } else if (name === 'anthem') {
+          // 100 BPM march in D major: D – Bm – G – A. Choir pad, a brass line (slow-attack saws, our own tune), a string
+          // ostinato, march drums with toms, a snare roll into each hit. Drums and ostinato rest in `music.calm`, where
+          // the brass plays softly over the pad.
+          const bt = 0.6, br = bt * 4, CH = [[50, 54, 57], [47, 50, 54], [43, 47, 50], [45, 49, 52]];
+          const LINE = [[[0, 69], [1, 74], [1.5, 76], [2, 78], [3, 76]], [[0, 74], [1, 71], [2, 69], [3, 66]],
+            [[0, 71], [1, 74], [2, 79], [3, 78]], [[0, 76], [1.5, 73], [2, 76], [3, 81]]];
+          const plan = anthemPlan(config), calm = M.calm ?? [], resting = t => calm.some(([a, b]) => t >= a && t < b);
+          const tom = (at, peak) => {
+            const o = ac.createOscillator(), g = ac.createGain();
+            o.frequency.setValueAtTime(120, at); o.frequency.exponentialRampToValueAtTime(70, at + 0.3);
+            env(g, at, peak, 0.003, 0.5); o.connect(g); out(g, 0, 0.4); o.start(at); o.stop(at + 0.55);
+          };
+          for (let k = 0; k * br < D; k++) {
+            const at = t0 + k * br, ch = CH[k % 4], soft = resting(k * br + 0.01);
+            padChord(ch.map(m => m + 12), at, br, soft ? 0.03 : 0.024, 1600);
+            sub(hz(ch[0] - 12), at, br * 0.9, soft ? 0.18 : 0.32);
+            for (const [b, m] of LINE[k % 4]) saw(hz(m), at + b * bt, bt * 0.95, soft ? 0.035 : 0.06, 1900, 0, 0.5, null, 0.06);
+            if (!soft) for (let e = 0; e < 8; e++) saw(hz(ch[e % 3] + 12), at + e * bt / 2, bt / 2 * 0.7, 0.03, 2400, e % 2 ? 0.3 : -0.3, 0.3);
+          }
+          for (const d of plan.drums) {
+            const at = t0 + d.t;
+            if (d.kind === 'kick') kick(at, d.peak); else if (d.kind === 'tom') tom(at, d.peak);
+            else snare(at, d.peak, d.kind === 'ghost' ? 0.06 : 0.25, d.kind === 'ghost' ? 0.2 : 0.7);
+          }
+          for (const { from, to } of plan.rolls) for (let t = from; t < to; t += bt / 8) {
+            const u = (t - from) / (to - from); snare(t0 + t, 0.05 + 0.25 * u * u, 0.05, 0.4);
+          }
         } else if (name === 'cinematic') {
           // 90 BPM in D minor: Dm – B♭ – F – C. 16th-note string ostinato, deep drums that build, a brass swell.
           const bt = 60 / 90, br = bt * 4, CH = [[50, 53, 57], [46, 50, 53], [53, 57, 60], [48, 52, 55]];
@@ -648,7 +691,7 @@
           if (k % 2 === 1) strike(hz(ch[3] + 24), at + 3 * b3, 2.8, 0.06);
         }
       }
-      if (['drive', 'synthwave', 'trap', 'cinematic'].includes(style)) energetic(style);
+      if (['drive', 'synthwave', 'trap', 'cinematic', 'anthem'].includes(style)) energetic(style);
       for (let k = 0; style === 'lofi' && k * bar < D; k++) {
         const at = t0 + k * bar, chord = CHORDS[k % 4];
         for (const m of chord) for (const d of [-7, 7]) pad(hz(m), at, bar + 0.3, 0.03, padBus, d);
@@ -775,5 +818,5 @@
     window.prepare = () => prepare(config.lines);
   }
 
-  window.Reel = { mount, WHITE, LAB, palette, toneCurve, wav, hitWindows, MUSIC_STYLES };
+  window.Reel = { mount, WHITE, LAB, palette, toneCurve, wav, hitWindows, anthemPlan, MUSIC_STYLES };
 })();
