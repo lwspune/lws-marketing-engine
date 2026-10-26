@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.32, 2026-10-26)
+# @pyqvault_ reel framework (v1.33, 2026-10-26)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -28,22 +28,21 @@ notes are PYQ Vault's own (every concept is one a student will meet), and the fo
 2026-10-21). · *Check:* a remake's row has the proof link; every row has a Source (`topic-scores.js`). · 📌 founder,
 2026-10-18; notes and founder concepts 🧪 L59
 
-**F21 · Pick by a score that our results tune.** Each idea in `pyqvault-ideas.md` is scored out of 100: each criterion's
+**F21 · Pick by a score.** Each idea in `pyqvault-ideas.md` is scored out of 100: each criterion's
 points × its weight, over the best possible. Criteria (anchors in the list's Scoring table): proof (−1–3, from their
 views multiple; a known flop, under 1×, is −1) · vivid (0–3) · guess (0–2) · surprise (0–2: is the obvious answer
 wrong?) · law live (0–1) · everyday (0–2). The subject that's due (P → C) takes its highest open score, a tie going to the
-bigger views multiple, then to the idea that shows its law live (F3). **The weights are tuned at every analysis**
-(founder, 2026-10-21): `topic-scores.js pyqvault --calibrate` compares each posted reel's score with its 48 h result
-(watch time and views against the typical reel), reports how well the score ranks them, and moves a criterion's weight
-by 0.5 when its high scorers beat its low scorers by 20% or more (at least 3 reels a side, 6 in all; never when the
-split lines up with a background, music, voice or hook); each run is logged in the list. **No exam-weight criterion:**
+bigger views multiple, then to the idea that shows its law live (F3). **The weights are frozen** (v1.33): on the 18
+framework reels the score ranks views at −0.33 and watch time at 0.07, so tuning it at every analysis only moved weights on
+noise; `topic-scores.js pyqvault --calibrate` still runs by hand, and whether the score stays is decided in the next prune
+(Round 2, with F4 and F25). **No exam-weight criterion:**
 the goal is engagement and reach (founder). **No repeats:** a concept already made is not picked again, even under a
 new angle; its row is parked with the reel it repeats (founder, 2026-10-20). · *Why:* the criteria are F1–F4's
 reasons turned into numbers, so the choice is the same whoever makes it; a fixed score can only be judged, a tuned one
 learns which criteria actually bring watch time and views on our account. Surprise is there because our comments are
 still 0 and a wrong first guess is what makes people comment (L28); everyday widened because the spoon, the wing mirror
 and the soda can were the everyday ideas (@mathsy.uk's #1, 2.7M). · *Check:* the tool passes
-(`tests/topic-scores.test.js` also checks the real list); the calibration log has a row for every analysis. · 🧪 L35
+(`tests/topic-scores.test.js` also checks the real list). · 🧪 L35, on notice
 
 **F28 · A notes or founder concept earns its row.** A concept from the notes or from the founder (F1) is curated
 against the framework before it's scored (a founder idea that fails a point comes back with a version that passes, or the
@@ -84,7 +83,8 @@ at the frame strip: is something new happening every second, across the whole fr
 **F4 · Ask first (predict-first).** Frame 0 asks a question the viewer can answer in two seconds, with A/B/C and
 "comment your guess 👇" (`PredictHeader`); the picture settles it and the right option lights. The caption's first line
 repeats it. · *Why:* the account that asks gets 3.3 comments per 1,000 views, everyone else 0–1 (L28); our first 8
-reels got 0 comments. · *Check:* the question + options are on the first frame. **v1.29 (with F35, on test):** after the guess window (~3 s) the A/B/C chips and the nudge go and the question shrinks to one line under the top edge; the answer comes back as a label beside the object. · 🧪 L28, L71
+reels got 0 comments. · *Check:* the question + options are on the first frame. **v1.29 (with F35, on test):** after the guess window (~3 s) the A/B/C chips and the nudge go and the question shrinks to one line under the top edge; the answer comes back as a label beside the object. · 🧪 L28, L71, on notice (v1.33: 0 comments on 27 reels; the one
+reel made without the guess, P37a, tied with ours)
 
 **F5 · Question in front, picture already moving behind it.** No still frames in the first 3 s: no title card, no
 still scene under the question. · *Why:* viewers left by 3–6 s, during the 2.6 s still title card (L29); seeing something
@@ -99,8 +99,8 @@ printed under the question (L45). · *Check:* cover time is before the answer li
 `tests/caption-answer.test.js` checks every caption. · 🧪 L28 (part of predict-first), L45
 
 **F25 · Rotate the hook and the opening picture.** The A/B/C guess (F4) stays on every reel; what rotates is the
-**hook**, the angle of the question, and the **opening picture** of the first 3 s. No hook or opening twice in a row; the
-orbit (F22) opens at most 2 of any 4 reels; each reel's pair is set in `pyqvault-ideas.md` → **Hook queue** before it's
+**hook**, the angle of the question, and the **opening picture** of the first 3 s. No hook or opening twice in a row; each
+reel's pair is set in `pyqvault-ideas.md` → **Hook queue** before it's
 made. Hooks, each with the reel that proved it for another account: **Race** (two or three set-ups already running:
 which first?) · **Pick one** ("Pick one. Don't switch.": @ubilumapp's pick-a-number, 4.9 comments per 1,000 views, their
 best rate) · **Ending first** (open on the strange result, then "how?") · **Everyday puzzle** (@sciencevisualised topspin
@@ -108,7 +108,8 @@ best rate) · **Ending first** (open on the strange result, then "how?") · **Ev
 get this wrong") · **Spot the mistake** (one wrong ray or arrow; our own idea, no proof yet) · **Put in order**
 (@sciencevisualised "Can you name all 8 chemical families?" 256×) · **Same start, two endings** (@bisal.physics "Same
 compression. Same starting gas. Two completely different outcomes." 21×). A countdown ("3 seconds") may be added to any
-of them, never on its own. Openings: Orbit 360° · Race running · Ending first · Zoom (scale; the scale goes in the caption,
+of them, never on its own. Openings: Orbit 360° (3D only: a full turn from frame 0, eased, back at the front, the
+explaining view, by 3 s) · Race running · Ending first · Zoom (scale; the scale goes in the caption,
 F10) · Assemble (suit-up: parts fly in and lock together) · Split apart (an exploded view) · Morph · X-ray · Split screen ·
 Colour flood · **Shock** (founder, 2026-10-23: a dramatic event from the topic inside the first second, seen before anything
 can be read: a strike, a crash, a burst, a flash; real physics, any moment of the topic, not only its climax; explosions and
@@ -117,7 +118,8 @@ danger are judged by the founder case by case, never a real person hurt). **Out:
 followers would learn the pattern and stop. The hooks are the ones that beat their own account's typical reel in our
 competitor data (`analytics/competitors/`); game hooks (pick one, solve this) bring 10–50× more comments per view than
 explainer hooks, and our comments are still 0. · *Check:* `node reels/tools/hook-rotation.js` (`tests/hook-rotation.test.js`
-also checks the real queue against the idea list); the reel's row gets its hook and opening in the Hook column. · 🧪 L48
+also checks the real queue against the idea list); the reel's row gets its hook and opening in the Hook column. · 🧪 L48,
+on notice (v1.33: 0 comments on 27 reels, and no hook stands out yet)
 
 **Every hook has a visual layer** (founder, 2026-10-21/22: "hook should always have a visual layer… it could also mean
 orbit shot, objects splitting or coming together (just like an Iron Man suit). It's some visual which hooks the viewer's
@@ -146,25 +148,11 @@ motion in 1–3 s ÷ in 0.2–1 s) and the motion in 1–3 s itself, and warns w
 pixels a frame (`AFTER_FLOOR`, Physics #13's level: a big shock may outmove anything after it); fix the opening before
 queuing. · 🧪 L72
 
-**F26 · A second hook at the answer.** As the first answer lands, the next question appears (≤ 7 words, F7), and the
-reel's explanation becomes its answer: "Then which angle goes farthest?" (45°), "Swap them: copper rod, zinc liquid?"
-(nothing happens). Other forms: the picture rules one option out halfway ("Not A"), or a near miss ("Almost…") just before
-the answer. The second answer is re-derived in the tests like the first (F10). · *Why:* viewers leave at the answer:
-Physics #4 answers at 9.7 s and is watched 9.5 s, Chemistry #4 at 9.0 s and 7.4 s (L48); the answer ends the curiosity,
-so a new question has to open before it closes. **It has its own attention-grabbing visual** (founder, 2026-10-22: "second
-should also have attention grabbing visual"): as the second question appears, the scene makes a striking move that sets
-it up (a punch-in that splits a molecule again, the camera swinging to the power meters, a glass sliding into the empty
-slot, a rope swinging steeper live, the rod and the liquid swapping places), so viewers see something new at the very
-moment they'd leave. · *Check:* the Second hook and **Second visual** columns of the Hook queue (`hook-rotation.js`:
-present, ≤ 7 words, a picture not a question); the reel's tests put the second question and its move on screen at the
-answer. · 🧪 L49
-
-**F27 · Loop or end card: on test.** Half the reels **loop**: the last second brings the scene back to its first frame
-(the question returns, the tag stays, F20), with no end card, so a replay runs on without a seam. The other half end on
-the end card as before. Never 3 the same in a row, both subjects on each side. · *Why:* a seamless replay adds watch
-time and invites a second look at the guess; the end card is a hard stop that ends the view. Only viewers who reach the
-end feel it, so it should pay off more once F26 keeps them longer. · *Check:* the Loop column of the Hook queue
-(`hook-rotation.js`); in a looping reel, a test that the last frame matches frame 0's scene. · 🧪 L50
+**F27 · Every reel loops.** The last second brings the scene back to its first frame (the question returns, the tag
+stays, F20), with no end card, so a replay runs on without a seam. · *Why:* the 4 looping reels got **1.35 views per
+account reached** (1.25–1.37), the 14 with an end card 1.16; people watch them again, and views rose with it (median 1,575
+vs 1,424). The end card was a hard stop that ended the view (L50). · *Check:* the Loop column of the Hook queue is "yes"
+(`hook-rotation.js`); a test that the last frame matches frame 0's scene. · ✅ L50
 
 ## Picture
 
@@ -220,7 +208,7 @@ with labels that come and go (L71). · *Check:* the reel lists every text in `te
 reflected in every surface, one key light and a soft contact shadow under each object (`StudioSet`, `ContactShadow` in
 `remotion/src/studio.tsx`); clear glass and see-through liquids; one colour family per reel; a slow drifting camera. Real
 colours stay (F24). Best for simple or abstract objects (glass, liquids, molecules, fields): a machine built in code still
-looks fake (the car look test, 2026-10-23). A studio reel counts on the white side of F12. · *Why:* the founder found our
+looks fake (the car look test, 2026-10-23). · *Why:* the founder found our
 reels "like kids drawing and plasticky" (2026-10-23) and picked this look from the studied reel (L71). · *Check:* the
 stills sheet: no hard horizon, a soft shadow under every object, nothing flat and plastic. · 🧪 L71
 
@@ -228,10 +216,6 @@ stills sheet: no hard horizon, a soft shadow under every object, nothing flat an
 the big moment**, a zoom out to show the result. Written as tested keys (`CAMERA`, `tween` in `motion.ts`). · *Why:* a
 change of view restarts attention and makes the big moment feel big (founder). · *Check:* tests: at least 2 zooms in and
 1 out, no jump between frames, a punch-in on the big moment. · 🧪 L33
-
-**F22 · The orbit: one of the openings (F25).** When a 3D reel opens with the orbit (at most 2 of any 4 reels, F25), from frame 0 the camera goes **all the way round the object, a full 360°** (front, side, back, side, front), eased in and out with no whoosh, while the question is up, and it **ends back at the front, the explaining view, by 3 s**, before anything is explained. One orbit per reel, in the opening only (no closing orbit, never during a punch-in). Written as a third camera value (orbit angle) on the same `CAMERA` keys. **Not for 2D reels** (founder, 2026-10-20: tried on @lws.pune 016, "doesn't look good"): a flat reel opens with its picture building from frame 0 instead (F5). · *Why:* the founder (2026-10-20): the orbit is the hook, so it belongs in the first 3 s; it shows the
-depth of the 3D we build and gives motion from frame 0 (F5). Back at the front by 3 s because a slope's angle, arrows
-and gauges only read from one view. · *Check:* the reel's tests (the orbit starts at frame 0, turns exactly 360°, ends at the front by 3 s, no jumps, no other orbit). · 📌 founder, measured by L37 and L48
 
 **F10 · Entertainment first, the result real.** The motto (founder, 2026-10-23): **entertainment through physics and
 chemistry**; people on Instagram come to be entertained, not to learn. So anything that adds drama is in: slow motion,
@@ -247,48 +231,27 @@ carries the scale note when sizes are exaggerated. · 📌 founder, 2026-10-23
 every point of v1). · *Why:* the old engine dropped frames, worst in the first second (L25); the founder
 judged Remotion "far better". · *Check:* rendered by `npm run render:<reel>`. · 📌 founder, 2026-10-18
 
-**F12 · Dark or white background: on test.** Alternate `LAB` (dark: wrap the reel in `<Theme value={LAB}>`) and
-`WHITE`, balanced across subjects. · *Why:*
-the fastest-growing science accounts are dark, ours started white; the data decides (L22). So far dark leads (median
-watch 5.6 s vs 3.3 s, 4 reels each) but the slots were tangled. Called once each side has ≥ 6 posted reels. · *Check:*
-the L22 rotation; the background goes in the Background column of the results table. · 🧪 L22
-
 ## Sound
 
-**F13 · Music made in code, picked by mood.** Energetic styles (`drive`, `synthwave`, `cinematic`, `trap`), never the
-same style twice in a row. By mood: simulations and motion → `drive` or `synthwave`; build-up reveals → `cinematic`;
-dark or dramatic → `trap`. **While L34 runs:** among the styles that fit the mood, take the one with the fewest posted
-reels (cinematic, lofi, drive, synthwave, trap), so each gets a fair count. 1–3 `music.hits` on the picture's big beats.
-Voice: see F23. · *Why:* no licence risk, and a hit on
-the big beat makes it land; Claude picks, the founder judges the finished reel. Which style holds viewers best is now measured (L34): the first 8 reels hint
-that cinematic and lofi beat drive, synthwave and trap. · *Check:* `music/<reel>.json`; the style goes in the Music column
-of the results table. · 🧪 L34
+**F13 · Music made in code, picked by mood.** Any style in `music/` that fits the reel's mood (simulations and motion →
+`drive` or `synthwave`; build-up reveals → `cinematic`; dark or dramatic → `trap`; calm → `lofi`), with 1–3
+`music.hits` on the picture's big beats. No voice: reels are silent apart from music and effects (v1.33). · *Why:* no
+licence risk, and a hit on the big beat makes it land; Claude picks, the founder judges the finished reel. The style
+itself made no difference: across 18 framework reels every style has reels at both the top and the bottom (L34), so there
+is no rotation to keep. · *Check:* `music/<reel>.json`. · 📌 house standard
 
-**F14 · The experiment's own sound.** Effects for what's on screen, made in code from the reel's timeline (`SOUND`
-score, `src/lib/sfx.ts`): e.g. a ratchet click per degree, the friction scrape while a block slides, a burner's roar,
-molecules tapping a lid. **Only what the picture shows** (a gas being heated doesn't boil, so no boiling sound). · *Why:*
-sound in sync with the picture makes it feel real (founder). **Both hooks' moves have their sound** (founder, 2026-10-22),
-from the kit in `sfx.ts`, still only what the picture shows: Assemble (suit-up) → a **snap** per part locking, pitch rising,
-then a **shimmer** when it's complete · Split apart → a **crack** · Morph or swap → a **shimmer** · a fast punch-in →
-**whoosh-in** (F15) · Colour flood → **shimmer** · a slow orbit or drift → **silent**, the music carries it (F15) · the
-second hook's big beat → a **music hit** (F13). · *Check:* tests put each sound on its event (a click at each whole degree,
-every tap at a real lid hit); the Hook queue's **Hook sound** and **Second sound** columns name only kit sounds
-(`hook-rotation.js`, kept in step with `sfx.ts` by its test), and the reel's tests put them on their moves. · 🧪 L33
-
-**F15 · A whoosh only on fast zooms** (≤ 0.9 s): rising for in, falling for out; slow drifts stay silent. · *Why:* a
-whoosh on every move is noise (founder: "if appropriate"). · *Check:* `whooshesFor`, tested. · 🧪 L33
-
-**F16 · The mix.** The music dips under the effects and comes back; effects sit 5–10 dB under the music's body;
-peak ≤ −3 dB (limiter only on loud moments). · *Why:* the effects are heard without fighting the music; one level for
-every reel. · *Check:* `npm run mix:<reel>` prints the levels; `check-video.mjs` on the MP4. · 📌 house standard
-
-**F23 · Voiceover: on test.** A free, offline AI voice (Kokoro, `af_heart`, Apache 2.0) reads **only words already on
-screen, while they are on screen**: the question from frame 0, then each caption just after it appears. The music drops
-~8 dB under it. Each test reel is also rendered silent, and the founder picks which one goes out. The caption says
-"🔊 Voice: AI narrator". · *Why:* many viewers do listen, and a voice may hold them through the first seconds (L29);
-it costs no money and nobody records their voice (faceless). Limited to on-screen words so the reel still works muted
-(F17). · *Check:* the reel's tests (`onScreen`: every line's words are on screen for its whole slot, no overlaps);
-`npm run voice:<reel>` stops if a line runs past its slot. · 🧪 L43
+**F14 · Sound: the experiment's own, mixed under the music.** Effects for what's on screen, made in code from the reel's
+timeline (`SOUND` score, `src/lib/sfx.ts`): e.g. a ratchet click per degree, the friction scrape while a block slides, a
+burner's roar, molecules tapping a lid. **Only what the picture shows** (a gas being heated doesn't boil, so no boiling
+sound). The opening move has its sound from the kit (founder, 2026-10-22): Assemble (suit-up) → a **snap** per part
+locking, pitch rising, then a **shimmer** · Split apart → a **crack** · Morph or swap → a **shimmer** · Colour flood →
+**shimmer** · a fast zoom (≤ 0.9 s) → a **whoosh**, rising in, falling out (`whooshesFor`); slow orbits and drifts stay
+**silent**, the music carries them. **The mix:** the music dips under the effects and comes back; effects sit 5–10 dB
+under the music's body; peak ≤ −3 dB (limiter only on loud moments). · *Why:* sound in sync with the picture makes it feel
+real (founder); a whoosh on every move is noise; one level for every reel. Merged from F14–F16 in v1.33 (same content).
+· *Check:* tests put each sound on its event (a click at each whole degree, every tap at a real lid hit); the Hook
+queue's **Hook sound** names only kit sounds (`hook-rotation.js`, kept in step with `sfx.ts` by its test); `npm run
+mix:<reel>` prints the levels; `check-video.mjs` on the MP4. · 📌 house standard
 
 **F17 · It still works with the sound off.** Every idea is on screen. · *Why:* many people scroll muted; the account
 is faceless and silent-first. · *Check:* watch it muted. · 📌 founder
@@ -305,8 +268,7 @@ series gives a reason to follow and come back (L14; @ubilumapp's numbered series
 
 **F20 · "PYQ Vault · pyqvault.com" on screen from frame 0; end on the idea.** A small tag under the question from the
 first frame, staying for the whole reel: smaller and quieter than the question (the question wins the 3-second decision)
-but at least 4.5:1 against the board (WCAG AA), no "www.". A reel that doesn't loop (F27) still ends on the end card with
-`pyqvault.com`. No exam question on screen at the end; exam relevance lives in the caption. · *Why:* the website is where
+but at least 4.5:1 against the board (WCAG AA), no "www.". No exam question on screen at the end; exam relevance lives in the caption. · *Why:* the website is where
 a follower becomes a user (founder), but until now @pyqvault_ reels showed it only on the end card at ~18–20 s, which the
 average viewer never reaches (they leave at 7–9 s, L48), and the board's watermark is off on them (it reads "LWS Pune ·
 NDA Maths"). On screen from frame 0 everyone sees it, the cover carries it, and a looping reel no longer needs a hard stop
@@ -315,33 +277,13 @@ frame; its contrast); the stills sheet. · 🧪 L51
 
 ## Before posting
 
-**F30 · Predict it before it goes out.** Every finished reel is scored by the virality predictor before it's queued: its
-inputs (the idea's score; motion, colour, length and cover measured on the MP4; hook move, words at frame 0, second hook,
-answer time and loop from the storyboard; the account's momentum) give a score out of 100, a band (record-breaker / above
-typical / below typical) and its weakest input. The prediction is written in `virality-log.md`, frozen, and judged at the
-reel's 48 h reading. **Advisory for now:** it becomes the go/no-go gate once at least 15 real predictions are judged, the
-score ranks views with a rank correlation of 0.5 or more and it caught most below-typical reels; then a reel predicted
-below typical is fixed (its weakest input) before posting, and the founder can overrule. Nothing posts without the
-founder's approval either way. · *Why:* founder, 2026-10-22: "a virality predictor… which can predict the reel will have more
-views than our current highest… eventually use this as the decision-making factor whether the reel should go out or not".
-Logging before posting keeps it honest; the hindsight check already separates the pre-framework reels (scores 14–29;
-119–269 views) from the framework ones (57–79; 1,293–1,496). · *Check:* `node reels/tools/virality-measure.mjs
-reels/<reel>.post.json` then a row in the log's Reels and Predictions tables; `node reels/tools/virality.js` validates the
-log and reports accuracy (`tests/virality.test.js`). **A new prediction for every new reel; the old ones updated at
-every analysis** (founder, 2026-10-22): the 48 h readings come in by script (publisher `npm run results` →
-`results-sync.js`), and `virality.js --update` fills each old prediction's outcome beside it (its frozen score and band are
-never rewritten), moves the weights the rule allows, and logs the run. · 🧪 L60
-
----
-
 **F38 · Four critics before it goes out.** Every new reel is read by a review panel of four fresh agents, each one harsh
 critic with one job: **Drama** (would frame 0 stop a thumb, is the event big and close, does it build to the reveal),
 **Colour** (does it pop on a phone, one focal point a beat, nothing washed out or glaring, the cover on the grid),
 **Motion** (something new every second to 3 s, purposeful camera, weight, no still stretch) and **Sound** (every impact
 heard on its frame, the shock the loudest moment, effects against music, accents on the reveals). Pass 1 on the stills
 sheet (Drama, Colour, Motion), pass 2 on the rendered MP4 (Sound, Motion on the measured numbers). A critic sees only the
-kit (frames, motion and sound reports, the beat table, our best reels' frames), never my reasoning or the predictor's
-score. It passes with **no defect left** (a bug or glitch, unreadable text, a colour-blind clash, an object that doesn't
+kit (frames, motion and sound reports, the beat table, our best reels' frames), never my reasoning. It passes with **no defect left** (a bug or glitch, unreadable text, a colour-blind clash, an object that doesn't
 read as itself, an event with no cause); scores are logged, not a gate, until L73 shows they predict; at most two passes,
 then the founder judges; declined suggestions are written in the caption kit with the reason. At most 3 agents at once; they never edit, render, queue or commit. The founder still judges the finished
 reel. Runbook, checklists, brief and log: `reels/review-panel.md`. · *Why:* the founder (2026-10-26) found Chemistry #11
@@ -397,3 +339,4 @@ before `queue:add`. · 📌 founder, measured by L73
 | v1.30 | 2026-10-26 | F37 the aftershock added (🧪): the opening keeps building to 3 s, a new event about every second, no fade or wash before 3 s, a hint of the answer at 2–3 s. `virality-measure.mjs` prints the aftershock ratio and warns under 0.6. First reel: the third Shock reel. | Chemistry #10's retention curve (founder's screenshot, 26 Oct): 94% at 1 s like Physics #13's 96%, but 71% at 3 s vs 78%, falling fastest while smoke filled the jar and the screen washed white. Founder, 2026-10-26: "we have answer for 1st [second]. now lets work on 2–3 sec"; approved the plan. Measured by L72. |
 | v1.31 | 2026-10-26 | F38 the review panel added (📌): four critics (Drama, Colour, Motion, Sound) read every new reel before it's queued; `reels/review-panel.md`, `remotion/tools/sound-report.ts`, `virality-measure.mjs --frames`. F37's check amended: an opening fades only when seconds 1–3 move under 0.6 of the first second **and** under 5% of the pixels a frame (`AFTER_FLOOR`, Physics #13's level). | F38: founder, 2026-10-26, after Chemistry #11 passed every check and was still "pretty bland": "there should be agents to review dramatic effect, colors, motions, sound effects", measured by L73. F37: the dramatic remake's flash and whip-pan moved 30–70% of the pixels a frame, so its busy seconds 1–3 (16%, 3× Physics #13) still scored 0.39; every earlier verdict stands (Chemistry #10, Physics #9b and #15 fade, Physics #13 passes). Founder approved both. |
 | v1.32 | 2026-10-26 | F38's pass rule: no defect left (not "every score ≥ 7"); scores logged, not a gate, until L73; at most two passes, then the founder judges. | Chemistry #11 took three passes from 5, 5, 6 to 6, 6, 6 at ~300k agent tokens a pass, and the critics began to contradict each other (red push arrows back after pass 1 had moved them to yellow for colour-blind viewers; uneven shards for a salt that cleaves into cubes). Founder approved. |
+| v1.33 | 2026-10-26 | **Pruned on the data** (founder: "too many rules… delete rules based on data"). Dropped: F12 dark/white alternation, F22 the orbit as its own rule (Orbit 360° stays one of F25's openings; its "2 of any 4" cap goes, already implied by no opening twice in a row), F23 voiceover (reels are silent), F26 the second hook, F30 the virality predictor (`virality-measure.mjs` stays for F37's aftershock). F13 keeps music by mood, without the fair rotation or "never twice in a row". F15 and F16 merged into F14 (same content). F27 from "loop or end card" to **every reel loops** (✅). F21's weights frozen, no calibration at each analysis. On notice for the next prune: F4, F21, F25. 34 points → 27. | Medians of the 18 framework reels (20–26 Oct; with / without): voice 9.0 / 8.4 s watched, 1,378 / 1,510 views (5 voiced, L43); second hook 8.5 / 8.7 s, 1,498 / 1,424 (8 reels, L49); orbit 8.7 / 8.5 s, 1,427 / 1,472 (6, L37); white 9.3 / 8.3 s, 1,497 / 1,366 (8 white, 10 dark: far under the 1.5× bar, L22); every music style at both ends (L34). The predictor's real predictions rank views at −0.47, 3 of 8 bands right (L60); the idea score ranks views at −0.33, watch at 0.07 (L35). Loops: 1.35 views per account reached vs 1.16 (L50). Views sit at 1,300–1,640 whatever the rules (L64), and the reel made without most of them tied (L61). Rule 3 of this framework: a point is dropped when ≥ 3 reels show no gain. |
