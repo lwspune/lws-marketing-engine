@@ -39,9 +39,33 @@ export function cleanTempDir(dir = RENDER_TEMP, now = Date.now()) {
   return { removed, skipped, bytes };
 }
 
-/** For remotion.config.ts: clear stale leftovers, then point this process's temp files at RENDER_TEMP. */
+// Remotion called from a script (tools/stills.ts) doesn't read remotion.config.ts, so until 2026-10-26 its profiles went to
+// the system temp folder: 324 of them, 4.8 GB, with the disk at 0.6 GB free. Scripts now call useRenderTemp() too; as a
+// backstop every clean also sweeps stale browser profiles out of the system temp folder, and nothing else (other apps' files).
+const PROFILE = 'puppeteer_dev_chrome_profile-';
+export const strayProfiles = (entries: Entry[], now: number) => staleEntries(entries.filter((e) => e.name.startsWith(PROFILE)), now);
+
+/** Delete stale browser profiles from `dir` (the system temp folder). Anything still locked is skipped and counted. */
+export function cleanStrayProfiles(dir = tmpdir(), now = Date.now()) {
+  const entries = readdirSync(dir).filter((name) => name.startsWith(PROFILE)).map((name) => ({ name, mtimeMs: lstatSync(join(dir, name)).mtimeMs }));
+  let removed = 0, skipped = 0, bytes = 0;
+  for (const name of strayProfiles(entries, now)) {
+    const path = join(dir, name);
+    try {
+      const size = sizeOf(path);
+      rmSync(path, { recursive: true, force: true });
+      removed++; bytes += size;
+    } catch {
+      skipped++;
+    }
+  }
+  return { removed, skipped, bytes };
+}
+
+/** For remotion.config.ts and scripts that render: clear stale leftovers (ours, and stray profiles in the system temp
+    folder), then point this process's temp files at RENDER_TEMP. Call it before anything launches a browser. */
 export function useRenderTemp() {
-  const result = cleanTempDir();
+  const strays = cleanStrayProfiles(), result = cleanTempDir();
   process.env.TEMP = process.env.TMP = process.env.TMPDIR = RENDER_TEMP;
-  return result;
+  return { removed: result.removed + strays.removed, skipped: result.skipped + strays.skipped, bytes: result.bytes + strays.bytes };
 }

@@ -170,7 +170,7 @@ parts, in this order:
 1. **Real first.** Anything that has a real colour keeps it: copper is copper, zinc and steel are grey metal, a flame is
    orange-yellow, copper sulphate is blue, chlorine is yellow-green, gold is gold, a leaf is green. It has to look like the
    real thing (Physics #8: the steel spoon read better than a cyan one). The shades come from `REAL` in
-   `remotion/src/lib/palette.ts` (14 materials, a fill and an edge of the same colour per board), so copper is the same
+   `remotion/src/lib/palette.ts` (15 materials, a fill and an edge of the same colour per board), so copper is the same
    copper in every reel; a material not there yet is added to it, with its test, before it's used.
 2. **Variety where nothing is real.** Things with no real colour (particles, field lines, rays, arrows, energy bars, the
    options) take colours from `VIVID` (same file, the set for the board), and anything the viewer must tell apart gets a

@@ -67,6 +67,7 @@ loop; momentum from the reels posted before). The score shown by the tool is tod
 | P6 | pv-physics-012-lift-power | 2 | 2 | 1 | 1 | 1 | 1 | 1 | 2 | 1 | 0 | 0 | idea 66 · motion 100% · words 18 · colour 17.1 · 19.2 s · cover 13.3 · You'd think + orbit 360°, second hook (replay paused on the meters), end card; second L62 test (joule counts), silent |
 | P51 | pv-physics-013-lightning | 1 | 2 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | idea 55 · motion 100% · words 17 · colour 19.5 · 17 s · cover 11.4 · You'd think + the first Shock opening (strike at 0.2 s), second hook (roof folds, second strike), loop; dark, trap, silent; momentum 1,367 ÷ 933 = 1.47 |
 | P75 | pv-physics-014-ohm | 3 | 2 | 1 | 0 | 2 | 1 | 1 | 1 | 2 | 0 | 1 | idea 79 · motion 100% · words ≈23 (label, two-line question, options, tag, nudge, the cast's names) · colour 39 · 14 s · cover 34.1 · Pick one + race running (sparks racing from frame 0), second hook "Now double Ohm?" (a second resistor slides in), loop; dark, drive, silent; first Painted 2D reel and first with the cast (Volt, Amp, Ohm); momentum as P51's 1.47 (no reel posted since) |
+| C44 | pv-chem-010-salt | 2 | 2 | 1 | 0 | 1 | 1 | 1 | 1 | 2 | 0 | 0 | idea 62 · motion 100% · words ≈20 (label, two-line question, three options) · colour 18 · 17 s · cover 22.9 · You'd think + the second Shock opening (sodium bursts in chlorine at 0.2 s), second hook (pan to the beaker, water pours, the bulb lights), end card; dark, trap, silent; momentum 1,377 ÷ 1,354 = 1.02 |
 
 ## Predictions
 
@@ -100,6 +101,7 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 | P6 | pv-physics-012-lift-power | 2026-10-23 | 77 | above typical | idea | 1930 | 1429 | no | – | waiting | – |
 | P51 | pv-physics-013-lightning | 2026-10-23 | 58 | above typical | idea | 1989 | 1429 | no | – | waiting | – |
 | P75 | pv-physics-014-ohm | 2026-10-24 | 83 | record-breaker | words | 1989 | 1429 | no | – | waiting | – |
+| C44 | pv-chem-010-salt | 2026-10-26 | 68 | above typical | idea | 2141 | 1429 | no | – | waiting | – |
 
 ## Calibration and accuracy runs
 

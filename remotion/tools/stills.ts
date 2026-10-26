@@ -9,13 +9,13 @@ import { pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { bundle } from '@remotion/bundler';
 import { renderStill, selectComposition } from '@remotion/renderer';
-import { RENDER_TEMP, cleanTempDir } from './tempDir.ts';
+import { RENDER_TEMP, useRenderTemp } from './tempDir.ts';
 
 const EDGE = 'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
 const [comp, outArg, list] = process.argv.slice(2);
 if (!comp || !outArg || !list) throw new Error('usage: npm run stills -- <Composition> <outDir> <frame,frame,...>');
 const outDir = resolve(outArg), frames = list.split(',').map(Number);
-cleanTempDir();
+useRenderTemp();   // the browser's profile goes to RENDER_TEMP too (this script never reads remotion.config.ts)
 mkdirSync(outDir, { recursive: true });
 
 const bundleDir = join(RENDER_TEMP, `stills-${comp}-${Date.now()}`);

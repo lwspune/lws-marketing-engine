@@ -65,7 +65,7 @@ test('palette: REAL materials have a true-to-life fill and an edge of their own 
   const { REAL, LAB } = await import('../src/lib/palette.ts') as { REAL?: Record<'white' | 'lab', Record<string, { fill: string; edge: string }>>; LAB: Record<string, string> };
   assert.ok(REAL, 'palette.ts exports REAL');
   assert.deepEqual(Object.keys(REAL.white), Object.keys(REAL.lab));
-  for (const m of ['copper', 'steel', 'zinc', 'gold', 'glass', 'water', 'flame', 'copperSulphate', 'chlorine']) assert.ok(REAL.white[m], m);
+  for (const m of ['copper', 'steel', 'zinc', 'gold', 'glass', 'water', 'flame', 'copperSulphate', 'chlorine', 'sodium']) assert.ok(REAL.white[m], m);
   for (const [set, board] of [[REAL.white, WHITE.board], [REAL.lab, LAB.board]] as const) {
     for (const [m, { fill, edge }] of Object.entries(set)) {
       assert.ok(Math.max(contrast(fill, board), contrast(edge, board)) >= 3, `${m} vanishes on ${board}`);
