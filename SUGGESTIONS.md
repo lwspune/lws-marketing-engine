@@ -161,7 +161,7 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
-### Queued Physics #15 (ice) fades after its opening (logged 2026-10-26, awaiting founder)
+### Queued Physics #15 (ice) fades after its opening (logged 2026-10-26; DECIDED 2026-10-26: posts as it is, already scheduled)
 Learning (framework F37, L72): the opening keeps building to 3 s, with no settle before 3 s. `virality-measure.mjs` gives
 Physics #15 an aftershock of **0.05** (bar 0.6): its pull-back moves 20–27% of the pixels a frame to 1.7 s, then 1.8–3 s
 is a slow colour change in the glasses (~1% a frame). **360:** scope = P36 only (queued in GoPost, not approved); posted
