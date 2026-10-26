@@ -173,7 +173,7 @@ remake only a strong old topic as a new numbered reel, and ask whether @lws.pune
 ### Earlier 3D reels may show VIVID colours pastel (logged 2026-10-26, awaiting founder)
 Learning (027, runbook → "Shapes that morph"): solid VIVID objects on the white board lose saturation under the renderer's film tone curve; 027 fixed it with `toneMapped={false}` and a matt finish. **360:** scope = the 3D reels made before it (@lws.pune 014, 025; @pyqvault_'s 3D physics reels) · blast radius = only those renders; nothing depends on them · does it apply? unclear: glossy marbles and glowing objects (025, Bloom) were judged fine by the founder, and tone mapping also keeps highlights from clipping · risk = low (a re-render; old files stay in git) · cost = ~10 min per reel to compare one frame, ~10 min to re-render · **recommendation: decline for posted reels; for any finished, unposted 3D reel compare one frame both ways before it's queued.**
 
-### Reels 018–023 were made in 2D before "3D reels only" (logged 2026-10-24, awaiting founder)
+### Reels 018–023 were made in 2D before "3D reels only" (logged 2026-10-24; DECIDED 2026-10-24: keep them as they are)
 Learning (framework F34, founder 2026-10-24): every new @lws.pune reel is 3D. 018–023 (secant → tangent, area between
 curves, matrix grid, log flip, completing the square, derivative cycle) are finished 2D Remotion reels, not yet posted.
 **360:** scope = 6 finished reels (code, renders, kits, manifests; whatever the publisher queue holds for them) · blast
@@ -182,6 +182,7 @@ every check; posting them also gives L69 its 2D comparison set · risk = low eit
 files stay in git) · cost = about half a day per reel in 3D (025 took most of a session) · **recommendation: decline the
 remake; post them as they are, and judge 3D against them (L69)**. Remake one only if its 48 h numbers are weak and its
 topic suits 3D (020's grid and 019's area would).
+**Founder's call (2026-10-24): "ok" to the recommendation: post 018–023 in 2D as they are; they are L69's 2D set.**
 
 ### Sound Mind: repaint the flat reels in Painted 2D? (logged 2026-10-24, not started)
 New learning: the founder prefers the painted look (framework S21) to the flat, outlined one. Candidates: the ME reels
