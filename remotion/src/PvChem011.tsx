@@ -3,23 +3,28 @@
 // reel and the first under F37 (the aftershock): both hammers land at 0.2 s, then in slow motion the copper bends (1.2 s),
 // cracks shoot across the salt (1.3 s, 2.2 s) and it bursts into cubes (3.2 s). The second hook dives into the bend: copper's
 // + ions in a sea of electrons slide and stay held; salt's slide one step, + meets +, and the layers push apart. Then it
-// rewinds to frame 0 (loop). Full-frame soft studio (F35, F36).
+// rewinds to frame 0 (loop). Remade the same day for drama (founder: "not dramatic enough, pretty bland"): a dark set under a
+// spotlight, a close-up opening, a white flash and chips at the hit, and at the burst a flash, 180 shards (a third flying at
+// the camera) and a cloud of salt dust, with real glow (Bloom). Full frame (F35); dark, not the studio (F36 is on test).
 import { useMemo } from 'react';
 import { AbsoluteFill, Html5Audio, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
 import { ThreeCanvas } from '@remotion/three';
 import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { WHITE as P, SOFT_UI, tint } from './lib/palette.ts';
+import { LAB as P, SOFT_UI, tint } from './lib/palette.ts';
+import { Bloom, EffectComposer } from '@react-three/postprocessing';
 import {
   BAR, SUPPORT, SALT, SALT_BLOCK, PIECE, CU_SLAB, PM, COVER_T, COLOURS as C, storyTime, sceneAt, barShape, hammerAt, cracksAt, flecksAt,
-  dustAt, piecesAt, copperCoresAt, electronsAt, saltIonsAt, repelPairsAt, repelAt, cameraAt, textsAt, bigAt, T_BURST, type Text, type Ion,
+  dustAt, piecesAt, copperCoresAt, electronsAt, saltIonsAt, repelPairsAt, repelAt, cameraAt, textsAt, bigAt, T_BURST, flashAt, chipsAt,
+  shardsAt, dustCloudAt, shiverAt, sparksAt, type Text, type Ion,
 } from './lib/pc011.ts';
 import type { V3 } from './lib/inductionScene.ts';
 import { FULL } from './lib/layout.ts';
 import { Caption, Theme, hand, useFonts } from './board.tsx';
 import { RoundBox } from './shapes.tsx';
 import { RealLight } from './realism.tsx';
-import { StudioSet, ContactShadow } from './studio.tsx';
+import { ContactShadow } from './studio.tsx';
+import { BloomWarmUp } from './induction3d.tsx';
 
 const COVER = { text: 'Guess before you watch', y: 1590, size: 60 };
 
@@ -30,9 +35,36 @@ function Rig({ t }: { t: number }) {
   return null;
 }
 
+// Colours after the review panel (Colour 5/10: grey on grey, copper like wood): dark gunmetal blocks, the salt the brightest
+// thing in frame (cool white, bright edges), polished salmon copper, a dark wooden handle that doesn't pull the eye.
 const steel = <meshPhysicalMaterial color={C.steel} metalness={0.75} roughness={0.28} clearcoat={0.4} />;
-const copper = <meshPhysicalMaterial color={C.copper} metalness={0.85} roughness={0.26} clearcoat={0.5} />;
-const salt = <meshPhysicalMaterial color={C.salt} roughness={0.18} clearcoat={1} transmission={0.25} thickness={0.3} ior={1.54} />;
+const gunmetal = <meshPhysicalMaterial color="#474e58" metalness={0.8} roughness={0.38} clearcoat={0.3} />;
+const copper = <meshPhysicalMaterial color={C.copperEdge} metalness={0.9} roughness={0.22} clearcoat={0.6} envMapIntensity={2.6} emissive={C.copper} emissiveIntensity={0.12} />;   // bright enough to read as copper on the dark set
+const salt = <meshPhysicalMaterial color="#e4eaf2" roughness={0.1} clearcoat={1} transmission={0.25} thickness={0.4} ior={1.54} />;
+/** A colour pushed above 1 so Bloom makes it glow (toneMapped off). */
+const hot = (hex: string, k: number) => new THREE.Color(hex).multiplyScalar(k);
+
+/** The dark set: a matt floor in a spotlight's pool, a rim light from behind for the edges, a little room light for the
+ *  metal's reflections, and a light at the point of impact while the flash lasts. */
+function DarkSet({ t }: { t: number }) {
+  const spot = useMemo(() => { const l = new THREE.SpotLight('#ffd9b3', 45, 14, 0.5, 0.75, 1.4); l.position.set(0.2, 6.5, 3.2); l.castShadow = true; l.shadow.mapSize.set(2048, 2048); return l; }, []);
+  const target = useMemo(() => { const o = new THREE.Object3D(); o.position.set(0, 0.5, 0); return o; }, []);
+  spot.target = target;
+  const f = flashAt(t), at: V3 = [SALT.x, t < T_BURST ? SALT.base + SALT.side : SALT.base + SALT.side / 2, 0.15];
+  return (
+    <>
+      <color attach="background" args={[C.board]} />
+      <fog attach="fog" args={[C.board, 9, 15]} />
+      <RealLight env={0.35} key={0.5} at={[-3, 7, 6]} span={6} />
+      <primitive object={spot} /><primitive object={target} />
+      <directionalLight position={[1, 4, -6]} intensity={2.8} color="#7fd4ff" />
+      <hemisphereLight args={['#5b6a88', '#05070b', 0.25]} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow><planeGeometry args={[40, 40]} /><meshStandardMaterial color={C.floor} roughness={0.85} /></mesh>
+      {f > 0.02 && <pointLight position={at} intensity={25 * f} distance={6} color="#ffffff" />}
+      {f > 0.02 && <mesh position={at}><sphereGeometry args={[0.03 + 0.08 * f, 24, 16]} /><meshBasicMaterial color={hot('#ffffff', 1 + 5 * f)} toneMapped={false} transparent opacity={f} /></mesh>}
+    </>
+  );
+}
 
 /** A thin bar from a to b (a crack, an edge): a cylinder turned to lie along the segment. */
 function Segment({ a, b, r, colour, opacity = 1 }: { a: V3; b: V3; r: number; colour: string; opacity?: number }) {
@@ -52,7 +84,7 @@ function SaltCube({ pos, rot, size }: { pos: V3; rot: V3; size: number }) {
   return (
     <group position={pos} rotation={rot}>
       <mesh castShadow><RoundBox size={[size, size, size]} radius={size * 0.04} />{salt}</mesh>
-      <lineSegments geometry={edges}><lineBasicMaterial color={C.saltEdge} transparent opacity={0.85} /></lineSegments>
+      <lineSegments geometry={edges}><lineBasicMaterial color={C.saltEdge} /></lineSegments>
     </group>
   );
 }
@@ -60,10 +92,14 @@ function SaltCube({ pos, rot, size }: { pos: V3; rot: V3; size: number }) {
 /** A hammer at its striking pose: a steel head (face down), a wooden handle out to the side and up. */
 function Hammer({ k, s }: { k: 'copper' | 'salt'; s: number }) {
   const h = hammerAt(k, s), side = k === 'copper' ? -1 : 1, head = { r: 0.14, h: 0.42 };
+  const trail = [1, 2, 3].map(n => hammerAt(k, s - 0.02 * n)).filter(g => Math.abs(g.face - h.face) > 0.02);
   // the handle leaves the head's side at mid-height, out and 25° up (a cylinder's axis is +y: turned by θ it points
   // (−sin θ, cos θ), so θ = −side·(90° − 25°))
   const up = 0.44, len = 1.3, dir = [side * Math.cos(up), Math.sin(up)], from = [side * head.r * 0.8, head.h * 0.55];
   return (
+    <>
+    {trail.map((g, n) => <mesh key={n} position={[g.x, g.face + head.h / 2, 0]}><cylinderGeometry args={[head.r, head.r, head.h, 32]} />
+      <meshBasicMaterial color="#9aa6b4" transparent opacity={0.16 - 0.04 * n} depthWrite={false} /></mesh>)}
     <group position={[h.x, h.face, 0]} rotation={[0, 0, h.tilt]}>
       <mesh position={[0, head.h / 2, 0]} castShadow><cylinderGeometry args={[head.r, head.r, head.h, 40]} />{steel}</mesh>
       <mesh position={[0, 0.02, 0]}><cylinderGeometry args={[head.r * 1.04, head.r * 1.04, 0.04, 40]} />
@@ -71,9 +107,10 @@ function Hammer({ k, s }: { k: 'copper' | 'salt'; s: number }) {
       <mesh position={[0, head.h - 0.02, 0]}><cylinderGeometry args={[head.r * 0.9, head.r * 1.02, 0.04, 40]} />
         <meshPhysicalMaterial color={C.steelEdge} metalness={0.8} roughness={0.22} /></mesh>
       <mesh position={[from[0] + dir[0] * len / 2, from[1] + dir[1] * len / 2, 0]} rotation={[0, 0, -side * (Math.PI / 2 - up)]} castShadow>
-        <cylinderGeometry args={[0.042, 0.05, len, 20]} /><meshPhysicalMaterial color={C.wood} roughness={0.55} clearcoat={0.3} />
+        <cylinderGeometry args={[0.042, 0.05, len, 20]} /><meshPhysicalMaterial color="#5a4029" roughness={0.6} clearcoat={0.2} />
       </mesh>
     </group>
+    </>
   );
 }
 
@@ -94,29 +131,47 @@ function Bar({ s }: { s: number }) {
   );
 }
 
-function Bench({ s }: { s: number }) {
-  const pieces = piecesAt(s);
+/** A soft round puff (a radial gradient), for the salt dust. */
+const puff = (() => {
+  if (typeof document === 'undefined') return null;
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const g = c.getContext('2d')!, grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+  grad.addColorStop(0, 'rgba(255,255,255,1)'); grad.addColorStop(0.4, 'rgba(255,255,255,0.55)'); grad.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = grad; g.fillRect(0, 0, 128, 128);
+  return new THREE.CanvasTexture(c);
+})();
+
+function Bench({ s, t }: { s: number; t: number }) {
+  const pieces = piecesAt(s), white = <meshStandardMaterial color="#d8e7fb" roughness={0.2} />;   // cool white shards, no glow (the panel)
   return (
     <>
-      <StudioSet colour={C.studio} />
+      <DarkSet t={t} />
       {[-1, 1].map(d => (
         <group key={d}>
-          <mesh position={[BAR.x + d * BAR.support, SUPPORT.h / 2, 0]} castShadow receiveShadow><RoundBox size={[SUPPORT.w, SUPPORT.h, SUPPORT.d]} radius={0.03} />{steel}</mesh>
+          <mesh position={[BAR.x + d * BAR.support, SUPPORT.h / 2, 0]} castShadow receiveShadow><RoundBox size={[SUPPORT.w, SUPPORT.h, SUPPORT.d]} radius={0.03} />{gunmetal}</mesh>
           <ContactShadow x={BAR.x + d * BAR.support} rx={0.24} rz={0.32} opacity={0.3} />
         </group>
       ))}
-      <mesh position={[SALT.x, SALT_BLOCK.h / 2, 0]} castShadow receiveShadow><RoundBox size={[2 * SALT_BLOCK.hw, SALT_BLOCK.h, 2 * SALT_BLOCK.hd]} radius={0.04} />{steel}</mesh>
+      <mesh position={[SALT.x, SALT_BLOCK.h / 2, 0]} castShadow receiveShadow><RoundBox size={[2 * SALT_BLOCK.hw, SALT_BLOCK.h, 2 * SALT_BLOCK.hd]} radius={0.04} />{gunmetal}</mesh>
       <ContactShadow x={SALT.x} rx={0.48} rz={0.42} opacity={0.3} />
       <Bar s={s} />
       {s < T_BURST
-        ? <SaltCube pos={[SALT.x, SALT.base + SALT.side / 2, 0]} rot={[0, 0, 0]} size={SALT.side} />
+        ? <SaltCube pos={[SALT.x + shiverAt(s)[0], SALT.base + SALT.side / 2, shiverAt(s)[1]]} rot={[0, 0, 0]} size={SALT.side} />
         : pieces.map((p, i) => <SaltCube key={i} pos={p.pos} rot={p.rot} size={PIECE * 0.985} />)}
-      {cracksAt(s).map((c, i) => c.slice(1).map((p, j) => <Segment key={`${i}-${j}`} a={[c[j][0], c[j][1], c[j][2] + 0.004]} b={[p[0], p[1], p[2] + 0.004]} r={0.013} colour="#2b323b" />))}
+      <group position={[shiverAt(s)[0], 0, shiverAt(s)[1]]}>
+        {cracksAt(s).map((c, i) => c.slice(1).map((p, j) => <Segment key={`${i}-${j}`} a={[c[j][0], c[j][1], c[j][2] + 0.006]} b={[p[0], p[1], p[2] + 0.006]} r={0.004} colour="#2f3b4a" />))}
+        {cracksAt(s).map((c, i) => c.slice(1).map((p, j) => <Segment key={`h${i}-${j}`} a={[c[j][0] + 0.006, c[j][1] + 0.006, c[j][2] + 0.008]} b={[p[0] + 0.006, p[1] + 0.006, p[2] + 0.008]} r={0.0022} colour="#bfe9ff" />))}
+      </group>
+      {sparksAt(s).map((k, i) => <mesh key={'k' + i} position={k.pos}><sphereGeometry args={[0.012, 8, 6]} /><meshBasicMaterial color={hot('#ffb347', 3)} toneMapped={false} transparent opacity={k.alpha} /></mesh>)}
       {flecksAt(s).map((f, i) => <mesh key={i} position={f.pos}><boxGeometry args={[0.03, 0.03, 0.03]} /><meshBasicMaterial color="#ffffff" transparent opacity={f.alpha} /></mesh>)}
       {dustAt(s).map((d, i) => (
         <mesh key={i} position={[d.x, 0.004, 0]} rotation={[-Math.PI / 2, 0, 0]}><ringGeometry args={[d.r * 0.82, d.r, 48]} />
           <meshBasicMaterial color="#8d939c" transparent opacity={d.alpha} depthWrite={false} /></mesh>
       ))}
+      {chipsAt(s).map((p, i) => <mesh key={'c' + i} position={p.pos} rotation={p.rot} castShadow><boxGeometry args={[p.size, p.size, p.size]} />{white}</mesh>)}
+      {shardsAt(s).map((p, i) => <mesh key={'s' + i} position={p.pos} rotation={p.rot} castShadow><boxGeometry args={[p.size, p.size, p.size]} />{white}</mesh>)}
+      {dustCloudAt(s).map((d, i) => <sprite key={'d' + i} position={d.pos} scale={[d.r * 2.6, d.r * 2.6, 1]}>
+        <spriteMaterial map={puff} color="#e6ebf2" transparent opacity={d.alpha * 0.55} depthWrite={false} /></sprite>)}
       <Hammer k="copper" s={s} />
       <Hammer k="salt" s={s} />
     </>
@@ -138,9 +193,10 @@ function Atoms({ t }: { t: number }) {
   const scene = sceneAt(t);
   return (
     <>
-      <color attach="background" args={[C.studio]} />
-      <RealLight env={0.9} key={1.1} at={[-30, 50, 60]} span={40} />
-      <ambientLight intensity={0.4} />
+      <color attach="background" args={[C.board]} />
+      <RealLight env={0.6} key={1.2} at={[-30, 50, 60]} span={40} />
+      <directionalLight position={[10, 20, -40]} intensity={1.2} color="#9fb7ff" />
+      <ambientLight intensity={0.2} />
       {scene === 'copper' && (
         <>
           {copperCoresAt(t).map((p, i) => (
@@ -150,8 +206,8 @@ function Atoms({ t }: { t: number }) {
             </group>
           ))}
           {electronsAt(t).map((p, i) => (
-            <mesh key={`e${i}`} position={p}><sphereGeometry args={[0.3, 20, 14]} />
-              <meshStandardMaterial color={C.electron} emissive={C.electron} emissiveIntensity={0.35} roughness={0.35} /></mesh>
+            <mesh key={`e${i}`} position={p}><sphereGeometry args={[0.45, 20, 14]} />
+              <meshBasicMaterial color={hot(C.electron, 1.6)} toneMapped={false} /></mesh>
           ))}
         </>
       )}
@@ -162,7 +218,7 @@ function Atoms({ t }: { t: number }) {
             return (
               <group key={i}>
                 <mesh position={x.pos}><sphereGeometry args={[r, 40, 28]} />
-                  <meshPhysicalMaterial color={x.ion === 'Na+' ? C.na : C.cl} roughness={0.3} clearcoat={0.6} /></mesh>
+                  <meshPhysicalMaterial color={x.ion === 'Na+' ? C.na : new THREE.Color(C.cl).multiplyScalar(0.72)} emissive={x.ion === 'Na+' ? C.na : '#000000'} emissiveIntensity={0.3} roughness={0.3} clearcoat={0.6} /></mesh>
                 {x.pos[2] === 0 && <Sign pos={x.pos} r={r} plus={x.ion === 'Na+'} />}
               </group>
             );
@@ -191,7 +247,9 @@ function Scene({ t }: { t: number }) {
   return (
     <>
       <Rig t={t} />
-      {sceneAt(t) === 'macro' ? <Bench s={storyTime(t)} /> : <Atoms t={t} />}
+      {sceneAt(t) === 'macro' ? <Bench s={storyTime(t)} t={t} /> : <Atoms t={t} />}
+      <EffectComposer multisampling={4}><Bloom mipmapBlur luminanceThreshold={1.0} luminanceSmoothing={0.2} intensity={0.8} radius={0.55} /></EffectComposer>
+      <BloomWarmUp />
     </>
   );
 }
@@ -207,25 +265,22 @@ function Words({ t }: { t: number }) {
     <div key={x.name} style={{ position: 'absolute', left: 0, width: 1080, top: x.y, transform: 'translateY(-50%)', textAlign: 'center', opacity: x.alpha, color: colour,
       whiteSpace: 'pre', ...font }}>{x.text}</div>
   );
-  const at = (x: Text, font: React.CSSProperties, colour: string = P.ink) => (
-    <div key={x.name} style={{ position: 'absolute', left: x.x, top: x.y, transform: 'translate(-50%, -50%)', opacity: x.alpha, color: colour, whiteSpace: 'pre',
-      textShadow: `0 0 18px ${C.studio}, 0 0 6px ${C.studio}`, ...font }}>{x.text}</div>
-  );
   return (
     <>
       {big > 0.01 && <div style={{ position: 'absolute', left: 0, top: 0, width: 1080, height: 620, opacity: big,
-        background: `linear-gradient(to bottom, ${tint(C.studio, 0.92)} 0%, ${tint(C.studio, 0.8)} 70%, ${tint(C.studio, 0)} 100%)` }} />}
+        background: `linear-gradient(to bottom, ${tint(C.board, 0.92)} 0%, ${tint(C.board, 0.8)} 70%, ${tint(C.board, 0)} 100%)` }} />}
+      {flashAt(t) > 0.01 && <div style={{ position: 'absolute', inset: 0, opacity: 0.3 * flashAt(t), background: 'radial-gradient(circle at 50% 62%, #ffffff 0%, rgba(255,255,255,0.4) 12%, rgba(255,255,255,0) 32%)' }} />}
       {textsAt(t).map(x => {
         switch (x.kind) {
           case 'label': return line(x, { font: `700 34px ${SOFT_UI}` }, P.muted);
           case 'header': return line(x, hand(x.size));
-          case 'chip': return pill(x, tint(P.ink, 0.16), 'rgba(255,255,255,0.7)', P.ink, hand(x.size));
+          case 'chip': return pill(x, tint(P.ink, 0.22), 'rgba(27,35,48,0.82)', P.ink, hand(x.size));
           case 'nudge': return line(x, { font: `600 32px ${SOFT_UI}` }, P.muted);
           case 'tag': return line(x, { font: `600 30px ${SOFT_UI}`, letterSpacing: 0.5 }, P.muted);
           case 'line': return line(x, { font: `600 44px ${SOFT_UI}` });
-          case 'caption': return at(x, { font: `600 46px ${SOFT_UI}` });
-          case 'setTag': return pill(x, tint(P.ink, 0.14), 'rgba(255,255,255,0.88)', P.muted, { font: `600 ${x.size}px ${SOFT_UI}` });
-          case 'answer': return pill(x, tint(P.amber, 0.8), 'rgba(255,248,240,0.95)', P.amber, { ...hand(x.size), boxShadow: `0 6px 22px ${tint(P.amber, 0.25)}` });
+          case 'caption': return pill(x, 'rgba(0,0,0,0)', 'rgba(10,14,20,0.72)', P.ink, { font: `600 ${x.size}px ${SOFT_UI}` });
+          case 'setTag': return pill(x, tint(P.ink, 0.35), 'rgba(27,35,48,0.9)', P.ink, { font: `600 ${x.size}px ${SOFT_UI}` });
+          case 'answer': return pill(x, tint(P.amber, 0.85), 'rgba(40,30,18,0.92)', P.amber, { ...hand(x.size), boxShadow: `0 0 26px ${tint(P.amber, 0.35)}` });
         }
       })}
     </>
@@ -238,8 +293,9 @@ export function PvChem011({ cover = false }: { cover?: boolean }) {
   const t = cover ? COVER_T : frame / fps;
   return (
     <Theme value={P}>
-      <AbsoluteFill style={{ background: C.studio }}>
+      <AbsoluteFill style={{ background: C.board }}>
         <ThreeCanvas width={FULL.width} height={FULL.height} shadows gl={{ antialias: true }}><Scene t={t} /></ThreeCanvas>
+        {sceneAt(t) === 'macro' && <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 75% 55% at 50% 62%, rgba(5,7,11,0) 55%, rgba(5,7,11,0.65) 100%)' }} />}
         <Words t={t} />
         {cover && <Caption text={COVER.text} alpha={1} age={0} size={COVER.size} y={COVER.y} rise={false} />}
         {!cover && <Html5Audio src={staticFile('pv-chem-011-hammer-mix.wav')} />}
