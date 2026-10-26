@@ -68,6 +68,7 @@ loop; momentum from the reels posted before). The score shown by the tool is tod
 | P51 | pv-physics-013-lightning | 1 | 2 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | idea 55 · motion 100% · words 17 · colour 19.5 · 17 s · cover 11.4 · You'd think + the first Shock opening (strike at 0.2 s), second hook (roof folds, second strike), loop; dark, trap, silent; momentum 1,367 ÷ 933 = 1.47 |
 | P75 | pv-physics-014-ohm | 3 | 2 | 1 | 0 | 2 | 1 | 1 | 1 | 2 | 0 | 1 | idea 79 · motion 100% · words ≈23 (label, two-line question, options, tag, nudge, the cast's names) · colour 39 · 14 s · cover 34.1 · Pick one + race running (sparks racing from frame 0), second hook "Now double Ohm?" (a second resistor slides in), loop; dark, drive, silent; first Painted 2D reel and first with the cast (Volt, Amp, Ohm); momentum as P51's 1.47 (no reel posted since) |
 | C44 | pv-chem-010-salt | 2 | 2 | 1 | 0 | 1 | 1 | 1 | 1 | 2 | 0 | 0 | idea 62 · motion 100% · words ≈20 (label, two-line question, three options) · colour 18 · 17 s · cover 22.9 · You'd think + the second Shock opening (sodium bursts in chlorine at 0.2 s), second hook (pan to the beaker, water pours, the bulb lights), end card; dark, trap, silent; momentum 1,377 ÷ 1,354 = 1.02 |
+| P36 | pv-physics-015-ice | 3 | 2 | 0 | 0 | 2 | 1 | 1 | 1 | 2 | 1 | 0 | idea 79 · motion 100% · words ≈25 (label, two-line question, three options, tag, nudge) · colour 33.7 · 17.6 s · cover 31.9 · Everyday puzzle + a Zoom opening (a pull-back from the ice: not one of the named moves), second hook (swing to the fridge), answer at 8.6 s, end card; the first full-frame studio reel (F35–F36); lofi, silent; momentum as C44 today (1,377 ÷ 1,354 = 1.02) |
 
 ## Predictions
 
@@ -102,6 +103,7 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 | P51 | pv-physics-013-lightning | 2026-10-23 | 58 | above typical | idea | 1989 | 1429 | no | – | waiting | – |
 | P75 | pv-physics-014-ohm | 2026-10-24 | 83 | record-breaker | words | 1989 | 1429 | no | – | waiting | – |
 | C44 | pv-chem-010-salt | 2026-10-26 | 68 | above typical | idea | 2141 | 1429 | no | – | waiting | – |
+| P36 | pv-physics-015-ice | 2026-10-26 | 78 | above typical | words | 2141 | 1429 | no | – | waiting | – |
 
 ## Calibration and accuracy runs
 
