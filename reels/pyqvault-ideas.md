@@ -6,7 +6,7 @@ in only if it passes **the test** below; it is then **scored** (weights frozen s
 `--calibrate` runs the tuning. Framework: `pyqvault-framework.md` (F1, F21, F28, F29). @lws.pune's ideas stay in
 `remake-backlog.md` until it is rebuilt.
 
-**Open: 83 ideas · about 83 days at 1 reel a day.**
+**Open: 82 ideas · about 82 days at 1 reel a day.**
 
 Refill before it drops under two weeks. Sources (F1): the founder's ideas (Source `founder`, any time), a notes sweep
 (physics and chemistry are done; a new exam's notes next), and the next competitor read (`node reels/tools/remake-candidates.mjs`).
@@ -205,7 +205,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | C46 | C | Iron nails in dry air, water and salt water: salt water rusts first | – | 2 | 2 | 1 | 0 | 2 | 55 |  | founder | ✓ |
 | C47 | C | A laser beam shows in milky water, not salt water (Tyndall) | 3.0 | 2 | 2 | 1 | 0 | 2 | 62 |  | founder | ✓ |
 | C48 | C | s and p orbitals blend into methane's four equal bonds (hybridisation) | – | 2 | 1 | 1 | 0 | 0 | 34 | ⏸ parked: fails F29 (the blend shows; why it happens needs words; founder's list, 2026-10-21) | founder | ✗ |
-| C49 | C | Add NaOH to four metal salts: white, blue, green and rust-brown clouds (hydroxide precipitates) | – | 3 | 2 | 1 | 0 | 0 | 52 | ⏭ queued 2026-10-26 (Hook queue; F39 test) | own | ✓ |
+| C49 | C | Add NaOH to four metal salts: white, blue, green and rust-brown clouds (hydroxide precipitates) | – | 3 | 2 | 1 | 0 | 0 | 52 | ✅ made 2026-10-26 (`pv-chem-013-hydroxides`, Chemistry #13; F39 share test 3 of 3, L64) | own | ✓ |
 
 ## Idea cards
 
@@ -779,7 +779,6 @@ hook and opening go in the Hook column of `pyqvault-learnings.md`).
 
 | Order | # | Hook | Opening | Visual hook | Hook sound | Loop | Frame 0 (draft) |
 |---|---|---|---|---|---|---|---|
-| 6 | C49 | Pick one | Race running | four test tubes in a rack, a drop of NaOH already falling into each; clouds bursting open one after another | tap (each drop lands) + whump (each cloud blooms) | yes | "Add NaOH to iron(III) chloride. The cloud is… A white · B blue · C rust-brown"; the drops already falling behind the question. The set: four tubes labelled Al³⁺ white, Cu²⁺ blue, Fe²⁺ green, Fe³⁺ rust-brown, held ~2 s (F39), then the tubes clear back to frame 0 |
 | 7 | P7 | Same start, two endings | Assemble (suit-up) | two drones build themselves part by part (frame, arms, rotors spinning up, ropes clipping on), then pull identical boxes; one box lifts off, the other scrapes along the ground | snap ×8 (one per part locking, pitch rising) + shimmer (both drones complete) | yes | "Same drone, same box, same pull. One lifts it, one drags it. Why?" A rope angle · B rope length · C luck; the drones assemble behind the question, then fly. Loop: both drones land back on the start |
 | 8 | C15 | Ending first | Ending first | a copper-coated rod standing in clear liquid; the picture starts running backwards and the liquid turns blue | shimmer (the rewind) | yes | Open on a copper-coated rod in clear liquid: "This was zinc in blue liquid. Where did the blue go?" then rewind (time-lapse, labelled). Loop: ends where it began |
 
