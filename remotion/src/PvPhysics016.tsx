@@ -11,7 +11,7 @@ import * as THREE from 'three';
 import { LAB as P, SOFT_UI, tint } from './lib/palette.ts';
 import {
   BANDS, ROW_Y, ICON_X, WAVE_X, REMOTE_WAVE, PHONE, TV, COVER_T, COLOURS as C, remoteAt, remoteScale, remoteTilt, remoteYaw, pressAt, burstAt, remoteWaveAt, docked, rowIn,
-  sweepAt, phoneIn, tvIn, channelAt, answerGlow, storyTime, bigAt, cameraAt, textsAt, type Text,
+  sweepAt, phoneIn, tvIn, channelAt, answerGlow, storyTime, bigAt, cameraAt, textsAt, MISSES, type Text,
 } from './lib/pp016.ts';
 import { FULL } from './lib/layout.ts';
 import { Caption, Theme, hand, useFonts } from './board.tsx';
@@ -21,6 +21,7 @@ import { RealLight } from './realism.tsx';
 const COVER = { text: 'Guess before you watch', y: 1590, size: 60 };
 const AMP = 0.065;
 const glow = (hex: string, k: number) => new THREE.Color(hex).multiplyScalar(k);
+const whiten = (hex: string, p: number) => '#' + new THREE.Color(hex).lerp(new THREE.Color('#ffffff'), p).getHexString();
 
 function Rig({ t }: { t: number }) {
   const { camera } = useThree(), cam = camera as THREE.PerspectiveCamera, c = cameraAt(t);
@@ -81,11 +82,9 @@ function Burst({ t }: { t: number }) {
   const [x, y, z] = remoteAt(t), tip = x - 0.185 * remoteScale(t);
   return (
     <group>
-      <mesh position={[tip, y, z]} scale={0.018 + 0.03 * (1 - b)}><sphereGeometry args={[1, 20, 14]} />
-        <meshBasicMaterial color={glow('#fff1ea', 3)} toneMapped={false} transparent opacity={(1 - b) ** 2} depthWrite={false} /></mesh>
       {[0, 0.15, 0.3].map(d => { const k = b - d; if (k <= 0) return null; return (
         <mesh key={d} position={[tip, y, z]} scale={0.04 + 0.75 * k}><torusGeometry args={[1, 0.06, 10, 64]} />
-          <meshBasicMaterial color={glow('#ff6b5a', 2.6)} toneMapped={false} transparent opacity={Math.max(0, 1 - k)} depthWrite={false} /></mesh>); })}
+          <meshBasicMaterial color={glow('#ff7a66', 3.2)} toneMapped={false} transparent opacity={Math.max(0, 1 - k)} depthWrite={false} /></mesh>); })}
       <Wave x0={tip - 1.6 * b} x1={tip} y={y} z={z} lambda={REMOTE_WAVE * 0.7} phase={-b * 20} colour="#ff6b5a" amp={0.05} r={0.016} k={2.6} opacity={1 - b} />
     </group>
   );
@@ -177,14 +176,14 @@ function Row({ i, t }: { i: number; t: number }) {
     <group>
       {b.name === 'visible'
         ? rainbow.map((c, k) => { const w = (x1 - WAVE_X[0]) / 6; return <Wave key={c} x0={WAVE_X[0] + k * w} x1={WAVE_X[0] + (k + 1) * w + 0.001} y={y} lambda={b.lambda} phase={phase - (2 * Math.PI * k * w) / b.lambda} colour={c} r={0.012 + 0.02 * sw} k={Math.max(0.5, 1.6 + 4 * sw + lift)} />; })
-        : <Wave x0={WAVE_X[0]} x1={x1} y={y} lambda={b.lambda} phase={phase} colour={b.colour} r={0.012 + 0.02 * sw + (b.name === 'infrared' ? 0.01 * ag : 0)} k={Math.max(0.5, 1.5 + 4 * sw + lift)} />}
+        : <Wave x0={WAVE_X[0]} x1={x1} y={y} lambda={b.lambda} phase={phase} colour={whiten(b.colour, 0.55 * sw)} r={0.012 + (0.01 + 0.004 * i) * sw + (b.name === 'infrared' ? 0.01 * ag : 0)} k={Math.max(0.5, 1.5 + (2.5 + 0.5 * i) * sw + lift)} />}
       <group position={[ICON_X, y, 0]} scale={0.4 + 0.6 * a}>{icon}</group>
     </group>
   );
 }
 
 /** The TV the remote flicks in the opening: a new saturated channel at each press, gone before the ladder. */
-const CHANNELS = [['#1e293b', '#0f172a'], ['#f43f5e', '#7c3aed'], ['#22c55e', '#0ea5e9'], ['#f59e0b', '#ef4444'], ['#06b6d4', '#a855f7']];
+const CHANNELS = [['#0ea5e9', '#6366f1'], ['#f43f5e', '#7c3aed'], ['#22c55e', '#0ea5e9'], ['#f59e0b', '#ef4444'], ['#06b6d4', '#a855f7']];
 function Tv({ t }: { t: number }) {
   const k = tvIn(t);
   const texes = useMemo(() => CHANNELS.map(([a, b]) => {
@@ -196,7 +195,7 @@ function Tv({ t }: { t: number }) {
   if (k <= 0) return null;
   return (
     <group position={TV} scale={0.9 + 0.1 * k}>
-      <mesh><RoundBox size={[0.78, 0.48, 0.04]} radius={0.02} /><meshPhysicalMaterial color="#0b0d12" roughness={0.3} clearcoat={1} transparent opacity={k} /></mesh>
+      <mesh><RoundBox size={[0.78, 0.48, 0.04]} radius={0.02} /><meshPhysicalMaterial color="#3a4150" metalness={0.5} roughness={0.3} clearcoat={1} transparent opacity={k} /></mesh>
       <mesh position={[0, 0, 0.022]}><planeGeometry args={[0.72, 0.42]} /><meshBasicMaterial map={texes[Math.min(CHANNELS.length - 1, channelAt(t))]} toneMapped={false} transparent opacity={k} /></mesh>
       <mesh position={[0, -0.3, 0]}><RoundBox size={[0.22, 0.04, 0.12]} radius={0.015} /><meshPhysicalMaterial color="#0b0d12" transparent opacity={k} /></mesh>
     </group>
@@ -207,8 +206,8 @@ function Tv({ t }: { t: number }) {
 function RemoteWave({ t }: { t: number }) {
   const a = remoteWaveAt(t);
   if (a <= 0) return null;
-  const [, y, z] = remoteAt(t);
-  return <Wave x0={WAVE_X[0]} x1={WAVE_X[1]} y={y} z={z * 0.5 + 0.02} lambda={REMOTE_WAVE} phase={storyTime(t) * 6} colour="#ffffff" r={0.008} k={1.2} opacity={0.7 * a} />;
+  const [x, y, z] = remoteAt(t), s = storyTime(t), miss = MISSES.some(m => s > m && s < m + 0.2);
+  return <Wave x0={WAVE_X[0]} x1={x - 0.185 * remoteScale(t)} y={y} z={z} lambda={REMOTE_WAVE} phase={s * 6} colour={miss ? '#ff2d2d' : '#ff7a66'} r={0.009} k={miss ? 3 : 1.6} opacity={0.8 * a} />;
 }
 
 /** The phone: its camera sees the remote's flash as a violet-white glow. */
@@ -282,7 +281,7 @@ function Words({ t }: { t: number }) {
           case 'caption': return at(x, { font: `600 46px ${SOFT_UI}` });
           case 'name': return at(x, { font: `800 ${x.size}px ${SOFT_UI}` }, x.colour ?? P.ink);
           case 'use': return at(x, { font: `600 ${x.size}px ${SOFT_UI}` }, x.colour ?? P.ink);
-          case 'range': return at(x, { font: `500 ${x.size}px ${SOFT_UI}`, fontVariantNumeric: 'tabular-nums' }, P.muted);
+          case 'range': return at(x, { font: `500 ${x.size}px ${SOFT_UI}`, fontVariantNumeric: 'tabular-nums' }, '#c8d0dc');
           case 'q': return at(x, { ...hand(x.size), fontWeight: 700 }, C.answer);
           case 'answer': return pill(x, C.answer, C.answer, C.board, { ...hand(x.size), fontWeight: 700, boxShadow: '0 0 30px rgba(255,244,224,0.5)' });
         }

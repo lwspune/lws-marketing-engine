@@ -6,7 +6,7 @@ in only if it passes **the test** below; it is then **scored** (weights frozen s
 `--calibrate` runs the tuning. Framework: `pyqvault-framework.md` (F1, F21, F28, F29). @lws.pune's ideas stay in
 `remake-backlog.md` until it is rebuilt.
 
-**Open: 84 ideas · about 84 days at 1 reel a day.**
+**Open: 83 ideas · about 83 days at 1 reel a day.**
 
 Refill before it drops under two weeks. Sources (F1): the founder's ideas (Source `founder`, any time), a notes sweep
 (physics and chemistry are done; a new exam's notes next), and the next competitor read (`node reels/tools/remake-candidates.mjs`).
@@ -156,7 +156,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | P71 | P | Leave the fridge door open in a closed room: the room gets warmer | – | 2 | 2 | 2 | 1 | 2 | 69 |  | mht-cet-physics/thermodynamics | ✓ |
 | P72 | P | Two crossed polaroids block all light; a third between them lets light back | 0.1 | 2 | 2 | 2 | 1 | 1 | 55 |  | mht-cet-physics/wave-optics | ✓ |
 | P73 | P | Double your speed and your braking distance goes up four times | – | 2 | 2 | 2 | 1 | 2 | 69 |  | jee-mains-physics/motion-in-a-straight-line | ✓ |
-| P74 | P | One spectrum: radio to gamma, and your TV remote uses infrared | – | 2 | 2 | 2 | 0 | 2 | 62 | ⏭ queued 2026-10-26 (Hook queue; F39 test) | jee-mains-physics/electromagnetic-waves | ✓ |
+| P74 | P | One spectrum: radio to gamma, and your TV remote uses infrared | – | 2 | 2 | 2 | 0 | 2 | 62 | ✅ made 2026-10-26 (`pv-physics-016-spectrum`, Physics #16; F39 share test 2 of 3, L64) | jee-mains-physics/electromagnetic-waves | ✓ |
 | P75 | P | Double the battery: the current doubles (Ohm's law acted by our own cast: Volt the battery, Amp the sparks, Ohm the resistor, red-hot at 4x heat) | 829 | 3 | 2 | 1 | 0 | 1 | 79 | ✅ made 2026-10-24 (`pv-physics-014-ohm`, Physics #14; Painted 2D; the topic hit 29.2M on @qubit.exe, 829x its typical reel; our own characters and scene) | founder | ✓ |
 | C1 | C | Heat speeds up a reaction: faster molecules, more hits | – | 3 | 1 | 0 | 1 | 1 | 52 | ✅ made 2026-10-18 (`pv-chem-001-heat-rate`; scored after posting) | own | ✓ |
 | C2 | C | The periodic table's 8 families | 256 | 3 | 1 | 0 | 0 | 0 | 59 | ✅ made 2026-10-18 (`pv-chem-002-families`; scored after posting) | remake | ✓ |
@@ -779,7 +779,6 @@ hook and opening go in the Hook column of `pyqvault-learnings.md`).
 
 | Order | # | Hook | Opening | Visual hook | Hook sound | Loop | Frame 0 (draft) |
 |---|---|---|---|---|---|---|---|
-| 5 | P74 | Everyday puzzle | Morph | a TV remote blinks; its invisible beam turns into a wave that stretches as wide as a radio tower, then squeezes band by band into finer and finer ripples | whoosh-in (the wave squeezes) + shimmer (each new band) | yes | "Your TV remote talks to the TV with… A radio · B infrared light · C sound"; the wave already morphing behind the question. The set: seven bands, radio to gamma, each under its everyday object, held ~2 s (F39), then the wave stretches back to frame 0 |
 | 6 | C49 | Pick one | Race running | four test tubes in a rack, a drop of NaOH already falling into each; clouds bursting open one after another | tap (each drop lands) + whump (each cloud blooms) | yes | "Add NaOH to iron(III) chloride. The cloud is… A white · B blue · C rust-brown"; the drops already falling behind the question. The set: four tubes labelled Al³⁺ white, Cu²⁺ blue, Fe²⁺ green, Fe³⁺ rust-brown, held ~2 s (F39), then the tubes clear back to frame 0 |
 | 7 | P7 | Same start, two endings | Assemble (suit-up) | two drones build themselves part by part (frame, arms, rotors spinning up, ropes clipping on), then pull identical boxes; one box lifts off, the other scrapes along the ground | snap ×8 (one per part locking, pitch rising) + shimmer (both drones complete) | yes | "Same drone, same box, same pull. One lifts it, one drags it. Why?" A rope angle · B rope length · C luck; the drones assemble behind the question, then fly. Loop: both drones land back on the start |
 | 8 | C15 | Ending first | Ending first | a copper-coated rod standing in clear liquid; the picture starts running backwards and the liquid turns blue | shimmer (the rewind) | yes | Open on a copper-coated rod in clear liquid: "This was zinc in blue liquid. Where did the blue go?" then rewind (time-lapse, labelled). Loop: ends where it began |

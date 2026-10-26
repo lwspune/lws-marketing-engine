@@ -29,7 +29,7 @@ test('frame 0 (F4, F20, F25 Everyday puzzle): the question, three options, the t
 
 test('F10, the physics: NCERT\'s seven bands (Class 12, Table 8.1), longest wave first; the remote is infrared', () => {
   assert.deepEqual(BANDS.map(b => b.name), ['radio', 'microwave', 'infrared', 'visible', 'ultraviolet', 'X-ray', 'gamma']);
-  assert.deepEqual(BANDS.map(b => b.range), ['> 0.1 m', '0.1 m – 1 mm', '1 mm – 700 nm', '700 – 400 nm', '400 nm – 1 nm', '1 nm – 10⁻³ nm', '< 10⁻³ nm']);
+  assert.deepEqual(BANDS.map(b => b.range), ['> 0.1 m', '0.1 m – 1 mm', '1 mm – 700 nm', '700 – 400 nm', '400 nm – 1 nm', '1 nm – 0.001 nm', '< 0.001 nm']);
   assert.deepEqual(BANDS.map(b => b.use), ['radio, TV', 'radar, ovens', 'TV remotes', 'what we see', 'sterilising', 'bone scans', 'cancer therapy']);
   for (let i = 1; i < BANDS.length; i++) assert.ok(BANDS[i].lambda < BANDS[i - 1].lambda, 'each row\'s drawn wave is shorter than the one above');
   const ir = BANDS.findIndex(b => b.name === 'infrared');
@@ -48,14 +48,16 @@ test('the opening (F25 Everyday puzzle, F37): a press and a burst at 0.2 s, then
   assert.ok(Math.abs(p0.x - 540) < 140 && p0.y > 620, 'the remote big in the middle, under the question');
 });
 
-test('the ladder: rows build top to bottom after the question shrinks, all seven up before the remote comes down', () => {
+// panel pass 2: built top-down, the first rows drew over the fading question (and 2.6–3.1 s was empty); bottom-up, the
+// first rows land where there are no words
+test('the ladder: rows build bottom to top, gamma first, from as the question shrinks; all seven up before the remote comes down', () => {
   for (let i = 0; i < BANDS.length; i++) {
     assert.ok(ROW_SHOWN[i] > T_SHRINK, `row ${i} after the shrink`);
-    if (i) assert.ok(ROW_SHOWN[i] > ROW_SHOWN[i - 1]);
+    if (i) assert.ok(ROW_SHOWN[i] < ROW_SHOWN[i - 1]);
     assert.equal(rowIn(i, ROW_SHOWN[i] - 0.01), 0);
     assert.equal(rowIn(i, ROW_SHOWN[i] + 0.5), 1);
   }
-  assert.ok(ROW_SHOWN[6] + 0.5 < ANSWER_AT - 0.6);
+  assert.ok(Math.max(...ROW_SHOWN) + 0.5 < ANSWER_AT - 0.6);
   for (let i = 1; i < 7; i++) assert.ok(ROW_Y[i] < ROW_Y[i - 1]);
 });
 
@@ -131,8 +133,9 @@ test('camera (F9): close on the remote, a pull-back, a punch-in on the answer, t
   let z = CAMERA.start[0], ins = 0, outs = 0;
   for (const k of CAMERA.keys) { if (k.to[0] > z) ins++; if (k.to[0] < z) outs++; z = k.to[0]; }
   assert.ok(ins >= 1 && outs >= 2);
-  // a modest punch-in: tighter, and the infrared row's labels (the answer's "TV remotes") or the remote fall off the frame
-  assert.ok(CAMERA.keys.some(k => k.to[0] > 1.2 && Math.abs(k.t + k.dur - (ANSWER_AT + 0.6)) < 0.25), 'the punch-in lands on the answer');
+  // a gentle push at the answer: any tighter and rows' labels fall off the frame (panel pass 2); the infrared row's glow and
+  // the others dimming mark it instead
+  assert.ok(CAMERA.keys.some(k => k.to[0] >= 1.05 && Math.abs(k.t + k.dur - (ANSWER_AT + 0.6)) < 0.25), 'the push lands on the answer');
   const at = (t: number) => tween(t, CAMERA.start, CAMERA.keys);
   for (let i = 1; i < frames.length; i++) {
     const a = at(frames[i - 1]), b = at(frames[i]);
@@ -165,10 +168,11 @@ test('WCAG AA on the dark set: the tag, the words and the answer pill', () => {
   assert.ok(contrast(COLOURS.board, COLOURS.answer) >= 4.5);
 });
 
-test('F6: the cover is taken before the answer, with the whole ladder built and the remote hovering', () => {
-  assert.ok(COVER_T < ANSWER_AT && COVER_T > ROW_SHOWN[6] + 0.5);
-  for (let i = 0; i < 7; i++) assert.equal(rowIn(i, COVER_T), 1);
-  assert.ok(remoteAt(COVER_T)[1] > ROW_Y[2] + 0.2, 'not docked yet');
+// panel pass 2: the ladder as a cover was a dense chart with a tiny remote; the cover is the opening's event instead
+test('F6: the cover is the opening burst: the remote big, rings flying, the question and its chips, long before the answer', () => {
+  assert.ok(COVER_T < 1 && COVER_T < ANSWER_AT);
+  assert.ok(PRESSES.some(p => COVER_T > p && COVER_T < p + 0.5), 'mid-burst');
+  assert.ok(textsAt(COVER_T).some(x => x.name === 'chip B'));
 });
 
 test('the waves sit in the middle column, between the labels and the objects', () => {
