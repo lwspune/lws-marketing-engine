@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  DURATION, T_HIT, T_BEND1, T_CRACK1, T_CRACK2, T_BURST, ANSWER_AT, T_SHRINK, T_SECOND, CUT1, CUT2, CUT3, REW0, SECOND_ANSWER_AT, COVER_T,
+  DURATION, T_HIT, T_BEND1, T_CRACK1, T_CRACK2, T_BURST, ANSWER_AT, T_SHRINK, T_SECOND, CUT1, CUT2, CUT3, REW0, SECOND_ANSWER_AT, COVER_T, T_LIKE, T_SPLIT,
   LABEL, HEADER, OPTIONS, ANSWER, SHORT_Q, SECOND_Q, BRAND, PM, SALT_SLAB, facingPairs, slideCu, slideSalt, splitAt,
-  storyTime, sceneAt, bendAt, barShape, hammerAt, SALT, PIECE, piecesAt, cracksAt, supportAt, CAMERA, cameraAt, heroAt, textsAt, CAPTIONS,
-  MUSIC_HITS, SOUND, COLOURS, shakeAt,
+  storyTime, sceneAt, bendAt, barShape, hammerAt, SALT, BAR, PIECE, piecesAt, cracksAt, supportAt, CAMERA, cameraAt, heroAt, textsAt, CAPTIONS,
+  MUSIC_HITS, SOUND, COLOURS, shakeAt, WIDE, flashAt, chipsAt, shardsAt, dustCloudAt, MACRO_CUTS, sparksAt,
 } from '../src/lib/pc011.ts';
 import { project } from '../src/lib/inductionScene.ts';
 import { FULL, widthShare, heightShare, frameProblems } from '../src/lib/layout.ts';
@@ -15,11 +15,15 @@ import { contrast } from '../src/lib/paint.ts';
 // @pyqvault_ · Chemistry, visualised #11 (C45, "Metal bends, salt shatters"): the same hammer, the same hit, on a copper
 // bar and a salt crystal. Which shatters? The salt. In a metal, + ions sit in a sea of electrons: layers slide and the sea
 // still holds them, so it bends. In a salt, + and − alternate: slide one step and + meets +, − meets −, they push apart and
-// the crystal splits along its cube faces. The third Shock reel and the first made under F37 (the aftershock).
+// the crystal splits along its cube faces. The third Shock reel and the first made under F37 (the aftershock). Remade the
+// same day for drama (founder: "not dramatic enough, pretty bland"): a dark set, a close-up opening, a real impact, a
+// violent shatter.
 const frames = Array.from({ length: Math.round(DURATION * 30) }, (_, i) => i / 30);
 const words = (s: string) => s.split(/\s+/).filter(w => /\w/.test(w)).length;
 const near = (a: number, b: number, eps = 1e-6) => assert.ok(Math.abs(a - b) < eps, `${a} ≠ ${b}`);
 const macro = (t: number) => sceneAt(t) === 'macro';
+const wide = (t: number) => WIDE.some(([a, b]) => t >= a && t < b);
+const saltOnPage = (t: number) => project([SALT.x, SALT.base + SALT.side / 2, 0], cameraAt(t), FULL);
 
 test('frame 0 (F4, F20, F25 Same start, two endings): the question, three options, the tag; the answer is the salt', () => {
   assert.equal(LABEL, 'CHEMISTRY, VISUALISED  #11');
@@ -90,6 +94,44 @@ test('the copper bends into a V between its blocks; the ends over the blocks sta
   assert.ok(bar.filter(p => Math.abs(p.x) > 0.6).every(p => p.dy > 0), 'the overhanging ends lift');
 });
 
+// The review panel (F38), first run: Drama 5, Colour 5, Motion 6, Sound 5. These are its must-fixes, as tests.
+test('panel: the burst has a cause: both hammers wind up and strike again at the burst (the first blow cracks, the second shatters)', () => {
+  for (const k of ['copper', 'salt'] as const) {
+    assert.ok(hammerAt(k, T_BURST - 0.25).lift > 0.4, `${k} hammer raised before the second blow`);
+    near(hammerAt(k, T_BURST - 1e-6).lift, 0, 1e-4);   // in contact as it bursts
+  }
+  assert.ok(bendAt(T_BURST + 0.3) > bendAt(T_BURST - 0.1) + 0.03, 'the copper bends further, still whole');
+  assert.ok(SOUND.hits.filter(h => h.t >= T_BURST - 0.05 && h.t <= T_BURST + 0.35 && h.kind !== 'tap').length <= 3, 'the burst not smeared under a pile of hits (pass 2)');
+});
+
+test('panel: the copper bends on camera (the whip lands at 1 s on a bar still mostly straight); the flash is short; the answer is held close', () => {
+  assert.ok(bendAt(MACRO_CUTS[0]) < 0.2 * bendAt(T_BEND1), 'the bar still nearly straight when the cut lands on it (pass 2: the bend was over)');
+  assert.ok(bendAt(T_BEND1) > 0.2, 'a deep V');
+  assert.ok(flashAt(T_HIT + 0.15) < 0.1 && flashAt(T_BURST + 0.15) < 0.1, 'a flash of 2–3 frames, not a white-out');
+  assert.ok(!wide(ANSWER_AT + 0.3) && Math.abs(saltOnPage(ANSWER_AT + 0.3).x - 540) < 260, 'the debris held close after the answer');
+  assert.ok(WIDE[0][0] >= 4.2 && WIDE[0][1] - WIDE[0][0] >= 0.35, 'then a two-shot before the second question');
+  const face = project([SALT.x, hammerAt('salt', 0).face + 0.21, 0], cameraAt(0), FULL);
+  assert.ok(face.y > 520 && face.y < 1500, `frame 0: the hammer head below the question (${Math.round(face.y)} px)`);
+});
+
+test('panel (sound): a clang where metal is hit, the music shaped (a riser into the burst, a hole for it, a lift for the second question, quiet at the loop seam), whooshes on time', () => {
+  assert.ok(SOUND.hits.some(h => h.kind === 'clang' && Math.abs(h.t - T_BEND1) < 0.05), 'the copper rings as its bend lands, on screen');
+  assert.ok(!SOUND.hits.some(h => h.kind === 'clang' && h.t < MACRO_CUTS[0]), 'no metal ring over the salt close-up (pass 2: salt cracks, copper rings)');
+  const shock = SOUND.hits.filter(h => Math.abs(h.t - T_HIT) < 0.05).reduce((a, h) => a + h.gain, 0);
+  const cracks = SOUND.hits.filter(h => h.kind === 'crack' && h.t > 1 && h.t < T_BURST - 0.1);
+  assert.ok(cracks.every(h => h.gain >= 0.3 * 0.55 - 1e-9) && cracks.length >= 4, 'the cracks loud enough to hear (pass 2)');
+  assert.ok(shock >= 0.5, 'a heavier shock');
+  const m = SOUND.music!;
+  assert.ok(m, 'a music curve');
+  assert.ok(m(2.5) < 0.6 && m(3.05) > m(2.5) + 0.15, 'no swell at 2.5 s: a riser into the burst');
+  for (const t of [3.15, 3.25, 3.35]) assert.ok(m(t) <= 0.5, `the burst plays nearly alone (${t})`);
+  assert.ok(m(T_SECOND - 0.4) >= 0.9 && m(T_SECOND + 0.05) >= 1.1, 'no sag before the second question, a lift on it (pass 2)');
+  assert.ok(m(DURATION - 0.05) < 0.3, 'quiet at the loop seam');
+  const whoosh = SOUND.hits.filter(h => h.kind.startsWith('whoosh'));
+  assert.ok(whoosh.some(h => h.kind === 'whoosh-in' && h.t + 0.45 >= T_SECOND - 0.1 && h.t + 0.45 <= T_SECOND + 0.15), 'the dive whoosh peaks on the second question');
+  assert.ok(!whoosh.some(h => h.t > ANSWER_AT - 0.1 && h.t < T_SECOND - 0.6), 'no stray whoosh between the answer and the dive');
+});
+
 test('the hammers: the same height and the same speed on both until the hit (same start); each face never goes inside what it hits', () => {
   for (const s of [0, 0.05, 0.1, 0.15]) near(hammerAt('copper', s).lift, hammerAt('salt', s).lift);
   near(hammerAt('copper', T_HIT).lift, 0); near(hammerAt('salt', T_HIT).lift, 0);
@@ -115,7 +157,7 @@ test('F37, the aftershock: an event about every second in the first 3 s, each wi
 test('the second hook (F26): asked within 1.5 s of the answer, with its own move (a dive into the bend), answered by the slide', () => {
   assert.equal(SECOND_Q, 'So why didn\'t the copper break?');
   assert.ok(T_SECOND - ANSWER_AT <= 1.5 && SECOND_ANSWER_AT > CUT1 && SECOND_ANSWER_AT < CUT2);
-  assert.ok(SOUND.hits.some(h => h.kind === 'whoosh-in' && h.t > T_SECOND && h.t < CUT1), 'the dive');
+  assert.ok(SOUND.hits.some(h => h.kind === 'whoosh-in' && h.t + 0.45 >= T_SECOND && h.t + 0.45 < CUT1), 'the dive (its whoosh peaks on the question)');
 });
 
 test('scenes: macro, the copper\'s atoms, the salt\'s atoms, macro; the story holds while the atoms are on screen', () => {
@@ -127,7 +169,7 @@ test('scenes: macro, the copper\'s atoms, the salt\'s atoms, macro; the story ho
 
 test('F27, the loop: the rewind brings every piece, the bar, the hammers, the camera and the words back to frame 0', () => {
   near(storyTime(DURATION), 0, 1e-9);
-  assert.ok(REW0 < DURATION - 1 && REW0 > CUT3 + 1);
+  assert.ok(REW0 < DURATION - 1 && REW0 > CUT3 + 1 && REW0 < CUT3 + 1.3, 'a short recap before the rewind (pass 2: it held 1.7 s)');
   assert.deepEqual(piecesAt(storyTime(DURATION)).map(p => p.pos), piecesAt(0).map(p => p.pos));
   near(bendAt(storyTime(DURATION)), 0);
   for (const k of ['copper', 'salt'] as const) near(hammerAt(k, storyTime(DURATION)).lift, hammerAt(k, 0).lift);
@@ -140,7 +182,7 @@ test('F27, the loop: the rewind brings every piece, the bar, the hammers, the ca
 });
 
 test('camera (F9): smooth except at the three cuts; a punch-in lands on the bend before the dive; whooshes only on fast moves', () => {
-  const cuts = [CUT1, CUT2, CUT3];
+  const cuts = [...MACRO_CUTS, CUT1, CUT2, CUT3];
   for (let i = 1; i < frames.length; i++) {
     const a = frames[i - 1], b = frames[i];
     if (cuts.some(c => a < c && b >= c)) continue;
@@ -153,8 +195,8 @@ test('camera (F9): smooth except at the three cuts; a punch-in lands on the bend
   assert.ok(whooshesFor(CAMERA.macro.start, CAMERA.macro.keys).length >= 1);
 });
 
-test('F35: the picture fills the frame (≥ 70 % of the width, or ≥ 60 % of the height) and stays on the page', () => {
-  for (const t of frames.filter(t => !(t > T_SECOND && t < CUT1 + 0.9) && !(t > CUT2 - 0.1 && t < CUT2 + 0.1))) {
+test('F35: on the wide shots and the atoms the picture fills the frame (≥ 70 % of the width, or ≥ 60 % of the height) and stays on the page', () => {
+  for (const t of frames.filter(t => (wide(t) || !macro(t)) && !(t > T_SECOND && t < CUT1 + 0.9) && !(t > CUT2 - 0.1 && t < CUT2 + 0.1) && !(t > T_LIKE && t < T_SPLIT + 0.8))) {
     const hero = heroAt(t), cam = cameraAt(t);
     const pts = hero.map(p => project(p, cam, FULL));
     assert.ok(widthShare(pts.map(p => p.x)) >= 0.7 || heightShare(pts.map(p => p.y)) >= 0.6, `small picture at ${t.toFixed(2)}`);
@@ -172,14 +214,16 @@ test('F35 + F4: the question opens big, shrinks to one line by 3.6 s; the tag on
 });
 
 test('F35: the setups are named under each on the wide shots, the salt\'s tag lights as the answer', () => {
-  for (const t of frames.filter(t => macro(t) && t >= 1.0 && t < T_SECOND)) {
+  const after = WIDE.find(([a]) => a > ANSWER_AT && a < T_SECOND);
+  assert.ok(after, 'a wide shot after the answer');
+  for (const t of frames.filter(t => wide(t) && t < T_SECOND && t - WIDE.find(([a, b]) => t >= a && t < b)![0] > 0.25)) {
     const names = textsAt(t).map(x => x.name);
     assert.ok(names.includes('tag copper') && names.includes('tag salt'), `tags missing at ${t.toFixed(2)}`);
   }
-  const answer = textsAt(ANSWER_AT + 0.1).find(x => x.name === 'tag salt')!;
+  const answer = textsAt(after![0] + 0.3).find(x => x.name === 'tag salt')!;
   assert.equal(answer.kind, 'answer');
   assert.equal(answer.text, 'B  salt');
-  assert.equal(textsAt(ANSWER_AT - 0.1).find(x => x.name === 'tag salt')!.kind, 'setTag');
+  assert.ok(!textsAt(ANSWER_AT - 0.1).some(x => x.kind === 'answer'), 'no answer before it lands');
 });
 
 test('F35: every text inside Instagram\'s safe area and clear of every other text, on every frame', () => {
@@ -204,15 +248,53 @@ test('sound (F14–F16): the hit on both, the bend\'s thump, a crack per crack, 
   for (const h of SOUND.hits) assert.ok(h.t >= 0 && h.t < DURATION);
 });
 
-test('colours (F24): copper, its electrons, Na⁺ and Cl⁻ told apart (colour-blind safe); salt\'s edge and the text readable on the studio', () => {
+test('colours (F24): copper, its electrons, Na⁺ and Cl⁻ told apart (colour-blind safe); salt\'s edge and the text readable on the dark set', () => {
   assert.ok(distinguishable(COLOURS.na, COLOURS.cl));
   assert.ok(distinguishable(COLOURS.copper, COLOURS.electron));
-  assert.ok(contrast(COLOURS.saltEdge, COLOURS.studio) >= 3);
-  assert.ok(contrast(COLOURS.muted, COLOURS.studio) >= 4.5 && contrast(COLOURS.ink, COLOURS.studio) >= 4.5);
+  assert.ok(contrast(COLOURS.saltEdge, COLOURS.board) >= 3 && contrast(COLOURS.copper, COLOURS.board) >= 3);
+  assert.ok(contrast(COLOURS.muted, COLOURS.board) >= 4.5 && contrast(COLOURS.ink, COLOURS.board) >= 4.5);
 });
 
-test('F6: the cover is the hit, before any crack, with both setups in view', () => {
-  assert.ok(COVER_T >= T_HIT && COVER_T < T_CRACK1 && COVER_T < ANSWER_AT);
-  assert.ok(Math.hypot(...shakeAt(COVER_T)) < 0.05, 'not mid-shake');
-  assert.ok(heroAt(COVER_T).length > 0);
+test('F6: the cover is the hit in close-up, chips in the air, before any crack and past the flash', () => {
+  assert.ok(COVER_T > T_HIT && COVER_T < T_CRACK1 && COVER_T < ANSWER_AT);
+  assert.ok(flashAt(COVER_T) < 0.3, 'the flash has faded');
+  assert.ok(chipsAt(storyTime(COVER_T)).length >= 10, 'chips in the air');
+  const c = saltOnPage(COVER_T);
+  assert.ok(Math.abs(c.x - 540) < 260 && c.y > 700 && c.y < 1500, 'the crystal mid-page');
+});
+
+test('drama: a close-up opening; the hit flashes, shakes, throws chips; the burst flashes, throws 150+ shards (some at the camera) and a cloud of salt dust', () => {
+  const c0 = cameraAt(0), s0 = saltOnPage(0), y = SALT.base + SALT.side / 2, z = SALT.side / 2;
+  const width = project([SALT.x + SALT.side / 2, y, z], c0, FULL).x - project([SALT.x - SALT.side / 2, y, z], c0, FULL).x;
+  assert.ok(Math.abs(s0.x - 540) < 200 && width > 0.3 * 1080, `frame 0 close on the crystal (${Math.round(width)} px wide)`);
+  assert.equal(flashAt(0), 0);
+  assert.ok(flashAt(T_HIT + 0.03) > 0.7 && flashAt(T_HIT + 0.6) < 0.05, 'a flash at the hit, gone fast');
+  assert.ok(flashAt(T_BURST + 0.03) > 0.7, 'a flash at the burst');
+  assert.ok(Math.hypot(...shakeAt(T_HIT + 0.02)) > 0.04, 'a hard shake');
+  assert.equal(chipsAt(T_HIT - 0.01).length, 0);
+  assert.ok(chipsAt(T_HIT + 0.3).length >= 20);
+  assert.equal(shardsAt(T_BURST - 0.01).length, 0);
+  const sh = shardsAt(T_BURST + 0.15), later = shardsAt(T_BURST + 0.3);
+  assert.ok(sh.length >= 150, `${sh.length} shards`);
+  assert.ok(sh.filter((p, i) => later[i].pos[2] - p.pos[2] > 0.08).length >= 20, 'shards flying at the camera');
+  for (let s = T_BURST; s < T_BURST + 2.5; s += 0.05) for (const p of shardsAt(s)) assert.ok(p.pos[1] >= supportAt(p.pos[0], p.pos[2]) - 1e-6, `a shard under the floor at ${s.toFixed(2)}`);
+  assert.ok(dustCloudAt(T_BURST + 0.3).length >= 20 && dustCloudAt(T_BURST + 3).length === 0, 'a cloud that clears');
+  assert.ok(!wide(0.5) && !wide(1.0), 'the close-up holds through the hit');
+  assert.ok(!WIDE.some(([a]) => a < T_BURST), 'no wide, still shot before the burst (F37: it settled at 1.4–2.7 s, 1–2 % of pixels moving)');
+  const bend = project([CAMERA.cuX, BAR.base, 0], cameraAt(T_BEND1), FULL);
+  assert.ok(Math.abs(bend.x - 540) < 260 && bend.y > 500 && bend.y < 1500, 'the copper bend in close-up as it lands');
+  assert.ok(Math.abs(saltOnPage(T_CRACK2 + 0.2).x - 540) < 260, 'the crystal in close-up as the cracks branch');
+  assert.ok(!wide(T_BURST), 'the burst in close-up');
+});
+
+test('panel pass 2: hard cuts, not whip-pans; the first blow wounds the crystal; the split is a burst; amber sparks where steel hits steel', () => {
+  assert.equal(MACRO_CUTS.length, 2);
+  assert.ok(MACRO_CUTS[0] > T_HIT + 0.3 && MACRO_CUTS[0] < 1 && MACRO_CUTS[1] > T_BEND1 && MACRO_CUTS[1] < 1.9, 'cut to the copper, cut back to the salt');
+  for (const c of MACRO_CUTS) assert.ok(SOUND.hits.some(h => h.kind === 'snap' && Math.abs(h.t - c) < 0.03), `a snap on the cut at ${c}`);
+  assert.ok(cracksAt(T_HIT + 0.3).length >= 1, 'the first blow cracks it');
+  assert.ok(chipsAt(T_HIT + 0.3).some(c => c.size >= 0.08), 'and knocks a corner off');
+  assert.ok(flashAt(T_SPLIT + 0.03) > 0.5 && flashAt(T_SPLIT + 0.3) < 0.1, 'the atomic split flashes');
+  assert.equal(sparksAt(T_BURST).length, 0);
+  assert.ok(sparksAt(T_BURST + 0.25).length >= 12, 'sparks as the hammer hits the steel block');
+  for (const t of [MACRO_CUTS[1] + 0.05, 2.0, 2.4]) assert.ok(Math.abs(saltOnPage(t).x - 540) < 280, `on the crystal at ${t}`);
 });

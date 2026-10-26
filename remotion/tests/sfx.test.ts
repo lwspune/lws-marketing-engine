@@ -45,6 +45,29 @@ test('shimmer: an airy swell that rises, then fades over about 2 s', () => {
   assert.ok(rms(out, 3.2, 4) < 1e-4, 'shimmer still sounding after 2.7 s');
 });
 
+// The review panel's sound critic (F38, Chemistry #11): a metal hit had only a thud, which phone speakers barely play, so
+// "copper rings, salt cracks" was lost. A clang: bright metal partials (1–4 kHz), ringing about 0.4 s.
+test('clang: a bright metallic ring that phone speakers can play, gone in about half a second', () => {
+  const out = renderSfx({ duration: 2, hits: [{ kind: 'clang', t: 0.5, gain: 1 }], beds: [] });
+  const b = brightness(out, 0.5, 0.8);
+  assert.ok(b > 1000 && b < 4500, `clang should sit at 1–4 kHz: ${b.toFixed(0)} Hz`);
+  assert.ok(rms(out, 0.5, 0.55) > 0.08, 'clang too quiet');
+  assert.ok(rms(out, 0.8, 0.9) > 0.1 * rms(out, 0.5, 0.55), 'clang should ring, not stop dead');
+  assert.ok(rms(out, 1.4, 2) < 1e-3, 'clang still ringing after 0.9 s');
+});
+
+// The sound critic again: a music swell can bury a beat, or ride over a burst. A reel can shape its music's level over time
+// (`music`), on top of the dips under each effect.
+test('a reel can shape its music: the level curve multiplies the music, and only the music', () => {
+  const n = 2 * SR, tone = Float32Array.from({ length: n }, (_, i) => 0.2 * Math.sin((2 * Math.PI * 300 * i) / SR));
+  const plain = mixWithMusic([tone, tone], { duration: 2, hits: [], beds: [] });
+  const shaped = mixWithMusic([tone, tone], { duration: 2, hits: [], beds: [], music: t => (t < 1 ? 1 : 0.5) });
+  assert.ok(Math.abs(rms(shaped.left, 0.2, 0.8) - rms(plain.left, 0.2, 0.8)) < 1e-6, 'untouched where the curve is 1');
+  assert.ok(Math.abs(rms(shaped.left, 1.2, 1.8) / rms(plain.left, 1.2, 1.8) - 0.5) < 0.01, 'halved where the curve is 0.5');
+  const fx = mixWithMusic([new Float32Array(n), new Float32Array(n)], { duration: 2, hits: [{ kind: 'snap', t: 1.2, gain: 1 }], beds: [], music: () => 0 });
+  assert.ok(rms(fx.left, 1.2, 1.3) > 0.01, 'the effects are not touched by the music curve');
+});
+
 test('the same score always renders the same sound', () => {
   const score: Score = { duration: 2, hits: [{ kind: 'tap', t: 0.5, gain: 0.7 }], beds: [{ kind: 'roar', t0: 0.2, t1: 1.5, level: () => 1 }] };
   assert.deepEqual(renderSfx(score), renderSfx(score));

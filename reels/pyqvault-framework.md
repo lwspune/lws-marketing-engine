@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.30, 2026-10-26)
+# @pyqvault_ reel framework (v1.32, 2026-10-26)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -141,8 +141,10 @@ split after: Physics #13's strike kept unfolding (78% at 3 s), Chemistry #10's b
 (71% at 3 s, ~11 points lost a second from 1.5 to 5 s). F5's "something changes on every frame" passed both: drifting
 smoke changes every frame. Each new event is a small reason to stay, as each tick of a running count is (L62). · *Check:*
 the storyboard lists ≥ 3 events in 0–3 s, each with a sound; `virality-measure.mjs` prints the **aftershock** (median
-motion in 1–3 s ÷ in 0.2–1 s) and warns under 0.6 (`virality.js` `AFTERSHOCK`: Chemistry #10 0.52 and Physics #9b 0.28
-fade, every other framework reel 0.8 or more); fix the opening before queuing. · 🧪 L72
+motion in 1–3 s ÷ in 0.2–1 s) and the motion in 1–3 s itself, and warns when both are low: under 0.6 of the first second
+(`AFTERSHOCK`: Chemistry #10 0.52 and Physics #9b 0.28, every other framework reel 0.8 or more) **and** under 5% of the
+pixels a frame (`AFTER_FLOOR`, Physics #13's level: a big shock may outmove anything after it); fix the opening before
+queuing. · 🧪 L72
 
 **F26 · A second hook at the answer.** As the first answer lands, the next question appears (≤ 7 words, F7), and the
 reel's explanation becomes its answer: "Then which angle goes farthest?" (45°), "Swap them: copper rod, zinc liquid?"
@@ -332,6 +334,22 @@ never rewritten), moves the weights the rule allows, and logs the run. · 🧪 L
 
 ---
 
+**F38 · Four critics before it goes out.** Every new reel is read by a review panel of four fresh agents, each one harsh
+critic with one job: **Drama** (would frame 0 stop a thumb, is the event big and close, does it build to the reveal),
+**Colour** (does it pop on a phone, one focal point a beat, nothing washed out or glaring, the cover on the grid),
+**Motion** (something new every second to 3 s, purposeful camera, weight, no still stretch) and **Sound** (every impact
+heard on its frame, the shock the loudest moment, effects against music, accents on the reveals). Pass 1 on the stills
+sheet (Drama, Colour, Motion), pass 2 on the rendered MP4 (Sound, Motion on the measured numbers). A critic sees only the
+kit (frames, motion and sound reports, the beat table, our best reels' frames), never my reasoning or the predictor's
+score. It passes with **no defect left** (a bug or glitch, unreadable text, a colour-blind clash, an object that doesn't
+read as itself, an event with no cause); scores are logged, not a gate, until L73 shows they predict; at most two passes,
+then the founder judges; declined suggestions are written in the caption kit with the reason. At most 3 agents at once; they never edit, render, queue or commit. The founder still judges the finished
+reel. Runbook, checklists, brief and log: `reels/review-panel.md`. · *Why:* the founder (2026-10-26) found Chemistry #11
+"not dramatic enough, pretty bland" after it had passed every test and check: my own look at my own stills is anchored on
+what I meant to make. "There should be agents to review dramatic effect, colors, motions, sound effects. They will review
+critically to ensure virality of the reel." · *Check:* the reel's row in `review-panel.md` → Log, no defect left,
+before `queue:add`. · 📌 founder, measured by L73
+
 ## Changing the framework
 
 1. **Every change has a reason.** Add, change or drop a point only with a line in the change log below: what changed,
@@ -377,3 +395,5 @@ never rewritten), moves the weights the rule allows, and logs the run. · 🧪 L
 | v1.28 | 2026-10-23 | F10 rewritten: "Entertainment first, the result real". Drama of any kind is in (slow motion, crashes, flashes, shake, stakes, exaggerated sizes); the one floor is a real result and real numbers on screen; scale, speed and zoom notes move from the screen to the caption. F25: new opening **Shock**, a dramatic event from the topic inside the first second (any moment of the topic, not only the climax; explosions and danger judged by the founder case by case; never a real person hurt). First reel: P51, lightning hits a car. | Founder, 2026-10-23, after the retention-curve debate: Instagram viewers come for entertainment; nobody can read a reel in its first second, so a visual shock has to win it and the question carries seconds 1–3. Skip rate (viewers gone by 3 s) goes with reach on 179 @lws.pune reels (pyqvault-learnings.md L64). |
 | v1.29 | 2026-10-26 | F35 one picture, full frame and F36 soft studio added (🧪); F3, F4 and F7 amended to fit them (the graph, the A/B/C chips and the captions leave their fixed boxes; the question shrinks to one line at ~3 s). On test as one package in Physics #15 (P36, ice at the top). | Founder, 2026-10-26, after the study of @studyhacks09's quantum-numbers reel (`study/reels/DdjNcuvomWl.mp4`, study only): "our videos are at the center of reel while top and bottom is occupied by content/text"; the founder approved the plan (layout + studio look in one test reel). Measured by L71. |
 | v1.30 | 2026-10-26 | F37 the aftershock added (🧪): the opening keeps building to 3 s, a new event about every second, no fade or wash before 3 s, a hint of the answer at 2–3 s. `virality-measure.mjs` prints the aftershock ratio and warns under 0.6. First reel: the third Shock reel. | Chemistry #10's retention curve (founder's screenshot, 26 Oct): 94% at 1 s like Physics #13's 96%, but 71% at 3 s vs 78%, falling fastest while smoke filled the jar and the screen washed white. Founder, 2026-10-26: "we have answer for 1st [second]. now lets work on 2–3 sec"; approved the plan. Measured by L72. |
+| v1.31 | 2026-10-26 | F38 the review panel added (📌): four critics (Drama, Colour, Motion, Sound) read every new reel before it's queued; `reels/review-panel.md`, `remotion/tools/sound-report.ts`, `virality-measure.mjs --frames`. F37's check amended: an opening fades only when seconds 1–3 move under 0.6 of the first second **and** under 5% of the pixels a frame (`AFTER_FLOOR`, Physics #13's level). | F38: founder, 2026-10-26, after Chemistry #11 passed every check and was still "pretty bland": "there should be agents to review dramatic effect, colors, motions, sound effects", measured by L73. F37: the dramatic remake's flash and whip-pan moved 30–70% of the pixels a frame, so its busy seconds 1–3 (16%, 3× Physics #13) still scored 0.39; every earlier verdict stands (Chemistry #10, Physics #9b and #15 fade, Physics #13 passes). Founder approved both. |
+| v1.32 | 2026-10-26 | F38's pass rule: no defect left (not "every score ≥ 7"); scores logged, not a gate, until L73; at most two passes, then the founder judges. | Chemistry #11 took three passes from 5, 5, 6 to 6, 6, 6 at ~300k agent tokens a pass, and the critics began to contradict each other (red push arrows back after pass 1 had moved them to yellow for colour-blind viewers; uneven shards for a salt that cleaves into cubes). Founder approved. |

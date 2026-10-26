@@ -76,14 +76,21 @@ test("motion: the share of pixels that change noticeably; a frame moves when at 
 
 // Framework F37 (L72): after a shock the event keeps building to 3 s. Chemistry #10's smoke kept "moving" (motion 100%)
 // while the change per frame halved from the first second to seconds 1–3; viewers fell ~11 points a second. Lightning held.
-test("aftershock: motion in 1–3 s against the first second; under 60% means the opening fades", () => {
+// Amended the same day (founder OK, 2026-10-26): a big shock (Chemistry #11's remake: a flash, a whip-pan, 30–70% of the
+// pixels a frame) made the ratio unreachable though seconds 1–3 moved 3× as much as Lightning's. An opening fades only when
+// seconds 1–3 are quiet both ways: under 60% of the first second AND under Lightning's level (5% of the pixels a frame).
+test("aftershock: an opening fades when seconds 1–3 move under 60% of the first second and under Lightning's 5% a frame", () => {
   const steps = (first, rest) => [...Array(9).fill(first), ...Array(30).fill(rest)];   // changes at 0.1, 0.2 … 3.9 s
   assert.equal(v.aftershock(steps(0.05, 0.05)), 1);
   const salt = steps(0.042, 0.022);
   assert.ok(Math.abs(v.aftershock(salt) - 0.52) < 0.01, "Chemistry #10's numbers");
-  assert.equal(v.fades(v.aftershock(salt)), true);
-  assert.equal(v.fades(v.aftershock(steps(0.049, 0.05))), false, "Lightning");
-  assert.equal(v.fades(0.6), false, "60% passes");
+  assert.ok(Math.abs(v.motionAfter(salt) - 0.022) < 1e-9);
+  assert.equal(v.fades(salt), true, "Chemistry #10");
+  assert.equal(v.fades(steps(0.049, 0.05)), false, "Lightning");
+  assert.equal(v.fades(steps(0.05, 0.03)), false, "60% of the first second passes");
+  assert.equal(v.fades(steps(0.4, 0.16)), false, "a big shock with busy seconds 1–3 passes (Chemistry #11 remade)");
+  assert.equal(v.fades(steps(0.4, 0.04)), true, "a big shock that then goes quiet fades");
+  assert.equal(v.fades(steps(0.03, 0.01)), true, "Physics #15 (ice): 0.05 of a busy pull-back, then 1% a frame");
   const late = [...Array(9).fill(0.03), ...Array(10).fill(0.03), ...Array(10).fill(0.005), ...Array(10).fill(0.08)];
   assert.ok(v.aftershock(late) < 1, "only 1–3 s counts: motion after 3 s doesn't rescue a fade");
   assert.equal(v.aftershock(steps(0, 0.05)), null, "no motion in the first second: F5's job, not this check");
