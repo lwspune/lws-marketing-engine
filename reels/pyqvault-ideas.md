@@ -6,7 +6,7 @@ in only if it passes **the test** below; it is then **scored**, and the score is
 `--calibrate` runs the tuning. Framework: `pyqvault-framework.md` (F1, F21, F28, F29). @lws.pune's ideas stay in
 `remake-backlog.md` until it is rebuilt.
 
-**Open: 87 ideas · about 29 days at 3 reels a day.**
+**Open: 86 ideas · about 29 days at 3 reels a day.**
 
 Refill before it drops under two weeks. Sources (F1): the founder's ideas (Source `founder`, any time), a notes sweep
 (physics and chemistry are done; a new exam's notes next), and the next competitor read (`node reels/tools/remake-candidates.mjs`).
@@ -197,7 +197,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | C41 | C | A hydrogen fuel cell's only exhaust is water | – | 2 | 2 | 1 | 0 | 1 | 48 |  | mht-cet-chemistry/electrochemistry | ✓ |
 | C42 | C | Liquid oxygen sticks to a magnet, nitrogen pours through (MO theory) | – | 2 | 2 | 2 | 0 | 0 | 48 | ⏸ parked: fails F29 (it sticks, but why, unpaired electrons, needs words; 2026-10-21) | mht-cet-chemistry/chemical-bonding | ✗ |
 | C43 | C | Solid wax sinks, solid water floats: ice's open lattice (hydrogen bonds) | – | 2 | 2 | 2 | 1 | 2 | 69 |  | founder | ✓ |
-| C44 | C | An explosive metal and a poison gas make table salt (ionic bond) | – | 2 | 2 | 2 | 0 | 2 | 62 |  | founder | ✓ |
+| C44 | C | An explosive metal and a poison gas make table salt (ionic bond) | – | 2 | 2 | 2 | 0 | 2 | 62 | ✅ made 2026-10-26 (`pv-chem-010-salt`, Chemistry #10; the second Shock opening, founder's pick) | founder | ✓ |
 | C45 | C | Hit metal and salt with a hammer: the salt shatters (metallic bond) | – | 2 | 2 | 1 | 0 | 2 | 55 |  | founder | ✓ |
 | C46 | C | Iron nails in dry air, water and salt water: salt water rusts first | – | 2 | 2 | 1 | 0 | 2 | 55 |  | founder | ✓ |
 | C47 | C | A laser beam shows in milky water, not salt water (Tyndall) | 3.0 | 2 | 2 | 1 | 0 | 2 | 62 |  | founder | ✓ |
