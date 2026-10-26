@@ -6,7 +6,7 @@ in only if it passes **the test** below; it is then **scored**, and the score is
 `--calibrate` runs the tuning. Framework: `pyqvault-framework.md` (F1, F21, F28, F29). @lws.pune's ideas stay in
 `remake-backlog.md` until it is rebuilt.
 
-**Open: 85 ideas · about 29 days at 3 reels a day.**
+**Open: 84 ideas · about 28 days at 3 reels a day.**
 
 Refill before it drops under two weeks. Sources (F1): the founder's ideas (Source `founder`, any time), a notes sweep
 (physics and chemistry are done; a new exam's notes next), and the next competitor read (`node reels/tools/remake-candidates.mjs`).
@@ -199,7 +199,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | C42 | C | Liquid oxygen sticks to a magnet, nitrogen pours through (MO theory) | – | 2 | 2 | 2 | 0 | 0 | 48 | ⏸ parked: fails F29 (it sticks, but why, unpaired electrons, needs words; 2026-10-21) | mht-cet-chemistry/chemical-bonding | ✗ |
 | C43 | C | Solid wax sinks, solid water floats: ice's open lattice (hydrogen bonds) | – | 2 | 2 | 2 | 1 | 2 | 69 |  | founder | ✓ |
 | C44 | C | An explosive metal and a poison gas make table salt (ionic bond) | – | 2 | 2 | 2 | 0 | 2 | 62 | ✅ made 2026-10-26 (`pv-chem-010-salt`, Chemistry #10; the second Shock opening, founder's pick) | founder | ✓ |
-| C45 | C | Hit metal and salt with a hammer: the salt shatters (metallic bond) | – | 2 | 2 | 1 | 0 | 2 | 55 |  | founder | ✓ |
+| C45 | C | Hit metal and salt with a hammer: the salt shatters (metallic bond) | – | 2 | 2 | 1 | 0 | 2 | 55 | ✅ made 2026-10-26 (`pv-chem-011-hammer`, Chemistry #11; the third Shock opening and the first F37 reel) | founder | ✓ |
 | C46 | C | Iron nails in dry air, water and salt water: salt water rusts first | – | 2 | 2 | 1 | 0 | 2 | 55 |  | founder | ✓ |
 | C47 | C | A laser beam shows in milky water, not salt water (Tyndall) | 3.0 | 2 | 2 | 1 | 0 | 2 | 62 |  | founder | ✓ |
 | C48 | C | s and p orbitals blend into methane's four equal bonds (hybridisation) | – | 2 | 1 | 1 | 0 | 0 | 34 | ⏸ parked: fails F29 (the blend shows; why it happens needs words; founder's list, 2026-10-21) | founder | ✗ |
@@ -742,7 +742,7 @@ each answer is re-derived in its reel's tests (F10).
 ### C45 · Metal bends, salt shatters
 - **Frame 0:** Hit a metal and a salt crystal with a hammer: which shatters? → the salt
 - **Without words:** a metal: + ions in a sea of moving electrons; a salt: + and − ions in a grid → the hammer hits the metal; layers slide and the electron sea flows with them: it bends → the hammer hits the salt; a layer slides; + meets +, − meets − → they push apart; the crystal shatters
-- **Second hook:** Why do metals conduct? → the electron sea moves
+- **Second hook:** So why didn't the copper break? → the electron sea holds its sliding layers (made, 2026-10-26: it is answered by the reel's own explanation, F26; the draft "Why do metals conduct?" would have needed a scene of its own)
 - **From:** founder · mht-cet-chemistry/solid-state · metallic vs ionic solids
 
 ### C46 · Rusting

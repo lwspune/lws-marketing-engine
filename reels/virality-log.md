@@ -69,6 +69,7 @@ loop; momentum from the reels posted before). The score shown by the tool is tod
 | P75 | pv-physics-014-ohm | 3 | 2 | 1 | 0 | 2 | 1 | 1 | 1 | 2 | 0 | 1 | idea 79 · motion 100% · words ≈23 (label, two-line question, options, tag, nudge, the cast's names) · colour 39 · 14 s · cover 34.1 · Pick one + race running (sparks racing from frame 0), second hook "Now double Ohm?" (a second resistor slides in), loop; dark, drive, silent; first Painted 2D reel and first with the cast (Volt, Amp, Ohm); momentum as P51's 1.47 (no reel posted since) |
 | C44 | pv-chem-010-salt | 2 | 2 | 1 | 0 | 1 | 1 | 1 | 1 | 2 | 0 | 0 | idea 62 · motion 100% · words ≈20 (label, two-line question, three options) · colour 18 · 17 s · cover 22.9 · You'd think + the second Shock opening (sodium bursts in chlorine at 0.2 s), second hook (pan to the beaker, water pours, the bulb lights), end card; dark, trap, silent; momentum 1,377 ÷ 1,354 = 1.02 |
 | P36 | pv-physics-015-ice | 3 | 2 | 0 | 0 | 2 | 1 | 1 | 1 | 2 | 1 | 0 | idea 79 · motion 100% · words ≈25 (label, two-line question, three options, tag, nudge) · colour 33.7 · 17.6 s · cover 31.9 · Everyday puzzle + a Zoom opening (a pull-back from the ice: not one of the named moves), second hook (swing to the fridge), answer at 8.6 s, end card; the first full-frame studio reel (F35–F36); lofi, silent; momentum as C44 today (1,377 ÷ 1,354 = 1.02) |
+| C45 | pv-chem-011-hammer | 1 | 2 | 1 | 0 | 1 | 1 | 1 | 1 | 1 | 0 | 1 | idea 55 · motion 100% · words ≈22 (label, two-line question, three options, tag, nudge) · colour 13.3 · 15 s · cover 11.6 · Same start, two endings + the third Shock opening (both hammers land at 0.2 s), the first F37 reel (aftershock 0.84: events at 0.2, 1.2, 1.3, 2.2, 3.2 s), second hook (a dive into the bend, then the atoms), loop (a rewind to frame 0); studio, cinematic, silent; momentum 1,513 ÷ 1,354 = 1.12 |
 
 ## Predictions
 
@@ -104,6 +105,7 @@ The 7 reels made but not posted on 2026-10-22 are the first real test.
 | P75 | pv-physics-014-ohm | 2026-10-24 | 83 | record-breaker | words | 1989 | 1429 | no | – | waiting | – |
 | C44 | pv-chem-010-salt | 2026-10-26 | 68 | above typical | idea | 2141 | 1429 | no | – | waiting | – |
 | P36 | pv-physics-015-ice | 2026-10-26 | 78 | above typical | words | 2141 | 1429 | no | – | waiting | – |
+| C45 | pv-chem-011-hammer | 2026-10-26 | 54 | below typical | idea | 2141 | 1429 | no | – | waiting | – |
 
 ## Calibration and accuracy runs
 
