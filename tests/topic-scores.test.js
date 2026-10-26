@@ -201,11 +201,11 @@ test("an open idea without a card, or with a thin card, is refused; a card with 
   assert.match(check(orphan).join("\n"), /C99: card has no row in Ideas/);
 });
 
-// The runway line: how many ideas are left at 3 reels a day.
-test("the Open line must match the list: open + queued ideas, and the days they last at 3 a day", () => {
+// The runway line: how many ideas are left at 1 reel a day (founder, 2026-10-26; was 3).
+test("the Open line must match the list: open + queued ideas, and the days they last at 1 a day", () => {
   const rows = ts.parse(MD);
-  assert.deepEqual(ts.runwayErrors("**Open: 4 ideas · about 2 days at 3 reels a day.**", rows), []);
-  assert.match(ts.runwayErrors("**Open: 9 ideas · about 3 days at 3 reels a day.**", rows).join(), /says 9 ideas and 3 days; the list has 4 open or queued \(about 2 days\)/);
+  assert.deepEqual(ts.runwayErrors("**Open: 4 ideas · about 4 days at 1 reel a day.**", rows), []);
+  assert.match(ts.runwayErrors("**Open: 9 ideas · about 3 days at 1 reel a day.**", rows).join(), /says 9 ideas and 3 days; the list has 4 open or queued \(about 4 days\)/);
   assert.match(ts.runwayErrors("no line", rows).join(), /no "Open: N ideas/);
 });
 
