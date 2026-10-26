@@ -1,0 +1,17 @@
+{
+  "duration": 12,
+  "music": {
+    "style": "anthem",
+    "hits": [
+      4.8,
+      7.2
+    ],
+    "calm": [
+      [
+        2.4,
+        4.8
+      ]
+    ],
+    "seamless": true
+  }
+}

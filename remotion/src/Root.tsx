@@ -41,6 +41,7 @@ import { Reel023 } from './Reel023.tsx';
 import { Reel024 } from './Reel024.tsx';
 import { Reel025 } from './Reel025.tsx';
 import { Reel027 } from './Reel027.tsx';
+import { Story001 } from './Story001.tsx';
 import { Reel018 } from './Reel018.tsx';
 import { DemoPhysics } from './DemoPhysics.tsx';
 import { DemoParticles } from './DemoParticles.tsx';
@@ -91,6 +92,7 @@ import { DURATION as DURATION_023 } from './lib/reel023.ts';
 import { DURATION as DURATION_024 } from './lib/reel024.ts';
 import { DURATION as DURATION_025 } from './lib/reel025.ts';
 import { DURATION as DURATION_027 } from './lib/reel027.ts';
+import { DURATION as DURATION_S001 } from './lib/story001.ts';
 import { DURATION as DURATION_018 } from './lib/reel018.ts';
 import { DURATION as DURATION_PC005 } from './lib/pc005.ts';
 import { DURATION as DURATION_015 } from './lib/reel015.ts';
@@ -225,6 +227,8 @@ export const Root = () => (
     <Still id="Reel025Cover" component={Reel025} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="Reel027" component={Reel027} durationInFrames={Math.round(DURATION_027 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="Reel027Cover" component={Reel027} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="Story001" component={Story001} durationInFrames={Math.round(DURATION_S001 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="Story001Cover" component={Story001} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="Reel018" component={Reel018} durationInFrames={Math.round(DURATION_018 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="Reel018Cover" component={Reel018} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="DemoPhysics" component={DemoPhysics} durationInFrames={150} fps={30} width={1080} height={1920} />

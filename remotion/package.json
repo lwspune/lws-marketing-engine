@@ -260,7 +260,11 @@
     "music:sm013": "node ../reels/tools/music.mjs music/sm-r013-window.json public/sm-r013-window.wav",
     "mix:sm013": "node tools/mix.ts sm013",
     "render:sm013": "remotion render SoundMind013 ../soundmind/reels/sm-r013-window.mp4",
-    "cover:sm013": "remotion still SoundMind013Cover ../soundmind/reels/sm-r013-window-cover.jpg --image-format=jpeg"
+    "cover:sm013": "remotion still SoundMind013Cover ../soundmind/reels/sm-r013-window-cover.jpg --image-format=jpeg",
+    "music:s001": "node ../reels/tools/music.mjs music/nda-story-001-one-day.json public/nda-story-001-one-day.wav",
+    "mix:s001": "node tools/mix.ts s001",
+    "render:s001": "remotion render Story001 ../reels/nda-story-001-one-day.mp4",
+    "cover:s001": "remotion still Story001Cover ../reels/nda-story-001-one-day-cover.png"
   },
   "dependencies": {
     "@dimforge/rapier3d-compat": "0.21.0",
