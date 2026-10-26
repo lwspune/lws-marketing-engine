@@ -161,6 +161,15 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### Earlier reels use the stacked layout, not full frame (logged 2026-10-26, awaiting founder)
+Learning (framework F35 + F36, L71): the picture fills the page on a soft studio set; the question shrinks to one line;
+text sits beside what it names. Every earlier @pyqvault_ reel (and @lws.pune's, which share the F-numbers) stacks a
+question card, the scene and a graph card + caption. **360:** scope = every posted or queued reel of both handles ·
+blast radius = only those posts; nothing depends on them, and a posted reel can't be changed (a remake is a new post) ·
+does it apply? not yet: F35–F36 are on test (L71) and may lose · risk = low (old renders stay in git) · cost = about half
+a day per reel · **recommendation: decline for now**; once L71 is confirmed (3 studio reels beat the typical reel),
+remake only a strong old topic as a new numbered reel, and ask whether @lws.pune should adopt F35 (its own framework).
+
 ### Earlier 3D reels may show VIVID colours pastel (logged 2026-10-26, awaiting founder)
 Learning (027, runbook → "Shapes that morph"): solid VIVID objects on the white board lose saturation under the renderer's film tone curve; 027 fixed it with `toneMapped={false}` and a matt finish. **360:** scope = the 3D reels made before it (@lws.pune 014, 025; @pyqvault_'s 3D physics reels) · blast radius = only those renders; nothing depends on them · does it apply? unclear: glossy marbles and glowing objects (025, Bloom) were judged fine by the founder, and tone mapping also keeps highlights from clipping · risk = low (a re-render; old files stay in git) · cost = ~10 min per reel to compare one frame, ~10 min to re-render · **recommendation: decline for posted reels; for any finished, unposted 3D reel compare one frame both ways before it's queued.**
 

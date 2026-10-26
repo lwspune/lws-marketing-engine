@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.26, 2026-10-22)
+# @pyqvault_ reel framework (v1.29, 2026-10-26)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -77,14 +77,14 @@ at the frame strip: is something new happening every second, across the whole fr
 
 **F3 · A law shown live.** A live simulation + live numbers that change with it + a graph that draws itself. · *Why:*
 @bisal.physics and @codematrixvishal's law reels are their best category (L20, L27); our top reel is Boyle's law, live. ·
-*Check:* the reel has all three. · 🧪 L27
+*Check:* the reel has all three. **v1.29 (with F35, on test):** no permanent graph card: live numbers sit on the object, and a graph, when one is needed, draws large for a moment (or onto the scene) and goes. · 🧪 L27, L71
 
 ## Hook (the first 3 seconds)
 
 **F4 · Ask first (predict-first).** Frame 0 asks a question the viewer can answer in two seconds, with A/B/C and
 "comment your guess 👇" (`PredictHeader`); the picture settles it and the right option lights. The caption's first line
 repeats it. · *Why:* the account that asks gets 3.3 comments per 1,000 views, everyone else 0–1 (L28); our first 8
-reels got 0 comments. · *Check:* the question + options are on the first frame. · 🧪 L28
+reels got 0 comments. · *Check:* the question + options are on the first frame. **v1.29 (with F35, on test):** after the guess window (~3 s) the A/B/C chips and the nudge go and the question shrinks to one line under the top edge; the answer comes back as a label beside the object. · 🧪 L28, L71
 
 **F5 · Question in front, picture already moving behind it.** No still frames in the first 3 s: no title card, no
 still scene under the question. · *Why:* viewers left by 3–6 s, during the 2.6 s still title card (L29); seeing something
@@ -155,7 +155,7 @@ end feel it, so it should pay off more once F26 keeps them longer. · *Check:* t
 
 **F7 · More picture, less text.** On-screen text is short labels, one line at a time, ≤ 7 words; no derivations, no
 formula walls. Live numbers that change with the picture (speed, rate, energy bars) count as picture. · *Why:* the picture carries the idea; text competes with it in a 3-second decision. · *Check:* the reel's
-tests count words per caption line. · 📌 founder, 2026-10-18
+tests count words per caption line. **v1.29 (with F35, on test):** each line sits beside what it names and goes again; no fixed caption pill at the bottom. · 📌 founder, 2026-10-18; layout 🧪 L71
 
 **F8 · Rounded shapes.** No sharp corners where we can avoid them: blocks, planks, knobs and posts are rounded
 (`RoundBox` in `remotion/src/shapes.tsx`) or round (cylinders, spheres); UI bars and pills have round ends. The 3D
@@ -190,6 +190,24 @@ material's fill or edge ≥ 3:1, the edge a shade of the fill; `distinguishable(
 beat table names each key object's colour, real (from REAL) or VIVID, and lists the pairs that must be told apart, which
 the reel's tests run through `distinguishable()` (runbook step 1); the stills sheet shows
 nothing washed out, no two neighbours hard to tell apart, and no clash. · 🧪 L46
+
+**F35 · One picture, full frame.** The 3D scene fills the page (`FULL` in `remotion/src/lib/layout.ts`): no question card
+above it, no graph card or caption pill below it. Once the opening is done, the main object spans at least 70% of the width
+(or 60% of the height for a tall one). The only text on screen all reel is the small tag (F20); every other text sits beside
+what it names, comes and goes, and stays inside Instagram's safe area (out of the bottom 320 px and of the button strip
+right of x 960 below mid-screen), clear of every other text. · *Why:* founder, 2026-10-26: "our videos are at the center
+of reel while top and bottom is occupied by content/text": three stacked boxes left the experiment less than half the
+phone, which made it look small and toy-like; the studied quantum-numbers reel (2,777 likes, 114 reposts) is one picture
+with labels that come and go (L71). · *Check:* the reel lists every text in `textsAt(t)` and its tests run
+`frameProblems()` (safe area, no collisions) and the main object's `widthShare` / `heightShare` on every frame. · 🧪 L71
+
+**F36 · Soft studio.** A white seamless set (the floor curves up into the back wall: no horizon line), soft room light
+reflected in every surface, one key light and a soft contact shadow under each object (`StudioSet`, `ContactShadow` in
+`remotion/src/studio.tsx`); clear glass and see-through liquids; one colour family per reel; a slow drifting camera. Real
+colours stay (F24). Best for simple or abstract objects (glass, liquids, molecules, fields): a machine built in code still
+looks fake (the car look test, 2026-10-23). A studio reel counts on the white side of F12. · *Why:* the founder found our
+reels "like kids drawing and plasticky" (2026-10-23) and picked this look from the studied reel (L71). · *Check:* the
+stills sheet: no hard horizon, a soft shadow under every object, nothing flat and plastic. · 🧪 L71
 
 **F9 · Zoom in and out at 3–4 moments.** A slow push in while something builds, a quick **punch-in that lands on
 the big moment**, a zoom out to show the result. Written as tested keys (`CAMERA`, `tween` in `motion.ts`). · *Why:* a
@@ -344,3 +362,4 @@ never rewritten), moves the weights the rule allows, and logs the run. · 🧪 L
 | v1.26 | 2026-10-22 | F30: the numbers come in by script and the predictor updates itself. Publisher `npm run results` (GoPost's write-once 48 h / 7 d readings by post slug) → `results-sync.js` (into the learnings results table) → `virality.js --update` (old predictions get their outcome beside them, weights move by the rule, the run is logged). The four-step analysis routine heads the results table. | Founder, 2026-10-22: "prediction is made every time a new reel is made and old predictions are updated to fine-tune the predictor". The results table had stopped at Physics #4 by hand, which hid the framework's 6–10× jump in views. |
 | v1.27 | 2026-10-22 | No point changed. Framework 2 (`pyqvault-framework-2.md`, an outside storyboard bible: suit-up builds, ~30 s, an explainer hook, the formula and a takeaway at the end) is put on test against this framework in one pair on one topic, electromagnetic induction: `pv-f2-induction` (made by it) vs `pv-physics-011-induction` (made by this one), 09:00 Fri 23 and Sat 24 Oct. | Founder, 2026-10-22: "let the data speak". Measured by L61, with its decision rule set before posting. |
 | v1.28 | 2026-10-23 | F10 rewritten: "Entertainment first, the result real". Drama of any kind is in (slow motion, crashes, flashes, shake, stakes, exaggerated sizes); the one floor is a real result and real numbers on screen; scale, speed and zoom notes move from the screen to the caption. F25: new opening **Shock**, a dramatic event from the topic inside the first second (any moment of the topic, not only the climax; explosions and danger judged by the founder case by case; never a real person hurt). First reel: P51, lightning hits a car. | Founder, 2026-10-23, after the retention-curve debate: Instagram viewers come for entertainment; nobody can read a reel in its first second, so a visual shock has to win it and the question carries seconds 1–3. Skip rate (viewers gone by 3 s) goes with reach on 179 @lws.pune reels (pyqvault-learnings.md L64). |
+| v1.29 | 2026-10-26 | F35 one picture, full frame and F36 soft studio added (🧪); F3, F4 and F7 amended to fit them (the graph, the A/B/C chips and the captions leave their fixed boxes; the question shrinks to one line at ~3 s). On test as one package in Physics #15 (P36, ice at the top). | Founder, 2026-10-26, after the study of @studyhacks09's quantum-numbers reel (`study/reels/DdjNcuvomWl.mp4`, study only): "our videos are at the center of reel while top and bottom is occupied by content/text"; the founder approved the plan (layout + studio look in one test reel). Measured by L71. |
