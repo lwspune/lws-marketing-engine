@@ -14,8 +14,8 @@ import { captionAt, prog } from './lib/motion.ts';
 import { useFonts } from './board.tsx';
 import { RoundBox } from './shapes.tsx';
 import {
-  COVER_T, SUN_UP, BLOCK, BAY, DRUM, DOME, FINIAL, DOME_Z, DOME_BASE, PATH_W, GATE_Z, GATE_HALF, GATE_H, SIL_H,
-  CAPTIONS, CAPTION_Y, CAPTION_SIZE, TITLE, cameraAt, project, sunDir, sunlight, dawnAt, shadowLength, morphAt,
+  COVER_T, COVER_TITLE, SUN_UP, BLOCK, BAY, DRUM, DOME, FINIAL, DOME_Z, DOME_BASE, PATH_W, GATE_Z, GATE_HALF, GATE_H, SIL_H,
+  CAPTIONS, TITLE, cameraAt, project, sunDir, sunlight, dawnAt, shadowLength, morphAt,
   silhouetteAt, studentZAt, strideAt, headLiftAt, gateAngleAt, titleAlpha, type V3,
 } from './lib/story001.ts';
 
@@ -24,8 +24,8 @@ function rng(seed: number) {                                   // mulberry32: th
   let a = seed >>> 0;
   return () => { a = (a + 0x6d2b79f5) >>> 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
 }
-const COL = { stone: '#9c8e7c', stoneDark: '#827564', red: '#a3412f', roof: '#8e3a2b', frame: '#e4dccb', glass: '#2a2724',
-  lit: '#ffc77a', dome: '#b4563d', rib: '#7e3424', gold: '#d6a84a', lawn: '#4d7a33', field: '#3c5a2a', path: '#a34b36',
+const COL = { stone: '#9c8e7c', stoneDark: '#827564', red: '#b04a33', roof: '#a9472f', frame: '#e4dccb', glass: '#2a2724',
+  lit: '#ffc77a', dome: '#c8653f', rib: '#8a3622', gold: '#d6a84a', lawn: '#4d7a33', field: '#3c5a2a', path: '#a34b36',
   hedge: '#2c5524', iron: '#16161a', palm: '#2f5e2b', trunk: '#6b5a45' };
 
 // ---- facades: drawn once on canvases (a colour map and a glow map for the lit windows) -------------------------------
@@ -51,7 +51,7 @@ function facade(wM: number, hM: number, floors: number[], opts: { arches?: numbe
       g.fillStyle = arch ? COL.red : COL.frame; g.fillRect(x0 - 5, y0 - 5, ww * px + 10, wh * px + 5);
       g.fillStyle = COL.glass; g.beginPath();
       g.moveTo(x0, y(base)); g.lineTo(x0, y0 + ww * px / 2); g.arc(x0 + ww * px / 2, y0 + ww * px / 2, ww * px / 2, Math.PI, 0); g.lineTo(x0 + ww * px, y(base)); g.fill();
-      if (r() < 0.35) { ge.fillStyle = COL.lit; ge.fillRect(x0 + 3, y0 + ww * px / 2, ww * px - 6, y(base) - y0 - ww * px / 2); }
+      if (r() < 0.15) { ge.fillStyle = COL.lit; ge.fillRect(x0 + 3, y0 + ww * px / 2, ww * px - 6, y(base) - y0 - ww * px / 2); }
     }
   });
   const tex = (cv: HTMLCanvasElement) => { const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t; };
@@ -157,7 +157,7 @@ function Grounds() {
     return out;
   }, []);
   return <group>
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, 40]} receiveShadow><planeGeometry args={[1600, 1600]} /><meshStandardMaterial color={COL.field} roughness={1} /></mesh>
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, 40]} receiveShadow><planeGeometry args={[8000, 8000]} /><meshStandardMaterial color={COL.field} roughness={1} /></mesh>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 62]} receiveShadow><planeGeometry args={[90, 124]} /><meshStandardMaterial color={COL.lawn} roughness={1} /></mesh>
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.005, 72]} receiveShadow><planeGeometry args={[PATH_W, 144]} /><meshStandardMaterial map={paths} roughness={0.95} /></mesh>
     {hedges.map((p, i) => <mesh key={i} position={p} castShadow receiveShadow><boxGeometry args={[0.8, 0.8, 7]} /><meshStandardMaterial color={COL.hedge} roughness={1} /></mesh>)}
@@ -177,12 +177,12 @@ function Gate({ angle }: { angle: number }) {
       {[0.25, 1.2, 2.2].map(y => <mesh key={y} position={[-side * GATE_HALF / 2, y, 0]}><boxGeometry args={[GATE_HALF, 0.05, 0.04]} /><meshStandardMaterial color={COL.iron} metalness={0.5} roughness={0.5} /></mesh>)}
     </group>
   );
-  // The bars cast no shadow: on the path they would stripe across his (the pillars and the wall still do).
+  // The bars and pillars cast no shadow: on the path they would stripe across his or read as a hole (the low wall still does).
   return <group>
     {leaf(-1)}{leaf(1)}
     {[-1, 1].map(s => <group key={s}>
-      <mesh position={[s * (GATE_HALF + 0.45), 1.6, GATE_Z]} castShadow receiveShadow><boxGeometry args={[0.8, 3.2, 0.8]} /><meshStandardMaterial color={COL.stone} roughness={0.95} /></mesh>
-      <mesh position={[s * (GATE_HALF + 0.45), 3.3, GATE_Z]} castShadow><boxGeometry args={[1, 0.25, 1]} /><meshStandardMaterial color={COL.red} /></mesh>
+      <mesh position={[s * (GATE_HALF + 0.45), 1.6, GATE_Z]} receiveShadow><boxGeometry args={[0.8, 3.2, 0.8]} /><meshStandardMaterial color={COL.stone} roughness={0.95} /></mesh>
+      <mesh position={[s * (GATE_HALF + 0.45), 3.3, GATE_Z]}><boxGeometry args={[1, 0.25, 1]} /><meshStandardMaterial color={COL.red} /></mesh>
       <mesh position={[s * 24, 0.35, GATE_Z]} castShadow receiveShadow><boxGeometry args={[42, 0.7, 0.5]} /><meshStandardMaterial color={COL.stone} roughness={0.95} /></mesh>
       {Array.from({ length: 70 }, (_, k) => <mesh key={k} position={[s * (3.4 + 0.6 * k), 1.2, GATE_Z]}><cylinderGeometry args={[0.018, 0.018, 1.0, 5]} /><meshStandardMaterial color={COL.iron} /></mesh>)}
     </group>)}
@@ -192,7 +192,7 @@ function Gate({ angle }: { angle: number }) {
 // ---- the student (seen only from behind) ------------------------------------------------------------------------------
 function Student({ t }: { t: number }) {
   const z = studentZAt(t), { swing, bob } = strideAt(t), lift = headLiftAt(t);
-  const skin = '#7d5238', shirt = '#d8d2c4', jeans = '#22304f';
+  const skin = '#7d5238', shirt = '#2d5fb8', jeans = '#2a2a33';   // a royal-blue top: apart from the grey stone and the red path
   const limb = (len: number, r: number, color: string) => <mesh position={[0, -len / 2, 0]}><capsuleGeometry args={[r, len - 2 * r, 6, 12]} /><meshStandardMaterial color={color} roughness={0.85} /></mesh>;
   return <group position={[0, bob, z]}>
     {[-1, 1].map(s => <group key={s} position={[s * 0.1, 0.92, 0]} rotation={[s * swing, 0, 0]}>
@@ -249,7 +249,7 @@ void main() {
   vec3 c = mix(hor, zen, pow(el, 0.45));
   c += vec3(1.0, 0.6, 0.28) * pow(toSun, 10.0) * (0.2 + 0.3 * uDawn) * (1.0 - el);
   float s = max(dot(d, uSun), 0.0);
-  c += vec3(1.0, 0.8, 0.55) * pow(s, 120.0) * 0.6 * uDisc + vec3(1.0, 0.97, 0.88) * smoothstep(0.99985, 0.99993, s) * 2.0 * uDisc;
+  c += vec3(1.0, 0.68, 0.32) * pow(s, 40.0) * 0.8 * uDisc + vec3(1.0, 0.8, 0.42) * smoothstep(0.99895, 0.99925, s) * 1.6 * uDisc;
   if (d.y < 0.0) c = mix(hor, vec3(0.2, 0.2, 0.18), clamp(-d.y * 4.0, 0.0, 1.0));
   gl_FragColor = vec4(c, 1.0);
 }`;
@@ -265,9 +265,15 @@ function Light({ t }: { t: number }) {
   const target = useMemo(() => { const o = new THREE.Object3D(); o.position.set(0, 0, 70); return o; }, []);
   if (!scene.children.includes(target)) scene.add(target);
   const at: V3 = [d[0] * 300, d[1] * 300, 70 + d[2] * 300];
+  // haze: the far ground melts into the horizon's colour, so the world has no edge (both pass-1 critics)
+  const haze = new THREE.Color('#6f5468').lerp(new THREE.Color('#e0a47a'), dawn);
+  if (!(scene.fog instanceof THREE.Fog)) scene.fog = new THREE.Fog(haze, 260, 1400);
+  (scene.fog as THREE.Fog).color.copy(haze);
   return <>
     <hemisphereLight args={['#a9bbec', '#3a3326', 0.95 + 0.55 * dawn]} />
-    <directionalLight position={[20, 60, 160]} intensity={0.7 + 0.4 * dawn} color="#c9d4f2" />
+    <directionalLight position={[20, 60, 160]} intensity={(0.7 + 0.4 * dawn) * (1 - 0.6 * sun)} color="#c9d4f2" />
+    {/* once the sun is up, warm light on the faces we see (the morning glow off the sky): the ending stays sunlit */}
+    <directionalLight position={[-30, 70, 260]} intensity={1.5 * sun} color="#ffb47a" />
     <directionalLight position={at} target={target} intensity={3.4 * sun} color="#ffd9a6" castShadow
       shadow-mapSize={[4096, 4096]} shadow-bias={-0.0004} shadow-normalBias={0.04}
       shadow-camera-left={-75} shadow-camera-right={75} shadow-camera-top={95} shadow-camera-bottom={-95} shadow-camera-near={10} shadow-camera-far={700} />
@@ -299,14 +305,22 @@ function Flare({ t }: { t: number }) {
   const flash = prog(t, SUN_UP - 0.05, 0.1) * (1 - prog(t, SUN_UP + 0.1, 1.0)), a = sunlight(t) * (p.depth > 0 ? 1 : 0);
   if (a < 0.01 && flash < 0.01) return null;
   return <>
-    {a > 0.01 && <div style={{ position: 'absolute', left: p.x - 300, top: p.y - 300, width: 600, height: 600, borderRadius: '50%', opacity: 0.35 * a,
-      background: 'radial-gradient(circle, rgba(255,246,220,0.95) 0%, rgba(255,214,150,0.45) 18%, rgba(255,170,90,0.12) 45%, rgba(255,170,90,0) 70%)', mixBlendMode: 'screen' }} />}
-    <AbsoluteFill style={{ background: 'rgba(255,236,200,1)', opacity: 0.18 * flash, mixBlendMode: 'screen' }} />
+    {a > 0.01 && <>
+      <div style={{ position: 'absolute', left: p.x - 700, top: p.y - 700, width: 1400, height: 1400, borderRadius: '50%', opacity: (0.22 + 0.4 * flash) * a, mixBlendMode: 'screen',
+        background: 'repeating-conic-gradient(from 0deg, rgba(255,200,120,0.55) 0deg 4deg, rgba(255,200,120,0) 4deg 15deg)',
+        WebkitMaskImage: 'radial-gradient(circle, #000 8%, rgba(0,0,0,0.5) 30%, transparent 65%)', transform: `rotate(${(t - SUN_UP) * 6}deg)` }} />
+      <div style={{ position: 'absolute', left: p.x - 320, top: p.y - 320, width: 640, height: 640, borderRadius: '50%', opacity: 0.45 * a, mixBlendMode: 'screen',
+        background: 'radial-gradient(circle, rgba(255,226,160,0.95) 0%, rgba(255,180,90,0.5) 16%, rgba(255,140,60,0.14) 42%, rgba(255,140,60,0) 70%)' }} />
+    </>}
+    <AbsoluteFill style={{ background: 'rgba(255,190,110,1)', opacity: 0.22 * flash, mixBlendMode: 'screen' }} />
   </>;
 }
 function Title({ t, force }: { t: number; force: boolean }) {
   const a = force ? 1 : Math.min(1, titleAlpha(t));
   if (a < 0.01) return null;
+  if (force) return <div style={{ position: 'absolute', left: 0, width: 1080, top: COVER_TITLE.y0, height: COVER_TITLE.y1 - COVER_TITLE.y0, display: 'flex',
+    alignItems: 'center', justifyContent: 'center', font: `700 ${COVER_TITLE.size}px ${TEXT_FONT}`, letterSpacing: '0.14em', color: '#fffaf0', paddingLeft: '0.14em',
+    textShadow: '0 0 10px rgba(20,12,30,0.9), 0 0 36px rgba(20,12,30,0.7), 0 4px 16px rgba(20,12,30,0.7)' }}>{TITLE.text}</div>;
   // a soft dark band behind it, so it reads on the bright sunrise sky too
   return <>
     <div style={{ position: 'absolute', left: 0, top: 0, width: 1080, height: TITLE.y1 + 160, opacity: a,
@@ -319,8 +333,9 @@ function Title({ t, force }: { t: number; force: boolean }) {
 function Line({ t }: { t: number }) {
   const cap = captionAt(CAPTIONS, t);
   if (!cap) return null;
-  return <div style={{ position: 'absolute', left: 0, width: 1080, top: CAPTION_Y - 50, height: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: cap.alpha }}>
-    <div style={{ font: `600 ${CAPTION_SIZE}px ${TEXT_FONT}`, color: '#fffaf0', background: 'rgba(12,14,32,0.58)', borderRadius: 999, padding: '10px 28px',
+  const size = cap.caption.size ?? 60, y = cap.caption.y ?? 330;
+  return <div style={{ position: 'absolute', left: 0, width: 1080, top: y - size, height: 2 * size, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: cap.alpha }}>
+    <div style={{ font: `600 ${size}px ${TEXT_FONT}`, color: '#fffaf0', background: 'rgba(12,14,32,0.86)', borderRadius: 999, padding: `${size * 0.18}px ${size * 0.5}px`,
       transform: `translateY(${(1 - Math.min(1, cap.age / 0.25)) * 12}px)` }}>{cap.caption.text}</div>
   </div>;
 }

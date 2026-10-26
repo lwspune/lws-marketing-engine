@@ -20,11 +20,14 @@ import { prog, clamp01, type Caption } from './motion.ts';
 import type { Hit, Score } from './sfx.ts';
 
 export type V3 = [number, number, number];
-export const DURATION = 12, COVER_T = 4.4, ORBIT_END = 2.4, SUN_UP = 4.8;
+export const DURATION = 12, ORBIT_END = 2.4, SUN_UP = 4.8, GATE_VIEW_T = 4.4;
 type Span = { t: number; dur: number };
-export const DESCENT: Span = { t: 2.4, dur: 1.6 }, PUSH: Span = { t: 4.0, dur: 0.8 }, CRANE: Span = { t: SUN_UP + 0.2, dur: 0.8 };
-export const MORPH: Span = { t: 5.8, dur: 1.4 }, HOLD_END = 8.2, GATE: Span = { t: 8.2, dur: 0.9 };
-export const WALK: Span = { t: 8.7, dur: 1.0 }, STEPS = [8.85, 9.2, 9.55], RISE: Span = { t: 9.7, dur: 2.3 };
+export const DESCENT: Span = { t: 2.4, dur: 1.6 }, PUSH: Span = { t: 4.0, dur: 0.8 }, CRANE: Span = { t: 4.9, dur: 1.35 };
+export const MORPH: Span = { t: 6.1, dur: 1.1 }, HOLD_END = 7.8, TURN_BACK: Span = { t: HOLD_END, dur: 0.6 };
+export const GATE: Span = { t: 8.4, dur: 1.0 }, WALK: Span = { t: 8.9, dur: 1.0 }, STEPS = [9.05, 9.4, 9.75];
+export const RISE: Span = { t: 9.9, dur: 2.1 };
+/** The cover (both pass-1 critics: the strongest image) is the finished cadet shadow, its title under his feet. */
+export const COVER_T = 7.5, COVER_TITLE = { y0: 1440, y1: 1600, size: 130 };
 export const MUSIC_HITS = [SUN_UP, 7.2];
 const DEG = Math.PI / 180;
 
@@ -95,7 +98,12 @@ export function silhouetteAt(m: number) {
 }
 
 // ---- the gate and the walk --------------------------------------------------------------------------------------------
-export const gateAngleAt = (t: number) => 80 * DEG * prog(t, GATE.t, GATE.dur);
+/** Heavy: slow to start, then swinging to 80° with a small bounce back off its stop (the clang is the latch going). */
+export function gateAngleAt(t: number) {
+  const u = clamp01((t - GATE.t) / GATE.dur), swing = u < 0.8 ? (u / 0.8) ** 2 * (3 - 2 * (u / 0.8)) : 1;
+  const bounce = u < 0.8 ? 0 : 0.06 * Math.sin((Math.PI * (u - 0.8)) / 0.2);
+  return 80 * DEG * (swing - bounce);
+}
 export const WALK_DIST = 2.1;
 export const studentZAt = (t: number) => STUDENT_Z - WALK_DIST * prog(t, WALK.t, WALK.dur);
 /** The walk's leg swing (radians, + = the left leg forward) and body bob (m), from the step times. */
@@ -105,13 +113,15 @@ export function strideAt(t: number) {
   return { swing: 0.45 * fade * Math.sin(Math.PI * (t - STEPS[0]) / (STEPS[1] - STEPS[0]) + Math.PI / 2), bob: 0.03 * fade * Math.abs(Math.sin(Math.PI * (t - STEPS[0]) / (STEPS[1] - STEPS[0]))) };
 }
 /** He lifts his head towards the dome before the sun comes (radians, + = up). */
-export const headLiftAt = (t: number) => 0.28 * prog(t, PUSH.t, 0.6);
+export const headLiftAt = (t: number) => 0.5 * prog(t, PUSH.t, 0.6);
 
 // ---- camera -----------------------------------------------------------------------------------------------------------
 export const FRAME = { width: 1080, height: 1920 };
 export type Camera = { position: V3; target: V3; up: V3; fov: number; aspect: number };
 type Shot = { position: V3; target: V3; fov: number };
-const ORBIT = { r: 165, h: 50, look: [0, 20, DOME_Z] as V3, fov: 36 };
+// Low enough that the drum and dome always stand against the sky (both pass-1 critics: no edge of the world, no red dome
+// on dark ground for colour-blind eyes).
+const ORBIT = { r: 165, h: 17, look: [0, 24, DOME_Z] as V3, fov: 36 };
 /** A full turn, at speed on frame 0 and easing out onto the front (F5, F22). */
 export const azimuthAt = (t: number) => 2 * Math.PI * (1 - (1 - clamp01(t / ORBIT_END)) ** 2);
 const orbitShot = (t: number): Shot => {
@@ -127,7 +137,7 @@ const down = (p: V3): V3 => [p[0], p[1] - 10 * Math.sin(86 * DEG), p[2] + 10 * M
 const HIGH0: Shot = { position: [0, 8, 120.8], target: down([0, 8, 120.8]), fov: 52 };
 const HIGH1: Shot = { position: [0, 7, 120.6], target: down([0, 7, 120.6]), fov: 50 };
 const FOLLOW0: Shot = { position: [0.4, 3.4, 124.5], target: [0, 0.9, 112], fov: 46 };
-const FOLLOW1: Shot = { position: [0.4, 3.4, 123.3], target: [0, 0.9, 110.8], fov: 46 };
+const FOLLOW1: Shot = { position: [0.4, 3.4, 123.0], target: [0, 0.9, 110.5], fov: 46 };
 const END: Shot = { position: [0, 8, 108], target: [0, 21, DOME_Z], fov: 42 };
 // `aim`: the target gets there in this many seconds (a pan up to the dome before the title comes back). `turn`: for the
 // two 180° turns, tilt first and turn once looking straight down ('late'), or turn first and then tilt up ('early'), so
@@ -136,9 +146,9 @@ const SHOTS: { span: Span; from: Shot; to: Shot; aim?: number; turn?: 'late' | '
   { span: DESCENT, from: orbitShot(ORBIT_END), to: GATE0 },
   { span: PUSH, from: GATE0, to: GATE1 },
   { span: CRANE, from: GATE1, to: HIGH0, turn: 'late' },
-  { span: { t: MORPH.t, dur: GATE.t - MORPH.t }, from: HIGH0, to: HIGH1 },
-  { span: { t: GATE.t, dur: 0.5 }, from: HIGH1, to: FOLLOW0, turn: 'early' },
-  { span: { t: GATE.t + 0.5, dur: RISE.t - GATE.t - 0.5 }, from: FOLLOW0, to: FOLLOW1 },
+  { span: { t: CRANE.t + CRANE.dur, dur: HOLD_END - CRANE.t - CRANE.dur }, from: HIGH0, to: HIGH1 },
+  { span: TURN_BACK, from: HIGH1, to: FOLLOW0, turn: 'early' },
+  { span: { t: GATE.t, dur: RISE.t - GATE.t }, from: FOLLOW0, to: FOLLOW1 },
   { span: RISE, from: FOLLOW1, to: END, aim: 0.8 },
 ];
 const mix3 = (a: V3, b: V3, u: number): V3 => [lerp(a[0], b[0], u), lerp(a[1], b[1], u), lerp(a[2], b[2], u)];
@@ -153,10 +163,14 @@ export function cameraAt(t: number): Camera {
   if (t > ORBIT_END) {
     const k = [...SHOTS].reverse().find(s => t >= s.span.t) ?? SHOTS[0], u = prog(t, k.span.t, k.span.dur), v = prog(t, k.span.t, k.aim ?? k.span.dur);
     const { t: t0, dur } = k.span, first = (x: number) => prog(t, t0, dur * x), last = (x: number) => prog(t, t0 + dur * (1 - x), dur * x);
-    const vy = k.turn === 'late' ? last(0.55) : k.turn === 'early' ? first(0.55) : v;
-    const vp = k.turn === 'late' ? first(0.55) : k.turn === 'early' ? last(0.55) : v;
+    // late: rise (first 35 %), tilt down (12–35 %), then spin slowly while looking straight down (last 65 %; Motion
+    // critic: a quick spin reads as the picture flipping); early: the reverse
+    const mid = prog(t, t0 + dur * 0.12, dur * 0.23), mid2 = prog(t, t0 + dur * 0.65, dur * 0.23);
+    const vy = k.turn === 'late' ? last(0.65) : k.turn === 'early' ? first(0.65) : v;
+    const vp = k.turn === 'late' ? mid : k.turn === 'early' ? mid2 : v;
+    const vu = k.turn === 'late' ? first(0.35) : k.turn === 'early' ? last(0.35) : u;
     const a = aim(k.from), b = aim(k.to), yaw = lerp(a.yaw, b.yaw, vy), pitch = lerp(a.pitch, b.pitch, vp), dist = lerp(a.dist, b.dist, v);
-    const position = mix3(k.from.position, k.to.position, u);
+    const position = mix3(k.from.position, k.to.position, vu);
     shot = { position, fov: lerp(k.from.fov, k.to.fov, u),
       target: [position[0] + dist * Math.cos(pitch) * Math.sin(yaw), position[1] + dist * Math.sin(pitch), position[2] - dist * Math.cos(pitch) * Math.cos(yaw)] };
   }
@@ -175,17 +189,18 @@ export function project(p: V3, cam: Camera) {
 
 // ---- words ------------------------------------------------------------------------------------------------------------
 export const TITLE = { text: 'ONE DAY', y0: 250, y1: 410, size: 150 };
-export const titleAlpha = (t: number) => (1 - prog(t, ORBIT_END, 0.3)) + prog(t, 10.5, 0.4);
-export const QUESTION: Caption = { t0: 10.9, t1: DURATION + 0.1, text: 'Which year is yours? 👇' };
+export const titleAlpha = (t: number) => (1 - prog(t, ORBIT_END, 0.5)) + prog(t, 10.7, 0.4);
+// The story lines sit in the title's band while the title is down (both pass-1 critics: never on his shirt); the closing
+// question is big, on a solid pill, above Instagram's own overlay.
+export const QUESTION: Caption = { t0: 10.3, t1: DURATION + 0.1, text: 'Which year is yours? 👇', size: 74, y: 1400 };
 export const CAPTIONS: Caption[] = [
-  { t0: 2.6, t1: SUN_UP, text: 'Today: outside the gate.' },
-  { t0: 8.7, t1: 10.7, text: 'One day: inside.' },
+  { t0: 2.95, t1: SUN_UP, text: 'Today: outside the gate.', size: 60, y: 330 },
+  { t0: GATE.t, t1: QUESTION.t0, text: 'One day: inside.', size: 60, y: 330 },
   QUESTION,
 ];
-export const CAPTION_Y = 1610, CAPTION_SIZE = 56;
-export function captionBox(text: string) {
-  const w = [...text].length * CAPTION_SIZE * 0.52 + 56;
-  return { x0: 540 - w / 2, x1: 540 + w / 2, y0: CAPTION_Y - 50, y1: CAPTION_Y + 50 };
+export function captionBox(c: Caption) {
+  const size = c.size ?? 60, w = [...c.text].length * size * 0.52 + 64;
+  return { x0: 540 - w / 2, x1: 540 + w / 2, y0: (c.y ?? 330) - 0.85 * size, y1: (c.y ?? 330) + 0.85 * size, size };
 }
 
 // ---- sound ------------------------------------------------------------------------------------------------------------
@@ -199,6 +214,7 @@ export const SOUND: Score = {
     { kind: 'whoosh-out', t: CRANE.t + CRANE.dur - 0.45, gain: 0.25 },
     { kind: 'shimmer', t: MORPH.t, gain: 0.5 },
     { kind: 'clang', t: GATE.t, gain: 0.4, pitch: 0.55 },
+    { kind: 'thunk', t: GATE.t + 0.8 * GATE.dur, gain: 0.35 },
     ...STEPS.map((t): Hit => ({ kind: 'tap', t, gain: 0.35, pitch: 0.3 })),
   ],
   beds: [{ kind: 'dawn', t0: 0, t1: DURATION, level: t => 0.9 - 0.4 * prog(t, SUN_UP, 1) }],
