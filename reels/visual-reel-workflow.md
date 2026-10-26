@@ -77,7 +77,7 @@ with motion, comment prompt before the reveal, answer at the end (L3–L5; reel 
 
 **Music:** pick `music: { style }` per reel and rotate it (founder, 2026-10-17: different background music per reel): `lofi` (house default), `bright` (D-major pluck arpeggio + light beat, 100 BPM; reel 012), `calm` (soft piano, no drums, 72 BPM). All original, made in code. Check loudness with check-video after any new style. **Don't** sonify the maths (two tones at once sounded chaotic to the founder, L17); `music.tones` stays in the engine unused.
 
-**Choosing the topic:** @pyqvault_ takes the tool's next pick from `pyqvault-ideas.md` (`node reels/tools/topic-scores.js pyqvault`; its card has the frame-0 question, the beats without words and the second hook); @lws.pune starts from `remake-backlog.md` (proven reels from the creators we studied, remade our way; founder, 2026-10-18). Take the idea, never their video or words.
+**Choosing the topic:** @pyqvault_ takes the tool's next pick from `pyqvault-ideas.md` (`node reels/tools/topic-scores.js pyqvault`; its card has the frame-0 question, the beats without words); @lws.pune starts from `remake-backlog.md` (proven reels from the creators we studied, remade our way; founder, 2026-10-18). Take the idea, never their video or words.
 
 **Premium look checklist** (founder's brief: premium + soothing to the eyes):
 - [ ] At most **one maths colour + one area colour + one accent**; amber marks the correct answer and
@@ -191,10 +191,8 @@ they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm ru
    frame 0 to 3 s (the A/B/C question, its hook type, the opening picture already moving behind it, and the tag; F4, F5,
    F20, F25), including **its visual hook**: the eye-catching move from the Hook queue (an orbit, a punch-in,
    parts assembling like a suit-up, an object splitting apart, a morph…; founder, 2026-10-21/22: every hook has a visual
-   layer) and **its sound** (the Hook sound: a snap per part of a suit-up, a crack for a split…; F14); **the answer row** (when the right option lights); **the second-hook row**, starting as the answer lands
-   (its question ≤ 7 words, which the rest of the reel answers; F26), with **its own attention-grabbing move**, the Second
-   visual from the Hook queue, and its sound (founder, 2026-10-22); and **the last row**, the loop back to frame 0 or the
-   end card (F27). *Why:* on Physics #8 every first-render fault
+   layer) and **its sound** (the Hook sound: a snap per part of a suit-up, a crack for a split…; F14); **the answer row** (when the right option lights); and **the last row**, the loop back to frame 0 (@pyqvault_: every
+   reel loops, F27; @lws.pune: the loop or the end card). *Why:* on Physics #8 every first-render fault
    was one a table catches: a cream candle and its image nearly invisible on the white board, the answer's image
    cropped at the band's edge, two voice lines longer than their captions. Remakes and rejections (Physics #4,
    Chemistry #4, Maths #3, the clay Sound Mind reel) each cost about an hour for a fault visible in a few frames.
@@ -202,14 +200,13 @@ they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm ru
    `tests/<reel>.test.ts` checks them first (`npm test`). For 3D, test that every label **and every row's
    "keep in frame" object** stays inside the 3D band on every frame (`project()`), and that the key figure **faces the
    camera** while it's being explained, answered and trapped (never edge-on).
-3. **Voice before caption times** (voiced reels, F23): write the lines, run `npm run voice:<reel>` and set each
-   caption's slot from the measured length (+ 0.1 s lead), then re-run until it prints no "too long". Silent reels: the
-   same slots, so either render can go out.
+3. **Caption times:** set each caption's slot in the timeline. No voiceover: @pyqvault_ dropped it in framework v1.33
+   (L43: 5 voiced reels, no clear gain), so there is one silent render.
 4. **Scene:** the 3D figure in a `ThreeCanvas` band; the question card, captions, working and end card are
    the shared HTML pieces in `src/board.tsx` (same white look and Reel.WHITE colours, palette test-locked).
    Labels are HTML placed with `project()`, so they stay crisp Cambria.
 5. **Stills sheet before any sound or full render:** render 6–8 beat frames (the opening, the cover time, each beat,
-   the answer, the second hook on screen mid-move, and the last frame: the end card, or for a loop the last frame beside frame 0) with `npm run stills -- <Comp> <scratchpad dir> <frame,frame,…>` (bundles once, renders every
+   the answer, and the last frame: the end card, or for a loop the last frame beside frame 0) with `npm run stills -- <Comp> <scratchpad dir> <frame,frame,…>` (bundles once, renders every
    frame and puts them on one sheet, `sheet.png`; `npx remotion still` re-bundles per frame, ~90 s each, 2026-10-23), and fix what it shows: anything hard to see on the board,
    washed out, two neighbours hard to tell apart, a clash, or a fake colour where a real one exists (F24), cropped,
    overlapping or late. Then read the sheet once **with the text hidden** (the
@@ -225,13 +222,11 @@ they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm ru
    hit for a cut or flip to a new screen) and **shimmer** (an airy 2 s swell under a reveal zoom), both modelled on a
    studied reel's sounds (2026-10-21): measured, then made in code, never copied.
 7. **Check:** render the MP4 to `reels/` and run `check-video.mjs` as in step 4 (four PASS lines), and look at its
-   strip. **@pyqvault_: then predict it before it's queued** (framework F30): `node reels/tools/virality-measure.mjs
+   strip. **@pyqvault_: then measure the opening** (framework F37): `node reels/tools/virality-measure.mjs
    reels/<reel>.post.json` (an "F37: the opening fades" warning means the first 3 s settle too early: fix the opening and
    re-render before going on). **Panel pass 2** (F38): Sound on `tools/sound-report.ts`, Motion on `--frames`; no defect left
-   before it's queued (scores are logged, not a gate; at most two passes). Then add its rows to `reels/virality-log.md` (Reels: the measured and storyboard points;
-   Predictions: today's score, band and weakest input, the record and the typical views now, Hindsight no) and run
-   `node reels/tools/virality.js`. While it's advisory, a "below typical" reel is flagged to the founder with its weakest
-   input; it doesn't stop the reel.
+   before it's queued (scores are logged, not a gate; at most two passes). No virality prediction: the predictor was
+   retired in framework v1.33 (L60: its real predictions ranked views at −0.47).
 8. **Map reels (F28):** start from `Reel017.tsx` + `src/lib/reel017.ts`. A card is 330 px wide, so a formula line over
    ~290 px at 34 px (about 18 Cambria characters) is cut off at its edge on the full map: give that node a smaller `size`
    (017's Bayes card: 31) or split the line. Check the full-map frame at full size, not only the stills sheet.

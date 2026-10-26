@@ -122,7 +122,8 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
 - **Voiceover trial (2026-10-20, founder-approved).** A free AI voice (Kokoro via `kokoro-js`, Apache 2.0, offline,
   pinned in `remotion/` with its install scripts read) reads only words already on screen, so reels stay faceless and
   still work muted. Every voiced reel is also rendered silent; the founder picks. Framework F23, lesson L43; decide after
-  3 voiced reels. The own-voice ElevenLabs plan (2026-10-15) stays parked.
+  3 voiced reels. The own-voice ElevenLabs plan (2026-10-15) stays parked. **Result (2026-10-26): dropped on @pyqvault_**
+  (5 voiced reels, median watch 9.0 s vs 8.4 s silent, views 1,378 vs 1,510: no clear gain for a second render).
 
 - **Realism demos (2026-10-20, founder-approved after seeing them).** Rapier physics (`@dimforge/rapier3d-compat`) and
   three.quarks particles are kept in `remotion/` for topics that need them (demos: `DemoPhysics.tsx`, `DemoParticles.tsx`;
@@ -158,6 +159,11 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   series per account (`stories/<series>/`, `SERIES` in `questions.js`); the Saturday quiz planner is off (0022). Judge
   after a week against the quiz stories' 23 h numbers (Insights).
 
+- **@pyqvault_ framework pruned on the data (2026-10-26, founder: "too many rules").** v1.33 dropped 7 points the numbers
+  showed no gain for (background alternation, orbit rule, voiceover, second hook, virality predictor; sound points merged),
+  made every reel loop, and froze the idea score's weights: 34 points → 27. Views sit at ~1,300–1,600 whatever the rules
+  (L64). **Standing rule:** every reel review also reviews the framework (its rule 5), to keep deleting and fine-tuning.
+
 ## File structure
 
 ```
@@ -188,21 +194,20 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   visual-candidates.md   #   PYQs whose answer is a picture, by paper (pick visual reels from here)
   tools/                 #   headless-Edge scripts: frames, record, cover, check-video, unchanged (+ baseline.txt)
   pyqvault-ideas.md      #   @pyqvault_ IDEA LIST (founder 2026-10-21): every future reel comes from here. The test (F29 no
-                         #   words, F28 gate…), the score (weights × points /100, tuned at every analysis), Ideas table, one
-                         #   card per open idea (frame 0, beats without words, second hook), Hook queue, Concept sweep, Archive
+                         #   words, F28 gate…), the score (weights × points /100, frozen since v1.33), Ideas table, one
+                         #   card per open idea (frame 0, beats without words), Hook queue, Concept sweep, Archive
   remake-backlog.md      #   @lws.pune ideas (score /10) + the remake rules; @pyqvault_ moved to pyqvault-ideas.md
   tools/topic-scores.js  #   next topic by score, per handle (framework F21); `node reels/tools/topic-scores.js
                          #   [pyqvault|lwspune]`; `pyqvault --calibrate` = the weight tuning (48 h results from
                          #   pyqvault-learnings.md → results, Idea column; needs 6 reels; prints, changes nothing); lwspune also
                          #   prints the week's Probability + Statistics picks (F32–F33, ideas "Probability · …")
-  virality-log.md        #   @pyqvault_ VIRALITY PREDICTOR (framework F30, founder 2026-10-22): inputs per reel, a score /100,
-                         #   band, weakest input; predictions frozen before posting, judged at 48 h; advisory until proven
-  tools/virality.js      #   the predictor (+ virality-measure.mjs: motion, colour, length, cover from the MP4 in headless
-                         #   Edge); `node reels/tools/virality.js [--update | --calibrate]`; --update at every analysis
+  virality-log.md        #   @pyqvault_ virality predictor: RETIRED 2026-10-26 (framework v1.33, L60: ranked views at −0.47);
+                         #   log frozen as the record. tools/virality.js likewise; virality-measure.mjs stays as F37's
+                         #   aftershock check (motion, colour, length, cover from the MP4 in headless Edge)
   tools/results-sync.js  #   copies GoPost's 48 h readings (publisher `npm run results`) into pyqvault-learnings.md's
-                         #   results table; the 4-step analysis routine is at the top of that table
-  tools/hook-rotation.js #   @pyqvault_ hook, opening, second hook, loop per queued reel (framework F25–F27;
-                         #   pyqvault-ideas.md → Hook queue): no repeat in a row, orbit ≤ 2 of any 4, loop alternates;
+                         #   results table; the analysis routine (ending in a framework review, rule 5) is at the top of it
+  tools/hook-rotation.js #   @pyqvault_ hook, opening, sound, loop per queued reel (framework F25, F27;
+                         #   pyqvault-ideas.md → Hook queue): no repeat in a row, P → C, every reel loops;
                          #   `node reels/tools/hook-rotation.js`
   analysis-framework.md  #   REEL ELEMENT ANALYSIS: which elements go with hits (top vs typical reels per account), method +
                          #   decision rule + runs; tools/element-analysis.js (+ elements.js, cover-metrics.mjs, element-report.js),

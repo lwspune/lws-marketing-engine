@@ -1,5 +1,9 @@
 # @pyqvault_ virality predictor log
 
+> **Retired 2026-10-26 (framework v1.33, L60).** Its 8 real predictions judged at 48 h ranked views at −0.47 and got 3 of 8
+> bands right, so no new reel is predicted. This log is frozen as the record; `virality-measure.mjs` stays, as framework
+> F37's aftershock check.
+
 **Will a finished reel beat our record for views?** (founder, 2026-10-22; framework F30). Each reel gets a score out of 100
 from inputs measured on the finished reel or read from its storyboard, a band (record-breaker / above typical / below
 typical) and its weakest input, the thing to fix first. **The prediction is logged, frozen, before the reel is posted**, and

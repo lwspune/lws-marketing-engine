@@ -7,18 +7,18 @@ const hr = require("../reels/tools/hook-rotation.js");
 const ts = require("../reels/tools/topic-scores.js");
 
 // @pyqvault_ hook rotation (framework F25, founder 2026-10-21): the A/B/C guess stays, the hook around it and the opening
-// picture rotate so the first 3 seconds don't become the same every reel. Each reel also gets a second hook at the answer
-// (F26) and either loops back to its first frame or ends on the end card (F27).
+// picture rotate so the first 3 seconds don't become the same every reel. Every reel loops back to its first frame (F27,
+// confirmed 2026-10-26). The second hook (F26) and the orbit cap (F22) were dropped on the data (framework v1.33).
 
 const QUEUE = `
 ## Hook queue
 
-| Order | # | Hook | Opening | Visual hook | Hook sound | Second hook | Second visual | Second sound | Loop | Frame 0 (draft) |
-|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | P11 | Pick one | Race running | five balls already flying from one cannon, each its own colour | thunk (the cannon fires) + whoosh-out | Then which angle goes farthest? | the fan freezes; the camera punches in on the 30° and 60° balls landing together | whoosh-in + music hit | yes | Pick one. Don't switch. |
-| 2 | C8 | Race | Zoom (scale) | two tubes side by side, bubbles already rising in both | crack (the molecule bursts) + tap (bubbles) | Why exactly twice as fast? | punch-in on one molecule; it splits again in slow motion | whoosh-in + crack | no | Which fills first? |
-| 3 | P6 | You'd think | Orbit 360° | two lifts hauling the same box, one racing ahead | silent (slow orbit) | So what did the fast lift spend? | both lifts freeze; the camera swings to the power meters | thunk (the lifts stop) + music hit | no | The fast lift does more work. Right? |
-| 4 | C9 | Put in order | Colour flood | four glasses on a shelf, colours flooding in, four empty numbered slots below | shimmer (the colours flood) | Where does pure water sit? | a clear glass slides into the empty middle slot | tap (the glass lands) + shimmer | yes | Most acidic first? |
+| Order | # | Hook | Opening | Visual hook | Hook sound | Loop | Frame 0 (draft) |
+|---|---|---|---|---|---|---|---|
+| 1 | P11 | Pick one | Race running | five balls already flying from one cannon, each its own colour | thunk (the cannon fires) + whoosh-out | yes | Pick one. Don't switch. |
+| 2 | C8 | Race | Zoom (scale) | two tubes side by side, bubbles already rising in both | crack (the molecule bursts) + tap (bubbles) | yes | Which fills first? |
+| 3 | P6 | You'd think | Orbit 360° | two lifts hauling the same box, one racing ahead | silent (slow orbit) | yes | The fast lift does more work. Right? |
+| 4 | C9 | Put in order | Colour flood | four glasses on a shelf, colours flooding in, four empty numbered slots below | shimmer (the colours flood) | yes | Most acidic first? |
 
 ## Next section
 `;
@@ -28,38 +28,21 @@ test("reads the queue in order, and only the table under its heading", () => {
   assert.deepEqual(q.map((r) => r.id), ["P11", "C8", "P6", "C9"]);
   assert.equal(q[2].hook, "You'd think");
   assert.equal(q[2].opening, "Orbit 360°");
-  assert.equal(q[0].secondHook, "Then which angle goes farthest?");
   assert.equal(q[0].loop, "yes");
   assert.equal(q[1].visual, "two tubes side by side, bubbles already rising in both");
 });
 
-// Founder, 2026-10-21/22: "hook should always have a visual layer… orbit shot, objects splitting or coming together (just
-// like an Iron Man suit), some visual which hooks the viewer's attention". The Opening is that move; the Visual hook column
-// says what we see it do, as a picture (not a question in words).
-// Founder, 2026-10-22: "second should also have attention grabbing visual". As the second question appears (F26), the
-// scene makes its own striking move; the Second visual column says what we see.
-test("every second hook has its own attention-grabbing visual, described as a picture", () => {
-  const ok = hr.rotationErrors(hr.parseQueue(QUEUE)).join("\n");
-  assert.doesNotMatch(ok, /second visual/);
-  assert.equal(hr.parseQueue(QUEUE)[1].secondVisual, "punch-in on one molecule; it splits again in slow motion");
-  const md = QUEUE.replace("| punch-in on one molecule; it splits again in slow motion |", "|  |")
-    .replace("| both lifts freeze; the camera swings to the power meters |", "| what did the fast lift spend? |");
-  const errors = hr.rotationErrors(hr.parseQueue(md)).join("\n");
-  assert.match(errors, /C8: no second visual/);
-  assert.match(errors, /P6: the second visual reads as a question/);
-});
-
-// Founder, 2026-10-22: each hook's move gets its own sound (F14: only what's on screen), named from the kit in
-// remotion/src/lib/sfx.ts, plus "music hit" (F13) or "silent" for a slow move (F15).
-test("both hooks name their sounds, from the kit only", () => {
+// Founder, 2026-10-22: the hook's move gets its own sound (F14: only what's on screen), named from the kit in
+// remotion/src/lib/sfx.ts, plus "music hit" (F13) or "silent" for a slow move.
+test("the hook names its sound, from the kit only", () => {
   const q = hr.parseQueue(QUEUE);
   assert.equal(q[1].sound, "crack (the molecule bursts) + tap (bubbles)");
   assert.deepEqual(hr.rotationErrors(q), []);
   const md = QUEUE.replace("| crack (the molecule bursts) + tap (bubbles) |", "|  |")
-    .replace("| thunk (the lifts stop) + music hit |", "| thunk + kazoo |");
+    .replace("| silent (slow orbit) |", "| whoosh-in + kazoo |");
   const errors = hr.rotationErrors(hr.parseQueue(md)).join("\n");
   assert.match(errors, /C8: no hook sound/);
-  assert.match(errors, /P6: second sound "kazoo" is not in the sound kit/);
+  assert.match(errors, /P6: hook sound "kazoo" is not in the sound kit/);
 });
 
 test("the sound list matches the kit the reels are mixed from (remotion/src/lib/sfx.ts)", () => {
@@ -78,6 +61,9 @@ test("Shock is an opening: a dramatic event from the topic in the first second (
   assert.ok(hr.OPENINGS.includes("Shock"));
 });
 
+// Founder, 2026-10-21/22: "hook should always have a visual layer… orbit shot, objects splitting or coming together (just
+// like an Iron Man suit), some visual which hooks the viewer's attention". The Opening is that move; the Visual hook column
+// says what we see it do, as a picture (not a question in words).
 test("every reel has a visual hook: a picture, not a question in words", () => {
   const md = QUEUE.replace("| two lifts hauling the same box, one racing ahead |", "|  |")
     .replace("| two tubes side by side, bubbles already rising in both |", "| which tube fills first? |");
@@ -100,11 +86,6 @@ test("the same opening twice in a row is refused", () => {
   assert.match(hr.rotationErrors(hr.parseQueue(md)).join("\n"), /C8: opening "Race running" again right after P11/);
 });
 
-test("the orbit opens at most 2 of any 4 reels in a row", () => {
-  const md = QUEUE.replace("| Race running |", "| Orbit 360° |").replace("| Colour flood |", "| Orbit 360° |");
-  assert.match(hr.rotationErrors(hr.parseQueue(md)).join("\n"), /orbit opens 3 of the 4 reels P11–C9/);
-});
-
 test("physics and chemistry alternate (framework F19)", () => {
   const md = QUEUE.replace("| 2 | C8 |", "| 2 | P8 |");
   assert.match(hr.rotationErrors(hr.parseQueue(md)).join("\n"), /P8: two physics reels in a row/);
@@ -117,20 +98,18 @@ test("the exam badge is out (founder, 2026-10-21), and so is any hook or opening
   assert.match(errors, /C9: opening "Slow fade" is not in F25's list/);
 });
 
-test("every reel has a second hook at the answer, short enough to read at a glance (F26, F7: ≤ 7 words)", () => {
-  const md = QUEUE.replace("| Then which angle goes farthest? |", "|  |")
-    .replace("| Why exactly twice as fast? |", "| So why does hydrogen fill exactly twice as fast here? |");
-  const errors = hr.rotationErrors(hr.parseQueue(md)).join("\n");
-  assert.match(errors, /P11: no second hook/);
-  assert.match(errors, /C8: second hook has 10 words \(at most 7\)/);
+// F27 confirmed (2026-10-26): the 4 looping reels got 1.35 views per account reached, the 14 with an end card 1.16.
+test("every reel loops back to its first frame (F27)", () => {
+  const errors = hr.rotationErrors(hr.parseQueue(QUEUE.replace("| yes | Which fills", "| no | Which fills"))).join("\n");
+  assert.match(errors, /C8: loop "no": every reel loops \(F27\)/);
 });
 
-test("loop is yes or no, and never the same 3 reels in a row, so loops and end cards stay comparable (F27)", () => {
-  const bad = hr.rotationErrors(hr.parseQueue(QUEUE.replace("| yes | Pick one.", "| maybe | Pick one."))).join("\n");
-  assert.match(bad, /P11: loop "maybe" should be yes or no/);
-  const run = hr.rotationErrors(hr.parseQueue(QUEUE.replace("| no | The fast lift", "| yes | The fast lift")
-    .replace("| no | Which fills", "| yes | Which fills"))).join("\n");
-  assert.match(run, /loop "yes" on 3 reels in a row \(P11–P6\)/);
+// Framework v1.33 (2026-10-26): F26 (8 reels with a second hook, median watch 8.5 s vs 8.7 s without) was dropped on the
+// data, so a queue without the Second hook / Second visual / Second sound columns passes.
+test("no second hook is needed (F26 dropped)", () => {
+  const q = hr.parseQueue(QUEUE);
+  assert.equal(q[0].secondHook, undefined);
+  assert.deepEqual(hr.rotationErrors(q), []);
 });
 
 test("the queue matches the ideas queued in the idea list, both ways", () => {
