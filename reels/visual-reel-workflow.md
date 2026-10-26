@@ -211,7 +211,8 @@ they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm ru
    question, labels and captions; numbers, gauges and graphs stay): it must still show what happens and why (@pyqvault_
    F29, founder 2026-10-21); if it doesn't, the picture is missing a beat, so add it rather than more words. The frames
    from 0–3 s, text hidden, must show the visual hook's move doing something striking on every frame. **Claude's own check:** the founder judges the finished reel only, never the sheet
-   (founder, 2026-10-21).
+   (founder, 2026-10-21). **Then the review panel's pass 1** (framework F38, `reels/review-panel.md`): the Drama, Colour and
+   Motion critics read the sheet, each a fresh agent with only the kit; fix every must-fix before the music.
 6. **Music:** write `remotion/music/<reel>.json` (`duration`, `music.style`, `music.hits`), then
    `node ../reels/tools/music.mjs music/<reel>.json public/<reel>.wav`: the house music from `engine.js`,
    rendered offline (sample-exact, hits on time). Then `npm run mix:<reel>`.
@@ -221,7 +222,8 @@ they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm ru
 7. **Check:** render the MP4 to `reels/` and run `check-video.mjs` as in step 4 (four PASS lines), and look at its
    strip. **@pyqvault_: then predict it before it's queued** (framework F30): `node reels/tools/virality-measure.mjs
    reels/<reel>.post.json` (an "F37: the opening fades" warning means the first 3 s settle too early: fix the opening and
-   re-render before going on), add its rows to `reels/virality-log.md` (Reels: the measured and storyboard points;
+   re-render before going on). **Panel pass 2** (F38): Sound on `tools/sound-report.ts`, Motion on `--frames`; every score
+   ≥ 7 and no must-fix left before it's queued. Then add its rows to `reels/virality-log.md` (Reels: the measured and storyboard points;
    Predictions: today's score, band and weakest input, the record and the typical views now, Hindsight no) and run
    `node reels/tools/virality.js`. While it's advisory, a "below typical" reel is flagged to the founder with its weakest
    input; it doesn't stop the reel.

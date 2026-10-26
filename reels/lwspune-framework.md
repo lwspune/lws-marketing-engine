@@ -1,4 +1,4 @@
-# @lws.pune reel framework (v1.10, 2026-10-24)
+# @lws.pune reel framework (v1.11, 2026-10-26)
 
 How every new @lws.pune reel is made, one numbered point at a time. Same standard as @pyqvault_'s
 (`pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or dropped
@@ -56,6 +56,21 @@ building (an empty frame 0, label collisions, a cropped punch-in, a cell off-scr
 question whose matrix wasn't on screen), each a re-render; 016 was rejected as "confusing". A reader who didn't write the
 story sees the confusion its writer can't. · *Check:* the storyboard, with its Review section filled, is committed before
 `src/lib/<reel>.ts`; L63 counts the faults found after the review. · 📌 founder, measured by L63
+
+**F38 · Four critics before it goes out.** Every new reel is read by a review panel of four fresh agents, each one harsh
+critic with one job: **Drama** (would frame 0 stop a thumb, is the event big and close, does it build to the reveal),
+**Colour** (does it pop on a phone, one focal point a beat, nothing washed out or glaring, the cover on the grid),
+**Motion** (something new every second to 3 s, purposeful camera, weight, no still stretch) and **Sound** (every impact
+heard on its frame, the shock the loudest moment, effects against music, accents on the reveals). Pass 1 on the stills
+sheet (Drama, Colour, Motion), pass 2 on the rendered MP4 (Sound, Motion on the measured numbers). A critic sees only the
+kit (frames, motion and sound reports, the beat table, our best reels' frames), never my reasoning or the predictor's
+score. It passes with no must-fix left and every score ≥ 7/10; declined suggestions are written in the caption kit with
+the reason. At most 3 agents at once; they never edit, render, queue or commit. The founder still judges the finished
+reel. Runbook, checklists, brief and log: `reels/review-panel.md`. · *Why:* the founder (2026-10-26) found Chemistry #11
+"not dramatic enough, pretty bland" after it had passed every test and check: my own look at my own stills is anchored on
+what I meant to make. "There should be agents to review dramatic effect, colors, motions, sound effects. They will review
+critically to ensure virality of the reel." · *Check:* the reel's row in `review-panel.md` → Log, with four scores ≥ 7,
+before `queue:add`. · 📌 founder, measured by L73 (both handles; @lws.pune keeps F31's storyboard review first)
 
 **F32 · Probability and Statistics every week.** One Probability reel and one Statistics reel each week, the best open
 idea in that chapter (`remake-backlog.md`, ideas named "Probability · …" / "Statistics · …"), whatever F21's overall score
@@ -222,6 +237,7 @@ counting dice outcomes; cards never overlap or crop while explained; the hold �
 
 | Version | Date | Change | Why |
 |---|---|---|---|
+| v1.11 | 2026-10-26 | F38 added: the review panel, the same point and number as @pyqvault_'s (v1.31): four critics read every new reel before it's queued (`reels/review-panel.md`). F31's storyboard review stays first. | Founder, 2026-10-26: "there should be agents to review dramatic effect, colors, motions, sound effects" (after @pyqvault_ Chemistry #11 passed every check and was still bland). Measured by L73. |
 | v1.10 | 2026-10-24 | F34 added: 3D reels only (template Reel025); F11's template and F22's scope follow. Reels 018–023, already made in 2D and not yet posted, are a backfill question (SUGGESTIONS.md), not changed here. | Founder, 2026-10-24: "lets make 3D reels only for lwspune", after the 2D Galton board ("bland and 2D, hardly any movements") was remade in 3D. Measured by L69. |
 | v1.9 | 2026-10-24 | F32 added: one Probability and one Statistics reel every week, picked within the chapter (F21's second exception, after F28). F33 added: probability and statistics are watched happening, the formula last. 11 core ideas added to `remake-backlog.md` (W18–W28); the topic-score tool prints the week's core picks and checks both points. | Founder, 2026-10-24: "add probability and statistics … they are most imp nda maths topics"; "there are beautiful ways to visualize probability. i think you are not able to make probability as much visual". Measured by L68. |
 | v1.8 | 2026-10-23 | F31 added: a written storyboard (`reels/<slug>.storyboard.md`, template in `lwspune-storyboard.md`) before any code, reviewed by one independent agent; every blocker fixed or declined in writing before the build. | Founder, 2026-10-23: "for future reels storyboarding for lwspune be better. one independent agent should review the story." Seven faults in 018–020 were found only after building; one of them (020's question matrix not on frame 0) made the question unanswerable. Measured by L63. |
