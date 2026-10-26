@@ -6,7 +6,7 @@ in only if it passes **the test** below; it is then **scored** (weights frozen s
 `--calibrate` runs the tuning. Framework: `pyqvault-framework.md` (F1, F21, F28, F29). @lws.pune's ideas stay in
 `remake-backlog.md` until it is rebuilt.
 
-**Open: 85 ideas · about 85 days at 1 reel a day.**
+**Open: 84 ideas · about 84 days at 1 reel a day.**
 
 Refill before it drops under two weeks. Sources (F1): the founder's ideas (Source `founder`, any time), a notes sweep
 (physics and chemistry are done; a new exam's notes next), and the next competitor read (`node reels/tools/remake-candidates.mjs`).
@@ -165,7 +165,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | C5 | C | P, V and T together (combined gas law) | 11 | 2 | 2 | 1 | 1 | 1 | 62 | ✅ made 2026-10-20 (`pv-chem-005-pvt`) | remake | ✓ |
 | C7 | C | Flame colours: each metal burns its own colour (fireworks) | – | 3 | 2 | 1 | 0 | 1 | 59 | ✅ made 2026-10-20 (`pv-chem-006-flame`) | own | ✓ |
 | C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | 3 | 2 | 1 | 1 | 0 | 59 | ✅ made 2026-10-23 (`pv-chem-009-electrolysis`) | own | ✓ |
-| C9 | C | The pH chart: lemon to bleach, milk is slightly acidic (universal indicator) | – | 3 | 2 | 2 | 0 | 2 | 72 | ⏭ queued 2026-10-21 (Hook queue); re-angled 2026-10-26 for F39 (the full chart, the milk guess) | own | ✓ |
+| C9 | C | The pH chart: lemon to bleach, milk is slightly acidic (universal indicator) | – | 3 | 2 | 2 | 0 | 2 | 72 | ✅ made 2026-10-26 (`pv-chem-012-ph`, Chemistry #12; the first F39 share test, L64) | own | ✓ |
 | C10 | C | Squeeze the brown gas: darker at once, then lighter (Le Chatelier) | – | 2 | 2 | 2 | 0 | 0 | 48 |  | own | ✓ |
 | C11 | C | Diffusion: dye in hot vs cold water | – | 2 | 2 | 0 | 0 | 2 | 48 | ⏸ parked: close to Chemistry #1, heat speeds things up (founder, 2026-10-20) | own | ✓ |
 | C12 | C | Heat it by 10 °C: the rate doubles (collisions over the energy hill) | – | 3 | 2 | 2 | 1 | 1 | 72 | ⏸ parked: repeats Chemistry #1, heat → rate (founder, 2026-10-20) | mht-cet-chemistry/chemical-kinetics | ✓ |
@@ -779,7 +779,6 @@ hook and opening go in the Hook column of `pyqvault-learnings.md`).
 
 | Order | # | Hook | Opening | Visual hook | Hook sound | Loop | Frame 0 (draft) |
 |---|---|---|---|---|---|---|---|
-| 4 | C9 | You'd think | Colour flood | a drop of indicator lands in a glass of milk and a yellow-green bloom spreads; behind it six more glasses flood red, orange, green, blue and violet, one after another | shimmer (the colours flood in) | yes | "Milk is… A acidic · B neutral · C basic"; the glasses already flooding behind the question. The set: seven glasses land on a pH scale 1–14 and the chart holds still ~2 s (F39), then the colours drain back to frame 0 |
 | 5 | P74 | Everyday puzzle | Morph | a TV remote blinks; its invisible beam turns into a wave that stretches as wide as a radio tower, then squeezes band by band into finer and finer ripples | whoosh-in (the wave squeezes) + shimmer (each new band) | yes | "Your TV remote talks to the TV with… A radio · B infrared light · C sound"; the wave already morphing behind the question. The set: seven bands, radio to gamma, each under its everyday object, held ~2 s (F39), then the wave stretches back to frame 0 |
 | 6 | C49 | Pick one | Race running | four test tubes in a rack, a drop of NaOH already falling into each; clouds bursting open one after another | tap (each drop lands) + whump (each cloud blooms) | yes | "Add NaOH to iron(III) chloride. The cloud is… A white · B blue · C rust-brown"; the drops already falling behind the question. The set: four tubes labelled Al³⁺ white, Cu²⁺ blue, Fe²⁺ green, Fe³⁺ rust-brown, held ~2 s (F39), then the tubes clear back to frame 0 |
 | 7 | P7 | Same start, two endings | Assemble (suit-up) | two drones build themselves part by part (frame, arms, rotors spinning up, ropes clipping on), then pull identical boxes; one box lifts off, the other scrapes along the ground | snap ×8 (one per part locking, pitch rising) + shimmer (both drones complete) | yes | "Same drone, same box, same pull. One lifts it, one drags it. Why?" A rope angle · B rope length · C luck; the drones assemble behind the question, then fly. Loop: both drones land back on the start |
