@@ -436,11 +436,16 @@
       const beat = 60 / BPM, bar = beat * 4;
       const master = ac.createGain(), tone = ac.createBiquadFilter();
       tone.type = 'lowpass'; tone.frequency.value = 2600; master.connect(tone); tone.connect(out);
+      // music.seamless (a reel that loops, framework F27): no fade in or out and no quiet intro bar, so the replay runs on
+      // without a hole in the music (Physics #16's sound critic: the first press played over silence, the seam dropped out)
       const fadeOut = Math.min(2.5, D * 0.2);
-      master.gain.setValueAtTime(0, t0);
-      master.gain.linearRampToValueAtTime(1, t0 + Math.min(1.2, D * 0.1));
-      master.gain.setValueAtTime(1, t0 + D - fadeOut);
-      master.gain.linearRampToValueAtTime(0, t0 + D);
+      if (M.seamless) master.gain.setValueAtTime(1, t0);
+      else {
+        master.gain.setValueAtTime(0, t0);
+        master.gain.linearRampToValueAtTime(1, t0 + Math.min(1.2, D * 0.1));
+        master.gain.setValueAtTime(1, t0 + D - fadeOut);
+        master.gain.linearRampToValueAtTime(0, t0 + D);
+      }
 
       // The bed (pads, bass, drums, arp) runs through its own gain so it can duck under sonified tones.
       const bed = ac.createGain(); bed.connect(master);
@@ -544,7 +549,7 @@
           o.frequency.setValueAtTime(from ?? f, at); if (from) o.frequency.exponentialRampToValueAtTime(f, at + 0.12);
           env(g, at, peak, 0.005, len); o.connect(sh); sh.connect(g); out(g); o.start(at); o.stop(at + len + 0.05);
         };
-        const intro = 1; // bars before the drums come in
+        const intro = M.seamless ? 0 : 1; // bars before the drums come in (none in a loop)
         if (name === 'drive') {
           // 122 BPM electro-pop in A minor: Am – F – C – G. Four on the floor, offbeat hats, pumping pad, pluck hook.
           const bt = 60 / 122, br = bt * 4;
