@@ -278,7 +278,8 @@ frame; its contrast); the stills sheet. · 🧪 L51
 **F39 · Made to send.** The payoff is a **complete set** a student has to know (all five flame colours, the whole pH
 chart, every band of the spectrum), not a single answer. The guess (F4) asks about one member; the reel shows them all.
 It ends on a **cheat-sheet frame**: the whole set on one clean screen, every member labelled, held still for ~2 s
-(screenshot-able: inside the safe area, F35), and then it loops back to frame 0 (F27). The caption lists the whole set,
+(screenshot-able: inside the safe area, F35), and then it loops back to frame 0 (F27). The caption lists the whole set
+(the guessed member as "?", so the caption still keeps the answer, F6),
 then one line asking for a share that names who it's for ("Send this to your lab partner before the practical"). ·
 *Why:* shares are what take a reel past Instagram's first batch of ~1,100–1,400 accounts (L64). Of 32 shares on 27 reels,
 21 went to one: the flame test (10.9 per 1,000 reach; every other framework reel ≤ 2.2), the only reel whose payoff was
