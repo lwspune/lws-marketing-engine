@@ -148,8 +148,9 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
 
 - **YouTube Shorts in the publisher (2026-10-23, founder-approved).** Same approve → publish flow as Instagram, to the
   LWS Pune and Sound Mind channels first (Sound Mind with Shivani's OK), PYQ Vault once its channel exists. Google
-  Cloud project `gopost-512510` ("GoPost", In production, not Google-verified: fine for our own channels). API uploads
-  stay Private until Google's API audit passes, which needs the YouTube section in lwspune.in's privacy policy.
+  Cloud project `gopost-512510` ("GoPost", In production, not Google-verified: fine for our own channels). The first
+  upload (2026-10-26, test Short `9Rgd3pBSkys`) went out **public**, so Google's "private until audited" lock didn't
+  apply; the audit (SETUP.md step 11) is only needed if that changes or we need more than ~6 uploads a day.
 
 - **@lws.pune daily NDA maths question stories (2026-10-23, founder-approved).** The daily quiz-link stories brought
   zero leads ("quizzes are not at all effective"), so from 24 Oct @lws.pune posts @pyqvault_'s story format with easy NDA
@@ -267,8 +268,8 @@ YouTube through the Data API (`src/lib/platforms/youtube.ts`): resumable upload 
 twice; then poll until processed → `youtube.com/shorts/<id>`; 48 h / 7 d views, likes, comments. Channel connected with
 `npm run connect:youtube -- --org=lws-pune --projects=<slug>` (Google sign-in, refresh token in Vault; needs
 `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` in `.env.local` and Vercel). A reel's optional `youtubeVideo` (`-yt.mp4`, end
-card "Subscribe for more": Remotion `EndCard platform`, `--props=props/youtube.json`) is what YouTube gets. **Until
-Google's API audit passes, every upload is Private (locked)** (SETUP.md step 11). **Cut-off runs (0021, 2026-10-23):** a run that outlasts the cron's
+card "Subscribe for more": Remotion `EndCard platform`, `--props=props/youtube.json`) is what YouTube gets. Uploads go out public (first one 2026-10-26); if YouTube ever
+locks one as Private, do the API audit (SETUP.md step 11). **Cut-off runs (0021, 2026-10-23):** a run that outlasts the cron's
 55 s records nothing, so the next one starts again; a 9-slide carousel did that ~50 times and Instagram blocked the
 account's uploads for a day (code 9). Now carousel slides upload 5 at once and are saved as they go (`child_refs`,
 resumed next run), a tick starts nothing new after 30 s (`TICK_BUDGET_MS`), and a pending post picked up more than 5

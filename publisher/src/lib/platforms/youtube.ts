@@ -14,8 +14,8 @@ import type { InsightsResult } from "./metaInsights";
 // first, and a later run that finds a saved session asks Google how far it got: complete → record
 // that video; partway → send the rest; gone (sessions last about a week) → start again.
 //
-// Until Google's API audit passes, YouTube keeps every API upload Private (locked); it is still
-// recorded as published, since uploading again would only make a second private copy.
+// Google says it locks API uploads from unaudited projects as Private; ours went out public (2026-10-26).
+// A locked upload would still be recorded as published: uploading again would only make a second copy.
 
 export interface YouTubeConfig {
   oauthBase: string;

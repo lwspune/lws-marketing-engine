@@ -83,10 +83,10 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 - **YouTube Shorts (built 2026-10-23, branch `feat/youtube-shorts`).** Upload (resumable, never twice: 0023),
   `connect:youtube`, 48 h / 7 d views/likes/comments, a reel's `-yt` copy with "Subscribe for more" (0024).
   Google Cloud project `gopost-512510` (Desktop client "GoPost connect", In production, unverified: fine for
-  our ≤ 100 sign-ins). **Blockers, in order:** (1) founder adds the YouTube paragraph to
-  lwspune.in/privacy-policy/ (drafted 2026-10-23, "a day or two"); (2) submit the YouTube API audit form
-  (support.google.com/youtube/contact/yt_api_form): until it passes every API upload is **Private (locked)**;
-  (3) Shivani's OK before connecting Sound Mind's channel; (4) PYQ Vault's channel doesn't exist yet.
+  our ≤ 100 sign-ins). **Live 2026-10-26:** LWS Pune channel connected; privacy page updated;
+  test Short `9Rgd3pBSkys` (reel 023) uploaded through GoPost and came out **public**, so the API audit was
+  not submitted (do it only if a Short ever arrives locked Private: SETUP.md step 11). **Still open:** Shivani's OK
+  before connecting Sound Mind's channel; PYQ Vault's channel doesn't exist yet.
   Later: watch time needs the YouTube Analytics API + the `yt-analytics.readonly` permission (not asked for).
   The privacy text promises the stored token is deleted within 7 days of a revoke or a request: today that's
   a manual delete of the connected account.
@@ -258,10 +258,10 @@ House rule: YouTube's end card says "Subscribe for more". From 2026-10-23 a Remo
 (`EndCard platform`, `props/youtube.json`) that the publisher sends to YouTube. Made before it: all 49 reels in `reels/`
 (48 already carry YouTube captions), each saying "Follow for more" (or "Follow for #N").
 **360:** scope = every reel we might post as a Short · blast radius = one more render + `youtubeVideo` per manifest; the
-Instagram/Facebook copies are untouched · does it apply? only to reels we actually post to YouTube, and only once the
-API audit passes (until then uploads stay private) · risk = low: a re-render, nothing posted changes; engine.js reels
+Instagram/Facebook copies are untouched · does it apply? only to reels we actually post to YouTube (uploads go out public
+since 2026-10-26) · risk = low: a re-render, nothing posted changes; engine.js reels
 (pre-Remotion) need an engine option first · cost ≈ 3–5 min per Remotion reel, more for engine reels ·
-**recommendation: defer** until the audit passes, then do it per reel as each is picked for YouTube.
+**recommendation: defer**, then do it per reel as each is picked for YouTube.
 
 ### Bright objects (F24) on reels already made (logged 2026-10-21, not proposed)
 New founder rule (framework F24, both handles): key objects take colours from the `VIVID` set. Made before it: every
