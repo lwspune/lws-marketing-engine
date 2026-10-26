@@ -73,8 +73,8 @@ test('the same score always renders the same sound', () => {
   assert.deepEqual(renderSfx(score), renderSfx(score));
 });
 
-test('a bed (burner roar, friction scrape, rain) sounds only while it runs and follows its level', () => {
-  for (const kind of ['roar', 'scrape', 'rain'] as const) {
+test('a bed (burner roar, friction scrape, rain, dawn) sounds only while it runs and follows its level', () => {
+  for (const kind of ['roar', 'scrape', 'rain', 'dawn'] as const) {
     const out = renderSfx({ duration: 4, hits: [], beds: [{ kind, t0: 1, t1: 2, level: t => (t < 1.5 ? 1 : 0) }] });
     assert.equal(rms(out, 0, 0.99), 0, `${kind} before it starts`);
     assert.ok(rms(out, 1.1, 1.4) > 0.01, `${kind} silent while on`);
@@ -93,6 +93,21 @@ test('rain: a steady hiss with the patter of drops, and the music stays put unde
   }
   assert.ok(ticks >= 20, `only ${ticks} drops heard in 2.8 s`);
   assert.ok(duckGain(score).every(g => g === 1), 'the music dips under the rain');
+});
+
+test('dawn (One Day, 2026-10-27): a quiet wind under bird chirps, a few a second, and the music stays put under it', () => {
+  const score: Score = { duration: 4, hits: [], beds: [{ kind: 'dawn', t0: 0, t1: 4, level: () => 1 }] };
+  const out = renderSfx(score), base = rms(out, 0.2, 3.8);
+  assert.ok(base > 0.005 && base < 0.06, `dawn level ${base.toFixed(4)}: a bed under the music, not over it`);
+  let chirps = 0, inChirp = false;                             // chirps: 20 ms windows well above the wind
+  for (let i = Math.round(0.2 * SR); i < out.length; i += Math.round(0.02 * SR)) {
+    let m = 0; for (let j = i; j < i + Math.round(0.02 * SR) && j < out.length; j++) m = Math.max(m, Math.abs(out[j]));
+    const loud = m > 4 * base;
+    if (loud && !inChirp) chirps++;
+    inChirp = loud;
+  }
+  assert.ok(chirps >= 6 && chirps <= 40, `${chirps} chirps in 3.8 s`);
+  assert.ok(duckGain(score).every(g => g === 1), 'the music dips under the dawn bed');
 });
 
 test('the music dips under effects, smoothly, and is untouched far from them', () => {
