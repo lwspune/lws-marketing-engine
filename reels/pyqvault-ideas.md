@@ -1,7 +1,7 @@
 # @pyqvault_ idea list
 
 **The one place @pyqvault_'s reel ideas live** (founder, 2026-10-21): every future reel is made from a row here. An idea gets
-in only if it passes **the test** below; it is then **scored**, and the score is tuned from our own results at every analysis.
+in only if it passes **the test** below; it is then **scored** (weights frozen since framework v1.33: the score didn't predict our results, L35).
 `node reels/tools/topic-scores.js pyqvault` checks the whole file and names the next pick per subject (P → C);
 `--calibrate` runs the tuning. Framework: `pyqvault-framework.md` (F1, F21, F28, F29). @lws.pune's ideas stay in
 `remake-backlog.md` until it is rebuilt.
@@ -47,7 +47,9 @@ the idea that shows its law live (F3). No exam weight: the goal is engagement an
 reel's*, where the typical reel is the median of every posted reel read at 48 h or more. 1.0 = typical, 2.0 = twice as
 good. Views and watch time are the goals (founder, 2026-10-22: reach the most people); comments come later.
 
-**Tuning, at every analysis** (each time new 48 h numbers are in `pyqvault-learnings.md`; founder, 2026-10-21: "fine-tuned
+**Tuning: frozen since 2026-10-26** (framework v1.33): on the 18 framework reels the score ranked views at −0.33 and
+watch time at 0.07, so the weights stay as they are; the next framework review (rule 5) decides whether the score stays.
+The rule as it was, kept for the record: **tuning, at every analysis** (each time new 48 h numbers are in `pyqvault-learnings.md`; founder, 2026-10-21: "fine-tuned
 during every analysis of our posted list"). Run `node reels/tools/topic-scores.js pyqvault --calibrate`; it changes nothing
 itself.
 1. **Does the score predict?** The rank correlation between score and result across posted reels (1 = same order, 0 = no
@@ -154,7 +156,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | P71 | P | Leave the fridge door open in a closed room: the room gets warmer | – | 2 | 2 | 2 | 1 | 2 | 69 |  | mht-cet-physics/thermodynamics | ✓ |
 | P72 | P | Two crossed polaroids block all light; a third between them lets light back | 0.1 | 2 | 2 | 2 | 1 | 1 | 55 |  | mht-cet-physics/wave-optics | ✓ |
 | P73 | P | Double your speed and your braking distance goes up four times | – | 2 | 2 | 2 | 1 | 2 | 69 |  | jee-mains-physics/motion-in-a-straight-line | ✓ |
-| P74 | P | Radio, light and X-rays are one kind of wave, at different spacings | – | 2 | 2 | 1 | 0 | 2 | 55 |  | jee-mains-physics/electromagnetic-waves | ✓ |
+| P74 | P | One spectrum: radio to gamma, and your TV remote uses infrared | – | 2 | 2 | 2 | 0 | 2 | 62 | ⏭ queued 2026-10-26 (Hook queue; F39 test) | jee-mains-physics/electromagnetic-waves | ✓ |
 | P75 | P | Double the battery: the current doubles (Ohm's law acted by our own cast: Volt the battery, Amp the sparks, Ohm the resistor, red-hot at 4x heat) | 829 | 3 | 2 | 1 | 0 | 1 | 79 | ✅ made 2026-10-24 (`pv-physics-014-ohm`, Physics #14; Painted 2D; the topic hit 29.2M on @qubit.exe, 829x its typical reel; our own characters and scene) | founder | ✓ |
 | C1 | C | Heat speeds up a reaction: faster molecules, more hits | – | 3 | 1 | 0 | 1 | 1 | 52 | ✅ made 2026-10-18 (`pv-chem-001-heat-rate`; scored after posting) | own | ✓ |
 | C2 | C | The periodic table's 8 families | 256 | 3 | 1 | 0 | 0 | 0 | 59 | ✅ made 2026-10-18 (`pv-chem-002-families`; scored after posting) | remake | ✓ |
@@ -163,7 +165,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | C5 | C | P, V and T together (combined gas law) | 11 | 2 | 2 | 1 | 1 | 1 | 62 | ✅ made 2026-10-20 (`pv-chem-005-pvt`) | remake | ✓ |
 | C7 | C | Flame colours: each metal burns its own colour (fireworks) | – | 3 | 2 | 1 | 0 | 1 | 59 | ✅ made 2026-10-20 (`pv-chem-006-flame`) | own | ✓ |
 | C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | 3 | 2 | 1 | 1 | 0 | 59 | ✅ made 2026-10-23 (`pv-chem-009-electrolysis`) | own | ✓ |
-| C9 | C | The pH rainbow: universal indicator from lemon to bleach | – | 3 | 2 | 1 | 0 | 2 | 66 | ⏭ queued 2026-10-21 (Hook queue) | own | ✓ |
+| C9 | C | The pH chart: lemon to bleach, milk is slightly acidic (universal indicator) | – | 3 | 2 | 2 | 0 | 2 | 72 | ✅ made 2026-10-26 (`pv-chem-012-ph`, Chemistry #12; the first F39 share test, L64) | own | ✓ |
 | C10 | C | Squeeze the brown gas: darker at once, then lighter (Le Chatelier) | – | 2 | 2 | 2 | 0 | 0 | 48 |  | own | ✓ |
 | C11 | C | Diffusion: dye in hot vs cold water | – | 2 | 2 | 0 | 0 | 2 | 48 | ⏸ parked: close to Chemistry #1, heat speeds things up (founder, 2026-10-20) | own | ✓ |
 | C12 | C | Heat it by 10 °C: the rate doubles (collisions over the energy hill) | – | 3 | 2 | 2 | 1 | 1 | 72 | ⏸ parked: repeats Chemistry #1, heat → rate (founder, 2026-10-20) | mht-cet-chemistry/chemical-kinetics | ✓ |
@@ -203,6 +205,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | C46 | C | Iron nails in dry air, water and salt water: salt water rusts first | – | 2 | 2 | 1 | 0 | 2 | 55 |  | founder | ✓ |
 | C47 | C | A laser beam shows in milky water, not salt water (Tyndall) | 3.0 | 2 | 2 | 1 | 0 | 2 | 62 |  | founder | ✓ |
 | C48 | C | s and p orbitals blend into methane's four equal bonds (hybridisation) | – | 2 | 1 | 1 | 0 | 0 | 34 | ⏸ parked: fails F29 (the blend shows; why it happens needs words; founder's list, 2026-10-21) | founder | ✗ |
+| C49 | C | Add NaOH to four metal salts: white, blue, green and rust-brown clouds (hydroxide precipitates) | – | 3 | 2 | 1 | 0 | 0 | 52 | ⏭ queued 2026-10-26 (Hook queue; F39 test) | own | ✓ |
 
 ## Idea cards
 
@@ -559,9 +562,8 @@ each answer is re-derived in its reel's tests (F10).
 - **From:** jee-mains-physics/motion-in-a-straight-line · braking and stopping distance
 
 ### P74 · One spectrum
-- **Frame 0:** Radio, microwave, visible light, X-ray: put them in order, longest wave first → radio, microwave, light, X-ray
-- **Without words:** a wave stretches across the screen as wide as a building (radio) → it squeezes: a microwave the size of a coin, then light, a rainbow of fine ripples → squeezed further: X-rays, finer than atoms → each shorter wave packs more energy per photon; an energy bar climbs as it squeezes
-- **Second hook:** So why do X-rays pass through you? → they're tiny and energetic
+- **Frame 0:** Your TV remote talks to the TV with… A radio · B infrared light · C sound? → infrared light
+- **Without words:** a wave stretches across the screen as wide as a building (radio, a tower) → it squeezes: microwave (an oven), infrared (a remote's blink), visible (a rainbow), ultraviolet (sun on skin), X-ray (a hand's bones), gamma (a nucleus) → an energy bar climbs as the wave squeezes → the whole spectrum holds still, each band under its object
 - **From:** jee-mains-physics/electromagnetic-waves · the spectrum
 
 ### C8 · Split water
@@ -571,10 +573,9 @@ each answer is re-derived in its reel's tests (F10).
 - **Second hook:** Why exactly twice as fast? → H₂O: two H for every O
 - **From:** own
 
-### C9 · The pH rainbow
-- **Frame 0:** Lemon, milk, soap, bleach: most acidic first? → lemon, milk, soap, bleach
-- **Without words:** four glasses get a drop of universal indicator → colours flood in: red, yellow-green, blue, purple → a pH scale slides under them; each glass lands on its number → pure water joins: green, at 7
-- **Second hook:** Where does pure water sit? → 7, green
+### C9 · The pH chart
+- **Frame 0:** Milk is… A acidic · B neutral · C basic? → slightly acidic (pH ≈ 6.5)
+- **Without words:** seven glasses (lemon, coffee, milk, water, baking soda, soap, bleach) each get a drop of universal indicator → colours flood in, red through orange, yellow-green, green, blue to violet → a pH scale 1–14 slides under them and each glass lands on its number; milk sits just left of water's green → the whole chart holds still: seven glasses on their numbers
 - **From:** own
 
 ### C10 · Squeeze the brown gas
@@ -751,6 +752,11 @@ each answer is re-derived in its reel's tests (F10).
 - **Second hook:** Why paint a bridge? → it keeps water and air off
 - **From:** founder · corrosion (electrochemistry)
 
+### C49 · Hydroxide clouds
+- **Frame 0:** Add NaOH to iron(III) chloride. The cloud is… A white · B blue · C rust-brown? → rust-brown
+- **Without words:** four clear salt solutions in a rack (aluminium, copper, iron(II), iron(III)) → a drop of NaOH falls into each in turn and a cloud blooms: white, pale blue, dirty green, rust-brown → the clouds settle to the bottom of each tube → the rack holds still, each tube labelled with its metal and colour
+- **From:** own · the Class 12 practical (salt analysis: cations)
+
 ### C47 · Tyndall effect
 - **Frame 0:** A laser through salt water and through milky water: where do you see the beam? → only in the milky water
 - **Without words:** two glasses, clear salt water and water with a drop of milk; a laser passes through both → in salt water the dissolved particles are too small: the beam is invisible → in milky water bigger fat droplets scatter the light: the beam glows as a line → a sunbeam through a dusty window, the same scattering
@@ -773,9 +779,10 @@ hook and opening go in the Hook column of `pyqvault-learnings.md`).
 
 | Order | # | Hook | Opening | Visual hook | Hook sound | Loop | Frame 0 (draft) |
 |---|---|---|---|---|---|---|---|
-| 4 | C9 | Put in order | Colour flood | four glasses on a shelf flooding with colour, four empty numbered slots waiting below them | shimmer (the colours flood in) | yes | "Lemon, milk, soap, bleach: most acidic first?" three orders as A/B/C; indicator colours already spreading. Loop: the colours wash back to the start |
-| 5 | P7 | Same start, two endings | Assemble (suit-up) | two drones build themselves part by part (frame, arms, rotors spinning up, ropes clipping on), then pull identical boxes; one box lifts off, the other scrapes along the ground | snap ×8 (one per part locking, pitch rising) + shimmer (both drones complete) | yes | "Same drone, same box, same pull. One lifts it, one drags it. Why?" A rope angle · B rope length · C luck; the drones assemble behind the question, then fly. Loop: both drones land back on the start |
-| 6 | C15 | Ending first | Ending first | a copper-coated rod standing in clear liquid; the picture starts running backwards and the liquid turns blue | shimmer (the rewind) | yes | Open on a copper-coated rod in clear liquid: "This was zinc in blue liquid. Where did the blue go?" then rewind (time-lapse, labelled). Loop: ends where it began |
+| 5 | P74 | Everyday puzzle | Morph | a TV remote blinks; its invisible beam turns into a wave that stretches as wide as a radio tower, then squeezes band by band into finer and finer ripples | whoosh-in (the wave squeezes) + shimmer (each new band) | yes | "Your TV remote talks to the TV with… A radio · B infrared light · C sound"; the wave already morphing behind the question. The set: seven bands, radio to gamma, each under its everyday object, held ~2 s (F39), then the wave stretches back to frame 0 |
+| 6 | C49 | Pick one | Race running | four test tubes in a rack, a drop of NaOH already falling into each; clouds bursting open one after another | tap (each drop lands) + whump (each cloud blooms) | yes | "Add NaOH to iron(III) chloride. The cloud is… A white · B blue · C rust-brown"; the drops already falling behind the question. The set: four tubes labelled Al³⁺ white, Cu²⁺ blue, Fe²⁺ green, Fe³⁺ rust-brown, held ~2 s (F39), then the tubes clear back to frame 0 |
+| 7 | P7 | Same start, two endings | Assemble (suit-up) | two drones build themselves part by part (frame, arms, rotors spinning up, ropes clipping on), then pull identical boxes; one box lifts off, the other scrapes along the ground | snap ×8 (one per part locking, pitch rising) + shimmer (both drones complete) | yes | "Same drone, same box, same pull. One lifts it, one drags it. Why?" A rope angle · B rope length · C luck; the drones assemble behind the question, then fly. Loop: both drones land back on the start |
+| 8 | C15 | Ending first | Ending first | a copper-coated rod standing in clear liquid; the picture starts running backwards and the liquid turns blue | shimmer (the rewind) | yes | Open on a copper-coated rod in clear liquid: "This was zinc in blue liquid. Where did the blue go?" then rewind (time-lapse, labelled). Loop: ends where it began |
 
 ## Concept sweep
 
