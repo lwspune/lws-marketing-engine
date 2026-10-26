@@ -146,6 +146,11 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   every new Sound Mind reel is made this way (framework S21; recipe in `soundmind/brand.md`; palette check
   `remotion/src/lib/paint.ts`). Older flat reels are a backfill candidate in `SUGGESTIONS.md`, not reworked.
 
+- **YouTube Shorts in the publisher (2026-10-23, founder-approved).** Same approve → publish flow as Instagram, to the
+  LWS Pune and Sound Mind channels first (Sound Mind with Shivani's OK), PYQ Vault once its channel exists. Google
+  Cloud project `gopost-512510` ("GoPost", In production, not Google-verified: fine for our own channels). API uploads
+  stay Private until Google's API audit passes, which needs the YouTube section in lwspune.in's privacy policy.
+
 - **@lws.pune daily NDA maths question stories (2026-10-23, founder-approved).** The daily quiz-link stories brought
   zero leads ("quizzes are not at all effective"), so from 24 Oct @lws.pune posts @pyqvault_'s story format with easy NDA
   maths MCQs (07:30 question, 19:30 answer, "Reply A, B, C or D": a reply opens an Inbox chat). `stories/` now holds one
@@ -256,8 +261,14 @@ publisher/               # HOSTED approve → publish app (Next.js 14 + Supabase
 **Publisher:** `cd publisher && npm test` (DB suite skips until `TEST_DATABASE_URL` is set), `npm run
 typecheck`, `npm run lint`, `npm run build`. Writes only through the 0002 database functions; the
 worker uses the service role. Tokens live in Supabase Vault, never in code or the browser. Every
-response uses `{ ok, data | error: { code, message } }`. YouTube isn't wired yet (phase 3): approving
-it records a clear "not available yet" failure. **Cut-off runs (0021, 2026-10-23):** a run that outlasts the cron's
+response uses `{ ok, data | error: { code, message } }`. **YouTube Shorts (0023/0024, 2026-10-23):** reels go to
+YouTube through the Data API (`src/lib/platforms/youtube.ts`): resumable upload whose session is saved first
+(`private.upload_sessions`, service role only), so a cut-off run resumes or records the finished video, never uploads
+twice; then poll until processed → `youtube.com/shorts/<id>`; 48 h / 7 d views, likes, comments. Channel connected with
+`npm run connect:youtube -- --org=lws-pune --projects=<slug>` (Google sign-in, refresh token in Vault; needs
+`GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` in `.env.local` and Vercel). A reel's optional `youtubeVideo` (`-yt.mp4`, end
+card "Subscribe for more": Remotion `EndCard platform`, `--props=props/youtube.json`) is what YouTube gets. **Until
+Google's API audit passes, every upload is Private (locked)** (SETUP.md step 11). **Cut-off runs (0021, 2026-10-23):** a run that outlasts the cron's
 55 s records nothing, so the next one starts again; a 9-slide carousel did that ~50 times and Instagram blocked the
 account's uploads for a day (code 9). Now carousel slides upload 5 at once and are saved as they go (`child_refs`,
 resumed next run), a tick starts nothing new after 30 s (`TICK_BUDGET_MS`), and a pending post picked up more than 5

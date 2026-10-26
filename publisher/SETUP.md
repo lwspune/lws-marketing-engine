@@ -236,6 +236,32 @@ its messages to GoPost; only step 5 does.
 If the window doesn't offer the WhatsApp Business app option, Meta has changed how the route is picked:
 `SIGNUP_EXTRAS` in `src/components/WhatsAppConnectBox.tsx` is the one place to update.
 
+## 11. YouTube Shorts (~20 min, then Google's audit)
+
+Done 2026-10-23 for LWS Pune; repeat only steps 5–7 for another channel.
+
+1. **Google Cloud project** `GoPost` (`gopost-512510`, signed in as the account that owns the LWS Pune channel) →
+   APIs & Services → Library → **YouTube Data API v3** → Enable.
+2. **Google Auth Platform**: app name GoPost, audience **External**, home page `https://lwspune.in/`, privacy
+   `https://lwspune.in/privacy-policy/`, terms `https://lwspune.in/terms-conditions/`, authorised domain
+   `lwspune.in` (Google won't take a `vercel.app` address). Data Access: `youtube.upload` + `youtube.readonly`.
+3. **Audience → Publish app → In production.** In "Testing" the sign-in dies after 7 days. Ignore "needs
+   verification": an unverified app works for up to 100 sign-ins, with a warning screen (Advanced → Go to GoPost).
+4. **Clients → Create client → Desktop app** "GoPost connect". Put its id and secret in `.env.local` **and** in
+   Vercel (Production) as `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`, then redeploy. Without them on Vercel,
+   YouTube publications fail with "YouTube isn't set up on the server yet".
+5. `npm run connect:youtube -- --org=lws-pune --projects=pyq-vault`: Google's sign-in opens in the browser; pick the
+   channel, allow both permissions. The refresh token goes to Vault. Re-run it if a card says the sign-in expired.
+   Sound Mind: `--projects=soundmind-shivani`, signed in by Shivani (or a manager of her brand account), with her OK
+   first. Being added under YouTube Studio → Permissions is **not** enough for the API.
+6. **Privacy policy**: lwspune.in/privacy-policy/ needs the "YouTube and Google" section (uses YouTube API Services,
+   links to the YouTube Terms and Google's Privacy Policy, what's stored, how to revoke). The auditors read it.
+7. **Audit**: support.google.com/youtube/contact/yt_api_form → audit. **Until it passes, every API upload is Private
+   (locked)**: GoPost still records it as published (uploading again would only make a second private copy).
+
+Quota: about 6 uploads a day per Google project (shared by every channel); over it, the card says to press Retry
+tomorrow. A reel with a `-yt` copy (end card "Subscribe for more", `youtubeVideo` in its manifest) sends that copy.
+
 ## 12. Website lead sheets: NDA age calculator + popup form (owners only, ~10 min)
 
 lwspune.com writes its NDA age calculator and popup-form entries to a Google Sheet ("Defence Age Calculator Data- LWS

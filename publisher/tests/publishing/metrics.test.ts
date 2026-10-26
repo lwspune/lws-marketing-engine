@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { startFakeMeta } from "../helpers/fakeMeta";
+import { startFakeGoogle } from "../helpers/fakeGoogle";
 import { fetchFacebookReelInsights, fetchInstagramInsights, fetchInstagramStoryInsights } from "@/lib/platforms/metaInsights";
 import { runMetricsTick, type MetricsRepo, type DueMetric } from "@/lib/publishing/metrics";
 import type { PublishContext } from "@/lib/publishing/worker";
@@ -136,10 +137,35 @@ describe("runMetricsTick", () => {
     expect(noAcct.recorded[0]).toMatchObject({ metrics: null, raw: { error: expect.stringMatching(/isn't connected/) } });
   });
 
-  it("skips YouTube for now without recording", async () => {
+  const ytContext = (): PublishContext => ({
+    post: { id: "p1", kind: "reel", videoPath: "v.mp4", coverPath: null, slidePaths: [], captions: {} },
+    account: { platform: "youtube", externalId: "UC-lws", token: "REFRESH-OK" },
+  });
+
+  it("records a 48h YouTube Short snapshot: views, likes and comments", async () => {
     fake = await startFakeMeta();
-    const m = memoryRepo([{ publication: pub({ platform: "youtube" }), snapshot: "48h" }]);
-    expect(await runMetricsTick({ repo: m.repo, metaConfig: fake.config, logger: silent })).toMatchObject({ recorded: 1 });
-    expect(m.recorded[0].raw).toMatchObject({ error: expect.stringMatching(/YouTube/) });
+    const google = await startFakeGoogle({ statistics: { viewCount: "1200", likeCount: "45", commentCount: "3" } });
+    try {
+      const m = memoryRepo([{ publication: pub({ platform: "youtube", externalId: "vid7" }), snapshot: "48h" }], ytContext());
+      expect(await runMetricsTick({ repo: m.repo, metaConfig: fake.config, youtubeConfig: google.config, logger: silent })).toMatchObject({ recorded: 1 });
+      expect(m.recorded[0]).toMatchObject({ snapshot: "48h", metrics: { views: 1200, likes: 45, comments: 3, reach: null, avgWatchMs: null } });
+      expect(google.calls.find((c) => c.path === "/youtube/v3/videos")!.query).toMatchObject({ part: "statistics", id: "vid7" });
+    } finally { await google.close(); }
+  });
+
+  it("a Short that's gone from YouTube is recorded with its reason, not retried", async () => {
+    fake = await startFakeMeta();
+    const google = await startFakeGoogle({ videoMissing: true });
+    try {
+      const m = memoryRepo([{ publication: pub({ platform: "youtube", externalId: "vid7" }), snapshot: "7d" }], ytContext());
+      await runMetricsTick({ repo: m.repo, metaConfig: fake.config, youtubeConfig: google.config, logger: silent });
+      expect(m.recorded[0]).toMatchObject({ metrics: null, raw: { error: expect.stringMatching(/no longer on YouTube/) } });
+    } finally { await google.close(); }
+  });
+
+  it("YouTube without a Google client on the server: nothing recorded, tried again later", async () => {
+    fake = await startFakeMeta();
+    const m = memoryRepo([{ publication: pub({ platform: "youtube", externalId: "vid7" }), snapshot: "48h" }], ytContext());
+    expect(await runMetricsTick({ repo: m.repo, metaConfig: fake.config, youtubeConfig: null, logger: silent })).toMatchObject({ skipped: 1, recorded: 0 });
   });
 });

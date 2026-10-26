@@ -37,7 +37,7 @@ export function supabaseRepo(db: SupabaseClient): PublisherRepo {
     async loadContext(pub): Promise<PublishContext | null> {
       const { data: post, error } = await db
         .from("posts")
-        .select("id, project_id, kind, captions, video_path, cover_path, slide_paths")
+        .select("id, project_id, kind, captions, video_path, cover_path, slide_paths, youtube_video_path")
         .eq("id", pub.postId)
         .single();
       if (error || !post) throw new Error(`post ${pub.postId}: ${error?.message ?? "missing"}`);
@@ -58,6 +58,7 @@ export function supabaseRepo(db: SupabaseClient): PublisherRepo {
         post: {
           id: post.id, kind: post.kind as PostKind, captions: (post.captions ?? {}) as Captions,
           videoPath: post.video_path, coverPath: post.cover_path, slidePaths: post.slide_paths ?? [],
+          youtubeVideoPath: post.youtube_video_path,
         },
         account: { platform: account.platform, externalId: account.external_id, token: token as string },
       };
@@ -95,6 +96,18 @@ export function supabaseRepo(db: SupabaseClient): PublisherRepo {
     async saveChildren(publicationId, refs) {
       const { error } = await db.rpc("save_carousel_children", { p_publication: publicationId, p_refs: refs });
       if (error) throw new Error(`save_carousel_children: ${error.message}`);
+    },
+
+    async loadUploadSession(publicationId) {
+      const { data, error } = await db.rpc("upload_session", { p_publication: publicationId });
+      if (error) throw new Error(`upload_session: ${error.message}`);
+      const row = (data as { session_uri: string; size_bytes: number }[] | null)?.[0];
+      return row ? { uri: row.session_uri, size: Number(row.size_bytes) } : null;
+    },
+
+    async saveUploadSession(publicationId, s) {
+      const { error } = await db.rpc("save_upload_session", { p_publication: publicationId, p_uri: s.uri, p_size: s.size });
+      if (error) throw new Error(`save_upload_session: ${error.message}`);
     },
   };
 }

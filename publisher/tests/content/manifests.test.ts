@@ -14,7 +14,7 @@ const manifests = existsSync(REELS) ? readdirSync(REELS).filter((f) => f.endsWit
 describe.skipIf(manifests.length === 0)("reels/*.post.json", () => {
   it.each(manifests)("%s is valid and complete", (file) => {
     const m = parseManifest(JSON.parse(readFileSync(path.join(REELS, file), "utf8")));
-    for (const name of [m.video, m.cover, ...(m.slides ?? [])].filter((x): x is string => !!x)) {
+    for (const name of [m.video, m.youtubeVideo, m.cover, ...(m.slides ?? [])].filter((x): x is string => !!x)) {
       expect(existsSync(path.join(REELS, name)), `${file} → ${name}`).toBe(true);
     }
     for (const p of supportedPlatforms(m.kind)) {
