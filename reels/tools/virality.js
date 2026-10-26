@@ -49,18 +49,22 @@ function changedShare(a, b, delta = CHANGE) {
 /** Share of frames that move: frame-to-frame values (changedShare) at or above the threshold. */
 const motionShare = (values, threshold = MOVING) => (values.length ? values.filter((d) => d >= threshold).length / values.length : 0);
 
-// Framework F37: the opening keeps building to 3 s. Below this share of the first second's motion, it fades (set
-// 2026-10-26 on 14 framework reels: Chemistry #10 0.52 and Physics #9b 0.28 fade, every other reel 0.8 or more).
-const AFTERSHOCK = 0.6;
+// Framework F37: the opening keeps building to 3 s. It fades when seconds 1–3 are quiet both ways: under AFTERSHOCK of
+// the first second's motion (set 2026-10-26 on 14 framework reels: Chemistry #10 0.52 and Physics #9b 0.28 fade, every
+// other reel 0.8 or more) AND under AFTER_FLOOR of the pixels a frame, Physics #13's level (our best start, 78% at 3 s).
+// The floor came the same day: a big shock made the ratio unreachable for a busy opening (Chemistry #11 remade: 0.39,
+// though seconds 1–3 moved 16% a frame, 3× Physics #13).
+const AFTERSHOCK = 0.6, AFTER_FLOOR = 0.05;
 const median = (xs) => { const s = [...xs].sort((a, b) => a - b), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
 
-/** Median change per frame in 1–3 s ÷ in 0.2–1 s, from changedShare values 0.1 s apart (the first is the change at 0.1 s).
- *  null when the first second doesn't move at all (F5's failure, not this one). */
+/** Median change per frame in 1–3 s (changedShare values 0.1 s apart; the first is the change at 0.1 s). */
+const motionAfter = (values) => median(values.slice(10, 30));
+/** motionAfter ÷ the median change in 0.2–1 s; null when the first second doesn't move at all (F5's failure, not this one). */
 function aftershock(values) {
-  const first = median(values.slice(2, 10)), next = median(values.slice(10, 30));
-  return first > 0 ? next / first : null;
+  const first = median(values.slice(2, 10));
+  return first > 0 ? motionAfter(values) / first : null;
 }
-const fades = (ratio) => ratio != null && ratio < AFTERSHOCK;
+const fades = (values) => { const r = aftershock(values); return r != null && r < AFTERSHOCK && motionAfter(values) < AFTER_FLOOR; };
 
 /** Hasler and Süsstrunk's colourfulness M of an RGBA frame: 0 for grey, ~15 slightly, ~33 moderately, ~59 highly colourful. */
 function colourfulness(px) {
@@ -224,7 +228,7 @@ function update(md, results, today) {
   return { md: out, summary: `${acc.n ? `${right} bands right` : "no real prediction judged yet"}; weights: ${changes}; ${note}` };
 }
 
-module.exports = { COLOUR, BANDS, AFTERSHOCK, points, frameDiff, changedShare, motionShare, aftershock, fades, fillOutcomes, applyWeights, update, colourfulness, parseReels, parseBands, score, band, weakest,
+module.exports = { COLOUR, BANDS, AFTERSHOCK, AFTER_FLOOR, points, frameDiff, changedShare, motionShare, aftershock, motionAfter, fades, fillOutcomes, applyWeights, update, colourfulness, parseReels, parseBands, score, band, weakest,
   parsePredictions, validate, accuracy };
 
 if (require.main === module) {
