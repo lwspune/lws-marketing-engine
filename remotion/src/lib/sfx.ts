@@ -5,13 +5,15 @@
 import type { Key } from './motion.ts';
 
 export const SR = 48000;
-export const HIT_KINDS = ['click', 'crack', 'thunk', 'whump', 'tap', 'boom', 'whoosh-in', 'whoosh-out', 'snap', 'shimmer'] as const;
+export const HIT_KINDS = ['click', 'crack', 'thunk', 'whump', 'tap', 'boom', 'whoosh-in', 'whoosh-out', 'snap', 'shimmer', 'clang'] as const;
 export type HitKind = (typeof HIT_KINDS)[number];
 /** A one-off sound at time t. `pitch` scales the click / tap tone (1 = its normal pitch). */
 export type Hit = { kind: HitKind; t: number; gain: number; pitch?: number };
 /** A sound that runs from t0 to t1, as loud as level(t) (0…1): a burner's roar, a friction scrape, rain. */
 export type Bed = { kind: 'roar' | 'scrape' | 'rain'; t0: number; t1: number; level: (t: number) => number };
-export type Score = { duration: number; hits: Hit[]; beds: Bed[] };
+/** `music`: an optional level curve for the music over time (1 = as made), on top of the dips under each effect: a riser
+ *  into a reveal, a hole for a burst to play alone (the review panel's sound critic, F38). */
+export type Score = { duration: number; hits: Hit[]; beds: Bed[]; music?: (t: number) => number };
 
 const TAU = 2 * Math.PI;
 
@@ -54,6 +56,18 @@ const HIT: Record<HitKind, (r: () => number, pitch: number) => Float32Array> = {
     for (let i = 0; i < out.length; i++) {
       const t = i / SR;
       out[i] = 0.45 * white(r) * Math.exp(-t / 0.0012) + 0.4 * Math.sin(TAU * f * t) * Math.exp(-t / 0.007) + 0.15 * Math.sin(TAU * 1.5 * f * t) * Math.exp(-t / 0.004);
+    }
+    return out;
+  },
+  // Metal struck: bright, slightly out-of-tune partials (1–4 kHz, the range a phone speaker plays) ringing about 0.4 s,
+  // over a tiny click. "Copper rings, salt cracks" (Chemistry #11, the sound critic): a thud alone is lost on a phone.
+  clang(r, pitch) {
+    const out = len(0.9), f0 = 1150 * pitch, partials = [[1, 1, 0.32], [1.59, 0.7, 0.22], [2.37, 0.5, 0.15], [3.21, 0.3, 0.1]];
+    for (let i = 0; i < out.length; i++) {
+      const t = i / SR, tail = Math.min(1, (0.9 - t) / 0.1);
+      let v = 0;
+      for (const [k, a, d] of partials) v += a * Math.sin(TAU * f0 * k * t) * Math.exp(-t / d);
+      out[i] = tail * (0.33 * v + 0.3 * white(r) * Math.exp(-t / 0.0015));
     }
     return out;
   },
@@ -174,6 +188,20 @@ function bed(b: Bed, out: Float32Array, r: () => number) {
   }
 }
 
+/** Loudness of each `step`-second window in dB (RMS, full scale = 0; silence −120): the review panel's sound critic reads
+ *  the mix this way (framework F38, tools/sound-report.ts). */
+export function rmsDbWindows(samples: Float32Array, sampleRate: number, step: number): number[] {
+  const n = Math.round(step * sampleRate), out: number[] = [];
+  for (let at = 0; at < samples.length; at += n) {
+    let sum = 0;
+    const end = Math.min(samples.length, at + n);
+    for (let i = at; i < end; i++) sum += samples[i] * samples[i];
+    const rms = Math.sqrt(sum / (end - at));
+    out.push(rms > 1e-6 ? 20 * Math.log10(rms) : -120);
+  }
+  return out;
+}
+
 /** The effects alone (mono). */
 export function renderSfx(score: Score, seed = 7): Float32Array {
   const out = new Float32Array(Math.ceil(score.duration * SR));
@@ -190,7 +218,7 @@ const DUCK_HIT: Record<HitKind, { depth: number; hold: number }> = {
   click: { depth: 0, hold: 0 }, tap: { depth: 0, hold: 0 },
   crack: { depth: 0.35, hold: 0.3 }, thunk: { depth: 0.35, hold: 0.35 }, whump: { depth: 0.4, hold: 0.6 },
   boom: { depth: 0.4, hold: 1.2 }, 'whoosh-in': { depth: 0.25, hold: 0.55 }, 'whoosh-out': { depth: 0.2, hold: 0.55 },
-  snap: { depth: 0.2, hold: 0.25 }, shimmer: { depth: 0.15, hold: 1.2 },
+  snap: { depth: 0.2, hold: 0.25 }, shimmer: { depth: 0.15, hold: 1.2 }, clang: { depth: 0.25, hold: 0.4 },
 };
 const DUCK_BED = { roar: 0.25, scrape: 0.45, rain: 0 }, FLOOR = 0.5;   // rain is the room the music plays in: no dip
 
@@ -234,10 +262,12 @@ const LIMIT = 10 ** (-3.3 / 20);
  *  `scale` = deepest limiting. */
 export function mixWithMusic(music: Float32Array[], score: Score, seed = 7, voice?: VoiceTrack) {
   const fx = renderSfx(score, seed), g = duckGain(score, voice?.spans), n = music[0].length;
+  const shape = new Float32Array(n).fill(1);                    // the reel's own music level, every 1 ms
+  if (score.music) for (let i = 0; i < n; i += 48) shape.fill(score.music(i / SR), i, Math.min(n, i + 48));
   const left = new Float32Array(n), right = new Float32Array(n);
   let peak = 0;
   for (let i = 0; i < n; i++) {
-    const gi = i < g.length ? g[i] : 1, e = (i < fx.length ? fx[i] : 0) + (voice && i < voice.track.length ? voice.track[i] : 0);
+    const gi = (i < g.length ? g[i] : 1) * shape[i], e = (i < fx.length ? fx[i] : 0) + (voice && i < voice.track.length ? voice.track[i] : 0);
     left[i] = music[0][i] * gi + e; right[i] = music[1][i] * gi + e;
     peak = Math.max(peak, Math.abs(left[i]), Math.abs(right[i]));
   }
