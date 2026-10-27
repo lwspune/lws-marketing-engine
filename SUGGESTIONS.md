@@ -172,6 +172,13 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### The `drive` music style fades ~0.5 dB a second (logged 2026-10-27; not decided)
+Found making Defence #1: `drive` loses ~9 dB from 1 s to 18 s (nda-maths-011: −20.1 → −29.7 dB RMS; 017: −19.4 → −27.9),
+so a reel goes quieter as it builds; synthwave, trap and cinematic hold their level. The cause is somewhere in
+`engine.js` → `energetic('drive')`. Shipped reels with it: @lws.pune 011, 017 (and any other `drive` reel). New reels avoid
+`drive` until it's fixed. Before fixing: a 360 (every `drive` reel's music changes) and the founder's OK; posted reels
+can't change anyway.
+
 ### Queued Physics #15 (ice) fades after its opening (logged 2026-10-26; DECIDED 2026-10-26: posts as it is, already scheduled)
 Learning (framework F37, L72): the opening keeps building to 3 s, with no settle before 3 s. `virality-measure.mjs` gives
 Physics #15 an aftershock of **0.05** (bar 0.6): its pull-back moves 20–27% of the pixels a frame to 1.7 s, then 1.8–3 s
