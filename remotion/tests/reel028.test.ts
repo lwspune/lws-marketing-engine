@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   DURATION, END_AT, ANSWER_AT, COVER_T, ORBIT_END, CAPTIONS, SHOWN, VOICE, MUSIC_HITS, OPTIONS, ANSWER, OPTION_LINES, COLORS,
-  PULSES, STRETCH, SWEEP_START, THETA0, LANE, figure, thetaAt, kAt, segmentsAt, readoutsAt, formulaAt, FORMULAS,
+  PULSES, STRETCH, SWEEP_START, CUTS, TOP, THETA0, LANE, figure, thetaAt, kAt, segmentsAt, readoutsAt, formulaAt, FORMULAS,
   cameraAt, project, azimuthAt, ZOOM, BAND, ppu, labelsAt, labelBox, SOUND, type Segment,
 } from '../src/lib/reel028.ts';
 import { tween } from '../src/lib/motion.ts';
@@ -52,13 +52,22 @@ test('the stretch: scale 1 → 1/cos θ about O takes M to A and P to T, so the 
 
 test('frame 0 has everything to answer: the circle, θ, the three candidate lines tagged A, B, C, the touching line', () => {
   const ids = segmentsAt(0).filter(s => s.alpha > 0.5).map(s => s.id);
-  for (const id of ['radius', 'height', 'tan', 'sec', 'touchRight']) assert.ok(ids.includes(id) || (id === 'touchRight' && segmentsAt(0).some(s => s.id === id && s.alpha > 0.15)), id);
+  for (const id of ['radius', 'height', 'tan', 'sec']) assert.ok(ids.includes(id), id);
+  // the touching line has no cause on screen yet: it appears at its own beat (review panel, pass 1)
+  assert.ok(segmentsAt(0).every(s => s.id !== 'touchRight' || s.alpha < 0.01));
   const tags = labelsAt(0).filter(l => l.role === 'tag' && l.alpha > 0.9).map(l => l.text);
   assert.deepEqual(tags.sort(), ['A', 'B', 'C']);
   assert.ok(labelsAt(0).some(l => l.text === 'θ' && l.alpha > 0.9));
   // something changes on every frame of the first 3 s (F5): the orbit
   for (let i = 1; i < 90; i++) assert.ok(azimuthAt(frames[i]) !== azimuthAt(frames[i - 1]));
   assert.ok(PULSES.length === 3 && PULSES.every(p => p < ORBIT_END));
+  // each candidate pulses while the figure faces the camera, its tag up (never edge-on or from behind)
+  for (const p of PULSES) for (const dt of [0, 0.3]) assert.ok(labelsAt(p + dt).filter(l => l.role === 'tag').every(l => l.alpha > 0.9), `tags at ${p + dt}`);
+  // the back of the turn is a whip: from 50° to 310° in under 0.7 s
+  const side = frames.filter(t => t < ORBIT_END && Math.cos(azimuthAt(t)) < Math.cos(50 * Math.PI / 180));
+  assert.ok(side.length && side.at(-1)! - side[0] < 0.7, `side-on for ${side.at(-1)! - side[0]} s`);
+  // moving from frame 0: the orbit already turning
+  assert.ok(azimuthAt(1 / 30) > 0.4 * Math.PI / 180);
 });
 
 test('the cover gives nothing away: front view, the tags up, B not lit, no name, no formula', () => {
@@ -123,7 +132,8 @@ test('camera: one full orbit from frame 0, front by 3 s; smooth; zooms in and ou
   for (const t of frames.filter(t => t >= ORBIT_END)) assert.ok(Math.abs(azimuthAt(t) - 2 * Math.PI) < 1e-9);
   for (let i = 1; i < frames.length; i++) {
     const a = cameraAt(frames[i - 1]), b = cameraAt(frames[i]);
-    assert.ok(Math.hypot(...a.position.map((v, k) => v - b.position[k])) < 1.5, `camera jumps at ${frames[i]}`);
+    // the orbit's whip round the back is fast on purpose (≤ 18° a frame); after it, no step over 1.5 units
+    assert.ok(Math.hypot(...a.position.map((v, k) => v - b.position[k])) < (frames[i] <= ORBIT_END ? 1.9 : 1.5), `camera jumps at ${frames[i]}`);
   }
   let z = ZOOM.start[0], ins = 0, outs = 0;
   for (const k of ZOOM.keys) { if (k.to[0] > z) ins++; if (k.to[0] < z) outs++; z = k.to[0]; }
@@ -141,8 +151,16 @@ function figureOnScreen(t: number) {
   for (const s of segmentsAt(t).filter(s => s.alpha > 0.05)) pts.push(project([...s.a, 0] as [number, number, number], cam), project([...s.b, 0] as [number, number, number], cam));
   return pts;
 }
-test('framing: the whole figure inside the band (≥ 20 px spare) on every frame after the orbit; clear of the formula line', () => {
-  for (const t of frames.filter(t => t >= ORBIT_END && t < END_AT))
+const PUNCH = { from: ANSWER_AT - 0.35, to: 9.4 };
+test('framing: the whole figure inside the band (≥ 20 px spare) on every frame after the orbit, but the punch-in, which keeps tan θ whole; clear of the formula line', () => {
+  for (const t of frames.filter(t => t > PUNCH.from && t < PUNCH.to)) {
+    const s = seg(t, 'tan'), cam = cameraAt(t);
+    for (const q of [s.a, s.b, [0, 0], [Math.cos(rad(THETA0)), 0]]) {
+      const p = project([q[0], q[1], 0], cam);
+      assert.ok(p.x >= 20 && p.x <= 1060 && p.y >= BAND.top + 20 && p.y <= BAND.top + BAND.height - 20, `punch crops the key lines at ${t.toFixed(2)}`);
+    }
+  }
+  for (const t of frames.filter(t => t >= ORBIT_END && t < END_AT && !(t > PUNCH.from && t < PUNCH.to)))
     for (const p of figureOnScreen(t))
       assert.ok(p.x >= 20 && p.x <= 1060 && p.y >= BAND.top + 20 && p.y <= BAND.top + BAND.height - 20, `out at ${t.toFixed(2)}: ${p.x.toFixed(0)}, ${p.y.toFixed(0)}`);
   for (const t of frames.filter(t => t < ORBIT_END)) for (const p of figureOnScreen(t)) assert.ok(p.y >= BAND.top && p.y <= BAND.top + BAND.height && p.x > 0 && p.x < 1080);
@@ -188,7 +206,17 @@ test('sound: a tap on each pulse, a thunk on the answer, a snap at each cut, tic
   for (const p of PULSES) assert.ok(SOUND.hits.some(h => h.kind === 'tap' && close(h.t, p, 1e-9)));
   assert.ok(SOUND.hits.some(h => h.kind === 'thunk' && close(h.t, ANSWER_AT, 1e-9)));
   assert.equal(SOUND.hits.filter(h => h.kind === 'snap').length, 2);
-  assert.ok(SOUND.hits.filter(h => h.kind === 'click' && h.t >= SWEEP_START && h.t < END_AT).length >= 20);
+  // the sweep: a tick every 5° (2–4 a second, never a rattle), a tap at each turnaround (62°, 28°)
+  const ticks = SOUND.hits.filter(h => h.kind === 'click' && h.t >= SWEEP_START && h.t < END_AT).map(h => h.t);
+  assert.ok(ticks.length >= 10 && ticks.length <= 16, `${ticks.length} ticks`);
+  for (let i = 1; i < ticks.length; i++) assert.ok(ticks[i] - ticks[i - 1] > 0.12, `ticks ${ticks[i - 1].toFixed(2)}, ${ticks[i].toFixed(2)}`);
+  for (const d of [62, 28]) assert.ok(SOUND.hits.some(h => h.kind === 'tap' && close(thetaAt(h.t), d, 0.5)), `turnaround ${d}°`);
+  // the answer is the loudest hit; the cosec snap lands with the music's accent; no two onsets within 0.25 s of it
+  const loud = Math.max(...SOUND.hits.map(h => h.gain));
+  assert.ok(SOUND.hits.some(h => h.kind === 'thunk' && close(h.t, ANSWER_AT, 1e-9) && h.gain === loud));
+  assert.ok(MUSIC_HITS.includes(CUTS[1]) && !SOUND.hits.some(h => h.t > CUTS[1] && h.t < CUTS[1] + 0.25));
+  assert.ok(SOUND.hits.some(h => close(h.t, TOP.t, 1e-9)), 'the top line draws with a sound');
+  assert.ok(SOUND.hits.some(h => h.t >= END_AT && h.t < END_AT + 0.5), 'the end card arrives with a sound');
   const ws = whooshesFor(ZOOM.start, ZOOM.keys); assert.ok(ws.length >= 3);
   for (const w of ws) assert.ok(SOUND.hits.some(s => s.kind === w.kind && close(s.t, w.t, 1e-9)));
   for (const h of SOUND.hits) assert.ok(h.t >= 0 && h.t < DURATION - 0.5);

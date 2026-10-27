@@ -21,7 +21,8 @@ import { Board, Caption, EndCard, PredictHeader, Theme, hand, useFonts, type End
 import { RealLight } from './realism.tsx';
 import { softEdges } from './shapes.tsx';
 
-const COVER = { text: 'Every trig ratio is a real line', y: 1590, size: 58 };
+// the cover has no header: the profile grid's 3:4 crop (y 240–1680) would cut it through the question (review panel)
+const COVER = { text: 'Which line is tan θ?', y: 1590, size: 72 };
 // lines sit just in front of the glass, each family on its own depth so overlapping rods never flicker
 const DEPTH: Record<string, number> = { radius: 0.02, ray: 0.012, touchRight: 0.01, touchTop: 0.01, base: 0.024, height: 0.032, sin: 0.03,
   cos: 0.034, tan: 0.03, sec: 0.028, cot: 0.03, cosec: 0.028 };
@@ -88,7 +89,8 @@ function Scene({ t }: { t: number }) {
       {/* the glass the figure is drawn on, and the circle as a glossy tube */}
       <mesh position={[0.1, 0.1, -0.05]} rotation={[Math.PI / 2, 0, 0]} receiveShadow>
         <cylinderGeometry args={[1.32, 1.32, 0.05, 96]} />
-        <meshPhysicalMaterial color="#e9eef7" roughness={0.15} metalness={0} transparent opacity={0.55} clearcoat={1} />
+        {/* light and see-through: from behind (the orbit's whip) it must not read as a grey plate */}
+        <meshPhysicalMaterial color="#f4f7fc" roughness={0.15} metalness={0} transparent opacity={0.3} clearcoat={1} depthWrite={false} />
       </mesh>
       <mesh castShadow><torusGeometry args={[1, 0.024, 20, 200]} />
         <meshStandardMaterial color={COLORS.circle} roughness={0.3} metalness={0.15} /></mesh>
@@ -112,9 +114,9 @@ const colourOf = (w: string) => (COLORS as Record<string, string>)[w];
 function Labels({ t }: { t: number }) {
   const cam = cameraAt(t);
   return <>{labelsAt(t).filter(l => l.alpha > 0.01 && l.role !== 'formula').map((l, i) => {
-    const b = labelBox(l, cam), tag = l.role === 'tag', pill = l.role !== 'theta';
-    return <div key={i} style={{ position: 'absolute', left: b.x0 - (pill ? 10 : 0), top: b.y0 - (pill ? 2 : 0), width: b.x1 - b.x0 + (pill ? 20 : 0),
-      height: b.y1 - b.y0 + (pill ? 4 : 0), display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: l.alpha,
+    const b = labelBox(l, cam), tag = l.role === 'tag', pill = l.role !== 'theta', px = tag ? 18 : pill ? 10 : 0, py = tag ? 6 : pill ? 2 : 0;
+    return <div key={i} style={{ position: 'absolute', left: b.x0 - px, top: b.y0 - py, width: b.x1 - b.x0 + 2 * px,
+      height: b.y1 - b.y0 + 2 * py, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: l.alpha,
       ...hand(l.size), fontWeight: l.role === 'name' || tag || l.role === 'readout' ? 800 : 600, color: l.color, whiteSpace: 'pre',
       background: pill ? (tag ? tint(l.color, 0.14) : tint('#ffffff', 0.9)) : undefined, borderRadius: 999,
       border: tag ? `3px solid ${tint(l.color, 0.75)}` : undefined, boxSizing: 'border-box',
@@ -145,8 +147,8 @@ export function Reel028({ cover = false, voice = false, platform = 'instagram' }
     <Theme value={P}>
       <AbsoluteFill>
         <Board watermark={false} />
-        <PredictHeader t={t} label={'NDA MATHS  ·  TRIGONOMETRY'} lines={HEADER} options={OPTIONS} answer={ANSWER} at={ANSWER_AT} size={54} chipW={150}
-          chipColors={OPTION_LINES.map(n => COLORS[n])} chipPulses={PULSES} />
+        {!cover && <PredictHeader t={t} label={'NDA MATHS  ·  TRIGONOMETRY'} lines={HEADER} options={OPTIONS} answer={ANSWER} at={ANSWER_AT} size={54} chipW={150}
+          chipColors={OPTION_LINES.map(n => COLORS[n])} chipPulses={PULSES} />}
         <div style={{ position: 'absolute', left: 0, top: BAND.top, width: BAND.width, height: BAND.height, ...softEdges({ top: 0.03, bottom: 0.03 }) }}>
           <ThreeCanvas width={BAND.width} height={BAND.height} shadows gl={{ antialias: true, alpha: true }}>
             <Scene t={t} />

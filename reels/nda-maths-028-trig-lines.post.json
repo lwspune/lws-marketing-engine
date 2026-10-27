@@ -1,0 +1,17 @@
+{
+  "slug": "nda-maths-028-trig-lines",
+  "project": "pyq-vault",
+  "kind": "reel",
+  "title": "028 · Why? #16: the six trig ratios are six real lines (3D; tan θ on the touching line; predict-first; voiced)",
+  "video": "nda-maths-028-trig-lines-voice.mp4",
+  "youtubeVideo": "nda-maths-028-trig-lines-voice-yt.mp4",
+  "cover": "nda-maths-028-trig-lines-cover.png",
+  "captions": {
+    "instagram": "NDA Maths · Trigonometry. Circle of radius 1. Which line is tan θ? A · B · C 👇\n\nB, the piece of the line that touches the circle. Here's why.\nThe small triangle has height sin θ and base cos θ. Stretch it from the centre until its base is 1: every side grows by 1/cos θ, so its height becomes sin θ ÷ cos θ = tan θ, standing on the line that touches the circle. That's the name: tangent = touching.\nThe slant from the centre to it cuts through the circle: sec θ (secant = cutting). Pythagoras: 1 + tan²θ = sec²θ.\nDo the same against the line touching the top: cot θ and cosec θ, and 1 + cot²θ = cosec²θ.\nTraps: A is sin θ (its triangle's base is cos θ, not 1). C is sec θ.\n\nNDA asked about this in 2024 (II), Q79: lim θ→π/2 (sec θ − tan θ) = ? sec θ − tan θ = (1 − sin θ)/cos θ = cos θ/(1 + sin θ) → 0, so (B) 0. In the picture: as θ grows, both lines shoot up but their gap shrinks.\n\nSave this 📌 Follow @lws.pune for one NDA maths idea every day.\nPractise NDA maths PYQs free, chapter-wise → link in bio (PYQ Vault).\n\n#NDA #NDAMaths #NDA2027 #NDAPreparation #DefenceAspirants #NDAPYQ #Trigonometry #LWSPune",
+    "facebook": "NDA Maths · Trigonometry. Circle of radius 1. Which line is tan θ? A · B · C 👇\n\nB. Stretch the sin–cos triangle until its base is 1: its height becomes sin θ ÷ cos θ = tan θ, on the line that touches the circle (tangent = touching). The slant that cuts the circle is sec θ, so 1 + tan²θ = sec²θ; the same at the top gives cot θ, cosec θ and 1 + cot²θ = cosec²θ. NDA 2024 (II), Q79: lim θ→π/2 (sec θ − tan θ) = 0.\n\nPractise NDA PYQs free, chapter-wise: https://www.pyqvault.com\n\n#NDA #NDAMaths #LWSPune",
+    "youtube": {
+      "title": "Why is it called tan θ? Six trig ratios are six real lines #shorts",
+      "description": "On a circle of radius 1, stretch the sin–cos triangle until its base is 1: its height becomes tan θ, on the line that touches the circle (tangent = touching). The slant that cuts the circle is sec θ, so 1 + tan²θ = sec²θ; the same at the top gives cot θ and cosec θ. NDA 2024 (II) Q79: lim θ→π/2 (sec θ − tan θ) = 0.\n\nPractise NDA PYQs free, chapter-wise: pyqvault.com\n\n#NDA #NDAMaths #Shorts"
+    }
+  }
+}
