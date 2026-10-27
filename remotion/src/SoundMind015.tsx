@@ -148,15 +148,18 @@ function Top({ t, cam }: { t: number; cam: Cam }) {
       </g>
       <Lamp x={lampX} y={lampY - 20} t={t} top />
       <g filter="url(#s15paint)">
+        {/* her neck, with a soft shadow under the chin; it runs under the collar so a breath never opens a gap */}
+        <rect x={headX - 25} y={headY + 30} width="50" height="130" rx="18" fill={fillOf('skin')} stroke={P.skin.edge} strokeWidth="2" />
+        <ellipse cx={headX} cy={headY + r - 2} rx="30" ry="12" fill={P.skin.shade} opacity="0.55" />
         {/* the sweatshirt's shoulders and the blanket, rising and falling with her breath */}
         <g transform={`translate(0 ${-8 * c}) translate(${headX} 1000) scale(${1 + 0.035 * c} ${1 + 0.05 * c}) translate(${-headX} -1000)`}>
-          <path d={`M${headX - 140} 1000 Q${headX - 150} ${headY + 90} ${headX} ${headY + 76} Q${headX + 150} ${headY + 90} ${headX + 140} 1000 Z`} fill={fillOf('sweatshirt')} {...edge('sweatshirt')} />
-          <path d={`M${headX - 34} ${headY + 80} Q${headX} ${headY + 104} ${headX + 34} ${headY + 80}`} fill="none" stroke={P.sweatshirt.shade} strokeWidth="9" strokeLinecap="round" />
+          <path d={`M${headX - 140} 1000 Q${headX - 150} ${headY + 126} ${headX} ${headY + 112} Q${headX + 150} ${headY + 126} ${headX + 140} 1000 Z`} fill={fillOf('sweatshirt')} {...edge('sweatshirt')} />
+          <path d={`M${headX - 34} ${headY + 116} Q${headX} ${headY + 140} ${headX + 34} ${headY + 116}`} fill="none" stroke={P.sweatshirt.shade} strokeWidth="9" strokeLinecap="round" />
           <rect x="262" y="960" width="556" height="870" rx="30" fill={fillOf('blanket')} {...edge('blanket', 3)} />
           <rect x="262" y="960" width="556" height="56" rx="20" fill={P.sheet.light} {...edge('sheet', 2)} />
           {/* her arms along her sides, over the blanket */}
           {[-1, 1].map(s => {
-            const d = `M${headX + s * 118} ${headY + 128} Q${headX + s * 180} 980 ${headX + s * 148} 1120`;
+            const d = `M${headX + s * 118} ${headY + 150} Q${headX + s * 180} 990 ${headX + s * 148} 1120`;
             return (
               <g key={s}>
                 <path d={d} fill="none" stroke={P.sweatshirt.edge} strokeWidth="66" strokeLinecap="round" />
