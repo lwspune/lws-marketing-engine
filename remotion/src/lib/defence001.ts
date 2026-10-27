@@ -198,7 +198,8 @@ export function labelBoxes(t: number): LabelBox[] {
 // ---- sound --------------------------------------------------------------------------------------------------------------
 // A thunk on the answer and a small bright tink as each of its stars flashes; a click as the trap's star slides off and
 // a tink as the other settles; a clank whenever badges come off; a tink as each new badge lands (pitch up a step per
-// rank); a shimmer for the Field Marshal; whooshes on the fast zooms only (F15).
+// rank); a shimmer for the Field Marshal; whooshes on the fast zooms only (F15). EFFECTS_GAIN (+2.3 dB) puts the effects
+// ~8 dB under the music (F16: 5–10 dB).
 const landings = () => {
   const out: { t: number; rank: number }[] = [];
   for (const s of STATES.slice(1)) {
@@ -209,6 +210,7 @@ const landings = () => {
   return out;
 };
 export const MUSIC_HITS = [ANSWER_AT, rankTimes[8]];
+const EFFECTS_GAIN = 1.3;
 export const SOUND: Score = {
   duration: DURATION,
   hits: [
@@ -220,6 +222,6 @@ export const SOUND: Score = {
     ...landings().map((l): Hit => ({ kind: 'clang', t: l.t, gain: 0.18, pitch: 1.7 + 0.07 * Math.max(0, l.rank) })),
     { kind: 'shimmer', t: FM_AT + 0.35, gain: 0.35 },
     ...whooshesFor(ZOOM.start, ZOOM.keys),
-  ],
+  ].map(h => ({ ...h, gain: h.gain * EFFECTS_GAIN })),
   beds: [],
 };

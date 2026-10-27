@@ -17,7 +17,7 @@ a reason where they don't (§ 0).
 | F8 rounded, F24 colour | ✅ the strap a rounded slab; real materials (olive drab cloth, brass) as F24 allows for things people know by their material; the ladder's lit row in a VIVID accent |
 | F9 zooms | ✅ punch-in on the answer, a slow push through the climb, a pull-back for the Field Marshal |
 | F12 white board | ✅ |
-| F13 music, a new style | ✅ `drive` (ONE DAY, queued just before, is `anthem`: never the same style twice in a row) |
+| F13 music, a new style | ✅ `synthwave` (ONE DAY, queued just before, is `anthem`: never the same style twice in a row; `drive` was tried first, but its level falls ~0.5 dB a second, logged in SUGGESTIONS.md) |
 | F14–F17 sound, muted | ✅ a metal tink per badge; every idea is on screen |
 | F18 short | ✅ 20.5 s |
 | F19 exam + chapter label | adapted: `NDA · ARMY RANKS`; series "Defence #1" in the caption kit |
@@ -59,7 +59,7 @@ The strap as in the pictures (§ 8): button at its pointed top, the badges below
 
 | time | picture: what moves | on-screen words (≤ 7) | camera | sound | key colours |
 |---|---|---|---|---|---|
-| 0–3.0 | the strap with the Brigadier's badges, one full turn | header + A/B/C | 360° orbit, ends at the front | `drive` from frame 0 | olive strap, brass badges on the white board |
+| 0–3.0 | the strap with the Brigadier's badges, one full turn | header + A/B/C | 360° orbit, ends at the front | `synthwave` from frame 0 | olive strap, brass badges on the white board |
 | 3.0 | **B lights**; the three stars flash in turn | — | punch-in (0.4 s) framed on the emblem + all three stars | whoosh-in, thunk + music hit | B chip lit |
 | 3.0–4.4 | a thin gold line draws the triangle through the three stars | Emblem + 3 stars in a triangle | hold | tink ×3 | gold line |
 | 4.4–5.4 | the bottom-right star slides off; the bottom-left one moves to the centre, under the first: a column of two, Colonel's badge | Colonel: emblem + only 2 stars | ease back | slide + tink | |
