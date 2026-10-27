@@ -43,6 +43,10 @@ when convenient (Account → Access Tokens; Project Settings → Database → re
 
 ## Deferred improvements
 
+### reels/tools/unchanged.mjs says CHANGED for nda-maths-008 (found 2026-10-27)
+On main too, before the anthem style was added (Story #1 branch), so not caused by it: 008's render no longer matches
+`reels/tools/baseline.txt`. Find which engine.js change moved it; re-baseline only if the new frames are right.
+
 ### ~~@lws.pune: NDA maths concepts first, real PYQs not so strict~~ DONE 2026-10-20
 The founder wants @lws.pune to focus on **NDA maths concepts**, without making real PYQs too harsh a rule. Done the same
 day with the @lws.pune reel framework (`reels/lwspune-framework.md` F1, lesson L39): `lwspune-insta.md` Content rules +
