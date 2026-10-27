@@ -38,6 +38,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   '019': { lib: '../src/lib/reel019.ts', file: 'public/nda-maths-019-area-between' },
   '020': { lib: '../src/lib/reel020.ts', file: 'public/nda-maths-020-matrix-grid' },
   '021': { lib: '../src/lib/reel021.ts', file: 'public/nda-maths-021-log-flip' },
+  d001: { lib: '../src/lib/defence001.ts', file: 'public/nda-defence-001-army-ranks' },
   '022': { lib: '../src/lib/reel022.ts', file: 'public/nda-maths-022-complete-square' },
   '023': { lib: '../src/lib/reel023.ts', file: 'public/nda-maths-023-derivative-cycle' },
   '024': { lib: '../src/lib/reel024.ts', file: 'public/nda-maths-024-function-range' },

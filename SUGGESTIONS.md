@@ -43,6 +43,12 @@ when convenient (Account → Access Tokens; Project Settings → Database → re
 
 ## Deferred improvements
 
+### A separate list of review-panel critics for each project (founder, 2026-10-27; "for now okay")
+F38 runs the same four critics (Drama, Colour, Motion, Sound) on every @pyqvault_ and @lws.pune reel. The founder wants
+each project to have its own list of reviewers (e.g. @lws.pune, @pyqvault_, Sound Mind each choosing which critics and
+checklists apply). Until then the current four stay on both. To do: a per-project panel in `reels/review-panel.md` (and
+Sound Mind's in `soundmind/framework.md`), with each framework pointing at its own list; a framework change with a reason.
+
 ### reels/tools/unchanged.mjs says CHANGED for nda-maths-008 (found 2026-10-27)
 On main too, before the anthem style was added (Story #1 branch), so not caused by it: 008's render no longer matches
 `reels/tools/baseline.txt`. Find which engine.js change moved it; re-baseline only if the new frames are right.
@@ -171,6 +177,13 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
   bank and draft the kit inside the app (still behind the approval gate).
 
 ## Backfill ledger
+
+### The `drive` music style fades ~0.5 dB a second (logged 2026-10-27; not decided)
+Found making Defence #1: `drive` loses ~9 dB from 1 s to 18 s (nda-maths-011: −20.1 → −29.7 dB RMS; 017: −19.4 → −27.9),
+so a reel goes quieter as it builds; synthwave, trap and cinematic hold their level. The cause is somewhere in
+`engine.js` → `energetic('drive')`. Shipped reels with it: @lws.pune 011, 017 (and any other `drive` reel). New reels avoid
+`drive` until it's fixed. Before fixing: a 360 (every `drive` reel's music changes) and the founder's OK; posted reels
+can't change anyway.
 
 ### Queued Physics #15 (ice) fades after its opening (logged 2026-10-26; DECIDED 2026-10-26: posts as it is, already scheduled)
 Learning (framework F37, L72): the opening keeps building to 3 s, with no settle before 3 s. `virality-measure.mjs` gives
