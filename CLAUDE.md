@@ -156,6 +156,10 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   dissolve, 25–32 s, ending dark (framework S22, lesson L75; first: sm-r014 "a reminder under the stars"). Silent-first:
   no AI voice on Shivani's account (it would pass as hers); her own recorded voice can be a second version.
 
+- **Sound Mind racing-mind reels (2026-10-27, founder-approved).** After studying a "racing thoughts" reel: her thoughts
+  pile up on screen faster and faster over a quickening heartbeat, a hard cut to half a second of silence, then a calm view
+  from above with one slow breath (framework S23, lesson L76; first: sm-r015 "the 1 a.m. thoughts").
+
 - **YouTube Shorts in the publisher (2026-10-23, founder-approved).** Same approve → publish flow as Instagram, to the
   LWS Pune and Sound Mind channels first (Sound Mind with Shivani's OK), PYQ Vault once its channel exists. Google
   Cloud project `gopost-512510` ("GoPost", In production, not Google-verified: fine for our own channels). The first

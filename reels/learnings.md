@@ -14,7 +14,7 @@ Reach-test targets: typical reach **> 2,000** · watch **> 10 s** · at least on
 reels posted 12–19 Oct, read 20 Oct: **1,271 views · 6.1 s watched · 3 saves · 0 comments · 0 shares**.
 
 **@pyqvault_ has its own log: `pyqvault-learnings.md`** (founder, 2026-10-20): L22, L27–L29 moved there with
-its reels' results, and L30–L37 live there. All three logs (with `soundmind/learnings.md`) share one numbering, so the next new lesson in any of them is **L76**.
+its reels' results, and L30–L37 live there. All three logs (with `soundmind/learnings.md`) share one numbering, so the next new lesson in any of them is **L77**.
 
 ---
 

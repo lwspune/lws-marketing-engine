@@ -1,4 +1,4 @@
-# @soundmindwithshivani post framework (v1.7, 2026-10-27)
+# @soundmindwithshivani post framework (v1.8, 2026-10-27)
 
 How every Sound Mind post is made, one numbered point at a time, in three parts: **both formats**, **carousels** and
 **reels**. Carousels and reels do different jobs (founder, 2026-10-21: "different fundamentally"): a carousel mostly
@@ -185,6 +185,23 @@ and on @pyqvault_ voice brought no gain (L43); her own recorded voice is welcome
 `remotion/tests/sm014.test.ts` (the hook on frame 0, one line at a time, reading time, safe band and 3:4 crop, the
 dissolves, the dark ending, painted palette, words WCAG AA, no health claims). · 🧪 L75
 
+## Reels: the racing-mind reel
+
+**Their job and winning:** the same as the ME story's (reach people who don't follow yet; at 7 days, more people reached
+and longer watch time than the typical reel, then shares and saves per 1,000 reached). S1, S3, S4, S5, S7, S12, S14,
+S16, S17 and S21 apply, and S20's "in season" rule.
+
+**S23 · Racing-mind reels: the thoughts pile up, then a hard cut to quiet, 20–26 s.** One feeling of a busy mind (night
+overthinking, the inner critic…). Part one: one scene, the camera creeping in, while 16–22 of her own thoughts (8 words at
+most, mixed sizes, Lora and her Kalam handwriting) appear faster and faster, older ones dimming, never covering each other,
+over a quickening pulse; the hook is the first thought, alone on frame 0. Then a hard cut: half a second with no words and
+no sound. Part two: a new angle, calm; a short practice (a slow breath, longer out than in) and one line to keep. ·
+*Why:* the founder pointed at a 20 s "racing thoughts" reel (2026-10-27; studied frame by frame: worries piling up over a
+steady pulse, a cut to near-silence, "Breathe…") and asked for one like it. The contrast between the noise and the
+silence is the reel; viewers recognise their own thoughts. · *Check:* `remotion/tests/sm015.test.ts` (the hook alone on
+frame 0, the pile-up speeding up, no thought covering another, each readable, the silent beat, the pulse quickening, the
+breath matching its words, painted palette, AA, no health claims). · 🧪 L76
+
 ---
 
 ## Changing the framework
@@ -206,6 +223,7 @@ dissolves, the dark ending, painted palette, words WCAG AA, no health claims). �
 |---|---|---|---|
 | v1 | 2026-10-21 | Framework created from `brand.md`'s rules (S1–S15), each with a reason, a check and a status; "winning" set to shares per 1,000 reached at 7 days. Lessons L52–L55 measure the four points on test. | Founder: a framework like @pyqvault_'s, for Sound Mind. Nothing in it is new: it numbers what Sound Mind already does, so changes from here on have a trail. |
 | v1.1 | 2026-10-21 | S6: never "comment KEYWORD" on a post meant to spread. S16 added: captions of a few lines, opening on "you" (replaces the one-line caption); on test, L56. | Founder chose both from run 2 of the element analysis (`reels/analysis-framework.md`): keyword asks went with ordinary posts in 3 accounts; long captions with hits in 5, a "you" first line in 3. Week 43's posts keep their one-line captions and are L56's comparison (SUGGESTIONS.md → Backfill ledger). |
+| v1.8 | 2026-10-27 | S23 added: racing-mind reels, a fourth kind of reel (thoughts pile up over a quickening pulse, a hard cut to silence, a calm second part with one slow breath). On test, L76; first: sm-r015 "the 1 a.m. thoughts". | Founder, after the study of a "racing thoughts" reel: "this one too". |
 | v1.7 | 2026-10-27 | S22 added: reminder reels, a third kind of reel (one short line at a time over drifting painted scenes, 25–32 s, ending dark). On test, L75; first: sm-r014 "a reminder under the stars" (Diwali night, in season). | Founder, after the study of a "let me remind you" reel: "analyse and create similar reel for soundmind"; silent-first (AI voice declined: it would pass as Shivani's). |
 | v1.6 | 2026-10-24 | S20: a pause reel's scene is in season (rain only June–September); sm-r013 "window seat" is the first indoor one, and its test refuses a rain bed. | Founder, 2026-10-24: "since it is not monsoon, we need to have different setup like chai in cozy room besides window with book in hand". |
 | v1.5 | 2026-10-24 | S21 added: Painted 2D, the look of every new reel (no black outlines, light and shadow sides, mood light, reflections, depth and soft focus); checked by `paint.ts`. S18's vivid palette still sets the colours of ME reels. L67 measures painted vs flat. | Founder, comparing pause reel #2 (painted) with #1 (flat, outlined): "this looks much better ... lets save it". |
