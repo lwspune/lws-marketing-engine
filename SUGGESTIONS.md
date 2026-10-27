@@ -43,6 +43,12 @@ when convenient (Account → Access Tokens; Project Settings → Database → re
 
 ## Deferred improvements
 
+### A separate list of review-panel critics for each project (founder, 2026-10-27; "for now okay")
+F38 runs the same four critics (Drama, Colour, Motion, Sound) on every @pyqvault_ and @lws.pune reel. The founder wants
+each project to have its own list of reviewers (e.g. @lws.pune, @pyqvault_, Sound Mind each choosing which critics and
+checklists apply). Until then the current four stay on both. To do: a per-project panel in `reels/review-panel.md` (and
+Sound Mind's in `soundmind/framework.md`), with each framework pointing at its own list; a framework change with a reason.
+
 ### reels/tools/unchanged.mjs says CHANGED for nda-maths-008 (found 2026-10-27)
 On main too, before the anthem style was added (Story #1 branch), so not caused by it: 008's render no longer matches
 `reels/tools/baseline.txt`. Find which engine.js change moved it; re-baseline only if the new frames are right.
