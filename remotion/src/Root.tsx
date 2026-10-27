@@ -41,6 +41,7 @@ import { Reel023 } from './Reel023.tsx';
 import { Reel024 } from './Reel024.tsx';
 import { Reel025 } from './Reel025.tsx';
 import { Reel027 } from './Reel027.tsx';
+import { Reel028 } from './Reel028.tsx';
 import { Defence001 } from './Defence001.tsx';
 import { DURATION as DURATION_D001 } from './lib/defence001.ts';
 import { Story001 } from './Story001.tsx';
@@ -94,6 +95,7 @@ import { DURATION as DURATION_023 } from './lib/reel023.ts';
 import { DURATION as DURATION_024 } from './lib/reel024.ts';
 import { DURATION as DURATION_025 } from './lib/reel025.ts';
 import { DURATION as DURATION_027 } from './lib/reel027.ts';
+import { DURATION as DURATION_028 } from './lib/reel028.ts';
 import { DURATION as DURATION_S001 } from './lib/story001.ts';
 import { DURATION as DURATION_018 } from './lib/reel018.ts';
 import { DURATION as DURATION_PC005 } from './lib/pc005.ts';
@@ -229,6 +231,9 @@ export const Root = () => (
     <Still id="Reel025Cover" component={Reel025} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="Reel027" component={Reel027} durationInFrames={Math.round(DURATION_027 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="Reel027Cover" component={Reel027} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="Reel028" component={Reel028} durationInFrames={Math.round(DURATION_028 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, voice: false, platform: 'instagram' as const }} />
+    <Composition id="Reel028Voice" component={Reel028} durationInFrames={Math.round(DURATION_028 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, voice: true, platform: 'instagram' as const }} />
+    <Still id="Reel028Cover" component={Reel028} width={1080} height={1920} defaultProps={{ cover: true, voice: false, platform: 'instagram' as const }} />
     <Composition id="Defence001" component={Defence001} durationInFrames={Math.round(DURATION_D001 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="Defence001Cover" component={Defence001} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="Story001" component={Story001} durationInFrames={Math.round(DURATION_S001 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
