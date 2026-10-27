@@ -54,6 +54,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   sm012: { lib: '../src/lib/sm012.ts', file: 'public/sm-r012-tapri' },
   ohm: { lib: '../src/lib/pvOhm.ts', file: 'public/pv-physics-014-ohm' },
   sm013: { lib: '../src/lib/sm013.ts', file: 'public/sm-r013-window' },
+  sm014: { lib: '../src/lib/sm014.ts', file: 'public/sm-r014-stars' },
 };
 const id = process.argv[2], reel = REELS[id];
 if (!reel) throw new Error(`usage: node tools/mix.ts <${Object.keys(REELS).join(' | ')}>`);

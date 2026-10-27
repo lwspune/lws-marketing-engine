@@ -131,6 +131,8 @@ import { SoundMind012 } from './SoundMind012.tsx';
 import { DURATION as DURATION_SM012 } from './lib/sm012.ts';
 import { SoundMind013 } from './SoundMind013.tsx';
 import { DURATION as DURATION_SM013 } from './lib/sm013.ts';
+import { SoundMind014 } from './SoundMind014.tsx';
+import { DURATION as DURATION_SM014 } from './lib/sm014.ts';
 import { SceneStory, sceneStoryFrames } from './SceneStory.tsx';
 
 export const Root = () => (
@@ -280,6 +282,8 @@ export const Root = () => (
     <Still id="SoundMind012Cover" component={SoundMind012} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="SoundMind013" component={SoundMind013} durationInFrames={Math.round(DURATION_SM013 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="SoundMind013Cover" component={SoundMind013} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="SoundMind014" component={SoundMind014} durationInFrames={Math.round(DURATION_SM014 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="SoundMind014Cover" component={SoundMind014} width={1080} height={1920} defaultProps={{ cover: true }} />
     {/* Sound Mind scene-story carousels: one frame per slide; the post comes in with --props (soundmind/render.mjs) */}
     <Composition id="SceneStory" component={SceneStory} durationInFrames={1} fps={1} width={1080} height={1350} defaultProps={{ post: null }}
       calculateMetadata={({ props }) => ({ durationInFrames: sceneStoryFrames(props.post) })} />
