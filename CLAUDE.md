@@ -124,6 +124,10 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   still work muted. Every voiced reel is also rendered silent; the founder picks. Framework F23, lesson L43; decide after
   3 voiced reels. The own-voice ElevenLabs plan (2026-10-15) stays parked. **Result (2026-10-26): dropped on @pyqvault_**
   (5 voiced reels, median watch 9.0 s vs 8.4 s silent, views 1,378 vs 1,510: no clear gain for a second render).
+  **Indian voice (2026-10-27, founder-approved):** AI4Bharat's Indic Parler-TTS (Apache 2.0, gated on Hugging Face,
+  offline after one download) runs from a Python venv in `remotion/.parler/` (git-ignored; pinned in
+  `tools/parler-requirements.txt`): `node tools/voice.ts <reel> --voice=parler-Mary --takes=3 --fit`. The founder
+  preferred Mary to `af_heart` and Thoma, then kept the Army ranks reel silent: reels stay silent; Mary if voice returns.
 
 - **Realism demos (2026-10-20, founder-approved after seeing them).** Rapier physics (`@dimforge/rapier3d-compat`) and
   three.quarks particles are kept in `remotion/` for topics that need them (demos: `DemoPhysics.tsx`, `DemoParticles.tsx`;

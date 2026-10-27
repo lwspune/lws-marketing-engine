@@ -6,10 +6,15 @@
 // (public/voice/<key>.wav). Stops, without writing the track, if a line runs past the time its words are on screen.
 // Cadence (founder, 2026-10-21): `--together` sets one loudness for the script instead of per line. Each line's spoken
 // form (`say`) must keep its on-screen words. Prints each line's pitch spread (semitones, 10th–90th percentile).
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { basename } from 'node:path';
+// `--voice=parler-Thoma` (or parler-Mary, …) uses Indic Parler-TTS instead (trial 2026-10-27; setup:
+// tools/parler-requirements.txt); its pace comes from --speed, asked for in words. `--fit` speeds up a line up to 15 % too
+// long to fit its time (same pitch).
+import { spawnSync } from 'node:child_process';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { basename, join } from 'node:path';
 import { SR, readWav, writeWav } from '../src/lib/sfx.ts';
-import { VOICE, VOICE_RMS, levelTo, levelTogether, overruns, pitchStats, placeVoice, sameWords, trimSilence, upsample2x, voiceKey, type VoiceLine } from '../src/lib/voice.ts';
+import { VOICE, VOICE_RMS, fitTo, levelTo, levelTogether, overruns, parlerDescription, parlerSpeaker, pitchStats, placeVoice, sameWords, spokenWords, trimSilence, upsample2x, voiceKey, type VoiceLine } from '../src/lib/voice.ts';
 
 const REELS: Record<string, { lib: string; file: string }> = {
   pc007: { lib: '../src/lib/pc007.ts', file: 'public/pv-chem-007-halflife' },
@@ -18,14 +23,17 @@ const REELS: Record<string, { lib: string; file: string }> = {
   pp010: { lib: '../src/lib/pp010.ts', file: 'public/pv-physics-010-launch-angles' },
   pp009b: { lib: '../src/lib/pp009b.ts', file: 'public/pv-physics-009b-wing-mirror' },
   pc008: { lib: '../src/lib/pc008.ts', file: 'public/pv-chem-008-packing' },
+  d001: { lib: '../src/lib/defence001.ts', file: 'public/nda-defence-001-army-ranks' },
 };
 const id = process.argv[2], reel = REELS[id];
 if (!reel) throw new Error(`usage: node tools/voice.ts <${Object.keys(REELS).join(' | ')}>`);
 
 const arg = (k: string) => process.argv.find(a => a.startsWith(`--${k}=`))?.split('=')[1];
 const name = arg('voice') ?? VOICE.name, speed = Number(arg('speed') ?? VOICE.speed);
-const together = process.argv.includes('--together');
-const tag = [name === VOICE.name ? '' : name, speed === VOICE.speed ? '' : `s${speed}`, together ? 'together' : '']
+const together = process.argv.includes('--together'), takes = Number(arg('takes') ?? 1);
+// a Parler voice made with `--takes=3` keeps the take a speech recogniser hears closest to the words (tools/parler.py)
+const keyName = takes > 1 ? `${name}x${takes}` : name;
+const tag = [name === VOICE.name ? '' : name, speed === VOICE.speed ? '' : `s${speed}`, takes > 1 ? `x${takes}` : '', together ? 'together' : '']
   .filter(Boolean).map(p => `-${p}`).join('');
 const { VOICE: LINES, DURATION } = (await import(reel.lib)) as { VOICE: VoiceLine[]; DURATION: number };
 for (const l of LINES) if (l.say && !sameWords(l.text, l.say)) throw new Error(`"${l.say}" changes the words of "${l.text}" (F17)`);
@@ -52,9 +60,38 @@ async function speak(text: string, key: string): Promise<Float32Array> {
   return readWav(readFileSync(cached)).channels[0];
 }
 
+// A "parler-<speaker>" voice (Indic Parler-TTS, Indian English): the lines not yet cached go to tools/parler.py in one
+// batch (the model loads once, ~1 min; each line takes a while on the CPU), which writes 48 kHz clips to trim and cache.
+const speaker = parlerSpeaker(name);
+if (speaker) {
+  const todo = LINES.map(l => ({ key: voiceKey(l, keyName, speed) + '-raw', text: l.say ?? l.text, words: spokenWords(l.say ?? l.text), takes }))
+    .filter(l => !existsSync(`${dir}/${l.key}.wav`));
+  if (todo.length) {
+    const out = mkdtempSync(join(tmpdir(), 'parler-'));
+    try {
+      writeFileSync(`${out}/job.json`, JSON.stringify({ description: parlerDescription(speaker, speed), out, lines: todo }));
+      const run = spawnSync('.parler/Scripts/python', ['tools/parler.py', `${out}/job.json`], { stdio: 'inherit' });
+      if (run.status !== 0) throw new Error('tools/parler.py failed (setup: tools/parler-requirements.txt)');
+      for (const l of todo) {
+        const { channels, sampleRate } = readWav(readFileSync(`${out}/${l.key}.wav`));
+        if (sampleRate !== SR) throw new Error(`parler.py gave ${sampleRate} Hz, expected ${SR}`);
+        // Parler leaves a soft hiss before and after a line, so its edges are found against the clip's own peak
+        const peak = channels[0].reduce((m, v) => Math.max(m, Math.abs(v)), 0);
+        writeFileSync(`${dir}/${l.key}.wav`, writeWav([trimSilence(channels[0], 0.15 * peak)], SR));
+      }
+    } finally { rmSync(out, { recursive: true, force: true }); }
+  }
+}
+
 let clips: Float32Array[] = [];
-for (const line of LINES) clips.push(await speak(line.say ?? line.text, voiceKey(line, name, speed) + '-raw'));
+for (const line of LINES) clips.push(await speak(line.say ?? line.text, voiceKey(line, keyName, speed) + '-raw'));
 clips = together ? levelTogether(clips, VOICE_RMS) : clips.map(c => levelTo(c, VOICE_RMS));
+// `--fit`: a line up to 15 % too long for its time is sped up to fit, same pitch (fitTo); longer ones are still refused.
+if (process.argv.includes('--fit')) clips = clips.map((c, i) => {
+  const room = Math.min(LINES[i].until, LINES[i + 1]?.t ?? Infinity) - LINES[i].t - 0.02, y = fitTo(c, room);
+  if (y !== c) console.log(`fit: "${LINES[i].say ?? LINES[i].text}" ${((c.length / y.length - 1) * 100).toFixed(0)} % faster`);
+  return y;
+});
 
 const seconds = clips.map(c => c.length / SR);
 const spread = clips.map(c => pitchStats(c, SR).range);

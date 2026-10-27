@@ -85,15 +85,17 @@ function numberWords(n: number): string {
   if (n < 20) return ONES[n];
   if (n < 100) return TENS[Math.floor(n / 10)] + (n % 10 ? ` ${ONES[n % 10]}` : '');
   if (n < 1000) return `${ONES[Math.floor(n / 100)]} hundred` + (n % 100 ? ` ${numberWords(n % 100)}` : '');
+  if (n < 1e6) return `${numberWords(Math.floor(n / 1000))} thousand` + (n % 1000 ? ` ${numberWords(n % 1000)}` : '');
   return String(n);
 }
-const words = (s: string) => s.toLowerCase().replace(/[’‘]/g, "'")
+/** A line as it is spoken: lower case, numbers as words ("5,730" → five thousand seven hundred thirty), no punctuation. */
+export const spokenWords = (s: string) => s.toLowerCase().replace(/[’‘]/g, "'").replace(/(\d),(?=\d{3}\b)/g, '$1')
   .replace(/(\d+)\s*%/g, (_, d: string) => `${numberWords(Number(d))} percent`)
   .replace(/\d+/g, d => numberWords(Number(d)))
   .replace(/[^a-z\s]/g, ' ').split(/\s+/).filter(Boolean).join(' ');
 /** True when a spoken form says exactly the on-screen words: only punctuation, case and numbers-as-words may differ
  *  (F17: the voice never says what isn't on screen). */
-export const sameWords = (text: string, say: string) => words(text) === words(say);
+export const sameWords = (text: string, say: string) => spokenWords(text) === spokenWords(say);
 
 /** Pitch movement of a clip: the share of sounding frames that are voiced, the median pitch (Hz) and the spread between
  *  its 10th and 90th percentiles in semitones. A flat, read-out-a-label line spreads little; a lively one more.
@@ -128,4 +130,42 @@ export function levelTogether(clips: Float32Array[], rms: number): Float32Array[
   for (const c of clips) { for (const v of c) s += v * v; n += c.length; }
   const g = s > 0 ? rms / Math.sqrt(s / n) : 1;
   return clips.map(c => c.map(v => v * g));
+}
+
+// ---- Indic Parler-TTS (AI4Bharat, Apache 2.0; trial 2026-10-27): Indian English voices, run by tools/parler.py. A voice
+// named "parler-<speaker>" (e.g. parler-Thoma) goes to Parler; any other name is a Kokoro voice. Parler takes no speed:
+// the pace is asked for in words, in a description that names the speaker first (AI4Bharat's tip for a steady voice). --
+
+export const parlerSpeaker = (voice: string) => (voice.startsWith('parler-') ? voice.slice('parler-'.length) : null);
+
+export function parlerDescription(speaker: string, speed: number): string {
+  const pace = speed < 0.95 ? 'a slow' : speed > 1.05 ? 'a slightly fast' : 'a moderate';
+  return `${speaker} speaks at ${pace} pace with a clear, expressive voice, in a close-sounding recording with very clear audio and no background noise.`;
+}
+
+/** Speeds a clip up to last `seconds` without changing its pitch (WSOLA: 30 ms Hann frames at half overlap, each taken
+ *  within ±10 ms of its place where it best continues the last one). Only for small overruns: a clip that already fits,
+ *  or would need more than 15 % speed-up, comes back unchanged, so the overrun check still reports it. */
+export function fitTo(x: Float32Array, seconds: number): Float32Array {
+  const n = Math.round(seconds * SR), r = x.length / n;
+  if (r <= 1 || r > 1.15) return x;
+  const L = Math.round(0.03 * SR), hop = L / 2, tol = Math.round(0.01 * SR);
+  const w = Float32Array.from({ length: L }, (_, i) => 0.5 - 0.5 * Math.cos((2 * Math.PI * i) / L));
+  const y = new Float32Array(n), norm = new Float32Array(n), at = (i: number) => (i >= 0 && i < x.length ? x[i] : 0);
+  let prev = 0;
+  for (let k = 0; k * hop < n; k++) {
+    const place = Math.round(k * hop * r);
+    let pos = place;
+    if (k > 0) {
+      let best = -Infinity;
+      for (let d = -tol; d <= tol; d++) {
+        let c = 0;
+        for (let i = 0; i < L; i += 4) c += at(place + d + i) * at(prev + hop + i);
+        if (c > best) { best = c; pos = place + d; }
+      }
+    }
+    for (let i = 0; i < L && k * hop + i < n; i++) { y[k * hop + i] += w[i] * at(pos + i); norm[k * hop + i] += w[i]; }
+    prev = pos;
+  }
+  return y.map((v, i) => (norm[i] > 1e-3 ? v / norm[i] : v));
 }

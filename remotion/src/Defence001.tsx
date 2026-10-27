@@ -11,7 +11,7 @@ import * as THREE from 'three';
 import { WHITE as P, SOFT_UI, tint } from './lib/palette.ts';
 import { captionAt } from './lib/motion.ts';
 import {
-  END_AT, ANSWER_AT, CAPTIONS, OPTIONS, ANSWER, COVER_T, COLORS, STRAP, STAR_R, EMBLEM, WREATH_R, TRIANGLE_PTS, LADDER,
+  END_AT, ANSWER_AT, HEADER, END_WORDS, CAPTIONS, OPTIONS, ANSWER, COVER_T, COLORS, STRAP, STAR_R, EMBLEM, WREATH_R, TRIANGLE_PTS, LADDER,
   BAND, badgesAt, popAt, flashAt, triangleAt, cameraAt, ladderAt, rankNameAt, type BadgeKind, type V3,
 } from './lib/defence001.ts';
 import { Board, Caption, EndCard, PredictHeader, Theme, useFonts, type EndLine } from './board.tsx';
@@ -227,9 +227,9 @@ function RankName({ t }: { t: number }) {
 }
 
 const END: EndLine[] = [
-  { at: 0.3, size: 62, weight: 700, color: P.ink, text: '9 ranks.' },
-  { at: 0.6, size: 58, weight: 600, color: P.ink, text: 'Lieutenant to General.' },
-  { at: 1.3, size: 80, weight: 700, color: P.green, text: 'Follow for more' },
+  { ...END_WORDS[0], size: 62, weight: 700, color: P.ink },
+  { ...END_WORDS[1], size: 58, weight: 600, color: P.ink },
+  { ...END_WORDS[2], size: 80, weight: 700, color: P.green },
 ];
 
 export function Defence001({ cover = false }: { cover?: boolean }) {
@@ -241,7 +241,7 @@ export function Defence001({ cover = false }: { cover?: boolean }) {
       <AbsoluteFill>
         <Board watermark={false} />
         {/* the cover has no header: the grid's 3:4 crop cut through its second line (panel pass 2); its pill asks instead */}
-        {!cover && <PredictHeader t={t} label={'NDA  ·  ARMY RANKS'} lines={['Which rank wears this?', 'Look at the shoulder.']}
+        {!cover && <PredictHeader t={t} label={'NDA  ·  ARMY RANKS'} lines={HEADER}
           options={OPTIONS} answer={ANSWER} at={ANSWER_AT} size={54} chipW={290} />}
         <div style={{ position: 'absolute', left: 0, top: BAND.top, width: BAND.width, height: BAND.height, ...softEdges({ top: 0.03, bottom: 0.03 }) }}>
           <ThreeCanvas width={BAND.width} height={BAND.height} shadows gl={{ antialias: true, alpha: true }}>

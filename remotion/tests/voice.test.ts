@@ -112,3 +112,32 @@ test('lines share one level: the script\'s overall loudness is set, each line ke
   const all = Math.sqrt((r[0] ** 2 + r[1] ** 2) / 2);
   assert.ok(Math.abs(all - 0.1) < 1e-6);
 });
+
+test('Indic Parler-TTS: a "parler-<speaker>" voice is described by its speaker and pace, other voices are Kokoro\'s', async () => {
+  const { parlerSpeaker, parlerDescription } = await import('../src/lib/voice.ts');
+  assert.equal(parlerSpeaker('parler-Thoma'), 'Thoma');
+  assert.equal(parlerSpeaker('af_heart'), null);
+  const d = parlerDescription('Thoma', 1);
+  assert.ok(d.startsWith('Thoma speaks'), 'the speaker is named first, so the voice stays the same line to line');
+  assert.match(d, /moderate pace/);
+  assert.match(d, /no background noise/);
+  assert.match(parlerDescription('Mary', 1.15), /^Mary speaks at a slightly fast pace/);
+  assert.match(parlerDescription('Mary', 0.9), /^Mary speaks at a slow pace/);
+});
+
+test('a line a little too long is sped up to fit without changing its pitch (at most 15 % faster)', async () => {
+  const { fitTo, pitchStats } = await import('../src/lib/voice.ts');
+  const voice = (s: number) => Float32Array.from({ length: Math.round(s * SR) }, (_, i) => 0.3 * Math.sin((2 * Math.PI * 200 * i) / SR) + 0.1 * Math.sin((2 * Math.PI * 400 * i) / SR));
+  const x = voice(2.2), y = fitTo(x, 2.0);
+  assert.ok(Math.abs(y.length / SR - 2.0) < 0.01, `fits: ${y.length / SR} s`);
+  assert.ok(Math.abs(pitchStats(y, SR).median - pitchStats(x, SR).median) < 5, 'same pitch');
+  assert.equal(fitTo(x, 2.5), x, 'a line that already fits is left alone');
+  assert.equal(fitTo(x, 1.8), x, 'more than 15 % over is left for the overrun check to report');
+});
+
+test('the spoken form of a line, for checking a take by ear-to-text: numbers as words, no punctuation', async () => {
+  const { spokenWords } = await import('../src/lib/voice.ts');
+  assert.equal(spokenWords('9 ranks.'), 'nine ranks');
+  assert.equal(spokenWords('B   Brigadier'), 'b brigadier');
+  assert.equal(spokenWords('Carbon-14 halves every 5,730 years'), 'carbon fourteen halves every five thousand seven hundred thirty years');
+});

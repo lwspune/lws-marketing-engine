@@ -140,11 +140,15 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
   and the Queue shows them as previews; since 2026-10-19 they load only when scrolled to, but each is still full size.
   `queue:add` could also upload a ~100 KB JPEG preview (sharp is already a dependency) for the cards, about 8× lighter.
   Needs a `preview_path` column or a naming rule; Instagram keeps getting the full cover.
-- **Free AI voiceover on test (2026-10-20, founder-approved, L43).** Kokoro (`kokoro-js`, Apache 2.0, offline) in
-  `remotion/`: `npm run voice:<reel>` speaks the reel's `VOICE` lines (on-screen words only, framework F23),
-  `npm run mix:<reel>` makes a silent and a voiced mix, and the founder picks one. First reel: @pyqvault_ Chemistry #7.
-  If its American/British accent is the problem, try AI4Bharat's Indic Parler-TTS next. Decide after 3 voiced reels.
-  The own-voice ElevenLabs plan below stays parked until then.
+- **Free AI voiceover: dropped 2026-10-26, Indian voice tried 2026-10-27 (L43).** Kokoro (`af_heart`) on 5 @pyqvault_
+  reels: median watch 9.0 s vs 8.4 s silent, views 1,378 vs 1,510, so framework v1.33 dropped F23 (reels are silent).
+  On 27 Oct the Indian English voices of AI4Bharat's Indic Parler-TTS were tried (`node tools/voice.ts <reel>
+  --voice=parler-Mary --speed=1.1 --takes=3 --fit`; setup `remotion/tools/parler-requirements.txt`, ~4.7 GB with the
+  model): on Chemistry #7 the founder preferred **Mary** to `af_heart` and Thoma, but kept the Army ranks reel
+  **silent** after hearing it voiced. Parler stumbles on short lines (mumbles after a lone word, garbles "Colonel"),
+  hence the 3 takes picked by a speech recogniser. Nothing voiced is planned; if voice comes back, Mary is the voice.
+  To free the space: delete `remotion/.parler/` and `~/.cache/huggingface/hub/models--ai4bharat--indic-parler-tts`.
+  The own-voice ElevenLabs plan below stays parked.
 - **Hinglish AI voiceover in the founder's own voice (planned and parked 2026-10-15).** Route:
   ElevenLabs Instant Voice Clone (founder confirmed the voice in `WhatsApp Video 2026-10-01 at 8.15.40 AM.mp4`
   is theirs; that clip peaks at 0 dB and likely has music, so a clean 1–2 min phone recording is the

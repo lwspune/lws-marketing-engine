@@ -19,6 +19,7 @@
 // | 18.6–20.8  | end card                                                                    | 9 ranks. Lieutenant to General. / Follow for more |
 import { prog, tween, captionAt, type Caption, type Key } from './motion.ts';
 import { whooshesFor, type Hit, type Score } from './sfx.ts';
+import type { Shown, VoiceLine } from './voice.ts';
 
 export type V3 = [number, number, number];
 export const DURATION = 20.8, ORBIT_END = 3.0, ANSWER_AT = ORBIT_END, COVER_T = 2.7, END_AT = 18.6;
@@ -246,3 +247,30 @@ export const SOUND: Score = {
   // than the build-up)
   music: t => 1 + 0.45 * Math.max(0, 1 - Math.abs(t - FM_LANDS - 0.15) / 0.5),
 };
+
+// ---- voiced version (trial, founder 2026-10-27: Indic Parler-TTS "Mary" against the silent reel) -----------------------
+// Only words on screen while they play (F17): the question, the answer chip, each rank's name as its badge lands, the end
+// card. The captions stay silent: each is up for 1.0–1.4 s, too short to say at a natural pace.
+export const HEADER = ['Which rank wears this?', 'Look at the shoulder.'];
+export const END_WORDS = [{ at: 0.3, text: '9 ranks.' }, { at: 0.6, text: 'Lieutenant to General.' }, { at: 1.3, text: 'Follow for more' }];
+const landings = [...RANKS.map((_, i) => firstLanding(RANK_STATE + i)), FM_LANDS];
+const names = [...RANKS, FIELD_MARSHAL].map(r => r.name);
+export const SHOWN: Shown[] = [
+  { t0: 0, t1: END_AT, text: HEADER.join('\n') },
+  ...OPTIONS.map(text => ({ t0: 0, t1: END_AT, text })),
+  ...CAPTIONS,
+  ...names.map((text, i) => ({ t0: landings[i], t1: landings[i + 1] ?? END_AT, text })),
+  ...names.map((text, i) => ({ t0: i === 9 ? FM_AT + 0.3 : CLEAR.t + 0.6, t1: END_AT, text })),   // the ladder
+  ...END_WORDS.map(e => ({ t0: END_AT + e.at, t1: DURATION, text: e.text })),
+];
+// each name as its badge lands; "General" a beat late, so "Lieutenant General" (0.8 s up as the big name, but on the ladder
+// throughout) has time to finish
+const nameAt = names.map((_, i) => landings[i] + (names[i] === 'General' ? 0.3 : 0.05));
+export const VOICE: VoiceLine[] = [
+  { t: 0.15, until: ANSWER_AT, text: HEADER.join(' ') },
+  { t: ANSWER_AT + 0.15, until: TRAP.t, text: OPTIONS[ANSWER], say: 'B. Brigadier.' },
+  // Parler garbles "Colonel" said flat (a word not spoken as spelt); with "!" it says it (heard as "colonel", 2026-10-27)
+  ...names.map((text, i) => ({ t: nameAt[i], until: nameAt[i + 1] ?? END_AT, text, ...(/Colonel$/.test(text) ? { say: `${text}!` } : {}) })),
+  { t: END_AT + 0.3, until: END_AT + 1.2, text: END_WORDS[0].text },
+  { t: END_AT + 1.2, until: DURATION, text: END_WORDS[1].text },
+];
