@@ -137,3 +137,8 @@ every caption ≤ 7 words).
 - Layout: formula line vs the circle's bottom → **fixed** (moved to the top of the band); sin / cos labels hidden in the
   sweep → **taken**; cosec label vs T and cot → tested every frame; the top line runs to x = 2.1 (past C at 1.88) →
   **fixed**.
+- Built (after the review): sec and cosec labels crossed as θ passed 45° in the sweep, then "sec θ" fell onto "tan θ" at
+  30° (both caught by the overlap test) → "sec θ" past T on the clockwise side, "cosec θ" ending left of the ray.
+  Review panel (F38, two passes): the full orbit now whips round the back in ~0.6 s with the glass hidden there; the
+  touching line appears only at its beat; the cover has no header; timings moved for sound (touch ring 10.0, 62° at
+  20.0, the tan formula 7.6). Log: `review-panel.md`.

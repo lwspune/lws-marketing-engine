@@ -42,7 +42,7 @@ camera, labels, voice lines and sound in `src/lib/reel028.ts`; tests in `tests/r
 | Time | Picture | Text (voiced cut: spoken word for word) |
 |---|---|---|
 | 0 s → | the ring on glass, θ marked, three lines tagged A (green drop), B (blue touching piece), C (orange slant) | **NDA MATHS · TRIGONOMETRY · Circle of radius 1. Which line is tan θ?** chips A · B · C in the lines' colours |
-| 0–3.0 s | a 360° orbit; each line pulses with its chip | *Every trig ratio is a real line* (not spoken) |
+| 0–3.0 s | a 360° orbit (front, a fast whip round the back, front); each line pulses with its chip while it faces the camera | *Every trig ratio is a real line* (not spoken) |
 | 3.1–5.3 s | the small triangle fills; "sin θ" (green), "cos θ" (cyan) | *Height sin θ, base cos θ* |
 | 5.3–6.9 s | the triangle grows from the centre, "× 1/cos θ = 1.00 → 1.31"; its base reaches "1", its height lands on the touching line | *Stretch it until the base is 1* |
 | 7.2 s | punch-in · **B** lights; "tan θ"; "tan θ = sin θ ÷ cos θ" | *So the height is tan θ* |
@@ -53,14 +53,33 @@ camera, labels, voice lines and sound in `src/lib/reel028.ts`; tests in `tests/r
 | 18.0–24.0 s | θ swings 40° → 62° → 28° → 40°; all six lines stretch and shrink; six live readouts | *Turn θ: all six lines move* · *Six ratios. Six real lines.* |
 | 24.0–27.3 s | end card | Trig ratios are lengths on one circle. **Follow for more** |
 
-**Cover:** 3.05 s (front view after the orbit, the three tagged lines, nothing named), "Every trig ratio is a real line".
+**Cover:** 3.05 s (front view after the orbit, the three tagged lines, nothing named), no header (the grid's 3:4 crop would
+cut it); "Which line is tan θ?" at the top of the crop.
 
 ## Sound (F14–F16)
 
-A soft tap as each candidate pulses, a click as sin and then cos glow, a shimmer under the stretch, a knock on the
-answer, a bright tap where each touching line touches, a snap where each slant cuts the circle, a click per identity and
-as cot draws, a tick for every 2° of θ in the sweep (pitch following θ); whooshes on the fast zooms only. Effects ~10 dB
-under the music, peak −3.3 dB. Voiced cut: the music dips 8 dB under each spoken line.
+A soft tap as each candidate pulses, a click as sin and then cos glow, a quiet shimmer under the stretch, a knock on the
+answer (the loudest hit), a bright tap where each touching line touches, a tick as the top line starts, a snap where each
+slant cuts the circle (the second on the music's accent), a click per identity and as cot draws, a tick every 5° of θ in
+the sweep and a tap at each turnaround, a tap on the end card; whooshes on the fast zooms only. Effects 9.7 dB under the
+music, peak −3.3 dB. Voiced cut: the music dips 8 dB under each spoken line.
+
+## Review panel (F38)
+
+Pass 1 on the MP4, all four critics: Drama 4, Colour 5, Motion 5, Sound 5. Must-fixes done (log: `review-panel.md`): the
+orbit's back and edge-on views now pass in a 0.57 s whip, with each candidate pulsing while it faces the camera; the
+touching line appears only at its beat; the opening moves from frame 0; the cover keeps the question inside the 3:4
+crop; the answer is the loudest hit and the sweep ticks every 5°. **Declined** (why): a ±30° sway instead of the full
+turn (F22, the founder's rule); darker label shades (bold 40 px labels are large text, 3:1 is enough, both pass);
+ending on the figure (F20's end card); a "tan explodes" frame-0 hook (another reel, kept as an idea); taming the calm
+piano's bar accents (the shared music engine; the reel's own hits now stand over them).
+
+Pass 2 (all four): Drama 6, Colour 7, Motion 8, Sound 6; every pass-1 defect fixed. Left, and fixed after the pass (the
+house limit is two passes): the glass's back face showed as a grey plate for ~0.3 s of the whip (it now fades while
+facing away); the touch ring and the 62° turnaround now land on the calm piano's bar accents (10.0, 20.0 s); the top
+line's tick louder; the formula click moved off the thunk (7.6 s); the cover's question moved into the grid crop's empty
+top; B's answer glow stronger. **Declined:** the piano's other bar accents (the music's own rhythm, shared engine); a
+whoosh on the orbit (F22: none); keeping the figure behind the end card (F20).
 
 ## Files
 
