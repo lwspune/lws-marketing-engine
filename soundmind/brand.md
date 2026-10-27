@@ -139,6 +139,30 @@ Rules are tests (`remotion/tests/sm014.test.ts`); timeline in `src/lib/sm014.ts`
 |---|---|---|
 | sm-r014 a reminder under the stars | a dark room with a round window (fly through it) → Pune rooftops at Diwali (sky lantern, diyas, fairy lights) → her on the terrace, back to us, looking up → the Milky Way and a shooting star → moonlit clouds, sinking dark | you're doing better than you think: you got up, you kept going, breathe out, be kinder to yourself tonight |
 
+## Reels: the racing-mind reel (2026-10-27, on test, framework S23)
+
+A fourth kind of reel: a busy mind made visible, then switched off. Model: a 20 s "racing thoughts" reel (studied
+2026-10-27): a girl awake in bed while her worries pile up on screen over a steady pulse, a hard cut to near-silence, a
+view from above of her lying calm, "Breathe…".
+
+1. **Frame 0:** the first thought, alone ("Why am I still awake?"); the next one after a second.
+2. **The pile-up:** 16–22 of her own thoughts, faster and faster (gaps from ~0.9 s down to ~0.35 s), mixed sizes, in
+   Lora and in Kalam (her handwriting); each fully up at least 1.2 s, then dimming to a ghost and gone after 4.6 s; a
+   placer (`place()` in `src/lib/sm015.ts`) scatters them so none covers another. The camera creeps in. Ends on the loudest
+   one ("I need to stop overthinking.").
+3. **The cut:** every word and sound stops at once; half a second of nothing.
+4. **The quiet:** a new angle (from above), one slow breath with its words ("Breathe in…" 3.5 s, "…and out." 4 s), eyes
+   closing, one line to keep; the lamp dims.
+5. **Sound, made in code:** a heartbeat (`thunk` pairs) that quickens and grows louder, a clock, a low rumble rising, the
+   piano kept low under them (`Score.music`); silence at the cut; then the piano alone.
+
+Rules are tests (`remotion/tests/sm015.test.ts`); timeline in `src/lib/sm015.ts`, drawing in `src/SoundMind015.tsx`.
+`cd remotion && npm run music:sm015 && npm run mix:sm015 && npm run render:sm015 && npm run cover:sm015`.
+
+| Reel | Scene | Thoughts → quiet |
+|---|---|---|
+| sm-r015 the 1 a.m. thoughts | she lies awake on her side by a warm lamp, phone glowing, Diwali lights outside the window → from above, on her back | 18 thoughts (messages, career, "what will people say?", Mumma, Monday plans…) → breathe in, out, "The thoughts can wait till morning." |
+
 ## Painted 2D (2026-10-24, framework S21): the look of every new reel
 
 The founder's pick after comparing the two pause reels ("this looks much better"). Recipe, as built in

@@ -7,7 +7,7 @@ and the result. Update **Result** and **Status** after each reel's 48 h and 7 d 
 `npm run insights -- --org=lws-pune` → `analytics/pyqvault-reels-<date>.csv`). A rule moves into `pyqvault-insta.md`
 (house settings) only once it's **Confirmed** or the founder makes it one.
 
-All three logs (this one, `learnings.md`, `soundmind/learnings.md`) share **one numbering** (L1, L2, …), so a number always means one lesson. The next new lesson is **L76**,
+All three logs (this one, `learnings.md`, `soundmind/learnings.md`) share **one numbering** (L1, L2, …), so a number always means one lesson. The next new lesson is **L77**,
 in whichever log it belongs to. How reels are made is in `pyqvault-framework.md` (F-numbers); each of its points
 names the lesson that measures it.
 
