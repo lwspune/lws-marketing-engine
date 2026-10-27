@@ -1,4 +1,4 @@
-# @soundmindwithshivani post framework (v1.6, 2026-10-24)
+# @soundmindwithshivani post framework (v1.7, 2026-10-27)
 
 How every Sound Mind post is made, one numbered point at a time, in three parts: **both formats**, **carousels** and
 **reels**. Carousels and reels do different jobs (founder, 2026-10-21: "different fundamentally"): a carousel mostly
@@ -168,6 +168,23 @@ White text on dark skies, the ink on light ones, both WCAG AA. · *Why:* the fou
 outlined drawings as "kids drawing". · *Check:* the reel's palette passes `paintProblems()` in its test (sm-r012:
 `remotion/tests/sm012.test.ts`). · 📌 founder; painted vs flat measured by L67
 
+## Reels: the reminder reel
+
+**Their job and winning:** the same as the ME story's (reach people who don't follow yet; at 7 days, more people reached
+and longer watch time than the typical reel, then shares per 1,000 reached with at least 2 shares). S11 doesn't apply;
+S1, S3, S4, S5, S7, S12, S14, S16, S17 and S21 do, and S20's "in season" rule.
+
+**S22 · Reminder reels: one short line at a time over drifting painted scenes, 25–32 s.** A kind message told as 9–12
+short lines (8 words at most), one on screen at a time, mid-frame in Lora, each up long enough to read (about 3 words a
+second); the hook on frame 0 names the feeling and raises a question. Underneath, 4–5 painted scenes (S21) that drift
+and dissolve into each other, no hard cuts; the last seconds sink dark so the loop is soft. No voice: the words are on
+screen (S7). · *Why:* the founder pointed at a 34 s "let me remind you" reel (2026-10-27; studied frame by frame: 15
+lines of ~2 s over night skies, the hook inside a dark circle, music only) and asked for one like it for Sound Mind. An
+AI voice was considered and left out: on Shivani's account it would pass as her voice and needs Meta's "AI info" label,
+and on @pyqvault_ voice brought no gain (L43); her own recorded voice is welcome as a second version. · *Check:*
+`remotion/tests/sm014.test.ts` (the hook on frame 0, one line at a time, reading time, safe band and 3:4 crop, the
+dissolves, the dark ending, painted palette, words WCAG AA, no health claims). · 🧪 L75
+
 ---
 
 ## Changing the framework
@@ -189,6 +206,7 @@ outlined drawings as "kids drawing". · *Check:* the reel's palette passes `pain
 |---|---|---|---|
 | v1 | 2026-10-21 | Framework created from `brand.md`'s rules (S1–S15), each with a reason, a check and a status; "winning" set to shares per 1,000 reached at 7 days. Lessons L52–L55 measure the four points on test. | Founder: a framework like @pyqvault_'s, for Sound Mind. Nothing in it is new: it numbers what Sound Mind already does, so changes from here on have a trail. |
 | v1.1 | 2026-10-21 | S6: never "comment KEYWORD" on a post meant to spread. S16 added: captions of a few lines, opening on "you" (replaces the one-line caption); on test, L56. | Founder chose both from run 2 of the element analysis (`reels/analysis-framework.md`): keyword asks went with ordinary posts in 3 accounts; long captions with hits in 5, a "you" first line in 3. Week 43's posts keep their one-line captions and are L56's comparison (SUGGESTIONS.md → Backfill ledger). |
+| v1.7 | 2026-10-27 | S22 added: reminder reels, a third kind of reel (one short line at a time over drifting painted scenes, 25–32 s, ending dark). On test, L75; first: sm-r014 "a reminder under the stars" (Diwali night, in season). | Founder, after the study of a "let me remind you" reel: "analyse and create similar reel for soundmind"; silent-first (AI voice declined: it would pass as Shivani's). |
 | v1.6 | 2026-10-24 | S20: a pause reel's scene is in season (rain only June–September); sm-r013 "window seat" is the first indoor one, and its test refuses a rain bed. | Founder, 2026-10-24: "since it is not monsoon, we need to have different setup like chai in cozy room besides window with book in hand". |
 | v1.5 | 2026-10-24 | S21 added: Painted 2D, the look of every new reel (no black outlines, light and shadow sides, mood light, reflections, depth and soft focus); checked by `paint.ts`. S18's vivid palette still sets the colours of ME reels. L67 measures painted vs flat. | Founder, comparing pause reel #2 (painted) with #1 (flat, outlined): "this looks much better ... lets save it". |
 | v1.4 | 2026-10-23 | S20 added: pause reels, a second kind of reel (one calm everyday scene in 3–4 shots, 12–15 s, made to loop, the message on frame 0). On test, L66; first: sm-r011 "chai in the rain". | Founder, after the study of an AI-made "peace" reel: "how can such reels be made for soundmind?", then chose our own flat 2D way over AI video. |

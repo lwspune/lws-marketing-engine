@@ -116,6 +116,29 @@ Rules are tests (`remotion/tests/sm011.test.ts`); timeline in `src/lib/sm011.ts`
 | sm-r013 window seat (Painted 2D, **in season**: no rain) | a cosy room at golden hour: she reads curled in the window seat, chai on the sill, a lamp, a plant, fairy lights, the town at sunset outside | the mug and its steam in the window light; the book, a page turning in the breeze | she leans her head on the window, eyes closed, the book open on her knees |
 | sm-r012 tapri at dusk (**Painted 2D**, S21) | a street-side tea stall under a tin roof at dusk in the rain; she sits with a kulhad of chai, her scooter outside | the kettle, its steam and the bulb; the scooter's tail light in a rippling puddle | she leans back against the post, eyes closed |
 
+## Reels: the reminder reel (2026-10-27, on test, framework S22)
+
+A third kind of reel: a kind message read one short line at a time over painted scenes that drift and dissolve. Model: a
+34 s "let me remind you" reel (studied 2026-10-27): 15 lines of ~2 s each in a small white serif, night skies that blend
+into each other with no hard cuts, the hook inside a dark circle on frame 0, music only, ending dark.
+
+1. **Frame 0:** the hook names the feeling and makes people wonder ("You've been hard on yourself again."), framed by
+   something round and dark (the window); the next line promises the rest ("So here's a gentle reminder.").
+2. **One line at a time**, 8 words at most, mid-frame (inside the profile grid's 3:4 crop), Lora 54 px white with a soft
+   dark halo, balanced wrapping; each up about 3 words a second + 0.4 s; never more than half a second without words.
+3. **The scenes:** 4–5 painted scenes (S21), each its own drawing with layers at their own depth, 0.8 s dissolves, the
+   camera always drifting; something always alive (stars, diyas, a lantern, clouds); in season.
+4. **The end** sinks dark (the last 2.5 s) while the last line stays bright, so the loop back to frame 0 is soft.
+5. Silent-first: calm piano made in code plus a few soft effects. If Shivani records the lines herself, add a voiced
+   version beside the silent one; never an AI voice on her account (it would pass as hers).
+
+Rules are tests (`remotion/tests/sm014.test.ts`); timeline in `src/lib/sm014.ts`, drawing in `src/SoundMind014.tsx`.
+`cd remotion && npm run music:sm014 && npm run mix:sm014 && npm run render:sm014 && npm run cover:sm014`.
+
+| Reel | Scenes | Message |
+|---|---|---|
+| sm-r014 a reminder under the stars | a dark room with a round window (fly through it) → Pune rooftops at Diwali (sky lantern, diyas, fairy lights) → her on the terrace, back to us, looking up → the Milky Way and a shooting star → moonlit clouds, sinking dark | you're doing better than you think: you got up, you kept going, breathe out, be kinder to yourself tonight |
+
 ## Painted 2D (2026-10-24, framework S21): the look of every new reel
 
 The founder's pick after comparing the two pause reels ("this looks much better"). Recipe, as built in

@@ -151,6 +151,11 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   every new Sound Mind reel is made this way (framework S21; recipe in `soundmind/brand.md`; palette check
   `remotion/src/lib/paint.ts`). Older flat reels are a backfill candidate in `SUGGESTIONS.md`, not reworked.
 
+- **Sound Mind reminder reels (2026-10-27, founder-approved).** After studying a "let me remind you" reel (one short line
+  at a time over drifting night skies, no cuts), a third Sound Mind reel kind: 9–12 short lines over painted scenes that
+  dissolve, 25–32 s, ending dark (framework S22, lesson L75; first: sm-r014 "a reminder under the stars"). Silent-first:
+  no AI voice on Shivani's account (it would pass as hers); her own recorded voice can be a second version.
+
 - **YouTube Shorts in the publisher (2026-10-23, founder-approved).** Same approve → publish flow as Instagram, to the
   LWS Pune and Sound Mind channels first (Sound Mind with Shivani's OK), PYQ Vault once its channel exists. Google
   Cloud project `gopost-512510` ("GoPost", In production, not Google-verified: fine for our own channels). The first
