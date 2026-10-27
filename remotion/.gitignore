@@ -6,3 +6,4 @@ public/*.wav
 public/voice/
 public/demo-*.json
 public/nda-maths-025-physics.json
+.parler/
