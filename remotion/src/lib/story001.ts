@@ -4,18 +4,19 @@
 // crest. Storyboard (independently reviewed, F31): reels/nda-story-001-one-day.storyboard.md. World units: metres; x
 // right, y up, z towards the student (the building's front at z = 0, the dome's centre at z = DOME_Z). Pure functions of t.
 //
-// Beat table (from the storyboard, retimed after the stills):
+// Beat table (current timing; the storyboard's § 5 matches):
 // | time      | what moves                                                                     | words                      |
-// | 0–2.4     | pre-dawn orbit round Sudan Block, at speed from frame 0                        | ONE DAY                    |
+// | 0–2.4     | pre-dawn orbit round Sudan Block, at speed from frame 0                        | ONE DAY (to 2.9)           |
 // | 2.4–4.0   | the camera glides down the path and lands behind the student at the gate       | Today: outside the gate.   |
-// | 4.0–4.8   | slow push; he lifts his head; the dome's rim glows                             |                            |
+// | 4.0–4.8   | slow push; he lifts his head; the dome's rim glows                             | (2.95–4.8)                 |
 // | 4.8       | the sun clears the dome: its light reaches him (boom, music hit)               |                            |
-// | 5.0–5.8   | crane: tilts down, rises, turns round, ends looking straight down on him       |                            |
-// | 5.8–7.2   | his shadow becomes a cadet's (bag fades, cap, rifle); complete on the 7.2 hit  |                            |
-// | 7.2–8.2   | the cadet shadow held                                                          |                            |
-// | 8.2–8.7   | the camera turns back down behind him; the gate opens (clang)                  |                            |
-// | 8.7–9.7   | he walks through (steps 8.85, 9.2, 9.55)                                       | One day: inside.           |
-// | 9.7–12.0  | the camera rises and pans up to the dome                                       | ONE DAY · Which year…? 👇  |
+// | 4.9–6.25  | crane: rises, tilts down, turns round, ends looking straight down on him       |                            |
+// | 6.1–7.2   | his shadow becomes a cadet's (bag fades, cap, rifle); complete on the 7.2 hit  |                            |
+// | 7.2–7.8   | the cadet shadow held (the cover, 7.5)                                         |                            |
+// | 7.8–8.4   | the camera turns back down behind him                                          |                            |
+// | 8.4–9.4   | the gate opens (clang 8.4, thunk 9.2)                                          | One day: inside. (8.4–10.3)|
+// | 8.9–9.9   | he walks through (steps 9.05, 9.4, 9.75)                                       |                            |
+// | 9.9–12.0  | the camera rises and pans up to the dome                                       | Which year is yours? 👇 (10.3) · ONE DAY (10.7) |
 import { prog, clamp01, type Caption } from './motion.ts';
 import type { Hit, Score } from './sfx.ts';
 

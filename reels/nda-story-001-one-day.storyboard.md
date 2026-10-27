@@ -46,12 +46,18 @@ in code** (founder chose this over the licensed song), and **no "LWS Pune · NDA
   (eases out only, F5 + F22).
 
 ## 4. Cover
+- **Changed after review pass 1:** the cover is the finished cadet shadow at **7.5 s**, the title under his feet (both
+  critics: the strongest image). The plan below was the first one.
 - Cover at **t = 4.4 s**: behind the student at the closed gate, the dome's rim blazing gold with the sun about to clear
   it, the title added on the cover. Promises the story; the cadet twist isn't on it.
 - 3:4 grid crop (y 240–1680): the title (y ≈ 330), the dome (≈ y 450–1000), the student's head and shoulders (≈ y
   1150–1600) inside.
 
 ## 5. Beats (30 fps, **12.0 s**; music 100 BPM, a bar = 2.4 s: 2.4, 4.8, 7.2, 9.6 are downbeats)
+**Retimed after the stills** (crane 4.9–6.25, change 6.1–7.2, hold to 7.8, turn back 7.8–8.4, gate 8.4, walk 8.9–9.9, rise
+9.9–12; words in the title band, y 330): the current times are in the beat table of `remotion/src/lib/story001.ts` and in
+[nda-story-001-one-day.md](nda-story-001-one-day.md). The table below is the plan as reviewed.
+
 | time | picture: what moves | on-screen words | camera | sound | key colours |
 |---|---|---|---|---|---|
 | 0–2.4 | pre-dawn orbit round Sudan Block, windows lit, gold glow behind the dome | ONE DAY | 360° at ~90 m, 25° down, at speed from frame 0, easing out onto the front | anthem: march from frame 0 + dawn bed | indigo, gold, red dome |
