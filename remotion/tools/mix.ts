@@ -43,6 +43,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   '024': { lib: '../src/lib/reel024.ts', file: 'public/nda-maths-024-function-range' },
   '025': { lib: '../src/lib/reel025.ts', file: 'public/nda-maths-025-galton-board' },
   '027': { lib: '../src/lib/reel027.ts', file: 'public/nda-maths-027-circle-area' },
+  s001: { lib: '../src/lib/story001.ts', file: 'public/nda-story-001-one-day' },
   '018': { lib: '../src/lib/reel018.ts', file: 'public/nda-maths-018-secant-tangent' },
   '010': { lib: '../src/lib/reel010.ts', file: 'public/nda-maths-010-why-seven' },
   '011': { lib: '../src/lib/reel011.ts', file: 'public/nda-maths-011-why-det-area' },

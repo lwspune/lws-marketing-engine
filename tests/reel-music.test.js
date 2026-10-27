@@ -14,8 +14,17 @@ function loadReel() {
   return window.Reel;
 }
 
-test("the styles: the three calm ones plus four energetic ones", () => {
-  assert.deepEqual([...loadReel().MUSIC_STYLES], ["lofi", "bright", "calm", "drive", "synthwave", "trap", "cinematic"]);
+test("the styles: the three calm ones plus five energetic ones", () => {
+  assert.deepEqual([...loadReel().MUSIC_STYLES], ["lofi", "bright", "calm", "drive", "synthwave", "trap", "cinematic", "anthem"]);
+});
+
+test("anthem (2026-10-27, the defence-story reels): its drums rest inside music.calm and a snare roll leads into each hit", () => {
+  const plan = loadReel().anthemPlan({ duration: 14.4, music: { style: "anthem", hits: [7.2, 9.6], calm: [[3, 6]] } });
+  assert.equal(plan.bpm, 100);
+  assert.ok(plan.drums.every(d => d.t < 3 || d.t >= 6), "no drum inside the calm span");
+  assert.ok(plan.drums.some(d => d.t < 3) && plan.drums.some(d => d.t >= 7.2), "drums before and after it");
+  const roll = JSON.parse(JSON.stringify(plan.rolls.map(r => [r.from, r.to])));
+  assert.deepEqual(roll, [[6, 7.2], [8.4, 9.6]], "a roll fills the 1.2 s before each hit");
 });
 
 test("hitWindows: each riser runs up to 2 s into its impact, starting no earlier than 0.3 s", () => {

@@ -9,8 +9,9 @@ export const HIT_KINDS = ['click', 'crack', 'thunk', 'whump', 'tap', 'boom', 'wh
 export type HitKind = (typeof HIT_KINDS)[number];
 /** A one-off sound at time t. `pitch` scales the click / tap tone (1 = its normal pitch). */
 export type Hit = { kind: HitKind; t: number; gain: number; pitch?: number };
-/** A sound that runs from t0 to t1, as loud as level(t) (0…1): a burner's roar, a friction scrape, rain. */
-export type Bed = { kind: 'roar' | 'scrape' | 'rain'; t0: number; t1: number; level: (t: number) => number };
+/** A sound that runs from t0 to t1, as loud as level(t) (0…1): a burner's roar, a friction scrape, rain, a dawn
+ *  (wind and birds). */
+export type Bed = { kind: 'roar' | 'scrape' | 'rain' | 'dawn'; t0: number; t1: number; level: (t: number) => number };
 /** `music`: an optional level curve for the music over time (1 = as made), on top of the dips under each effect: a riser
  *  into a reveal, a hole for a burst to play alone (the review panel's sound critic, F38). */
 export type Score = { duration: number; hits: Hit[]; beds: Bed[]; music?: (t: number) => number };
@@ -159,9 +160,10 @@ function bed(b: Bed, out: Float32Array, r: () => number) {
   const k = 1 - Math.exp(-1 / (0.015 * SR));                 // level smoothing (15 ms): no clicks when it changes
   const f1 = new Biquad(), f2 = new Biquad();
   const f3 = new Biquad();
-  let lev = 0, brown = 0, grain = 0, drop = 0, dropF = 0, dropPh = 0;
+  let lev = 0, brown = 0, grain = 0, drop = 0, dropF = 0, dropPh = 0, chirpLeft = 0, chirpLen = 0, chirpF = 0, chirpTo = 0, notes = 0;
   if (b.kind === 'roar') { f1.set('low', 700, 0.7); f2.set('band', 180, 0.8); }
   if (b.kind === 'rain') { f1.set('band', 2400, 0.5); f2.set('low', 500, 0.7); f3.set('band', 6500, 0.9); }
+  if (b.kind === 'dawn') f1.set('low', 400, 0.7);
   for (let i = i0; i < i1; i++) {
     const t = i / SR, target = t < b.t1 ? Math.max(0, Math.min(1, b.level(t))) : 0;
     lev += (target - lev) * k;
@@ -178,6 +180,19 @@ function bed(b: Bed, out: Float32Array, r: () => number) {
       if (r() < 40 / SR) { drop = 0.25 + 0.75 * r(); dropF = 1500 + 3500 * r(); dropPh = 0; }
       drop *= 0.9975; dropPh += (TAU * dropF) / SR;
       out[i] += lev * (0.2 * f1.run(n) + 0.12 * f2.run(brown) + 0.06 * f3.run(n) + 0.35 * drop * Math.sin(dropPh));
+    } else if (b.kind === 'dawn') {
+      // Open air before sunrise: a low wind that swells and drops, and birds: ~2 calls a second, each 1–3 short notes
+      // sliding up or down between 2.6 and 5 kHz.
+      brown = 0.99 * brown + 0.05 * n;
+      const gust = 0.7 + 0.3 * Math.sin(t * 0.9) * Math.sin(t * 0.37 + 1);
+      let bird = 0;
+      if (chirpLeft <= 0 && notes > 0) { notes--; chirpLen = chirpLeft = Math.round((0.05 + 0.06 * r()) * SR); chirpF = 2600 + 2000 * r(); chirpTo = chirpF * (r() < 0.5 ? 1.35 : 0.75); }
+      else if (chirpLeft <= 0 && r() < 2 / SR) { notes = 1 + Math.floor(3 * r()); chirpLeft = Math.round(0.02 * SR); chirpLen = 0; }
+      if (chirpLeft > 0) {
+        chirpLeft--;
+        if (chirpLen) { const u = 1 - chirpLeft / chirpLen; dropPh += (TAU * chirpF * Math.pow(chirpTo / chirpF, u)) / SR; bird = Math.sin(Math.PI * u) ** 2 * Math.sin(dropPh); }
+      }
+      out[i] += lev * (0.12 * gust * f1.run(brown) + 0.16 * bird);
     } else {
       // Kinetic friction: gritty noise whose pitch and stick-slip grain rate rise with speed.
       f1.set('band', 500 + 900 * lev, 1.5);
@@ -220,7 +235,7 @@ const DUCK_HIT: Record<HitKind, { depth: number; hold: number }> = {
   boom: { depth: 0.4, hold: 1.2 }, 'whoosh-in': { depth: 0.25, hold: 0.55 }, 'whoosh-out': { depth: 0.2, hold: 0.55 },
   snap: { depth: 0.2, hold: 0.25 }, shimmer: { depth: 0.15, hold: 1.2 }, clang: { depth: 0.25, hold: 0.4 },
 };
-const DUCK_BED = { roar: 0.25, scrape: 0.45, rain: 0 }, FLOOR = 0.5;   // rain is the room the music plays in: no dip
+const DUCK_BED = { roar: 0.25, scrape: 0.45, rain: 0, dawn: 0 }, FLOOR = 0.5;   // rain and dawn are the room the music plays in: no dip
 
 // Under a voiceover (L43) the music drops to 0.4 (−8 dB), from just before each line until just after it.
 const VOICE_DUCK = 0.4, VOICE_LEAD = 0.12, VOICE_HOLD = 0.15;
