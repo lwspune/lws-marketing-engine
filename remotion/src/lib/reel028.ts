@@ -153,7 +153,7 @@ export const VOICE: VoiceLine[] = [
 // figure seen edge-on or from behind can't be read, so the turn holds near the front for ~0.9 s (A and B pulse), whips
 // round the back in ~0.6 s (Defence #1's fix) and settles to the front (C pulses): a tanh whip plus a small ease-out
 // drift, so it is already turning on frame 0. Then zooms with the target (the second and third values) following the
-// action: a slow push from 2.4 s on the triangle, a zoom out as it grows, a punch-in landing on the answer (the far side
+// action: a slow push from 1.9 s (after the whip) on the triangle, a zoom out as it grows, a punch-in landing on the answer (the far side
 // of the circle leaves the frame on purpose; tan θ stays whole), a fast zoom out, a slow push along the touching line, a
 // fast zoom out for the slant, a slow drift up to the top pair, a fast zoom out for the sweep.
 const DEG = Math.PI / 180, DIST = 6.4, FOV = 30;
@@ -168,7 +168,7 @@ const elevationAt = (t: number) => (20 - 15 * prog(t, 0, ORBIT_END)) * DEG;
 export const ZOOM: { start: number[]; keys: Key[] } = {
   start: [1.24, 0.15, 0.05],
   keys: [
-    { t: 2.4, dur: 2.2, to: [1.3, 0.3, 0.2] },
+    { t: 1.9, dur: 2.4, to: [1.3, 0.3, 0.2] },
     { t: STRETCH.t, dur: 1.5, to: [1.19, 0.3, 0.25] },
     { t: ANSWER_AT - 0.35, dur: 0.35, to: [1.42, 0.62, 0.35] },
     { t: TOUCH.t, dur: 0.5, to: [1.19, 0.3, 0.3] },
@@ -270,17 +270,17 @@ export const SOUND: Score = {
     { kind: 'click', t: SIN_GLOW, gain: 0.3, pitch: 1.1 },
     { kind: 'click', t: COS_GLOW, gain: 0.3, pitch: 0.95 },
     { kind: 'shimmer', t: STRETCH.t, gain: 0.2 },
-    { kind: 'thunk', t: ANSWER_AT, gain: 0.8 },
+    { kind: 'thunk', t: ANSWER_AT, gain: 0.45 },
     ...FORMULAS.map((f, i): Hit => ({ kind: 'click', t: f.t, gain: 0.3, pitch: 1 + 0.08 * i })),
     { kind: 'tap', t: PING_A, gain: 0.32, pitch: 1.6 },
-    { kind: 'snap', t: CUT1, gain: 0.38 },
+    { kind: 'snap', t: CUT1, gain: 0.3 },
     { kind: 'tap', t: TOP.t, gain: 0.22, pitch: 1.4 },
     { kind: 'tap', t: PING_B, gain: 0.32, pitch: 1.7 },
     { kind: 'click', t: COT.t, gain: 0.3, pitch: 1.2 },
-    { kind: 'snap', t: CUT2, gain: 0.38 },
+    { kind: 'snap', t: CUT2, gain: 0.3 },
     ...sweepTicks(),
     { kind: 'tap', t: END_AT + 0.2, gain: 0.3, pitch: 1.0 },
-    ...whooshesFor(ZOOM.start, ZOOM.keys).map(w => (w.kind === 'whoosh-out' ? { ...w, gain: w.gain * 0.6 } : w)),
+    ...whooshesFor(ZOOM.start, ZOOM.keys).map(w => ({ ...w, gain: w.gain * (w.kind === 'whoosh-out' ? 0.6 : 0.5) })),
   ] as Hit[]).map(h => ({ ...h, gain: h.gain * EFFECTS_GAIN })),
   beds: [],
 };
