@@ -85,6 +85,15 @@ test('timeline: answer at the end of the orbit, 9 ranks 1.1 s apart from 6.0, th
   assert.equal(badgesAt(CLEAR.t + CLEAR.dur).filter(b => b.alpha > 0.01).length, 0, 'the strap is cleared before the climb');
 });
 
+test('old badges are gone before the new ones fall (pass 2: the General star under the wreath)', () => {
+  for (const t of frames.filter(t => t > CLEAR.t)) {
+    const bs = badgesAt(t), falling = bs.filter(b => b.landed && b.alpha > 0.01 && t < b.landed);
+    if (!falling.length) continue;
+    const cur = stateAt(t), leaving = bs.filter(b => b.alpha > 0.01 && !(cur[b.id] && cur[b.id].kind === b.kind));
+    assert.equal(leaving.length, 0, `t ${t.toFixed(2)}: ${leaving.map(b => b.kind).join(', ')} still leaving`);
+  }
+});
+
 test('frame 0 moves; the cover is before the answer and shows the Brigadier\'s badge', () => {
   assert.ok(COVER_T < ANSWER_AT - 0.2);
   for (let i = 1; i < 90; i++) assert.ok(azimuthAt(i / 30) > azimuthAt((i - 1) / 30), `still at frame ${i}`);
@@ -146,9 +155,13 @@ test('labels: the ladder, the big rank name and the captions never overlap each 
   assert.deepEqual(lad.map(r => r.state), ['done', 'done', 'done', 'lit', 'next', 'next', 'next', 'next', 'next']);
   assert.ok(lad[0].y > lad[8].y, 'climbing: Lieutenant at the bottom');
   assert.equal(ladderAt(FM_AT + 0.5).length, 10);
-  assert.equal(rankNameAt(rankTimes[6] + 0.5)?.text, 'Major General');
-  assert.equal(rankNameAt(FM_AT + 0.5)?.text, 'Field Marshal');
+  assert.equal(rankNameAt(rankTimes[6] + 0.7)?.text, 'Major General');
+  assert.equal(rankNameAt(FM_AT + 0.8)?.text, 'Field Marshal');
   assert.equal(rankNameAt(rankTimes[0] - 0.1), null);
+});
+
+test('the Field Marshal captions wait for its badge to land', () => {
+  for (const c of CAPTIONS.filter(c => /Only 2|Manekshaw/.test(c.text))) assert.ok(c.t0 >= MUSIC_HITS[2] - 0.01, c.text);
 });
 
 test('captions: ≤ 7 words, ≤ 36 characters, in order, inside the frame; no claim that General is "only one"', () => {
@@ -179,7 +192,7 @@ test('sound: a tink as each badge lands, a thunk on the answer, a clank as badge
   assert.ok(SOUND.hits.some(h => h.kind === 'thunk' && Math.abs(h.t - ANSWER_AT) < 0.02));
   for (const t of [CLEAR.t, rankTimes[2], rankTimes[6], rankTimes[7], FM_AT]) assert.ok(SOUND.hits.some(h => h.kind === 'clang' && (h.pitch ?? 1) < 1.2 && Math.abs(h.t - t) < 0.05), `clank at ${t}`);
   for (const w of whooshesFor(ZOOM.start, ZOOM.keys)) assert.ok(SOUND.hits.some(h => h.kind === w.kind && Math.abs(h.t - w.t) < 1e-9));
-  assert.deepEqual(MUSIC_HITS.map(x => +x.toFixed(2)), [ANSWER_AT, 15.1, 16.2]);
+  assert.deepEqual(MUSIC_HITS.map(x => +x.toFixed(2)), [ANSWER_AT, 15.1, 16.5]);
   for (const t of MUSIC_HITS.slice(1)) assert.ok(SOUND.hits.some(h => h.kind === 'thunk' && Math.abs(h.t - t) < 0.02), `a thunk on the landing at ${t}`);
   assert.ok(SOUND.hits.every(h => h.t >= 0 && h.t < DURATION));
   void tween;

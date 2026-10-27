@@ -15,20 +15,20 @@
 // | 4.4–5.2    | the bottom-right star slides off, the bottom-left moves to the centre       | Colonel: emblem + only 2 stars     |
 // | 5.4–5.9    | all badges lift off; zoom out; the ladder fades in                          |                                    |
 // | 6.0–15.9   | a rank every 1.1 s: Lt, Capt, Maj, Lt Col, Col, Brig, Maj Gen, Lt Gen, Gen   | NDA → IMA → you start here (6.0) · The Army Chief's rank (14.8) |
-// | 15.9–18.3  | the Field Marshal; zoom out; the whole ladder                               | Only 2 ever held this rank · Manekshaw (1973) · Cariappa (1986) |
-// | 18.3–20.5  | end card                                                                    | 9 ranks. Lieutenant to General. / Follow for more |
+// | 15.9–18.6  | the Field Marshal (lands 16.5); zoom out; the ladder                              | Only 2 ever held this rank · Manekshaw (1973) · Cariappa (1986) |
+// | 18.6–20.8  | end card                                                                    | 9 ranks. Lieutenant to General. / Follow for more |
 import { prog, tween, captionAt, type Caption, type Key } from './motion.ts';
 import { whooshesFor, type Hit, type Score } from './sfx.ts';
 
 export type V3 = [number, number, number];
-export const DURATION = 20.5, ORBIT_END = 3.0, ANSWER_AT = ORBIT_END, COVER_T = 2.7, END_AT = 18.3;
+export const DURATION = 20.8, ORBIT_END = 3.0, ANSWER_AT = ORBIT_END, COVER_T = 2.7, END_AT = 18.6;
 export const OPTIONS = ['A   Colonel', 'B   Brigadier', 'C   Major Gen'], ANSWER = 1;
 type Span = { t: number; dur: number };
 export const TRAP: Span = { t: 4.4, dur: 0.8 }, CLEAR: Span = { t: 5.4, dur: 0.5 }, TRIANGLE = { t: 3.15, dur: 0.6, out: 4.4 };
 export const STEP = 1.1, rankTimes = Array.from({ length: 9 }, (_, i) => +(6.0 + STEP * i).toFixed(2)), FM_AT = 15.9;
 // the cloth darker than its paint so it renders as real Army olive under the lights, and the brass bright: ≥ 3:1 between
 // them on the rendered frame (panel pass 1: 1.2:1 hid the stars from colour-blind eyes)
-export const COLORS = { strap: '#33381a', strapEdge: '#22260f', brass: '#e8c04a', brassDark: '#8a6a12', lit: '#c2410c', gold: '#d9a514', line: '#ffffff' };
+export const COLORS = { strap: '#33381a', strapEdge: '#22260f', brass: '#e8c04a', brassDark: '#8a6a12', lit: '#a8440f', gold: '#d9a514', line: '#ffffff' };
 
 // ---- the strap and its badges -----------------------------------------------------------------------------------------
 export const STRAP = { w: 0.9, len: 2.4, t: 0.08, point: 0.3, button: { y: 0.92, r: 0.09 } };
@@ -71,7 +71,17 @@ const stateIndex = (t: number) => { let k = 0; while (k + 1 < STATES.length && S
 /** The badges the strap is heading to at t (its last change's target). */
 export const stateAt = (t: number) => STATES[stateIndex(t)].badges;
 
-const ARRIVE = 0.3, STAGGER = 0.12, DROP = 0.9;
+// New badges fall from DROP above the strap and land ARRIVE later, 0.12 s apart; when a rank also takes badges off, they
+// fly off in LEAVE and the new ones wait CLEAR_GAP (panel pass 2: the General's star was still there as the wreath fell).
+const ARRIVE = 0.3, STAGGER = 0.12, DROP = 0.5, LEAVE = 0.3, CLEAR_GAP = LEAVE;
+const kept = (prev: Record<string, Badge>, id: string, b: Badge) => !!prev[id] && prev[id].kind === b.kind;
+/** When each new badge of state k lands, in order. */
+function landingsOf(k: number) {
+  const cur = STATES[k], prev = STATES[k - 1].badges;
+  const clears = cur.leave === 'up' && Object.entries(prev).some(([id, b]) => !kept(cur.badges, id, b));
+  return Object.entries(cur.badges).filter(([id, b]) => !kept(prev, id, b))
+    .map(([id], i) => ({ id, t: cur.t + (clears ? CLEAR_GAP : 0) + ARRIVE + STAGGER * i }));
+}
 const lerp = (a: number, b: number, u: number) => a + (b - a) * u;
 export type Placed = { id: string; kind: BadgeKind; x: number; y: number; z: number; alpha: number; landed?: number };
 /** A badge's size as it lands: 1, popping to 1.08 on the landing frame and settling back in 0.2 s (weight, pass 1). */
@@ -83,18 +93,18 @@ export function badgesAt(t: number): Placed[] {
   const k = stateIndex(t), cur = STATES[k];
   if (k === 0) return Object.entries(cur.badges).map(([id, b]) => ({ id, ...b, z: 0, alpha: 1 }));
   const prev = STATES[k - 1].badges, u = Math.min(1, (t - cur.t) / cur.dur), e = prog(u, 0, 1), out: Placed[] = [];
-  let order = 0;
+  const lands = landingsOf(k);
   for (const [id, b] of Object.entries(cur.badges)) {
     const p = prev[id];
     if (p && p.kind === b.kind) { out.push({ id, kind: b.kind, x: lerp(p.x, b.x, e), y: lerp(p.y, b.y, e), z: 0, alpha: 1 }); continue; }
-    const land = cur.t + ARRIVE + STAGGER * order++, f = Math.min(1, Math.max(0, (t - (land - ARRIVE)) / ARRIVE));
+    const land = lands.find(l => l.id === id)!.t, f = Math.min(1, Math.max(0, (t - (land - ARRIVE)) / ARRIVE));
     out.push({ id, kind: b.kind, x: b.x, y: b.y, z: DROP * (1 - f * f), alpha: t < land - ARRIVE ? 0 : Math.min(1, (t - (land - ARRIVE)) / 0.08), landed: land });
   }
   for (const [id, b] of Object.entries(prev)) {
     if (cur.badges[id] && cur.badges[id].kind === b.kind) continue;
     out.push(cur.leave === 'right'
       ? { id, kind: b.kind, x: b.x + 1.2 * e, y: b.y, z: 0.1 * Math.sin(Math.PI * u), alpha: Math.max(0, 1 - Math.max(0, u - 0.5) * 2) }
-      : { id, kind: b.kind, x: b.x, y: b.y + 2.6 * u * u, z: 0.25 * u, alpha: Math.max(0, 1 - Math.max(0, u - 0.7) / 0.3) });
+      : (() => { const v = Math.min(1, (t - cur.t) / LEAVE); return { id, kind: b.kind, x: b.x, y: b.y + 2.6 * v * v, z: 0.25 * v, alpha: Math.max(0, 1 - Math.max(0, v - 0.6) / 0.4) }; })());
   }
   return out;
 }
@@ -114,7 +124,7 @@ export function strapCorners(): V3[] {
 }
 
 // ---- camera -------------------------------------------------------------------------------------------------------------
-// One full orbit from frame 0 (F22), drifting slowly round the front and whipping round the back in ~0.6 s, so the badges
+// One full orbit from frame 0 (F22) under a slow push, drifting slowly round the front and whipping round the back in ~0.6 s, so the badges
 // face the viewer for most of the 3 s (storyboard review I1; panel pass 1: the bare back held ~1.3 s); then zooms only: a
 // punch-in on the answer, out as the strap is cleared (and to the right of the ladder), a slow push through the climb, out
 // for the Field Marshal.
@@ -128,10 +138,11 @@ export const azimuthAt = (t: number) => {
 export const ZOOM: { start: number[]; keys: Key[] } = {
   start: [1.12],
   keys: [
+    { t: 0, dur: ORBIT_END, to: [1.2] },
     { t: ANSWER_AT, dur: 0.4, to: [1.28] },
     { t: CLEAR.t, dur: CLEAR.dur, to: [1] },
     { t: rankTimes[0], dur: FM_AT - rankTimes[0], to: [1.08] },
-    { t: FM_AT, dur: 0.6, to: [0.92] },
+    { t: FM_AT + 0.75, dur: 0.6, to: [0.92] },
   ],
 };
 export type Camera = { position: V3; target: V3; up: V3; fov: number; aspect: number };
@@ -154,7 +165,9 @@ export function project(p: V3, cam: Camera) {
 // ---- words: the ladder, the big rank name, the captions (one list for the picture and the tests) --------------------------
 export const LADDER = { x: 60, bottom: 1440, gap: 105, size: 40 }, NAME = { y: 1450, size: 56 }, CAPTION_Y = 1580, CAPTION_SIZE = 50;
 export type Row = { text: string; y: number; state: 'done' | 'lit' | 'next'; weight: number; marker: boolean; alpha: number };
-const currentRank = (t: number) => (t >= FM_AT ? 9 : rankTimes.filter(r => r <= t).length - 1);
+/** The rank on the strap: it changes as its first badge lands (panel pass 2: the ladder lit 0.3 s before the badge). */
+const firstLanding = (k: number) => landingsOf(k)[0].t, RANK_STATE = 3;   // STATES[RANK_STATE + i] is RANKS[i]
+const currentRank = (t: number) => (t >= firstLanding(STATES.length - 1) ? 9 : rankTimes.filter((_, i) => firstLanding(RANK_STATE + i) <= t).length - 1);
 export function ladderAt(t: number): Row[] {
   if (t < CLEAR.t) return [];
   const c = currentRank(t), fade = prog(t, CLEAR.t + 0.3, 0.3), names = [...RANKS.map(r => r.name), ...(t >= FM_AT ? [FIELD_MARSHAL.name] : [])];
@@ -166,17 +179,18 @@ export function ladderAt(t: number): Row[] {
 }
 /** The lit rank's name, big, centred under the strap, popping in as its badge lands. */
 export function rankNameAt(t: number) {
-  if (t < rankTimes[0] || t >= END_AT) return null;
-  const c = currentRank(t), at = c === 9 ? FM_AT : rankTimes[c], x = project([0, 0, 0], cameraAt(t)).x;
-  return { text: c === 9 ? FIELD_MARSHAL.name : RANKS[c].name, x, y: NAME.y, size: NAME.size, alpha: prog(t, at + 0.15, 0.2), age: t - at };
+  const c = currentRank(t);
+  if (c < 0 || t >= END_AT) return null;
+  const at = firstLanding(c === 9 ? STATES.length - 1 : RANK_STATE + c), x = project([0, 0, 0], cameraAt(t)).x;
+  return { text: c === 9 ? FIELD_MARSHAL.name : RANKS[c].name, x, y: NAME.y, size: NAME.size, alpha: prog(t, at, 0.15), age: t - at };
 }
 export const CAPTIONS: Caption[] = [
   { t0: ANSWER_AT + 0.1, t1: TRAP.t, text: 'Emblem + 3 stars in a triangle' },
   { t0: TRAP.t, t1: CLEAR.t + 0.2, text: 'Colonel: emblem + only 2 stars' },
   { t0: rankTimes[0], t1: rankTimes[1], text: 'NDA → IMA → you start here' },
   { t0: rankTimes[8], t1: FM_AT, text: 'The Army Chief\'s rank' },
-  { t0: FM_AT + 0.2, t1: FM_AT + 1.4, text: 'Only 2 ever held this rank' },
-  { t0: FM_AT + 1.4, t1: END_AT, text: 'Manekshaw (1973) · Cariappa (1986)' },
+  { t0: FM_AT + 0.6, t1: FM_AT + 1.6, text: 'Only 2 ever held this rank' },
+  { t0: FM_AT + 1.6, t1: END_AT, text: 'Manekshaw (1973) · Cariappa (1986)' },
 ].map(c => ({ ...c, size: CAPTION_SIZE, y: CAPTION_Y }));
 export function captionBox(c: Caption) {
   // the board's Caption card: 48 px side padding, 30 px top and bottom, line height 1.22
@@ -206,13 +220,11 @@ export function labelBoxes(t: number): LabelBox[] {
 // was quieter than the ladder); whooshes on the fast zooms only (F15), the zoom-outs soft. EFFECTS_GAIN (+2.3 dB) puts the
 // effects ~8 dB under the music (F16: 5–10 dB).
 const changes = () => STATES.slice(1).map((s, k) => {
-  const prev = STATES[k].badges, kept = (id: string, b: Badge) => prev[id] && prev[id].kind === b.kind;
-  const arrive = Object.entries(s.badges).filter(([id, b]) => !kept(id, b)).map((_, i) => s.t + ARRIVE + STAGGER * i);
-  const leaves = Object.entries(prev).some(([id, b]) => !(s.badges[id] && s.badges[id].kind === b.kind));
-  return { t: s.t, rank: s.rank, arrive, leaves: leaves && s.leave === 'up' };
+  const prev = STATES[k].badges, leaves = Object.entries(prev).some(([id, b]) => !kept(s.badges, id, b));
+  return { t: s.t, rank: s.rank, arrive: landingsOf(k + 1).map(l => l.t), leaves: leaves && s.leave === 'up' };
 });
 /** When General's and the Field Marshal's badges land. */
-export const GENERAL_LANDS = rankTimes[8] + ARRIVE, FM_LANDS = FM_AT + ARRIVE;
+export const GENERAL_LANDS = landingsOf(STATES.length - 2)[0].t, FM_LANDS = landingsOf(STATES.length - 1)[0].t;
 export const MUSIC_HITS = [ANSWER_AT, GENERAL_LANDS, FM_LANDS];
 const EFFECTS_GAIN = 1.3;
 export const SOUND: Score = {
@@ -220,14 +232,17 @@ export const SOUND: Score = {
   hits: ([
     { kind: 'thunk', t: ANSWER_AT, gain: 0.5 },
     ...[0, 1, 2].map((i): Hit => ({ kind: 'clang', t: ANSWER_AT + 0.15 * i, gain: 0.22, pitch: 2.4 + 0.1 * i })),
-    { kind: 'click', t: TRAP.t, gain: 0.25, pitch: 0.8 },
-    { kind: 'clang', t: TRAP.t + TRAP.dur, gain: 0.14, pitch: 2.0 },
+    { kind: 'click', t: TRAP.t, gain: 0.75, pitch: 0.8 },
+    { kind: 'clang', t: TRAP.t + TRAP.dur, gain: 0.2, pitch: 2.0 },
     ...changes().filter(c => c.leaves).map((c): Hit => ({ kind: 'clang', t: c.t, gain: 0.22, pitch: 0.9 })),
     ...changes().flatMap(c => c.arrive.map((t): Hit => ({ kind: 'clang', t, gain: 0.18, pitch: 1.7 + 0.07 * Math.max(0, c.rank) }))),
     { kind: 'thunk', t: GENERAL_LANDS, gain: 0.35 },
-    { kind: 'thunk', t: FM_LANDS, gain: 0.5 },
-    { kind: 'shimmer', t: FM_LANDS, gain: 0.45 },
+    { kind: 'thunk', t: FM_LANDS, gain: 0.65 },
+    { kind: 'shimmer', t: FM_LANDS, gain: 0.55 },
     ...whooshesFor(ZOOM.start, ZOOM.keys).map(h => ({ ...h, gain: h.kind === 'whoosh-out' ? h.gain * 0.55 : h.gain })),
   ] as Hit[]).map(h => ({ ...h, gain: h.gain * EFFECTS_GAIN })),
   beds: [],
+  // the music lifts under the Field Marshal so its accent comes through the dip (panel pass 2: the climax sat quieter
+  // than the build-up)
+  music: t => 1 + 0.45 * Math.max(0, 1 - Math.abs(t - FM_LANDS - 0.15) / 0.5),
 };

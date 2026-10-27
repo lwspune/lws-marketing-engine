@@ -240,8 +240,9 @@ export function Defence001({ cover = false }: { cover?: boolean }) {
     <Theme value={P}>
       <AbsoluteFill>
         <Board watermark={false} />
-        <PredictHeader t={t} label={'NDA  ·  ARMY RANKS'} lines={['Which rank wears this?', 'Look at the shoulder.']}
-          options={OPTIONS} answer={ANSWER} at={ANSWER_AT} size={54} chipW={290} />
+        {/* the cover has no header: the grid's 3:4 crop cut through its second line (panel pass 2); its pill asks instead */}
+        {!cover && <PredictHeader t={t} label={'NDA  ·  ARMY RANKS'} lines={['Which rank wears this?', 'Look at the shoulder.']}
+          options={OPTIONS} answer={ANSWER} at={ANSWER_AT} size={54} chipW={290} />}
         <div style={{ position: 'absolute', left: 0, top: BAND.top, width: BAND.width, height: BAND.height, ...softEdges({ top: 0.03, bottom: 0.03 }) }}>
           <ThreeCanvas width={BAND.width} height={BAND.height} shadows gl={{ antialias: true, alpha: true }}>
             <Scene t={t} />
