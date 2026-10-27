@@ -96,11 +96,14 @@ test('camera: one full orbit from frame 0, slow at the front and fast behind, fr
   assert.ok(Math.abs(azimuthAt(ORBIT_END) - 2 * Math.PI) < 1e-9);
   assert.equal(azimuthAt(ORBIT_END + 1), 2 * Math.PI);
   const speed = (t: number) => (azimuthAt(t + 1 / 30) - azimuthAt(t)) * 30;
-  assert.ok(speed(1.4) > 3 * speed(0.05), 'fast through the back half');
+  assert.ok(speed(1.5) > 8 * speed(0.05), 'whips through the back');
+  const back = frames.filter(t => t < ORBIT_END && Math.cos(azimuthAt(t)) < 0).length / 30;
+  assert.ok(back <= 0.7, `the back in view ${back.toFixed(2)} s`);
+  assert.ok(speed(0) > 0.25, 'moving on frame 0');
   let prev = cameraAt(0).position;
   for (const t of frames.slice(1)) {
     const p = cameraAt(t).position, d = Math.hypot(p[0] - prev[0], p[1] - prev[1], p[2] - prev[2]);
-    assert.ok(d < 0.85, `jump at ${t.toFixed(2)}: ${d}`);
+    assert.ok(d < (t <= ORBIT_END ? 1.1 : 0.6), `jump at ${t.toFixed(2)}: ${d}`);
     prev = p;
   }
   let z = ZOOM.start[0], ins = 0, outs = 0;
@@ -174,9 +177,10 @@ test('sound: a tink as each badge lands, a thunk on the answer, a clank as badge
   for (const t of frames) for (const b of badgesAt(t)) if (b.landed && b.landed > t - 1 / 30 && b.landed <= t) landings.push(b.landed);
   for (const l of new Set(landings)) assert.ok(tinks.some(t => Math.abs(t - l) < 0.02), `no tink at ${l.toFixed(2)}`);
   assert.ok(SOUND.hits.some(h => h.kind === 'thunk' && Math.abs(h.t - ANSWER_AT) < 0.02));
-  for (const t of [CLEAR.t, rankTimes[2], rankTimes[6], FM_AT]) assert.ok(SOUND.hits.some(h => h.kind === 'clang' && (h.pitch ?? 1) < 1.2 && Math.abs(h.t - t) < 0.05), `clank at ${t}`);
+  for (const t of [CLEAR.t, rankTimes[2], rankTimes[6], rankTimes[7], FM_AT]) assert.ok(SOUND.hits.some(h => h.kind === 'clang' && (h.pitch ?? 1) < 1.2 && Math.abs(h.t - t) < 0.05), `clank at ${t}`);
   for (const w of whooshesFor(ZOOM.start, ZOOM.keys)) assert.ok(SOUND.hits.some(h => h.kind === w.kind && Math.abs(h.t - w.t) < 1e-9));
-  assert.deepEqual(MUSIC_HITS, [ANSWER_AT, rankTimes[8]]);
+  assert.deepEqual(MUSIC_HITS.map(x => +x.toFixed(2)), [ANSWER_AT, 15.1, 16.2]);
+  for (const t of MUSIC_HITS.slice(1)) assert.ok(SOUND.hits.some(h => h.kind === 'thunk' && Math.abs(h.t - t) < 0.02), `a thunk on the landing at ${t}`);
   assert.ok(SOUND.hits.every(h => h.t >= 0 && h.t < DURATION));
   void tween;
 });

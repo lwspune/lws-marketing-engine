@@ -2,9 +2,11 @@
   "duration": 20.5,
   "music": {
     "style": "synthwave",
+    "seamless": true,
     "hits": [
       3.0,
-      14.8
+      15.1,
+      16.2
     ]
   }
 }

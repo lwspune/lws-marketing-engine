@@ -19,7 +19,6 @@
 // | 18.3–20.5  | end card                                                                    | 9 ranks. Lieutenant to General. / Follow for more |
 import { prog, tween, captionAt, type Caption, type Key } from './motion.ts';
 import { whooshesFor, type Hit, type Score } from './sfx.ts';
-import { VIVID } from './palette.ts';
 
 export type V3 = [number, number, number];
 export const DURATION = 20.5, ORBIT_END = 3.0, ANSWER_AT = ORBIT_END, COVER_T = 2.7, END_AT = 18.3;
@@ -27,7 +26,9 @@ export const OPTIONS = ['A   Colonel', 'B   Brigadier', 'C   Major Gen'], ANSWER
 type Span = { t: number; dur: number };
 export const TRAP: Span = { t: 4.4, dur: 0.8 }, CLEAR: Span = { t: 5.4, dur: 0.5 }, TRIANGLE = { t: 3.15, dur: 0.6, out: 4.4 };
 export const STEP = 1.1, rankTimes = Array.from({ length: 9 }, (_, i) => +(6.0 + STEP * i).toFixed(2)), FM_AT = 15.9;
-export const COLORS = { strap: '#4b5320', strapEdge: '#3a4119', brass: '#c9a227', brassDark: '#8a6a12', lit: VIVID.white.orange, gold: '#d9a514' };
+// the cloth darker than its paint so it renders as real Army olive under the lights, and the brass bright: ≥ 3:1 between
+// them on the rendered frame (panel pass 1: 1.2:1 hid the stars from colour-blind eyes)
+export const COLORS = { strap: '#33381a', strapEdge: '#22260f', brass: '#e8c04a', brassDark: '#8a6a12', lit: '#c2410c', gold: '#d9a514', line: '#ffffff' };
 
 // ---- the strap and its badges -----------------------------------------------------------------------------------------
 export const STRAP = { w: 0.9, len: 2.4, t: 0.08, point: 0.3, button: { y: 0.92, r: 0.09 } };
@@ -73,6 +74,8 @@ export const stateAt = (t: number) => STATES[stateIndex(t)].badges;
 const ARRIVE = 0.3, STAGGER = 0.12, DROP = 0.9;
 const lerp = (a: number, b: number, u: number) => a + (b - a) * u;
 export type Placed = { id: string; kind: BadgeKind; x: number; y: number; z: number; alpha: number; landed?: number };
+/** A badge's size as it lands: 1, popping to 1.08 on the landing frame and settling back in 0.2 s (weight, pass 1). */
+export const popAt = (b: Placed, t: number) => (b.landed && t >= b.landed ? 1 + 0.08 * Math.exp(-(t - b.landed) / 0.07) : 1);
 /** Every badge on (or flying to / off) the strap at t: its place on the strap, its height off it (z), its opacity, and
  *  for one that drops on, when it lands. New badges fall onto the strap one after another (0.12 s apart); badges a rank
  *  keeps slide to their new place; the rest lift off (or slide off to the right, in the trap). */
@@ -89,10 +92,9 @@ export function badgesAt(t: number): Placed[] {
   }
   for (const [id, b] of Object.entries(prev)) {
     if (cur.badges[id] && cur.badges[id].kind === b.kind) continue;
-    const fade = Math.max(0, 1 - 1.2 * u);
     out.push(cur.leave === 'right'
       ? { id, kind: b.kind, x: b.x + 1.2 * e, y: b.y, z: 0.1 * Math.sin(Math.PI * u), alpha: Math.max(0, 1 - Math.max(0, u - 0.5) * 2) }
-      : { id, kind: b.kind, x: b.x, y: b.y + 0.3 * e, z: DROP * e, alpha: fade });
+      : { id, kind: b.kind, x: b.x, y: b.y + 2.6 * u * u, z: 0.25 * u, alpha: Math.max(0, 1 - Math.max(0, u - 0.7) / 0.3) });
   }
   return out;
 }
@@ -112,17 +114,19 @@ export function strapCorners(): V3[] {
 }
 
 // ---- camera -------------------------------------------------------------------------------------------------------------
-// One full orbit from frame 0 (F22), slow through the front and fast round the back so the badges face the viewer for
-// most of the 3 s (review I1); then zooms only: a punch-in on the answer, out as the strap is cleared (and to the right
-// of the ladder), a slow push through the climb, out for the Field Marshal.
-const DEG = Math.PI / 180, DIST = 6.06, FOV = 30, EL = 6 * DEG, ORBIT_K = 0.8, CLIMB_X = -0.66;
+// One full orbit from frame 0 (F22), drifting slowly round the front and whipping round the back in ~0.6 s, so the badges
+// face the viewer for most of the 3 s (storyboard review I1; panel pass 1: the bare back held ~1.3 s); then zooms only: a
+// punch-in on the answer, out as the strap is cleared (and to the right of the ladder), a slow push through the climb, out
+// for the Field Marshal.
+const DEG = Math.PI / 180, DIST = 6.06, FOV = 30, EL = 6 * DEG, DRIFT = 0.15, WHIP = 6, CLIMB_X = -0.66;
 export const BAND = { top: 470, height: 1030, width: 1080 };
 export const azimuthAt = (t: number) => {
   const u = Math.min(1, Math.max(0, t / ORBIT_END));
-  return u >= 1 ? 2 * Math.PI : 2 * Math.PI * (u - (ORBIT_K * Math.sin(2 * Math.PI * u)) / (2 * Math.PI));
+  const whip = (Math.tanh(WHIP * (u - 0.5)) / Math.tanh(WHIP / 2) + 1) / 2;
+  return u >= 1 ? 2 * Math.PI : 2 * Math.PI * (DRIFT * u + (1 - DRIFT) * whip);
 };
 export const ZOOM: { start: number[]; keys: Key[] } = {
-  start: [1],
+  start: [1.12],
   keys: [
     { t: ANSWER_AT, dur: 0.4, to: [1.28] },
     { t: CLEAR.t, dur: CLEAR.dur, to: [1] },
@@ -157,7 +161,7 @@ export function ladderAt(t: number): Row[] {
   return names.map((text, i) => {
     const state = i < c ? 'done' : i === c ? 'lit' : 'next';
     return { text, y: LADDER.bottom - LADDER.gap * i, state, weight: state === 'lit' ? 800 : 600, marker: state === 'lit',
-      alpha: fade * (state === 'next' ? 0.45 : 1) * (i === 9 ? prog(t, FM_AT, 0.3) : 1) };
+      alpha: fade * (i === 9 ? prog(t, FM_AT, 0.3) : 1) };
   });
 }
 /** The lit rank's name, big, centred under the strap, popping in as its badge lands. */
@@ -171,8 +175,8 @@ export const CAPTIONS: Caption[] = [
   { t0: TRAP.t, t1: CLEAR.t + 0.2, text: 'Colonel: emblem + only 2 stars' },
   { t0: rankTimes[0], t1: rankTimes[1], text: 'NDA → IMA → you start here' },
   { t0: rankTimes[8], t1: FM_AT, text: 'The Army Chief\'s rank' },
-  { t0: FM_AT + 0.2, t1: FM_AT + 1.2, text: 'Only 2 ever held this rank' },
-  { t0: FM_AT + 1.2, t1: END_AT, text: 'Manekshaw (1973) · Cariappa (1986)' },
+  { t0: FM_AT + 0.2, t1: FM_AT + 1.4, text: 'Only 2 ever held this rank' },
+  { t0: FM_AT + 1.4, t1: END_AT, text: 'Manekshaw (1973) · Cariappa (1986)' },
 ].map(c => ({ ...c, size: CAPTION_SIZE, y: CAPTION_Y }));
 export function captionBox(c: Caption) {
   // the board's Caption card: 48 px side padding, 30 px top and bottom, line height 1.22
@@ -196,32 +200,34 @@ export function labelBoxes(t: number): LabelBox[] {
 }
 
 // ---- sound --------------------------------------------------------------------------------------------------------------
-// A thunk on the answer and a small bright tink as each of its stars flashes; a click as the trap's star slides off and
-// a tink as the other settles; a clank whenever badges come off; a tink as each new badge lands (pitch up a step per
-// rank); a shimmer for the Field Marshal; whooshes on the fast zooms only (F15). EFFECTS_GAIN (+2.3 dB) puts the effects
-// ~8 dB under the music (F16: 5–10 dB).
-const landings = () => {
-  const out: { t: number; rank: number }[] = [];
-  for (const s of STATES.slice(1)) {
-    const prev = STATES[STATES.indexOf(s) - 1].badges;
-    let order = 0;
-    for (const [id, b] of Object.entries(s.badges)) if (!(prev[id] && prev[id].kind === b.kind)) out.push({ t: s.t + ARRIVE + STAGGER * order++, rank: s.rank });
-  }
-  return out;
-};
-export const MUSIC_HITS = [ANSWER_AT, rankTimes[8]];
+// A thunk on the answer and a bright tink as each of its stars flashes; a click as the trap's star slides off and a tink as
+// the other settles; a clank whenever badges come off; a tink as each new badge lands (pitch up a step per rank); General
+// and the Field Marshal land with a thunk on a music accent, the Field Marshal with a shimmer too (panel pass 1: the climax
+// was quieter than the ladder); whooshes on the fast zooms only (F15), the zoom-outs soft. EFFECTS_GAIN (+2.3 dB) puts the
+// effects ~8 dB under the music (F16: 5–10 dB).
+const changes = () => STATES.slice(1).map((s, k) => {
+  const prev = STATES[k].badges, kept = (id: string, b: Badge) => prev[id] && prev[id].kind === b.kind;
+  const arrive = Object.entries(s.badges).filter(([id, b]) => !kept(id, b)).map((_, i) => s.t + ARRIVE + STAGGER * i);
+  const leaves = Object.entries(prev).some(([id, b]) => !(s.badges[id] && s.badges[id].kind === b.kind));
+  return { t: s.t, rank: s.rank, arrive, leaves: leaves && s.leave === 'up' };
+});
+/** When General's and the Field Marshal's badges land. */
+export const GENERAL_LANDS = rankTimes[8] + ARRIVE, FM_LANDS = FM_AT + ARRIVE;
+export const MUSIC_HITS = [ANSWER_AT, GENERAL_LANDS, FM_LANDS];
 const EFFECTS_GAIN = 1.3;
 export const SOUND: Score = {
   duration: DURATION,
-  hits: [
+  hits: ([
     { kind: 'thunk', t: ANSWER_AT, gain: 0.5 },
-    ...[0, 1, 2].map((i): Hit => ({ kind: 'clang', t: ANSWER_AT + 0.15 * i, gain: 0.1, pitch: 2.4 + 0.1 * i })),
+    ...[0, 1, 2].map((i): Hit => ({ kind: 'clang', t: ANSWER_AT + 0.15 * i, gain: 0.22, pitch: 2.4 + 0.1 * i })),
     { kind: 'click', t: TRAP.t, gain: 0.25, pitch: 0.8 },
     { kind: 'clang', t: TRAP.t + TRAP.dur, gain: 0.14, pitch: 2.0 },
-    ...[CLEAR.t, rankTimes[2], rankTimes[6], FM_AT].map((t): Hit => ({ kind: 'clang', t, gain: 0.22, pitch: 0.9 })),
-    ...landings().map((l): Hit => ({ kind: 'clang', t: l.t, gain: 0.18, pitch: 1.7 + 0.07 * Math.max(0, l.rank) })),
-    { kind: 'shimmer', t: FM_AT + 0.35, gain: 0.35 },
-    ...whooshesFor(ZOOM.start, ZOOM.keys),
-  ].map(h => ({ ...h, gain: h.gain * EFFECTS_GAIN })),
+    ...changes().filter(c => c.leaves).map((c): Hit => ({ kind: 'clang', t: c.t, gain: 0.22, pitch: 0.9 })),
+    ...changes().flatMap(c => c.arrive.map((t): Hit => ({ kind: 'clang', t, gain: 0.18, pitch: 1.7 + 0.07 * Math.max(0, c.rank) }))),
+    { kind: 'thunk', t: GENERAL_LANDS, gain: 0.35 },
+    { kind: 'thunk', t: FM_LANDS, gain: 0.5 },
+    { kind: 'shimmer', t: FM_LANDS, gain: 0.45 },
+    ...whooshesFor(ZOOM.start, ZOOM.keys).map(h => ({ ...h, gain: h.kind === 'whoosh-out' ? h.gain * 0.55 : h.gain })),
+  ] as Hit[]).map(h => ({ ...h, gain: h.gain * EFFECTS_GAIN })),
   beds: [],
 };

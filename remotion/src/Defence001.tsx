@@ -12,7 +12,7 @@ import { WHITE as P, SOFT_UI, tint } from './lib/palette.ts';
 import { captionAt } from './lib/motion.ts';
 import {
   END_AT, ANSWER_AT, CAPTIONS, OPTIONS, ANSWER, COVER_T, COLORS, STRAP, STAR_R, EMBLEM, WREATH_R, TRIANGLE_PTS, LADDER,
-  BAND, badgesAt, flashAt, triangleAt, cameraAt, ladderAt, rankNameAt, type BadgeKind, type V3,
+  BAND, badgesAt, popAt, flashAt, triangleAt, cameraAt, ladderAt, rankNameAt, type BadgeKind, type V3,
 } from './lib/defence001.ts';
 import { Board, Caption, EndCard, PredictHeader, Theme, useFonts, type EndLine } from './board.tsx';
 import { RealLight } from './realism.tsx';
@@ -104,7 +104,7 @@ function emblemParts() {
 }
 
 function Brass({ glow = 0, opacity = 1 }: { glow?: number; opacity?: number }) {
-  return <meshStandardMaterial color={COLORS.brass} metalness={0.85} roughness={0.3} emissive={COLORS.brass} emissiveIntensity={glow}
+  return <meshStandardMaterial color={COLORS.brass} metalness={0.75} roughness={0.28} emissive={COLORS.brass} emissiveIntensity={0.12 + glow}
     transparent={opacity < 1} opacity={opacity} />;
 }
 
@@ -171,7 +171,7 @@ function Badge({ kind, id, t, opacity }: { kind: BadgeKind; id: string; t: numbe
 
 function Badges({ t }: { t: number }) {
   return <>{badgesAt(t).filter(b => b.alpha > 0.01).map(b => (
-    <group key={`${b.id}-${b.kind}`} position={[b.x, b.y, FRONT + 0.004 + b.z]}>
+    <group key={`${b.id}-${b.kind}`} position={[b.x, b.y, FRONT + 0.004 + b.z]} scale={popAt(b, t)}>
       <Badge kind={b.kind} id={b.id} t={t} opacity={b.alpha} />
     </group>
   ))}</>;
@@ -187,7 +187,7 @@ function Triangle({ t }: { t: number }) {
     const len = Math.hypot(e[0] - a[0], e[1] - a[1]), ang = Math.atan2(e[1] - a[1], e[0] - a[0]);
     out.push(<mesh key={i} position={[(a[0] + e[0]) / 2, (a[1] + e[1]) / 2, FRONT + 0.004]} rotation={[0, 0, ang - Math.PI / 2]}>
       <cylinderGeometry args={[0.014, 0.014, len, 10]} />
-      <meshBasicMaterial color={COLORS.gold} transparent opacity={alpha} toneMapped={false} />
+      <meshBasicMaterial color={COLORS.line} transparent opacity={alpha} toneMapped={false} />
     </mesh>);
   }
   return <>{out}</>;
@@ -199,6 +199,8 @@ function Scene({ t }: { t: number }) {
       <CameraRig t={t} />
       <RealLight env={0.9} at={[-3, 6, 8]} span={4} />
       <pointLight position={[2.5, 1.5, 3]} intensity={6} color="#fff3d6" />
+      {/* the strap's back, seen for ~0.6 s in the orbit: lit, so it stays olive cloth, not a black slab (panel pass 1) */}
+      <directionalLight position={[1, 3, -8]} intensity={4} color="#fff6e6" />
       <Strap />
       <Badges t={t} />
       <Triangle t={t} />
@@ -209,7 +211,7 @@ function Scene({ t }: { t: number }) {
 function Ladder({ t }: { t: number }) {
   return <>{ladderAt(t).filter(r => r.alpha > 0.01).map(r => (
     <div key={r.text} style={{ position: 'absolute', left: LADDER.x, top: r.y - LADDER.size * 0.6, height: LADDER.size * 1.2, display: 'flex', alignItems: 'center',
-      opacity: r.alpha, font: `${r.weight} ${LADDER.size}px ${SOFT_UI}`, color: r.state === 'lit' ? COLORS.lit : P.ink, whiteSpace: 'pre' }}>
+      opacity: r.alpha, font: `${r.weight} ${LADDER.size}px ${SOFT_UI}`, color: r.state === 'lit' ? COLORS.lit : r.state === 'next' ? P.muted : P.ink, whiteSpace: 'pre' }}>
       {r.marker && <div style={{ position: 'absolute', left: -30, width: 16, height: 16, borderRadius: 8, background: COLORS.lit }} />}
       {r.text}
     </div>
