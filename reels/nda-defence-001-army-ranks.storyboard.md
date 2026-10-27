@@ -19,7 +19,7 @@ a reason where they don't (§ 0).
 | F12 white board | ✅ |
 | F13 music, a new style | ✅ `synthwave` (ONE DAY, queued just before, is `anthem`: never the same style twice in a row; `drive` was tried first, but its level falls ~0.5 dB a second, logged in SUGGESTIONS.md) |
 | F14–F17 sound, muted | ✅ a metal tink per badge; every idea is on screen |
-| F18 short | ✅ 20.5 s |
+| F18 short | ✅ 20.8 s |
 | F19 exam + chapter label | adapted: `NDA · ARMY RANKS`; series "Defence #1" in the caption kit |
 | F20 end card | ✅ one takeaway line + "Follow for more"; the viewer question ("Which rank will you retire as? 👇") in the caption |
 | F10 honest | ✅ every badge checked against its picture (§ 8); our own drawings, simplified |
@@ -54,7 +54,7 @@ a reason where they don't (§ 0).
 - Cover: t = 2.7 s (orbit near the front, nothing answered: the chips not lit, tested). Cover-only line "Which rank
   wears this?" at y 1590 (inside the 3:4 crop 240–1680); the strap fills the middle.
 
-## 5. Beats (30 fps, 20.5 s)
+## 5. Beats (30 fps, 20.8 s; after the review panel the Field Marshal lands at 16.5 and the end card starts at 18.6: the current times are in the beat table of `remotion/src/lib/defence001.ts` and the caption kit)
 The strap as in the pictures (§ 8): button at its pointed top, the badges below it, top to bottom.
 
 | time | picture: what moves | on-screen words (≤ 7) | camera | sound | key colours |
@@ -73,9 +73,9 @@ The strap as in the pictures (§ 8): button at its pointed top, the badges below
 | 12.6 | all off; a star lands, a crossed sword and baton below it: **Major General** | — | | clank + tink | |
 | 13.7 | the star swaps for the emblem: **Lieutenant General** | — | | tink | |
 | 14.8 | a star returns between the emblem and the sword: **General** | The Army Chief's rank | | tink + music hit | |
-| 15.9–18.3 | all off; the emblem over two crossed batons in a wreath: **Field Marshal**, a row above the ladder, lit gold; the whole ladder in view | Field Marshal: only 2 ever | pull back (zoom out) | shimmer | gold |
-| 16.9–18.3 | | Manekshaw (1973) · Cariappa (1986) | | | |
-| 18.3–20.5 | end card on the board | 9 ranks. Lieutenant to General. / Follow for more | | music to the end | |
+| 15.9–18.6 | all off; the emblem over two crossed batons in a wreath: **Field Marshal**, a row above the ladder, lit gold; the whole ladder in view | Field Marshal: only 2 ever | pull back (zoom out) | shimmer | gold |
+| 17.5–18.6 | | Manekshaw (1973) · Cariappa (1986) | | | |
+| 18.6–20.8 | end card on the board | 9 ranks. Lieutenant to General. / Follow for more | | music to the end | |
 
 New every ≤ 1.1 s from 0 to 15.9; the Field Marshal held 2.4 s (the frame most worth saving). The answer at 3.0; the
 second beat (the Colonel trap explained) at 4.4; then the climb, one new badge a second.
@@ -83,9 +83,9 @@ second beat (the Colonel trap explained) at 4.4; then the climb, one new badge a
 ## 6. Layout map (1080 × 1920)
 | zone | y range (px) | what sits there, per beat |
 |---|---|---|
-| header: label, 2 lines, chips, "comment your guess" | 96 – 440 | 0–18.3 (the nudge until 2.6) |
+| header: label, 2 lines, chips, "comment your guess" | 96 – 440 | 0–18.6 (the nudge until 2.6) |
 | picture band | 470 – 1500 | the strap ≈ 760 px tall at the front (≈ y 560–1320), centred x 540 in the opening and the punch-in; from 5.4 at x ≈ 600–900 |
-| rank name, big | ≈ 1360 – 1440 | 6.0–15.9 and 15.9–18.3: the lit rank's name, 56 px bold, centred on the strap (x ≈ 750) |
+| rank name, big | ≈ 1360 – 1440 | 6.0–15.9 and 16.5–18.6: the lit rank's name, 56 px bold, centred on the strap (x ≈ 750) |
 | ladder (from 5.4) | 520 – 1460 | 9 rows on the left, x 60–460, 105 px apart, Lieutenant at the bottom (y 1440), General at the top (y 600); Field Marshal's row at y 520 from 15.9 |
 | caption | 1540 – 1640 | one line at a time |
 | nothing important | > 1680; < 240 on the cover | |
