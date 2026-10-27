@@ -196,7 +196,7 @@
     "cover:027": "remotion still Reel027Cover ../reels/nda-maths-027-circle-area-cover.png",
     "music:028": "node ../reels/tools/music.mjs music/nda-maths-028-trig-lines.json public/nda-maths-028-trig-lines.wav",
     "voice:028": "node tools/voice.ts 028",
-    "mix:028": "node tools/mix.ts 028 && node tools/mix.ts 028 --voice",
+    "mix:028": "node tools/mix.ts 028 --headroom=0.5 && node tools/mix.ts 028 --voice --headroom=0.5",
     "render:028": "remotion render Reel028 ../reels/nda-maths-028-trig-lines.mp4",
     "render:028v": "remotion render Reel028Voice ../reels/nda-maths-028-trig-lines-voice.mp4",
     "render:028:yt": "remotion render Reel028 ../reels/nda-maths-028-trig-lines-yt.mp4 --props=props/youtube.json",

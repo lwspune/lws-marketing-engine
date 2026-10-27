@@ -69,7 +69,12 @@ if (voiceArg) {
   voice = { track: readWav(readFileSync(`${v}.wav`)).channels[0], spans: JSON.parse(readFileSync(`${v}.json`, 'utf8')).spans };
   out = `${reel.file}-voice${tag}-mix.wav`;
 }
-const { left, right, peak, scale } = mixWithMusic(music.channels, SOUND, 7, voice);
+const mixed = mixWithMusic(music.channels, SOUND, 7, voice), { left, right, scale } = mixed;
+// `--headroom=0.5` (dB): a mix whose limited peaks overshoot −3 dB once encoded to AAC (reel 028's voiced cut: −2.9 dB)
+// is turned down by that much as a whole, so the MP4 keeps the house peak.
+const headroom = 10 ** (-Number(process.argv.find(a => a.startsWith('--headroom='))?.split('=')[1] ?? 0) / 20);
+for (const ch of [left, right]) for (let i = 0; i < ch.length; i++) ch[i] *= headroom;
+const peak = mixed.peak * headroom;
 writeFileSync(out, writeWav([left, right], SR));
 
 const db = (v: number) => (20 * Math.log10(Math.max(v, 1e-9))).toFixed(1);
