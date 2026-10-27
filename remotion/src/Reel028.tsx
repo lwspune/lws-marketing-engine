@@ -14,15 +14,16 @@ import { captionAt, prog } from './lib/motion.ts';
 import type { Platform } from './lib/platform.ts';
 import {
   END_AT, ANSWER_AT, CAPTIONS, OPTIONS, ANSWER, OPTION_LINES, PULSES, COVER_T, COLORS, HEADER, BAND, FORMULA_Y, FORMULA_SIZE,
-  ARC_C, SWEEP_START, PINGS, CUTS, END_LINES, END_AT_LINE, figure, thetaAt, segmentsAt, slabAt, cameraAt, labelsAt, labelBox,
+  ARC_C, SWEEP_START, PINGS, CUTS, END_LINES, END_AT_LINE, figure, thetaAt, segmentsAt, slabAt, cameraAt, glassAlphaAt, labelsAt, labelBox,
   type Segment, type V3,
 } from './lib/reel028.ts';
 import { Board, Caption, EndCard, PredictHeader, Theme, hand, useFonts, type EndLine } from './board.tsx';
 import { RealLight } from './realism.tsx';
 import { softEdges } from './shapes.tsx';
 
-// the cover has no header: the profile grid's 3:4 crop (y 240–1680) would cut it through the question (review panel)
-const COVER = { text: 'Which line is tan θ?', y: 1590, size: 72 };
+// the cover has no header: the profile grid's 3:4 crop (y 240–1680) would cut it through the question; the question
+// sits in the crop's empty top instead (review panel, passes 1 and 2)
+const COVER = { text: 'Which line is tan θ?', y: 400, size: 72 };
 // lines sit just in front of the glass, each family on its own depth so overlapping rods never flicker
 const DEPTH: Record<string, number> = { radius: 0.02, ray: 0.012, touchRight: 0.01, touchTop: 0.01, base: 0.024, height: 0.032, sin: 0.03,
   cos: 0.034, tan: 0.03, sec: 0.028, cot: 0.03, cosec: 0.028 };
@@ -90,7 +91,7 @@ function Scene({ t }: { t: number }) {
       <mesh position={[0.1, 0.1, -0.05]} rotation={[Math.PI / 2, 0, 0]} receiveShadow>
         <cylinderGeometry args={[1.32, 1.32, 0.05, 96]} />
         {/* light and see-through: from behind (the orbit's whip) it must not read as a grey plate */}
-        <meshPhysicalMaterial color="#f4f7fc" roughness={0.15} metalness={0} transparent opacity={0.3} clearcoat={1} depthWrite={false} />
+        <meshPhysicalMaterial color="#f4f7fc" roughness={0.15} metalness={0} transparent opacity={glassAlphaAt(t)} clearcoat={1} depthWrite={false} />
       </mesh>
       <mesh castShadow><torusGeometry args={[1, 0.024, 20, 200]} />
         <meshStandardMaterial color={COLORS.circle} roughness={0.3} metalness={0.15} /></mesh>

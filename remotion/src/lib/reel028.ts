@@ -14,11 +14,11 @@
 // | 3.1–5.3    | tags fade, B and C dim; the sin–cos triangle fills; sin, then cos glow   | Height sin θ, base cos θ                 |
 // | 5.3–6.9    | the triangle grows from O by 1/cos θ; its height lands on x = 1          | Stretch it until the base is 1           |
 // | 7.2        | B lights; punch-in; "tan θ = sin θ ÷ cos θ"                              | So the height is tan θ                   |
-// | 8.9–11.4   | the touching line x = 1 brightens and runs long; a ring where it touches | Tangent means touching. It touches here. |
+// | 8.9–11.4   | the touching line x = 1 brightens and runs long; a ring where it touches (10.0) | Tangent means touching. It touches here. |
 // | 11.4–13.8  | the slant lights orange, a flash where it cuts the circle; 1 + tan² = sec²| Secant means cutting. It cuts through.   |
 // | 13.8–15.2  | the line touching the top draws; a ring where it touches                 | Same trick at the top                    |
 // | 15.2–18.0  | the ray reaches it: cot (violet), θ again at the top, cosec (pink, its cut on the music's accent 16.8) | Cot θ touches. Cosec θ cuts. |
-// | 18.0–24.0  | θ sweeps 40° → 62° → 28° → 40°; six live readouts                        | Turn θ: all six lines move · Six ratios… |
+// | 18.0–24.0  | θ sweeps 40° → 62° (20.0) → 28° (22.6) → 40°; six live readouts         | Turn θ: all six lines move · Six ratios… |
 // | 24.0–27.3  | end card (its first two lines voiced)                                    |                                          |
 import { clamp01, prog, tween, type Caption, type Key } from './motion.ts';
 import { whooshesFor, type Hit, type Score } from './sfx.ts';
@@ -49,16 +49,16 @@ const lane = (p: V2, th: number, side: number): V2 => [p[0] + side * LANE * Math
 type Span = { t: number; dur: number };
 export const PULSES = [0.05, 0.5, 1.9], TAGS_OUT = 3.1, DIM: Span = { t: 3.1, dur: 0.4 }, SLAB_IN: Span = { t: 3.2, dur: 0.4 };
 export const SIN_GLOW = 3.45, COS_GLOW = 3.9, STRETCH: Span = { t: 5.3, dur: 1.6 }, SIN_BACK = 7.6, COS_BACK = 8.9;
-export const TOUCH: Span = { t: 8.9, dur: 0.7 }, PING_A = 9.6, SEC: Span = { t: 11.4, dur: 0.4 }, CUT1 = 11.9;
+export const TOUCH: Span = { t: 8.9, dur: 0.7 }, PING_A = 10.0, SEC: Span = { t: 11.4, dur: 0.4 }, CUT1 = 11.9;
 export const TOP: Span = { t: 13.8, dur: 0.8 }, PING_B = 14.7, RAY: Span = { t: 15.2, dur: 0.3 }, COT: Span = { t: 15.4, dur: 0.4 };
 export const ARC_C = 15.8, COSEC: Span = { t: 16.3, dur: 0.4 }, CUT2 = 16.8, SWEEP_START = 18.0;
 export const FORMULAS = [
-  { t: 7.4, text: 'tan θ = sin θ ÷ cos θ' },
+  { t: 7.6, text: 'tan θ = sin θ ÷ cos θ' },
   { t: 12.6, text: '1 + tan²θ = sec²θ' },
   { t: 17.2, text: '1 + cot²θ = cosec²θ' },
 ];
 
-const THETA_KEYS: Key[] = [{ t: 18.4, dur: 1.8, to: [62] }, { t: 20.4, dur: 2.2, to: [28] }, { t: 22.8, dur: 1.0, to: [THETA0] }];
+const THETA_KEYS: Key[] = [{ t: 18.4, dur: 1.6, to: [62] }, { t: 20.4, dur: 2.2, to: [28] }, { t: 22.8, dur: 1.0, to: [THETA0] }];
 export const thetaAt = (t: number) => tween(t, [THETA0], THETA_KEYS)[0];
 /** The stretch: the triangle's scale about O, 1 → 1/cos θ. */
 export const kAt = (t: number) => 1 + (1 / Math.cos(rad(THETA0)) - 1) * prog(t, STRETCH.t, STRETCH.dur);
@@ -91,7 +91,7 @@ export function segmentsAt(t: number): Segment[] {
     { id: 'sin', a: f.P, b: f.M, color: COLORS.sin, alpha: prog(t, SIN_BACK, 0.4), glow: 0, r: 0.028 },
     { id: 'cos', a: [0, 0], b: f.M, color: COLORS.cos, alpha: prog(t, COS_BACK, 0.4), glow: 0, r: 0.028 },
     { id: 'tan', a: f.A, b: f.T, color: COLORS.tan, alpha: Math.max(dim, prog(t, ANSWER_AT, 0.3)),
-      glow: 0.6 * flash(t, PULSES[1]) + 0.7 * flash(t, ANSWER_AT), r: 0.03 },
+      glow: 0.6 * flash(t, PULSES[1]) + 1.3 * flash(t, ANSWER_AT, 0.8), r: 0.03 },
     { id: 'sec', a: lane([0, 0], th, 1), b: lane(f.T, th, 1), color: COLORS.sec, alpha: Math.max(dim, prog(t, SEC.t, SEC.dur)),
       glow: 0.6 * flash(t, PULSES[2]) + 0.6 * flash(t, SEC.t), r: 0.028 },
     { id: 'cot', a: f.B, b: f.C, color: COLORS.cot, alpha: prog(t, COT.t, COT.dur), glow: 0.6 * flash(t, COT.t), r: 0.03 },
@@ -165,6 +165,9 @@ export function azimuthAt(t: number) {
   return 2 * Math.PI * (WHIP.drift * (1 - (1 - u) ** 2) + (1 - WHIP.drift) * whip);
 }
 const elevationAt = (t: number) => (20 - 15 * prog(t, 0, ORBIT_END)) * DEG;
+/** The glass under the figure: seen from behind (the whip) it reads as a grey plate, so it fades out as it turns away
+ *  and back in as it faces the camera again (review panel, pass 2). */
+export const glassAlphaAt = (t: number) => 0.3 * clamp01((Math.cos(azimuthAt(t)) - 0.2) / 0.6);
 export const ZOOM: { start: number[]; keys: Key[] } = {
   start: [1.24, 0.15, 0.05],
   keys: [
@@ -249,7 +252,8 @@ export function labelBox(l: Label, cam: Camera) {
 // as cot draws, a tick every 5° of θ in the sweep (pitch following θ) and a tap at each turnaround, a tap as the end card
 // arrives; whooshes on the fast zooms only, the zoom-outs softer. Review panel, pass 1 (Sound): EFFECTS_GAIN 2.5 puts
 // the effects ~9 dB under the music (F16: 5–10 dB); the calm piano's bar accents stay (the shared engine), so the
-// reel's own hits are made to stand over them.
+// reel's own hits are made to stand over them; pass 2 put the touch ring (10.0) and the 62° turnaround (20.0) on two of
+// those bar accents, so the accents land on events.
 const EFFECTS_GAIN = 2.5;
 function sweepTicks(): Hit[] {
   const out: Hit[] = [], dt = 1 / 240;
@@ -274,13 +278,13 @@ export const SOUND: Score = {
     ...FORMULAS.map((f, i): Hit => ({ kind: 'click', t: f.t, gain: 0.3, pitch: 1 + 0.08 * i })),
     { kind: 'tap', t: PING_A, gain: 0.32, pitch: 1.6 },
     { kind: 'snap', t: CUT1, gain: 0.3 },
-    { kind: 'tap', t: TOP.t, gain: 0.22, pitch: 1.4 },
+    { kind: 'tap', t: TOP.t, gain: 0.4, pitch: 1.4 },
     { kind: 'tap', t: PING_B, gain: 0.32, pitch: 1.7 },
     { kind: 'click', t: COT.t, gain: 0.3, pitch: 1.2 },
-    { kind: 'snap', t: CUT2, gain: 0.3 },
+    { kind: 'snap', t: CUT2, gain: 0.36 },
     ...sweepTicks(),
     { kind: 'tap', t: END_AT + 0.2, gain: 0.3, pitch: 1.0 },
-    ...whooshesFor(ZOOM.start, ZOOM.keys).map(w => ({ ...w, gain: w.gain * (w.kind === 'whoosh-out' ? 0.6 : 0.5) })),
+    ...whooshesFor(ZOOM.start, ZOOM.keys).map(w => ({ ...w, gain: w.gain * (w.kind === 'whoosh-out' ? 0.45 : 0.5) })),
   ] as Hit[]).map(h => ({ ...h, gain: h.gain * EFFECTS_GAIN })),
   beds: [],
 };

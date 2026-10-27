@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   DURATION, END_AT, ANSWER_AT, COVER_T, ORBIT_END, CAPTIONS, SHOWN, VOICE, MUSIC_HITS, OPTIONS, ANSWER, OPTION_LINES, COLORS,
   PULSES, STRETCH, SWEEP_START, CUTS, TOP, THETA0, LANE, figure, thetaAt, kAt, segmentsAt, readoutsAt, formulaAt, FORMULAS,
-  cameraAt, project, azimuthAt, ZOOM, BAND, ppu, labelsAt, labelBox, SOUND, type Segment,
+  cameraAt, project, azimuthAt, glassAlphaAt, ZOOM, BAND, ppu, labelsAt, labelBox, SOUND, type Segment,
 } from '../src/lib/reel028.ts';
 import { tween } from '../src/lib/motion.ts';
 import { whooshesFor } from '../src/lib/sfx.ts';
@@ -66,6 +66,9 @@ test('frame 0 has everything to answer: the circle, θ, the three candidate line
   // the back of the turn is a whip: from 50° to 310° in under 0.7 s
   const side = frames.filter(t => t < ORBIT_END && Math.cos(azimuthAt(t)) < Math.cos(50 * Math.PI / 180));
   assert.ok(side.length && side.at(-1)! - side[0] < 0.7, `side-on for ${side.at(-1)! - side[0]} s`);
+  // the glass fades while it faces away: no grey plate in the whip (review panel, pass 2)
+  for (const t of frames.filter(t => t < ORBIT_END)) if (Math.cos(azimuthAt(t)) < 0) assert.ok(glassAlphaAt(t) < 0.01, `glass at ${t.toFixed(2)}`);
+  assert.ok(glassAlphaAt(0) > 0.25 && glassAlphaAt(ORBIT_END) > 0.25);
   // moving from frame 0: the orbit already turning
   assert.ok(azimuthAt(1 / 30) > 0.4 * Math.PI / 180);
 });
