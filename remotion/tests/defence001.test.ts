@@ -197,3 +197,17 @@ test('sound: a tink as each badge lands, a thunk on the answer, a clank as badge
   assert.ok(SOUND.hits.every(h => h.t >= 0 && h.t < DURATION));
   void tween;
 });
+
+test('voiced version (trial, founder 2026-10-27): every line is on screen while it plays, one at a time, the names as they land', async () => {
+  const { VOICE, SHOWN, HEADER, END_WORDS } = await import('../src/lib/defence001.ts');
+  const { onScreen } = await import('../src/lib/voice.ts');
+  assert.ok(VOICE[0].t <= 0.2 && VOICE[0].text === HEADER.join(' '), 'the question is read from frame 0');
+  for (const line of VOICE) assert.ok(onScreen(line, SHOWN), `"${line.text}" at ${line.t} isn't on screen`);
+  for (let k = 1; k < VOICE.length; k++) assert.ok(VOICE[k].t >= VOICE[k - 1].until, `"${VOICE[k].text}" overlaps the line before`);
+  assert.ok(VOICE.at(-1)!.until <= DURATION);
+  for (const r of [...RANKS, FIELD_MARSHAL]) {
+    const line = VOICE.find(l => l.text === r.name)!, at = rankNameAt(line.t);
+    assert.ok(line && at && at.text === r.name, `${r.name} is said while its name is the big one`);
+  }
+  assert.deepEqual(END_WORDS.map(e => e.text), ['9 ranks.', 'Lieutenant to General.', 'Follow for more']);
+});
