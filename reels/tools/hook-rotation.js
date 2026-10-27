@@ -21,7 +21,7 @@ const HEADING = "## Hook queue";
 
 // The sound kit the hook's sound comes from (founder, 2026-10-22; F14: only what's on screen): the hits and beds of
 // remotion/src/lib/sfx.ts (a test keeps this list equal to it), a music hit (F13), or silent for a slow move.
-const SOUNDS = ["click", "crack", "thunk", "whump", "tap", "boom", "whoosh-in", "whoosh-out", "snap", "shimmer", "clang", "roar", "scrape", "rain",
+const SOUNDS = ["click", "crack", "thunk", "whump", "tap", "boom", "whoosh-in", "whoosh-out", "snap", "shimmer", "clang", "roar", "scrape", "rain", "dawn",
   "music hit", "silent"];
 
 /** Each sound named in a cell like "snap ×8 (rising) + shimmer", or the names that aren't in the kit. */
