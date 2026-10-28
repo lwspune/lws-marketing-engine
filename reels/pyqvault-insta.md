@@ -12,8 +12,7 @@ that used to be here moved there unchanged (plus the 2026-10-20 points); change 
 
 - **Series:** "Physics, visualised #N" and "Chemistry, visualised #N", alternating P → C (framework F19). **No maths**
   from 2026-10-20 (founder: physics and chemistry have the better visual content); maths ideas go to @lws.pune. Maths #1
-  and #2 were posted before that and stay up. **Exception (founder, 2026-10-28):** Maths, visualised #4, the six trig
-  ratios as real lines (`pv-maths-004-trig-lines`), a copy of a studied 59× reel made for @lws.pune and sent here instead.
+  and #2 were posted before that and stay up.
 - Physics #1 and Chemistry #1 were made with the old engine (`api.jar`, `api.sphere3d`) and stay as they are.
 
 ## Caption

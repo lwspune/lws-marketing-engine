@@ -4,7 +4,7 @@
 pyqvault", an exception to @pyqvault_'s no-maths rule) · **Series:** Maths, visualised #4 · **Syllabus:** Class 11
 Trigonometric Functions (CBSE, JEE Main, MHT-CET) · Made in `remotion/` as composition `Reel028` (built first for @lws.pune) · **Proven idea:**
 remake-backlog W32, @official_neutron_and_numbers' "This Visualisation Makes Trig Click"
-([reel](https://www.instagram.com/reel/DblFTtdhlhn/), 1.1M views, 59× their typical reel; lesson L76).
+([reel](https://www.instagram.com/reel/DblFTtdhlhn/), 1.1M views, 59× their typical reel; lesson L77).
 
 **How this version was made (founder, 2026-10-28):** the first version followed our house framework (3D, white board,
 a question first, captions read aloud) and the founder rejected it: "i asked you to make exact one" and "hardly any
