@@ -12,7 +12,7 @@ that used to be here moved there unchanged (plus the 2026-10-20 points); change 
 
 - **Series:** "Physics, visualised #N", "Chemistry, visualised #N" and "Maths, visualised #N", rotating P → C → M
   (framework F19). Maths was off from 2026-10-20 and is back from 2026-10-28 (founder: "defence related reels will go to
-  lwspune. maths, physics, chem will go to pyqvault"); the count carries on from Maths #2. NDA maths and defence reels
+  lwspune. maths, physics, chem will go to pyqvault"); the count carries on from Maths #3. NDA maths and defence reels
   stay on @lws.pune; no topic goes to both.
 - **Imitate proven reels** (framework F40, founder 2026-10-28: "let's not reinvent the wheel"): reels copy a ≥ 3× reel
   from another creator as closely as possible, in our own look, words and sound.

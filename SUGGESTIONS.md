@@ -185,10 +185,10 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 ### @pyqvault_'s open ideas were made for the old rules (logged 2026-10-28; not decided)
 Learning (framework F40, founder 2026-10-28): imitate proven reels as closely as possible. The idea list has 84 open ideas;
 many are notes or founder concepts with no proof, and remakes were scored on rules (the A/B/C guess, F4) a copied reel may
-not have, so a proven imitation scores low (M1 and M2: 41/100 against 55–76 for the rest) and F21 would never pick it.
+not have, so a proven imitation scores low (M10 and M11: 41/100 against 55–76 for the rest) and F21 would never pick it.
 Options: proven reels go first in the pick (topic-scores `nextPicks`), the unproven ideas become a reserve, the archived
-Maths ideas (Archive → "Maths, visualised: closed") are re-checked for proof. **Needs a 360 and the founder's OK** before
-reordering or parking shipped rows; until then imitations are queued by hand (as M1 was).
+Maths ideas (Archive → "Maths, visualised: closed") are re-checked for proof (M5–M9 there are ≥ 15× remakes). **Needs a 360 and the founder's OK** before
+reordering or parking shipped rows; until then imitations are queued by hand (as M10 was).
 
 ### @learnara.math as a counted account in the element analysis (logged 2026-10-28; waiting)
 Its export (2026-10-28) has 21 reels and only 2 hits (≥ 3×), too few for the 15-vs-15 method. Re-export about

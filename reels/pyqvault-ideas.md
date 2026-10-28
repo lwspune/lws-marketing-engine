@@ -206,8 +206,8 @@ numbers were already known (a hindsight risk); everything else was scored before
 | C47 | C | A laser beam shows in milky water, not salt water (Tyndall) | 3.0 | 2 | 2 | 1 | 0 | 2 | 62 |  | founder | ✓ |
 | C48 | C | s and p orbitals blend into methane's four equal bonds (hybridisation) | – | 2 | 1 | 1 | 0 | 0 | 34 | ⏸ parked: fails F29 (the blend shows; why it happens needs words; founder's list, 2026-10-21) | founder | ✗ |
 | C49 | C | Add NaOH to four metal salts: white, blue, green and rust-brown clouds (hydroxide precipitates) | – | 3 | 2 | 1 | 0 | 0 | 52 | ✅ made 2026-10-26 (`pv-chem-013-hydroxides`, Chemistry #13; F39 share test 3 of 3, L64) | own | ✓ |
-| M1 | M | Chain rule as gears: turn x, u turns, y turns faster; the ratios multiply | 7.1 | 2 | 0 | 0 | 1 | 1 | 41 | ⏭ queued 2026-10-28 (Hook queue; F40 imitation) | remake | ✓ |
-| M2 | M | One radian: the radius bends onto the rim, and 2π of them go round | 4.8 | 2 | 0 | 0 | 1 | 1 | 41 |  | remake | ✓ |
+| M10 | M | Chain rule as gears: turn x, u turns, y turns faster; the ratios multiply | 7.1 | 2 | 0 | 0 | 1 | 1 | 41 | ⏭ queued 2026-10-28 (Hook queue; F40 imitation) | remake | ✓ |
+| M11 | M | One radian: the radius bends onto the rim, and 2π of them go round | 4.8 | 2 | 0 | 0 | 1 | 1 | 41 |  | remake | ✓ |
 
 ## Idea cards
 
@@ -765,12 +765,12 @@ each answer is re-derived in its reel's tests (F10).
 - **Second hook:** Why do headlights show beams in fog? → the same scattering
 - **From:** founder · surface chemistry (colloids) · @sciencevisualised "light through different liquid mixtures" 52.8k (3.0×)
 
-### M1 · Chain rule as gears
+### M10 · Chain rule as gears
 - **Frame 0:** Chain Rule, three gears already meshing (the source's title opening, F40) → dy/dx = dy/du · du/dx
 - **Without words:** a crank turns the big x gear → it drives the smaller u gear, which turns faster → u drives the tiny y gear, faster still → turn counters show y's turns per x turn = the two gear ratios multiplied
 - **From:** remake (F40 imitation) · @learnara.math "Chain Rule visualized!" 86k (7.1×) [link](https://www.instagram.com/reel/DerDcmpqINc/)
 
-### M2 · One radian
+### M11 · One radian
 - **Frame 0:** Radians, a circle with its radius drawn (the source's title opening, F40) → one radian = the angle whose arc equals the radius
 - **Without words:** a radius lifts off the circle → it bends onto the rim as an arc of the same length → the angle it spans lights up → copies of the radius go on round the rim: a bit over six fit, 2π
 - **From:** remake (F40 imitation) · @learnara.math "Radians visualized!" 58k (4.8×) [link](https://www.instagram.com/reel/Deg7KZnqT5J/)
@@ -793,7 +793,7 @@ hook and opening go in the Hook column of `pyqvault-learnings.md`).
 |---|---|---|---|---|---|---|---|
 | 7 | P7 | Same start, two endings | Assemble (suit-up) | two drones build themselves part by part (frame, arms, rotors spinning up, ropes clipping on), then pull identical boxes; one box lifts off, the other scrapes along the ground | snap ×8 (one per part locking, pitch rising) + shimmer (both drones complete) | yes | "Same drone, same box, same pull. One lifts it, one drags it. Why?" A rope angle · B rope length · C luck; the drones assemble behind the question, then fly. Loop: both drones land back on the start |
 | 8 | C15 | Ending first | Ending first | a copper-coated rod standing in clear liquid; the picture starts running backwards and the liquid turns blue | shimmer (the rewind) | yes | Open on a copper-coated rod in clear liquid: "This was zinc in blue liquid. Where did the blue go?" then rewind (time-lapse, labelled). Loop: ends where it began |
-| 9 | M1 | Copied | Copied | three meshing gears already turning, a crank on the big x gear, the small y gear spinning fastest | click (gear teeth) | yes | "Chain Rule" over the three gears, as the source opens (exact shots set from the study copy). Loop: the gears come back to their start marks |
+| 9 | M10 | Copied | Copied | three meshing gears already turning, a crank on the big x gear, the small y gear spinning fastest | click (gear teeth) | yes | "Chain Rule" over the three gears, as the source opens (exact shots set from the study copy). Loop: the gears come back to their start marks |
 
 ## Concept sweep
 
