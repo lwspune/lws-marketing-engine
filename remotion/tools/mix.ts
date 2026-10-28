@@ -44,6 +44,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   '024': { lib: '../src/lib/reel024.ts', file: 'public/nda-maths-024-function-range' },
   '025': { lib: '../src/lib/reel025.ts', file: 'public/nda-maths-025-galton-board' },
   '027': { lib: '../src/lib/reel027.ts', file: 'public/nda-maths-027-circle-area' },
+  '028': { lib: '../src/lib/reel028.ts', file: 'public/nda-maths-028-trig-lines' },
   s001: { lib: '../src/lib/story001.ts', file: 'public/nda-story-001-one-day' },
   '018': { lib: '../src/lib/reel018.ts', file: 'public/nda-maths-018-secant-tangent' },
   '010': { lib: '../src/lib/reel010.ts', file: 'public/nda-maths-010-why-seven' },
@@ -70,7 +71,12 @@ if (voiceArg) {
   voice = { track: readWav(readFileSync(`${v}.wav`)).channels[0], spans: JSON.parse(readFileSync(`${v}.json`, 'utf8')).spans };
   out = `${reel.file}-voice${tag}-mix.wav`;
 }
-const { left, right, peak, scale } = mixWithMusic(music.channels, SOUND, 7, voice);
+const mixed = mixWithMusic(music.channels, SOUND, 7, voice), { left, right, scale } = mixed;
+// `--headroom=0.5` (dB): a mix whose limited peaks overshoot −3 dB once encoded to AAC (reel 028's voiced cut: −2.9 dB)
+// is turned down by that much as a whole, so the MP4 keeps the house peak.
+const headroom = 10 ** (-Number(process.argv.find(a => a.startsWith('--headroom='))?.split('=')[1] ?? 0) / 20);
+for (const ch of [left, right]) for (let i = 0; i < ch.length; i++) ch[i] *= headroom;
+const peak = mixed.peak * headroom;
 writeFileSync(out, writeWav([left, right], SR));
 
 const db = (v: number) => (20 * Math.log10(Math.max(v, 1e-9))).toFixed(1);

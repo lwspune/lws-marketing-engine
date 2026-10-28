@@ -8,6 +8,10 @@ tricks, "math sounds like", parametric art).
 **Rules for a remake**
 - We take the **idea** (the topic and the kind of picture), never their video, frames, text, voice or music.
   Everything is drawn in our own look (Remotion template `remotion/src/PvPhysics004.tsx`, framework F11) with our own words.
+- **Except when the founder links a reel and asks for "one like this" / "the exact one"** (2026-10-28, after 028's
+  framework version was rejected): then copy its look, step order, titles, effects and pace; change only what is wrong
+  (ask once); a continuous narration in our own words, never their audio or script; check by setting our frames next to
+  theirs at matching steps, not with the F31/F38 reviewers (memory `feedback-copy-means-copy`).
 - **Better, not the same:** add what theirs lacks, usually the *why* (a live count, a second picture, a graph that
   morphs) and each handle's framework (`pyqvault-framework.md` / `lwspune-framework.md`).
 - The caption kit (`<reel>.md`) names the source reel in a "Proven idea" line, so the numbers can be compared later.
@@ -56,6 +60,7 @@ but a good concept isn't blocked for lack of one. Only NDA maths chapters go on 
 | W29 | Why is a circle's area πr²? (rings unroll into a triangle) | @proof.motion 126k (30×) [link](https://www.instagram.com/reel/DcVE1Qxqr7-/), their #1 by far | the circle's rings peel off and lie flat, stacking into a triangle: base 2πr, height r, so ½ · 2πr · r; the same sum of rings is ∫₀ʳ 2πx dx | Area by integration (NDA 2019 (I) Q76: perimeter ÷ area = 2/r) | ✅ made 2026-10-26 (reel 027) |
 | W30 | Why is C ÷ d always π? (roll the circle out) | @proof.motion 6.8k (1.6×) [link](https://www.instagram.com/reel/DcfgBdrqz6k/) | a wheel rolls one turn; its track is laid off in diameters: 3 and a bit, for every size of wheel | Trigonometry (radian measure) | |
 | W31 | Why a² + b² = c² (the squares pour across) | @proof.motion 10.2k (2.5×) [link](https://www.instagram.com/reel/Dc233N3AwPu/) | squares on the sides as 3D tanks; the two small ones pour into the big one and fill it exactly | Coordinate geometry (distance formula) | |
+| W32 | The six trig ratios are six real lines on one circle | @official_neutron_and_numbers 1.1M (59×) [link](https://www.instagram.com/reel/DblFTtdhlhn/), studied 2026-10-27 (theirs draws cot and cosec wrongly) | stretch the sin–cos triangle until its base is 1: its height is tan θ, on the line that touches the circle; the slant that cuts it is sec θ; the same at the top gives cot θ, cosec θ; Pythagoras gives both identities; θ sweeps and all six change live | Trigonometry (NDA 2024 (II) Q79: lim θ→π/2 (sec θ − tan θ) = 0) | ✅ made 2026-10-28 for **@pyqvault_** (`pv-maths-004-trig-lines`, Maths, visualised #4; founder: a copy of their reel, posted on PYQ Vault) |
 
 ## @lws.pune topic scores
 
@@ -91,6 +96,7 @@ and the goal of the reel is reach. `node reels/tools/topic-scores.js lwspune` ch
 | W29 | M | Why is a circle's area πr²? The rings unroll and stack into a triangle: ½ · 2πr · r | 30.4 | 3 | 2 | 1 | 1 | 9 | ✅ made 2026-10-26 (`nda-maths-027-circle-area`) |
 | W30 | M | Why is C ÷ d always π? A wheel rolls one turn and its track is measured in diameters | 1.64 | 2 | 2 | 1 | 1 | 6 | |
 | W31 | M | Why a² + b² = c²: the squares on the two short sides pour into the big one | 2.47 | 2 | 1 | 1 | 1 | 5 | |
+| W32 | M | The six trig ratios are six real lines: stretch the sin–cos triangle to base 1 and its height is tan θ, on the touching line | 59 | 3 | 2 | 1 | 0 | 8 | ✅ made 2026-10-28 for @pyqvault_ (`pv-maths-004-trig-lines`) |
 
 Anchors as above. The soda can's question: "Which can uses the least metal: tall, wide or equal?" (h = 2r); the
 probability square's: "Two coins: both heads?" (½ · ½). The reference sheets (W9, W13) score low on purpose: no
