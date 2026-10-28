@@ -1,7 +1,8 @@
-# @lws.pune · 028, Why? #16: the six trig ratios are six real lines
+# @pyqvault_ · Maths, visualised #4: the six trig ratios are six real lines
 
-**Handle:** @lws.pune (project `pyq-vault`, post slug `nda-maths-028-trig-lines`) · **Series:** Why? #16 · **NDA link:**
-NDA 2024 (II) Maths Q79 (question id `50d1cbe8-cb76-4d0d-86a0-7e61869cd845`), named in the caption · **Proven idea:**
+**Handle:** @pyqvault_ (project `pyqvault-insta`, post slug `pv-maths-004-trig-lines`; founder 2026-10-28: "this will go to
+pyqvault", an exception to @pyqvault_'s no-maths rule) · **Series:** Maths, visualised #4 · **Syllabus:** Class 11
+Trigonometric Functions (CBSE, JEE Main, MHT-CET) · Made in `remotion/` as composition `Reel028` (built first for @lws.pune) · **Proven idea:**
 remake-backlog W32, @official_neutron_and_numbers' "This Visualisation Makes Trig Click"
 ([reel](https://www.instagram.com/reel/DblFTtdhlhn/), 1.1M views, 59× their typical reel; lesson L76).
 
@@ -25,7 +26,6 @@ narration, beats, words and sound in `src/lib/reel028.ts`; tests in `tests/reel0
   centre to it is **sec θ** and cuts the circle (secant = to cut). Right angle at (1, 0): 1 + tan²θ = sec²θ.
 - The line touching the top, y = 1, cut off by the same ray at (cot θ, 1), is **cot θ**; the slant to it is **cosec θ**.
 - Tests check every line's length against its ratio, and that T and C lie on θ's own ray.
-- **NDA 2024 (II) Q79:** lim θ→π/2 (sec θ − tan θ) = (1 − sin θ)/cos θ = cos θ/(1 + sin θ) → **0 → (B)**.
 
 ## Narration (af_heart) and steps
 
@@ -50,11 +50,11 @@ narration, beats, words and sound in `src/lib/reel028.ts`; tests in `tests/reel0
 
 ## Files
 
-- `nda-maths-028-trig-lines-voice.mp4` · `nda-maths-028-trig-lines-cover.png`
+- `pv-maths-004-trig-lines-voice.mp4` · `pv-maths-004-trig-lines-cover.png` · `pv-maths-004-strip.png`
 - Re-make: `cd remotion && npm test && npm run music:028 && npm run voice:028 && npm run mix:028 && npm run render:028v &&
   npm run cover:028`
 
 ## Before you post (founder)
 
 - [ ] Watch it once on the phone with sound
-- [ ] Queue it in GoPost (Instagram, Facebook, LWS Pune YouTube)
+- [ ] Queue it in GoPost (project PYQ Vault: @pyqvault_ + the PYQ Vault Facebook Page; never the LWS Pune YouTube channel)
