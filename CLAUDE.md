@@ -138,8 +138,8 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   maths MCQ at 07:30 IST ("Reply A, B, C or D") and its answer at 19:30. The cards never name an exam (founder: "just
   q and options"). Replies, not a quiz sticker: the API can't add stickers, and replies land in the Inbox. Made a week
   at a time in `stories/` (KaTeX in headless Edge, because the server's card maker can't set maths, and every answer
-  is re-derived first), queued with `queue:add`, approved with "Approve all stories". This is @pyqvault_'s one maths
-  format: its reels stay physics + chemistry. Runbook: `stories/README.md`.
+  is re-derived first), queued with `queue:add`, approved with "Approve all stories". Its reels are physics,
+  chemistry and, from 2026-10-28, maths again. Runbook: `stories/README.md`.
 
 - **Sound Mind pause reels (2026-10-23, founder-approved).** After studying an AI-made anime "peace" reel, the founder
   chose to make such reels our own way rather than with AI video (no "AI info" label on Shivani's brand): one calm
@@ -176,6 +176,13 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   showed no gain for (background alternation, orbit rule, voiceover, second hook, virality predictor; sound points merged),
   made every reel loop, and froze the idea score's weights: 34 points → 27. Views sit at ~1,300–1,600 whatever the rules
   (L64). **Standing rule:** every reel review also reviews the framework (its rule 5), to keep deleting and fine-tuning.
+
+- **Account split + imitate proven reels (2026-10-28, founder).** "Defence related reels will go to lwspune. Maths,
+  physics, chem will go to pyqvault. For pyqvault we will imitate top performing reels (let's not reinvent the wheel)."
+  @lws.pune keeps defence reels and NDA maths; @pyqvault_ takes Class 11–12 maths again (P → C → M), never a topic made for
+  both. @pyqvault_ reels copy a ≥ 3× reel from another creator "as closely as possible while maintaining our unique brand
+  identity": topic, picture, hook, shot order, timing and length copied; look, words, sound, tag and loop ours; never their
+  video, words, music or mascot (framework F40, lesson L77). First: @learnara.math's chain rule as gears (86k, 7.1×).
 
 ## File structure
 
@@ -220,7 +227,7 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   tools/results-sync.js  #   copies GoPost's 48 h readings (publisher `npm run results`) into pyqvault-learnings.md's
                          #   results table; the analysis routine (ending in a framework review, rule 5) is at the top of it
   tools/hook-rotation.js #   @pyqvault_ hook, opening, sound, loop per queued reel (framework F25, F27;
-                         #   pyqvault-ideas.md → Hook queue): no repeat in a row, P → C, every reel loops;
+                         #   pyqvault-ideas.md → Hook queue): no repeat in a row, P → C → M, every reel loops;
                          #   `node reels/tools/hook-rotation.js`
   analysis-framework.md  #   REEL ELEMENT ANALYSIS: which elements go with hits (top vs typical reels per account), method +
                          #   decision rule + runs; tools/element-analysis.js (+ elements.js, cover-metrics.mjs, element-report.js),

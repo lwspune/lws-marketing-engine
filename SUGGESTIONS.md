@@ -182,6 +182,18 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### @pyqvault_'s open ideas were made for the old rules (logged 2026-10-28; not decided)
+Learning (framework F40, founder 2026-10-28): imitate proven reels as closely as possible. The idea list has 84 open ideas;
+many are notes or founder concepts with no proof, and remakes were scored on rules (the A/B/C guess, F4) a copied reel may
+not have, so a proven imitation scores low (M1 and M2: 41/100 against 55–76 for the rest) and F21 would never pick it.
+Options: proven reels go first in the pick (topic-scores `nextPicks`), the unproven ideas become a reserve, the archived
+Maths ideas (Archive → "Maths, visualised: closed") are re-checked for proof. **Needs a 360 and the founder's OK** before
+reordering or parking shipped rows; until then imitations are queued by hand (as M1 was).
+
+### @learnara.math as a counted account in the element analysis (logged 2026-10-28; waiting)
+Its export (2026-10-28) has 21 reels and only 2 hits (≥ 3×), too few for the 15-vs-15 method. Re-export about
+2026-11-11; once it has ≥ 10 hits, add it to the science set (`element-analysis.js`) and run the analysis again.
+
 ### The `drive` music style fades ~0.5 dB a second (logged 2026-10-27; not decided)
 Found making Defence #1: `drive` loses ~9 dB from 1 s to 18 s (nda-maths-011: −20.1 → −29.7 dB RMS; 017: −19.4 → −27.9),
 so a reel goes quieter as it builds; synthwave, trap and cinematic hold their level. The cause is somewhere in
