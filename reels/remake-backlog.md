@@ -8,6 +8,10 @@ tricks, "math sounds like", parametric art).
 **Rules for a remake**
 - We take the **idea** (the topic and the kind of picture), never their video, frames, text, voice or music.
   Everything is drawn in our own look (Remotion template `remotion/src/PvPhysics004.tsx`, framework F11) with our own words.
+- **Except when the founder links a reel and asks for "one like this" / "the exact one"** (2026-10-28, after 028's
+  framework version was rejected): then copy its look, step order, titles, effects and pace; change only what is wrong
+  (ask once); a continuous narration in our own words, never their audio or script; check by setting our frames next to
+  theirs at matching steps, not with the F31/F38 reviewers (memory `feedback-copy-means-copy`).
 - **Better, not the same:** add what theirs lacks, usually the *why* (a live count, a second picture, a graph that
   morphs) and each handle's framework (`pyqvault-framework.md` / `lwspune-framework.md`).
 - The caption kit (`<reel>.md`) names the source reel in a "Proven idea" line, so the numbers can be compared later.
