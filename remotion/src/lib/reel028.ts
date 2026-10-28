@@ -1,290 +1,183 @@
-// @lws.pune · reel 028 (3D, predict-first): on a circle of radius 1, which line is tan θ? B, the piece of the line that
-// touches the circle at (1, 0). The sin–cos triangle (height sin θ, base cos θ) is stretched from the centre by 1/cos θ
-// until its base is 1: its height lands on that touching line and is sin θ ÷ cos θ = tan θ. The slant to it cuts the
-// circle: sec θ. The same build against the line touching the top gives cot θ and cosec θ; Pythagoras on the two big
-// triangles gives 1 + tan²θ = sec²θ and 1 + cot²θ = cosec²θ. Then θ sweeps and all six lengths change with live numbers.
-// Idea: @official_neutron_and_numbers' trig reel (59×, remake-backlog W32; theirs draws cot and cosec wrongly). NDA 2024
-// (II) Q79 (lim θ→π/2 (sec θ − tan θ) = 0) in the caption. Storyboard (independently reviewed, F31):
-// reels/nda-maths-028-trig-lines.storyboard.md. World units: the circle's radius is 1, so a length is its ratio's value;
-// x right, y up, z towards the camera; the centre O at the origin. Pure functions of t.
+// @lws.pune · reel 028, remade the founder's way (2026-10-28: "i asked you to make exact one"): the studied
+// @official_neutron_and_numbers trig reel (1.1M views, remake-backlog W32) in its own look and order: a dark starfield,
+// a glowing cyan circle, flat neon lines, one coloured title per step, and a continuous narration (our own words, Kokoro
+// af_heart, the founder's pick from two samples). The one change the founder chose: cot and cosec where they really are
+// (theirs sends cosec up-left, off θ's ray, and cot left of the y-axis). Pure functions of t; the screen is 1080 × 1920.
 //
-// Beat table (from the storyboard):
-// | time       | what moves                                                               | caption                                  |
-// | 0–3.0      | a 360° orbit: front, a whip round the back (1.0–1.6), front; A (0.05), B (0.5), C (1.9) pulse | Every trig ratio is a real line |
-// | 3.1–5.3    | tags fade, B and C dim; the sin–cos triangle fills; sin, then cos glow   | Height sin θ, base cos θ                 |
-// | 5.3–6.9    | the triangle grows from O by 1/cos θ; its height lands on x = 1          | Stretch it until the base is 1           |
-// | 7.2        | B lights; punch-in; "tan θ = sin θ ÷ cos θ"                              | So the height is tan θ                   |
-// | 8.9–11.4   | the touching line x = 1 brightens and runs long; a ring where it touches (10.0) | Tangent means touching. It touches here. |
-// | 11.4–13.8  | the slant lights orange, a flash where it cuts the circle; 1 + tan² = sec²| Secant means cutting. It cuts through.   |
-// | 13.8–15.2  | the line touching the top draws; a ring where it touches                 | Same trick at the top                    |
-// | 15.2–18.0  | the ray reaches it: cot (violet), θ again at the top, cosec (pink, its cut on the music's accent 16.8) | Cot θ touches. Cosec θ cuts. |
-// | 18.0–24.0  | θ sweeps 40° → 62° (20.0) → 28° (22.6) → 40°; six live readouts         | Turn θ: all six lines move · Six ratios… |
-// | 24.0–27.3  | end card (its first two lines voiced)                                    |                                          |
-import { clamp01, prog, tween, type Caption, type Key } from './motion.ts';
-import { whooshesFor, type Hit, type Score } from './sfx.ts';
-import { VIVID, WHITE } from './palette.ts';
-import type { Shown, VoiceLine } from './voice.ts';
+// Beats (each starts with its narration line):
+// | beat    | narration                                                            | picture                                   |
+// | circle  | Take a circle with radius one.                                       | the circle draws, "1"; a ripple            |
+// | angle   | Pick an angle, theta, and draw its radius.                           | the radius swings up to θ = 40°; a glow    |
+// | sin     | Now drop a line straight down … That height is sine theta.           | green drop, "sin θ"                        |
+// | cos     | And the shadow it leaves along the x-axis? That's cosine theta.      | yellow base, "cos θ"                       |
+// | why     | But why is tangent called tangent?                                   | title only                                 |
+// | touch   | Draw a line that just touches the circle on the right, going up.     | thin cyan line up x = 1                    |
+// | extend  | Now stretch the radius until it meets that line.                     | the radius runs on to T                    |
+// | tan     | That piece is the real tangent. It touches the circle.               | a glitch, then cyan A → T, "tan θ"         |
+// | sec     | And the slanted line … That's the secant. It cuts right through …    | orange O → T, a flash where it cuts        |
+// | cut     | Secant literally means to cut.                                       | "Secant = To Cut"                          |
+// | top     | Now do the same at the top. Draw a line that touches the top …       | an arrow at the top; y = 1; ray to C       |
+// | cot     | That top piece is cotangent.                                         | purple B → C, "cot θ"                      |
+// | csc     | And the slanted line from the centre to it is cosecant.              | pink O → C, a flash where it cuts          |
+// | six     | Six ratios. Six real lines.                                          | the six lines glow in turn                 |
+import { prog, tween, type Key } from './motion.ts';
+import type { Hit, Score } from './sfx.ts';
+import type { VoiceLine } from './voice.ts';
 
 export type V2 = [number, number];
-export type V3 = [number, number, number];
-export const DURATION = 27.3, END_AT = 24.0, ANSWER_AT = 7.2, ORBIT_END = 3.0, COVER_T = 3.05, THETA0 = 40;
-export const HEADER = ['Circle of radius 1.', 'Which line is tan θ?'];
-export const OPTIONS = ['A', 'B', 'C'], ANSWER = 1, OPTION_LINES = ['sin', 'tan', 'sec'] as const;
-const V = VIVID.white;
-export const COLORS = { sin: V.green, cos: V.cyan, tan: V.blue, sec: V.orange, cot: V.violet, cosec: V.pink, circle: WHITE.muted, ray: WHITE.muted };
-export type Name = 'sin' | 'cos' | 'tan' | 'sec' | 'cot' | 'cosec';
+export const THETA_DEG = 40, CENTRE: V2 = [540, 860], R = 330;
+export const COLORS = { circle: '#22d3ee', radius: '#f1f5f9', sin: '#34d399', cos: '#facc15', tan: '#22d3ee', sec: '#fb923c',
+  cot: '#c084fc', csc: '#f472b6', axis: '#64748b', bg: '#070b16', arrow: '#fbbf24' };
 
-// ---- the figure ------------------------------------------------------------------------------------------------------
 const rad = (d: number) => (d * Math.PI) / 180;
-/** Every point of the figure at θ (degrees): P on the circle, M under it, A = (1, 0) and B = (0, 1) where the two
- *  touching lines touch, T and C where θ's ray meets them. */
+/** Every point of the figure at θ (degrees), in units of the radius: P on the circle, M under it, A = (1, 0) and
+ *  B = (0, 1) where the two touching lines touch, T and C where θ's ray meets them. */
 export function figure(deg: number) {
   const th = rad(deg), c = Math.cos(th), s = Math.sin(th);
   return { th, c, s, P: [c, s] as V2, M: [c, 0] as V2, A: [1, 0] as V2, T: [1, s / c] as V2, B: [0, 1] as V2, C: [c / s, 1] as V2 };
 }
-/** sec and cosec lie on the same ray, so each gets its own lane beside it: sec on the clockwise side, cosec the other. */
-export const LANE = 0.035;
-const lane = (p: V2, th: number, side: number): V2 => [p[0] + side * LANE * Math.sin(th), p[1] - side * LANE * Math.cos(th)];
+export const toScreen = (p: V2): V2 => [CENTRE[0] + R * p[0], CENTRE[1] - R * p[1]];
 
-type Span = { t: number; dur: number };
-export const PULSES = [0.05, 0.5, 1.9], TAGS_OUT = 3.1, DIM: Span = { t: 3.1, dur: 0.4 }, SLAB_IN: Span = { t: 3.2, dur: 0.4 };
-export const SIN_GLOW = 3.45, COS_GLOW = 3.9, STRETCH: Span = { t: 5.3, dur: 1.6 }, SIN_BACK = 7.6, COS_BACK = 8.9;
-export const TOUCH: Span = { t: 8.9, dur: 0.7 }, PING_A = 10.0, SEC: Span = { t: 11.4, dur: 0.4 }, CUT1 = 11.9;
-export const TOP: Span = { t: 13.8, dur: 0.8 }, PING_B = 14.7, RAY: Span = { t: 15.2, dur: 0.3 }, COT: Span = { t: 15.4, dur: 0.4 };
-export const ARC_C = 15.8, COSEC: Span = { t: 16.3, dur: 0.4 }, CUT2 = 16.8, SWEEP_START = 18.0;
-export const FORMULAS = [
-  { t: 7.6, text: 'tan θ = sin θ ÷ cos θ' },
-  { t: 12.6, text: '1 + tan²θ = sec²θ' },
-  { t: 17.2, text: '1 + cot²θ = cosec²θ' },
+// ---- the narration and its beats --------------------------------------------------------------------------------------
+// Start times leave each af_heart line (measured 2026-10-28) ~0.15 s spare and ~0.25 s of breath before the next.
+const LINES: [string, string, number][] = [
+  ['circle', 'Take a circle with radius one.', 0.3],
+  ['angle', 'Pick an angle, theta, and draw its radius.', 2.55],
+  ['sin', 'Now drop a line straight down to the x-axis. That height is sine theta.', 5.45],
+  ['cos', 'And the shadow it leaves along the x-axis? That\'s cosine theta.', 10.04],
+  ['why', 'But why is tangent called tangent?', 14.08],
+  ['touch', 'Draw a line that just touches the circle on the right, going straight up.', 16.24],
+  ['extend', 'Now stretch the radius until it meets that line.', 20.06],
+  ['tan', 'That piece is the real tangent. It touches the circle.', 23.06],
+  ['sec', 'And the slanted line from the centre up to it? That\'s the secant. It cuts right through the circle.', 26.64],
+  ['cut', 'Secant literally means to cut.', 32.17],
+  ['top', 'Now do the same at the top. Draw a line that touches the top of the circle, and stretch the radius to meet it.', 34.31],
+  ['cot', 'That top piece is cotangent.', 40.74],
+  ['csc', 'And the slanted line from the centre to it is cosecant.', 42.8],
+  ['six', 'Six ratios. Six real lines.', 46.11],
 ];
+export const DURATION = 49.6, COVER_T = 49.0;
+export const BEATS = LINES.map(([id, , t]) => ({ id, t }));
+const at = (id: string) => BEATS.find(b => b.id === id)!.t;
+export const VOICE: VoiceLine[] = LINES.map(([, text, t], i) => ({ t, until: i + 1 < LINES.length ? LINES[i + 1][2] : DURATION - 0.3, text }));
+export const beatAt = (t: number) => [...BEATS].reverse().find(b => t >= b.t)?.id ?? null;
 
-const THETA_KEYS: Key[] = [{ t: 18.4, dur: 1.6, to: [62] }, { t: 20.4, dur: 2.2, to: [28] }, { t: 22.8, dur: 1.0, to: [THETA0] }];
-export const thetaAt = (t: number) => tween(t, [THETA0], THETA_KEYS)[0];
-/** The stretch: the triangle's scale about O, 1 → 1/cos θ. */
-export const kAt = (t: number) => 1 + (1 / Math.cos(rad(THETA0)) - 1) * prog(t, STRETCH.t, STRETCH.dur);
-
-const hex = (c: string) => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
-export const mix = (a: string, b: string, p: number) =>
-  '#' + hex(a).map((v, i) => Math.round(v + (hex(b)[i] - v) * clamp01(p)).toString(16).padStart(2, '0')).join('');
-/** A short swell of light: 0 → 1 → 0 over 0.6 s from t0. */
-const flash = (t: number, t0: number, d = 0.6) => (t >= t0 && t < t0 + d ? Math.sin((Math.PI * (t - t0)) / d) : 0);
-
-export type Segment = { id: string; a: V2; b: V2; color: string; alpha: number; glow: number; r: number };
-/** Every line of the figure at t: one list for the picture and the tests. */
-export function segmentsAt(t: number): Segment[] {
-  const f = figure(thetaAt(t)), { th } = f, k = kAt(t);
-  const dim = (0.2 + 0.8 * (1 - prog(t, DIM.t, DIM.dur)));
-  const far: V2 = Math.hypot(...f.T) > Math.hypot(...f.C) ? f.T : f.C;
-  const touchUp = 0.25 + 0.05 * prog(t, TOUCH.t, TOUCH.dur), topEnd = Math.max(f.C[0] + 0.3, 1.3), topP = prog(t, TOP.t, TOP.dur);
-  const answered = prog(t, ANSWER_AT - 0.3, 0.3);
-  const segs: Segment[] = [
-    { id: 'radius', a: [0, 0], b: f.P, color: COLORS.circle, alpha: 1, glow: 0, r: 0.014 },
-    { id: 'ray', a: f.P, b: far, color: COLORS.ray, alpha: 0.7 * prog(t, RAY.t, RAY.dur), glow: 0, r: 0.009 },
-    { id: 'touchRight', a: [1, -touchUp], b: [1, f.T[1] + touchUp], color: COLORS.tan,
-      alpha: 0.65 * prog(t, TOUCH.t, TOUCH.dur), glow: 0.4 * flash(t, PING_A - 0.3), r: 0.011 },
-    { id: 'touchTop', a: [-0.3, 1], b: [-0.3 + (topEnd + 0.3) * topP, 1], color: COLORS.cot, alpha: 0.65 * Math.min(1, topP * 5), glow: 0.4 * flash(t, PING_B - 0.3), r: 0.011 },
-    // the triangle's sides while it is the sin–cos triangle and while it grows; the height becomes tan θ
-    { id: 'base', a: [0, 0], b: [k * f.c, 0], color: mix(COLORS.cos, COLORS.circle, prog(t, STRETCH.t, STRETCH.dur)),
-      alpha: prog(t, COS_GLOW, 0.3), glow: 0.5 * flash(t, COS_GLOW), r: 0.028 },
-    { id: 'height', a: [k * f.c, 0], b: [k * f.c, k * f.s], color: mix(COLORS.sin, COLORS.tan, answered),
-      alpha: 1 - prog(t, ANSWER_AT + 0.1, 0.3), glow: 0.6 * flash(t, PULSES[0]) + 0.5 * flash(t, SIN_GLOW), r: 0.03 },
-    { id: 'sin', a: f.P, b: f.M, color: COLORS.sin, alpha: prog(t, SIN_BACK, 0.4), glow: 0, r: 0.028 },
-    { id: 'cos', a: [0, 0], b: f.M, color: COLORS.cos, alpha: prog(t, COS_BACK, 0.4), glow: 0, r: 0.028 },
-    { id: 'tan', a: f.A, b: f.T, color: COLORS.tan, alpha: Math.max(dim, prog(t, ANSWER_AT, 0.3)),
-      glow: 0.6 * flash(t, PULSES[1]) + 1.3 * flash(t, ANSWER_AT, 0.8), r: 0.03 },
-    { id: 'sec', a: lane([0, 0], th, 1), b: lane(f.T, th, 1), color: COLORS.sec, alpha: Math.max(dim, prog(t, SEC.t, SEC.dur)),
-      glow: 0.6 * flash(t, PULSES[2]) + 0.6 * flash(t, SEC.t), r: 0.028 },
-    { id: 'cot', a: f.B, b: f.C, color: COLORS.cot, alpha: prog(t, COT.t, COT.dur), glow: 0.6 * flash(t, COT.t), r: 0.03 },
-    { id: 'cosec', a: lane([0, 0], th, -1), b: lane(f.C, th, -1), color: COLORS.cosec, alpha: prog(t, COSEC.t, COSEC.dur),
-      glow: 0.6 * flash(t, COSEC.t), r: 0.028 },
-  ];
-  return segs;
-}
-/** The triangle as a thin slab: the sin–cos triangle, then (grown) O-A-T; gone in the sweep. */
-export function slabAt(t: number) {
-  const f = figure(THETA0), k = kAt(t);
-  return { pts: [[0, 0], [k * f.c, 0], [k * f.c, k * f.s]] as V2[],
-    alpha: (0.2 * prog(t, SLAB_IN.t, SLAB_IN.dur) + 0.12 * flash(t, FORMULAS[1].t - 0.2, 1.2)) * (1 - prog(t, SWEEP_START - 0.3, 0.4)) };
-}
-/** Where the two touching lines touch (rings that pulse) and where the slants cut the circle (flashes). */
-export const PINGS = [{ at: 'A' as const, t: PING_A }, { at: 'B' as const, t: PING_B }];
-export const CUTS = [CUT1, CUT2];
-
-export function formulaAt(t: number) {
-  if (t < FORMULAS[0].t || t >= SWEEP_START) return null;
-  return [...FORMULAS].reverse().find(f => t >= f.t)!.text;
-}
-/** The six live readouts in the sweep: the true value at this frame's θ, to 2 dp. */
-export function readoutsAt(t: number) {
-  if (t < SWEEP_START) return null;
-  const { th } = figure(thetaAt(t)), v = [Math.sin(th), Math.cos(th), Math.tan(th), 1 / Math.cos(th), 1 / Math.tan(th), 1 / Math.sin(th)];
-  return (['sin', 'cos', 'tan', 'sec', 'cot', 'cosec'] as Name[]).map((name, i) => ({ name, value: v[i].toFixed(2) }));
-}
-
-export const CAPTIONS: Caption[] = [
-  { t0: 0, t1: ORBIT_END, text: 'Every trig ratio is a real line' },
-  { t0: 3.1, t1: STRETCH.t, text: 'Height sin θ, base cos θ' },
-  { t0: STRETCH.t, t1: ANSWER_AT, text: 'Stretch it until the base is 1' },
-  { t0: ANSWER_AT, t1: TOUCH.t, text: 'So the height is tan θ' },
-  { t0: TOUCH.t, t1: SEC.t, text: 'Tangent means touching. It touches here.' },
-  { t0: SEC.t, t1: TOP.t, text: 'Secant means cutting. It cuts through.' },
-  { t0: TOP.t, t1: RAY.t, text: 'Same trick at the top' },
-  { t0: RAY.t, t1: SWEEP_START, text: 'Cot θ touches. Cosec θ cuts.' },
-  { t0: SWEEP_START, t1: 20.6, text: 'Turn θ: all six lines move' },
-  { t0: 21.0, t1: END_AT, text: 'Six ratios. Six real lines.' },
-].map(c => ({ ...c, size: 46 }));
-export const END_LINES = ['Trig ratios are', 'lengths on one circle.'];
-export const END_AT_LINE = [0.2, 0.35];
-export const MUSIC_HITS = [ANSWER_AT, CUT2];
-
-// ---- voice (af_heart, the founder's ask for this reel): the question, then each caption, word for word -------------
-export const SHOWN: Shown[] = [
-  { t0: 0, t1: END_AT, text: HEADER.join('\n') }, ...CAPTIONS,
-  { t0: END_AT + END_AT_LINE[1] + 0.35, t1: DURATION, text: END_LINES.join(' ') },
-];
-export const VOICE: VoiceLine[] = [
-  { t: 0.15, until: 3.1, text: HEADER.join(' ') },
-  ...CAPTIONS.slice(1).map(c => ({ t: c.t0 + 0.05, until: c.t1, text: c.text })),
-  { t: END_AT + END_AT_LINE[1] + 0.35, until: DURATION, text: END_LINES.join(' ') },
-];
-
-// ---- camera ---------------------------------------------------------------------------------------------------------
-// One full orbit from frame 0 (F22), looking down 20° easing to 5°, front-on by ORBIT_END. Review panel, pass 1: a flat
-// figure seen edge-on or from behind can't be read, so the turn holds near the front for ~0.9 s (A and B pulse), whips
-// round the back in ~0.6 s (Defence #1's fix) and settles to the front (C pulses): a tanh whip plus a small ease-out
-// drift, so it is already turning on frame 0. Then zooms with the target (the second and third values) following the
-// action: a slow push from 1.9 s (after the whip) on the triangle, a zoom out as it grows, a punch-in landing on the answer (the far side
-// of the circle leaves the frame on purpose; tan θ stays whole), a fast zoom out, a slow push along the touching line, a
-// fast zoom out for the slant, a slow drift up to the top pair, a fast zoom out for the sweep.
-const DEG = Math.PI / 180, DIST = 6.4, FOV = 30;
-export const BAND = { top: 480, height: 1020, width: 1080 };
-const WHIP = { at: 1.3, width: 0.3, drift: 0.06 };
-export function azimuthAt(t: number) {
-  const u = clamp01(t / ORBIT_END), x = (v: number) => (v * ORBIT_END - WHIP.at) / WHIP.width;
-  const whip = (Math.tanh(x(u)) - Math.tanh(x(0))) / (Math.tanh(x(1)) - Math.tanh(x(0)));
-  return 2 * Math.PI * (WHIP.drift * (1 - (1 - u) ** 2) + (1 - WHIP.drift) * whip);
-}
-const elevationAt = (t: number) => (20 - 15 * prog(t, 0, ORBIT_END)) * DEG;
-/** The glass under the figure: seen from behind (the whip) it reads as a grey plate, so it fades out as it turns away
- *  and back in as it faces the camera again (review panel, pass 2). */
-export const glassAlphaAt = (t: number) => 0.3 * clamp01((Math.cos(azimuthAt(t)) - 0.2) / 0.6);
-export const ZOOM: { start: number[]; keys: Key[] } = {
-  start: [1.24, 0.15, 0.05],
-  keys: [
-    { t: 1.9, dur: 2.4, to: [1.3, 0.3, 0.2] },
-    { t: STRETCH.t, dur: 1.5, to: [1.19, 0.3, 0.25] },
-    { t: ANSWER_AT - 0.35, dur: 0.35, to: [1.42, 0.62, 0.35] },
-    { t: TOUCH.t, dur: 0.5, to: [1.19, 0.3, 0.3] },
-    { t: TOUCH.t + 0.5, dur: 1.8, to: [1.27, 0.32, 0.3] },
-    { t: SEC.t, dur: 0.5, to: [1.17, 0.35, 0.35] },
-    { t: TOP.t, dur: 1.4, to: [1.13, 0.35, 0.38] },
-    { t: SWEEP_START, dur: 0.6, to: [0.95, 0.45, 0.52] },
-  ],
+// When each line starts drawing (on the words that name it) and how long it takes.
+export const DRAW = {
+  circle: at('circle') + 0.2, angle: at('angle') + 0.3, sin: at('sin') + 0.7, cos: at('cos') + 0.6, touch: at('touch') + 0.3,
+  extend: at('extend') + 0.3, tan: at('tan'), sec: at('sec') + 1.6, top: at('top') + 2.0, extend2: at('top') + 4.2, cot: at('cot'),
+  csc: at('csc') + 0.8,
 };
-/** Pixels per world unit in the figure's plane for zoom z (the same perspective three.js uses). */
-export const ppu = (z: number) => BAND.height / (2 * (DIST / z) * Math.tan((FOV * DEG) / 2));
-export type Camera = { position: V3; target: V3; up: V3; fov: number; aspect: number };
-export function cameraAt(t: number): Camera {
-  const [z, tx, ty] = tween(t, ZOOM.start, ZOOM.keys), az = azimuthAt(t), el = elevationAt(t), d = DIST / z, tg: V3 = [tx, ty, 0];
-  return { position: [tx + d * Math.cos(el) * Math.sin(az), ty + d * Math.sin(el), d * Math.cos(el) * Math.cos(az)],
-    target: tg, up: [0, 1, 0], fov: FOV, aspect: BAND.width / BAND.height };
-}
-const sub = (a: V3, b: V3): V3 => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
-const dot = (a: V3, b: V3) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-const cross = (a: V3, b: V3): V3 => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
-const unit = (a: V3): V3 => { const l = Math.hypot(...a); return [a[0] / l, a[1] / l, a[2] / l]; };
-/** Where a world point lands on the 1080×1920 frame. */
-export function project(p: V3, cam: Camera) {
-  const f = unit(sub(cam.target, cam.position)), r = unit(cross(f, cam.up)), u = cross(r, f), d = sub(p, cam.position);
-  const depth = dot(d, f), k = Math.tan((cam.fov * DEG) / 2);
-  return { x: ((dot(d, r) / (depth * k * cam.aspect) + 1) / 2) * BAND.width, y: BAND.top + ((1 - dot(d, u) / (depth * k)) / 2) * BAND.height, depth };
-}
+const DUR = { circle: 1.2, angle: 1.5, sin: 0.8, cos: 0.8, touch: 1.2, extend: 0.9, tan: 0.5, sec: 1.0, top: 1.2, extend2: 0.8, cot: 0.6, csc: 1.0 };
+const drawn = (k: keyof typeof DRAW, t: number) => prog(t, DRAW[k], DUR[k]);
+export const angleAt = (t: number) => THETA_DEG * drawn('angle', t);
+export const circleDrawn = (t: number) => drawn('circle', t);
 
-// ---- labels: one list for the picture and the tests (HTML on top of the 3D, placed with project) ----------------------
-export type Label = { text: string; at: V3; screen?: { x: number; y: number }; size: number; alpha: number;
-  anchor: 'start' | 'middle' | 'end'; role: 'tag' | 'theta' | 'name' | 'one' | 'pill' | 'formula' | 'readout'; color: string };
-export const FORMULA_Y = 545, FORMULA_SIZE = 52, READOUT_Y = [1420, 1472], READOUT_X = [180, 540, 900], READOUT_SIZE = 44;
-const Z = 0.05;
-const at = (p: V2): V3 => [p[0], p[1], Z];
-/** How much the figure faces the camera in the orbit: 1 within 30° of the front, 0 from 60° round (tags would bunch up
- *  edge-on). */
-const facing = (t: number) => clamp01((Math.cos(azimuthAt(t)) - Math.cos(60 * DEG)) / (Math.cos(30 * DEG) - Math.cos(60 * DEG)));
-export function labelsAt(t: number): Label[] {
-  const f = figure(thetaAt(t)), { th } = f, dir: V2 = [f.c, f.s], cw: V2 = [f.s, -f.c], acw: V2 = [-f.s, f.c];
-  const along = (p: V2, d: number, n: V2, o: number): V2 => [p[0] + dir[0] * d + n[0] * o, p[1] + dir[1] * d + n[1] * o];
-  const tags = facing(t) * (1 - prog(t, TAGS_OUT, 0.3)), sweep = 1 - prog(t, SWEEP_START, 0.4), k = kAt(t), f0 = figure(THETA0);
-  const sec = 1 / f.c, bis = [-1 - f.c, -f.s], bl = Math.hypot(bis[0], bis[1]);
-  const L = (text: string, p: V2, alpha: number, anchor: Label['anchor'], role: Label['role'], color: string, size = 40): Label =>
-    ({ text, at: at(p), size, alpha, anchor, role, color });
-  const formula = formulaAt(t);
+/** A short swell 0 → 1 → 0 over d seconds from t0. */
+const swell = (t: number, t0: number, d = 0.6) => (t >= t0 && t < t0 + d ? Math.sin((Math.PI * (t - t0)) / d) : 0);
+export const rippleAt = (t: number) => { const u = (t - (DRAW.circle + 1.0)) / 1.0; return u > 0 && u < 1 ? u : 0; };
+export const glowAt = (t: number) => swell(t, DRAW.angle + DUR.angle - 0.1, 0.9);
+/** The glitch on the tangent (their beat ~20 s): a few frames of shifted slices, seeded so every render is the same. */
+export const glitchAt = (t: number) => (t >= DRAW.tan - 0.12 && t < DRAW.tan + 0.24 ? 1 + Math.floor((t - DRAW.tan + 0.12) * 30) : 0);
+
+/** Their gentle camera: a push in on "Cosine is the Base" and a smaller one on the tangent, each easing back out. The
+ *  picture scales about the circle's centre (labels with it); titles stay put. */
+const ZOOM_KEYS: Key[] = [
+  { t: at('cos') + 0.2, dur: 0.6, to: [1.12] }, { t: at('why') - 0.4, dur: 0.6, to: [1] },
+  { t: DRAW.tan + 0.3, dur: 0.6, to: [1.06] }, { t: at('sec') - 0.2, dur: 0.6, to: [1] },
+];
+export const zoomAt = (t: number) => tween(t, [1], ZOOM_KEYS)[0];
+
+// ---- the lines (screen coordinates) ---------------------------------------------------------------------------------
+export type Segment = { id: string; a: V2; b: V2; color: string; width: number; drawn: number; alpha: number; glow: number };
+const LANE = 6;  // sec and cosec share θ's ray, so each runs in its own lane beside it
+export function segmentsAt(t: number): Segment[] {
+  const deg = Math.max(angleAt(t), 0.0001), f = figure(THETA_DEG), g = figure(deg), S = toScreen;
+  const n: V2 = [Math.sin(f.th), Math.cos(f.th)];        // on screen: the ray's clockwise side (y points down)
+  const lane = (p: V2, side: number): V2 => [p[0] + side * LANE * n[0], p[1] + side * LANE * n[1]];
+  const six = (k: number) => swell(t, at('six') + 0.35 * k, 0.7);
+  const seg = (id: string, a: V2, b: V2, color: string, width: number, d: number, alpha: number, glow = 0): Segment =>
+    ({ id, a, b, color, width, drawn: d, alpha: d > 0 ? alpha : 0, glow });
   return [
-    L('A', [f.c - 0.09, f.s / 2], tags, 'end', 'tag', COLORS.sin, 48),
-    L('B', [1.09, f.T[1] / 2], tags, 'start', 'tag', COLORS.tan, 48),
-    L('C', along([0, 0], 0.62 * sec, acw, 0.2), tags, 'middle', 'tag', COLORS.sec, 48),
-    L('θ', [0.3 * Math.cos(th / 2), 0.3 * Math.sin(th / 2)], 1, 'middle', 'theta', COLORS.circle, 36),
-    L('1', along([0, 0], 0.45, acw, 0.1), 1 - prog(t, STRETCH.t, 0.3), 'middle', 'one', COLORS.circle, 40),
-    L('sin θ', [f.c - 0.05, f.s / 2], prog(t, SIN_GLOW, 0.3) * (1 - prog(t, STRETCH.t, 0.2)) + prog(t, SIN_BACK, 0.4) * sweep, 'end', 'name', COLORS.sin),
-    L('cos θ', [f.c / 2, -0.14], prog(t, COS_GLOW, 0.3) * (1 - prog(t, STRETCH.t, 0.2)) + prog(t, COS_BACK, 0.4) * sweep, 'middle', 'name', COLORS.cos),
-    L(`× 1/cos θ = ${k.toFixed(2)}`, [k * f0.c, -0.34], prog(t, STRETCH.t, 0.2) * (1 - prog(t, ANSWER_AT, 0.3)), 'middle', 'pill', COLORS.circle, 36),
-    L('1', [0.86, -0.14], prog(t, ANSWER_AT - 0.6, 0.3) * sweep, 'middle', 'one', COLORS.circle),
-    L('1', [-0.07, 0.5], prog(t, TOP.t + 0.8, 0.3) * sweep, 'end', 'one', COLORS.circle),
-    L('tan θ', [1.07, f.T[1] / 2], prog(t, ANSWER_AT, 0.3), 'start', 'name', COLORS.tan),
-    L('sec θ', along(f.T, 0.15, cw, 0.1), prog(t, SEC.t, SEC.dur), 'start', 'name', COLORS.sec),
-    L('cot θ', [f.C[0] / 2, 0.87], prog(t, COT.t, COT.dur), 'middle', 'name', COLORS.cot),
-    L('cosec θ', along(f.C, 0.04, acw, 0.2), prog(t, COSEC.t, COSEC.dur), 'end', 'name', COLORS.cosec),
-    L('θ', [f.C[0] + (0.3 * bis[0]) / bl, 1 + (0.3 * bis[1]) / bl], prog(t, ARC_C, 0.3) * sweep, 'middle', 'theta', COLORS.circle, 36),
-    { text: formula ?? FORMULAS[2].text, at: [0, 0, 0], screen: { x: 540, y: FORMULA_Y }, size: FORMULA_SIZE, anchor: 'middle', role: 'formula',
-      color: WHITE.ink, alpha: formula ? prog(t, FORMULAS[0].t, 0.3) * (1 - prog(t, SWEEP_START - 0.3, 0.3)) : 0 },
-    ...(readoutsAt(t) ?? []).map((r, i): Label => ({ text: `${r.name} ${r.value}`, at: [0, 0, 0], size: READOUT_SIZE, anchor: 'middle',
-      screen: { x: READOUT_X[i % 3], y: READOUT_Y[Math.floor(i / 3)] }, role: 'readout', color: COLORS[r.name], alpha: prog(t, SWEEP_START, 0.4) })),
+    seg('radius', S([0, 0]), S(g.P), COLORS.radius, 4, t >= DRAW.angle ? 1 : 0, 1),
+    seg('touch', S([1, 0]), S([1, f.T[1] + 0.42]), COLORS.tan, 3, drawn('touch', t), 0.6),
+    seg('extend', S(f.P), S(f.T), COLORS.radius, 3, drawn('extend', t), 0.8),
+    seg('top', S([0, 1]), S([f.C[0] + 0.25, 1]), COLORS.cot, 3, drawn('top', t), 0.6),
+    seg('extend2', S(f.T), S(f.C), COLORS.radius, 3, drawn('extend2', t), 0.8),
+    seg('sin', S(f.P), S(f.M), COLORS.sin, 6, drawn('sin', t), 1, 0.8 * six(0)),
+    seg('cos', S([0, 0]), S(f.M), COLORS.cos, 6, drawn('cos', t), 1, 0.8 * six(1)),
+    seg('tan', S(f.A), S(f.T), COLORS.tan, 7, drawn('tan', t), 1, 0.8 * swell(t, DRAW.tan, 0.8) + 0.8 * six(2)),
+    seg('sec', lane(S([0, 0]), 1), lane(S(f.T), 1), COLORS.sec, 5, drawn('sec', t), 1, 0.8 * six(3)),
+    seg('cot', S(f.B), S(f.C), COLORS.cot, 6, drawn('cot', t), 1, 0.8 * six(4)),
+    seg('csc', lane(S([0, 0]), -1), lane(S(f.C), -1), COLORS.csc, 5, drawn('csc', t), 1, 0.8 * six(5)),
   ];
 }
-export function labelBox(l: Label, cam: Camera) {
-  const p = l.screen ?? project(l.at, cam), w = [...l.text].length * l.size * 0.52, h = l.size;
-  const x0 = l.anchor === 'start' ? p.x : l.anchor === 'end' ? p.x - w : p.x - w / 2;
-  return { x0, x1: x0 + w, y0: p.y - 0.55 * h, y1: p.y + 0.55 * h };
+/** Flashes where each slant passes through the circle (at P), timed to the moment its tip gets there. */
+export const CUTS = [DRAW.sec + DUR.sec * Math.cos(rad(THETA_DEG)), DRAW.csc + DUR.csc * Math.sin(rad(THETA_DEG))];
+export const cutFlashAt = (t: number) => Math.max(...CUTS.map(c => swell(t, c - 0.05, 0.5)));
+/** Their curved arrow pointing down at the top of the circle, while the top step is set up. */
+export const arrowAt = (t: number) => prog(t, at('top') + 0.2, 0.4) * (1 - prog(t, DRAW.top + 0.6, 0.4));
+
+// ---- words ------------------------------------------------------------------------------------------------------------
+export type Title = { t: number; text: string; color: string };
+export const TITLES: Title[] = [
+  { t: at('circle'), text: 'Start with a circle of radius 1', color: COLORS.circle },
+  { t: at('angle'), text: 'Choose an angle θ', color: COLORS.cos },
+  { t: at('sin'), text: 'Sine is the Height', color: COLORS.sin },
+  { t: at('cos'), text: 'Cosine is the Base', color: COLORS.cos },
+  { t: at('why'), text: 'Why is it called Tangent?', color: COLORS.tan },
+  { t: at('sec'), text: 'Secant Cuts the Circle', color: COLORS.sec },
+  { t: at('top'), text: 'Cotangent at the Top', color: COLORS.cot },
+  { t: at('csc'), text: 'Cosecant', color: COLORS.csc },
+  { t: at('six'), text: 'Six Actual Lines', color: COLORS.cos },
+];
+export const SUBTITLES: (Title & { t1: number })[] = [
+  { t: at('tan') + 0.6, t1: at('sec'), text: 'Tangent = Touching', color: COLORS.tan },
+  { t: at('cut'), t1: at('top'), text: 'Secant = To Cut', color: COLORS.sec },
+];
+export const titleAt = (t: number) => [...TITLES].reverse().find(x => t >= x.t) ?? null;
+export const subtitleAt = (t: number) => SUBTITLES.find(x => t >= x.t && t < x.t1) ?? null;
+export const TITLE_Y = 200, TITLE_SIZE = 56, SUBTITLE_Y = 1330, SUBTITLE_SIZE = 40;
+
+export type Label = { text: string; x: number; y: number; size: number; anchor: 'start' | 'middle' | 'end'; color: string; alpha: number };
+export function labelsAt(t: number): Label[] {
+  const f = figure(THETA_DEG), S = toScreen, P = S(f.P), M = S(f.M), A = S(f.A), T = S(f.T), C = S(f.C), B = S(f.B);
+  const acw: V2 = [-Math.sin(f.th), -Math.cos(f.th)];   // on screen: the ray's anticlockwise side
+  const along = (k: number, off: number): V2 => { const p = S([k * f.c, k * f.s]); return [p[0] + off * acw[0], p[1] + off * acw[1]]; };
+  const half = rad(angleAt(t) / 2), sec = 1 / f.c;
+  const fade = (k: keyof typeof DRAW) => prog(t, DRAW[k] + DUR[k] * 0.6, 0.3);
+  // cosec's name sits just past its own end (beyond the top corner), clear of the tangent line it crosses
+  const secAt = along(0.55 * sec, 34), cscAt: V2 = [C[0] + 12, C[1] - 26];
+  return [
+    { text: '1', x: A[0] + 14, y: A[1] + 40, size: 34, anchor: 'start', color: COLORS.radius, alpha: prog(t, DRAW.circle + 0.9, 0.3) },
+    { text: 'θ', x: CENTRE[0] + 92 * Math.cos(half), y: CENTRE[1] - 92 * Math.sin(half) + 12, size: 34, anchor: 'middle', color: COLORS.cos, alpha: prog(t, DRAW.angle + 0.4, 0.3) },
+    { text: 'sin θ', x: P[0] - 14, y: (P[1] + M[1]) / 2, size: 38, anchor: 'end', color: COLORS.sin, alpha: fade('sin') },
+    { text: 'cos θ', x: (CENTRE[0] + M[0]) / 2, y: CENTRE[1] + 46, size: 38, anchor: 'middle', color: COLORS.cos, alpha: fade('cos') },
+    { text: 'tan θ', x: A[0] + 18, y: (A[1] + T[1]) / 2, size: 38, anchor: 'start', color: COLORS.tan, alpha: fade('tan') },
+    { text: 'sec θ', x: secAt[0], y: secAt[1], size: 38, anchor: 'middle', color: COLORS.sec, alpha: fade('sec') },
+    { text: 'cot θ', x: (B[0] + C[0]) / 2, y: B[1] - 36, size: 38, anchor: 'middle', color: COLORS.cot, alpha: fade('cot') },
+    { text: 'csc θ', x: cscAt[0], y: cscAt[1], size: 38, anchor: 'start', color: COLORS.csc, alpha: fade('csc') },
+  ];
+}
+export function labelBox(l: Label) {
+  const w = [...l.text].length * l.size * 0.55, h = l.size;
+  const x0 = l.anchor === 'start' ? l.x : l.anchor === 'end' ? l.x - w : l.x - w / 2;
+  return { x0, x1: x0 + w, y0: l.y - 0.6 * h, y1: l.y + 0.4 * h };
 }
 
-// ---- sound ----------------------------------------------------------------------------------------------------------
-// A soft tap on each candidate's pulse, a click as sin and then cos glow, a quiet shimmer under the stretch (it builds to
-// the answer), a knock on the answer (the loudest hit), a bright tap where each touching line touches, a tick as the top
-// line starts, a snap where each slant cuts the circle (the second on the music's accent), a click per formula line and
-// as cot draws, a tick every 5° of θ in the sweep (pitch following θ) and a tap at each turnaround, a tap as the end card
-// arrives; whooshes on the fast zooms only, the zoom-outs softer. Review panel, pass 1 (Sound): EFFECTS_GAIN 2.5 puts
-// the effects ~9 dB under the music (F16: 5–10 dB); the calm piano's bar accents stay (the shared engine), so the
-// reel's own hits are made to stand over them; pass 2 put the touch ring (10.0) and the 62° turnaround (20.0) on two of
-// those bar accents, so the accents land on events.
-const EFFECTS_GAIN = 2.5;
-function sweepTicks(): Hit[] {
-  const out: Hit[] = [], dt = 1 / 240;
-  let last = Math.floor(thetaAt(SWEEP_START) / 5);
-  for (let t = SWEEP_START; t < END_AT; t += dt) {
-    const d = thetaAt(t), bin = Math.floor(d / 5);
-    if (bin !== last) out.push({ kind: 'click', t, gain: 0.26, pitch: 0.75 + ((d - 28) / 34) * 0.6 });
-    last = bin;
-  }
-  // a soft tap where θ turns round (62°, then 28°)
-  for (const k of THETA_KEYS.slice(0, 2)) out.push({ kind: 'tap', t: k.t + k.dur, gain: 0.3, pitch: k.to[0] > THETA0 ? 1.3 : 0.8 });
-  return out;
-}
+// ---- sound: soft, under the voice --------------------------------------------------------------------------------------
+// A shimmer with the ripple, a tap as each line starts drawing, a snap where each slant cuts the circle, a crack on the
+// glitch; quiet, so the narration leads. The music dips under the voice (mix.ts --voice).
+export const MUSIC_HITS = [DRAW.tan, at('six')];
 export const SOUND: Score = {
   duration: DURATION,
   hits: ([
-    ...PULSES.map((t, i): Hit => ({ kind: 'tap', t, gain: 0.3, pitch: 1.2 - 0.15 * i })),
-    { kind: 'click', t: SIN_GLOW, gain: 0.3, pitch: 1.1 },
-    { kind: 'click', t: COS_GLOW, gain: 0.3, pitch: 0.95 },
-    { kind: 'shimmer', t: STRETCH.t, gain: 0.2 },
-    { kind: 'thunk', t: ANSWER_AT, gain: 0.45 },
-    ...FORMULAS.map((f, i): Hit => ({ kind: 'click', t: f.t, gain: 0.3, pitch: 1 + 0.08 * i })),
-    { kind: 'tap', t: PING_A, gain: 0.32, pitch: 1.6 },
-    { kind: 'snap', t: CUT1, gain: 0.3 },
-    { kind: 'tap', t: TOP.t, gain: 0.4, pitch: 1.4 },
-    { kind: 'tap', t: PING_B, gain: 0.32, pitch: 1.7 },
-    { kind: 'click', t: COT.t, gain: 0.3, pitch: 1.2 },
-    { kind: 'snap', t: CUT2, gain: 0.36 },
-    ...sweepTicks(),
-    { kind: 'tap', t: END_AT + 0.2, gain: 0.3, pitch: 1.0 },
-    ...whooshesFor(ZOOM.start, ZOOM.keys).map(w => ({ ...w, gain: w.gain * (w.kind === 'whoosh-out' ? 0.45 : 0.5) })),
-  ] as Hit[]).map(h => ({ ...h, gain: h.gain * EFFECTS_GAIN })),
+    { kind: 'shimmer', t: DRAW.circle + 1.0, gain: 0.25 },
+    ...(['sin', 'cos', 'tan', 'sec', 'cot', 'csc'] as const).map((k, i): Hit => ({ kind: 'tap', t: DRAW[k], gain: 0.3, pitch: 0.9 + 0.08 * i })),
+    { kind: 'tap', t: DRAW.touch, gain: 0.22, pitch: 1.5 },
+    { kind: 'tap', t: DRAW.top, gain: 0.22, pitch: 1.6 },
+    { kind: 'crack', t: DRAW.tan - 0.1, gain: 0.25 },
+    ...CUTS.map((t): Hit => ({ kind: 'snap', t, gain: 0.3 })),
+  ] as Hit[]).map(h => ({ ...h, gain: h.gain * 1.6 })),
   beds: [],
 };

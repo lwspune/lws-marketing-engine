@@ -231,9 +231,9 @@ export const Root = () => (
     <Still id="Reel025Cover" component={Reel025} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="Reel027" component={Reel027} durationInFrames={Math.round(DURATION_027 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="Reel027Cover" component={Reel027} width={1080} height={1920} defaultProps={{ cover: true }} />
-    <Composition id="Reel028" component={Reel028} durationInFrames={Math.round(DURATION_028 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, voice: false, platform: 'instagram' as const }} />
-    <Composition id="Reel028Voice" component={Reel028} durationInFrames={Math.round(DURATION_028 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, voice: true, platform: 'instagram' as const }} />
-    <Still id="Reel028Cover" component={Reel028} width={1080} height={1920} defaultProps={{ cover: true, voice: false, platform: 'instagram' as const }} />
+    <Composition id="Reel028" component={Reel028} durationInFrames={Math.round(DURATION_028 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, voice: false }} />
+    <Composition id="Reel028Voice" component={Reel028} durationInFrames={Math.round(DURATION_028 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false, voice: true }} />
+    <Still id="Reel028Cover" component={Reel028} width={1080} height={1920} defaultProps={{ cover: true, voice: true }} />
     <Composition id="Defence001" component={Defence001} durationInFrames={Math.round(DURATION_D001 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="Defence001Cover" component={Defence001} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="Story001" component={Story001} durationInFrames={Math.round(DURATION_S001 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />

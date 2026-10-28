@@ -199,8 +199,6 @@
     "mix:028": "node tools/mix.ts 028 --headroom=0.5 && node tools/mix.ts 028 --voice --headroom=0.5",
     "render:028": "remotion render Reel028 ../reels/nda-maths-028-trig-lines.mp4",
     "render:028v": "remotion render Reel028Voice ../reels/nda-maths-028-trig-lines-voice.mp4",
-    "render:028:yt": "remotion render Reel028 ../reels/nda-maths-028-trig-lines-yt.mp4 --props=props/youtube.json",
-    "render:028v:yt": "remotion render Reel028Voice ../reels/nda-maths-028-trig-lines-voice-yt.mp4 --props=props/youtube.json",
     "cover:028": "remotion still Reel028Cover ../reels/nda-maths-028-trig-lines-cover.png",
     "music:d001": "node ../reels/tools/music.mjs music/nda-defence-001-army-ranks.json public/nda-defence-001-army-ranks.wav",
     "mix:d001": "node tools/mix.ts d001",

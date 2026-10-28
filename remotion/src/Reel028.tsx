@@ -1,168 +1,123 @@
-// @lws.pune · reel 028 (3D, predict-first): on a circle of radius 1, which line is tan θ? B. A glossy ring on a thin glass
-// disc turns in a full orbit (F22) while three candidate lines pulse with their chips; the sin–cos triangle fills and grows
-// from the centre by 1/cos θ until its base is 1, so its height lands on the line touching the circle and becomes tan θ;
-// that touching line glows (tangent = touching), the slant that cuts the circle lights (secant = cutting), the same build
-// at the top gives cot θ and cosec θ (θ marked again where the ray meets the top line), the two identities, then θ sweeps
-// and all six lines change with live readouts. Every line comes from the tested `segmentsAt`. Timeline: lib/reel028.ts.
-import { useMemo } from 'react';
+// @lws.pune · reel 028 in the studied reel's own look (founder, 2026-10-28): a dark starfield, a glowing cyan circle,
+// flat neon lines drawn as the narration names them, one coloured title per step, their ripple, glow and glitch; cot and
+// cosec drawn correctly. Flat SVG, no 3D. Timeline, geometry and words: lib/reel028.ts.
 import { AbsoluteFill, Html5Audio, staticFile, useCurrentFrame, useVideoConfig } from 'remotion';
-import { ThreeCanvas } from '@remotion/three';
-import { useThree } from '@react-three/fiber';
-import * as THREE from 'three';
-import { WHITE as P, tint } from './lib/palette.ts';
-import { captionAt, prog } from './lib/motion.ts';
-import type { Platform } from './lib/platform.ts';
+import { SOFT_UI } from './lib/palette.ts';
+import { prog } from './lib/motion.ts';
 import {
-  END_AT, ANSWER_AT, CAPTIONS, OPTIONS, ANSWER, OPTION_LINES, PULSES, COVER_T, COLORS, HEADER, BAND, FORMULA_Y, FORMULA_SIZE,
-  ARC_C, SWEEP_START, PINGS, CUTS, END_LINES, END_AT_LINE, figure, thetaAt, segmentsAt, slabAt, cameraAt, glassAlphaAt, labelsAt, labelBox,
-  type Segment, type V3,
+  CENTRE, R, COLORS, DURATION, COVER_T, THETA_DEG, TITLE_Y, TITLE_SIZE, SUBTITLE_Y, SUBTITLE_SIZE, DRAW, figure, toScreen,
+  segmentsAt, labelsAt, titleAt, subtitleAt, rippleAt, glowAt, glitchAt, cutFlashAt, arrowAt, angleAt, circleDrawn, zoomAt,
 } from './lib/reel028.ts';
-import { Board, Caption, EndCard, PredictHeader, Theme, hand, useFonts, type EndLine } from './board.tsx';
-import { RealLight } from './realism.tsx';
-import { softEdges } from './shapes.tsx';
+import { useFonts } from './board.tsx';
 
-// the cover has no header: the profile grid's 3:4 crop (y 240–1680) would cut it through the question; the question
-// sits in the crop's empty top instead (review panel, passes 1 and 2)
-const COVER = { text: 'Which line is tan θ?', y: 400, size: 72 };
-// lines sit just in front of the glass, each family on its own depth so overlapping rods never flicker
-const DEPTH: Record<string, number> = { radius: 0.02, ray: 0.012, touchRight: 0.01, touchTop: 0.01, base: 0.024, height: 0.032, sin: 0.03,
-  cos: 0.034, tan: 0.03, sec: 0.028, cot: 0.03, cosec: 0.028 };
+const W = 1080, H = 1920;
+// a seeded starfield (the same every render)
+const STARS = (() => {
+  let s = 28; const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+  return Array.from({ length: 150 }, () => ({ x: rnd() * W, y: rnd() * H, r: 0.8 + rnd() * 1.8, a: 0.15 + rnd() * 0.5, ph: rnd() * 6.28 }));
+})();
 
-function CameraRig({ t }: { t: number }) {
-  const { camera } = useThree(), c = cameraAt(t), cam = camera as THREE.PerspectiveCamera;
-  cam.up.set(...c.up); cam.position.set(...c.position); cam.fov = c.fov; cam.aspect = c.aspect;
-  cam.lookAt(...c.target); cam.updateProjectionMatrix();
-  return null;
+function Stars({ t, glow }: { t: number; glow: number }) {
+  return <svg width={W} height={H} style={{ position: 'absolute' }}>
+    <defs><radialGradient id="wash" cx="50%" cy="45%" r="60%"><stop offset="0%" stopColor="#1e3a5f" stopOpacity={0.35 + 0.45 * glow} /><stop offset="100%" stopColor={COLORS.bg} stopOpacity={0} /></radialGradient></defs>
+    <rect width={W} height={H} fill={COLORS.bg} />
+    <rect width={W} height={H} fill="url(#wash)" />
+    {STARS.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={p.r} fill="#cbd5e1" opacity={p.a * (0.7 + 0.3 * Math.sin(t * 1.3 + p.ph))} />)}
+  </svg>;
 }
 
-/** A glossy rod from a to b (round ends, F8). */
-function Rod({ s }: { s: Segment }) {
-  if (s.alpha <= 0.01) return null;
-  const z = DEPTH[s.id] ?? 0.02, a = new THREE.Vector3(s.a[0], s.a[1], z), b = new THREE.Vector3(s.b[0], s.b[1], z);
-  const len = a.distanceTo(b);
-  if (len < 1e-4) return null;
-  const mid = a.clone().add(b).multiplyScalar(0.5), q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize());
-  const mat = <meshStandardMaterial color={s.color} emissive={s.color} emissiveIntensity={0.18 + s.glow} roughness={0.35} metalness={0.05}
-    transparent={s.alpha < 1} opacity={s.alpha} toneMapped={false} />;
+/** The figure: axes, circle, the lines as far as they are drawn, the angle mark, the point on the circle. */
+function Figure({ t }: { t: number }) {
+  const f = figure(THETA_DEG), O = CENTRE, P = toScreen(figure(Math.max(angleAt(t), 0.0001)).P), c = circleDrawn(t);
+  const ripple = rippleAt(t), glow = glowAt(t), cut = cutFlashAt(t), deg = angleAt(t), circ = 2 * Math.PI * R;
+  const arc = (r: number, a0: number, a1: number) => {
+    const p = (a: number) => [O[0] + r * Math.cos(a), O[1] - r * Math.sin(a)];
+    const [x0, y0] = p(a0), [x1, y1] = p(a1);
+    return `M ${x0} ${y0} A ${r} ${r} 0 0 0 ${x1} ${y1}`;
+  };
+  const B = toScreen(f.B), arrow = arrowAt(t);
+  return <svg width={W} height={H} style={{ position: 'absolute' }}>
+    <defs>
+      {/* in frame units: a straight vertical or horizontal line has a zero-width box, which would hide it */}
+      <filter id="glow" filterUnits="userSpaceOnUse" x={0} y={0} width={W} height={H}><feGaussianBlur stdDeviation="5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+      <filter id="halo" filterUnits="userSpaceOnUse" x={0} y={0} width={W} height={H}><feGaussianBlur stdDeviation="12" /></filter>
+      <marker id="head" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill={COLORS.arrow} /></marker>
+    </defs>
+    {/* dashed axes */}
+    <line x1={60} y1={O[1]} x2={1020} y2={O[1]} stroke={COLORS.axis} strokeWidth={2} strokeDasharray="8 10" opacity={0.55} />
+    <line x1={O[0]} y1={O[1] - 450} x2={O[0]} y2={O[1] + 450} stroke={COLORS.axis} strokeWidth={2} strokeDasharray="8 10" opacity={0.55} />
+    {/* the circle, drawn round from (1, 0); its ripple */}
+    <circle cx={O[0]} cy={O[1]} r={R} fill="none" stroke={COLORS.circle} strokeWidth={14} opacity={(0.25 + 0.5 * glow) * c} filter="url(#halo)" />
+    <circle cx={O[0]} cy={O[1]} r={R} fill="none" stroke={COLORS.circle} strokeWidth={6} filter="url(#glow)"
+      strokeDasharray={`${circ * c} ${circ}`} transform={`rotate(0 ${O[0]} ${O[1]}) scale(1 -1) translate(0 ${-2 * O[1]})`} />
+    {ripple > 0 && <circle cx={O[0]} cy={O[1]} r={R * (1 + 0.55 * ripple)} fill="none" stroke={COLORS.circle} strokeWidth={4} opacity={0.5 * (1 - ripple)} />}
+    {/* the lines */}
+    {segmentsAt(t).filter(s => s.alpha > 0.01).map(s => {
+      const e = [s.a[0] + (s.b[0] - s.a[0]) * s.drawn, s.a[1] + (s.b[1] - s.a[1]) * s.drawn];
+      return <g key={s.id} opacity={s.alpha}>
+        {s.glow > 0.01 && <line x1={s.a[0]} y1={s.a[1]} x2={e[0]} y2={e[1]} stroke={s.color} strokeWidth={s.width * 3} strokeLinecap="round" opacity={s.glow} filter="url(#halo)" />}
+        <line x1={s.a[0]} y1={s.a[1]} x2={e[0]} y2={e[1]} stroke={s.color} strokeWidth={s.width} strokeLinecap="round" filter="url(#glow)" />
+      </g>;
+    })}
+    {/* the angle */}
+    {deg > 0.5 && <path d={arc(56, 0, (deg * Math.PI) / 180)} fill="none" stroke={COLORS.cos} strokeWidth={3} />}
+    {/* the point on the circle, and a ring of sparks where a slant cuts through */}
+    {t >= DRAW.angle && <circle cx={P[0]} cy={P[1]} r={7 + 5 * cut} fill="#ffffff" filter="url(#glow)" />}
+    {cut > 0.02 && Array.from({ length: 12 }, (_, i) => {
+      const a = (i / 12) * 2 * Math.PI, rr = 18 + 26 * cut;
+      return <circle key={i} cx={P[0] + rr * Math.cos(a)} cy={P[1] + rr * Math.sin(a)} r={3} fill={COLORS.cos} opacity={cut} />;
+    })}
+    {/* their curved arrow down to the top of the circle */}
+    {arrow > 0.01 && <path d={`M ${B[0] - 230} ${B[1] - 190} Q ${B[0] - 90} ${B[1] - 170} ${B[0] - 22} ${B[1] - 30}`} fill="none" stroke={COLORS.arrow}
+      strokeWidth={6} strokeLinecap="round" markerEnd="url(#head)" opacity={arrow} strokeDasharray="600" strokeDashoffset={600 * (1 - arrow)} />}
+  </svg>;
+}
+
+function Labels({ t }: { t: number }) {
+  return <>{labelsAt(t).filter(l => l.alpha > 0.01).map((l, i) => (
+    <div key={i} style={{ position: 'absolute', top: l.y - l.size * 0.8, height: l.size * 1.2, display: 'flex', alignItems: 'center', opacity: l.alpha,
+      font: `600 ${l.size}px ${SOFT_UI}`, color: l.color, whiteSpace: 'pre', textShadow: '0 0 10px rgba(0,0,0,0.9)',
+      ...(l.anchor === 'start' ? { left: l.x } : l.anchor === 'end' ? { right: W - l.x } : { left: l.x - 300, width: 600, justifyContent: 'center' }) }}>{l.text}</div>
+  ))}</>;
+}
+
+function Words({ t, cover }: { t: number; cover: boolean }) {
+  const title = titleAt(t), sub = subtitleAt(t);
+  const a = title ? (cover ? 1 : prog(t, title.t, 0.35)) : 0, rise = title && !cover ? 14 * (1 - prog(t, title.t, 0.35)) : 0;
   return <>
-    <mesh position={mid} quaternion={q} castShadow><capsuleGeometry args={[s.r, len, 6, 16]} />{mat}</mesh>
+    {title && <div style={{ position: 'absolute', left: 0, width: W, top: (cover ? 330 : TITLE_Y) - TITLE_SIZE * 0.6 + rise, textAlign: 'center', opacity: a,
+      font: `700 ${TITLE_SIZE}px ${SOFT_UI}`, color: title.color, textShadow: `0 0 18px ${title.color}88` }}>{title.text}</div>}
+    {sub && !cover && <div style={{ position: 'absolute', left: 0, width: W, top: SUBTITLE_Y - SUBTITLE_SIZE * 0.6, textAlign: 'center',
+      opacity: prog(t, sub.t, 0.3) * (1 - prog(t, sub.t1 - 0.3, 0.3)), font: `600 ${SUBTITLE_SIZE}px ${SOFT_UI}`, color: sub.color }}>{sub.text}</div>}
   </>;
 }
 
-function Slab({ t }: { t: number }) {
-  const { pts, alpha } = slabAt(t);
-  const geo = useMemo(() => {
-    const g = new THREE.BufferGeometry();
-    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(9), 3));
-    return g;
-  }, []);
-  const arr = geo.attributes.position.array as Float32Array;
-  pts.forEach((p, i) => { arr[3 * i] = p[0]; arr[3 * i + 1] = p[1]; arr[3 * i + 2] = 0.006; });
-  geo.attributes.position.needsUpdate = true; geo.computeBoundingSphere();
-  if (alpha <= 0.01) return null;
-  return <mesh geometry={geo}><meshBasicMaterial color={P.blue} transparent opacity={alpha} side={THREE.DoubleSide} depthWrite={false} /></mesh>;
+/** Their glitch: for a few frames the picture splits into shifted slices with a red / cyan fringe. */
+function Glitch({ t, children }: { t: number; children: React.ReactNode }) {
+  const g = glitchAt(t);
+  if (!g) return <>{children}</>;
+  const shift = (k: number) => (((g * 7919 + k * 104729) % 97) / 97 - 0.5) * 70;
+  const bands = [0, 18, 31, 47, 58, 72, 86, 100];
+  return <>
+    {bands.slice(0, -1).map((y0, k) => (
+      <div key={k} style={{ position: 'absolute', inset: 0, clipPath: `inset(${y0}% 0 ${100 - bands[k + 1]}% 0)`, transform: `translateX(${shift(k)}px)` }}>{children}</div>
+    ))}
+    <div style={{ position: 'absolute', inset: 0, transform: `translateX(${shift(9) * 0.3}px)`, mixBlendMode: 'screen', opacity: 0.35, filter: 'hue-rotate(150deg)' }}>{children}</div>
+  </>;
 }
 
-/** An arc of angle th (radians) round `at`, starting at angle `from`. */
-function Arc({ at, from, th, r, opacity }: { at: V3; from: number; th: number; r: number; opacity: number }) {
-  if (opacity <= 0.01) return null;
-  return <mesh position={at} rotation={[0, 0, from]}>
-    <torusGeometry args={[r, 0.008, 8, 48, th]} />
-    <meshStandardMaterial color={COLORS.circle} roughness={0.4} transparent={opacity < 1} opacity={opacity} />
-  </mesh>;
-}
-
-/** A ring that spreads and fades where a touching line touches the circle. */
-function Ping({ at, t0, t, color }: { at: V3; t0: number; t: number; color: string }) {
-  const u = (t - (t0 - 0.2)) / 0.8;
-  if (u <= 0 || u >= 1) return null;
-  return <mesh position={at}><torusGeometry args={[0.05 + 0.2 * u, 0.012, 8, 48]} />
-    <meshBasicMaterial color={color} transparent opacity={0.9 * (1 - u)} toneMapped={false} /></mesh>;
-}
-
-function Scene({ t }: { t: number }) {
-  const f = figure(thetaAt(t)), segs = segmentsAt(t), sweep = 1 - prog(t, SWEEP_START, 0.4);
-  const cut = Math.max(...CUTS.map(c => (t >= c - 0.1 && t < c + 0.5 ? Math.sin((Math.PI * (t - c + 0.1)) / 0.6) : 0)));
-  return (
-    <>
-      <CameraRig t={t} />
-      <RealLight env={0.9} at={[-3, 6, 9]} span={4} />
-      {/* the glass the figure is drawn on, and the circle as a glossy tube */}
-      <mesh position={[0.1, 0.1, -0.05]} rotation={[Math.PI / 2, 0, 0]} receiveShadow>
-        <cylinderGeometry args={[1.32, 1.32, 0.05, 96]} />
-        {/* light and see-through: from behind (the orbit's whip) it must not read as a grey plate */}
-        <meshPhysicalMaterial color="#f4f7fc" roughness={0.15} metalness={0} transparent opacity={glassAlphaAt(t)} clearcoat={1} depthWrite={false} />
-      </mesh>
-      <mesh castShadow><torusGeometry args={[1, 0.024, 20, 200]} />
-        <meshStandardMaterial color={COLORS.circle} roughness={0.3} metalness={0.15} /></mesh>
-      {[[[-1.2, 0], [1.3, 0]], [[0, -1.2], [0, 1.3]]].map(([a, b], i) =>
-        <Rod key={i} s={{ id: 'axis', a: a as [number, number], b: b as [number, number], color: P.muted, alpha: 0.55, glow: 0, r: 0.007 }} />)}
-      <Slab t={t} />
-      {segs.map(s => <Rod key={s.id} s={s} />)}
-      <Arc at={[0, 0, 0.02]} from={0} th={f.th} r={0.2} opacity={1} />
-      <Arc at={[f.C[0], 1, 0.02]} from={Math.PI} th={f.th} r={0.2} opacity={prog(t, ARC_C, 0.3) * sweep} />
-      {/* the point on the circle, and its flash where a slant cuts through */}
-      <mesh position={[f.P[0], f.P[1], 0.04]}><sphereGeometry args={[0.04 + 0.04 * cut, 20, 20]} />
-        <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={0.3 + 1.2 * cut} roughness={0.3} toneMapped={false} /></mesh>
-      {PINGS.map(p => <Ping key={p.at} at={p.at === 'A' ? [1, 0, 0.04] : [0, 1, 0.04]} t0={p.t} t={t} color={p.at === 'A' ? COLORS.tan : COLORS.cot} />)}
-    </>
-  );
-}
-
-// Labels: HTML in Cambria on top of the canvas, placed with project(); names on white pills in their line's colour.
-const NAMES = /(cosec|sin|cos|tan|sec|cot)/;
-const colourOf = (w: string) => (COLORS as Record<string, string>)[w];
-function Labels({ t }: { t: number }) {
-  const cam = cameraAt(t);
-  return <>{labelsAt(t).filter(l => l.alpha > 0.01 && l.role !== 'formula').map((l, i) => {
-    const b = labelBox(l, cam), tag = l.role === 'tag', pill = l.role !== 'theta', px = tag ? 18 : pill ? 10 : 0, py = tag ? 6 : pill ? 2 : 0;
-    return <div key={i} style={{ position: 'absolute', left: b.x0 - px, top: b.y0 - py, width: b.x1 - b.x0 + 2 * px,
-      height: b.y1 - b.y0 + 2 * py, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: l.alpha,
-      ...hand(l.size), fontWeight: l.role === 'name' || tag || l.role === 'readout' ? 800 : 600, color: l.color, whiteSpace: 'pre',
-      background: pill ? (tag ? tint(l.color, 0.14) : tint('#ffffff', 0.9)) : undefined, borderRadius: 999,
-      border: tag ? `3px solid ${tint(l.color, 0.75)}` : undefined, boxSizing: 'border-box',
-      boxShadow: l.role === 'pill' ? `0 3px 10px ${tint(P.ink, 0.15)}` : undefined }}>{l.text}</div>;
-  })}</>;
-}
-
-/** The identity line at the top of the band, each ratio's name in its line's colour. */
-function Formula({ t }: { t: number }) {
-  const l = labelsAt(t).find(x => x.role === 'formula')!;
-  if (l.alpha <= 0.01) return null;
-  return <div style={{ position: 'absolute', left: 0, width: 1080, top: FORMULA_Y - FORMULA_SIZE * 0.62, textAlign: 'center', opacity: l.alpha,
-    ...hand(FORMULA_SIZE), color: P.ink, whiteSpace: 'pre' }}>
-    {l.text.split(NAMES).map((w, i) => (colourOf(w) && NAMES.test(w) ? <span key={i} style={{ color: colourOf(w), fontWeight: 800 }}>{w}</span> : <span key={i}>{w}</span>))}
-  </div>;
-}
-
-export function Reel028({ cover = false, voice = false, platform = 'instagram' }: { cover?: boolean; voice?: boolean; platform?: Platform }) {
+export function Reel028({ cover = false, voice = true }: { cover?: boolean; voice?: boolean }) {
   useFonts();
   const frame = useCurrentFrame(), { fps } = useVideoConfig();
-  const t = cover ? COVER_T : frame / fps, cap = cover ? null : captionAt(CAPTIONS, t);
-  const END: EndLine[] = [
-    { at: END_AT_LINE[0], size: 60, weight: 600, color: P.ink, text: END_LINES[0] },
-    { at: END_AT_LINE[1], size: 60, weight: 600, color: P.ink, text: END_LINES[1] },
-    { at: 1.3, size: 80, weight: 700, color: P.green, text: 'Follow for more' },
-  ];
+  const t = cover ? COVER_T : Math.min(frame / fps, DURATION);
   return (
-    <Theme value={P}>
-      <AbsoluteFill>
-        <Board watermark={false} />
-        {!cover && <PredictHeader t={t} label={'NDA MATHS  ·  TRIGONOMETRY'} lines={HEADER} options={OPTIONS} answer={ANSWER} at={ANSWER_AT} size={54} chipW={150}
-          chipColors={OPTION_LINES.map(n => COLORS[n])} chipPulses={PULSES} />}
-        <div style={{ position: 'absolute', left: 0, top: BAND.top, width: BAND.width, height: BAND.height, ...softEdges({ top: 0.03, bottom: 0.03 }) }}>
-          <ThreeCanvas width={BAND.width} height={BAND.height} shadows gl={{ antialias: true, alpha: true }}>
-            <Scene t={t} />
-          </ThreeCanvas>
-        </div>
-        <Labels t={t} />
-        {!cover && <Formula t={t} />}
-        {cover
-          ? <Caption text={COVER.text} alpha={1} age={0} size={COVER.size} y={COVER.y} rise={false} />
-          : cap && <Caption text={cap.caption.text} alpha={cap.alpha} age={cap.age} size={cap.caption.size ?? 46} y={cap.caption.y ?? 1580} />}
-        {!cover && <EndCard t={t} at={END_AT} lines={END} platform={platform} />}
-        {!cover && <Html5Audio src={staticFile(voice ? 'nda-maths-028-trig-lines-voice-mix.wav' : 'nda-maths-028-trig-lines-mix.wav')} />}
-      </AbsoluteFill>
-    </Theme>
+    <AbsoluteFill style={{ background: COLORS.bg }}>
+      <Stars t={t} glow={glowAt(t)} />
+      <div style={{ position: 'absolute', inset: 0, transform: `scale(${zoomAt(t)})`, transformOrigin: `${CENTRE[0]}px ${CENTRE[1]}px` }}>
+        <Glitch t={t}><Figure t={t} /><Labels t={t} /></Glitch>
+      </div>
+      <Words t={t} cover={cover} />
+      {!cover && <Html5Audio src={staticFile(voice ? 'nda-maths-028-trig-lines-voice-mix.wav' : 'nda-maths-028-trig-lines-mix.wav')} />}
+    </AbsoluteFill>
   );
 }
