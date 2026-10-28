@@ -91,6 +91,23 @@ test("physics and chemistry alternate (framework F19)", () => {
   assert.match(hr.rotationErrors(hr.parseQueue(md)).join("\n"), /P8: two physics reels in a row/);
 });
 
+// Founder, 2026-10-28: maths is back on @pyqvault_, so the subjects rotate P → C → M.
+test("two maths reels in a row are refused, a maths reel after chemistry is fine", () => {
+  assert.deepEqual(hr.rotationErrors(hr.parseQueue(QUEUE.replace("| 4 | C9 |", "| 4 | M1 |"))), []);
+  const md = QUEUE.replace("| 3 | P6 |", "| 3 | M1 |").replace("| 4 | C9 |", "| 4 | M2 |");
+  assert.match(hr.rotationErrors(hr.parseQueue(md)).join("\n"), /M2: two maths reels in a row/);
+});
+
+// Founder, 2026-10-28 ("let's not reinvent the wheel"): an imitated reel (framework F40) keeps its source's hook and
+// opening, so "Copied" is in both catalogues and two imitations in a row aren't a repeat. The loop (F27) still holds.
+test("an imitated reel keeps its source's hook and opening (F40), and two in a row aren't a repeat", () => {
+  const md = QUEUE.replace("| P6 | You'd think | Orbit 360° |", "| P6 | Copied | Copied |")
+    .replace("| C9 | Put in order | Colour flood |", "| C9 | Copied | Copied |");
+  assert.deepEqual(hr.rotationErrors(hr.parseQueue(md)), []);
+  const noLoop = md.replace("| yes | Most acidic", "| no | Most acidic");
+  assert.match(hr.rotationErrors(hr.parseQueue(noLoop)).join("\n"), /C9: loop "no": every reel loops/);
+});
+
 test("the exam badge is out (founder, 2026-10-21), and so is any hook or opening not in the catalogue", () => {
   const md = QUEUE.replace("| P11 | Pick one |", "| P11 | Exam badge |").replace("| Colour flood |", "| Slow fade |");
   const errors = hr.rotationErrors(hr.parseQueue(md)).join("\n");
