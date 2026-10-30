@@ -8,6 +8,7 @@ import { compareToBaseline, LWS_BASELINE, storyErrorText, type PostMetrics, type
 import { PLATFORM_LABEL, type Captions, type Platform, type PostKind } from "@/lib/domain/types";
 import type { Result } from "@/lib/publishing/result";
 import type { StoryQuestion, StoryQuiz } from "@/lib/domain/story";
+import type { Download } from "@/lib/domain/downloads";
 import { SlideViewer } from "@/components/SlideViewer";
 import { ReelPreview } from "@/components/ReelPreview";
 
@@ -19,6 +20,8 @@ export interface PostView {
   /** Reels and carousels: the project's next free posting slot, where approving puts it (null: no slots). */
   nextSlotAt: string | null;
   videoUrl: string | null; coverUrl: string | null; slideUrls: string[];
+  /** The post's files, signed to save rather than play (domain/downloads.ts). */
+  downloads: Download[];
   channels: { platform: Platform; name: string }[];
   publications: {
     id: string; platform: Platform; status: string; scheduledAt: string | null; attempts: number; permalink: string | null;
@@ -101,6 +104,17 @@ export function PostCard({ post }: { post: PostView }) {
             <SlideViewer urls={post.slideUrls} title={post.title} />
           ) : (
             <div className="flex aspect-[9/16] items-center justify-center rounded-xl border border-dashed border-line bg-bg text-xs text-muted">No preview</div>
+          )}
+          {post.downloads.length > 0 && (
+            // The link saves the file (Supabase's download link sends it as an attachment, under the stored name):
+            // Android Chrome puts it in Downloads, iPhone Safari in Files (Share → Save Video puts it in Photos).
+            <div className="mt-3 flex flex-col gap-2">
+              {post.downloads.map((d) => (
+                <a key={d.url} href={d.url} download={d.file} className="btn w-full py-1.5 text-xs" aria-label={`${d.label}: ${d.file}`}>
+                  <span aria-hidden>⬇</span> {d.label}
+                </a>
+              ))}
+            </div>
           )}
         </div>
 

@@ -9,6 +9,7 @@ import { queueProjects } from "@/lib/domain/projects";
 import { newestFirst } from "@/lib/domain/queue";
 import type { Platform } from "@/lib/domain/types";
 import { nextSlot, slotsFor } from "@/lib/domain/slots";
+import { downloadPaths, mediaDownloads } from "@/lib/domain/downloads";
 
 export const dynamic = "force-dynamic";
 
@@ -61,12 +62,17 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
     return nextSlot(slotsFor(slug), taken, now)?.toISOString() ?? null;
   };
 
-  // Preview links for the media of the posts on screen (members may read their org's files).
-  const paths = (posts ?? []).flatMap((p) => [p.video_path, p.cover_path, ...(p.slide_paths ?? [])]).filter((x): x is string => !!x);
-  const signed = new Map<string, string>();
+  // Preview links for the media of the posts on screen (members may read their org's files), and the same files signed
+  // to download (domain/downloads.ts: a reel posted by hand from the phone).
+  const paths = downloadPaths(posts ?? []);
+  const signed = new Map<string, string>(), saveAs = new Map<string, string>();
   if (paths.length) {
-    const { data } = await supabase.storage.from("media").createSignedUrls(paths, 3600);
+    const [{ data }, { data: dl }] = await Promise.all([
+      supabase.storage.from("media").createSignedUrls(paths, 3600),
+      supabase.storage.from("media").createSignedUrls(paths, 3600, { download: true }),
+    ]);
     for (const d of data ?? []) if (d.path && d.signedUrl) signed.set(d.path, d.signedUrl);
+    for (const d of dl ?? []) if (d.path && d.signedUrl) saveAs.set(d.path, d.signedUrl);
   }
 
   const views: PostView[] = (posts ?? []).map((p) => ({
@@ -78,6 +84,7 @@ export default async function Dashboard({ searchParams }: { searchParams: { tab?
     videoUrl: p.video_path ? signed.get(p.video_path) ?? null : null,
     coverUrl: p.cover_path ? signed.get(p.cover_path) ?? null : null,
     slideUrls: (p.slide_paths ?? []).map((s: string) => signed.get(s)).filter((x: string | undefined): x is string => !!x),
+    downloads: mediaDownloads(p, saveAs),
     channels: (channels ?? []).filter((c) => c.project_id === p.project_id).map((c) => ({
       platform: c.platform as Platform,
       name: (c.connected_accounts as unknown as { display_name: string } | null)?.display_name ?? c.platform,
