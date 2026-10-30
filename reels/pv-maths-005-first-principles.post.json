@@ -1,0 +1,16 @@
+{
+  "slug": "pv-maths-005-first-principles",
+  "project": "pyqvault-insta",
+  "kind": "reel",
+  "title": "Maths #5 · Where derivatives come from: chord → tangent (copy of @mathsy.uk, narrated)",
+  "video": "pv-maths-005-first-principles.mp4",
+  "cover": "pv-maths-005-first-principles-cover.png",
+  "captions": {
+    "instagram": "Where do derivatives really come from? 🤔\n\nClass 11 Maths · Limits and Derivatives\nMaths, visualised #5\n\nTake two points on a curve, h apart. The line through them climbs f(x + h) − f(x) over a distance h.\nLet h shrink towards 0 and that line turns into the tangent at x.\nThe slope it settles on is the derivative: f′(x) = lim h→0 [f(x + h) − f(x)] / h\n\"Find the derivative from first principles\" is a regular Class 11 exam question, and the idea under every calculus PYQ.\n\nSave it for revision 📌 Follow for #6.\nPractise every PYQ on this chapter free → link in bio (PYQ Vault).\n\n#Maths #Class11 #CBSE #JEEMain #MHTCET #Derivatives #Calculus #LimitsAndDerivatives #MathsVisualised",
+    "facebook": "Where do derivatives really come from? 🤔\n\nMaths, visualised #5: two points on a curve, h apart. The line through them has slope [f(x + h) − f(x)] / h. Let h shrink towards 0 and the line becomes the tangent at x; its slope is the derivative, f′(x).\n\nPractise PYQs free, chapter-wise: https://www.pyqvault.com\n\n#Maths #Derivatives #Class11",
+    "youtube": {
+      "title": "Where derivatives really come from #shorts",
+      "description": "Maths, visualised #5. Two points on a curve, h apart: the line through them has slope [f(x + h) − f(x)] / h. Shrink h towards 0 and it becomes the tangent; its slope is the derivative (Class 11 Limits and Derivatives; JEE Main, CBSE, MHT-CET).\n\nPractise PYQs free, chapter-wise: pyqvault.com\n\n#Maths #Derivatives #Shorts"
+    }
+  }
+}
