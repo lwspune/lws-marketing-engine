@@ -7,10 +7,29 @@ import { join, resolve, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { openPage, fileUrl } from './edge.mjs';
 
 const [, , src, out] = process.argv;
 if (!src || !out) throw new Error('usage: music.mjs <page.render.html | spec.json> <out.wav>');
+
+// A spec that names a shelf track ({ "music": { "track": "<id>", "from": s } }): cut the licensed track instead of
+// rendering engine.js music (reels/tools/shelf.js has the rules and the list).
+if (src.endsWith('.json') && JSON.parse(readFileSync(src, 'utf8')).music?.track) {
+  const { execFileSync } = await import('node:child_process');
+  const shelf = createRequire(import.meta.url)('./shelf.js');
+  const spec = JSON.parse(readFileSync(src, 'utf8')), track = shelf.find(shelf.load(), spec.music.track);
+  const plan = shelf.cutPlan(track, { duration: spec.duration, from: spec.music.from });
+  const ffmpeg = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..', 'remotion', 'node_modules', '@remotion', 'compositor-win32-x64-msvc', 'ffmpeg.exe');
+  const wav = execFileSync(ffmpeg, ['-v', 'error', '-ss', String(plan.from), '-t', String(plan.duration), '-i', shelf.fileOf(track.id),
+    '-af', `volume=${plan.gainDb}dB`, '-ar', '48000', '-ac', '2', '-c:a', 'pcm_s16le', '-f', 'wav', '-'], { maxBuffer: 1 << 28 });
+  let o = 12; while (wav.toString('ascii', o, o + 4) !== 'data') o += 8 + wav.readUInt32LE(o + 4);
+  const pcm = new Int16Array(wav.buffer, wav.byteOffset + o + 8, (wav.length - o - 8) >> 1);
+  shelf.applyFades(pcm, 48000, plan);
+  writeFileSync(out, wav);
+  console.log(`wrote ${out} · ${track.title} by ${track.artist} (Pixabay) · ${plan.from}–${plan.from + plan.duration} s · ${plan.gainDb} dB`);
+  process.exit(0);
+}
 
 let page = src, tmp = null;
 if (src.endsWith('.json')) {
