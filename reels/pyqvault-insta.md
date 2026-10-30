@@ -1,7 +1,7 @@
 # @pyqvault_ house settings (approved by the founder, 2026-10-18)
 
 The Instagram for **PYQ Vault**: Physics, Chemistry and Maths concepts for **Class 11–12** (CBSE / State boards, JEE,
-NEET, MHT-CET), explained visually. Not NDA (that's @lws.pune). Publisher project **`pyqvault-insta`**: posts go
+NEET, MHT-CET), explained visually. Not NDA or defence (that's @lws.pune). Publisher project **`pyqvault-insta`**: posts go
 to @pyqvault_ and the PYQ Vault Facebook Page. Reels are made in Remotion (`remotion/`) by the framework below.
 
 ## How a reel is made: the framework
@@ -10,18 +10,22 @@ to @pyqvault_ and the PYQ Vault Facebook Page. Reels are made in Remotion (`remo
 topic, hook, picture, sound and shape, each with its reason, how it's checked and its status. The content and look rules
 that used to be here moved there unchanged (plus the 2026-10-20 points); change them only through its change log.
 
-- **Series:** "Physics, visualised #N" and "Chemistry, visualised #N", alternating P → C (framework F19). **No maths**
-  from 2026-10-20 (founder: physics and chemistry have the better visual content); maths ideas go to @lws.pune. Maths #1
-  and #2 were posted before that and stay up.
+- **Series:** "Physics, visualised #N", "Chemistry, visualised #N" and "Maths, visualised #N", rotating P → C → M
+  (framework F19). Maths was off from 2026-10-20 and is back from 2026-10-28 (founder: "defence related reels will go to
+  lwspune. maths, physics, chem will go to pyqvault"); the count carries on from Maths #3. NDA maths and defence reels
+  stay on @lws.pune; no topic goes to both.
+- **Imitate proven reels** (framework F40, founder 2026-10-28: "let's not reinvent the wheel"): reels copy a ≥ 3× reel
+  from another creator as closely as possible, in our own look, words and sound.
 - Physics #1 and Chemistry #1 were made with the old engine (`api.jar`, `api.sphere3d`) and stay as they are.
 
 ## Caption
 
-- First line names the syllabus (L23): `Class 11 Physics · <chapter>` / `Class 12 Chemistry · <chapter>`.
+- First line names the syllabus (L23): `Class 11 Physics · <chapter>` / `Class 12 Chemistry · <chapter>` /
+  `Class 12 Maths · <chapter>`.
 - Then the series line, 2–4 short lines on the idea, one line on where it's asked, the save/follow ask, and
   "Practise every PYQ on this chapter free → link in bio (PYQ Vault)".
-- Hashtags: #Physics or #Chemistry, #Class11 / #Class12, #CBSE, #JEEMain, #NEET (+ #MHTCET where relevant),
-  the chapter, #PhysicsVisualised / #ChemistryVisualised.
+- Hashtags: #Physics, #Chemistry or #Maths, #Class11 / #Class12, #CBSE, #JEEMain, #NEET (physics and chemistry only;
+  + #MHTCET where relevant), the chapter, #PhysicsVisualised / #ChemistryVisualised / #MathsVisualised.
 - Facebook: same, with the PYQ Vault chapter link written out.
 - **Predict-first reels** (framework F4, F6): line 1 is the question with its options, then "Comment your guess before you
   watch 👇" and "Answer at the end of the reel 👀". The answer is never in the caption, on any platform (L45; checked

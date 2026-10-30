@@ -19,8 +19,8 @@ const fs = require("node:fs"), path = require("node:path");
 
 // @lws.pune's fixed ranges: proof + vivid + question + concept live + everyday, out of 10.
 const RANGES = { vivid: 3, question: 2, law: 1, everyday: 1 };
-// @pyqvault_ is physics and chemistry only: they have the better visual content (founder, 2026-10-20).
-const SUBJECTS = ["P", "C"];
+// @pyqvault_ is maths, physics and chemistry (founder, 2026-10-28: defence reels and NDA maths go to @lws.pune).
+const SUBJECTS = ["P", "C", "M"];
 const ACCOUNTS = {
   pyqvault: { handle: "@pyqvault_", file: "pyqvault-ideas.md", heading: "## Ideas", subjects: SUBJECTS, weighted: true },
   // Core chapters (lwspune-framework.md F32, founder 2026-10-24): the biggest NDA maths chapters get a reel each every week.

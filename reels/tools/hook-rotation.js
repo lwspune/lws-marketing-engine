@@ -9,14 +9,16 @@
 
 // The catalogue, each with the reel that proved it for another account (framework F25 has the evidence).
 const HOOKS = ["Race", "Pick one", "Ending first", "Everyday puzzle", "You'd think", "Spot the mistake", "Put in order",
-  "Same start, two endings"];
+  "Same start, two endings", "Copied"];
 // Openings are the visual layer, the move that grabs attention in the first 3 s (founder, 2026-10-22: "orbit shot, objects
 // splitting or coming together, just like an Iron Man suit"). Assemble (suit-up) replaced "Parts build". Shock: a dramatic
 // event from the topic in the first second, before anyone can read (founder, 2026-10-23).
 const OPENINGS = ["Orbit 360°", "Race running", "Ending first", "Zoom (scale)", "Assemble (suit-up)", "Split apart", "Morph",
-  "X-ray", "Split screen", "Colour flood", "Shock"];
+  "X-ray", "Split screen", "Colour flood", "Shock", "Copied"];
 // Out by the founder's call: the reason is in the framework's change log.
 const BANNED = { "Exam badge": "out (founder, 2026-10-21)" };
+// An imitated reel (framework F40, founder 2026-10-28) keeps the hook and opening of the reel it copies.
+const COPIED = "Copied";
 const HEADING = "## Hook queue";
 
 // The sound kit the hook's sound comes from (founder, 2026-10-22; F14: only what's on screen): the hits and beds of
@@ -51,7 +53,7 @@ function parseQueue(md) {
   return rows.sort((a, b) => a.order - b.order);
 }
 
-const subjectName = { P: "physics", C: "chemistry" };
+const subjectName = { P: "physics", C: "chemistry", M: "maths" };
 
 /** Everything that breaks the rotation, as readable lines (empty when it's fine). */
 function rotationErrors(q) {
@@ -70,9 +72,9 @@ function rotationErrors(q) {
     if (r.loop !== "yes") errors.push(`${r.id}: loop "${r.loop}": every reel loops (F27)`);
     const prev = q[i - 1];
     if (!prev) return;
-    if (r.hook === prev.hook) errors.push(`${r.id}: hook "${r.hook}" again right after ${prev.id}`);
-    if (r.opening === prev.opening) errors.push(`${r.id}: opening "${r.opening}" again right after ${prev.id}`);
-    if (r.id[0] === prev.id[0]) errors.push(`${r.id}: two ${subjectName[r.id[0]] ?? r.id[0]} reels in a row (F19: P → C)`);
+    if (r.hook === prev.hook && r.hook !== COPIED) errors.push(`${r.id}: hook "${r.hook}" again right after ${prev.id}`);
+    if (r.opening === prev.opening && r.opening !== COPIED) errors.push(`${r.id}: opening "${r.opening}" again right after ${prev.id}`);
+    if (r.id[0] === prev.id[0]) errors.push(`${r.id}: two ${subjectName[r.id[0]] ?? r.id[0]} reels in a row (F19: P → C → M)`);
   });
   return errors;
 }

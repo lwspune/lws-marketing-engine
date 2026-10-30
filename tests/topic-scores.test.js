@@ -304,7 +304,13 @@ test("the real @pyqvault_ idea list is valid, has an open idea for each subject 
   assert.deepEqual(ts.validate(rows, undefined, opts(md)), []);
   assert.deepEqual(ts.runwayErrors(md, rows), []);
   const next = ts.nextPicks(rows);
-  for (const s of ["P", "C"]) assert.ok(next[s], `no open ${s} idea`);
+  for (const s of ["P", "C", "M"]) assert.ok(next[s], `no open ${s} idea`);
+});
+
+// Founder, 2026-10-28: maths, physics and chemistry go to @pyqvault_; defence and NDA maths stay on @lws.pune.
+test("@pyqvault_ takes maths again, alongside physics and chemistry", () => {
+  assert.deepEqual(ts.ACCOUNTS.pyqvault.subjects, ["P", "C", "M"]);
+  assert.deepEqual(check(MD.replace("| C8 | C |", "| M1 | M |").replace("### C8 ·", "### M1 ·")), []);
 });
 
 test("every posted @pyqvault_ reel with an idea id points at a row of the idea list", () => {

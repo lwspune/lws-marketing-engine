@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.34, 2026-10-26)
+# @pyqvault_ reel framework (v1.35, 2026-10-28)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -19,8 +19,28 @@ together: Instagram shows a reel to more people when the first viewers stay. The
 
 ## Topic
 
-**F1 · Three sources: a proven remake, a PYQ Vault concept, or the founder's idea.** Every reel is made from the idea
-list, `pyqvault-ideas.md` (founder, 2026-10-21): ideas that already went viral for other creators, remade our way;
+**F40 · Imitate a proven reel as closely as possible, in our own brand.** Founder, 2026-10-28: "for pyqvault we will
+imitate top performing reels (let's not reinvent the wheel)… imitate as closely as possible while maintaining our unique
+brand identity." The source is a reel on our syllabus that reached **≥ 3× its own account's typical reel**
+(`node reels/tools/remake-candidates.mjs`; @learnara.math, @bisal.physics, @sciencevisualised…).
+- **We copy:** the topic, the picture or metaphor (gears for the chain rule), the hook and opening, the order of the
+  shots and when each lands, the length, and how the text comes in.
+- **Always ours (the brand):** the soft studio look and real colours (F36, F24), Remotion 3D (F11), every word written by
+  us, the series title and the "PYQ Vault · pyqvault.com" tag (F19, F20), music and effects made in code (F13, F14),
+  silent-first (F17), a real result (F10), the loop (F27, proven on our numbers), and PYQ Vault's V mascot wherever the
+  source has its own mascot or character.
+- **Never theirs:** their video, frames, wording, voice, music, mascot or logo.
+- **The source wins** over the points it already decides: F2–F5, F9, F18, F25, F29, F35, F37, F39 apply only where it
+  leaves a choice open. F38's panel still reads it for defects.
+- **How:** a study copy of the source in `study/reels/<code>.mp4` (git-ignored, never posted) → its shot list with
+  timings in the reel's caption kit under **Proven idea** → build to it → a side-by-side sheet (theirs vs ours at the
+  same times) before `queue:add`. The Hook queue row says `Copied` for hook and opening.
+· *Why:* after 27 framework reels our views sit at ~1,300–1,600 whatever the rules (L64); a hit's shape has already
+worked on real viewers, ours was built from rules. · *Check:* the caption kit has the source link, its views multiple and
+the shot list; the side-by-side sheet. · 🧪 L77
+
+**F1 · Proven reels first, then a PYQ Vault concept or the founder's idea.** Every reel is made from the idea
+list, `pyqvault-ideas.md` (founder, 2026-10-21): ideas that already went viral for other creators, imitated closely (F40, from 2026-10-28);
 concepts from PYQ Vault's own notes (the MHT-CET and JEE Main physics and chemistry chapters); or a concept the founder
 brings (Source `founder`). The last two pass F28; every idea passes the list's test. Each row names its Source. · *Why:* someone else's views prove people want it; our first reels were all remakes,
 and the best did 2× the worst (L27). But the proven supply runs dry (chemistry had none left beyond the gas laws), the
@@ -31,7 +51,7 @@ notes are PYQ Vault's own (every concept is one a student will meet), and the fo
 **F21 · Pick by a score.** Each idea in `pyqvault-ideas.md` is scored out of 100: each criterion's
 points × its weight, over the best possible. Criteria (anchors in the list's Scoring table): proof (−1–3, from their
 views multiple; a known flop, under 1×, is −1) · vivid (0–3) · guess (0–2) · surprise (0–2: is the obvious answer
-wrong?) · law live (0–1) · everyday (0–2). The subject that's due (P → C) takes its highest open score, a tie going to the
+wrong?) · law live (0–1) · everyday (0–2). The subject that's due (P → C → M) takes its highest open score, a tie going to the
 bigger views multiple, then to the idea that shows its law live (F3). **The weights are frozen** (v1.33): on the 18
 framework reels the score ranks views at −0.33 and watch time at 0.07, so tuning it at every analysis only moved weights on
 noise; `topic-scores.js pyqvault --calibrate` still runs by hand, and whether the score stays is decided in the next prune
@@ -46,7 +66,7 @@ and the soda can were the everyday ideas (@mathsy.uk's #1, 2.7M). · *Check:* th
 
 **F28 · A notes or founder concept earns its row.** A concept from the notes or from the founder (F1) is curated
 against the framework before it's scored (a founder idea that fails a point comes back with a version that passes, or the
-reason it can't; the founder decides): physics or chemistry (F19), not a repeat (F21), labels of 7 words or fewer with no derivation (F7), true without
+reason it can't; the founder decides): physics, chemistry or maths (F19), not a repeat (F21), labels of 7 words or fewer with no derivation (F7), true without
 faking anything (F10), works muted and fits ≤ 25 s (F17, F18). While it's open or queued it must also pass **the gate**:
 Guess 2, a 2-second A/B/C guess (F4), and Vivid ≥ 2 (F2); one that fails is parked with the
 reason. Every chapter read goes in the idea list's **Concept sweep** log with what it added and what it left out (and which
@@ -261,10 +281,13 @@ is faceless and silent-first. · *Check:* watch it muted. · 📌 founder
 **F18 · Short.** ≤ 25 s for predict-first reels; ~25–35 s otherwise. · *Why:* viewers left within seconds (L29); a
 short reel is watched to the end more often. · *Check:* the reel's tests. · 🧪 L29
 
-**F19 · A numbered series, physics and chemistry only.** "Physics / Chemistry, visualised #N", alternating P → C. No
-maths on @pyqvault_ (founder, 2026-10-20): maths ideas go to @lws.pune. · *Why:* physics and chemistry have the better
-visual content (founder; our top reels are Boyle and the 8 families, L30), and maths has its home on @lws.pune; a numbered
-series gives a reason to follow and come back (L14; @ubilumapp's numbered series top their chart). · 📌 founder, 2026-10-18
+**F19 · A numbered series: physics, chemistry and maths.** "Physics / Chemistry / Maths, visualised #N", rotating
+P → C → M (no subject twice in a row). Maths is back from 2026-10-28 (founder: "defence related reels will go to lwspune.
+maths, physics, chem will go to pyqvault"); NDA maths stays on @lws.pune, and no topic is made for both accounts.
+· *Why:* the proven maths supply is the biggest there is (103 of the 185 ≥ 3× reels in `remake-candidates.mjs`; @learnara.math's
+chain rule did 86k on a 1,500-follower account), so with F40 maths is no longer short of good pictures (it was dropped
+on 2026-10-20 for that reason); a numbered series gives a reason to follow and come back (L14; @ubilumapp's numbered
+series top their chart). The Maths, visualised count carries on from #3. · 📌 founder, 2026-10-18; maths 2026-10-28
 
 **F20 · "PYQ Vault · pyqvault.com" on screen from frame 0; end on the idea.** A small tag under the question from the
 first frame, staying for the whole reel: smaller and quieter than the question (the question wins the 3-second decision)
@@ -370,3 +393,4 @@ before `queue:add`. · 📌 founder, measured by L73
 | v1.32 | 2026-10-26 | F38's pass rule: no defect left (not "every score ≥ 7"); scores logged, not a gate, until L73; at most two passes, then the founder judges. | Chemistry #11 took three passes from 5, 5, 6 to 6, 6, 6 at ~300k agent tokens a pass, and the critics began to contradict each other (red push arrows back after pass 1 had moved them to yellow for colour-blind viewers; uneven shards for a salt that cleaves into cubes). Founder approved. |
 | v1.33 | 2026-10-26 | **Pruned on the data** (founder: "too many rules… delete rules based on data"). Rule 5 added: the framework is reviewed at every reel review (founder: "every time we review reels, let's review the framework as well"). Dropped: F12 dark/white alternation, F22 the orbit as its own rule (Orbit 360° stays one of F25's openings; its "2 of any 4" cap goes, already implied by no opening twice in a row), F23 voiceover (reels are silent), F26 the second hook, F30 the virality predictor (`virality-measure.mjs` stays for F37's aftershock). F13 keeps music by mood, without the fair rotation or "never twice in a row". F15 and F16 merged into F14 (same content). F27 from "loop or end card" to **every reel loops** (✅). F21's weights frozen, no calibration at each analysis. On notice for the next prune: F4, F21, F25. 34 points → 27. | Medians of the 18 framework reels (20–26 Oct; with / without): voice 9.0 / 8.4 s watched, 1,378 / 1,510 views (5 voiced, L43); second hook 8.5 / 8.7 s, 1,498 / 1,424 (8 reels, L49); orbit 8.7 / 8.5 s, 1,427 / 1,472 (6, L37); white 9.3 / 8.3 s, 1,497 / 1,366 (8 white, 10 dark: far under the 1.5× bar, L22); every music style at both ends (L34). The predictor's real predictions rank views at −0.47, 3 of 8 bands right (L60); the idea score ranks views at −0.33, watch at 0.07 (L35). Loops: 1.35 views per account reached vs 1.16 (L50). Views sit at 1,300–1,640 whatever the rules (L64), and the reel made without most of them tied (L61). Rule 3 of this framework: a point is dropped when ≥ 3 reels show no gain. |
 | v1.34 | 2026-10-26 | F39 made to send added (🧪): the payoff is a complete set, the reel ends on a cheat-sheet frame held ~2 s before the loop, and the caption lists the set plus one send line. First package: C9 (the pH chart), P74 (the spectrum), C49 (hydroxide precipitates), ahead of P7 and C15. | Founder: "let's work on increasing reels shares, that is our real growth lever." Views sit in a batch of ~1,100–1,400 accounts whatever the rules (L64); the only framework reel that left it, the flame test, had 21 of our 32 shares and was a complete exam table (10.9 shares per 1,000 reach vs ≤ 2.2 for every other). Measured by L64 (the bar is set in F39). |
+| v1.35 | 2026-10-28 | **F40 imitate a proven reel** added (🧪 L77): copy a ≥ 3× reel's topic, picture, hook, shot order, timing and length; keep our brand (studio look, our words, series + tag, music made in code, silent-first, real result, loop, V mascot); the source wins over F2–F5, F9, F18, F25, F29, F35, F37, F39 where it decides. F1: proven reels first. F19: maths back, P → C → M; NDA maths and defence stay on @lws.pune. F21, F28: maths added. `hook-rotation.js`: `Copied` hook and opening. First: M10, @learnara.math's chain rule as gears (86k, 7.1×). | Founder: "defence related reels will go to lwspune. maths, physics, chem will go to pyqvault. for pyqvault we will imitate top performing reels (let's not reinvent wheel)", "as closely as possible while maintaining our unique brand identity". 27 framework reels sit at ~1,300–1,600 views whatever the rules (L64). |

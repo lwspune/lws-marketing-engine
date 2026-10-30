@@ -1,0 +1,16 @@
+{
+  "slug": "pv-maths-004-chain-rule",
+  "project": "pyqvault-insta",
+  "kind": "reel",
+  "title": "Maths #4 · The chain rule as three gears (F40 imitation of @learnara.math's 7.1× reel; white studio, loop)",
+  "video": "pv-maths-004-chain-rule.mp4",
+  "cover": "pv-maths-004-chain-rule-cover.png",
+  "captions": {
+    "instagram": "Turn x once. How many times does y turn? 🤔\n\nClass 12 Maths · Continuity and Differentiability: the chain rule\nMaths, visualised #4\n\nThree gears: x drives u, u drives y.\nu turns 2× per turn of x → du/dx = 2\ny turns 3× per turn of u → dy/du = 3\nSo one turn of x turns y 3 × 2 = 6 times. Not 3 + 2.\nRates along a chain multiply: dy/dx = dy/du · du/dx\n\nSend this to the friend who still adds them 😅\nSave it for revision 📌 Follow for #5.\nPractise every PYQ chapter-wise, free → pyqvault.com (link in bio).\n\n#Maths #Class12 #CBSE #JEEMain #MHTCET #ChainRule #Calculus #Differentiation #MathsVisualised",
+    "facebook": "Turn x once. How many times does y turn? 🤔\n\nMaths, visualised #4: the chain rule as three gears. u turns 2× per turn of x, y turns 3× per turn of u, so y turns 3 × 2 = 6 times per turn of x. Rates along a chain multiply: dy/dx = dy/du · du/dx.\n\nSend it to the friend who still adds them 😅\n\nPractise PYQs free, chapter-wise: https://www.pyqvault.com\n\n#Maths #ChainRule #Class12",
+    "youtube": {
+      "title": "The chain rule, seen with three gears #shorts",
+      "description": "Maths, visualised #4. x drives u, u drives y: du/dx = 2, dy/du = 3, so dy/dx = 3 × 2 = 6. Rates along a chain multiply (Class 12 Continuity and Differentiability; JEE Main, CBSE, MHT-CET).\n\nPractise PYQs free, chapter-wise: pyqvault.com\n\n#Maths #ChainRule #Shorts"
+    }
+  }
+}
