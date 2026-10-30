@@ -177,6 +177,13 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   made every reel loop, and froze the idea score's weights: 34 points → 27. Views sit at ~1,300–1,600 whatever the rules
   (L64). **Standing rule:** every reel review also reviews the framework (its rule 5), to keep deleting and fine-tuning.
 
+- **Music shelf (2026-10-30, founder: "i need music which can be directly used in reel").** Licensed tracks we put in our own
+  MP4 and post through GoPost everywhere (Instagram, Facebook, YouTube): 14 Pixabay tracks (Pixabay Content License:
+  commercial use, no credit), two per mood (patriotic, epic, motivational, lofi, suspense, upbeat, emotional). A reel's music
+  spec names one (`{ "music": { "track": "<id>", "from": s } }`) instead of a code-made style; code-made music stays the
+  default. Another creator's audio (their voice, their song) is never put in our file: that goes on in the Instagram app
+  ("Use audio"), posted by hand from the phone (GoPost's Download button).
+
 ## File structure
 
 ```
@@ -264,7 +271,8 @@ remotion/                # TRIAL: reels in Remotion (React + SVG, frame-by-frame
   src/shapes.tsx         #   RoundBox (rounded 3D boxes, framework F8); camera zooms are `tween` keys (motion.ts, F9)
   src/Reel014.tsx        #   first 3D reel (@remotion/three + three.js, GPU via ANGLE); `npm run music:014`,
                          #   `render:014`, `cover:014` write to ../reels/. Runbook: reels/visual-reel-workflow.md
-  music/*.json           #   music spec per reel → reels/tools/music.mjs renders engine.js music offline to WAV
+  music/*.json           #   music spec per reel → reels/tools/music.mjs renders engine.js music offline to WAV, or cuts a
+                         #   music-shelf track ("track": "<id>", reels/music-shelf.json; MP3s in public/music-shelf/, git-ignored)
   tests/deps.test.ts     #   package guard: exact versions, npm registry only, no unread install scripts. Reel toolkit
                          #   (glow, self-drawing paths, noise, hand-drawn notes, pen strokes): reels/visual-reel-workflow.md
 publisher/               # HOSTED approve → publish app (Next.js 14 + Supabase, own Vercel project)
