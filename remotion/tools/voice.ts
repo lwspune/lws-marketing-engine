@@ -25,6 +25,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   pc008: { lib: '../src/lib/pc008.ts', file: 'public/pv-chem-008-packing' },
   d001: { lib: '../src/lib/defence001.ts', file: 'public/nda-defence-001-army-ranks' },
   '028': { lib: '../src/lib/reel028.ts', file: 'public/nda-maths-028-trig-lines' },
+  pm005: { lib: '../src/lib/pm005.ts', file: 'public/pv-maths-005-first-principles' },
 };
 const id = process.argv[2], reel = REELS[id];
 if (!reel) throw new Error(`usage: node tools/voice.ts <${Object.keys(REELS).join(' | ')}>`);
