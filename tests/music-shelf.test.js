@@ -26,7 +26,7 @@ test("every track on the shelf says what it is, where it came from and its licen
 });
 
 test("the moods cover what our reels need, at least two tracks each", () => {
-  for (const mood of ["patriotic", "epic", "motivational", "lofi", "suspense", "upbeat", "emotional"])
+  for (const mood of ["patriotic", "epic", "motivational", "lofi", "suspense", "upbeat", "emotional", "soothing"])
     assert.ok(SHELF.filter((t) => t.mood === mood).length >= 2, mood);
 });
 
