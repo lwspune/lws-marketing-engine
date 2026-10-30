@@ -129,6 +129,8 @@
     "mix:pm004": "node tools/mix.ts pm004",
     "render:pm004": "remotion render PvMaths004 ../reels/pv-maths-004-chain-rule.mp4",
     "cover:pm004": "remotion still PvMaths004Cover ../reels/pv-maths-004-chain-rule-cover.png",
+    "render:poem001": "remotion render LwsPoem001 ../reels/nda-poem-001-atal-raho.mp4 --muted",
+    "cover:poem001": "remotion still LwsPoem001Cover ../reels/nda-poem-001-atal-raho-cover.png",
     "compare:pp009": "node -e \"const fs=require('fs');for(const f of ['pv-physics-009-wing-mirror-voice.mp4','pv-physics-009b-wing-mirror-voice.mp4'])fs.copyFileSync('../reels/'+f,'public/'+f)\" && remotion render Compare009 ../reels/pv-physics-009-compare.mp4",
     "music:pc008": "node ../reels/tools/music.mjs music/pv-chem-008-packing.json public/pv-chem-008-packing.wav",
     "voice:pc008": "node tools/voice.ts pc008",
