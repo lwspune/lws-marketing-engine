@@ -26,7 +26,7 @@ test("every track on the shelf says what it is, where it came from and its licen
 });
 
 test("the moods cover what our reels need, at least two tracks each", () => {
-  for (const mood of ["patriotic", "epic", "motivational", "lofi", "suspense", "upbeat", "emotional"])
+  for (const mood of ["patriotic", "epic", "motivational", "lofi", "suspense", "upbeat", "emotional", "soothing"])
     assert.ok(SHELF.filter((t) => t.mood === mood).length >= 2, mood);
 });
 
@@ -51,6 +51,16 @@ test("fades are applied to the samples: silent edges where they fade, untouched 
   assert.equal(pcm[2 * (n - 1)], 0);
   assert.equal(pcm[2 * 1500], 10000, "the middle stays as it was");
   assert.ok(pcm[2 * 250] > 4000 && pcm[2 * 250] < 6000, "half way through the fade-in, about half");
+});
+
+test("a WAV that ffmpeg streamed (sizes left as 0xFFFFFFFF) gets its real RIFF and data sizes", () => {
+  const fmt = Buffer.alloc(24); fmt.write("fmt ", 0); fmt.writeUInt32LE(16, 4);
+  const pcm = Buffer.alloc(40, 1), data = Buffer.alloc(8); data.write("data", 0); data.writeUInt32LE(0xffffffff, 4);
+  const head = Buffer.alloc(12); head.write("RIFF", 0); head.writeUInt32LE(0xffffffff, 4); head.write("WAVE", 8);
+  const wav = Buffer.concat([head, fmt, data, pcm]);
+  shelf.fixWavSizes(wav);
+  assert.equal(wav.readUInt32LE(4), wav.length - 8);
+  assert.equal(wav.readUInt32LE(12 + 24 + 4), 40);
 });
 
 test("the shelf's audio files themselves stay out of git", () => {
