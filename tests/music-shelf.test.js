@@ -53,6 +53,16 @@ test("fades are applied to the samples: silent edges where they fade, untouched 
   assert.ok(pcm[2 * 250] > 4000 && pcm[2 * 250] < 6000, "half way through the fade-in, about half");
 });
 
+test("a WAV that ffmpeg streamed (sizes left as 0xFFFFFFFF) gets its real RIFF and data sizes", () => {
+  const fmt = Buffer.alloc(24); fmt.write("fmt ", 0); fmt.writeUInt32LE(16, 4);
+  const pcm = Buffer.alloc(40, 1), data = Buffer.alloc(8); data.write("data", 0); data.writeUInt32LE(0xffffffff, 4);
+  const head = Buffer.alloc(12); head.write("RIFF", 0); head.writeUInt32LE(0xffffffff, 4); head.write("WAVE", 8);
+  const wav = Buffer.concat([head, fmt, data, pcm]);
+  shelf.fixWavSizes(wav);
+  assert.equal(wav.readUInt32LE(4), wav.length - 8);
+  assert.equal(wav.readUInt32LE(12 + 24 + 4), 40);
+});
+
 test("the shelf's audio files themselves stay out of git", () => {
   const ignore = fs.readFileSync(path.join(__dirname, "..", "remotion", "public", "music-shelf", ".gitignore"), "utf8");
   assert.match(ignore, /\*\.mp3/);

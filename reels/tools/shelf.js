@@ -44,4 +44,14 @@ function applyFades(pcm, rate, { fadeIn, fadeOut }) {
   return pcm;
 }
 
-module.exports = { load, find, fileOf, cutPlan, applyFades, DIR };
+/** ffmpeg writing a WAV to a pipe can't seek back, so it leaves the RIFF and data sizes as 0xFFFFFFFF, and a reader that
+ *  trusts them (remotion's readWav) runs off the end. Sets both from the buffer's real length, in place. */
+function fixWavSizes(wav) {
+  let o = 12;
+  while (wav.toString("ascii", o, o + 4) !== "data") o += 8 + wav.readUInt32LE(o + 4);
+  wav.writeUInt32LE(wav.length - 8, 4);
+  wav.writeUInt32LE(wav.length - o - 8, o + 4);
+  return wav;
+}
+
+module.exports = { load, find, fileOf, cutPlan, applyFades, fixWavSizes, DIR };

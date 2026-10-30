@@ -26,7 +26,7 @@ if (src.endsWith('.json') && JSON.parse(readFileSync(src, 'utf8')).music?.track)
   let o = 12; while (wav.toString('ascii', o, o + 4) !== 'data') o += 8 + wav.readUInt32LE(o + 4);
   const pcm = new Int16Array(wav.buffer, wav.byteOffset + o + 8, (wav.length - o - 8) >> 1);
   shelf.applyFades(pcm, 48000, plan);
-  writeFileSync(out, wav);
+  writeFileSync(out, shelf.fixWavSizes(wav));
   console.log(`wrote ${out} · ${track.title} by ${track.artist} (Pixabay) · ${plan.from}–${plan.from + plan.duration} s · ${plan.gainDb} dB`);
   process.exit(0);
 }
