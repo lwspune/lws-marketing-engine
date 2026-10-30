@@ -21,8 +21,8 @@ together: Instagram shows a reel to more people when the first viewers stay. The
 **F40 · Imitate a proven reel as closely as possible, in our own brand.** Founder, 2026-10-28: "for pyqvault we will
 imitate top performing reels (let's not reinvent the wheel)… imitate as closely as possible while maintaining our unique
 brand identity." The source is a reel on our syllabus with **at least 100k views** (founder, 2026-10-30: "we should
-make reels only on proven ideas and should have 100k as min criteria"); among those, the bigger multiple of its own
-account's typical reel goes first (`node reels/tools/remake-candidates.mjs`; @learnara.math, @bisal.physics,
+make reels only on proven ideas and should have 100k as min criteria"); among those, F21's score picks (its proof points come
+from the multiple of the source's own account's typical reel). Candidates: `node reels/tools/remake-candidates.mjs` (accounts read so far: @learnara.math, @bisal.physics,
 @sciencevisualised…).
 - **We copy:** the topic, the picture or metaphor (gears for the chain rule), the hook and opening, the order of the
   shots and when each lands, the length, and how the text comes in.
