@@ -213,8 +213,9 @@ they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm ru
    question, labels and captions; numbers, gauges and graphs stay): it must still show what happens and why (@pyqvault_
    F29, founder 2026-10-21); if it doesn't, the picture is missing a beat, so add it rather than more words. The frames
    from 0–3 s, text hidden, must show the visual hook's move doing something striking on every frame. **Claude's own check:** the founder judges the finished reel only, never the sheet
-   (founder, 2026-10-21). **Then the review panel's pass 1** (framework F38, `reels/review-panel.md`): the Drama, Colour and
-   Motion critics read the sheet, each a fresh agent with only the kit; fix every must-fix before the music.
+   (founder, 2026-10-21). **@lws.pune: then the review panel's pass 1** (framework F38, `reels/review-panel.md`; dropped on
+   @pyqvault_ in v1.36): the Drama, Colour and Motion critics read the sheet, each a fresh agent with only the kit; fix
+   every must-fix before the music.
 6. **Music:** write `remotion/music/<reel>.json` (`duration`, `music.style`, `music.hits`), then
    `node ../reels/tools/music.mjs music/<reel>.json public/<reel>.wav`: the house music from `engine.js`,
    rendered offline (sample-exact, hits on time). Then `npm run mix:<reel>`.
@@ -222,11 +223,9 @@ they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm ru
    hit for a cut or flip to a new screen) and **shimmer** (an airy 2 s swell under a reveal zoom), both modelled on a
    studied reel's sounds (2026-10-21): measured, then made in code, never copied.
 7. **Check:** render the MP4 to `reels/` and run `check-video.mjs` as in step 4 (four PASS lines), and look at its
-   strip. **@pyqvault_: then measure the opening** (framework F37): `node reels/tools/virality-measure.mjs
-   reels/<reel>.post.json` (an "F37: the opening fades" warning means the first 3 s settle too early: fix the opening and
-   re-render before going on). **Panel pass 2** (F38): Sound on `tools/sound-report.ts`, Motion on `--frames`; no defect left
-   before it's queued (scores are logged, not a gate; at most two passes). No virality prediction: the predictor was
-   retired in framework v1.33 (L60: its real predictions ranked views at −0.47).
+   strip. **@lws.pune: panel pass 2** (F38): Sound on `tools/sound-report.ts`, Motion on `--frames`; no defect left
+   before it's queued (scores are logged, not a gate; at most two passes). No opening measure on @pyqvault_ (F37 dropped in
+   v1.36, L72) and no virality prediction (retired in v1.33, L60: its real predictions ranked views at −0.47).
 8. **Map reels (F28):** start from `Reel017.tsx` + `src/lib/reel017.ts`. A card is 330 px wide, so a formula line over
    ~290 px at 34 px (about 18 Cambria characters) is cut off at its edge on the full map: give that node a smaller `size`
    (017's Bayes card: 31) or split the line. Check the full-map frame at full size, not only the stills sheet.

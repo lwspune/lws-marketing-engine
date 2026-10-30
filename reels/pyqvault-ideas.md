@@ -3,8 +3,13 @@
 **The one place @pyqvault_'s reel ideas live** (founder, 2026-10-21): every future reel is made from a row here. An idea gets
 in only if it passes **the test** below; it is then **scored** (weights frozen since framework v1.33: the score didn't predict our results, L35).
 `node reels/tools/topic-scores.js pyqvault` checks the whole file and names the next pick per subject (P → C → M);
-`--calibrate` runs the tuning. Framework: `pyqvault-framework.md` (F1, F21, F28, F29). @lws.pune's ideas stay in
+`--calibrate` runs the tuning. Framework: `pyqvault-framework.md` (F1, F21, F29, F40). @lws.pune's ideas stay in
 `remake-backlog.md` until it is rebuilt.
+
+**Proven ideas only (founder, 2026-10-30, framework v1.36):** a reel is made only from a remake whose source reel has
+**≥ 100k views** (F1, F40). Notes and founder concepts are no longer made; until `topic-scores.js` parks them and checks
+the 100k bar itself, pick only Source `remake` rows whose source has ≥ 100k views, and refill from
+`node reels/tools/remake-candidates.mjs` (chemistry has no ≥ 100k candidates in the saved competitor data yet).
 
 **Open: 83 ideas · about 83 days at 1 reel a day.**
 

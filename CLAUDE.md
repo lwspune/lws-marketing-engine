@@ -177,6 +177,10 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   made every reel loop, and froze the idea score's weights: 34 points → 27. Views sit at ~1,300–1,600 whatever the rules
   (L64). **Standing rule:** every reel review also reviews the framework (its rule 5), to keep deleting and fine-tuning.
 
+- **@pyqvault_ makes proven ideas only (2026-10-30, founder: "only on proven ideas… 100k as min criteria").** Every reel
+  copies a reel with ≥ 100k views (framework F1, F40, v1.36); notes and founder concepts are no longer made. Same review
+  dropped F37 (aftershock), F38 (review panel, @pyqvault_ only) and F39 (made to send) on the data: none moved views.
+
 - **Account split + imitate proven reels (2026-10-28, founder).** "Defence related reels will go to lwspune. Maths,
   physics, chem will go to pyqvault. For pyqvault we will imitate top performing reels (let's not reinvent the wheel)."
   @lws.pune keeps defence reels and NDA maths; @pyqvault_ takes Class 11–12 maths again (P → C → M), never a topic made for
@@ -228,8 +232,8 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
                          #   pyqvault-learnings.md → results, Idea column; needs 6 reels; prints, changes nothing); lwspune also
                          #   prints the week's Probability + Statistics picks (F32–F33, ideas "Probability · …")
   virality-log.md        #   @pyqvault_ virality predictor: RETIRED 2026-10-26 (framework v1.33, L60: ranked views at −0.47);
-                         #   log frozen as the record. tools/virality.js likewise; virality-measure.mjs stays as F37's
-                         #   aftershock check (motion, colour, length, cover from the MP4 in headless Edge)
+                         #   log frozen as the record. tools/virality.js likewise; virality-measure.mjs (motion, colour,
+                         #   length, cover from the MP4 in headless Edge) is kept for study; F37, its last user, was dropped in v1.36
   tools/results-sync.js  #   copies GoPost's 48 h readings (publisher `npm run results`) into pyqvault-learnings.md's
                          #   results table; the analysis routine (ending in a framework review, rule 5) is at the top of it
   tools/hook-rotation.js #   @pyqvault_ hook, opening, sound, loop per queued reel (framework F25, F27;
