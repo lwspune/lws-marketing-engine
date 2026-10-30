@@ -224,7 +224,7 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   visual-candidates.md   #   PYQs whose answer is a picture, by paper (pick visual reels from here)
   tools/                 #   headless-Edge scripts: frames, record, cover, check-video, unchanged (+ baseline.txt)
   pyqvault-ideas.md      #   @pyqvault_ IDEA LIST (founder 2026-10-21): every future reel comes from here. The test (F29 no
-                         #   words, F28 gate…), the score (weights × points /100, frozen since v1.33), Ideas table, one
+                         #   words, Views ≥ 100k: proven only…), the score (weights × points /100, frozen since v1.33), Ideas table, one
                          #   card per open idea (frame 0, beats without words), Hook queue, Concept sweep, Archive
   remake-backlog.md      #   @lws.pune ideas (score /10) + the remake rules; @pyqvault_ moved to pyqvault-ideas.md
   tools/topic-scores.js  #   next topic by score, per handle (framework F21); `node reels/tools/topic-scores.js
