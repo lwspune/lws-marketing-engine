@@ -2,8 +2,7 @@
 
 **Why** (founder, 2026-10-26): Chemistry #11 passed every test and check and was still "not dramatic enough, pretty bland".
 My own look at my own stills is anchored on what I meant to make. "There should be agents to review dramatic effect,
-colours, motions, sound effects. They will review critically to ensure virality of the reel." So every new @pyqvault_ and
-@lws.pune reel is read by four harsh critics who see only the reel, never my reasoning, before it's queued in GoPost. The
+colours, motions, sound effects. They will review critically to ensure virality of the reel." So every new @lws.pune reel (and @pyqvault_ until 30 Oct: dropped there in framework v1.36, L73, no gain on views) is read by four harsh critics who see only the reel, never my reasoning, before it's queued in GoPost. The
 founder still judges the finished reel; the panel's verdicts go with it.
 
 **Pass bar** (founder, 2026-10-26, after Chemistry #11 took three passes to go from 5, 5, 6 to 6, 6, 6 while the critics

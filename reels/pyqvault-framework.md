@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.35, 2026-10-28)
+# @pyqvault_ reel framework (v1.36, 2026-10-30)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -11,9 +11,8 @@ a house standard (kept until our numbers say otherwise)
 
 **Winning means:** more **views and watch time** than the typical @pyqvault_ reel at 48 h (founder, 2026-10-22: "views is
 the main goal because we want to reach the maximum audience… watch time as well"; comments come later). The two go
-together: Instagram shows a reel to more people when the first viewers stay. The bar today is the five framework reels of
-20–21 Oct: **1,429 views · 8.4 s watched** (median, read at 6–36 h; the pre-framework reels were 119–269 views, 3–7 s).
-`topic-scores.js pyqvault --calibrate` replaces it with the 48 h median once enough reels are read at 48 h.
+together: Instagram shows a reel to more people when the first viewers stay. The bar today is the 22 framework reels of
+20–29 Oct at 48 h: **1,465 views · 8.9 s watched** (median, 2026-10-30; the pre-framework reels were 119–269 views, 3–7 s).
 
 ---
 
@@ -21,8 +20,10 @@ together: Instagram shows a reel to more people when the first viewers stay. The
 
 **F40 · Imitate a proven reel as closely as possible, in our own brand.** Founder, 2026-10-28: "for pyqvault we will
 imitate top performing reels (let's not reinvent the wheel)… imitate as closely as possible while maintaining our unique
-brand identity." The source is a reel on our syllabus that reached **≥ 3× its own account's typical reel**
-(`node reels/tools/remake-candidates.mjs`; @learnara.math, @bisal.physics, @sciencevisualised…).
+brand identity." The source is a reel on our syllabus with **at least 100k views** (founder, 2026-10-30: "we should
+make reels only on proven ideas and should have 100k as min criteria"); among those, the bigger multiple of its own
+account's typical reel goes first (`node reels/tools/remake-candidates.mjs`; @learnara.math, @bisal.physics,
+@sciencevisualised…).
 - **We copy:** the topic, the picture or metaphor (gears for the chain rule), the hook and opening, the order of the
   shots and when each lands, the length, and how the text comes in.
 - **Always ours (the brand):** the soft studio look and real colours (F36, F24), Remotion 3D (F11), every word written by
@@ -30,23 +31,23 @@ brand identity." The source is a reel on our syllabus that reached **≥ 3× its
   silent-first (F17), a real result (F10), the loop (F27, proven on our numbers), and PYQ Vault's V mascot wherever the
   source has its own mascot or character.
 - **Never theirs:** their video, frames, wording, voice, music, mascot or logo.
-- **The source wins** over the points it already decides: F2–F5, F9, F18, F25, F29, F35, F37, F39 apply only where it
-  leaves a choice open. F38's panel still reads it for defects.
+- **The source wins** over the points it already decides: F2–F5, F9, F18, F25, F29, F35 apply only where it leaves a
+  choice open.
 - **How:** a study copy of the source in `study/reels/<code>.mp4` (git-ignored, never posted) → its shot list with
   timings in the reel's caption kit under **Proven idea** → build to it → a side-by-side sheet (theirs vs ours at the
   same times) before `queue:add`. The Hook queue row says `Copied` for hook and opening.
 · *Why:* after 27 framework reels our views sit at ~1,300–1,600 whatever the rules (L64); a hit's shape has already
-worked on real viewers, ours was built from rules. · *Check:* the caption kit has the source link, its views multiple and
-the shot list; the side-by-side sheet. · 🧪 L77
+worked on real viewers, ours was built from rules. · *Check:* the caption kit has the source link, its views (≥ 100k),
+its views multiple and the shot list; the side-by-side sheet. · 🧪 L77
 
-**F1 · Proven reels first, then a PYQ Vault concept or the founder's idea.** Every reel is made from the idea
-list, `pyqvault-ideas.md` (founder, 2026-10-21): ideas that already went viral for other creators, imitated closely (F40, from 2026-10-28);
-concepts from PYQ Vault's own notes (the MHT-CET and JEE Main physics and chemistry chapters); or a concept the founder
-brings (Source `founder`). The last two pass F28; every idea passes the list's test. Each row names its Source. · *Why:* someone else's views prove people want it; our first reels were all remakes,
-and the best did 2× the worst (L27). But the proven supply runs dry (chemistry had none left beyond the gas laws), the
-notes are PYQ Vault's own (every concept is one a student will meet), and the founder knows the students (founder,
-2026-10-21). · *Check:* a remake's row has the proof link; every row has a Source (`topic-scores.js`). · 📌 founder,
-2026-10-18; notes and founder concepts 🧪 L59
+**F1 · Proven ideas only.** Every reel is made from the idea list, `pyqvault-ideas.md`, and only from ideas that already
+went viral for another creator (≥ 100k views, F40), imitated closely (founder, 2026-10-30: "we should make reels only on
+proven ideas"). Concepts from PYQ Vault's notes and the founder's own concepts are no longer made; their rows stay parked
+in the list. Each row names its Source. · *Why:* someone else's views prove people want it; after 22 framework reels
+built from our own rules, every one but two reached the same ~1,100–1,370 accounts whatever we changed (L64), and the
+first posted copy had the best watch time, saves and shares since the flame test (L77). The notes and founder concepts
+did no better than remakes (L59). · *Check:* a row to make has the proof link and its views; every row has a Source
+(`topic-scores.js`). · 📌 founder, 2026-10-30
 
 **F21 · Pick by a score.** Each idea in `pyqvault-ideas.md` is scored out of 100: each criterion's
 points × its weight, over the best possible. Criteria (anchors in the list's Scoring table): proof (−1–3, from their
@@ -63,19 +64,6 @@ learns which criteria actually bring watch time and views on our account. Surpri
 still 0 and a wrong first guess is what makes people comment (L28); everyday widened because the spoon, the wing mirror
 and the soda can were the everyday ideas (@mathsy.uk's #1, 2.7M). · *Check:* the tool passes
 (`tests/topic-scores.test.js` also checks the real list). · 🧪 L35, on notice
-
-**F28 · A notes or founder concept earns its row.** A concept from the notes or from the founder (F1) is curated
-against the framework before it's scored (a founder idea that fails a point comes back with a version that passes, or the
-reason it can't; the founder decides): physics, chemistry or maths (F19), not a repeat (F21), labels of 7 words or fewer with no derivation (F7), true without
-faking anything (F10), works muted and fits ≤ 25 s (F17, F18). While it's open or queued it must also pass **the gate**:
-Guess 2, a 2-second A/B/C guess (F4), and Vivid ≥ 2 (F2); one that fails is parked with the
-reason. Every chapter read goes in the idea list's **Concept sweep** log with what it added and what it left out (and which
-point kept it out), so no chapter is read twice; a JEE Main chapter with an MHT-CET namesake is logged as covered. ·
-*Why:* a remake's proof shows people want it; a notes concept has no proof, so the two things our numbers say matter
-most, the guess (L28) and a busy picture (L30), have to be there from the start. Most of the notes are sums and recall
-with nothing to watch; the log stops anyone wading through them again. · *Check:* `topic-scores.js` refuses an open or
-queued non-remake row with Guess < 2 or Vivid < 2, a notes Source not in the Concept sweep, or a chapter logged twice
-(`tests/topic-scores.test.js`). · 🧪 L59
 
 **F29 · Explained without a single word.** The test of a good concept (founder, 2026-10-21): take every word out of the
 reel (the question, the labels, the captions) and the picture alone still shows **what happens and why**. Motion, colour,
@@ -96,14 +84,14 @@ at the frame strip: is something new happening every second, across the whole fr
 
 **F3 · A law shown live.** A live simulation + live numbers that change with it + a graph that draws itself. · *Why:*
 @bisal.physics and @codematrixvishal's law reels are their best category (L20, L27); our top reel is Boyle's law, live. ·
-*Check:* the reel has all three. **v1.29 (with F35, on test):** no permanent graph card: live numbers sit on the object, and a graph, when one is needed, draws large for a moment (or onto the scene) and goes. · 🧪 L27, L71
+*Check:* the reel has all three. **v1.29 (with F35):** no permanent graph card: live numbers sit on the object, and a graph, when one is needed, draws large for a moment (or onto the scene) and goes. · 🧪 L27; layout 📌 house look (L71)
 
 ## Hook (the first 3 seconds)
 
 **F4 · Ask first (predict-first).** Frame 0 asks a question the viewer can answer in two seconds, with A/B/C and
 "comment your guess 👇" (`PredictHeader`); the picture settles it and the right option lights. The caption's first line
 repeats it. · *Why:* the account that asks gets 3.3 comments per 1,000 views, everyone else 0–1 (L28); our first 8
-reels got 0 comments. · *Check:* the question + options are on the first frame. **v1.29 (with F35, on test):** after the guess window (~3 s) the A/B/C chips and the nudge go and the question shrinks to one line under the top edge; the answer comes back as a label beside the object. · 🧪 L28, L71, on notice (v1.33: 0 comments on 27 reels; the one
+reels got 0 comments. · *Check:* the question + options are on the first frame. **v1.29 (with F35):** after the guess window (~3 s) the A/B/C chips and the nudge go and the question shrinks to one line under the top edge; the answer comes back as a label beside the object. · 🧪 L28, L71, on notice (v1.33: 0 comments on 27 reels; the one
 reel made without the guess, P37a, tied with ours)
 
 **F5 · Question in front, picture already moving behind it.** No still frames in the first 3 s: no title card, no
@@ -153,21 +141,6 @@ seen before any words are read, and motion from frame 0 is what holds them (F5, 
 Opening and **Visual hook** columns (`hook-rotation.js` refuses an empty visual hook, or one written as a question); the
 storyboard's first row; the stills sheet's frames from 0–3 s, read with the text hidden. · 📌 founder, 2026-10-21
 
-**F37 · The aftershock: the opening keeps building to 3 s.** The opening move (a Shock above all) doesn't end when it
-lands: from ~0.4 s to 3 s its own consequences grow and spread (charge races over the car, crystals start forming on the
-glass), with **a new event about every second**, each with its own sound (F14): the opening at ~0.2 s, a second around
-1.2 s, a third around 2.2 s. Nothing settles, fades or washes out before 3 s (no slow smoke fill, white wash, dissolve or
-slow cut; those come after 3 s). Around 2–3 s one event hints that the answer is coming without giving it (F6): the
-salt crystals start to look like salt. · *Why:* our two Shock reels started alike (96% and 94% still watching at 1 s) and
-split after: Physics #13's strike kept unfolding (78% at 3 s), Chemistry #10's burst settled into smoke and a white wash
-(71% at 3 s, ~11 points lost a second from 1.5 to 5 s). F5's "something changes on every frame" passed both: drifting
-smoke changes every frame. Each new event is a small reason to stay, as each tick of a running count is (L62). · *Check:*
-the storyboard lists ≥ 3 events in 0–3 s, each with a sound; `virality-measure.mjs` prints the **aftershock** (median
-motion in 1–3 s ÷ in 0.2–1 s) and the motion in 1–3 s itself, and warns when both are low: under 0.6 of the first second
-(`AFTERSHOCK`: Chemistry #10 0.52 and Physics #9b 0.28, every other framework reel 0.8 or more) **and** under 5% of the
-pixels a frame (`AFTER_FLOOR`, Physics #13's level: a big shock may outmove anything after it); fix the opening before
-queuing. · 🧪 L72
-
 **F27 · Every reel loops.** The last second brings the scene back to its first frame (the question returns, the tag
 stays, F20), with no end card, so a replay runs on without a seam. · *Why:* the 4 looping reels got **1.35 views per
 account reached** (1.25–1.37), the 14 with an end card 1.16; people watch them again, and views rose with it (median 1,575
@@ -178,7 +151,7 @@ vs 1,424). The end card was a hard stop that ended the view (L50). · *Check:* t
 
 **F7 · More picture, less text.** On-screen text is short labels, one line at a time, ≤ 7 words; no derivations, no
 formula walls. Live numbers that change with the picture (speed, rate, energy bars) count as picture. · *Why:* the picture carries the idea; text competes with it in a 3-second decision. · *Check:* the reel's
-tests count words per caption line. **v1.29 (with F35, on test):** each line sits beside what it names and goes again; no fixed caption pill at the bottom. · 📌 founder, 2026-10-18; layout 🧪 L71
+tests count words per caption line. **v1.29 (with F35):** each line sits beside what it names and goes again; no fixed caption pill at the bottom. · 📌 founder, 2026-10-18; layout 📌 house look (L71: no gain measured)
 
 **F8 · Rounded shapes.** No sharp corners where we can avoid them: blocks, planks, knobs and posts are rounded
 (`RoundBox` in `remotion/src/shapes.tsx`) or round (cylinders, spheres); UI bars and pills have round ends. The 3D
@@ -222,7 +195,7 @@ right of x 960 below mid-screen), clear of every other text. · *Why:* founder, 
 of reel while top and bottom is occupied by content/text": three stacked boxes left the experiment less than half the
 phone, which made it look small and toy-like; the studied quantum-numbers reel (2,777 likes, 114 reposts) is one picture
 with labels that come and go (L71). · *Check:* the reel lists every text in `textsAt(t)` and its tests run
-`frameProblems()` (safe area, no collisions) and the main object's `widthShare` / `heightShare` on every frame. · 🧪 L71
+`frameProblems()` (safe area, no collisions) and the main object's `widthShare` / `heightShare` on every frame. · 📌 house look, 2026-10-30 (L71: no measured gain, no extra cost)
 
 **F36 · Soft studio.** A white seamless set (the floor curves up into the back wall: no horizon line), soft room light
 reflected in every surface, one key light and a soft contact shadow under each object (`StudioSet`, `ContactShadow` in
@@ -230,7 +203,7 @@ reflected in every surface, one key light and a soft contact shadow under each o
 colours stay (F24). Best for simple or abstract objects (glass, liquids, molecules, fields): a machine built in code still
 looks fake (the car look test, 2026-10-23). · *Why:* the founder found our
 reels "like kids drawing and plasticky" (2026-10-23) and picked this look from the studied reel (L71). · *Check:* the
-stills sheet: no hard horizon, a soft shadow under every object, nothing flat and plastic. · 🧪 L71
+stills sheet: no hard horizon, a soft shadow under every object, nothing flat and plastic. · 📌 house look, 2026-10-30 (L71: no measured gain, no extra cost)
 
 **F9 · Zoom in and out at 3–4 moments.** A slow push in while something builds, a quick **punch-in that lands on
 the big moment**, a zoom out to show the result. Written as tested keys (`CAMERA`, `tween` in `motion.ts`). · *Why:* a
@@ -298,38 +271,6 @@ NDA Maths"). On screen from frame 0 everyone sees it, the cover carries it, and 
 (founder, 2026-10-21). An MCQ at the end felt like homework (founder). · *Check:* the reel's tests (the tag is on every
 frame; its contrast); the stills sheet. · 🧪 L51
 
-**F39 · Made to send.** The payoff is a **complete set** a student has to know (all five flame colours, the whole pH
-chart, every band of the spectrum), not a single answer. The guess (F4) asks about one member; the reel shows them all.
-It ends on a **cheat-sheet frame**: the whole set on one clean screen, every member labelled, held still for ~2 s
-(screenshot-able: inside the safe area, F35), and then it loops back to frame 0 (F27). The caption lists the whole set
-(the guessed member as "?", so the caption still keeps the answer, F6),
-then one line asking for a share that names who it's for ("Send this to your lab partner before the practical"). ·
-*Why:* shares are what take a reel past Instagram's first batch of ~1,100–1,400 accounts (L64). Of 32 shares on 27 reels,
-21 went to one: the flame test (10.9 per 1,000 reach; every other framework reel ≤ 2.2), the only reel whose payoff was
-a full table students learn for the practical, with the set listed in its caption (also 21 saves). The next most shared,
-"all of calculus in one curve" (4 shares, 4 saves), is a whole topic in one picture too. @codematrixvishal's 20M+ reels
-are reference sheets (L27). Students share what helps a friend study. · *Check:* the storyboard's last row is the sheet
-(≥ 3 members, each labelled, ≥ 1.8 s still); the reel's tests hold it still; the caption has the set and the send line. ·
-🧪 L64: the first package is C9, P74, C49 (the set, the sheet and the send line together); confirmed when at least 2 of
-the 3 reach **≥ 5 shares per 1,000 reach** at 48 h, dropped if all 3 stay at 2.2 or below
-
-## Before posting
-
-**F38 · Four critics before it goes out.** Every new reel is read by a review panel of four fresh agents, each one harsh
-critic with one job: **Drama** (would frame 0 stop a thumb, is the event big and close, does it build to the reveal),
-**Colour** (does it pop on a phone, one focal point a beat, nothing washed out or glaring, the cover on the grid),
-**Motion** (something new every second to 3 s, purposeful camera, weight, no still stretch) and **Sound** (every impact
-heard on its frame, the shock the loudest moment, effects against music, accents on the reveals). Pass 1 on the stills
-sheet (Drama, Colour, Motion), pass 2 on the rendered MP4 (Sound, Motion on the measured numbers). A critic sees only the
-kit (frames, motion and sound reports, the beat table, our best reels' frames), never my reasoning. It passes with **no defect left** (a bug or glitch, unreadable text, a colour-blind clash, an object that doesn't
-read as itself, an event with no cause); scores are logged, not a gate, until L73 shows they predict; at most two passes,
-then the founder judges; declined suggestions are written in the caption kit with the reason. At most 3 agents at once; they never edit, render, queue or commit. The founder still judges the finished
-reel. Runbook, checklists, brief and log: `reels/review-panel.md`. · *Why:* the founder (2026-10-26) found Chemistry #11
-"not dramatic enough, pretty bland" after it had passed every test and check: my own look at my own stills is anchored on
-what I meant to make. "There should be agents to review dramatic effect, colors, motions, sound effects. They will review
-critically to ensure virality of the reel." · *Check:* the reel's row in `review-panel.md` → Log, no defect left,
-before `queue:add`. · 📌 founder, measured by L73
-
 ## Changing the framework
 
 1. **Every change has a reason.** Add, change or drop a point only with a line in the change log below: what changed,
@@ -394,3 +335,4 @@ before `queue:add`. · 📌 founder, measured by L73
 | v1.33 | 2026-10-26 | **Pruned on the data** (founder: "too many rules… delete rules based on data"). Rule 5 added: the framework is reviewed at every reel review (founder: "every time we review reels, let's review the framework as well"). Dropped: F12 dark/white alternation, F22 the orbit as its own rule (Orbit 360° stays one of F25's openings; its "2 of any 4" cap goes, already implied by no opening twice in a row), F23 voiceover (reels are silent), F26 the second hook, F30 the virality predictor (`virality-measure.mjs` stays for F37's aftershock). F13 keeps music by mood, without the fair rotation or "never twice in a row". F15 and F16 merged into F14 (same content). F27 from "loop or end card" to **every reel loops** (✅). F21's weights frozen, no calibration at each analysis. On notice for the next prune: F4, F21, F25. 34 points → 27. | Medians of the 18 framework reels (20–26 Oct; with / without): voice 9.0 / 8.4 s watched, 1,378 / 1,510 views (5 voiced, L43); second hook 8.5 / 8.7 s, 1,498 / 1,424 (8 reels, L49); orbit 8.7 / 8.5 s, 1,427 / 1,472 (6, L37); white 9.3 / 8.3 s, 1,497 / 1,366 (8 white, 10 dark: far under the 1.5× bar, L22); every music style at both ends (L34). The predictor's real predictions rank views at −0.47, 3 of 8 bands right (L60); the idea score ranks views at −0.33, watch at 0.07 (L35). Loops: 1.35 views per account reached vs 1.16 (L50). Views sit at 1,300–1,640 whatever the rules (L64), and the reel made without most of them tied (L61). Rule 3 of this framework: a point is dropped when ≥ 3 reels show no gain. |
 | v1.34 | 2026-10-26 | F39 made to send added (🧪): the payoff is a complete set, the reel ends on a cheat-sheet frame held ~2 s before the loop, and the caption lists the set plus one send line. First package: C9 (the pH chart), P74 (the spectrum), C49 (hydroxide precipitates), ahead of P7 and C15. | Founder: "let's work on increasing reels shares, that is our real growth lever." Views sit in a batch of ~1,100–1,400 accounts whatever the rules (L64); the only framework reel that left it, the flame test, had 21 of our 32 shares and was a complete exam table (10.9 shares per 1,000 reach vs ≤ 2.2 for every other). Measured by L64 (the bar is set in F39). |
 | v1.35 | 2026-10-28 | **F40 imitate a proven reel** added (🧪 L77): copy a ≥ 3× reel's topic, picture, hook, shot order, timing and length; keep our brand (studio look, our words, series + tag, music made in code, silent-first, real result, loop, V mascot); the source wins over F2–F5, F9, F18, F25, F29, F35, F37, F39 where it decides. F1: proven reels first. F19: maths back, P → C → M; NDA maths and defence stay on @lws.pune. F21, F28: maths added. `hook-rotation.js`: `Copied` hook and opening. First: M10, @learnara.math's chain rule as gears (86k, 7.1×). | Founder: "defence related reels will go to lwspune. maths, physics, chem will go to pyqvault. for pyqvault we will imitate top performing reels (let's not reinvent wheel)", "as closely as possible while maintaining our unique brand identity". 27 framework reels sit at ~1,300–1,600 views whatever the rules (L64). |
+| v1.36 | 2026-10-30 | **Proven ideas only, ≥ 100k views** (founder): F1 rewritten (no more notes or founder concepts; their rows stay parked), F40's source bar from "≥ 3× its account's typical reel" to **≥ 100k views**, the multiple now only ranks. **Dropped:** F28 (it only screened notes and founder concepts), F37 the aftershock and its check (L72), F38 the review panel (L73: on @pyqvault_ only; @lws.pune keeps it), F39 made to send (L64: it can no longer pass). **F35/F36** studio look: from 🧪 to 📌 house look (L71: no gain measured, no extra cost). The winning bar updated to the 48 h median. Still on notice: F4, F21, F25, decided once F40's first 3 copies are read (L77). Next candidates: F21 and F25, which F40's copied topic and hook now override. New lesson L78: one reel a day cut daily views by ~2/3 with no gain per reel. | 30 Oct review, 22 framework reels at 48 h (median 1,465 views · 8.9 s): studio 1,556 · 8.9 s vs 1,453 · 8.8 s (+7%, all from the ice reel); F37/F38 reels 1,454 · 9.0 s vs 1,475 · 8.8 s; Shock openings 1,377 · 7.8 s vs 1,475 · 9.0 s; F39 shares per 1,000 reach 0.8, 2.7 and 0 at 29 h (bar ≥ 5 on 2 of 3). The first posted copy (Maths #4 trig lines) at 5 h: 14.3 s watched (record), 14 saves, 6 shares. Founder: "we should make reels only on proven ideas and should have 100k as min criteria". |

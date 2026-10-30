@@ -44,7 +44,7 @@ when convenient (Account → Access Tokens; Project Settings → Database → re
 ## Deferred improvements
 
 ### A separate list of review-panel critics for each project (founder, 2026-10-27; "for now okay")
-F38 runs the same four critics (Drama, Colour, Motion, Sound) on every @pyqvault_ and @lws.pune reel. The founder wants
+F38 runs the same four critics (Drama, Colour, Motion, Sound) on every @lws.pune reel (dropped on @pyqvault_ 2026-10-30, framework v1.36: no gain on views, L73). The founder wants
 each project to have its own list of reviewers (e.g. @lws.pune, @pyqvault_, Sound Mind each choosing which critics and
 checklists apply). Until then the current four stay on both. To do: a per-project panel in `reels/review-panel.md` (and
 Sound Mind's in `soundmind/framework.md`), with each framework pointing at its own list; a framework change with a reason.
@@ -201,7 +201,7 @@ so a reel goes quieter as it builds; synthwave, trap and cinematic hold their le
 `drive` until it's fixed. Before fixing: a 360 (every `drive` reel's music changes) and the founder's OK; posted reels
 can't change anyway.
 
-### Queued Physics #15 (ice) fades after its opening (logged 2026-10-26; DECIDED 2026-10-26: posts as it is, already scheduled)
+### Queued Physics #15 (ice) fades after its opening (logged 2026-10-26; DECIDED 2026-10-26: posts as it is, already scheduled; RESULT 2026-10-30: 2,212 views at 48 h, the most since C7, so F37 was dropped, L72)
 Learning (framework F37, L72): the opening keeps building to 3 s, with no settle before 3 s. `virality-measure.mjs` gives
 Physics #15 an aftershock of **0.05** (bar 0.6): its pull-back moves 20–27% of the pixels a frame to 1.7 s, then 1.8–3 s
 is a slow colour change in the glasses (~1% a frame). **360:** scope = P36 only (queued in GoPost, not approved); posted
