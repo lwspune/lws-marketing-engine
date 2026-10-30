@@ -11,10 +11,11 @@ in only if it passes **the test** below; it is then **scored** (weights frozen s
 the 100k bar itself, pick only Source `remake` rows whose source has ≥ 100k views, and refill from
 `node reels/tools/remake-candidates.mjs` (chemistry has no ≥ 100k candidates in the saved competitor data yet).
 
-**Open: 83 ideas · about 83 days at 1 reel a day.**
+**Open: 13 ideas · about 13 days at 1 reel a day.**
 
-Refill before it drops under two weeks. Sources (F1): the founder's ideas (Source `founder`, any time), a notes sweep
-(physics and chemistry are done; a new exam's notes next), and the next competitor read (`node reels/tools/remake-candidates.mjs`).
+Refill before it drops under two weeks, from proven reels only (F1, F40): the next competitor read (`node reels/tools/remake-candidates.mjs`,
+≥ 100k views) and reels the founder sends. **Chemistry has none open** (30 Oct): the saved competitor data has no chemistry
+reel over 100k that isn't made yet, so chemistry waits for new accounts or reels from the founder.
 
 ## The test
 
@@ -24,14 +25,12 @@ marked ⚙.
 | Point | The question | Who |
 |---|---|---|
 | **F29 · No words** ⚙ | Take every word out (question, labels, captions): does the picture alone still show *what happens and why*? Motion, colour, arrows, gauges, graphs, numbers and symbols count as picture. Written as the card's **Without words** beats. | every idea, remakes too |
-| **F4 · A 2-second guess** ⚙ | Does frame 0 ask an A/B/C question answerable in 2 seconds? (Guess 2) | notes and founder ideas (F28) |
-| **F2 · Vivid** ⚙ | Several things moving or a strong colour change? (Vivid ≥ 2) | notes and founder ideas (F28) |
+| **F1, F40 · Proven** ⚙ | Is it a remake whose source reel has **≥ 100k views** (the Views column)? Notes and founder concepts are parked (2026-10-30). | every idea to make |
 | **F7 · Short labels** | Can every label be 7 words or fewer, with no derivation? | every idea |
 | **F10 · Honest** | Is it true without faking anything (time-lapses and scale labelled)? | every idea |
 | **F17, F18 · Muted, short** | Does it work with the sound off, in 25 s or less? | every idea |
 | **F19 · Subject** | Physics, chemistry or maths? | every idea |
 | **F21 · No repeat** | Not a concept we've already made, even from a new angle? | every idea |
-| **F28 · One read per chapter** ⚙ | A notes idea's chapter is in the Concept sweep log. | notes ideas |
 
 ## Scoring
 
@@ -86,133 +85,143 @@ Status: blank = open · ⏭ queued (in the Hook queue) · ✅ made · ⏸ parked
 `own` (Claude's), `founder`, or the PYQ Vault notes chapter. Rows marked "scored after posting" were scored once their
 numbers were already known (a hindsight risk); everything else was scored before it was made.
 
-| # | Subject | Idea | Proof (×) | Vivid | Guess | Surprise | Law live | Everyday | Score | Status | Source | Wordless |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| P1 | P | Two carts collide: momentum before = after (ends on JEE Main 2022 Q8) | – | 1 | 1 | 0 | 1 | 0 | 24 | ✅ made 2026-10-18 (`pv-physics-001-collision`; scored after posting) | own | ✓ |
-| P2 | P | Boyle's law: squeeze the piston, count the hits | 129 | 3 | 1 | 0 | 1 | 1 | 72 | ✅ made 2026-10-18 (`pv-physics-002-boyle`; scored after posting) | remake | ✓ |
-| P3 | P | Pendulum: energy trades places, the total never moves | 150 | 2 | 1 | 0 | 1 | 1 | 62 | ✅ made 2026-10-19 (`pv-physics-003-pendulum`; scored after posting) | remake | ✓ |
-| P4 | P | Block on a tilting ramp: it slips when sin θ wins | 63 | 2 | 2 | 1 | 1 | 1 | 69 | ✅ made 2026-10-20 (`pv-physics-004-slope`, remade; scored after posting) | remake | ✓ |
-| P5 | P | Adiabatic squeeze heats the gas (insulated vs open, side by side) | 125 | 3 | 2 | 1 | 1 | 1 | 86 | ✅ made 2026-10-20 (`pv-physics-005-adiabatic`) | remake | ✓ |
-| P6 | P | Same lift, faster = more power | 76 | 1 | 2 | 1 | 1 | 2 | 66 | ✅ made 2026-10-23 (`pv-physics-012-lift-power`) | remake | ✓ |
-| P7 | P | Tilt the rope: lift vs pull (drone towing a box) | 83 | 2 | 1 | 1 | 1 | 1 | 62 | ⏭ queued 2026-10-21 (Hook queue) | remake | ✓ |
-| P8 | P | Why a bounced ball never comes back as high | 52 | 1 | 1 | 0 | 1 | 2 | 52 |  | remake | ✓ |
-| P9 | P | Heat flows hot → cold, never back (two chambers mixing) | 54 | 3 | 1 | 0 | 1 | 2 | 72 | ✅ made 2026-10-20 (`pv-physics-007-heat`) | remake | ✓ |
-| P10 | P | One-screen sheet: Class 12 electricity & magnetism | 190 | 2 | 0 | 0 | 0 | 0 | 41 | ⏸ parked: fails F29 (a sheet of laws is words by design; 2026-10-21) | remake | ✗ |
-| P11 | P | 30° and 60° land in the same spot (a fan of launch angles) | 11 | 3 | 2 | 2 | 1 | 1 | 79 | ✅ made 2026-10-21 (`pv-physics-010-launch-angles`, Physics #10) | remake | ✓ |
-| P12 | P | Topspin dips, slice floats (Magnus, streamlines) | 63 | 3 | 2 | 1 | 0 | 1 | 72 | ✅ made 2026-10-20 (`pv-physics-006-topspin`) | remake | ✓ |
-| P13 | P | Rolling race: ring, disc and ball down one slope | – | 3 | 2 | 2 | 1 | 1 | 72 |  | mht-cet-physics/rotational-dynamics | ✓ |
-| P14 | P | A magnet dropped down a copper pipe falls in slow motion | 0.5 | 3 | 2 | 2 | 1 | 0 | 59 |  | mht-cet-physics/electromagnetic-induction | ✓ |
-| P15 | P | Bright red light frees no electrons, dim violet does | 0.3 | 3 | 2 | 2 | 1 | 1 | 66 |  | mht-cet-physics/dual-nature-of-radiation-and-matter | ✓ |
-| P16 | P | Red star or blue star: which is hotter? (Wien) | – | 3 | 2 | 2 | 1 | 1 | 72 |  | mht-cet-physics/thermal-properties-of-matter | ✓ |
-| P17 | P | Join a small and a big soap bubble: the big one grows | – | 2 | 2 | 2 | 1 | 1 | 62 |  | mht-cet-physics/mechanical-properties-of-fluids | ✓ |
-| P18 | P | A laser follows a curved water jet (total internal reflection) | 0.3 | 2 | 2 | 1 | 1 | 1 | 48 | ⏸ parked: total internal reflection is P20's mirage, the everyday angle (founder, 2026-10-20) | mht-cet-physics/ray-optics | ✓ |
-| P19 | P | White light through a prism: violet bends most (dispersion) | 0.5 | 3 | 2 | 1 | 1 | 1 | 59 | ⏸ parked: replaced by P31, the rainbow (same dispersion, everyday picture; the prism flopped at 0.5×; 2026-10-21) | mht-cet-physics/ray-optics | ✓ |
-| P20 | P | The "water" on a hot road is the sky (mirage) | 0.4 | 3 | 2 | 1 | 0 | 2 | 59 |  | mht-cet-physics/ray-optics | ✓ |
-| P21 | P | Cover half the lens: the whole image stays, dimmer | 0.9 | 2 | 2 | 2 | 1 | 1 | 55 |  | mht-cet-physics/ray-optics | ✓ |
-| P22 | P | A 2 m pool looks 1.5 m deep (apparent depth) | – | 2 | 2 | 1 | 1 | 2 | 62 |  | mht-cet-physics/ray-optics | ✓ |
-| P23 | P | Walk a candle up to a convex lens: the image flips upright | – | 2 | 2 | 1 | 1 | 1 | 55 |  | mht-cet-physics/ray-optics | ✓ |
-| P24 | P | Your face in a spoon: upside down, then upright up close (concave mirror) | 10.5 | 2 | 2 | 2 | 1 | 2 | 76 | ✅ made 2026-10-21 (`pv-physics-008-spoon`) | mht-cet-physics/ray-optics | ✓ |
-| P25 | P | A magnifying glass under water barely magnifies (lensmaker) | – | 2 | 2 | 2 | 1 | 1 | 62 |  | mht-cet-physics/ray-optics | ✓ |
-| P26 | P | A half-height mirror shows your whole body, at any distance | – | 1 | 2 | 2 | 1 | 2 | 59 | ⏸ parked: fails F28 (vivid 1: one person walking, one strip of mirror; 2026-10-21) | mht-cet-physics/ray-optics | ✓ |
-| P27 | P | A bigger telescope lens: a brighter moon, not a bigger one | – | 2 | 2 | 2 | 0 | 1 | 55 |  | mht-cet-physics/ray-optics | ✓ |
-| P28 | P | Turn a prism: the bend dips, then rises (minimum deviation) | – | 2 | 2 | 1 | 1 | 0 | 48 | ⏸ parked: fails F29 (it dips, then rises, but why needs words; 2026-10-21) | mht-cet-physics/ray-optics | ✗ |
-| P29 | P | "Objects in mirror are closer than they appear" (convex mirror) | 6.2 | 2 | 2 | 1 | 1 | 2 | 69 | ✅ made 2026-10-21 (`pv-physics-009-wing-mirror`); rebuilt 2026-10-22 to v1.26 as P29b (`pv-physics-009b-wing-mirror`) | mht-cet-physics/ray-optics | ✓ |
-| P30 | P | A raindrop's speed levels off: drag catches up with weight (terminal velocity) | 36 | 2 | 2 | 1 | 1 | 2 | 76 |  | founder | ✓ |
-| P31 | P | Rainbow: red on top, made inside raindrops | – | 3 | 2 | 1 | 1 | 1 | 66 |  | founder | ✓ |
-| P32 | P | A skater pulls her arms in and spins faster (angular momentum) | – | 2 | 2 | 1 | 1 | 1 | 55 |  | founder | ✓ |
-| P33 | P | Water climbs highest in the thinnest tube (capillary action) | – | 2 | 2 | 1 | 1 | 2 | 62 |  | founder | ✓ |
-| P34 | P | Shake a string faster: more loops (standing waves) | – | 2 | 2 | 1 | 1 | 1 | 55 |  | founder | ✓ |
-| P35 | P | Heat a brass–steel strip: it bends toward the steel (bimetallic strip) | 1.2 | 2 | 2 | 1 | 1 | 1 | 55 |  | founder | ✓ |
-| P36 | P | Ice at the top cools a drink faster than ice at the bottom (convection) | – | 3 | 2 | 2 | 1 | 2 | 79 | ✅ made 2026-10-26 (`pv-physics-015-ice`, Physics #15; first full-frame studio reel, F35–F36) | founder | ✓ |
-| P37 | P | A magnet held still in a coil lights nothing (induction) | – | 2 | 2 | 2 | 1 | 1 | 62 | ✅ made 2026-10-22 (`pv-physics-011-induction`, Physics #11; framework-2 test B, L61; reel A `pv-f2-induction` is the same topic made by framework 2) | founder | ✓ |
-| P38 | P | Two coils that never touch: the second bulb lights, on AC only (transformer) | – | 2 | 2 | 2 | 1 | 2 | 69 |  | founder | ✓ |
-| P39 | P | Flip the battery on a diode: the current stops (p-n junction) | – | 2 | 2 | 1 | 1 | 2 | 62 |  | founder | ✓ |
-| P40 | P | Blow between two hanging sheets: they swing together (Bernoulli) | 0.5 | 2 | 2 | 2 | 1 | 1 | 55 |  | founder | ✓ |
-| P41 | P | A steel needle floats; one drop of soap sinks it (surface tension) | – | 2 | 2 | 2 | 0 | 1 | 55 |  | founder | ✓ |
-| P42 | P | Fire a cannonball fast enough and it falls forever (Newton's cannon) | – | 2 | 2 | 2 | 1 | 0 | 55 |  | founder | ✓ |
-| P43 | P | The right note, not the loudest, shatters a glass (resonance) | 0.4 | 2 | 2 | 1 | 1 | 1 | 48 |  | founder | ✓ |
-| P44 | P | A siren's waves bunch up ahead of the ambulance (Doppler) | 0.7 | 2 | 2 | 0 | 1 | 2 | 48 |  | founder | ✓ |
-| P45 | P | A second slit makes dark stripes (double slit) | 0.4 | 2 | 2 | 2 | 1 | 0 | 48 |  | founder | ✓ |
-| P46 | P | One neutron, ten rounds, over a thousand splits (fission chain) | 0.2 | 3 | 2 | 1 | 0 | 0 | 45 |  | founder | ✓ |
-| P47 | P | Speed up the AC: a bulb behind a capacitor glows brighter | – | 2 | 2 | 2 | 1 | 0 | 55 |  | mht-cet-physics/ac-circuits | ✓ |
-| P48 | P | Charge a capacitor, connect a coil: the current swings back and forth (LC oscillation) | – | 2 | 2 | 2 | 1 | 0 | 55 |  | mht-cet-physics/ac-circuits | ✓ |
-| P49 | P | Two bulbs in series or in parallel: the parallel pair glows brighter | – | 2 | 2 | 1 | 1 | 2 | 62 |  | mht-cet-physics/current-electricity | ✓ |
-| P50 | P | Switch off a big coil and it sparks (self-inductance) | – | 2 | 2 | 2 | 1 | 1 | 62 |  | mht-cet-physics/electromagnetic-induction | ✓ |
-| P51 | P | Lightning hits a car: the metal body, not the tyres, keeps you safe | – | 2 | 2 | 2 | 0 | 1 | 55 | ✅ made 2026-10-23 (`pv-physics-013-lightning`, Physics #13; the first Shock opening, founder's pick) | mht-cet-physics/electrostatics | ✓ |
-| P52 | P | Fall to the Earth's centre and you'd weigh nothing | – | 2 | 2 | 2 | 1 | 0 | 55 |  | mht-cet-physics/gravitation | ✓ |
-| P53 | P | You weigh a little less at the equator than at the poles | – | 2 | 2 | 2 | 0 | 0 | 48 |  | mht-cet-physics/gravitation | ✓ |
-| P54 | P | A lift starting up: the scale under you reads more | – | 2 | 2 | 1 | 1 | 2 | 62 |  | mht-cet-physics/laws-of-motion | ✓ |
-| P55 | P | Bend your knees when you land: same push, spread over more time | – | 2 | 2 | 1 | 1 | 2 | 62 |  | mht-cet-physics/laws-of-motion | ✓ |
-| P56 | P | Two wires with currents the same way pull together | – | 2 | 2 | 2 | 1 | 0 | 55 |  | mht-cet-physics/magnetic-fields-due-to-electric-current | ✓ |
-| P57 | P | Charged particles spiral along Earth's field and light the aurora | 0.3 | 3 | 2 | 1 | 1 | 1 | 59 |  | mht-cet-physics/magnetic-fields-due-to-electric-current | ✓ |
-| P58 | P | Heat a magnet red-hot and it stops being a magnet | – | 2 | 2 | 2 | 0 | 1 | 55 |  | mht-cet-physics/magnetic-materials | ✓ |
-| P59 | P | Thumb over a hose: the same water squeezes out faster (continuity) | – | 2 | 2 | 0 | 1 | 2 | 55 |  | mht-cet-physics/mechanical-properties-of-fluids | ✓ |
-| P60 | P | Three holes in a bottle on the floor: the middle jet lands farthest | – | 2 | 2 | 2 | 1 | 1 | 62 |  | mht-cet-physics/mechanical-properties-of-fluids | ✓ |
-| P61 | P | An ice cube melts in a full glass: the water level doesn't move | – | 2 | 2 | 2 | 0 | 2 | 62 |  | mht-cet-physics/mechanical-properties-of-fluids | ✓ |
-| P62 | P | Let go of a whirling ball: it flies off along the tangent, not outward | – | 2 | 2 | 2 | 0 | 1 | 55 |  | mht-cet-physics/motion-in-a-plane | ✓ |
-| P63 | P | Run in vertical rain: tilt the umbrella forward | – | 2 | 2 | 1 | 1 | 2 | 62 |  | mht-cet-physics/motion-in-a-plane | ✓ |
-| P64 | P | A heavy bob and a light one swing in step (period doesn't depend on mass) | – | 2 | 2 | 2 | 1 | 1 | 62 |  | mht-cet-physics/oscillations | ✓ |
-| P65 | P | Tilted roads let cars take a curve faster (banking) | – | 2 | 2 | 1 | 1 | 1 | 55 |  | mht-cet-physics/rotational-dynamics | ✓ |
-| P66 | P | Swing a bucket of water overhead fast enough and nothing spills | – | 2 | 2 | 2 | 1 | 1 | 62 |  | mht-cet-physics/rotational-dynamics | ✓ |
-| P67 | P | Heat a metal and it conducts worse; heat a semiconductor and it conducts better | – | 2 | 2 | 2 | 1 | 0 | 55 |  | mht-cet-physics/semiconductor-devices | ✓ |
-| P68 | P | Two almost-equal notes make a wobble (beats) | – | 2 | 2 | 2 | 1 | 0 | 55 |  | mht-cet-physics/superposition-of-waves | ✓ |
-| P69 | P | A nucleus weighs less than its parts (mass defect) | – | 2 | 2 | 2 | 0 | 0 | 48 |  | mht-cet-physics/structure-of-atoms-and-nuclei | ✓ |
-| P70 | P | Metal feels colder than wood at the same temperature | – | 2 | 2 | 2 | 1 | 2 | 69 |  | mht-cet-physics/thermal-properties-of-matter | ✓ |
-| P71 | P | Leave the fridge door open in a closed room: the room gets warmer | – | 2 | 2 | 2 | 1 | 2 | 69 |  | mht-cet-physics/thermodynamics | ✓ |
-| P72 | P | Two crossed polaroids block all light; a third between them lets light back | 0.1 | 2 | 2 | 2 | 1 | 1 | 55 |  | mht-cet-physics/wave-optics | ✓ |
-| P73 | P | Double your speed and your braking distance goes up four times | – | 2 | 2 | 2 | 1 | 2 | 69 |  | jee-mains-physics/motion-in-a-straight-line | ✓ |
-| P74 | P | One spectrum: radio to gamma, and your TV remote uses infrared | – | 2 | 2 | 2 | 0 | 2 | 62 | ✅ made 2026-10-26 (`pv-physics-016-spectrum`, Physics #16; F39 share test 2 of 3, L64) | jee-mains-physics/electromagnetic-waves | ✓ |
-| P75 | P | Double the battery: the current doubles (Ohm's law acted by our own cast: Volt the battery, Amp the sparks, Ohm the resistor, red-hot at 4x heat) | 829 | 3 | 2 | 1 | 0 | 1 | 79 | ✅ made 2026-10-24 (`pv-physics-014-ohm`, Physics #14; Painted 2D; the topic hit 29.2M on @qubit.exe, 829x its typical reel; our own characters and scene) | founder | ✓ |
-| C1 | C | Heat speeds up a reaction: faster molecules, more hits | – | 3 | 1 | 0 | 1 | 1 | 52 | ✅ made 2026-10-18 (`pv-chem-001-heat-rate`; scored after posting) | own | ✓ |
-| C2 | C | The periodic table's 8 families | 256 | 3 | 1 | 0 | 0 | 0 | 59 | ✅ made 2026-10-18 (`pv-chem-002-families`; scored after posting) | remake | ✓ |
-| C3 | C | Avogadro: add gas, the volume grows | 50 | 2 | 1 | 0 | 1 | 1 | 55 | ✅ made 2026-10-19 (`pv-chem-003-avogadro`; scored after posting) | remake | ✓ |
-| C4 | C | Charles's law: heat 0 → 273 °C, the volume doubles | 30 | 2 | 2 | 1 | 1 | 1 | 69 | ✅ made 2026-10-20 (`pv-chem-004-charles`, remade; scored after posting) | remake | ✓ |
-| C5 | C | P, V and T together (combined gas law) | 11 | 2 | 2 | 1 | 1 | 1 | 62 | ✅ made 2026-10-20 (`pv-chem-005-pvt`) | remake | ✓ |
-| C7 | C | Flame colours: each metal burns its own colour (fireworks) | – | 3 | 2 | 1 | 0 | 1 | 59 | ✅ made 2026-10-20 (`pv-chem-006-flame`) | own | ✓ |
-| C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | 3 | 2 | 1 | 1 | 0 | 59 | ✅ made 2026-10-23 (`pv-chem-009-electrolysis`) | own | ✓ |
-| C9 | C | The pH chart: lemon to bleach, milk is slightly acidic (universal indicator) | – | 3 | 2 | 2 | 0 | 2 | 72 | ✅ made 2026-10-26 (`pv-chem-012-ph`, Chemistry #12; the first F39 share test, L64) | own | ✓ |
-| C10 | C | Squeeze the brown gas: darker at once, then lighter (Le Chatelier) | – | 2 | 2 | 2 | 0 | 0 | 48 |  | own | ✓ |
-| C11 | C | Diffusion: dye in hot vs cold water | – | 2 | 2 | 0 | 0 | 2 | 48 | ⏸ parked: close to Chemistry #1, heat speeds things up (founder, 2026-10-20) | own | ✓ |
-| C12 | C | Heat it by 10 °C: the rate doubles (collisions over the energy hill) | – | 3 | 2 | 2 | 1 | 1 | 72 | ⏸ parked: repeats Chemistry #1, heat → rate (founder, 2026-10-20) | mht-cet-chemistry/chemical-kinetics | ✓ |
-| C13 | C | Half-life: 64 atoms, 2 half-lives, 16 left | – | 3 | 2 | 1 | 1 | 1 | 66 | ✅ made 2026-10-20 (`pv-chem-007-halflife`, first voiceover) | mht-cet-chemistry/chemical-kinetics | ✓ |
-| C14 | C | Stack the oranges: 52%, 68% or 74% filled (packing efficiency) | – | 3 | 2 | 1 | 1 | 1 | 66 | ✅ made 2026-10-21 (`pv-chem-008-packing`) | mht-cet-chemistry/solid-state | ✓ |
-| C15 | C | A zinc rod in blue copper sulphate: copper coats it, the blue fades | – | 3 | 2 | 1 | 1 | 0 | 59 | ⏭ queued 2026-10-21 (Hook queue) | mht-cet-chemistry/electrochemistry | ✓ |
-| C16 | C | Why water is bent: lone pairs squeeze 109.5° → 104.5° (VSEPR) | – | 2 | 2 | 1 | 1 | 1 | 55 |  | mht-cet-chemistry/chemical-bonding | ✓ |
-| C17 | C | Salt makes water boil hotter, not sooner (boiling-point elevation) | – | 2 | 2 | 2 | 1 | 2 | 69 |  | mht-cet-chemistry/solutions | ✓ |
-| C18 | C | Salt a cucumber: the water walks out through the skin (osmosis) | 1.6 | 3 | 2 | 1 | 1 | 2 | 72 |  | mht-cet-chemistry/solutions | ✓ |
-| C19 | C | Same pinhole: the helium balloon empties first (lighter = faster) | – | 3 | 2 | 1 | 1 | 1 | 66 |  | mht-cet-chemistry/states-of-matter | ✓ |
-| C20 | C | By the trend, water should boil at −80 °C (hydrogen bonds) | – | 2 | 2 | 2 | 1 | 1 | 62 | ⏸ parked: same concept as C43 (hydrogen bonds); its −80 °C line is C43's second hook (2026-10-21) | mht-cet-chemistry/chemical-bonding | ✓ |
-| C21 | C | Salt water lights the bulb bright, vinegar barely (strong vs weak electrolyte) | – | 2 | 2 | 1 | 1 | 1 | 55 |  | mht-cet-chemistry/electrochemistry | ✓ |
-| C22 | C | A drop of acid: water's colour swings, a buffer's holds | – | 2 | 2 | 1 | 1 | 1 | 55 |  | mht-cet-chemistry/ionic-equilibria | ✓ |
-| C23 | C | Warm an aldehyde with Tollens' reagent: the tube turns into a mirror | – | 3 | 2 | 2 | 0 | 1 | 66 |  | mht-cet-chemistry/aldehydes-ketones-and-carboxylic-acids | ✓ |
-| C24 | C | Soap doesn't dissolve oil, it wraps it (micelles) | – | 3 | 2 | 1 | 0 | 2 | 66 |  | mht-cet-chemistry/surface-chemistry | ✓ |
-| C25 | C | Heat DNA: the A–T rungs let go before G–C | – | 3 | 2 | 1 | 0 | 0 | 52 |  | mht-cet-chemistry/biomolecules | ✓ |
-| C26 | C | Pump a second gas in: the first gas's pressure doesn't change (Dalton) | – | 3 | 2 | 2 | 1 | 0 | 66 |  | mht-cet-chemistry/states-of-matter | ✓ |
-| C27 | C | Ice melts at one temperature, glass just softens (crystalline vs amorphous) | – | 2 | 2 | 1 | 1 | 2 | 62 |  | mht-cet-chemistry/solid-state | ✓ |
-| C28 | C | Copper sulphate is blue, zinc sulphate colourless (d–d colours) | – | 3 | 2 | 1 | 0 | 0 | 52 | ⏸ parked: fails F29 (why zinc is colourless needs its d shell explained in words; 2026-10-21) | mht-cet-chemistry/transition-and-inner-transition-elements | ✗ |
-| C29 | C | More electrons, smaller atom: radii shrink across a period | – | 2 | 2 | 2 | 1 | 0 | 55 |  | mht-cet-chemistry/modern-periodic-table | ✓ |
-| C30 | C | Lithium, sodium, potassium in water: which bursts into flame? | – | 3 | 2 | 1 | 0 | 0 | 52 |  | mht-cet-chemistry/elements-of-group-1-and-2 | ✓ |
-| C31 | C | Cut a 1 cm cube into nanocubes: surface area ×10 million | – | 2 | 2 | 2 | 1 | 0 | 55 |  | mht-cet-chemistry/surface-chemistry | ✓ |
-| C32 | C | One sip of water holds 6 × 10²³ molecules (the mole) | – | 2 | 2 | 2 | 0 | 2 | 62 |  | mht-cet-chemistry/some-basic-concepts | ✓ |
-| C33 | C | A pinch of alum clears muddy water (coagulation) | – | 2 | 2 | 1 | 0 | 1 | 48 |  | mht-cet-chemistry/surface-chemistry | ✓ |
-| C34 | C | SN2: the molecule flips inside out like an umbrella | – | 2 | 2 | 1 | 0 | 1 | 48 |  | mht-cet-chemistry/halogen-derivatives | ✓ |
-| C35 | C | Mirror-image molecules, like your hands, never match (chirality) | – | 2 | 2 | 1 | 0 | 2 | 55 |  | mht-cet-chemistry/basic-principles-of-organic-chemistry | ✓ |
-| C36 | C | Boil an egg: the proteins unfold, the chain stays (denaturation) | – | 2 | 2 | 1 | 0 | 2 | 55 |  | mht-cet-chemistry/biomolecules | ✓ |
-| C37 | C | Carry bag or milk can: same ethene, branched vs straight chains (LDPE vs HDPE) | – | 2 | 2 | 1 | 0 | 2 | 55 |  | mht-cet-chemistry/introduction-to-polymer-chemistry | ✓ |
-| C38 | C | A gallium spoon melts in hot tea | – | 2 | 2 | 2 | 0 | 1 | 55 |  | jee-mains-chemistry/p-block-elements | ✓ |
-| C39 | C | Add acid to saturated salt water: salt crystals fall out (common ion) | – | 2 | 2 | 2 | 1 | 0 | 55 |  | mht-cet-chemistry/ionic-equilibria | ✓ |
-| C40 | C | 1,000 snapshots of one electron make a cloud (orbitals) | – | 3 | 2 | 1 | 0 | 0 | 52 | ⏸ parked: fails F29 (the cloud shows; why it isn't a neat orbit needs words; 2026-10-21) | mht-cet-chemistry/structure-of-atom | ✗ |
-| C41 | C | A hydrogen fuel cell's only exhaust is water | – | 2 | 2 | 1 | 0 | 1 | 48 |  | mht-cet-chemistry/electrochemistry | ✓ |
-| C42 | C | Liquid oxygen sticks to a magnet, nitrogen pours through (MO theory) | – | 2 | 2 | 2 | 0 | 0 | 48 | ⏸ parked: fails F29 (it sticks, but why, unpaired electrons, needs words; 2026-10-21) | mht-cet-chemistry/chemical-bonding | ✗ |
-| C43 | C | Solid wax sinks, solid water floats: ice's open lattice (hydrogen bonds) | – | 2 | 2 | 2 | 1 | 2 | 69 |  | founder | ✓ |
-| C44 | C | An explosive metal and a poison gas make table salt (ionic bond) | – | 2 | 2 | 2 | 0 | 2 | 62 | ✅ made 2026-10-26 (`pv-chem-010-salt`, Chemistry #10; the second Shock opening, founder's pick) | founder | ✓ |
-| C45 | C | Hit metal and salt with a hammer: the salt shatters (metallic bond) | – | 2 | 2 | 1 | 0 | 2 | 55 | ✅ made 2026-10-26 (`pv-chem-011-hammer`, Chemistry #11; the third Shock opening and the first F37 reel) | founder | ✓ |
-| C46 | C | Iron nails in dry air, water and salt water: salt water rusts first | – | 2 | 2 | 1 | 0 | 2 | 55 |  | founder | ✓ |
-| C47 | C | A laser beam shows in milky water, not salt water (Tyndall) | 3.0 | 2 | 2 | 1 | 0 | 2 | 62 |  | founder | ✓ |
-| C48 | C | s and p orbitals blend into methane's four equal bonds (hybridisation) | – | 2 | 1 | 1 | 0 | 0 | 34 | ⏸ parked: fails F29 (the blend shows; why it happens needs words; founder's list, 2026-10-21) | founder | ✗ |
-| C49 | C | Add NaOH to four metal salts: white, blue, green and rust-brown clouds (hydroxide precipitates) | – | 3 | 2 | 1 | 0 | 0 | 52 | ✅ made 2026-10-26 (`pv-chem-013-hydroxides`, Chemistry #13; F39 share test 3 of 3, L64) | own | ✓ |
-| M10 | M | Chain rule as gears: turn x, u turns, y turns faster; the ratios multiply | 7.1 | 2 | 0 | 0 | 1 | 1 | 41 | ✅ made 2026-10-28 (`pv-maths-004-chain-rule`, Maths #4; the first F40 imitation) | remake | ✓ |
-| M11 | M | One radian: the radius bends onto the rim, and 2π of them go round | 4.8 | 2 | 0 | 0 | 1 | 1 | 41 |  | remake | ✓ |
+| # | Subject | Idea | Proof (×) | Views | Vivid | Guess | Surprise | Law live | Everyday | Score | Status | Source | Wordless |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| P1 | P | Two carts collide: momentum before = after (ends on JEE Main 2022 Q8) | – | – | 1 | 1 | 0 | 1 | 0 | 24 | ✅ made 2026-10-18 (`pv-physics-001-collision`; scored after posting) | own | ✓ |
+| P2 | P | Boyle's law: squeeze the piston, count the hits | 129 | 3.52M | 3 | 1 | 0 | 1 | 1 | 72 | ✅ made 2026-10-18 (`pv-physics-002-boyle`; scored after posting) | remake | ✓ |
+| P3 | P | Pendulum: energy trades places, the total never moves | 150 | 2.60M | 2 | 1 | 0 | 1 | 1 | 62 | ✅ made 2026-10-19 (`pv-physics-003-pendulum`; scored after posting) | remake | ✓ |
+| P4 | P | Block on a tilting ramp: it slips when sin θ wins | 63 | 1.50M | 2 | 2 | 1 | 1 | 1 | 69 | ✅ made 2026-10-20 (`pv-physics-004-slope`, remade; scored after posting) | remake | ✓ |
+| P5 | P | Adiabatic squeeze heats the gas (insulated vs open, side by side) | 125 | 1.06M | 3 | 2 | 1 | 1 | 1 | 86 | ✅ made 2026-10-20 (`pv-physics-005-adiabatic`) | remake | ✓ |
+| P6 | P | Same lift, faster = more power | 76 | 1.33M | 1 | 2 | 1 | 1 | 2 | 66 | ✅ made 2026-10-23 (`pv-physics-012-lift-power`) | remake | ✓ |
+| P7 | P | Tilt the rope: lift vs pull (drone towing a box) | 83 | 1.45M | 2 | 1 | 1 | 1 | 1 | 62 | ⏭ queued 2026-10-21 (Hook queue) | remake | ✓ |
+| P8 | P | Why a bounced ball never comes back as high | 52 | 908k | 1 | 1 | 0 | 1 | 2 | 52 |  | remake | ✓ |
+| P9 | P | Heat flows hot → cold, never back (two chambers mixing) | 54 | 457k | 3 | 1 | 0 | 1 | 2 | 72 | ✅ made 2026-10-20 (`pv-physics-007-heat`) | remake | ✓ |
+| P10 | P | One-screen sheet: Class 12 electricity & magnetism | 190 | 5.21M | 2 | 0 | 0 | 0 | 0 | 41 | ⏸ parked: fails F29 (a sheet of laws is words by design; 2026-10-21) | remake | ✗ |
+| P11 | P | 30° and 60° land in the same spot (a fan of launch angles) | 11 | 193k | 3 | 2 | 2 | 1 | 1 | 79 | ✅ made 2026-10-21 (`pv-physics-010-launch-angles`, Physics #10) | remake | ✓ |
+| P12 | P | Topspin dips, slice floats (Magnus, streamlines) | 63 | 1.10M | 3 | 2 | 1 | 0 | 1 | 72 | ✅ made 2026-10-20 (`pv-physics-006-topspin`) | remake | ✓ |
+| P13 | P | Rolling race: ring, disc and ball down one slope | – | – | 3 | 2 | 2 | 1 | 1 | 72 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/rotational-dynamics | ✓ |
+| P14 | P | A magnet dropped down a copper pipe falls in slow motion | 0.5 | – | 3 | 2 | 2 | 1 | 0 | 59 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/electromagnetic-induction | ✓ |
+| P15 | P | Bright red light frees no electrons, dim violet does | 0.3 | – | 3 | 2 | 2 | 1 | 1 | 66 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/dual-nature-of-radiation-and-matter | ✓ |
+| P16 | P | Red star or blue star: which is hotter? (Wien) | – | – | 3 | 2 | 2 | 1 | 1 | 72 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/thermal-properties-of-matter | ✓ |
+| P17 | P | Join a small and a big soap bubble: the big one grows | – | – | 2 | 2 | 2 | 1 | 1 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/mechanical-properties-of-fluids | ✓ |
+| P18 | P | A laser follows a curved water jet (total internal reflection) | 0.3 | – | 2 | 2 | 1 | 1 | 1 | 48 | ⏸ parked: total internal reflection is P20's mirage, the everyday angle (founder, 2026-10-20) | mht-cet-physics/ray-optics | ✓ |
+| P19 | P | White light through a prism: violet bends most (dispersion) | 0.5 | – | 3 | 2 | 1 | 1 | 1 | 59 | ⏸ parked: replaced by P31, the rainbow (same dispersion, everyday picture; the prism flopped at 0.5×; 2026-10-21) | mht-cet-physics/ray-optics | ✓ |
+| P20 | P | The "water" on a hot road is the sky (mirage) | 0.4 | – | 3 | 2 | 1 | 0 | 2 | 59 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/ray-optics | ✓ |
+| P21 | P | Cover half the lens: the whole image stays, dimmer | 0.9 | – | 2 | 2 | 2 | 1 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/ray-optics | ✓ |
+| P22 | P | A 2 m pool looks 1.5 m deep (apparent depth) | – | – | 2 | 2 | 1 | 1 | 2 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/ray-optics | ✓ |
+| P23 | P | Walk a candle up to a convex lens: the image flips upright | – | – | 2 | 2 | 1 | 1 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/ray-optics | ✓ |
+| P24 | P | Your face in a spoon: upside down, then upright up close (concave mirror) | 10.5 | – | 2 | 2 | 2 | 1 | 2 | 76 | ✅ made 2026-10-21 (`pv-physics-008-spoon`) | mht-cet-physics/ray-optics | ✓ |
+| P25 | P | A magnifying glass under water barely magnifies (lensmaker) | – | – | 2 | 2 | 2 | 1 | 1 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/ray-optics | ✓ |
+| P26 | P | A half-height mirror shows your whole body, at any distance | – | – | 1 | 2 | 2 | 1 | 2 | 59 | ⏸ parked: fails F28 (vivid 1: one person walking, one strip of mirror; 2026-10-21) | mht-cet-physics/ray-optics | ✓ |
+| P27 | P | A bigger telescope lens: a brighter moon, not a bigger one | – | – | 2 | 2 | 2 | 0 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/ray-optics | ✓ |
+| P28 | P | Turn a prism: the bend dips, then rises (minimum deviation) | – | – | 2 | 2 | 1 | 1 | 0 | 48 | ⏸ parked: fails F29 (it dips, then rises, but why needs words; 2026-10-21) | mht-cet-physics/ray-optics | ✗ |
+| P29 | P | "Objects in mirror are closer than they appear" (convex mirror) | 6.2 | – | 2 | 2 | 1 | 1 | 2 | 69 | ✅ made 2026-10-21 (`pv-physics-009-wing-mirror`); rebuilt 2026-10-22 to v1.26 as P29b (`pv-physics-009b-wing-mirror`) | mht-cet-physics/ray-optics | ✓ |
+| P30 | P | A raindrop's speed levels off: drag catches up with weight (terminal velocity) | 36 | 625k | 2 | 2 | 1 | 1 | 2 | 76 |  | remake | ✓ |
+| P31 | P | Rainbow: red on top, made inside raindrops | – | – | 3 | 2 | 1 | 1 | 1 | 66 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| P32 | P | A skater pulls her arms in and spins faster (angular momentum) | – | – | 2 | 2 | 1 | 1 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| P33 | P | Water climbs highest in the thinnest tube (capillary action) | – | – | 2 | 2 | 1 | 1 | 2 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| P34 | P | Shake a string faster: more loops (standing waves) | – | – | 2 | 2 | 1 | 1 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| P35 | P | Heat a brass–steel strip: it bends toward the steel (bimetallic strip) | 1.2 | – | 2 | 2 | 1 | 1 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| P36 | P | Ice at the top cools a drink faster than ice at the bottom (convection) | – | – | 3 | 2 | 2 | 1 | 2 | 79 | ✅ made 2026-10-26 (`pv-physics-015-ice`, Physics #15; first full-frame studio reel, F35–F36) | founder | ✓ |
+| P37 | P | A magnet held still in a coil lights nothing (induction) | – | – | 2 | 2 | 2 | 1 | 1 | 62 | ✅ made 2026-10-22 (`pv-physics-011-induction`, Physics #11; framework-2 test B, L61; reel A `pv-f2-induction` is the same topic made by framework 2) | founder | ✓ |
+| P38 | P | Two coils that never touch: the second bulb lights, on AC only (transformer) | – | – | 2 | 2 | 2 | 1 | 2 | 69 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| P39 | P | Flip the battery on a diode: the current stops (p-n junction) | – | – | 2 | 2 | 1 | 1 | 2 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| P40 | P | Blow between two hanging sheets: they swing together (Bernoulli) | 0.5 | – | 2 | 2 | 2 | 1 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| P41 | P | A steel needle floats; one drop of soap sinks it (surface tension) | – | – | 2 | 2 | 2 | 0 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| P42 | P | Fire a cannonball fast enough and it falls forever (Newton's cannon) | – | – | 2 | 2 | 2 | 1 | 0 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| P43 | P | The right note, not the loudest, shatters a glass (resonance) | 0.4 | – | 2 | 2 | 1 | 1 | 1 | 48 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| P44 | P | A siren's waves bunch up ahead of the ambulance (Doppler) | 0.7 | – | 2 | 2 | 0 | 1 | 2 | 48 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| P45 | P | A second slit makes dark stripes (double slit) | 0.4 | – | 2 | 2 | 2 | 1 | 0 | 48 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| P46 | P | One neutron, ten rounds, over a thousand splits (fission chain) | 0.2 | – | 3 | 2 | 1 | 0 | 0 | 45 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| P47 | P | Speed up the AC: a bulb behind a capacitor glows brighter | – | – | 2 | 2 | 2 | 1 | 0 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/ac-circuits | ✓ |
+| P48 | P | Charge a capacitor, connect a coil: the current swings back and forth (LC oscillation) | – | – | 2 | 2 | 2 | 1 | 0 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/ac-circuits | ✓ |
+| P49 | P | Two bulbs in series or in parallel: the parallel pair glows brighter | – | – | 2 | 2 | 1 | 1 | 2 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/current-electricity | ✓ |
+| P50 | P | Switch off a big coil and it sparks (self-inductance) | – | – | 2 | 2 | 2 | 1 | 1 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/electromagnetic-induction | ✓ |
+| P51 | P | Lightning hits a car: the metal body, not the tyres, keeps you safe | – | – | 2 | 2 | 2 | 0 | 1 | 55 | ✅ made 2026-10-23 (`pv-physics-013-lightning`, Physics #13; the first Shock opening, founder's pick) | mht-cet-physics/electrostatics | ✓ |
+| P52 | P | Fall to the Earth's centre and you'd weigh nothing | – | – | 2 | 2 | 2 | 1 | 0 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/gravitation | ✓ |
+| P53 | P | You weigh a little less at the equator than at the poles | – | – | 2 | 2 | 2 | 0 | 0 | 48 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/gravitation | ✓ |
+| P54 | P | A lift starting up: the scale under you reads more | – | – | 2 | 2 | 1 | 1 | 2 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/laws-of-motion | ✓ |
+| P55 | P | Bend your knees when you land: same push, spread over more time | – | – | 2 | 2 | 1 | 1 | 2 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/laws-of-motion | ✓ |
+| P56 | P | Two wires with currents the same way pull together | – | – | 2 | 2 | 2 | 1 | 0 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/magnetic-fields-due-to-electric-current | ✓ |
+| P57 | P | Charged particles spiral along Earth's field and light the aurora | 0.3 | – | 3 | 2 | 1 | 1 | 1 | 59 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/magnetic-fields-due-to-electric-current | ✓ |
+| P58 | P | Heat a magnet red-hot and it stops being a magnet | – | – | 2 | 2 | 2 | 0 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/magnetic-materials | ✓ |
+| P59 | P | Thumb over a hose: the same water squeezes out faster (continuity) | – | – | 2 | 2 | 0 | 1 | 2 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/mechanical-properties-of-fluids | ✓ |
+| P60 | P | Three holes in a bottle on the floor: the middle jet lands farthest | – | – | 2 | 2 | 2 | 1 | 1 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/mechanical-properties-of-fluids | ✓ |
+| P61 | P | An ice cube melts in a full glass: the water level doesn't move | – | – | 2 | 2 | 2 | 0 | 2 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/mechanical-properties-of-fluids | ✓ |
+| P62 | P | Let go of a whirling ball: it flies off along the tangent, not outward | – | – | 2 | 2 | 2 | 0 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/motion-in-a-plane | ✓ |
+| P63 | P | Run in vertical rain: tilt the umbrella forward | – | – | 2 | 2 | 1 | 1 | 2 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/motion-in-a-plane | ✓ |
+| P64 | P | A heavy bob and a light one swing in step (period doesn't depend on mass) | – | – | 2 | 2 | 2 | 1 | 1 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/oscillations | ✓ |
+| P65 | P | Tilted roads let cars take a curve faster (banking) | – | – | 2 | 2 | 1 | 1 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/rotational-dynamics | ✓ |
+| P66 | P | Swing a bucket of water overhead fast enough and nothing spills | – | – | 2 | 2 | 2 | 1 | 1 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/rotational-dynamics | ✓ |
+| P67 | P | Heat a metal and it conducts worse; heat a semiconductor and it conducts better | – | – | 2 | 2 | 2 | 1 | 0 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/semiconductor-devices | ✓ |
+| P68 | P | Two almost-equal notes make a wobble (beats) | – | – | 2 | 2 | 2 | 1 | 0 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/superposition-of-waves | ✓ |
+| P69 | P | A nucleus weighs less than its parts (mass defect) | – | – | 2 | 2 | 2 | 0 | 0 | 48 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/structure-of-atoms-and-nuclei | ✓ |
+| P70 | P | Metal feels colder than wood at the same temperature | – | – | 2 | 2 | 2 | 1 | 2 | 69 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/thermal-properties-of-matter | ✓ |
+| P71 | P | Leave the fridge door open in a closed room: the room gets warmer | – | – | 2 | 2 | 2 | 1 | 2 | 69 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/thermodynamics | ✓ |
+| P72 | P | Two crossed polaroids block all light; a third between them lets light back | 0.1 | – | 2 | 2 | 2 | 1 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-physics/wave-optics | ✓ |
+| P73 | P | Double your speed and your braking distance goes up four times | – | – | 2 | 2 | 2 | 1 | 2 | 69 | ⏸ parked: not a proven idea (F1, 2026-10-30) | jee-mains-physics/motion-in-a-straight-line | ✓ |
+| P74 | P | One spectrum: radio to gamma, and your TV remote uses infrared | – | – | 2 | 2 | 2 | 0 | 2 | 62 | ✅ made 2026-10-26 (`pv-physics-016-spectrum`, Physics #16; F39 share test 2 of 3, L64) | jee-mains-physics/electromagnetic-waves | ✓ |
+| P75 | P | Double the battery: the current doubles (Ohm's law acted by our own cast: Volt the battery, Amp the sparks, Ohm the resistor, red-hot at 4x heat) | 829 | – | 3 | 2 | 1 | 0 | 1 | 79 | ✅ made 2026-10-24 (`pv-physics-014-ohm`, Physics #14; Painted 2D; the topic hit 29.2M on @qubit.exe, 829x its typical reel; our own characters and scene) | founder | ✓ |
+| P76 | P | Two equal balls, one hits off-centre: they fly apart at exactly 90° | 34 | 289k | 2 | 2 | 1 | 1 | 1 | 69 |  | remake | ✓ |
+| P77 | P | 3 kg and 5 kg over a pulley: the heavy one falls, but only at g/4 | 13 | 310k | 2 | 2 | 1 | 1 | 1 | 62 |  | remake | ✓ |
+| P78 | P | Land on a trampoline: at the lowest point all your energy is in the springs | 11 | 191k | 3 | 2 | 1 | 1 | 2 | 79 |  | remake | ✓ |
+| P79 | P | Same knock through air, water and steel: steel carries it ~15× faster than air | 7 | 125k | 2 | 2 | 1 | 1 | 1 | 62 |  | remake | ✓ |
+| C1 | C | Heat speeds up a reaction: faster molecules, more hits | – | – | 3 | 1 | 0 | 1 | 1 | 52 | ✅ made 2026-10-18 (`pv-chem-001-heat-rate`; scored after posting) | own | ✓ |
+| C2 | C | The periodic table's 8 families | 256 | 4.45M | 3 | 1 | 0 | 0 | 0 | 59 | ✅ made 2026-10-18 (`pv-chem-002-families`; scored after posting) | remake | ✓ |
+| C3 | C | Avogadro: add gas, the volume grows | 50 | 421k | 2 | 1 | 0 | 1 | 1 | 55 | ✅ made 2026-10-19 (`pv-chem-003-avogadro`; scored after posting) | remake | ✓ |
+| C4 | C | Charles's law: heat 0 → 273 °C, the volume doubles | 30 | 807k | 2 | 2 | 1 | 1 | 1 | 69 | ✅ made 2026-10-20 (`pv-chem-004-charles`, remade; scored after posting) | remake | ✓ |
+| C5 | C | P, V and T together (combined gas law) | 11 | 299k | 2 | 2 | 1 | 1 | 1 | 62 | ✅ made 2026-10-20 (`pv-chem-005-pvt`) | remake | ✓ |
+| C7 | C | Flame colours: each metal burns its own colour (fireworks) | – | – | 3 | 2 | 1 | 0 | 1 | 59 | ✅ made 2026-10-20 (`pv-chem-006-flame`) | own | ✓ |
+| C8 | C | Split water: hydrogen fills twice as fast as oxygen | – | – | 3 | 2 | 1 | 1 | 0 | 59 | ✅ made 2026-10-23 (`pv-chem-009-electrolysis`) | own | ✓ |
+| C9 | C | The pH chart: lemon to bleach, milk is slightly acidic (universal indicator) | – | – | 3 | 2 | 2 | 0 | 2 | 72 | ✅ made 2026-10-26 (`pv-chem-012-ph`, Chemistry #12; the first F39 share test, L64) | own | ✓ |
+| C10 | C | Squeeze the brown gas: darker at once, then lighter (Le Chatelier) | – | – | 2 | 2 | 2 | 0 | 0 | 48 | ⏸ parked: not a proven idea (F1, 2026-10-30) | own | ✓ |
+| C11 | C | Diffusion: dye in hot vs cold water | – | – | 2 | 2 | 0 | 0 | 2 | 48 | ⏸ parked: close to Chemistry #1, heat speeds things up (founder, 2026-10-20) | own | ✓ |
+| C12 | C | Heat it by 10 °C: the rate doubles (collisions over the energy hill) | – | – | 3 | 2 | 2 | 1 | 1 | 72 | ⏸ parked: repeats Chemistry #1, heat → rate (founder, 2026-10-20) | mht-cet-chemistry/chemical-kinetics | ✓ |
+| C13 | C | Half-life: 64 atoms, 2 half-lives, 16 left | – | – | 3 | 2 | 1 | 1 | 1 | 66 | ✅ made 2026-10-20 (`pv-chem-007-halflife`, first voiceover) | mht-cet-chemistry/chemical-kinetics | ✓ |
+| C14 | C | Stack the oranges: 52%, 68% or 74% filled (packing efficiency) | – | – | 3 | 2 | 1 | 1 | 1 | 66 | ✅ made 2026-10-21 (`pv-chem-008-packing`) | mht-cet-chemistry/solid-state | ✓ |
+| C15 | C | A zinc rod in blue copper sulphate: copper coats it, the blue fades | – | – | 3 | 2 | 1 | 1 | 0 | 59 | ⏸ parked: not a proven idea (F1, 2026-10-30); it had been picked 2026-10-21 | mht-cet-chemistry/electrochemistry | ✓ |
+| C16 | C | Why water is bent: lone pairs squeeze 109.5° → 104.5° (VSEPR) | – | – | 2 | 2 | 1 | 1 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/chemical-bonding | ✓ |
+| C17 | C | Salt makes water boil hotter, not sooner (boiling-point elevation) | – | – | 2 | 2 | 2 | 1 | 2 | 69 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/solutions | ✓ |
+| C18 | C | Salt a cucumber: the water walks out through the skin (osmosis) | 1.6 | – | 3 | 2 | 1 | 1 | 2 | 72 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/solutions | ✓ |
+| C19 | C | Same pinhole: the helium balloon empties first (lighter = faster) | – | – | 3 | 2 | 1 | 1 | 1 | 66 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/states-of-matter | ✓ |
+| C20 | C | By the trend, water should boil at −80 °C (hydrogen bonds) | – | – | 2 | 2 | 2 | 1 | 1 | 62 | ⏸ parked: same concept as C43 (hydrogen bonds); its −80 °C line is C43's second hook (2026-10-21) | mht-cet-chemistry/chemical-bonding | ✓ |
+| C21 | C | Salt water lights the bulb bright, vinegar barely (strong vs weak electrolyte) | – | – | 2 | 2 | 1 | 1 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/electrochemistry | ✓ |
+| C22 | C | A drop of acid: water's colour swings, a buffer's holds | – | – | 2 | 2 | 1 | 1 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/ionic-equilibria | ✓ |
+| C23 | C | Warm an aldehyde with Tollens' reagent: the tube turns into a mirror | – | – | 3 | 2 | 2 | 0 | 1 | 66 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/aldehydes-ketones-and-carboxylic-acids | ✓ |
+| C24 | C | Soap doesn't dissolve oil, it wraps it (micelles) | – | – | 3 | 2 | 1 | 0 | 2 | 66 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/surface-chemistry | ✓ |
+| C25 | C | Heat DNA: the A–T rungs let go before G–C | – | – | 3 | 2 | 1 | 0 | 0 | 52 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/biomolecules | ✓ |
+| C26 | C | Pump a second gas in: the first gas's pressure doesn't change (Dalton) | – | – | 3 | 2 | 2 | 1 | 0 | 66 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/states-of-matter | ✓ |
+| C27 | C | Ice melts at one temperature, glass just softens (crystalline vs amorphous) | – | – | 2 | 2 | 1 | 1 | 2 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/solid-state | ✓ |
+| C28 | C | Copper sulphate is blue, zinc sulphate colourless (d–d colours) | – | – | 3 | 2 | 1 | 0 | 0 | 52 | ⏸ parked: fails F29 (why zinc is colourless needs its d shell explained in words; 2026-10-21) | mht-cet-chemistry/transition-and-inner-transition-elements | ✗ |
+| C29 | C | More electrons, smaller atom: radii shrink across a period | – | – | 2 | 2 | 2 | 1 | 0 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/modern-periodic-table | ✓ |
+| C30 | C | Lithium, sodium, potassium in water: which bursts into flame? | – | – | 3 | 2 | 1 | 0 | 0 | 52 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/elements-of-group-1-and-2 | ✓ |
+| C31 | C | Cut a 1 cm cube into nanocubes: surface area ×10 million | – | – | 2 | 2 | 2 | 1 | 0 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/surface-chemistry | ✓ |
+| C32 | C | One sip of water holds 6 × 10²³ molecules (the mole) | – | – | 2 | 2 | 2 | 0 | 2 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/some-basic-concepts | ✓ |
+| C33 | C | A pinch of alum clears muddy water (coagulation) | – | – | 2 | 2 | 1 | 0 | 1 | 48 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/surface-chemistry | ✓ |
+| C34 | C | SN2: the molecule flips inside out like an umbrella | – | – | 2 | 2 | 1 | 0 | 1 | 48 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/halogen-derivatives | ✓ |
+| C35 | C | Mirror-image molecules, like your hands, never match (chirality) | – | – | 2 | 2 | 1 | 0 | 2 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/basic-principles-of-organic-chemistry | ✓ |
+| C36 | C | Boil an egg: the proteins unfold, the chain stays (denaturation) | – | – | 2 | 2 | 1 | 0 | 2 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/biomolecules | ✓ |
+| C37 | C | Carry bag or milk can: same ethene, branched vs straight chains (LDPE vs HDPE) | – | – | 2 | 2 | 1 | 0 | 2 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/introduction-to-polymer-chemistry | ✓ |
+| C38 | C | A gallium spoon melts in hot tea | – | – | 2 | 2 | 2 | 0 | 1 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | jee-mains-chemistry/p-block-elements | ✓ |
+| C39 | C | Add acid to saturated salt water: salt crystals fall out (common ion) | – | – | 2 | 2 | 2 | 1 | 0 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/ionic-equilibria | ✓ |
+| C40 | C | 1,000 snapshots of one electron make a cloud (orbitals) | – | – | 3 | 2 | 1 | 0 | 0 | 52 | ⏸ parked: fails F29 (the cloud shows; why it isn't a neat orbit needs words; 2026-10-21) | mht-cet-chemistry/structure-of-atom | ✗ |
+| C41 | C | A hydrogen fuel cell's only exhaust is water | – | – | 2 | 2 | 1 | 0 | 1 | 48 | ⏸ parked: not a proven idea (F1, 2026-10-30) | mht-cet-chemistry/electrochemistry | ✓ |
+| C42 | C | Liquid oxygen sticks to a magnet, nitrogen pours through (MO theory) | – | – | 2 | 2 | 2 | 0 | 0 | 48 | ⏸ parked: fails F29 (it sticks, but why, unpaired electrons, needs words; 2026-10-21) | mht-cet-chemistry/chemical-bonding | ✗ |
+| C43 | C | Solid wax sinks, solid water floats: ice's open lattice (hydrogen bonds) | – | – | 2 | 2 | 2 | 1 | 2 | 69 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| C44 | C | An explosive metal and a poison gas make table salt (ionic bond) | – | – | 2 | 2 | 2 | 0 | 2 | 62 | ✅ made 2026-10-26 (`pv-chem-010-salt`, Chemistry #10; the second Shock opening, founder's pick) | founder | ✓ |
+| C45 | C | Hit metal and salt with a hammer: the salt shatters (metallic bond) | – | – | 2 | 2 | 1 | 0 | 2 | 55 | ✅ made 2026-10-26 (`pv-chem-011-hammer`, Chemistry #11; the third Shock opening and the first F37 reel) | founder | ✓ |
+| C46 | C | Iron nails in dry air, water and salt water: salt water rusts first | – | – | 2 | 2 | 1 | 0 | 2 | 55 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| C47 | C | A laser beam shows in milky water, not salt water (Tyndall) | 3.0 | – | 2 | 2 | 1 | 0 | 2 | 62 | ⏸ parked: not a proven idea (F1, 2026-10-30) | founder | ✓ |
+| C48 | C | s and p orbitals blend into methane's four equal bonds (hybridisation) | – | – | 2 | 1 | 1 | 0 | 0 | 34 | ⏸ parked: fails F29 (the blend shows; why it happens needs words; founder's list, 2026-10-21) | founder | ✗ |
+| C49 | C | Add NaOH to four metal salts: white, blue, green and rust-brown clouds (hydroxide precipitates) | – | – | 3 | 2 | 1 | 0 | 0 | 52 | ✅ made 2026-10-26 (`pv-chem-013-hydroxides`, Chemistry #13; F39 share test 3 of 3, L64) | own | ✓ |
+| M10 | M | Chain rule as gears: turn x, u turns, y turns faster; the ratios multiply | 7.1 | 86k | 2 | 0 | 0 | 1 | 1 | 41 | ✅ made 2026-10-28 (`pv-maths-004-chain-rule`, Maths #4; the first F40 imitation; **shelved, not posted**: its source has 86k views, under the 100k bar, founder 2026-10-30) | remake | ✓ |
+| M11 | M | One radian: the radius bends onto the rim, and 2π of them go round | 4.8 | 58k | 2 | 0 | 0 | 1 | 1 | 41 | ⏸ parked: its source has 58k views, under 100k (F40, 2026-10-30) | remake | ✓ |
+| M12 | M | The can that uses the least metal: height equals diameter | 114 | 2.74M | 3 | 2 | 2 | 1 | 2 | 100 |  | remake | ✓ |
+| M13 | M | The calculus wheel: differentiate sin four times and you're back at sin | 66 | 1.59M | 2 | 2 | 1 | 1 | 0 | 62 |  | remake | ✓ |
+| M14 | M | The area between y = x and y = x² is exactly 1/6 | 66 | 1.80M | 2 | 2 | 1 | 1 | 0 | 62 |  | remake | ✓ |
+| M15 | M | Rectangles under y = x² from 0 to 3: more of them, and the total settles on 9 | 19 | 459k | 2 | 2 | 1 | 1 | 0 | 55 |  | remake | ✓ |
+| M16 | M | The unit circle's standard angles: sin 30° is a height of exactly one half | 779 | 21.3M | 2 | 2 | 1 | 1 | 0 | 69 |  | remake | ✓ |
+| M17 | M | Roll two dice: 7 is the most common total (6 ways in 36) | 4 | 104k | 3 | 2 | 1 | 1 | 2 | 79 |  | remake | ✓ |
 
 ## Idea cards
 
@@ -775,6 +784,56 @@ each answer is re-derived in its reel's tests (F10).
 - **Without words:** a radius lifts off the circle → it bends onto the rim as an arc of the same length → the angle it spans lights up → copies of the radius go on round the rim: a bit over six fit, 2π
 - **From:** remake (F40 imitation) · @learnara.math "Radians visualized!" 58k (4.8×) [link](https://www.instagram.com/reel/Deg7KZnqT5J/)
 
+### P76 · Two equal balls, one hits off-centre
+- **Frame 0:** One ball hits an equal ball off-centre. They fly apart at: 45°, 90° or 180°? → 90°
+- **Without words:** a ball rolls at a still twin and clips it off-centre → both fly off, an arc draws between their paths → the arc reads 90° → their two momentum arrows add up to the first ball's arrow
+- **From:** remake (F40) · @bisal.physics "Off-Centre Collision" 289k (34×) [link](https://www.instagram.com/reel/DdiP8gfyFsS/) · 11 · Laws of motion (collisions)
+
+### P77 · 3 kg and 5 kg over a pulley
+- **Frame 0:** 3 kg and 5 kg hang over a pulley. The 5 kg falls at: g, g/2 or g/4? → g/4
+- **Without words:** two blocks hang still over a pulley → released, the heavy one falls and the light one rises → their speed bars grow at the same steady rate → the rate settles at 2.45 m/s², a quarter of a free fall beside it
+- **From:** remake (F40) · @mathsy.uk "Pegs & Pulleys" 310k (13×) [link](https://www.instagram.com/reel/C4k0JpwrZxP/) · 11 · Laws of motion
+
+### P78 · Land on a trampoline
+- **Frame 0:** At the trampoline's lowest point, where is your energy? A in you · B in the springs · C lost → B
+- **Without words:** a jumper drops, the motion bar full → the bed stretches and the motion bar drains into a spring bar → at the bottom the motion bar is empty, the spring bar full → the bed snaps back and the bars swap again
+- **From:** remake (F40) · @sciencevisualised "Trampoline Energy" 191k (11×) [link](https://www.instagram.com/reel/DbpwLYxM2hG/) · 11 · Work, energy & power
+
+### P79 · Same knock through air, water and steel
+- **Frame 0:** One knock, three rods: air, water, steel. Which carries it fastest? → steel
+- **Without words:** three long tubes side by side, a hammer knocks their left ends at once → a wave of jostling particles races along each → steel's arrives first, then water's, then air's → the speeds land under each: about 5,000 · 1,500 · 340 m/s
+- **From:** remake (F40) · @sciencevisualised "sound speed in solids" 125k (7×) [link](https://www.instagram.com/reel/DcmaUDMsL0Z/) · 11 · Waves
+
+### M12 · The can that uses the least metal
+- **Frame 0:** A can of fixed volume using the least metal is: tall and thin, short and wide, or as tall as it is wide? → as tall as it is wide
+- **Without words:** a can morphs from tall-thin to short-wide, its volume number fixed → a metal-area bar falls, then rises again → a graph of area against radius draws, with a lowest dot → at that dot the can's height equals its diameter
+- **From:** remake (F40) · @mathsy.uk "optimisation of a Soda Can" 2.74M (114×) [link](https://www.instagram.com/reel/C4nXYzzKdHe/) · 12 · Application of derivatives (maxima and minima)
+
+### M13 · The calculus wheel
+- **Frame 0:** Differentiate sin x four times. You get: sin x, −sin x or cos x? → sin x
+- **Without words:** a wheel with sin, cos, −sin, −cos at its four points → each click clockwise (d/dx) morphs the curve to the next one → after four clicks the curve is sin again → turning the wheel back undoes each step (the integral)
+- **From:** remake (F40) · @mathsy.uk "The trigonometric wheel of calculus" 1.59M (66×) [link](https://www.instagram.com/reel/C4c9UQKq_UO/) · 12 · Differentiation and integration
+
+### M14 · The area between y = x and y = x² is exactly 1/6
+- **Frame 0:** The area between y = x and y = x² from 0 to 1: 1/2, 1/3 or 1/6? → 1/6
+- **Without words:** y = x and y = x² draw from 0 to 1, meeting at both ends → thin strips fill the gap between them → the strips slide together into one block → the block's area counts up to 1/6 = 1/2 − 1/3
+- **From:** remake (F40) · @codematrixvishal "area between two curves" 1.80M (66×) [link](https://www.instagram.com/reel/Dd0ByRkjOhZ/) · 12 · Application of integrals
+
+### M15 · Rectangles under y = x² from 0 to 3
+- **Frame 0:** The area under y = x² from 0 to 3 is: 3, 6 or 9? → 9
+- **Without words:** 3 wide rectangles stand under the curve, their total far off → they split into 6, 12, 48, the gaps shrinking → the running total closes in on 9.00 → the rectangles melt into the smooth area, 9
+- **From:** remake (F40) · @mathsy.uk "What is integration?" 459k (19×) [link](https://www.instagram.com/reel/C4wUT11tpvK/) · 12 · Integrals
+
+### M16 · The unit circle's standard angles
+- **Frame 0:** On a circle of radius 1, sin 30° is: 1/2, √3/2 or 1? → 1/2
+- **Without words:** a point walks round a circle of radius 1 and stops at 30° → its height lights up as a bar reading 1/2 → it stops at 45°, 60°, 90°: √2/2, √3/2, 1 → every standard angle round the circle shows its height and base at once
+- **From:** remake (F40) · @codematrixvishal "the complete Trigonometric Unit Circle" 21.3M (779×) [link](https://www.instagram.com/reel/DbXW1vxJ-7-/) · 11 · Trigonometric functions (standard angles; Maths #1 showed sin and cos moving, this is their exact values)
+
+### M17 · Roll two dice
+- **Frame 0:** Roll two dice. The most common total is: 6, 7 or 12? → 7
+- **Without words:** two dice tumble again and again, a bar for each total growing → the bars build a triangle peaking at 7 → the six pairs that make 7 light up on a 6 × 6 grid → 7 comes up 1 time in 6, 12 only 1 in 36
+- **From:** remake (F40) · @mathsy.uk "most common dice roll in monopoly" 104k (4×) [link](https://www.instagram.com/reel/C4m_LRlKLl2/) · 11 · Probability
+
 ## Hook queue
 
 **The next @pyqvault_ reels, in order** (founder 2026-10-21). The topics are F21's picks (Ideas above); the A/B/C
@@ -792,7 +851,6 @@ hook and opening go in the Hook column of `pyqvault-learnings.md`).
 | Order | # | Hook | Opening | Visual hook | Hook sound | Loop | Frame 0 (draft) |
 |---|---|---|---|---|---|---|---|
 | 7 | P7 | Same start, two endings | Assemble (suit-up) | two drones build themselves part by part (frame, arms, rotors spinning up, ropes clipping on), then pull identical boxes; one box lifts off, the other scrapes along the ground | snap ×8 (one per part locking, pitch rising) + shimmer (both drones complete) | yes | "Same drone, same box, same pull. One lifts it, one drags it. Why?" A rope angle · B rope length · C luck; the drones assemble behind the question, then fly. Loop: both drones land back on the start |
-| 8 | C15 | Ending first | Ending first | a copper-coated rod standing in clear liquid; the picture starts running backwards and the liquid turns blue | shimmer (the rewind) | yes | Open on a copper-coated rod in clear liquid: "This was zinc in blue liquid. Where did the blue go?" then rewind (time-lapse, labelled). Loop: ends where it began |
 
 ## Concept sweep
 

@@ -22,8 +22,8 @@ const SCORING = `
 | Everyday | everyday | 0–2 | 1 | held or seen daily |
 `;
 
-const HEADER = `| # | Subject | Idea | Proof (×) | Vivid | Guess | Surprise | Law live | Everyday | Score | Status | Source | Wordless |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|`;
+const HEADER = `| # | Subject | Idea | Proof (×) | Views | Vivid | Guess | Surprise | Law live | Everyday | Score | Status | Source | Wordless |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|`;
 
 const CARDS = `
 ## Idea cards
@@ -68,12 +68,13 @@ ${CARDS}${extra}
 
 // P5: 3 + 3 + 2 + 2 + 1 + 1 = 12 of 13 → 92. P6: 2 + 1 + 2 + 1 + 1 + 1 = 8 → 62. C7: 0 + 3 + 2 + 1 + 0 + 1 = 7 → 54.
 // C8: 0 + 3 + 2 + 1 + 1 + 0 = 7 → 54.
+// Views: the copied reel's views (F1, F40: ≥ 100k for an idea still to make, founder 2026-10-30).
 const ROWS = [
-  "| P5 | P | Adiabatic squeeze | 125 | 3 | 2 | 2 | 1 | 1 | 92 | | remake | ✓ |",
-  "| P6 | P | Work vs power | 76 | 1 | 2 | 1 | 1 | 1 | 62 | | remake | ✓ |",
-  "| P2 | P | Boyle | 129 | 3 | 1 | 1 | 1 | 1 | 77 | ✅ made | remake | ✓ |",
-  "| C7 | C | Flame colours | – | 3 | 2 | 1 | 0 | 1 | 54 | | own | ✓ |",
-  "| C8 | C | Split water | – | 3 | 2 | 1 | 1 | 0 | 54 | | own | ✓ |",
+  "| P5 | P | Adiabatic squeeze | 125 | 1.06M | 3 | 2 | 2 | 1 | 1 | 92 | | remake | ✓ |",
+  "| P6 | P | Work vs power | 76 | 1.33M | 1 | 2 | 1 | 1 | 1 | 62 | | remake | ✓ |",
+  "| P2 | P | Boyle | 129 | 3.52M | 3 | 1 | 1 | 1 | 1 | 77 | ✅ made | remake | ✓ |",
+  "| C7 | C | Flame colours | – | 250k | 3 | 2 | 1 | 0 | 1 | 54 | | remake | ✓ |",
+  "| C8 | C | Split water | – | 180,000 | 3 | 2 | 1 | 1 | 0 | 54 | | remake | ✓ |",
 ].join("\n");
 const MD = ideas(ROWS);
 const opts = (md) => ({ weights: ts.parseWeights(md), swept: ts.parseSweep(md), cards: ts.parseCards(md) });
@@ -101,8 +102,30 @@ test("the score is the weighted points out of 100", () => {
 
 test("columns are read by their header names", () => {
   const [p5] = ts.parse(MD);
-  assert.deepEqual(p5, { id: "P5", subject: "P", idea: "Adiabatic squeeze", proofX: 125, vivid: 3, guess: 2, surprise: 2, law: 1,
-    everyday: 1, score: 92, status: "", source: "remake", wordless: true });
+  assert.deepEqual(p5, { id: "P5", subject: "P", idea: "Adiabatic squeeze", proofX: 125, views: 1060000, vivid: 3, guess: 2,
+    surprise: 2, law: 1, everyday: 1, score: 92, status: "", source: "remake", wordless: true });
+});
+
+test("views are read as written: 1.45M, 908k, 180,000; a dash or anything else is no number", () => {
+  assert.deepEqual(["1.45M", "908k", "86K", "180,000", "–", "", "lots"].map(ts.parseViews),
+    [1450000, 908000, 86000, 180000, null, null, null]);
+});
+
+// F1 + F40 (founder, 2026-10-30: "only on proven ideas… 100k as min criteria"): an idea still to make is a remake whose
+// source has ≥ 100k views. Made, parked or moved ideas keep their history unchecked; a list without a Views column
+// (@lws.pune's) isn't checked.
+test("proven only: an idea to make must be a remake with ≥ 100k views; made and parked ones aren't checked", () => {
+  const bad = MD.replace("| P6 | P | Work vs power | 76 | 1.33M |", "| P6 | P | Work vs power | 76 | 86k |")
+    .replace("| 54 | | remake | ✓ |\n| C8", "| 54 | | own | ✓ |\n| C8")
+    .replace("| C8 | C | Split water | – | 180,000 |", "| C8 | C | Split water | – | – |");
+  const errors = check(bad).join("\n");
+  assert.match(errors, /P6: its source has 86k views; a reel is made only from one with ≥ 100k \(F40\)/);
+  assert.match(errors, /C7: source "own" isn't a proven idea; only remakes are made \(F1\): park it/);
+  assert.match(errors, /C8: no views for its source; a reel is made only from one with ≥ 100k \(F40\)/);
+  const history = bad.replace("| 86k | 1 | 2 | 1 | 1 | 1 | 62 | |", "| 86k | 1 | 2 | 1 | 1 | 1 | 62 | ⏸ parked: under 100k |")
+    .replace("| 54 | | own |", "| 54 | ✅ made | own |")
+    .replace("| – | 3 | 2 | 1 | 1 | 0 | 54 | |", "| – | 3 | 2 | 1 | 1 | 0 | 54 | ⏸ parked |");
+  assert.deepEqual(check(history), []);
 });
 
 test("a correct list has no errors", () => {
@@ -110,8 +133,8 @@ test("a correct list has no errors", () => {
 });
 
 test("catches a wrong score, a value out of range, an unknown subject and a repeated id", () => {
-  const bad = MD.replace("| 76 | 1 | 2 | 1 | 1 | 1 | 62 |", "| 76 | 1 | 2 | 1 | 1 | 1 | 70 |")
-    .replace("| – | 3 | 2 | 1 | 0 | 1 | 54 |", "| – | 3 | 2 | 1 | 0 | 3 | 69 |")
+  const bad = MD.replace("| 1.33M | 1 | 2 | 1 | 1 | 1 | 62 |", "| 1.33M | 1 | 2 | 1 | 1 | 1 | 70 |")
+    .replace("| 250k | 3 | 2 | 1 | 0 | 1 | 54 |", "| 250k | 3 | 2 | 1 | 0 | 3 | 69 |")
     .replace("| C8 | C |", "| P5 | X |");
   const errors = check(bad).join("\n");
   assert.match(errors, /P6: score 70 should be 62/);
@@ -122,45 +145,35 @@ test("catches a wrong score, a value out of range, an unknown subject and a repe
 
 test("a broken row (wrong number of columns) is reported, not skipped", () => {
   const bad = MD.replace("| 62 | | remake | ✓ |", "| 62 || | remake | ✓ |");
-  assert.match(check(bad).join("\n"), /P6: 14 columns, expected 13/);
+  assert.match(check(bad).join("\n"), /P6: 15 columns, expected 14/);
 });
 
 test("next pick per subject: highest open score, then the bigger views multiple, then the law shown live", () => {
   const next = ts.nextPicks(ts.parse(MD));
   assert.equal(next.P.id, "P5", "Boyle is made");
   assert.equal(next.C.id, "C8", "C7 and C8 both 54 with no proof; C8 shows its law live");
-  const flop = ts.parse(MD.replace("| C7 | C | Flame colours | – |", "| C7 | C | Flame colours | 11 |").replace("| 0 | 1 | 54 | | own |", "| 0 | 1 | 62 | | own |"));
+  const flop = ts.parse(MD.replace("| C7 | C | Flame colours | – |", "| C7 | C | Flame colours | 11 |").replace("| 0 | 1 | 54 | | remake |", "| 0 | 1 | 62 | | remake |"));
   assert.equal(ts.nextPicks(flop).C.id, "C7");
 });
 
 test("queued, parked and moved ideas are never picked; queued ones are listed", () => {
-  const rows = ts.parse(MD.replace("| 92 | | remake |", "| 92 | ⏭ queued | remake |").replace("| 54 | | own | ✓ |\n| C8", "| 54 | ⏸ parked | own | ✓ |\n| C8"));
+  const rows = ts.parse(MD.replace("| 92 | | remake |", "| 92 | ⏭ queued | remake |").replace("| 54 | | remake | ✓ |\n| C8", "| 54 | ⏸ parked | remake | ✓ |\n| C8"));
   assert.deepEqual(ts.queued(rows).map((r) => r.id), ["P5"]);
   assert.equal(ts.nextPicks(rows).P.id, "P6");
   assert.equal(ts.nextPicks(rows).C.id, "C8");
 });
 
-// F1 + F28: Source is remake, own, founder or a notes chapter; a notes or founder idea needs a 2-second guess (guess 2)
-// and a busy picture (vivid ≥ 2); a notes chapter must be in the Concept sweep log, once.
+// F1: Source is remake, own, founder or a notes chapter (the last three are history since v1.36, F28 dropped); a notes
+// chapter must be in the Concept sweep log, once.
 test("sources: remake, own, founder or an MHT-CET / JEE Main physics or chemistry chapter", () => {
-  const bad = MD.replace("| 62 | | remake |", "| 62 | | youtube |").replace("| 54 | | own | ✓ |\n| C8", "| 54 | | nda-chemistry/acids | ✓ |\n| C8");
+  const bad = MD.replace("| 62 | | remake |", "| 62 | | youtube |").replace("| 54 | | remake | ✓ |\n| C8", "| 54 | | nda-chemistry/acids | ✓ |\n| C8");
   const errors = check(bad).join("\n");
   assert.match(errors, /P6: source "youtube"/);
   assert.match(errors, /C7: source "nda-chemistry\/acids"/);
 });
 
-test("F28 gate: a non-remake idea to make needs guess 2 and vivid ≥ 2; a remake is exempt", () => {
-  const row = "| P13 | P | Rolling race | – | 1 | 1 | 1 | 1 | 1 | 38 | | mht-cet-physics/rotational-dynamics | ✓ |";
-  const card = "\n### P13 · Rolling race\n- **Frame 0:** Which is first? → the ball\n- **Without words:** a → b → c\n- **Second hook:** Heavier ring? → tie\n- **From:** notes\n";
-  const md = ideas(`${ROWS}\n${row}`, card);
-  const errors = check(md).join("\n");
-  assert.match(errors, /P13: fails the F28 gate: vivid 1/);
-  assert.match(errors, /P13: fails the F28 gate: guess 1/);
-  assert.doesNotMatch(errors, /P6/, "P6 is a remake with vivid 1");
-});
-
 test("a notes idea's chapter must be in the Concept sweep log, and no chapter is logged twice", () => {
-  const row = "| C16 | C | Water is bent | – | 2 | 2 | 1 | 1 | 1 | 54 | | mht-cet-chemistry/chemical-bonding | ✓ |";
+  const row = "| C16 | C | Water is bent | – | – | 2 | 2 | 1 | 1 | 1 | 54 | | mht-cet-chemistry/chemical-bonding | ✓ |";
   const card = "\n### C16 · Water is bent\n- **Frame 0:** 109.5°, 104.5° or 90°? → 104.5°\n- **Without words:** a → b → c\n- **Second hook:** NH₃? → 107°\n- **From:** notes\n";
   assert.match(check(ideas(`${ROWS}\n${row}`, card)).join("\n"), /C16: chapter mht-cet-chemistry\/chemical-bonding is not in the Concept sweep log/);
   const twice = MD.replace("| mht-cet-physics/rotational-dynamics | 2026-10-21 | P13 | – |", "| mht-cet-physics/rotational-dynamics | 2026-10-21 | P13 | – |\n| mht-cet-physics/rotational-dynamics | 2026-10-22 | – | – |");
@@ -170,7 +183,7 @@ test("a notes idea's chapter must be in the Concept sweep log, and no chapter is
 // F29: explained without a single word; ✓ / ✗ for every row, an open or queued ✗ refused whatever the source.
 test("F29: an open or queued ✗ is refused; a parked one isn't; the cell must be ✓ or ✗", () => {
   const bad = MD.replace("| 62 | | remake | ✓ |", "| 62 | | remake | ✗ |").replace("| 77 | ✅ made | remake | ✓ |", "| 77 | ✅ made | remake | ✗ |")
-    .replace("| 54 | | own | ✓ |\n| C8", "| 54 | | own | maybe |\n| C8");
+    .replace("| 54 | | remake | ✓ |\n| C8", "| 54 | | remake | maybe |\n| C8");
   const errors = check(bad).join("\n");
   assert.match(errors, /P6: fails the F29 wordless test/);
   assert.doesNotMatch(errors, /P2:/, "a made idea isn't checked");
@@ -227,12 +240,12 @@ test("results are read from the results table: idea id, numbers and the columns 
 
 // Six scored ideas: the three vivid ones did twice as well as the three quiet ones.
 const CAL_ROWS = [
-  "| P1 | P | a | – | 3 | 2 | 1 | 1 | 1 | 62 | ✅ made | own | ✓ |",
-  "| P2 | P | b | – | 3 | 2 | 1 | 1 | 1 | 62 | ✅ made | own | ✓ |",
-  "| P3 | P | c | – | 3 | 2 | 1 | 1 | 1 | 62 | ✅ made | own | ✓ |",
-  "| C1 | C | d | – | 1 | 2 | 1 | 1 | 1 | 46 | ✅ made | own | ✓ |",
-  "| C2 | C | e | – | 1 | 2 | 1 | 1 | 1 | 46 | ✅ made | own | ✓ |",
-  "| C3 | C | f | – | 1 | 2 | 1 | 1 | 1 | 46 | ✅ made | own | ✓ |",
+  "| P1 | P | a | – | – | 3 | 2 | 1 | 1 | 1 | 62 | ✅ made | own | ✓ |",
+  "| P2 | P | b | – | – | 3 | 2 | 1 | 1 | 1 | 62 | ✅ made | own | ✓ |",
+  "| P3 | P | c | – | – | 3 | 2 | 1 | 1 | 1 | 62 | ✅ made | own | ✓ |",
+  "| C1 | C | d | – | – | 1 | 2 | 1 | 1 | 1 | 46 | ✅ made | own | ✓ |",
+  "| C2 | C | e | – | – | 1 | 2 | 1 | 1 | 1 | 46 | ✅ made | own | ✓ |",
+  "| C3 | C | f | – | – | 1 | 2 | 1 | 1 | 1 | 46 | ✅ made | own | ✓ |",
 ].join("\n");
 const calResults = (bgs) => RESULTS([
   r("1", "P1", bgs[0], 200, 8), r("2", "P2", bgs[1], 220, 9), r("3", "P3", bgs[2], 240, 8.5),
@@ -298,13 +311,17 @@ test("Spearman's rank correlation handles ties", () => {
 // The real files.
 const real = (f) => fs.readFileSync(path.join(__dirname, "..", "reels", f), "utf8");
 
-test("the real @pyqvault_ idea list is valid, has an open idea for each subject and a correct Open line", () => {
+// Proven ideas only (2026-10-30) can leave a subject with nothing to make; the list must then say so in its header, so a
+// dry subject is a stated gap waiting for a refill, never a silent one.
+test("the real @pyqvault_ idea list is valid, has an open idea for each subject (or says it has none) and a correct Open line", () => {
   const md = real("pyqvault-ideas.md"), rows = ts.parse(md);
   assert.ok(rows.length >= 60, `only ${rows.length} ideas`);
   assert.deepEqual(ts.validate(rows, undefined, opts(md)), []);
   assert.deepEqual(ts.runwayErrors(md, rows), []);
-  const next = ts.nextPicks(rows);
-  for (const s of ["P", "C", "M"]) assert.ok(next[s], `no open ${s} idea`);
+  const next = ts.nextPicks(rows), names = { P: "Physics", C: "Chemistry", M: "Maths" };
+  for (const s of ["P", "C", "M"])
+    assert.ok(next[s] || md.includes(`**${names[s]} has none open**`), `no open ${s} idea, and the list doesn't say "**${names[s]} has none open**"`);
+  assert.ok(next.P || next.C || next.M, "no open idea in any subject");
 });
 
 // Founder, 2026-10-28: maths, physics and chemistry go to @pyqvault_; defence and NDA maths stay on @lws.pune.

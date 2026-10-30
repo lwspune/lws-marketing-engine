@@ -1,6 +1,6 @@
 // node reels/tools/remake-candidates.mjs
 // Mine the saved competitor exports for proven, syllabus-relevant reels to remake.
-// Keeps reels at ≥ 3× their own account's median, tags each with a Class 11–12 / NDA topic, drops spectacle.
+// Keeps reels with ≥ 100k views (framework F40, founder 2026-10-30), tags each with a Class 11–12 / NDA topic, drops spectacle.
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 const dir = fileURLToPath(new URL('../../analytics/competitors/', import.meta.url));
@@ -56,7 +56,7 @@ for (const file of readdirSync(dir).filter(f => f.endsWith('.csv') && !f.startsW
   for (const r of rows) {
     if (r[ix.type] !== 'REELS') continue;
     const views = +r[ix.views] || 0, mult = +r[ix.x_their_median] || 0, cap = (r[ix.caption] || '').replace(/\s+/g, ' ');
-    if (mult < 3 || views < 50000) continue;
+    if (views < 100000) continue;                     // proven: ≥ 100k views; the multiple only ranks (F40)
     if (SPECTACLE.test(cap)) continue;
     const topic = TOPICS.find(([, , re]) => re.test(cap));
     if (!topic) continue;

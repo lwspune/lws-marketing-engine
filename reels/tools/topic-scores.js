@@ -8,9 +8,9 @@
 //
 // @pyqvault_ (reels/pyqvault-ideas.md, founder 2026-10-21): score = each criterion's points × its weight, out of 100. The
 // criteria, their ranges and weights are the list's Scoring table; calibrate() suggests weight changes from posted reels'
-// results at every analysis. Each idea names its Source (F1: remake, own, founder, or a PYQ Vault notes chapter); a notes or
-// founder idea must pass the F28 gate and a notes chapter must be in the Concept sweep log; every idea to make must pass F29
-// (explained without a single word) and have an idea card.
+// results at every analysis. Each idea names its Source (F1: remake, own, founder, or a PYQ Vault notes chapter); since
+// 2026-10-30 only a remake whose source has ≥ 100k views (Views column) is made (F1, F40), and a notes chapter must be in
+// the Concept sweep log; every idea to make must pass F29 (explained without a single word) and have an idea card.
 // @lws.pune (reels/remake-backlog.md) keeps the older unweighted score out of 10 until it is rebuilt (founder, 2026-10-21).
 // The goal is engagement and reach, so exam weight is never a criterion (founder, 2026-10-20), except @lws.pune's core
 // chapters: one Probability and one Statistics reel every week, each watched happening (lwspune-framework.md F32–F33).
@@ -56,9 +56,21 @@ const plain = (c) => c.replace(/\*\*/g, "").trim();
 const leadingNumber = (c) => { const m = plain(c).match(/^([\d,]+(?:\.\d+)?)/); return m ? Number(m[1].replace(/,/g, "")) : null; };
 
 // Column header → row key. "Question" is @lws.pune's guess column; "Concept live" its law column.
-const KEYS = { "#": "id", Subject: "subject", Idea: "idea", "Proof (×)": "proofX", Vivid: "vivid", Question: "question",
+const KEYS = { "#": "id", Subject: "subject", Idea: "idea", "Proof (×)": "proofX", Views: "views", Vivid: "vivid", Question: "question",
   Guess: "guess", Surprise: "surprise", "Law live": "law", "Concept live": "law", Everyday: "everyday", Score: "score",
   Status: "status", Source: "source", Wordless: "wordless" };
+
+/** A source reel's views as written in the Views column ("1.45M", "908k", "180,000"), or null ("–", blank, anything else). */
+function parseViews(c) {
+  const m = String(c).trim().match(/^(\d[\d,]*(?:\.\d+)?)\s*([kKmM]?)$/);
+  if (!m) return null;
+  const scale = { k: 1e3, m: 1e6 }[m[2].toLowerCase()] || 1;
+  return Math.round(Number(m[1].replace(/,/g, "")) * scale);
+}
+const fmtViews = (n) => (n >= 1e6 ? `${+(n / 1e6).toFixed(2)}M` : `${+(n / 1e3).toFixed(1)}k`);
+
+// F1 + F40 (founder, 2026-10-30): a reel is made only from a proven idea, a remake whose source has at least this many views.
+const PROVEN_MIN = 100_000;
 
 /** Rows of the idea table under `heading`, keyed by its header names. Wordless ✓ → true, ✗ → false (else kept as text). */
 function parse(md, heading = ACCOUNTS.pyqvault.heading) {
@@ -73,6 +85,7 @@ function parse(md, heading = ACCOUNTS.pyqvault.heading) {
       const key = KEYS[name], c = cells[i];
       if (!key) return;
       if (key === "proofX") row[key] = /^\d+(\.\d+)?$/.test(c) ? Number(c) : null;
+      else if (key === "views") row[key] = parseViews(c);
       else if (["vivid", "question", "guess", "surprise", "law", "everyday", "score"].includes(key)) row[key] = Number(c);
       else if (key === "wordless") row[key] = c === "✓" ? true : c === "✗" ? false : c;
       else row[key] = c;
@@ -102,7 +115,7 @@ function weightedScore(r, weights) {
   return best ? Math.round((100 * got) / best) : 0;
 }
 
-/** The chapters in the Concept sweep log (F28: each notes chapter is read once), in table order. */
+/** The chapters in the Concept sweep log (each notes chapter is read once), in table order. */
 function parseSweep(md) {
   return section(md, "## Concept sweep").map(cellsOf)
     .filter((c) => /^[a-z-]+\/[a-z0-9-]+$/.test(c[0] || "")).map((c) => c[0]);
@@ -177,11 +190,12 @@ function validate(rows, subjects = SUBJECTS, { weights, swept, cards } = {}) {
       errors.push(`${r.id}: source "${r.source}" should be remake, own, founder, or an MHT-CET / JEE Main physics or chemistry chapter`);
       continue;
     }
-    // F28: with no remake's proof behind it, an idea still to make must open on a 2-second guess (F4) over a busy picture (F2).
-    if (r.source !== "remake" && toMake(r)) {
-      const guess = r.guess ?? r.question;
-      if (r.vivid < 2) errors.push(`${r.id}: fails the F28 gate: vivid ${r.vivid} (needs ≥ 2, F2); park it or find a busier picture`);
-      if (guess < 2) errors.push(`${r.id}: fails the F28 gate: guess ${guess} (needs a 2-second guess, F4)`);
+    // F1 + F40: in a list with a Views column, an idea still to make is a remake whose source has ≥ 100k views.
+    if ("views" in r && toMake(r)) {
+      if (r.source !== "remake") errors.push(`${r.id}: source "${r.source}" isn't a proven idea; only remakes are made (F1): park it`);
+      else if (r.views == null) errors.push(`${r.id}: no views for its source; a reel is made only from one with ≥ ${fmtViews(PROVEN_MIN)} (F40)`);
+      else if (r.views < PROVEN_MIN)
+        errors.push(`${r.id}: its source has ${fmtViews(r.views)} views; a reel is made only from one with ≥ ${fmtViews(PROVEN_MIN)} (F40)`);
     }
     if (swept && isNotes(r.source) && !swept.includes(r.source))
       errors.push(`${r.id}: chapter ${r.source} is not in the Concept sweep log`);
@@ -324,7 +338,7 @@ function calibrate(ideaRows, weights, results) {
   return { n: reels.length, typical, rho, reels, criteria, tooYoung };
 }
 
-module.exports = { ACCOUNTS, CAL, proofPoints, parse, parseWeights, weightedScore, parseSweep, parseCards, validate, runwayErrors,
+module.exports = { ACCOUNTS, CAL, PROVEN_MIN, proofPoints, parseViews, parse, parseWeights, weightedScore, parseSweep, parseCards, validate, runwayErrors,
   nextPicks, queued, parseResults, spearman, calibrate, baseIdea, chapterOf, corePicks, coreErrors };
 
 if (require.main === module) {

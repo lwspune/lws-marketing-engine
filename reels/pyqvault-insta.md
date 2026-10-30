@@ -35,7 +35,7 @@ that used to be here moved there unchanged (plus the 2026-10-20 points); change 
 
 - **One reel a day at 18:00 IST** (founder, 2026-10-26: each reel now takes longer to make, with the review panel, F38).
   F38 was dropped on 30 Oct (v1.36), and one a day cut daily views by about two thirds with no gain per reel (L78):
-  going back to 2–3 a day is the next posting decision.
+  The founder kept one a day (2026-10-30): more time for each copy (F40).
   Was three a day at 09:00, 13:00 and 18:00 from 2026-10-20 (11:00 / 17:30 / 21:30 before, L32). 18:00 kept: the three
   slots' framework-reel medians were within ~10% (09:00 ~1,360 views, 13:00 ~1,510, 18:00 ~1,480) and students are free
   after school. Approving in GoPost puts the reel in the next free slot (`publisher/src/lib/domain/slots.ts`).
