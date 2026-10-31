@@ -33,6 +33,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   pp016: { lib: '../src/lib/pp016.ts', file: 'public/pv-physics-016-spectrum' },
   pc013: { lib: '../src/lib/pc013.ts', file: 'public/pv-chem-013-hydroxides' },
   pm004: { lib: '../src/lib/pm004.ts', file: 'public/pv-maths-004-chain-rule' },
+  pvForces: { lib: '../src/lib/pvForces.ts', file: 'public/pv-physics-017-forces' },
   '015': { lib: '../src/lib/reel015.ts', file: 'public/nda-maths-015-slope-graph' },
   '016': { lib: '../src/lib/reel016.ts', file: 'public/nda-maths-016-multiply' },
   '017': { lib: '../src/lib/reel017.ts', file: 'public/nda-maths-017-probability-map' },

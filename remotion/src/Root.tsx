@@ -29,6 +29,7 @@ import { PvChem012 } from './PvChem012.tsx';
 import { PvPhysics016 } from './PvPhysics016.tsx';
 import { PvChem013 } from './PvChem013.tsx';
 import { PvMaths004 } from './PvMaths004.tsx';
+import { PvForces } from './PvForces.tsx';
 import { PvMaths005 } from './PvMaths005.tsx';
 import { LwsPoem001 } from './LwsPoem001.tsx';
 import { PvChem006 } from './PvChem006.tsx';
@@ -86,6 +87,7 @@ import { DURATION as DURATION_PC012 } from './lib/pc012.ts';
 import { DURATION as DURATION_PP016 } from './lib/pp016.ts';
 import { DURATION as DURATION_PC013 } from './lib/pc013.ts';
 import { DURATION as DURATION_PM004 } from './lib/pm004.ts';
+import { DURATION as DURATION_PVFORCES } from './lib/pvForces.ts';
 import { DURATION as DURATION_PM005 } from './lib/pm005.ts';
 import { DURATION as DURATION_POEM001 } from './lib/poem001.ts';
 import { DURATION as DURATION_PC006 } from './lib/pc006.ts';
@@ -210,6 +212,8 @@ export const Root = () => (
     <Still id="PvChem013Cover" component={PvChem013} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="PvMaths004" component={PvMaths004} durationInFrames={Math.round(DURATION_PM004 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="PvMaths004Cover" component={PvMaths004} width={1080} height={1920} defaultProps={{ cover: true }} />
+    <Composition id="PvForces" component={PvForces} durationInFrames={Math.round(DURATION_PVFORCES * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
+    <Still id="PvForcesCover" component={PvForces} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="PvMaths005" component={PvMaths005} durationInFrames={Math.round(DURATION_PM005 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
     <Still id="PvMaths005Cover" component={PvMaths005} width={1080} height={1920} defaultProps={{ cover: true }} />
     <Composition id="LwsPoem001" component={LwsPoem001} durationInFrames={Math.round(DURATION_POEM001 * 30)} fps={30} width={1080} height={1920} defaultProps={{ cover: false }} />
