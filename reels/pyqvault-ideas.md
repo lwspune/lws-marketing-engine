@@ -11,7 +11,7 @@ in only if it passes **the test** below; it is then **scored** (weights frozen s
 the 100k bar itself, pick only Source `remake` rows whose source has ≥ 100k views, and refill from
 `node reels/tools/remake-candidates.mjs` (chemistry has no ≥ 100k candidates in the saved competitor data yet).
 
-**Open: 13 ideas · about 13 days at 1 reel a day.**
+**Open: 12 ideas · about 12 days at 1 reel a day.**
 
 Refill before it drops under two weeks, from proven reels only (F1, F40): the next competitor read (`node reels/tools/remake-candidates.mjs`,
 ≥ 100k views) and reels the founder sends. **Chemistry has none open** (30 Oct): the saved competitor data has no chemistry
@@ -93,7 +93,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | P4 | P | Block on a tilting ramp: it slips when sin θ wins | 63 | 1.50M | 2 | 2 | 1 | 1 | 1 | 69 | ✅ made 2026-10-20 (`pv-physics-004-slope`, remade; scored after posting) | remake | ✓ |
 | P5 | P | Adiabatic squeeze heats the gas (insulated vs open, side by side) | 125 | 1.06M | 3 | 2 | 1 | 1 | 1 | 86 | ✅ made 2026-10-20 (`pv-physics-005-adiabatic`) | remake | ✓ |
 | P6 | P | Same lift, faster = more power | 76 | 1.33M | 1 | 2 | 1 | 1 | 2 | 66 | ✅ made 2026-10-23 (`pv-physics-012-lift-power`) | remake | ✓ |
-| P7 | P | Tilt the rope: lift vs pull (drone towing a box) | 83 | 1.45M | 2 | 1 | 1 | 1 | 1 | 62 | ⏭ queued 2026-10-21 (Hook queue) | remake | ✓ |
+| P7 | P | Every force on a crate on a slope: F, f, N, mg, then mg sin θ, mg cos θ and the equations | 83 | 1.45M | 2 | 1 | 1 | 1 | 1 | 62 | ✅ made 2026-10-31 (`pv-physics-017-forces`, Physics #17; an F40 copy; the card was written from the caption and fixed from the study copy; a one-off repeat of P4's topic, founder 2026-10-31) | remake | ✓ |
 | P8 | P | Why a bounced ball never comes back as high | 52 | 908k | 1 | 1 | 0 | 1 | 2 | 52 |  | remake | ✓ |
 | P9 | P | Heat flows hot → cold, never back (two chambers mixing) | 54 | 457k | 3 | 1 | 0 | 1 | 2 | 72 | ✅ made 2026-10-20 (`pv-physics-007-heat`) | remake | ✓ |
 | P10 | P | One-screen sheet: Class 12 electricity & magnetism | 190 | 5.21M | 2 | 0 | 0 | 0 | 0 | 41 | ⏸ parked: fails F29 (a sheet of laws is words by design; 2026-10-21) | remake | ✗ |
@@ -164,7 +164,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | P75 | P | Double the battery: the current doubles (Ohm's law acted by our own cast: Volt the battery, Amp the sparks, Ohm the resistor, red-hot at 4x heat) | 829 | – | 3 | 2 | 1 | 0 | 1 | 79 | ✅ made 2026-10-24 (`pv-physics-014-ohm`, Physics #14; Painted 2D; the topic hit 29.2M on @qubit.exe, 829x its typical reel; our own characters and scene) | founder | ✓ |
 | P76 | P | Two equal balls, one hits off-centre: they fly apart at exactly 90° | 34 | 289k | 2 | 2 | 1 | 1 | 1 | 69 |  | remake | ✓ |
 | P77 | P | 3 kg and 5 kg over a pulley: the heavy one falls, but only at g/4 | 13 | 310k | 2 | 2 | 1 | 1 | 1 | 62 |  | remake | ✓ |
-| P78 | P | Land on a trampoline: at the lowest point all your energy is in the springs | 11 | 191k | 3 | 2 | 1 | 1 | 2 | 79 |  | remake | ✓ |
+| P78 | P | Land on a trampoline: at the lowest point all your energy is in the springs | 11 | 191k | 3 | 2 | 1 | 1 | 2 | 79 | ⏭ queued 2026-10-31 (Hook queue) | remake | ✓ |
 | P79 | P | Same knock through air, water and steel: steel carries it ~15× faster than air | 7 | 125k | 2 | 2 | 1 | 1 | 1 | 62 |  | remake | ✓ |
 | C1 | C | Heat speeds up a reaction: faster molecules, more hits | – | – | 3 | 1 | 0 | 1 | 1 | 52 | ✅ made 2026-10-18 (`pv-chem-001-heat-rate`; scored after posting) | own | ✓ |
 | C2 | C | The periodic table's 8 families | 256 | 4.45M | 3 | 1 | 0 | 0 | 0 | 59 | ✅ made 2026-10-18 (`pv-chem-002-families`; scored after posting) | remake | ✓ |
@@ -216,7 +216,7 @@ numbers were already known (a hindsight risk); everything else was scored before
 | C49 | C | Add NaOH to four metal salts: white, blue, green and rust-brown clouds (hydroxide precipitates) | – | – | 3 | 2 | 1 | 0 | 0 | 52 | ✅ made 2026-10-26 (`pv-chem-013-hydroxides`, Chemistry #13; F39 share test 3 of 3, L64) | own | ✓ |
 | M10 | M | Chain rule as gears: turn x, u turns, y turns faster; the ratios multiply | 7.1 | 86k | 2 | 0 | 0 | 1 | 1 | 41 | ✅ made 2026-10-28 (`pv-maths-004-chain-rule`, Maths #4; the first F40 imitation; **shelved, not posted**: its source has 86k views, under the 100k bar, founder 2026-10-30) | remake | ✓ |
 | M11 | M | One radian: the radius bends onto the rim, and 2π of them go round | 4.8 | 58k | 2 | 0 | 0 | 1 | 1 | 41 | ⏸ parked: its source has 58k views, under 100k (F40, 2026-10-30) | remake | ✓ |
-| M12 | M | The can that uses the least metal: height equals diameter | 114 | 2.74M | 3 | 2 | 2 | 1 | 2 | 100 |  | remake | ✓ |
+| M12 | M | The can that uses the least metal: height equals diameter | 114 | 2.74M | 3 | 2 | 2 | 1 | 2 | 100 | ⏭ queued 2026-10-31 (Hook queue) | remake | ✓ |
 | M13 | M | The calculus wheel: differentiate sin four times and you're back at sin | 66 | 1.59M | 2 | 2 | 1 | 1 | 0 | 62 |  | remake | ✓ |
 | M14 | M | The area between y = x and y = x² is exactly 1/6 | 66 | 1.80M | 2 | 2 | 1 | 1 | 0 | 62 |  | remake | ✓ |
 | M15 | M | Rectangles under y = x² from 0 to 3: more of them, and the total settles on 9 | 19 | 459k | 2 | 2 | 1 | 1 | 0 | 55 |  | remake | ✓ |
@@ -235,11 +235,10 @@ each answer is re-derived in its reel's tests (F10).
 - **Second hook:** So what did speed change? → power, the work per second
 - **From:** remake · @sciencevisualised 1.33M (76×) [link](https://www.instagram.com/reel/Dc6jyHPqN27/)
 
-### P7 · Tilt the rope
-- **Frame 0:** Same drone, same box, same pull: one lifts it, one drags it. Why? → the rope angle
-- **Without words:** two drones pull identical boxes on ropes at different angles → arrows split each pull into an up part and a forward part → the steep rope's up arrow outgrows the box's weight arrow → that box leaves the ground, the other slides
-- **Second hook:** How steep before it lifts? → where F sin θ = mg
-- **From:** remake · @sciencevisualised 1.45M (83×) [link](https://www.instagram.com/reel/Dc9MzBgKwJS/)
+### P7 · Every force on a slope
+- **Frame 0:** the whole scene, as theirs: a crate on a slope, four characters (one per force), four named arrows → F − f − mg sin θ = ma, N = mg cos θ, f = μN
+- **Without words:** four arrows leave the crate (up the slope, down it, out of it, straight down) → the down arrow splits into two at 90°, one down the slope, one into it → the out-of-slope arrow grows as long as the into-slope part → the equations stack
+- **From:** remake · @sciencevisualised "Acting Forces on Object" 1.45M (83×) [link](https://www.instagram.com/reel/Dc9MzBgKwJS/) (the study copy, 2026-10-31: not the drone reel this card first described)
 
 ### P8 · Bounce height
 - **Frame 0:** Drop a ball from 1 m. It comes back to 1 m, a bit less, or higher? → a bit less, every time
@@ -850,7 +849,8 @@ hook and opening go in the Hook column of `pyqvault-learnings.md`).
 
 | Order | # | Hook | Opening | Visual hook | Hook sound | Loop | Frame 0 (draft) |
 |---|---|---|---|---|---|---|---|
-| 7 | P7 | Same start, two endings | Assemble (suit-up) | two drones build themselves part by part (frame, arms, rotors spinning up, ropes clipping on), then pull identical boxes; one box lifts off, the other scrapes along the ground | snap ×8 (one per part locking, pitch rising) + shimmer (both drones complete) | yes | "Same drone, same box, same pull. One lifts it, one drags it. Why?" A rope angle · B rope length · C luck; the drones assemble behind the question, then fly. Loop: both drones land back on the start |
+| 8 | M12 | Copied | Copied | the source's first 3 s, copied from its study copy (@mathsy.uk C4nXYzzKdHe) | whoosh-in | yes | the source's opening, in our words |
+| 9 | P78 | Copied | Copied | the source's first 3 s, copied from its study copy (@sciencevisualised DbpwLYxM2hG) | whoosh-in | yes | the source's opening, in our words |
 
 ## Concept sweep
 
