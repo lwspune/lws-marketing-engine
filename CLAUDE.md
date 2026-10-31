@@ -411,6 +411,11 @@ database. `admissions_leads_after` (service role) decides who counts; the cursor
 lead added late with an old date isn't passed by, and a lead added in the last two minutes is held back so one still being
 saved can't land behind the cursor. `src/lib/domain/admissionsFeed.ts`. Only new leads travel: an edit here afterwards
 doesn't reach Admissions AI. The middleware lets `api/feeds/` through, so each feed guards itself. SETUP.md step 14.
+**Next 14 caches a GET route's fetches, POST bodies included (2026-10-31):** supabase-js sends a database function as a
+POST, so the feed answered each (cursor, limit) it had once answered empty with that empty page, for days, while leads
+waited. `force-dynamic` and a `no-store` response header did not stop it. The service-role client (`src/lib/supabase/admin.ts`)
+now sends every request `no-store` (`tests/platforms/adminClient.test.ts`); any other `fetch` a GET route makes must say
+`cache: "no-store"` too.
 **Leads from chats GoPost can't see (0018, founder 2026-10-21):** e.g. +91 91563 10546 (the SPI ad number, not connected):
 read in WhatsApp Web through Claude in Chrome, read-only; opening an unread chat marks it read, so judge unread ones by
 their preview or ask first. The founder approves the verdicts, then `npm run leads:add -- --org=lws-pune --channel=whatsapp
