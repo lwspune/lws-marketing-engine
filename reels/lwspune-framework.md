@@ -1,4 +1,4 @@
-# @lws.pune reel framework (v1.12, 2026-10-26)
+# @lws.pune reel framework (v1.13, 2026-11-02)
 
 How every new @lws.pune reel is made, one numbered point at a time. Same standard as @pyqvault_'s
 (`pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or dropped
@@ -8,25 +8,59 @@ by its own numbers. Account settings (captions, hashtags, posting time, the dail
 the numbers and lessons live in `learnings.md` (the L-numbers below).
 
 **Status:** ✅ proven by @lws.pune's own numbers · 🧪 on test here (the L-number measures it; evidence from other
-accounts or from @pyqvault_ counts as a reason, not as proof) · 📌 standing rule: the founder's call or a house standard
+accounts or from @pyqvault_ counts as a reason, not as proof) · 📌 standing rule: the founder's call or a house standard ·
+⏸ paused (kept as written, for when maths reels come back)
+
+**Since 2026-11-02 the reels are NDA life, defence and SSB, and maths reels are paused** (F41). The points written for
+maths (F1, F3, F10, F19, F21, F28, F32, F33) are adapted or set aside per reel in its storyboard's "Framework points"
+table (first done for `nda-defence-001-army-ranks`); everything about the hook, picture, sound and shape still applies.
 
 **Winning means:** beating the typical recent @lws.pune maths reel at 48 h. Today that's **1,271 views · 6.1 s watched ·
 3 saves · 0 comments · 0 shares** (median of the 7 NDA maths reels posted 12–19 Oct, read 20 Oct). Watch time comes
 first: Instagram only shows a reel to more people when the first viewers stay. Saves come second: they're why NDA
 aspirants follow (L6). The reach test's targets still stand: reach > 2,000, watch > 10 s, one reel > 10k.
+**For NDA life, defence and SSB reels (F41)** the bar is the ceiling they're meant to break: **3,800 views at 48 h**
+(2× the late-October maths reels, L74), with watch > 8 s; and leads, counted in L79.
 
 ---
 
 ## Topic
 
-**F1 · NDA maths concepts first, from proven ideas.** The reel explains one NDA maths idea; a real NDA PYQ is named in the
+**F41 · NDA life first, then defence, then SSB.** Each week: **4 NDA life** reels (the academy as a cadet lives it:
+the campus, a day, uniforms, squadrons, camps, sports, the passing-out parade, the road after NDA), **2 defence
+knowledge** reels (ranks, jets, ships, medals, regiments, as a guess-the-answer like Army ranks) and **1 SSB / syllabus**
+reel (the five SSB days, one task per reel; the written exam's marks). Ideas come from `lwspune-ideas.md`, each with a
+frame-0 picture that stops a thumb on its own. On screen `NDA LIFE · <TOPIC>`, `DEFENCE · <TOPIC>` or `SSB · <TOPIC>`
+(F19 adapted); the caption kit counts "NDA Life #N", "Defence #N", "SSB #N". **Maths reels are paused** (F1, F21, F28,
+F32, F33 ⏸); the daily maths question stories carry on. · *Why:* the founder (2026-11-02: "we can pause maths for now.
+lets focus more on nda life", in the order NDA life → defence → SSB). Our numbers: no maths reel has passed ~1,950 views
+(L74), and the two defence reels did better on every number but comments: One Day 2,103 views at 48 h (8.3 s watched,
+27 likes), Army ranks 1,876 views in 13 h (9.5 s, 24 likes, 6 saves), against a typical late-October maths reel of ~1,900
+views, 6–8 s and 8–16 likes. The account's only reels ever above 10k were defence stories (L8). · *Check:* each week's
+seven reels in `lwspune-ideas.md` → Week plan. · 📌 founder, measured by L79
+
+**F42 · True, public and our own.** Every fact on screen or in the caption (a name, a number, a date, which uniform for
+which occasion) is checked against an official source (NDA's own site `nda.nic.in`, the Army, Navy or Air Force site,
+PIB, UPSC), named in the storyboard's Facts table; a fact we can't source is cut, not guessed. Pictures are our own 3D:
+no photos or footage of the academy, no copied crests or emblems, people faceless (silhouettes or figures without
+features), nothing that isn't already public, and nothing about ragging or punishment for laughs. · *Why:* F10's
+honesty for topics with no maths to re-derive; a wrong fact about NDA on a coaching account costs the trust aspirants
+pay for; faceless and own-material are standing rules (CLAUDE.md). · *Check:* the storyboard's Facts table has a source
+for every fact before the review (F31). · 📌 founder
+
+**F43 · Back to the exam, in one line.** Every NDA life, defence or SSB reel ends its end card or its caption on one line
+that leads to the written exam ("It starts with the written exam: maths is 300 of 900 marks"), never a sales pitch on
+screen. · *Why:* reach that never meets the exam brings followers, not leads; the reels are here to fill the Leads page.
+· *Check:* the line is in the caption kit. · 🧪 L79 (leads and DMs in the week after each reel)
+
+**F1 · NDA maths concepts first, from proven ideas.** ⏸ paused 2026-11-02 (F41). The reel explains one NDA maths idea; a real NDA PYQ is named in the
 caption when one fits, but a good concept isn't blocked for lack of one. Ideas come from the @lws.pune list in
 `remake-backlog.md`: ideas that already went viral for other creators, remade our way. · *Why:* the founder (2026-10-20:
 "let's not make real PYQs too harsh; focus on NDA maths concepts"); the maths accounts that grow teach syllabus
 fundamentals named by exam and topic (@mathsy.uk, L23); someone else's views prove people want the idea. · *Check:* the
 backlog row has the proof link and an NDA chapter. · 🧪 L39
 
-**F21 · Pick by topic score.** Each open idea is scored out of 10 in `remake-backlog.md` → **@lws.pune topic scores**:
+**F21 · Pick by topic score.** ⏸ paused 2026-11-02 (F41). Each open idea is scored out of 10 in `remake-backlog.md` → **@lws.pune topic scores**:
 proof (−1–3, from their views multiple; a known flop, under 1×, is −1) + vivid (0–3) + a 2-second question (0–2) + concept live (0–1) + everyday hook
 (0–1), with @pyqvault_'s written anchors. **Gate:** NDA maths chapters only. No exam-weight criterion: the gate already
 keeps it on the syllabus, and the reel's job is reach (except F32's weekly Probability and Statistics reels). `node reels/tools/topic-scores.js lwspune` checks the table and
@@ -73,7 +107,7 @@ what I meant to make. "There should be agents to review dramatic effect, colors,
 critically to ensure virality of the reel." · *Check:* the reel's row in `review-panel.md` → Log, no defect left,
 before `queue:add`. · 📌 founder, measured by L73 (both handles; @lws.pune keeps F31's storyboard review first)
 
-**F32 · Probability and Statistics every week.** One Probability reel and one Statistics reel each week, the best open
+**F32 · Probability and Statistics every week.** ⏸ paused 2026-11-02 (F41). One Probability reel and one Statistics reel each week, the best open
 idea in that chapter (`remake-backlog.md`, ideas named "Probability · …" / "Statistics · …"), whatever F21's overall score
 says; the rest of the week stays with F21. Each chapter keeps at least 2 ideas waiting. · *Why:* the founder (2026-10-24:
 "they are the most important NDA maths topics"). Probability is the biggest chapter now (41 of the last 360 questions,
@@ -81,7 +115,7 @@ first in each of the last 3 papers) and Statistics is #3 over all 19 papers. F21
 proven remakes exist for either, and 010 and 017 stayed with followers (L58). · *Check:* `node reels/tools/topic-scores.js
 lwspune` prints "This week's core reels" and fails when a chapter has fewer than 2 ideas to make. · 📌 founder, measured by L68
 
-**F33 · Probability and statistics are watched happening.** The chance is something you see: balls, darts, dice, tosses
+**F33 · Probability and statistics are watched happening.** ⏸ paused 2026-11-02 (F41). The chance is something you see: balls, darts, dice, tosses
 or marks doing it on screen, many times, and the answer read off the picture (a share of an area, a pile's height, a line
 settling, a seesaw levelling). The formula comes last, as the name for what was just seen. No word cards, no
 formula-first walk-throughs. · *Why:* the founder (2026-10-24: "there are beautiful ways to visualize probability … you are
@@ -206,7 +240,7 @@ end felt like homework (founder, on @pyqvault_). · *Check:* the end card. · �
 
 ## Map reels (a series, on test)
 
-**F28 · A whole chapter on one map, ending on a frame worth a screenshot.** For the chapter with the most NDA maths
+**F28 · A whole chapter on one map, ending on a frame worth a screenshot.** ⏸ paused 2026-11-02 (F41). For the chapter with the most NDA maths
 questions now (the PYQ Vault guide's trends: the last 3 papers), not by topic score (F21). Frame 0: the question of
 which chapter (F4) over the map already up and small: a hub with **?**, one spoke and one empty card per idea, each in
 its own VIVID colour (F24). The answer lands on the hub; then the camera goes close on each card in turn while its formula
@@ -238,6 +272,7 @@ counting dice outcomes; cards never overlap or crop while explained; the hold �
 
 | Version | Date | Change | Why |
 |---|---|---|---|
+| v1.13 | 2026-11-02 | F41 added: NDA life first (4 a week), then defence knowledge (2) and SSB / syllabus (1); maths reels paused, with F1, F21, F28, F32 and F33 (⏸, kept as written). F42 added: every fact sourced, our own faceless 3D. F43 added: one line back to the written exam. Ideas move to `lwspune-ideas.md`. This also sets aside L6's "keep maths as the core of the mix" for now. | Founder, 2026-11-02: "we can pause maths for now. lets focus more on nda life", after the two defence reels beat the maths reels on views, watch time and likes (One Day 2,103 at 48 h; Army ranks 1,876 in 13 h) while maths sat under ~1,950 (L74). Measured by L79. |
 | v1.12 | 2026-10-26 | F38's pass rule, as @pyqvault_ v1.32: no defect left; scores logged, not a gate; at most two passes. | Founder, after Chemistry #11's three passes (5, 5, 6 → 6, 6, 6) and critics contradicting each other. |
 | v1.11 | 2026-10-26 | F38 added: the review panel, the same point and number as @pyqvault_'s (v1.31): four critics read every new reel before it's queued (`reels/review-panel.md`). F31's storyboard review stays first. | Founder, 2026-10-26: "there should be agents to review dramatic effect, colors, motions, sound effects" (after @pyqvault_ Chemistry #11 passed every check and was still bland). Measured by L73. |
 | v1.10 | 2026-10-24 | F34 added: 3D reels only (template Reel025); F11's template and F22's scope follow. Reels 018–023, already made in 2D and not yet posted, are a backfill question (SUGGESTIONS.md), not changed here. | Founder, 2026-10-24: "lets make 3D reels only for lwspune", after the 2D Galton board ("bland and 2D, hardly any movements") was remade in 3D. Measured by L69. |
