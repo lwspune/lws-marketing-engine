@@ -176,11 +176,19 @@ What changed from the plan above, and why. The times in `remotion/src/lib/life00
 - **Antim Pag:** a 2.4 m saturated gold band on a dark edge that flashes as each rank crosses (Drama, Colour: the hairline vanished).
 - **Cadets** a third bigger, with swinging legs and thick white belts (Motion: "barcodes"). Still plain navy, no uniform claimed.
 - **Boats:** all sails white and the camera never within 70 m of a boat (all three: a near orange sail read as a red shard).
-- **Jets:** a camera set off the jets' path on the side away from the lake; they fly towards it in a 30 m vee and pass close
-  (Drama, Motion: they overlapped and left the frame). Pale wingtip streaks, no smoke.
+- **Jets:** a camera 300 m off the jets' path on the side away from the lake; they fly towards it in a 40 m vee at fly-past
+  speed (200 m/s, ~700 km/h), all three in frame together ≥ 0.5 s (tested; Drama, Motion: they overlapped and left the
+  frame). Pale wingtip streaks, no smoke.
 - **The sunset and the "dome lights" beats are cut** (all three: neither showed at that size). The light warms and the
   shadows lengthen in the pull-back; the end card's three lines arrive one by one.
 - **Wide view from 64°** so the slab fills the band (≤ 960 px wide at every angle, tested); the closing view sits above the
   end card (tested).
 - Declined: "open in the middle of the action" (Drama): the options are places on the model, so frame 0 shows the model
   (F4), and every 3D reel opens on the orbit (F22).
+
+**After pass 2 (2026-11-03):** a 260 px green ✓ slams in over the ground on the answer and shrinks into pin B (Drama: "the
+reveal is still pin-sized"); each place label waits for its place to be in view (Motion, Drama: "C · Peacock Bay" was up
+over the dome); the ✓'s thunk is the loudest hit with a ring sound, the music dips under it and under the jets, the roar
+fades out over 1.25 s, each pin pops with a click, no double taps, the music from frame 0 (Sound). Declined: white caps or
+cross-belts on the cadets (Motion): that would claim a uniform no source gives us (F42); at full size they read as marching
+figures.

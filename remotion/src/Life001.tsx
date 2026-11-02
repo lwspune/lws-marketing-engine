@@ -15,7 +15,7 @@ import { captionAt, prog } from './lib/motion.ts';
 import {
   DURATION, COVER_T, ANSWER_AT, END_AT, OPTIONS, ANSWER, HEADER, CROSSED, BASE, GROUND, LINE, LAKE, HILLS, BUILDINGS, SUDAN,
   PINS, PIN, BAND, CAPTIONS, END_LINES, END_PANEL, COVER_CAPTION, PILL, cameraAt, pinAt, pillAt, figuresAt, lineFlashAt, jetsAt, JET,
-  lightAt, boatsAt, ringAt, GRASS, WATER, MARK, type V3,
+  lightAt, boatsAt, ringAt, burstAt, GRASS, WATER, MARK, project, type V3,
 } from './lib/life001.ts';
 import { Board, Caption, PredictHeader, Theme, useFonts } from './board.tsx';
 import { RoundBox, softEdges } from './shapes.tsx';
@@ -250,6 +250,15 @@ function Pins({ t }: { t: number }) {
     </div>;
   })}</>;
 }
+/** The answer's big ✓: slams in over the middle of the ground, then shrinks into pin B (review pass 2). */
+function Burst({ t }: { t: number }) {
+  const b = burstAt(t);
+  if (b.alpha <= 0.01) return null;
+  const g = project([0, 0, -29], cameraAt(t)), pin = pinAt(1, t), x = g.x + (pin.x - g.x) * b.toPin, y = g.y + (pin.y - PIN.r - PIN.tip - g.y) * b.toPin;
+  return <div style={{ position: 'absolute', left: x - b.size / 2, top: y - b.size / 2, width: b.size, height: b.size, borderRadius: '50%', opacity: b.alpha,
+    background: MARK.right, border: `${Math.max(4, b.size / 26)}px solid #fff`, boxSizing: 'border-box', boxShadow: `0 16px 40px ${tint(P.ink, 0.4)}`,
+    display: 'flex', alignItems: 'center', justifyContent: 'center', font: `800 ${b.size * 0.6}px ${SOFT_UI}`, color: '#fff' }}>✓</div>;
+}
 function Pill({ t }: { t: number }) {
   const p = pillAt(t);
   if (!p) return null;
@@ -302,6 +311,7 @@ export function Life001({ cover = false }: { cover?: boolean }) {
         </div>
         <TiltShift />
         <Pins t={t} />
+        {!cover && <Burst t={t} />}
         {!cover && <Pill t={t} />}
         {cover
           ? <Caption text={COVER_CAPTION.text} alpha={1} age={0} size={COVER_CAPTION.size} y={COVER_CAPTION.y} rise={false} />

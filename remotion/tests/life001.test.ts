@@ -4,7 +4,7 @@ import {
   DURATION, ORBIT_END, COVER_T, ANSWER_AT, END_AT, MARCH_IN, OPTIONS, ANSWER, CROSSED, PILLS, CAPTIONS, END_LINES, BAND, BASE,
   HILLS, PINS, STOPS, BLOCKS, LINE, cameraAt, azimuthAt, CAM, project, pinAt, figuresAt, crossingTimes, lineFlashAt, jetsAt, JET,
   lightAt, labelBoxes, captionBox, endLineBox, textsAt, SOUND, COVER_CAPTION, END_PANEL, PIN, PIN_COLOR, GRASS, WATER, MARK, ringAt,
-  boatsAt, SAIL,
+  boatsAt, SAIL, burstAt,
 } from '../src/lib/life001.ts';
 import { whooshesFor } from '../src/lib/sfx.ts';
 import { distinguishable } from '../src/lib/palette.ts';
@@ -170,7 +170,7 @@ test('light: golden afternoon, then low and orange in the pull-back (the dome-li
   assert.ok(lightAt(5).elevation > 25 && lightAt(15.6).elevation < 12);
   assert.ok(lightAt(14.0).elevation - lightAt(15.4).elevation > 15, 'the light drops in the pull-back');
   assert.ok(lightAt(15.6).warm > 0.95 && lightAt(5).warm === 0);
-  assert.ok(!SOUND.hits.some(h => h.kind === 'shimmer'), 'no sound for a beat that is gone');
+  assert.ok(!SOUND.hits.some(h => h.kind === 'shimmer' && h.t >= END_AT), 'no sound for the dome beat that is gone');
 });
 
 test('pins (panel pass 1): one dark colour that stands out on grass and water; big coloured marks; each pin pops in turn in the opening', () => {
@@ -195,14 +195,14 @@ test('boats keep their distance from the camera, so no sail fills the frame (pan
 });
 
 test('jets (panel pass 1): as they pass, all three are in frame and apart', () => {
-  let ok = false;
-  for (const t of frames.filter(t => t >= 13.4 && t < 14.3)) {
+  let ok = 0;
+  for (const t of frames.filter(t => t >= 13.0 && t < 14.4)) {
     const cam = cameraAt(t), ps = jetsAt(t).map(j => project(j.pos, cam));
     const inside = ps.every(p => p.depth > 0 && p.x >= 60 && p.x <= 1020 && p.y >= BAND.top + 40 && p.y <= 1600);
     const apart = ps.every((a, i) => ps.every((b, j) => i === j || Math.hypot(a.x - b.x, a.y - b.y) >= 120));
-    if (inside && apart) ok = true;
+    if (inside && apart) ok += 1 / 30;
   }
-  assert.ok(ok, 'no frame shows the three jets inside the picture and apart');
+  assert.ok(ok >= 0.5, `the three jets are in frame and apart for only ${ok.toFixed(2)} s (pass 2: at least 0.5 s)`);
 });
 
 test('sound: whooshes only on the fast glides (F15, review B5), a thud per cross, a thunk on the answer, a tap per landing and per rank crossing', () => {
@@ -218,4 +218,27 @@ test('sound: whooshes only on the fast glides (F15, review B5), a thud per cross
   const roar = SOUND.beds.find(b => b.kind === 'roar')!;
   assert.ok(roar && roar.t0 <= 13.0 && roar.t1 >= 14.2);
   assert.ok(SOUND.hits.every(h => h.t >= 0 && h.t < DURATION));
+});
+
+test('pass 2: a big ✓ bursts over the ground on the answer; labels switch when their place is in view', () => {
+  assert.equal(burstAt(ANSWER_AT - 0.05).alpha, 0);
+  const b = burstAt(ANSWER_AT + 0.25);
+  assert.ok(b.alpha > 0.9 && b.size >= 200, `the ✓ is ${b.size} px`);
+  assert.equal(burstAt(ANSWER_AT + 1.2).alpha, 0, 'it settles into the pin');
+  const at = (txt: string) => PILLS.find(p => p.text.startsWith(txt))!.t0;
+  assert.ok(at('C') >= 6.25, 'C · Peacock Bay waits for the lake');
+  assert.ok(at('B · Khetarpal') >= 9.0, 'B · Khetarpal waits for the ground');
+});
+
+test('pass 2: sound — pins pop with a click; the ✓ is the loudest hit with a ring; no double taps; the roar fades out', () => {
+  for (const at of [0.3, 0.9, 1.5]) assert.ok(SOUND.hits.some(h => h.kind === 'click' && Math.abs(h.t - at) < 0.02), `a pop at ${at}`);
+  const thunk = SOUND.hits.find(h => h.kind === 'thunk' && Math.abs(h.t - ANSWER_AT) < 0.02)!;
+  const whumps = SOUND.hits.filter(h => h.kind === 'whump');
+  assert.ok(whumps.every(w => thunk.gain >= 1.6 * w.gain), 'the answer clearly louder than the ✗');
+  assert.ok(SOUND.hits.some(h => h.kind === 'shimmer' && h.t >= ANSWER_AT && h.t < ANSWER_AT + 0.3), 'a bright ring on the ✓');
+  const taps = SOUND.hits.filter(h => h.kind === 'tap').map(h => h.t).sort((a, b) => a - b);
+  for (let i = 1; i < taps.length; i++) assert.ok(taps[i] - taps[i - 1] >= 0.08 - 1e-9, `taps at ${taps[i - 1].toFixed(2)} and ${taps[i].toFixed(2)}`);
+  const roar = SOUND.beds.find(b => b.kind === 'roar')!;
+  assert.ok(roar.t1 >= 15.0 && roar.level(14.9) > 0.05 && roar.level(14.9) < roar.level(14.2), 'the roar fades, not stops');
+  assert.ok(SOUND.music!(ANSWER_AT + 0.1) < 0.7 && SOUND.music!(13.9) < 0.8 && SOUND.music!(5) === 1, 'the music dips under the ✓ and the jets');
 });
