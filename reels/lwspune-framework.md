@@ -1,4 +1,4 @@
-# @lws.pune reel framework (v1.13, 2026-11-02)
+# @lws.pune reel framework (v1.14, 2026-11-02)
 
 How every new @lws.pune reel is made, one numbered point at a time. Same standard as @pyqvault_'s
 (`pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or dropped
@@ -199,7 +199,12 @@ house, logged (L40)
 
 ## Sound
 
-**F13 · Music made in code, a different style each reel.** Never the same style twice in a row, picked by mood: calm
+**F13 · Music from the Pixabay shelf (since 2026-11-02).** Every new @lws.pune reel uses a licensed Pixabay track from
+`reels/music-shelf.json` (`{ "music": { "track": "<id>", "from": s } }`; `patriotic` for NDA life and defence), not
+music made in code; still never the same track twice in a row; effects and the mix as F14–F16. · *Why:* the founder
+(2026-11-02: "you can use pixabay patriotic music for background … going forward start using pixabay music"). · *Check:*
+`music/<reel>.json` names a shelf track; the track goes in the Music column of the results table. · 📌 founder, measured by
+L40. *The rule it replaces, kept for the record:* Music made in code, a different style each reel. Never the same style twice in a row, picked by mood: calm
 `lofi` (the house default) or `calm` for slow builds, `cinematic` for a reveal, `drive` or `synthwave` for motion, `bright`
 for light topics. 1–3 `music.hits` on the big beats. No voice. · *Why:* no licence risk; the founder asked for a
 different music per reel (L17); which style holds viewers is measured, not assumed. · *Check:* `music/<reel>.json`; the
@@ -272,6 +277,7 @@ counting dice outcomes; cards never overlap or crop while explained; the hold �
 
 | Version | Date | Change | Why |
 |---|---|---|---|
+| v1.14 | 2026-11-02 | F13: music from the Pixabay shelf (`reels/music-shelf.json`, patriotic for NDA life and defence) instead of music made in code. | Founder, 2026-11-02: "you can use pixabay patriotic music for background … going forward start using pixabay music". |
 | v1.13 | 2026-11-02 | F41 added: NDA life first (4 a week), then defence knowledge (2) and SSB / syllabus (1); maths reels paused, with F1, F21, F28, F32 and F33 (⏸, kept as written). F42 added: every fact sourced, our own faceless 3D. F43 added: one line back to the written exam. Ideas move to `lwspune-ideas.md`. This also sets aside L6's "keep maths as the core of the mix" for now. | Founder, 2026-11-02: "we can pause maths for now. lets focus more on nda life", after the two defence reels beat the maths reels on views, watch time and likes (One Day 2,103 at 48 h; Army ranks 1,876 in 13 h) while maths sat under ~1,950 (L74). Measured by L79. |
 | v1.12 | 2026-10-26 | F38's pass rule, as @pyqvault_ v1.32: no defect left; scores logged, not a gate; at most two passes. | Founder, after Chemistry #11's three passes (5, 5, 6 → 6, 6, 6) and critics contradicting each other. |
 | v1.11 | 2026-10-26 | F38 added: the review panel, the same point and number as @pyqvault_'s (v1.31): four critics read every new reel before it's queued (`reels/review-panel.md`). F31's storyboard review stays first. | Founder, 2026-10-26: "there should be agents to review dramatic effect, colors, motions, sound effects" (after @pyqvault_ Chemistry #11 passed every check and was still bland). Measured by L73. |
