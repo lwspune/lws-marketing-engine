@@ -2,22 +2,22 @@
 // "Where is the passing-out parade held?" A Sudan Block · B Khetarpal · C Peacock Bay, a pin over each place. The camera
 // visits Sudan Block (✗ "Not the parade ground."), Peacock Bay's sailing boats (✗), then Khetarpal Ground: blocks of
 // cadets are set down like toy soldiers, B lights ✓, and only the passing-out course marches over the gold Antim Pag line.
-// Three jets pass; the camera pulls back to the campus in low orange light; the dome lights up under the end card.
+// Three jets pass; the camera pulls back to the campus in low orange light under the end card.
 // Facts and their sources: storyboard § 8 (PIB, NDA's joining instructions, UPSC). Storyboard (independently reviewed,
 // F31): reels/nda-life-001-campus.storyboard.md. World units are metres; the model is not to scale (§ 8).
 //
 // Beat table (from the storyboard):
 // | time       | what moves                                                         | words                               |
-// | 0–3.0      | the model, one full orbit; boats, birds, pins                      | header + A/B/C                      |
-// | 3.0–5.8    | glide to Sudan Block, arc round the dome; A ✗ at 5.0               | A · Sudan Block · Not the parade ground. |
-// | 5.8–8.6    | glide to the lake, low over the boats; C ✗ at 7.9                  | C · Peacock Bay · water sports · Not here. |
+// | 0–3.0      | the model, one full orbit; the pins pop in turn (0.3, 0.9, 1.5)    | header + A/B/C                      |
+// | 3.0–5.8    | glide to Sudan Block, arc round the dome; A pops with a red ✗ at 5.0 | A · Sudan Block · Not the parade ground. |
+// | 5.8–8.6    | glide to the lake, over the boats; C pops with a red ✗ at 7.9      | C · Peacock Bay · water sports · Not here. |
 // | 8.6–10.6   | glide to the ground; blocks land 9.5–10.5                          | B · Khetarpal                       |
-// | 10.6–13.0  | B ✓; the course marches over the line, rank by rank                | Passing-out parade: here. · The last step: Antim Pag. |
-// | 13.0–14.4  | three jets pass                                                    |                                     |
-// | 14.4–17.6  | pull back, the light low and orange; end card 15.6; dome lit 16.0  | It starts with the written exam. / Maths: 300 of 900 marks. / Follow for more |
+// | 10.6–12.8  | B pops, green ✓, a ring out; the course crosses the gold band, rank by rank (to 12.93) | Passing-out parade: here. · The last step: Antim Pag. |
+// | 12.8–14.4  | to a camera off the jets' path; three jets fly in and pass close     |                                     |
+// | 14.4–17.6  | pull back, the light low and orange; end card 15.6                 | It starts with the written exam. / Maths: 300 of 900 marks. / Follow for more |
 import { prog, tween, captionAt, type Caption, type Key } from './motion.ts';
 import { whooshesFor, type Hit, type Score } from './sfx.ts';
-import { VIVID } from './palette.ts';
+import { WHITE } from './palette.ts';
 import { DOME_TOP } from './story001.ts';
 
 export type V3 = [number, number, number];
@@ -30,7 +30,7 @@ export const CROSSED = [{ i: 0, at: 5.0 }, { i: 2, at: 7.9 }];
 export const BASE = { x0: -200, x1: 240, z0: -235, z1: 85, h: 12 };
 export const SUDAN = { x: 0, z: -90 };                                  // its front face; the dome's centre is 7.5 m behind
 export const GROUND = { x0: -90, x1: 90, z0: -74, z1: 16 };
-export const LINE = { z: -58, half: 36 };
+export const LINE = { z: -58, half: 40, width: 2.4 };     // a gold band, not a hairline (panel pass 1)
 export const LAKE = { x: 165, z: -40, rx: 55, rz: 95 };
 export type Hill = { x: number; z: number; r: number; h: number };
 export const HILLS: Hill[] = [
@@ -45,10 +45,14 @@ export const BUILDINGS = [
 ];
 
 // ---- pins -----------------------------------------------------------------------------------------------------------
+// One dark colour for all three (panel pass 1: green on the grass and blue on the water vanished, and A's orange beside B's
+// green was a colour-blind pair); the letters tell them apart, the big marks say right or wrong.
+export const GRASS = '#79a858', WATER = '#3fa0dc', PIN_COLOR = WHITE.ink;
+export const MARK = { r: 30, right: WHITE.green, wrong: '#b91c1c' };   // a pair colour-blind viewers tell apart (test)
 export const PINS = [
-  { letter: 'A', color: VIVID.white.orange, at: [0, DOME_TOP + 14, SUDAN.z - 7.5] as V3 },
-  { letter: 'B', color: VIVID.white.green, at: [0, 24, -29] as V3 },
-  { letter: 'C', color: VIVID.white.blue, at: [LAKE.x, 22, LAKE.z] as V3 },
+  { letter: 'A', color: PIN_COLOR, at: [0, DOME_TOP + 14, SUDAN.z - 7.5] as V3 },
+  { letter: 'B', color: PIN_COLOR, at: [0, 24, -29] as V3 },
+  { letter: 'C', color: PIN_COLOR, at: [LAKE.x, 22, LAKE.z] as V3 },
 ];
 /** Each stop: its pin, when the camera has arrived, when it leaves. */
 export const STOPS = [{ pin: 0, settled: 3.9, t1: 5.8 }, { pin: 2, settled: 6.7, t1: 8.6 }, { pin: 1, settled: 9.5, t1: 11.0 }];
@@ -56,7 +60,7 @@ export const PIN = { r: 32, tip: 18 };                                  // circl
 
 // ---- camera: [zoom = 1000 / distance, target x, y, z, elevation°, azimuth°] ---------------------------------------------
 const S = (d: number, tg: V3, el: number, az: number) => [1000 / d, ...tg, el, az];
-const WIDE = S(1040, [20, 0, -75], 56, 0);           // from high up, so the slab fills the band (≤ 960 px wide at every angle)
+const WIDE = S(1360, [20, 0, -75], 64, 0);           // from high up, so the slab fills the band (≤ 960 px wide at every angle)
 export const CAM: { start: number[]; keys: Key[] } = {
   start: WIDE,
   keys: [
@@ -64,23 +68,24 @@ export const CAM: { start: number[]; keys: Key[] } = {
     { t: 3.9, dur: 1.1, to: S(165, [0, 32, -97], 15, 30) },            // arc round the dome
     { t: 5.0, dur: 0.8, to: S(165, [0, 32, -97], 15, 38) },            // hold on the ✗
     { t: 5.8, dur: 0.9, to: S(150, [LAKE.x, 4, LAKE.z], 14, -30) },     // glide to the lake
-    { t: 6.7, dur: 1.2, to: S(105, [LAKE.x + 5, 3, LAKE.z - 5], 9, 8) }, // low over the boats
-    { t: 7.9, dur: 0.7, to: S(105, [LAKE.x + 5, 3, LAKE.z - 5], 9, 14) },
+    { t: 6.7, dur: 1.2, to: S(150, [LAKE.x + 5, 3, LAKE.z - 5], 16, 8) }, // low over the boats (not so low a sail fills the frame)
+    { t: 7.9, dur: 0.7, to: S(150, [LAKE.x + 5, 3, LAKE.z - 5], 16, 14) },
     { t: 8.6, dur: 0.9, to: S(240, [0, 6, -34], 28, 0) },              // glide to the ground
     { t: 9.5, dur: 1.1, to: S(210, [0, 6, -34], 27, 0) },              // push as the blocks land
     { t: 10.6, dur: 0.4, to: S(175, [0, 8, -34], 26, 0) },             // punch-in on the ✓
     { t: 11.0, dur: 0.8, to: S(85, [0, 3, LINE.z], 11, 62) },          // swing low beside the line
     { t: 11.8, dur: 1.2, to: S(75, [0, 3, LINE.z - 4], 10, 72) },
-    { t: 13.0, dur: 0.6, to: S(160, [0, 40, -40], 4, 35) },            // look up for the jets
-    { t: 13.6, dur: 0.8, to: S(160, [80, 55, 30], 6, 60) },            // follow them past
-    { t: 14.4, dur: 1.2, to: S(1120, [20, 0, -5], 56, 0) },           // pull back to the whole campus, set high: clear of the end card
-    { t: END_AT, dur: DURATION - END_AT, to: S(1120, [20, 0, -5], 56, 8) },  // a slow drift round,
+    { t: 12.8, dur: 1.0, to: S(204, [-30, 60, 20], -3, -41) },         // off the jets' path (the side away from the lake), looking up the way they come
+    { t: 13.8, dur: 0.6, to: S(127, [-106, 62, 62], -5, -27) },        // the camera holds; the look follows them past
+    { t: 14.4, dur: 1.2, to: S(1360, [20, 0, 90], 64, 0) },           // pull back to the whole campus, set high: clear of the end card
+    { t: END_AT, dur: DURATION - END_AT, to: S(1360, [20, 0, 90], 64, 8) },  // a slow drift round,
   ],
 };
 /** The orbit (F22): one full turn from frame 0, at speed on frame 0 and easing out only, ending at the front at 3.0. */
 const orbit = (t: number) => { const u = Math.min(1, Math.max(0, t / ORBIT_END)); return 360 * (1 - (1 - u) ** 2); };
 const DEG = Math.PI / 180, FOV = 30;
-export const BAND = { top: 470, height: 950, width: 1080 };
+export const BAND = { top: 470, height: 1230, width: 1080 };   // to y 1700: the picture runs under the captions (panel pass 1)
+export const SAFE_BOTTOM = 1600;                                 // nothing to read below this (Instagram's caption and buttons)
 export const azimuthAt = (t: number) => tween(t, CAM.start, CAM.keys)[5] + orbit(t);
 /** A small shake as the jets pass the camera. */
 const shake = (t: number) => { const a = Math.max(0, 1 - Math.abs(t - 14.15) / 0.3); return [Math.sin(t * 91) * a * 0.6, Math.sin(t * 67 + 1) * a * 0.5, 0]; };
@@ -104,9 +109,17 @@ export function project(p: V3, cam: Camera) {
 }
 
 export type PinState = 'open' | 'crossed' | 'right';
+const bump = (t: number, at: number, dur: number) => (t < at || t > at + dur ? 0 : Math.sin((Math.PI * (t - at)) / dur));
+/** A pin's size: each pops in turn in the opening (a new event every 0.6 s), and with its ✗ or ✓ (panel pass 1). */
+export const popAt = (i: number, t: number) => {
+  const x = CROSSED.find(c => c.i === i);
+  return 1 + 0.25 * bump(t, 0.3 + 0.6 * i, 0.35) + (x ? 0.35 * bump(t, x.at, 0.4) : 0) + (i === ANSWER ? 0.5 * bump(t, ANSWER_AT, 0.5) : 0);
+};
+/** The ring that flashes out across the ground from pin B on the answer (0 = none, then 0…1 as it grows and fades). */
+export const ringAt = (t: number) => (t < ANSWER_AT || t > ANSWER_AT + 0.8 ? 0 : (t - ANSWER_AT) / 0.8);
 /** All three pins in the orbit; once the tour starts, only the current stop's pin (each fades in / out over 0.3 s). */
 const shown = (t: number, a: number, b: number) => (a <= 0 ? 1 : prog(t, a, 0.3)) * (1 - prog(t, b, 0.3));
-const WINDOWS: [number, number][][] = [[[0, 5.8]], [[0, ORBIT_END], [8.6, Infinity]], [[0, ORBIT_END], [5.8, 8.6]]];
+const WINDOWS: [number, number][][] = [[[0, 5.8]], [[0, ORBIT_END], [8.6, 13.0]], [[0, ORBIT_END], [5.8, 8.6]]];
 const focusAt = (i: number, t: number) => Math.min(1, WINDOWS[i].reduce((s, [a, b]) => s + shown(t, a, b), 0));
 /** A pin at t: where its tip lands on screen (bobbing), its state and mark, how visible it is. Pin A drops onto the dome
  *  3.9–4.6 (from 10 m up); all pins leave as the camera pulls back. */
@@ -115,10 +128,10 @@ export function pinAt(i: number, t: number) {
   const q = project([p.at[0], p.at[1] + drop, p.at[2]], cameraAt(t)), s = { ...q, y: q.y + 5 * Math.sin((2 * Math.PI * t) / 1.3 + 2 * i) };
   const crossed = CROSSED.find(c => c.i === i && t >= c.at), right = i === ANSWER && t >= ANSWER_AT;
   const state: PinState = right ? 'right' : crossed ? 'crossed' : 'open';
-  const inBand = Math.min(1, Math.max(0, (s.y - (BAND.top + 2 * PIN.r + PIN.tip)) / 30), Math.max(0, (BAND.top + BAND.height - s.y) / 30),
+  const inBand = Math.min(1, Math.max(0, (s.y - (BAND.top + 2 * PIN.r + PIN.tip)) / 30), Math.max(0, (SAFE_BOTTOM - s.y) / 30),
     Math.max(0, (s.x - PIN.r) / 30), Math.max(0, (BAND.width - PIN.r - s.x) / 30));
   const alpha = (s.depth > 0 ? inBand : 0) * (1 - prog(t, 14.4, 0.4)) * focusAt(i, t);
-  return { x: s.x, y: s.y, depth: s.depth, state, mark: state === 'right' ? '✓' : state === 'crossed' ? '✗' : '', alpha, color: p.color, letter: p.letter };
+  return { x: s.x, y: s.y, depth: s.depth, state, mark: state === 'right' ? '✓' : state === 'crossed' ? '✗' : '', alpha, color: p.color, letter: p.letter, pop: popAt(i, t) };
 }
 
 // ---- the parade -----------------------------------------------------------------------------------------------------
@@ -155,14 +168,25 @@ export function crossingTimes() {
 /** The gold line's flash: 1 as a rank crosses, fading in 0.12 s. */
 export const lineFlashAt = (t: number) => Math.max(0, ...crossingTimes().map(c => (t >= c ? Math.exp(-(t - c) / 0.12) : 0)));
 
+// ---- boats on the lake (white sails; panel pass 1: a near orange sail read as a red shard) -----------------------------
+export const SAIL = '#fbfaf5';
+export function boatsAt(t: number) {
+  return [0, 1, 2, 3, 4].map(k => {
+    const a = 0.9 * k + 0.09 * t * (k % 2 ? 1 : -1), rr = 0.35 + 0.12 * (k % 3);
+    const x = LAKE.x + LAKE.rx * rr * Math.cos(a), z = LAKE.z + LAKE.rz * rr * 1.2 * Math.sin(a);
+    const heading = Math.atan2(-LAKE.rx * Math.sin(a), LAKE.rz * 1.2 * Math.cos(a)) + (k % 2 ? 0 : Math.PI);
+    return { x, z, heading, rock: 0.05 * Math.sin(2.1 * t + k), sail: SAIL };
+  });
+}
+
 // ---- jets (a Su-30 fly-past, PIB; three in a vee, no smoke) --------------------------------------------------------------
 export const JET = { span: 22, len: 30, speed: 350, smoke: false };
-const JET_Q: V3 = [30, 60, 20], JET_AT = 13.75, JET_DIR = unit([1, 0.03, 0.55]), JET_SIDE = unit(cross([0, 1, 0], JET_DIR));
+const JET_Q: V3 = [-30, 60, 20], JET_AT = 13.75, JET_DIR = unit([-1, 0.03, 0.55]), JET_SIDE = unit(cross([0, 1, 0], JET_DIR));
 export function jetsAt(t: number) {
   if (t < 13.0 || t >= 14.4) return [];
   const s = JET.speed * (t - JET_AT), lead: V3 = [JET_Q[0] + JET_DIR[0] * s, JET_Q[1] + JET_DIR[1] * s, JET_Q[2] + JET_DIR[2] * s];
   return [0, -1, 1].map(k => ({
-    pos: [lead[0] - Math.abs(k) * 20 * JET_DIR[0] + k * 18 * JET_SIDE[0], lead[1], lead[2] - Math.abs(k) * 20 * JET_DIR[2] + k * 18 * JET_SIDE[2]] as V3,
+    pos: [lead[0] - Math.abs(k) * 30 * JET_DIR[0] + k * 30 * JET_SIDE[0], lead[1], lead[2] - Math.abs(k) * 30 * JET_DIR[2] + k * 30 * JET_SIDE[2]] as V3,
     dir: JET_DIR, side: JET_SIDE,
   }));
 }
@@ -170,7 +194,7 @@ export function jetsAt(t: number) {
 // ---- light: a golden afternoon, then low and orange in the pull-back; the windows light up at 16.0 ----------------------
 export function lightAt(t: number) {
   const low = prog(t, 14.4, 1.2);
-  return { elevation: 32 - 24 * low, azimuth: -145, warm: low, intensity: 3.0 - 0.9 * low, glow: 0.12 + 0.88 * prog(t, 15.9, 0.4) };
+  return { elevation: 32 - 24 * low, azimuth: -110, warm: low, intensity: 3.0 - 0.9 * low, glow: 0.12 + 0.6 * low };
 }
 
 // ---- words ----------------------------------------------------------------------------------------------------------
@@ -221,7 +245,9 @@ export function labelBoxes(t: number): Box[] {
   if (c && c.alpha > 0.01) out.push({ text: c.caption.text, ...captionBox(c.caption) });
   PINS.forEach((_, i) => {
     const q = pinAt(i, t);
-    if (q.alpha > 0.05) out.push({ text: `pin ${q.letter}`, x0: q.x - PIN.r - 4, x1: q.x + PIN.r + 4, y0: q.y - 2 * PIN.r - PIN.tip, y1: q.y, pin: true });
+    // the pin scaled about its tip, with its mark disc over the top-right corner (Life001.tsx's Pins)
+    const k = q.pop, m = q.mark ? MARK.r : 0;
+    if (q.alpha > 0.05) out.push({ text: `pin ${q.letter}`, x0: q.x - k * (PIN.r + 4), x1: q.x + k * (PIN.r + 4 + (m ? 22 : 0)), y0: q.y - k * (2 * PIN.r + PIN.tip + (m ? m - 4 : 0)), y1: q.y, pin: true });
   });
   return out;
 }
@@ -237,7 +263,7 @@ export function textsAt(t: number): string[] {
 // ---- sound ----------------------------------------------------------------------------------------------------------
 // Wind and birds under everything; whooshes on the fast glides only (F15); a soft click as pin A lands; a low thud on
 // each ✗; water plips over the bay; a tap as each block lands and as each rank of the course crosses the line, marking
-// time between; a thunk on the ✓; the jets' roar; a shimmer as the dome lights.
+// time between; a thunk on the ✓; the jets' roar.
 const plips = Array.from({ length: 5 }, (_, k) => 6.75 + 0.27 * k);
 const markTime = Array.from({ length: 6 }, (_, k) => ANSWER_AT + 0.4 + 0.5 * k);
 export const SOUND: Score = {
@@ -251,7 +277,6 @@ export const SOUND: Score = {
     ...markTime.map((t): Hit => ({ kind: 'tap', t, gain: 0.1, pitch: 0.9 })),
     ...crossingTimes().map((t): Hit => ({ kind: 'tap', t, gain: 0.3, pitch: 1.6 })),
     { kind: 'thunk', t: ANSWER_AT, gain: 0.55 },
-    { kind: 'shimmer', t: 16.0, gain: 0.4 },
   ],
   beds: [
     { kind: 'dawn', t0: 0, t1: DURATION, level: () => 0.45 },

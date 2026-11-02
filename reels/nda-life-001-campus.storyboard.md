@@ -163,3 +163,24 @@ but the picture still shows "the leavers cross a last line".
 | I4 | Header may not fit 344 px | Taken as a stills check; fallback chips at 36 px |
 | I5 | Cover: the header's top is cropped in the grid | Taken: the cover repeats the question mid-page (y 600–900) |
 | L | Model 1060 px wide clips at 45°; the punch-in may push pin B out | Taken: ≤ 960 px at every angle and pin B / the glowing edge inside the band at the punch-in, both tested |
+
+## 11. Build notes (after the review panel's pass 1, 2026-11-03)
+
+What changed from the plan above, and why. The times in `remotion/src/lib/life001.ts`'s beat table are the current ones.
+- **Picture band 470–1700** (was 470–1420): the picture runs under the captions and the pill, which sit on white cards
+  (Drama and Colour: "a third of the frame is empty cream"). Text still stays above y 1600 (tested).
+- **Pins one dark colour** with a white letter (Colour: green on the grass and blue on the water vanished; A's orange beside
+  B's green was a colour-blind pair). Each pops in turn in the opening (0.3, 0.9, 1.5 s: a new event every 0.6 s, Motion),
+  and with its mark: a big red ✗ or green ✓ disc (all three: the marks were ~20 px). A ring flashes out from B on the answer.
+  The answer chip lights in the ✓'s green, not the board's amber (Colour, Drama).
+- **Antim Pag:** a 2.4 m saturated gold band on a dark edge that flashes as each rank crosses (Drama, Colour: the hairline vanished).
+- **Cadets** a third bigger, with swinging legs and thick white belts (Motion: "barcodes"). Still plain navy, no uniform claimed.
+- **Boats:** all sails white and the camera never within 70 m of a boat (all three: a near orange sail read as a red shard).
+- **Jets:** a camera set off the jets' path on the side away from the lake; they fly towards it in a 30 m vee and pass close
+  (Drama, Motion: they overlapped and left the frame). Pale wingtip streaks, no smoke.
+- **The sunset and the "dome lights" beats are cut** (all three: neither showed at that size). The light warms and the
+  shadows lengthen in the pull-back; the end card's three lines arrive one by one.
+- **Wide view from 64°** so the slab fills the band (≤ 960 px wide at every angle, tested); the closing view sits above the
+  end card (tested).
+- Declined: "open in the middle of the action" (Drama): the options are places on the model, so frame 0 shows the model
+  (F4), and every 3D reel opens on the orbit (F22).

@@ -3,10 +3,12 @@ import assert from 'node:assert/strict';
 import {
   DURATION, ORBIT_END, COVER_T, ANSWER_AT, END_AT, MARCH_IN, OPTIONS, ANSWER, CROSSED, PILLS, CAPTIONS, END_LINES, BAND, BASE,
   HILLS, PINS, STOPS, BLOCKS, LINE, cameraAt, azimuthAt, CAM, project, pinAt, figuresAt, crossingTimes, lineFlashAt, jetsAt, JET,
-  lightAt, labelBoxes, captionBox, endLineBox, textsAt, SOUND, COVER_CAPTION, END_PANEL,
+  lightAt, labelBoxes, captionBox, endLineBox, textsAt, SOUND, COVER_CAPTION, END_PANEL, PIN, PIN_COLOR, GRASS, WATER, MARK, ringAt,
+  boatsAt, SAIL,
 } from '../src/lib/life001.ts';
 import { whooshesFor } from '../src/lib/sfx.ts';
-import { distinguishable, VIVID } from '../src/lib/palette.ts';
+import { distinguishable } from '../src/lib/palette.ts';
+import { contrast } from '../src/lib/paint.ts';
 
 // @lws.pune · NDA Life #1 (3D, predict-first): NDA as a miniature. "Where is the passing-out parade held?" A Sudan Block ·
 // B Khetarpal · C Peacock Bay; the tour crosses out A and C, cadets land on Khetarpal Ground (B ✓) and the passing-out
@@ -138,6 +140,7 @@ test('the parade: blocks land one after another by the answer; then only the pas
   const times = crossingTimes();
   assert.ok(times.length >= 4 && times.every(c => c >= 11.6 && c <= 13.0), times.join(', '));
   for (const c of times) assert.ok(lineFlashAt(c + 0.02) > 0.8, `the line flashes as a rank crosses at ${c.toFixed(2)}`);
+  assert.ok(LINE.width >= 2, 'a band, not a hairline (panel pass 1)');
   // the course blocks are inside the line's length, the others outside it
   for (const bl of BLOCKS) {
     const half = ((bl.cols - 1) * bl.dx) / 2 + 0.5;
@@ -163,18 +166,43 @@ test('jets: only in 13.0–14.4, three in a vee, at least a quarter of the frame
   assert.ok(best >= 270, `the lead jet at most ${best.toFixed(0)} px wide`);
 });
 
-test('light: golden afternoon, then low and orange from 15.0; the dome lights up at 16.0', () => {
+test('light: golden afternoon, then low and orange in the pull-back (the dome-lights beat was cut, panel pass 1)', () => {
   assert.ok(lightAt(5).elevation > 25 && lightAt(15.6).elevation < 12);
   assert.ok(lightAt(14.0).elevation - lightAt(15.4).elevation > 15, 'the light drops in the pull-back');
-  assert.ok(lightAt(15.9).glow < 0.3 && lightAt(16.5).glow > 0.8);
+  assert.ok(lightAt(15.6).warm > 0.95 && lightAt(5).warm === 0);
+  assert.ok(!SOUND.hits.some(h => h.kind === 'shimmer'), 'no sound for a beat that is gone');
 });
 
-test('pin colours are vivid and told apart by colour-blind viewers; the answer pin also gets a ✓, not colour alone', () => {
-  const v = Object.values(VIVID.white) as string[];
-  for (const p of PINS) assert.ok(v.includes(p.color), p.letter);
-  for (let i = 0; i < PINS.length; i++) for (let j = i + 1; j < PINS.length; j++) assert.ok(distinguishable(PINS[i].color, PINS[j].color), `${PINS[i].letter} / ${PINS[j].letter}`);
-  assert.equal(pinAt(ANSWER, ANSWER_AT + 0.5).mark, '✓');
-  assert.equal(pinAt(0, 6).mark, '✗');
+test('pins (panel pass 1): one dark colour that stands out on grass and water; big coloured marks; each pin pops in turn in the opening', () => {
+  for (const ground of [GRASS, WATER]) assert.ok(contrast(PIN_COLOR, ground) >= 4.5, `pin on ${ground}`);
+  assert.ok(PINS.every(p => p.color === PIN_COLOR));
+  const right = pinAt(ANSWER, ANSWER_AT + 0.5), wrong = pinAt(0, 6);
+  assert.equal(right.mark, '✓'); assert.equal(wrong.mark, '✗');
+  assert.ok(MARK.r >= PIN.r * 0.8, 'the mark is nearly pin-sized');
+  assert.ok(distinguishable(MARK.right, MARK.wrong), 'tick and cross told apart by colour too');
+  assert.ok(pinAt(0, 5.15).pop > 1.2 && pinAt(2, 8.05).pop > 1.2 && pinAt(ANSWER, ANSWER_AT + 0.15).pop > 1.3, 'the pin pops with its mark');
+  PINS.forEach((_, i) => assert.ok(pinAt(i, 0).alpha > 0.5, `pin ${i} on frame 0`));
+  for (const at of [0.3, 0.9, 1.5]) assert.ok(PINS.some((_, i) => pinAt(i, at + 0.12).pop > 1.15), `a pin pops at ${at}`);
+  assert.ok(ringAt(ANSWER_AT + 0.2) > 0 && ringAt(ANSWER_AT - 0.1) === 0, 'a ring flashes out from B on the answer');
+});
+
+test('boats keep their distance from the camera, so no sail fills the frame (panel pass 1)', () => {
+  for (const t of frames) for (const b of boatsAt(t)) {
+    const c = cameraAt(t).position, d = Math.hypot(b.x - c[0], b.z - c[2]);
+    assert.ok(d >= 70, `t ${t.toFixed(2)}: a boat ${d.toFixed(0)} m from the camera`);
+  }
+  assert.ok(boatsAt(0).every(b => b.sail === SAIL), 'every sail white');
+});
+
+test('jets (panel pass 1): as they pass, all three are in frame and apart', () => {
+  let ok = false;
+  for (const t of frames.filter(t => t >= 13.4 && t < 14.3)) {
+    const cam = cameraAt(t), ps = jetsAt(t).map(j => project(j.pos, cam));
+    const inside = ps.every(p => p.depth > 0 && p.x >= 60 && p.x <= 1020 && p.y >= BAND.top + 40 && p.y <= 1600);
+    const apart = ps.every((a, i) => ps.every((b, j) => i === j || Math.hypot(a.x - b.x, a.y - b.y) >= 120));
+    if (inside && apart) ok = true;
+  }
+  assert.ok(ok, 'no frame shows the three jets inside the picture and apart');
 });
 
 test('sound: whooshes only on the fast glides (F15, review B5), a thud per cross, a thunk on the answer, a tap per landing and per rank crossing', () => {

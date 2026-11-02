@@ -92,10 +92,10 @@ export const C = ({ color, children }: { color: string; children: React.ReactNod
 // the wrong options step back so the eye lands on the answer.
 // `until`: a looping reel (F27) un-lights the answer from then, so its last frame matches its first.
 // `crossed`: options struck out one by one before the answer (NDA Life #1's tour), each dimmed with a line through it.
-export function Chips({ t, labels, answer, at, top, w = 180, h = 72, gap = 20, size = 44, until = Infinity, crossed = [] }:
+export function Chips({ t, labels, answer, at, top, w = 180, h = 72, gap = 20, size = 44, until = Infinity, crossed = [], accent }:
   { t: number; labels: string[]; answer: number; at: number; top: number; w?: number; h?: number; gap?: number; size?: number; until?: number;
-    crossed?: { i: number; at: number }[] }) {
-  const P = usePalette(), back = 1 - prog(t, until, 0.5);
+    crossed?: { i: number; at: number }[]; accent?: string }) {
+  const P = usePalette(), back = 1 - prog(t, until, 0.5), A = accent ?? P.amber;
   const on = prog(t, at, 0.6) * back, pulse = Math.sin(Math.PI * clamp01((t - at) / 0.7)), dim = 1 - 0.55 * prog(t, at + 0.3, 0.5) * back;
   const x0 = 540 - (labels.length * w + (labels.length - 1) * gap) / 2;
   return <>{labels.map((label, i) => {
@@ -105,9 +105,9 @@ export function Chips({ t, labels, answer, at, top, w = 180, h = 72, gap = 20, s
       <div key={label} style={{
         position: 'absolute', left: x0 + i * (w + gap), top, width: w, height: h, borderRadius: h / 2, boxSizing: 'border-box',
         display: 'flex', alignItems: 'center', justifyContent: 'center', transform: `scale(${s})`,
-        border: `${hit ? 2 + on : 2}px solid ${hit ? tint(P.amber, 0.25 + 0.6 * on) : tint(P.ink, 0.14)}`,
-        background: hit ? tint(P.amber, 0.12 * on) : 'transparent', boxShadow: hit ? `0 6px 22px ${tint(P.amber, 0.25 * on)}` : 'none',
-        opacity: i === answer ? 1 : dim * (1 - 0.5 * struck), color: hit && on > 0.5 ? P.amber : P.ink, ...hand(size), paddingTop: 2,
+        border: `${hit ? 2 + on : 2}px solid ${hit ? tint(A, 0.25 + 0.6 * on) : tint(P.ink, 0.14)}`,
+        background: hit ? tint(A, 0.12 * on) : 'transparent', boxShadow: hit ? `0 6px 22px ${tint(A, 0.25 * on)}` : 'none',
+        opacity: i === answer ? 1 : dim * (1 - 0.5 * struck), color: hit && on > 0.5 ? A : P.ink, ...hand(size), paddingTop: 2,
         textDecoration: struck > 0.5 ? 'line-through' : 'none', textDecorationThickness: 4,
       }}>{label}</div>
     );
@@ -146,9 +146,9 @@ export function TitleCard({ t, label, lines, color, size = 78 }: { t: number; la
 // lights at `at`, when the picture has shown the answer.
 // `brand` (F20, founder 2026-10-21): "PYQ Vault · pyqvault.com" under the chips from frame 0, for the whole reel, quieter
 // than the question (muted: ≥ 4.5:1 on the board). `until` (F27): the card resets for a loop.
-export function PredictHeader({ t, label, lines, options, answer, at, size = 58, chipW = 200, brand, until = Infinity, crossed }:
+export function PredictHeader({ t, label, lines, options, answer, at, size = 58, chipW = 200, brand, until = Infinity, crossed, accent }:
   { t: number; label: string; lines: string[]; options: string[]; answer: number; at: number; size?: number; chipW?: number; brand?: string; until?: number;
-    crossed?: { i: number; at: number }[] }) {
+    crossed?: { i: number; at: number }[]; accent?: string }) {
   const P = usePalette(), nudge = Math.max(1 - prog(t, at - 0.4, 0.4), prog(t, until, 0.5)), top = 150 + lines.length * size * 1.2;
   return (
     <>
@@ -156,7 +156,7 @@ export function PredictHeader({ t, label, lines, options, answer, at, size = 58,
       {lines.map((l, i) => (
         <div key={l} style={{ position: 'absolute', left: 0, width: 1080, top: 150 + i * size * 1.2, textAlign: 'center', ...hand(size), color: P.ink, whiteSpace: 'pre' }}>{l}</div>
       ))}
-      <Chips t={t} labels={options} answer={answer} at={at} top={top + 26} w={chipW} h={76} gap={22} size={42} until={until} crossed={crossed} />
+      <Chips t={t} labels={options} answer={answer} at={at} top={top + 26} w={chipW} h={76} gap={22} size={42} until={until} crossed={crossed} accent={accent} />
       {brand && (
         <div style={{ position: 'absolute', left: 0, width: 1080, top: top + 120, textAlign: 'center', font: `600 30px ${SOFT_UI}`, color: P.muted, letterSpacing: 0.5 }}>
           {brand}

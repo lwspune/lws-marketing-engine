@@ -15,15 +15,15 @@ import { captionAt, prog } from './lib/motion.ts';
 import {
   DURATION, COVER_T, ANSWER_AT, END_AT, OPTIONS, ANSWER, HEADER, CROSSED, BASE, GROUND, LINE, LAKE, HILLS, BUILDINGS, SUDAN,
   PINS, PIN, BAND, CAPTIONS, END_LINES, END_PANEL, COVER_CAPTION, PILL, cameraAt, pinAt, pillAt, figuresAt, lineFlashAt, jetsAt, JET,
-  lightAt, type V3,
+  lightAt, boatsAt, ringAt, GRASS, WATER, MARK, type V3,
 } from './lib/life001.ts';
 import { Board, Caption, PredictHeader, Theme, useFonts } from './board.tsx';
 import { RoundBox, softEdges } from './shapes.tsx';
 import { COL, rng, SudanBlock, Palm } from './sudanBlock.tsx';
 
-const C = { soil: '#7b5a3e', soilDark: '#5e432d', grass: '#79a858', grass2: '#6b9a4c', stripeA: '#82b65e', stripeB: '#73a651',
-  hill: '#6f9550', hillDark: '#5c7f41', road: '#d8c9a6', sand: '#e2d3a8', water: '#3d8fc4', tree: ['#3f7a35', '#4d8a3c', '#5a9442'],
-  trunk: '#6b5a45', navy: '#1f2a4a', belt: '#f4f1ea', skin: '#7d5238', jet: '#5f6873', sail: '#fbfaf5', hull: '#f2efe8' };
+const C = { soil: '#7b5a3e', soilDark: '#5e432d', grass: GRASS, grass2: '#6b9a4c', stripeA: '#82b65e', stripeB: '#73a651',
+  hill: '#6f9550', hillDark: '#5c7f41', road: '#d8c9a6', sand: '#e2d3a8', water: WATER, tree: ['#3f7a35', '#4d8a3c', '#5a9442'],
+  trunk: '#6b5a45', navy: '#1f2a4a', belt: '#f4f1ea', skin: '#7d5238', jet: '#8a939e', sail: '#fbfaf5', hull: '#f2efe8' };
 
 function CameraRig({ t }: { t: number }) {
   const { camera } = useThree(), c = cameraAt(t), cam = camera as THREE.PerspectiveCamera;
@@ -43,9 +43,9 @@ function Light({ t }: { t: number }) {
   const at: V3 = [20 + R * Math.cos(e) * Math.sin(a), R * Math.sin(e), -75 + R * Math.cos(e) * Math.cos(a)];
   const target = useMemo(() => { const o = new THREE.Object3D(); o.position.set(20, 0, -75); return o; }, []);
   if (!scene.children.includes(target)) scene.add(target);
-  const sun = new THREE.Color('#fff1d6').lerp(new THREE.Color('#ff7a2e'), l.warm);
+  const sun = new THREE.Color('#fff1d6').lerp(new THREE.Color('#ff5a10'), l.warm);
   return <>
-    <hemisphereLight args={[new THREE.Color('#d6e6ff').lerp(new THREE.Color('#ffb98a'), 0.6 * l.warm), '#6b5a3a', 1.1 - 0.55 * l.warm]} />
+    <hemisphereLight args={[new THREE.Color('#d6e6ff').lerp(new THREE.Color('#ffb98a'), 0.6 * l.warm), '#6b5a3a', 1.1 - 0.65 * l.warm]} />
     <directionalLight position={at} target={target} intensity={l.intensity} color={sun} castShadow
       shadow-mapSize={[4096, 4096]} shadow-bias={-0.0004} shadow-normalBias={0.6} shadow-radius={3}
       shadow-camera-left={-300} shadow-camera-right={300} shadow-camera-top={300} shadow-camera-bottom={-300} shadow-camera-near={50} shadow-camera-far={1600} />
@@ -136,17 +136,12 @@ function Model({ glow }: { glow: number }) {
 
 // ---- moving things -------------------------------------------------------------------------------------------------------
 function Boats({ t }: { t: number }) {
-  const boats = [0, 1, 2, 3, 4].map(k => {
-    const a = 0.9 * k + 0.09 * t * (k % 2 ? 1 : -1), rr = 0.35 + 0.12 * (k % 3);
-    const x = LAKE.x + LAKE.rx * rr * Math.cos(a), z = LAKE.z + LAKE.rz * rr * 1.2 * Math.sin(a);
-    const heading = Math.atan2(-LAKE.rx * Math.sin(a), LAKE.rz * 1.2 * Math.cos(a)) + (k % 2 ? 0 : Math.PI);
-    return { x, z, heading, rock: 0.05 * Math.sin(2.1 * t + k) };
-  });
+  const boats = boatsAt(t);
   const sail = useMemo(() => { const s = new THREE.Shape(); s.moveTo(0, 0); s.lineTo(0, 9); s.lineTo(4.6, 0.6); s.closePath(); return new THREE.ShapeGeometry(s); }, []);
   return <>{boats.map((b, i) => <group key={i} position={[b.x, 0.5, b.z]} rotation={[0, b.heading, b.rock]}>
     <mesh scale={[1.3, 0.7, 3.4]} castShadow><sphereGeometry args={[1, 16, 8, 0, Math.PI * 2, Math.PI / 2, Math.PI / 2]} /><meshStandardMaterial color={C.hull} roughness={0.5} side={THREE.DoubleSide} /></mesh>
     <mesh position={[0, 5, 0.6]} castShadow><cylinderGeometry args={[0.12, 0.12, 10, 6]} /><meshStandardMaterial color="#8a7a63" /></mesh>
-    <mesh geometry={sail} position={[0, 0.8, 0.6]} rotation={[0, -Math.PI / 2 + 0.35, 0]} castShadow><meshStandardMaterial color={i === 2 ? '#e9663a' : C.sail} roughness={0.7} side={THREE.DoubleSide} /></mesh>
+    <mesh geometry={sail} position={[0, 0.8, 0.6]} rotation={[0, -Math.PI / 2 + 0.35, 0]} castShadow><meshStandardMaterial color={b.sail} roughness={0.7} side={THREE.DoubleSide} /></mesh>
     {/* its wake: a soft pale V on the water behind it */}
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.25, -6]}><planeGeometry args={[3.2, 9]} /><meshBasicMaterial color="#e8f4fb" transparent opacity={0.35} depthWrite={false} /></mesh>
   </group>)}</>;
@@ -161,32 +156,45 @@ function Birds({ t }: { t: number }) {
   })}</>;
 }
 const _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _s = new THREE.Vector3(), _p = new THREE.Vector3();
+// Faceless cadets, a third bigger than life on the model (panel pass 1: they read as barcodes): a torso, two legs that
+// swing on the step, a thick white belt, a head and a cap. Plain navy: no uniform is claimed (storyboard § 8).
+const FIG = 1.3;
 function Cadets({ t }: { t: number }) {
   const max = 8 * 30;
-  const { body, belt, head, cap } = useMemo(() => {
-    const mk = (g: THREE.BufferGeometry, color: string) => { const m = new THREE.InstancedMesh(g, new THREE.MeshStandardMaterial({ color, roughness: 0.8 }), max); m.castShadow = true; m.frustumCulled = false; return m; };
-    return { body: mk(new THREE.CapsuleGeometry(0.42, 1.5, 4, 10), C.navy), belt: mk(new THREE.CylinderGeometry(0.46, 0.46, 0.16, 10), C.belt),
-      head: mk(new THREE.SphereGeometry(0.3, 10, 8), C.skin), cap: mk(new THREE.CylinderGeometry(0.36, 0.36, 0.22, 10), C.navy) };
+  const parts = useMemo(() => {
+    const mk = (g: THREE.BufferGeometry, color: string, n = max) => { const m = new THREE.InstancedMesh(g, new THREE.MeshStandardMaterial({ color, roughness: 0.8 }), n); m.castShadow = true; m.frustumCulled = false; return m; };
+    return { torso: mk(new THREE.CapsuleGeometry(0.42 * FIG, 0.75 * FIG, 4, 10), C.navy), legs: mk(new THREE.CapsuleGeometry(0.17 * FIG, 0.8 * FIG, 4, 8), C.navy, 2 * max),
+      belt: mk(new THREE.CylinderGeometry(0.47 * FIG, 0.47 * FIG, 0.28 * FIG, 12), C.belt), head: mk(new THREE.SphereGeometry(0.3 * FIG, 10, 8), C.skin),
+      cap: mk(new THREE.CylinderGeometry(0.37 * FIG, 0.37 * FIG, 0.24 * FIG, 10), C.navy) };
   }, []);
   const fs = figuresAt(t);
   const put = (m: THREE.InstancedMesh, i: number, x: number, y: number, z: number, tilt = 0) => {
     _q.setFromEuler(new THREE.Euler(tilt, 0, 0)); _m.compose(_p.set(x, y, z), _q, _s.set(1, 1, 1)); m.setMatrixAt(i, _m);
   };
   fs.forEach((f, i) => {
-    const bob = 0.12 * Math.abs(f.step), tilt = 0.06 * f.step;
-    put(body, i, f.x, f.y + 1.2 + bob, f.z, tilt); put(belt, i, f.x, f.y + 1.25 + bob, f.z);
-    put(head, i, f.x, f.y + 2.5 + bob, f.z); put(cap, i, f.x, f.y + 2.78 + bob, f.z);
+    const lift = 0.1 * FIG * Math.abs(f.step), hip = f.y + 1.0 * FIG + lift;
+    [-1, 1].forEach((side, k) => {                               // each leg hangs from the hip and swings opposite the other
+      const a = 0.45 * side * f.step;
+      put(parts.legs, 2 * i + k, f.x + side * 0.2 * FIG, hip - 0.5 * FIG * Math.cos(a), f.z + 0.5 * FIG * Math.sin(a), a);
+    });
+    put(parts.torso, i, f.x, hip + 0.55 * FIG, f.z); put(parts.belt, i, f.x, hip + 0.2 * FIG, f.z);
+    put(parts.head, i, f.x, hip + 1.38 * FIG, f.z); put(parts.cap, i, f.x, hip + 1.66 * FIG, f.z);
   });
-  for (const m of [body, belt, head, cap]) { m.count = fs.length; m.instanceMatrix.needsUpdate = true; }
-  return <><primitive object={body} /><primitive object={belt} /><primitive object={head} /><primitive object={cap} /></>;
+  for (const m of [parts.torso, parts.belt, parts.head, parts.cap]) { m.count = fs.length; m.instanceMatrix.needsUpdate = true; }
+  parts.legs.count = 2 * fs.length; parts.legs.instanceMatrix.needsUpdate = true;
+  return <>{Object.values(parts).map((m, i) => <primitive key={i} object={m} />)}</>;
 }
 function AntimPag({ t }: { t: number }) {
   if (t < ANSWER_AT - 0.2) return null;
   const f = lineFlashAt(t), a = prog(t, ANSWER_AT - 0.2, 0.4);
-  return <mesh position={[0, 0.18, LINE.z]}>
-    <boxGeometry args={[2 * LINE.half, 0.12, 0.9]} />
-    <meshStandardMaterial color="#e2b23a" emissive="#ffcc55" emissiveIntensity={0.35 + 2.2 * f} metalness={0.5} roughness={0.35} transparent opacity={a} />
-  </mesh>;
+  // a thick saturated gold band on a dark edge, flashing as each rank steps over it (panel pass 1: the hairline vanished)
+  return <group position={[0, 0, LINE.z]}>
+    <mesh position={[0, 0.16, 0]}><boxGeometry args={[2 * LINE.half + 1.2, 0.2, LINE.width + 1.2]} /><meshStandardMaterial color="#5a3a05" transparent opacity={a} /></mesh>
+    <mesh position={[0, 0.32, 0]}>
+      <boxGeometry args={[2 * LINE.half, 0.2, LINE.width]} />
+      <meshStandardMaterial color="#f5b301" emissive="#ffc21a" emissiveIntensity={0.6 + 2.6 * f} metalness={0.3} roughness={0.3} transparent opacity={a} toneMapped={false} />
+    </mesh>
+  </group>;
 }
 function Jets({ t }: { t: number }) {
   const js = jetsAt(t);
@@ -203,6 +211,8 @@ function Jets({ t }: { t: number }) {
       <mesh geometry={wing} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.2, -2]} castShadow><meshStandardMaterial color={C.jet} metalness={0.5} roughness={0.45} side={THREE.DoubleSide} /></mesh>
       {[-1, 1].map(s => <mesh key={s} position={[s * 1.6, 2.6, -JET.len / 2 + 3]} rotation={[0, 0, s * 0.25]}><boxGeometry args={[0.3, 4.6, 4.2]} /><meshStandardMaterial color={C.jet} metalness={0.5} roughness={0.45} /></mesh>)}
       <mesh position={[0, 0.6, 7]}><sphereGeometry args={[1.0, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2]} /><meshStandardMaterial color="#1c2a3a" metalness={0.8} roughness={0.15} /></mesh>
+      {/* speed streaks off the wingtips: thin and pale, not smoke (a Su-30 fly-past has none) */}
+      {[-1, 1].map(s => <mesh key={`w${s}`} position={[s * (JET.span / 2 - 0.6), -0.1, -JET.len / 2 - 14]}><boxGeometry args={[0.18, 0.18, 30]} /><meshBasicMaterial color="#ffffff" transparent opacity={0.45} depthWrite={false} /></mesh>)}
     </group>;
   })}</>;
 }
@@ -221,17 +231,22 @@ function Scene({ t }: { t: number }) {
 }
 
 // ---- words over the picture ----------------------------------------------------------------------------------------------
+// Dark pins with a white letter (panel pass 1: green on the grass and blue on the water vanished); each pops in turn in the
+// opening and with its mark; the mark is a big coloured disc (red ✗, green ✓); a ring flashes out from B on the answer.
 function Pins({ t }: { t: number }) {
-  const ps = PINS.map((_, i) => pinAt(i, t)).filter(p => p.alpha > 0.01).sort((a, b) => b.depth - a.depth);
+  const ps = PINS.map((_, i) => pinAt(i, t)).filter(p => p.alpha > 0.01).sort((a, b) => b.depth - a.depth), ring = ringAt(t);
   return <>{ps.map(p => {
-    const fill = p.state === 'crossed' ? '#9aa3ad' : p.color, d = 2 * PIN.r;
-    return <div key={p.letter} style={{ position: 'absolute', left: p.x - PIN.r, top: p.y - d - PIN.tip, width: d, height: d + PIN.tip, opacity: p.alpha }}>
+    const fill = p.state === 'crossed' ? '#6b7280' : p.color, d = 2 * PIN.r, k = p.pop;
+    return <div key={p.letter} style={{ position: 'absolute', left: p.x - PIN.r, top: p.y - d - PIN.tip, width: d, height: d + PIN.tip, opacity: p.alpha,
+      transform: `scale(${k})`, transformOrigin: '50% 100%' }}>
+      {p.state === 'right' && ring > 0 && <div style={{ position: 'absolute', left: PIN.r - 40 - 260 * ring, top: d + PIN.tip - 20 - 90 * ring, width: 80 + 520 * ring, height: 40 + 180 * ring,
+        borderRadius: '50%', border: `${6 * (1 - ring) + 2}px solid ${MARK.right}`, opacity: 1 - ring }} />}
       <div style={{ position: 'absolute', left: PIN.r - 13, top: d - 6, width: 0, height: 0, borderLeft: '13px solid transparent', borderRight: '13px solid transparent', borderTop: `${PIN.tip + 6}px solid ${fill}` }} />
       <div style={{ position: 'absolute', left: 0, top: 0, width: d, height: d, borderRadius: '50%', background: fill, border: '4px solid #fff', boxSizing: 'border-box',
-        boxShadow: p.state === 'right' ? `0 0 0 8px ${tint(p.color, 0.35)}, 0 8px 22px ${tint(P.ink, 0.35)}` : `0 8px 20px ${tint(P.ink, 0.3)}`,
-        display: 'flex', alignItems: 'center', justifyContent: 'center', font: `800 34px ${SOFT_UI}`, color: '#fff' }}>{p.letter}</div>
-      {p.mark && <div style={{ position: 'absolute', left: d - 18, top: -14, width: 36, height: 36, borderRadius: 18, background: '#fff', boxShadow: `0 3px 10px ${tint(P.ink, 0.3)}`,
-        display: 'flex', alignItems: 'center', justifyContent: 'center', font: `800 26px ${SOFT_UI}`, color: p.state === 'right' ? P.green : '#c2410c' }}>{p.mark}</div>}
+        boxShadow: `0 8px 20px ${tint(P.ink, 0.35)}`, display: 'flex', alignItems: 'center', justifyContent: 'center', font: `800 34px ${SOFT_UI}`, color: '#fff' }}>{p.letter}</div>
+      {p.mark && <div style={{ position: 'absolute', left: d - 2 * MARK.r + 22, top: -MARK.r + 4, width: 2 * MARK.r, height: 2 * MARK.r, borderRadius: MARK.r,
+        background: p.state === 'right' ? MARK.right : MARK.wrong, border: '4px solid #fff', boxSizing: 'border-box', boxShadow: `0 4px 14px ${tint(P.ink, 0.35)}`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center', font: `800 34px ${SOFT_UI}`, color: '#fff' }}>{p.mark}</div>}
     </div>;
   })}</>;
 }
@@ -277,10 +292,10 @@ export function Life001({ cover = false }: { cover?: boolean }) {
       <AbsoluteFill>
         <Board watermark={false} />
         {!cover && <PredictHeader t={t} label={'NDA LIFE  ·  THE CAMPUS'} lines={HEADER} options={OPTIONS} answer={ANSWER} at={ANSWER_AT}
-          size={54} chipW={300} crossed={CROSSED} />}
+          size={54} chipW={300} crossed={CROSSED} accent={MARK.right} />}
         <div style={{ position: 'absolute', left: 0, top: BAND.top, width: BAND.width, height: BAND.height, ...softEdges({ top: 0.1, bottom: 0.1 }),
-          // evening: only the picture warms as the light goes low (a tint over the band would colour the board too)
-          filter: `sepia(${0.35 * warm}) saturate(${1 + 0.35 * warm})` }}>
+          // evening: the picture deepens as the light goes low (sepia turned it olive; the orange is the sunlight's own)
+          filter: `saturate(${1 + 0.3 * warm}) contrast(${1 + 0.06 * warm})` }}>
           <ThreeCanvas width={BAND.width} height={BAND.height} shadows gl={{ antialias: true, alpha: true }}>
             <Scene t={t} />
           </ThreeCanvas>
