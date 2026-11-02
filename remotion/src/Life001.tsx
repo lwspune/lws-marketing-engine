@@ -23,7 +23,7 @@ import { COL, rng, SudanBlock, Palm } from './sudanBlock.tsx';
 
 const C = { soil: '#7b5a3e', soilDark: '#5e432d', grass: GRASS, grass2: '#6b9a4c', stripeA: '#82b65e', stripeB: '#73a651',
   hill: '#6f9550', hillDark: '#5c7f41', road: '#d8c9a6', sand: '#e2d3a8', water: WATER, tree: ['#3f7a35', '#4d8a3c', '#5a9442'],
-  trunk: '#6b5a45', navy: '#1f2a4a', belt: '#f4f1ea', skin: '#7d5238', jet: '#8a939e', sail: '#fbfaf5', hull: '#f2efe8' };
+  trunk: '#6b5a45', navy: '#1f2a4a', belt: '#f4f1ea', skin: '#7d5238', jet: '#3b424c', sail: '#fbfaf5', hull: '#f2efe8' };
 
 function CameraRig({ t }: { t: number }) {
   const { camera } = useThree(), c = cameraAt(t), cam = camera as THREE.PerspectiveCamera;
@@ -205,14 +205,14 @@ function Jets({ t }: { t: number }) {
   if (!js.length) return null;
   return <>{js.map((j, i) => {
     const yaw = Math.atan2(j.dir[0], j.dir[2]);
-    return <group key={i} position={j.pos} rotation={[0, yaw, 0]}>
-      <mesh rotation={[Math.PI / 2, 0, 0]} castShadow><cylinderGeometry args={[1.1, 0.9, JET.len, 14]} /><meshStandardMaterial color={C.jet} metalness={0.5} roughness={0.45} /></mesh>
-      <mesh position={[0, 0, JET.len / 2 + 2.4]} rotation={[Math.PI / 2, 0, 0]}><coneGeometry args={[1.1, 4.8, 14]} /><meshStandardMaterial color={C.jet} metalness={0.5} roughness={0.45} /></mesh>
+    return <group key={i} position={j.pos} rotation={[0, yaw, 0]} scale={JET.len / 30}>
+      <mesh rotation={[Math.PI / 2, 0, 0]} castShadow><cylinderGeometry args={[1.1, 0.9, 30, 14]} /><meshStandardMaterial color={C.jet} metalness={0.5} roughness={0.45} /></mesh>
+      <mesh position={[0, 0, 15 + 2.4]} rotation={[Math.PI / 2, 0, 0]}><coneGeometry args={[1.1, 4.8, 14]} /><meshStandardMaterial color={C.jet} metalness={0.5} roughness={0.45} /></mesh>
       <mesh geometry={wing} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.2, -2]} castShadow><meshStandardMaterial color={C.jet} metalness={0.5} roughness={0.45} side={THREE.DoubleSide} /></mesh>
-      {[-1, 1].map(s => <mesh key={s} position={[s * 1.6, 2.6, -JET.len / 2 + 3]} rotation={[0, 0, s * 0.25]}><boxGeometry args={[0.3, 4.6, 4.2]} /><meshStandardMaterial color={C.jet} metalness={0.5} roughness={0.45} /></mesh>)}
+      {[-1, 1].map(s => <mesh key={s} position={[s * 1.6, 2.6, -15 + 3]} rotation={[0, 0, s * 0.25]}><boxGeometry args={[0.3, 4.6, 4.2]} /><meshStandardMaterial color={C.jet} metalness={0.5} roughness={0.45} /></mesh>)}
       <mesh position={[0, 0.6, 7]}><sphereGeometry args={[1.0, 12, 8, 0, Math.PI * 2, 0, Math.PI / 2]} /><meshStandardMaterial color="#1c2a3a" metalness={0.8} roughness={0.15} /></mesh>
       {/* speed streaks off the wingtips: thin and pale, not smoke (a Su-30 fly-past has none) */}
-      {[-1, 1].map(s => <mesh key={`w${s}`} position={[s * (JET.span / 2 - 0.6), -0.1, -JET.len / 2 - 14]}><boxGeometry args={[0.18, 0.18, 30]} /><meshBasicMaterial color="#ffffff" transparent opacity={0.45} depthWrite={false} /></mesh>)}
+      {[-1, 1].map(s => <mesh key={`w${s}`} position={[s * 10.4, -0.1, -15 - 14]}><boxGeometry args={[0.18, 0.18, 30]} /><meshBasicMaterial color="#ffffff" transparent opacity={0.45} depthWrite={false} /></mesh>)}
     </group>;
   })}</>;
 }
@@ -240,7 +240,7 @@ function Pins({ t }: { t: number }) {
     return <div key={p.letter} style={{ position: 'absolute', left: p.x - PIN.r, top: p.y - d - PIN.tip, width: d, height: d + PIN.tip, opacity: p.alpha,
       transform: `scale(${k})`, transformOrigin: '50% 100%' }}>
       {p.state === 'right' && ring > 0 && <div style={{ position: 'absolute', left: PIN.r - 40 - 260 * ring, top: d + PIN.tip - 20 - 90 * ring, width: 80 + 520 * ring, height: 40 + 180 * ring,
-        borderRadius: '50%', border: `${6 * (1 - ring) + 2}px solid ${MARK.right}`, opacity: 1 - ring }} />}
+        borderRadius: '50%', border: `${12 * (1 - ring) + 4}px solid ${MARK.right}`, boxShadow: `0 0 0 3px #fff`, opacity: 1 - 0.7 * ring }} />}
       <div style={{ position: 'absolute', left: PIN.r - 13, top: d - 6, width: 0, height: 0, borderLeft: '13px solid transparent', borderRight: '13px solid transparent', borderTop: `${PIN.tip + 6}px solid ${fill}` }} />
       <div style={{ position: 'absolute', left: 0, top: 0, width: d, height: d, borderRadius: '50%', background: fill, border: '4px solid #fff', boxSizing: 'border-box',
         boxShadow: `0 8px 20px ${tint(P.ink, 0.35)}`, display: 'flex', alignItems: 'center', justifyContent: 'center', font: `800 34px ${SOFT_UI}`, color: '#fff' }}>{p.letter}</div>

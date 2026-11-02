@@ -2,7 +2,7 @@
 // "Where is the passing-out parade held?" A Sudan Block · B Khetarpal · C Peacock Bay, a pin over each place. The camera
 // visits Sudan Block (✗ "Not the parade ground."), Peacock Bay's sailing boats (✗), then Khetarpal Ground: blocks of
 // cadets are set down like toy soldiers, B lights ✓, and only the passing-out course marches over the gold Antim Pag line.
-// Three jets pass; the camera pulls back to the campus in low orange light under the end card.
+// Three jets pass; the camera rises over the ground to the whole campus under the end card.
 // Facts and their sources: storyboard § 8 (PIB, NDA's joining instructions, UPSC). Storyboard (independently reviewed,
 // F31): reels/nda-life-001-campus.storyboard.md. World units are metres; the model is not to scale (§ 8).
 //
@@ -51,7 +51,7 @@ export const GRASS = '#79a858', WATER = '#3fa0dc', PIN_COLOR = WHITE.ink;
 export const MARK = { r: 30, right: WHITE.green, wrong: '#b91c1c' };   // a pair colour-blind viewers tell apart (test)
 export const PINS = [
   { letter: 'A', color: PIN_COLOR, at: [0, DOME_TOP + 14, SUDAN.z - 7.5] as V3 },
-  { letter: 'B', color: PIN_COLOR, at: [0, 24, -29] as V3 },
+  { letter: 'B', color: PIN_COLOR, at: [0, 7, -29] as V3 },      // low, on the ground: not in front of Sudan Block (Colour, pass 2)
   { letter: 'C', color: PIN_COLOR, at: [LAKE.x, 22, LAKE.z] as V3 },
 ];
 /** Each stop: its pin, when the camera has arrived, when it leaves. */
@@ -127,7 +127,7 @@ export function burstAt(t: number) {
 }
 /** All three pins in the orbit; once the tour starts, only the current stop's pin (each fades in / out over 0.3 s). */
 const shown = (t: number, a: number, b: number) => (a <= 0 ? 1 : prog(t, a, 0.3)) * (1 - prog(t, b, 0.3));
-const WINDOWS: [number, number][][] = [[[0, 5.8]], [[0, ORBIT_END], [8.6, 13.0]], [[0, ORBIT_END], [5.8, 8.6]]];
+const WINDOWS: [number, number][][] = [[[0, 5.8]], [[0, ORBIT_END], [8.6, 12.7]], [[0, ORBIT_END], [5.8, 8.6]]];
 const focusAt = (i: number, t: number) => Math.min(1, WINDOWS[i].reduce((s, [a, b]) => s + shown(t, a, b), 0));
 /** A pin at t: where its tip lands on screen (bobbing), its state and mark, how visible it is. Pin A drops onto the dome
  *  3.9–4.6 (from 10 m up); all pins leave as the camera pulls back. */
@@ -188,7 +188,7 @@ export function boatsAt(t: number) {
 }
 
 // ---- jets (a Su-30 fly-past, PIB; three in a vee, no smoke) --------------------------------------------------------------
-export const JET = { span: 22, len: 30, speed: 200, smoke: false };   // a fly-past speed (~700 km/h), not a dash
+export const JET = { span: 33, len: 45, speed: 200, smoke: false };   // a fly-past speed (~700 km/h), not a dash
 const JET_Q: V3 = [-30, 60, 20], JET_AT = 13.7, JET_DIR = unit([-1, 0.03, 0.55]), JET_SIDE = unit(cross([0, 1, 0], JET_DIR));
 export function jetsAt(t: number) {
   if (t < 13.0 || t >= 14.4) return [];
