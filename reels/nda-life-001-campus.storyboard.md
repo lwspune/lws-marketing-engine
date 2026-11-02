@@ -22,7 +22,7 @@ the maths-only points are adapted or set aside in § 0 (as `nda-defence-001-army
 | F8 rounded, F24 colour | ✅ the miniature's hills, lawns, water and roofs in their real colours (F24's "things people know by their material"); the three pins and chips in VIVID colours; nothing grey we invent |
 | F9 zooms | ✅ a push into each stop, a punch-in on the ✓, a close on the Antim Pag line, a pull-back to the whole campus |
 | F12 white board | n/a: a place, not a diagram; the header and the end card sit on soft white panels so the words keep their contrast |
-| F13 music, a new style | ✅ `cinematic` (the last two: `anthem`, `synthwave`) |
+| F13 music | ✅ Pixabay shelf track `patriotic-india` ("Indian Patriotic", JonasBlakewood; F13 v1.14) |
 | F14–F17 sound, muted | ✅ wind + birds (`dawn` bed), water lapping at the bay, marching taps, a thunk on ✓, the jets' `roar` bed; every idea on screen |
 | F15 whoosh only on fast moves | ✅ the three glides between stops are 0.9 s, each with its whoosh; the slower moves are silent |
 | F18 short | ✅ 17.6 s |
@@ -74,13 +74,13 @@ the maths-only points are adapted or set aside in § 0 (as `nda-defence-001-army
 | **7.9** | chip C crossed out (✗) | Not here. | — | low thud | |
 | 7.9–8.6 | hold: the boats, the ✗, the caption | (same) | slow drift | | |
 | 8.6–9.5 | glide to the big green ground in front of the buildings | pill: B · Khetarpal | 0.9 s glide | whoosh | |
-| 9.5–10.6 | blocks of tiny navy figures march on in step from the side, filling the ground in rows; the dome stands behind them (shown, not said) | — | slow push, the dome kept in the back of the frame | marching taps, snare | navy figures, white belts, green |
+| 9.5–10.6 | blocks of tiny navy figures drop onto the ground one after another like toy soldiers placed on a model (0.12 s apart, a tap each), then mark time in step; the dome stands behind them (shown, not said). *Build note:* marching in from the side would cross ~150 m in 1.1 s and read as running | — | slow push, the dome kept in the back of the frame | marching taps, snare | navy figures, white belts, green |
 | **10.6** | chip B lights ✓; the ground's edge glows; the pill becomes "B · Khetarpal Ground" | Passing-out parade: here. | punch-in 0.4 s (pin B and the glowing edge kept inside the band: test) | **thunk** + music hit | ✓ in B's green |
 | 10.6–11.8 | the other blocks halt; the last blocks, the passing-out course, march towards a gold line across the ground | — | swing low beside the line | marching taps on the beat | gold line |
 | 11.8–13.0 | the passing-out course crosses the line, rank by rank; the line flashes as each rank crosses; the other blocks stand still (review I1) | The last step: Antim Pag. | close, low, beside the line | each rank's step on the beat | |
 | 13.0–13.6 | three jets in a vee sweep in low over the ground, **no smoke** (a Su-30 fly-past, review I2) | — | tilt up to follow them | `roar` bed rising | dark grey jets on a gold sky |
 | 13.6–14.4 | the jets pass right over the camera and away | — | the camera shakes slightly as they pass | roar peaks and passes | |
-| 14.4–15.6 | pull back and up to the whole campus; at 15.0 the sun touches the hills | — | long pull-back to frame 0's height | music lifts | sunset orange |
+| 14.4–15.6 | pull back and up to the whole campus; at 15.0 the light drops low and orange and the hills' long shadows sweep over the campus. *Build note:* the model sits on the white board with no sky, so there is no sun disc to touch the hills | — | long pull-back to frame 0's height | music lifts | sunset orange |
 | 15.6–17.6 | the end card fades in on a white panel; at 16.0 the dome lights up | It starts with the written exam. (15.6) / Maths: 300 of 900 marks. (16.2) / Follow for more (16.8) | slow drift | music resolves on the bar | lit dome |
 
 New every ≤ 1.2 s: orbit → Sudan Block → arc → ✗ → lake → boats → ✗ → ground → marching → ✓ → the course moves out →
@@ -155,7 +155,7 @@ but the picture still shows "the leavers cross a last line".
 | B3 | ✗ caption and the next pill change together, so the caption reads as the next place's | Fixed: each ✗ caption and its pill hold 0.7–0.8 s, then the glide; tested |
 | B4 | Caption at 1540–1640 is in the bottom 320 px; a 930 px line enters the right button zone | Fixed: picture band 470–1420, caption 1440–1540 at 48 px, every line ≤ 840 px (tested) |
 | B5 | F15: a 1.2 s move with a whoosh | Fixed: the three glides are 0.9 s with their whoosh; slower moves are silent |
-| B6 | F2: still stretches of 1.8 s and 3 s at the end | Fixed: jets in and jets over as two beats; the sun touches the hills at 15.0; the end card's lines arrive at 15.6, 16.2, 16.8 and the dome lights at 16.0; trimmed to 17.6 s |
+| B6 | F2: still stretches of 1.8 s and 3 s at the end | Fixed: jets in and jets over as two beats; the light drops low and the hills' shadows sweep at 15.0; the end card's lines arrive at 15.6, 16.2, 16.8 and the dome lights at 16.0; trimmed to 17.6 s |
 | B7 | F22 says the orbit eases in, but here it's at speed on frame 0 | Logged in § 0 as deliberate (F5 wins, as One Day); the tests check ease-out only |
 | I1 | Only the passing-out course crosses the Antim Pag | Taken: the last blocks march out and cross; the rest stand still |
 | I2 | A vee with smoke reads as Surya Kiran; a Su-30 fly-past has no smoke | Taken: no smoke |
