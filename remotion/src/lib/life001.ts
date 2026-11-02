@@ -56,7 +56,7 @@ export const PIN = { r: 32, tip: 18 };                                  // circl
 
 // ---- camera: [zoom = 1000 / distance, target x, y, z, elevation°, azimuth°] ---------------------------------------------
 const S = (d: number, tg: V3, el: number, az: number) => [1000 / d, ...tg, el, az];
-const WIDE = S(1180, [20, 0, -75], 34, 0);
+const WIDE = S(1040, [20, 0, -75], 56, 0);           // from high up, so the slab fills the band (≤ 960 px wide at every angle)
 export const CAM: { start: number[]; keys: Key[] } = {
   start: WIDE,
   keys: [
@@ -73,8 +73,8 @@ export const CAM: { start: number[]; keys: Key[] } = {
     { t: 11.8, dur: 1.2, to: S(75, [0, 3, LINE.z - 4], 10, 72) },
     { t: 13.0, dur: 0.6, to: S(160, [0, 40, -40], 4, 35) },            // look up for the jets
     { t: 13.6, dur: 0.8, to: S(160, [80, 55, 30], 6, 60) },            // follow them past
-    { t: 14.4, dur: 1.2, to: WIDE },                                   // pull back to the whole campus
-    { t: END_AT, dur: DURATION - END_AT, to: S(1180, [20, 0, -75], 34, 8) },
+    { t: 14.4, dur: 1.2, to: S(1120, [20, 0, -5], 56, 0) },           // pull back to the whole campus, set high: clear of the end card
+    { t: END_AT, dur: DURATION - END_AT, to: S(1120, [20, 0, -5], 56, 8) },  // a slow drift round,
   ],
 };
 /** The orbit (F22): one full turn from frame 0, at speed on frame 0 and easing out only, ending at the front at 3.0. */
@@ -189,10 +189,11 @@ export const CAPTIONS: Caption[] = [
   { t0: 11.8, t1: 13.0, text: 'The last step: Antim Pag.' },
 ].map(c => ({ ...c, size: CAPTION_SIZE, y: CAPTION_Y }));
 export type EndLine = { at: number; text: string; size: number; weight: number; y: number };
+export const END_PANEL = { top: 1225, height: 300 };
 export const END_LINES: EndLine[] = [
-  { at: 0, text: 'It starts with the written exam.', size: 48, weight: 700, y: 1210 },
-  { at: 0.6, text: 'Maths: 300 of 900 marks.', size: 48, weight: 600, y: 1290 },
-  { at: 1.2, text: 'Follow for more', size: 64, weight: 700, y: 1378 },
+  { at: 0, text: 'It starts with the written exam.', size: 48, weight: 700, y: 1300 },
+  { at: 0.6, text: 'Maths: 300 of 900 marks.', size: 48, weight: 600, y: 1378 },
+  { at: 1.2, text: 'Follow for more', size: 64, weight: 700, y: 1462 },
 ];
 export const COVER_CAPTION = { text: 'Where is the passing-out\nparade held?', y: 620, size: 60 };
 

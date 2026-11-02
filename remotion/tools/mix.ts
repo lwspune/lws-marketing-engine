@@ -49,6 +49,7 @@ const REELS: Record<string, { lib: string; file: string }> = {
   '028': { lib: '../src/lib/reel028.ts', file: 'public/nda-maths-028-trig-lines' },
   pm005: { lib: '../src/lib/pm005.ts', file: 'public/pv-maths-005-first-principles' },
   s001: { lib: '../src/lib/story001.ts', file: 'public/nda-story-001-one-day' },
+  l001: { lib: '../src/lib/life001.ts', file: 'public/nda-life-001-campus' },
   '018': { lib: '../src/lib/reel018.ts', file: 'public/nda-maths-018-secant-tangent' },
   '010': { lib: '../src/lib/reel010.ts', file: 'public/nda-maths-010-why-seven' },
   '011': { lib: '../src/lib/reel011.ts', file: 'public/nda-maths-011-why-det-area' },

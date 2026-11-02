@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   DURATION, ORBIT_END, COVER_T, ANSWER_AT, END_AT, MARCH_IN, OPTIONS, ANSWER, CROSSED, PILLS, CAPTIONS, END_LINES, BAND, BASE,
   HILLS, PINS, STOPS, BLOCKS, LINE, cameraAt, azimuthAt, CAM, project, pinAt, figuresAt, crossingTimes, lineFlashAt, jetsAt, JET,
-  lightAt, labelBoxes, captionBox, endLineBox, textsAt, SOUND, COVER_CAPTION,
+  lightAt, labelBoxes, captionBox, endLineBox, textsAt, SOUND, COVER_CAPTION, END_PANEL,
 } from '../src/lib/life001.ts';
 import { whooshesFor } from '../src/lib/sfx.ts';
 import { distinguishable, VIVID } from '../src/lib/palette.ts';
@@ -99,6 +99,7 @@ test('framing: the whole model ≤ 960 px wide and inside the band in the orbit 
     const y0 = Math.min(...ps.map(p => p.y)), y1 = Math.max(...ps.map(p => p.y));
     assert.ok(x1 - x0 <= 960 && x0 >= 40 && x1 <= 1040, `t ${t.toFixed(2)}: model ${x0.toFixed(0)}–${x1.toFixed(0)}`);
     assert.ok(y0 >= BAND.top && y1 <= BAND.top + BAND.height, `t ${t.toFixed(2)}: model y ${y0.toFixed(0)}–${y1.toFixed(0)}`);
+    if (t >= END_AT) assert.ok(y1 <= END_PANEL.top - 10, `t ${t.toFixed(2)}: the model (to ${y1.toFixed(0)}) under the end card`);
   }
 });
 

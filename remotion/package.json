@@ -297,7 +297,11 @@
     "music:s001": "node ../reels/tools/music.mjs music/nda-story-001-one-day.json public/nda-story-001-one-day.wav",
     "mix:s001": "node tools/mix.ts s001",
     "render:s001": "remotion render Story001 ../reels/nda-story-001-one-day.mp4",
-    "cover:s001": "remotion still Story001Cover ../reels/nda-story-001-one-day-cover.png"
+    "cover:s001": "remotion still Story001Cover ../reels/nda-story-001-one-day-cover.png",
+    "music:l001": "node ../reels/tools/music.mjs music/nda-life-001-campus.json public/nda-life-001-campus.wav",
+    "mix:l001": "node tools/mix.ts l001",
+    "render:l001": "remotion render Life001 ../reels/nda-life-001-campus.mp4",
+    "cover:l001": "remotion still Life001Cover ../reels/nda-life-001-campus-cover.png"
   },
   "dependencies": {
     "@dimforge/rapier3d-compat": "0.21.0",
