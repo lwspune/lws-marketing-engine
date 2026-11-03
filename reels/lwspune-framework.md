@@ -1,4 +1,4 @@
-# @lws.pune reel framework (v1.15, 2026-11-03)
+# @lws.pune reel framework (v1.16, 2026-11-03)
 
 How every new @lws.pune reel is made, one numbered point at a time. Same standard as @pyqvault_'s
 (`pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or dropped
@@ -177,10 +177,10 @@ the question and labels still. · *Why:* a change of view restarts attention (fo
 and looked jerky to the founder (L11). · *Check:* tests: at least 2 zooms in and 1 out, no jump between frames, a
 punch-in on the big moment. · 🧪 L38
 
-**F22 · The orbit is the hook: every 3D reel opens with one.** From frame 0 the camera goes **all the way round the object, a full 360°** (front, side, back, side, front), eased in and out with no whoosh, while the question is up, and it **ends back at the front, the explaining view, by 3 s**, before anything is explained. One orbit per reel, in the opening only (no closing orbit, never during a punch-in). Written as a third camera value (orbit angle) on the same `CAMERA` keys. **Not for 2D reels** (founder, 2026-10-20: tried on @lws.pune 016, "doesn't look good"): a flat reel opens with its picture building from frame 0 instead (F5). Since F34 (2026-10-24) every new @lws.pune reel is 3D, so every new reel opens with the orbit. · *Why:* the founder (2026-10-20): the orbit
+**F22 · The orbit is the hook: every 3D reel opens with one.** From frame 0 the camera goes **all the way round the object, a full 360°** (front, side, back, side, front), eased in and out with no whoosh, while the question is up, and it **ends back at the front, the explaining view, by 4 s** (was 3 s; F2's pacing floor, v1.16), before anything is explained. One orbit per reel, in the opening only (no closing orbit, never during a punch-in). Written as a third camera value (orbit angle) on the same `CAMERA` keys. **Not for 2D reels** (founder, 2026-10-20: tried on @lws.pune 016, "doesn't look good"): a flat reel opens with its picture building from frame 0 instead (F5). Since F34 (2026-10-24) every new @lws.pune reel is 3D, so every new reel opens with the orbit. · *Why:* the founder (2026-10-20): the orbit
 is the hook, so it belongs in the first 3 s; it shows the 3D's depth and gives motion from frame 0 (reel 014 opens
 with one, L25). Back at the front by 3 s because an angle or a slope only reads from one view. · *Check:* the reel's
-tests (the orbit starts at frame 0, turns exactly 360°, ends at the front by 3 s, no jumps, no other orbit). · 📌 founder,
+tests (the orbit starts at frame 0, turns exactly 360°, ends at the front by 4 s, no jumps, no other orbit). · 📌 founder,
 measured by L38
 
 **F10 · Honest.** The maths is re-derived in the reel's tests; a PYQ named in the caption has its answer re-derived from
@@ -202,9 +202,10 @@ house, logged (L40)
 ## Sound
 
 **F13 · Music from the Pixabay shelf (since 2026-11-02).** Every new @lws.pune reel uses a licensed Pixabay track from
-`reels/music-shelf.json` (`{ "music": { "track": "<id>", "from": s } }`; `patriotic` for NDA life and defence), not
-music made in code; still never the same track twice in a row; effects and the mix as F14–F16. · *Why:* the founder
-(2026-11-02: "you can use pixabay patriotic music for background … going forward start using pixabay music"). · *Check:*
+`reels/music-shelf.json` (`{ "music": { "track": "<id>", "from": s } }`; `epic` or other cinematic, orchestral tracks for NDA life and defence; **not** `patriotic-india`, upbeat and "kiddish"
+under NDA reels, v1.16), not music made in code; still never the same track twice in a row; effects and the mix as F14–F16.
+· *Why:* the founder (2026-11-02: "you can use pixabay patriotic music for background … going forward start using pixabay
+music"; 2026-11-03, on "Indian Patriotic" under NDA Life #1: "seems kiddish"). · *Check:*
 `music/<reel>.json` names a shelf track; the track goes in the Music column of the results table. · 📌 founder, measured by
 L40. *The rule it replaces, kept for the record:* Music made in code, a different style each reel. Never the same style twice in a row, picked by mood: calm
 `lofi` (the house default) or `calm` for slow builds, `cinematic` for a reveal, `drive` or `synthwave` for motion, `bright`
@@ -281,6 +282,7 @@ counting dice outcomes; cards never overlap or crop while explained; the hold �
 |---|---|---|---|
 | v1.14 | 2026-11-02 | F13: music from the Pixabay shelf (`reels/music-shelf.json`, patriotic for NDA life and defence) instead of music made in code. | Founder, 2026-11-02: "you can use pixabay patriotic music for background … going forward start using pixabay music". |
 | v1.15 | 2026-11-03 | F2: a pacing floor: captions ≥ 1.4 s on screen, glides ≥ 1.5 s, a 3D opening turn ≥ 4 s. | Founder, 2026-11-03, on NDA Life #1's first cut (17.6 s, glides 0.8–1.2 s, two captions under 1 s): "seems fast". Re-cut at 24.6 s. L80. |
+| v1.16 | 2026-11-03 | F13: cinematic or orchestral shelf tracks (`epic`) for NDA life and defence, not the upbeat `patriotic-india`. F22: the orbit is back at the front by 4 s, not 3 s, to match F2's floor (v1.15). | Founder, 2026-11-03, on NDA Life #1's music: "music can be better. currently seems kiddish". F22: the 4 s turn was part of the approved re-cut ("seems fast"); the storyboard review found F22 and F2 disagreeing. |
 | v1.13 | 2026-11-02 | F41 added: NDA life first (4 a week), then defence knowledge (2) and SSB / syllabus (1); maths reels paused, with F1, F21, F28, F32 and F33 (⏸, kept as written). F42 added: every fact sourced, our own faceless 3D. F43 added: one line back to the written exam. Ideas move to `lwspune-ideas.md`. This also sets aside L6's "keep maths as the core of the mix" for now. | Founder, 2026-11-02: "we can pause maths for now. lets focus more on nda life", after the two defence reels beat the maths reels on views, watch time and likes (One Day 2,103 at 48 h; Army ranks 1,876 in 13 h) while maths sat under ~1,950 (L74). Measured by L79. |
 | v1.12 | 2026-10-26 | F38's pass rule, as @pyqvault_ v1.32: no defect left; scores logged, not a gate; at most two passes. | Founder, after Chemistry #11's three passes (5, 5, 6 → 6, 6, 6) and critics contradicting each other. |
 | v1.11 | 2026-10-26 | F38 added: the review panel, the same point and number as @pyqvault_'s (v1.31): four critics read every new reel before it's queued (`reels/review-panel.md`). F31's storyboard review stays first. | Founder, 2026-10-26: "there should be agents to review dramatic effect, colors, motions, sound effects" (after @pyqvault_ Chemistry #11 passed every check and was still bland). Measured by L73. |
