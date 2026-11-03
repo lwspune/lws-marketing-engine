@@ -28,7 +28,7 @@ aspirants follow (L6). The reach test's targets still stand: reach > 2,000, watc
 
 **F41 · NDA life first, then defence, then SSB.** Each week: **4 NDA life** reels (the academy as a cadet lives it:
 the campus, a day, uniforms, squadrons, camps, sports, the passing-out parade, the road after NDA), **2 defence
-knowledge** reels (ranks, jets, ships, medals, regiments, as a guess-the-answer like Army ranks) and **1 SSB / syllabus**
+knowledge** reels (ranks, jets, ships, medals, regiments, as showcases, F4 v1.17) and **1 SSB / syllabus**
 reel (the five SSB days, one task per reel; the written exam's marks). Ideas come from `lwspune-ideas.md`, each with a
 frame-0 picture that stops a thumb on its own. On screen `NDA LIFE · <TOPIC>`, `DEFENCE · <TOPIC>` or `SSB · <TOPIC>`
 (F19 adapted); the caption kit counts "NDA Life #N", "Defence #N", "SSB #N". **Maths reels are paused** (F1, F21, F28,
