@@ -6,7 +6,8 @@ Every new @lws.pune reel comes from here since 2026-11-02 (framework F41: maths 
 **What makes an idea go on this list**
 - **Frame 0 stops a thumb on its own**: a picture worth looking at with the sound off and no words read (F2, F5, F17).
   The card says what is on frame 0 and what moves.
-- **One 2-second question** on frame 0 (F4), answered by the picture.
+- **A promise and a count** on frame 0 (F4 v1.17: show, don't quiz): what the reel shows ("4 fighter jets of the Indian Air
+  Force"), ticked through as it goes. The cards' "Question" column below is from before 2026-11-03: read it as the hook.
 - **Every fact sourced** before the storyboard (F42). Facts still to check are marked *check* on the card; the
   storyboard's Facts table names a source for each, or the fact is cut.
 - **Our own faceless 3D** (F34, F42): no photos, footage, crests or real faces.
@@ -44,7 +45,7 @@ Every new @lws.pune reel comes from here since 2026-11-02 (framework F41: maths 
 | # | Idea | Frame 0 | The question | Status |
 |---|---|---|---|---|
 | D1 | **Army ranks**: which rank wears this? (`nda-defence-001-army-ranks`) | a shoulder strap turning | A Colonel · B Brigadier · C Major Gen | 📤 1 Nov |
-| D2 | **Jets by their shape**: three silhouettes fly in; which is the Rafale? Then each one lit up and named (Rafale, Tejas, Su-30MKI) | three dark silhouettes crossing the sky | "Which one is the Rafale?" | 💡 *check* the outlines against official pictures |
+| D2 | **Fighter jets of the Indian Air Force**: Tejas, Mirage 2000, Su-30MKI and Rafale fly above the clouds; each lit up, the part that tells it apart ringed, one sourced line each; the Rafale rolls; all fly over (`nda-defence-002-jets`) | four dark jets in a formation above the clouds, the camera already turning | "4 fighter jets of the Indian Air Force" (a showcase, F4 v1.17) | 🎬 |
 | D3 | **Same rank, three uniforms**: a Captain in the Army is…in the Navy and…in the Air Force; the three badges side by side, turning | three shoulder straps turning together | "An Army Captain equals which Navy rank?" | 💡 *check* the equivalent ranks |
 | D4 | **Ships by size**: an aircraft carrier, a destroyer and a submarine sail in at true scale against each other | the carrier sliding in | "How long is INS Vikrant?" | 💡 *check* lengths |
 | D5 | **The gallantry medals**: which one is the highest in war? The medals hang and turn, then rise in order | medals turning on ribbons | "Which is the highest wartime award?" | 💡 *check* the order and the ribbons |

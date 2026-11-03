@@ -1,4 +1,4 @@
-# @lws.pune reel framework (v1.16, 2026-11-03)
+# @lws.pune reel framework (v1.17, 2026-11-03)
 
 How every new @lws.pune reel is made, one numbered point at a time. Same standard as @pyqvault_'s
 (`pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or dropped
@@ -138,7 +138,13 @@ that the board / figure stays in frame. · 📌 founder, measured by L69
 
 ## Hook (the first 3 seconds)
 
-**F4 · Ask first (predict-first), one question only.** Frame 0 asks a question the viewer can answer in two seconds, with
+**F4 · Show, don't quiz (since 2026-11-03).** NDA life, defence and SSB reels are **showcases**: frame 0 promises what the
+reel shows ("4 fighter jets of the Indian Air Force", "6 places every NDA cadet knows"), with a count the viewer watches
+tick through (`TourHeader`'s dots), and each thing is named with one true line. No A/B/C, no "comment your guess", no ✗/✓,
+unless the founder asks for a quiz. The caption can still invite a comment. · *Why:* the founder, 2026-11-03: "Why are we
+making it as a quiz question … We need to move out of quiz mindset", after the campus tour replaced a quiz version. ·
+*Check:* frame 0 has a promise and a count, no options. · 📌 founder. *The rule it replaces, kept for the record (and for
+maths reels if they return):* **Ask first (predict-first), one question only.** Frame 0 asks a question the viewer can answer in two seconds, with
 A/B/C and "comment your guess 👇" (`PredictHeader`); the picture settles it and the right option lights. The caption's
 first line repeats it. Never two questions in one reel (founder's rule, 2026-10-14). · *Why:* comments are rare here
 (L7: median ~1); an ask only works before people leave (L5); on @pyqvault_ the account that asks gets 3.3 comments per
@@ -282,6 +288,7 @@ counting dice outcomes; cards never overlap or crop while explained; the hold �
 |---|---|---|---|
 | v1.14 | 2026-11-02 | F13: music from the Pixabay shelf (`reels/music-shelf.json`, patriotic for NDA life and defence) instead of music made in code. | Founder, 2026-11-02: "you can use pixabay patriotic music for background … going forward start using pixabay music". |
 | v1.15 | 2026-11-03 | F2: a pacing floor: captions ≥ 1.4 s on screen, glides ≥ 1.5 s, a 3D opening turn ≥ 4 s. | Founder, 2026-11-03, on NDA Life #1's first cut (17.6 s, glides 0.8–1.2 s, two captions under 1 s): "seems fast". Re-cut at 24.6 s. L80. |
+| v1.17 | 2026-11-03 | F4: show, don't quiz: NDA life, defence and SSB reels are showcases with a promise and a count on frame 0, no A/B/C or ✗/✓; the old predict-first rule kept for maths reels. | Founder, 2026-11-03, on Defence #2 built as "Which one is the Rafale?": "Why are we making it as a quiz question. It can be as a different fighter jets of Indian Air Force edutainment reel. We need to move out of quiz mindset". |
 | v1.16 | 2026-11-03 | F13: cinematic or orchestral shelf tracks (`epic`) for NDA life and defence, not the upbeat `patriotic-india`. F22: the orbit is back at the front by 4 s, not 3 s, to match F2's floor (v1.15). | Founder, 2026-11-03, on NDA Life #1's music: "music can be better. currently seems kiddish". F22: the 4 s turn was part of the approved re-cut ("seems fast"); the storyboard review found F22 and F2 disagreeing. |
 | v1.13 | 2026-11-02 | F41 added: NDA life first (4 a week), then defence knowledge (2) and SSB / syllabus (1); maths reels paused, with F1, F21, F28, F32 and F33 (⏸, kept as written). F42 added: every fact sourced, our own faceless 3D. F43 added: one line back to the written exam. Ideas move to `lwspune-ideas.md`. This also sets aside L6's "keep maths as the core of the mix" for now. | Founder, 2026-11-02: "we can pause maths for now. lets focus more on nda life", after the two defence reels beat the maths reels on views, watch time and likes (One Day 2,103 at 48 h; Army ranks 1,876 in 13 h) while maths sat under ~1,950 (L74). Measured by L79. |
 | v1.12 | 2026-10-26 | F38's pass rule, as @pyqvault_ v1.32: no defect left; scores logged, not a gate; at most two passes. | Founder, after Chemistry #11's three passes (5, 5, 6 → 6, 6, 6) and critics contradicting each other. |
