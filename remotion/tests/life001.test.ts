@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  DURATION, ORBIT_END, COVER_T, ANSWER_AT, END_AT, MARCH_IN, OPTIONS, ANSWER, CROSSED, PILLS, CAPTIONS, END_LINES, BAND, BASE,
+  DURATION, ORBIT_END, COVER_T, ANSWER_AT, END_AT, MARCH_IN, MARCH_GO, PULL, OPTIONS, ANSWER, CROSSED, PILLS, CAPTIONS, END_LINES, BAND, BASE,
   HILLS, PINS, STOPS, BLOCKS, LINE, cameraAt, azimuthAt, CAM, project, pinAt, figuresAt, crossingTimes, lineFlashAt, jetsAt, JET,
   lightAt, labelBoxes, captionBox, endLineBox, textsAt, SOUND, COVER_CAPTION, END_PANEL, PIN, PIN_COLOR, GRASS, WATER, MARK, ringAt,
   boatsAt, SAIL, burstAt,
@@ -19,7 +19,7 @@ test('the question: A Sudan Block · B Khetarpal · C Peacock Bay, answer B; the
   assert.deepEqual(OPTIONS.map(o => o.replace(/\s+/g, ' ')), ['A Sudan Block', 'B Khetarpal', 'C Peacock Bay']);
   assert.equal(ANSWER, 1);
   assert.deepEqual(CROSSED.map(c => c.i), [0, 2], 'A then C crossed out');
-  assert.deepEqual(CROSSED.map(c => c.at), [5.0, 7.9]);
+  assert.deepEqual(CROSSED.map(c => c.at), [6.9, 11.6]);
   for (const t of frames) {
     const shown = textsAt(t).join(' | ');
     if (t < ANSWER_AT) assert.ok(!/Khetarpal Ground/.test(shown), `t ${t.toFixed(2)}: "${shown}"`);
@@ -27,8 +27,8 @@ test('the question: A Sudan Block · B Khetarpal · C Peacock Bay, answer B; the
   assert.ok(textsAt(ANSWER_AT + 0.5).some(s => /Khetarpal Ground/.test(s)));
 });
 
-test('timeline: ≤ 25 s; the answer at 10.6 after both crosses; the cover before anything is given away', () => {
-  assert.equal(DURATION, 17.6); assert.equal(ORBIT_END, 3.0); assert.equal(ANSWER_AT, 10.6); assert.equal(END_AT, 15.6);
+test('timeline: ≤ 25 s; the answer at 15.6 after both crosses; the cover before anything is given away', () => {
+  assert.equal(DURATION, 24.6); assert.equal(ORBIT_END, 4.0); assert.equal(ANSWER_AT, 15.6); assert.equal(END_AT, 22.6);
   assert.ok(CROSSED.every(c => c.at < ANSWER_AT));
   assert.ok(COVER_T < ORBIT_END && COVER_T < MARCH_IN);
   assert.equal(figuresAt(COVER_T).length, 0, 'the ground is empty on the cover');
@@ -38,12 +38,12 @@ test('timeline: ≤ 25 s; the answer at 10.6 after both crosses; the cover befor
   assert.ok(DURATION - END_AT >= 1.8);
 });
 
-test('nothing marches before 9.5 s and no option lights before the answer', () => {
-  assert.equal(MARCH_IN, 9.5);
+test('nothing marches before 14.5 s and no option lights before the answer', () => {
+  assert.equal(MARCH_IN, 14.5);
   for (const t of frames.filter(t => t < MARCH_IN)) assert.equal(figuresAt(t).length, 0, `t ${t.toFixed(2)}`);
   for (const t of frames.filter(t => t < ANSWER_AT)) assert.ok(PINS.every((_, i) => pinAt(i, t).state !== 'right'));
   assert.equal(pinAt(ANSWER, ANSWER_AT + 0.01).state, 'right');
-  assert.equal(pinAt(0, 5.01).state, 'crossed'); assert.equal(pinAt(2, 7.91).state, 'crossed');
+  assert.equal(pinAt(0, 6.91).state, 'crossed'); assert.equal(pinAt(2, 11.61).state, 'crossed');
 });
 
 test('each stop pill holds ≥ 0.6 s after its "not here" caption appears, and a caption never outlives its stop (review B3)', () => {
@@ -133,12 +133,12 @@ test('the parade: blocks land one after another by the answer; then only the pas
   assert.equal(settled.length, BLOCKS.reduce((n, b) => n + b.rows * b.cols, 0), 'every block landed before the answer');
   assert.ok(settled.every(f => Math.abs(f.y) < 1e-6));
   const course = (t: number) => figuresAt(t).filter(f => f.course), others = (t: number) => figuresAt(t).filter(f => !f.course);
-  const a = others(ANSWER_AT + 0.05), b = others(13.4);
+  const a = others(ANSWER_AT + 0.05), b = others(20.4);
   a.forEach((f, i) => assert.ok(Math.abs(f.x - b[i].x) < 1e-9 && Math.abs(f.z - b[i].z) < 1e-9, 'the other blocks stand still'));
-  for (const f of course(11.5)) assert.ok(f.z > LINE.z, 'no one crosses before 11.6 s');
-  for (const f of course(13.0)) assert.ok(f.z < LINE.z, 'every rank of the course has crossed by 13.0 s');
+  for (const f of course(MARCH_GO + 1.5)) assert.ok(f.z > LINE.z, 'no one crosses before 18.1 s');
+  for (const f of course(20.1)) assert.ok(f.z < LINE.z, 'every rank of the course has crossed by 20.1 s');
   const times = crossingTimes();
-  assert.ok(times.length >= 4 && times.every(c => c >= 11.6 && c <= 13.0), times.join(', '));
+  assert.ok(times.length >= 4 && times.every(c => c >= 18.1 && c <= 20.1), times.join(', '));
   for (const c of times) assert.ok(lineFlashAt(c + 0.02) > 0.8, `the line flashes as a rank crosses at ${c.toFixed(2)}`);
   assert.ok(LINE.width >= 2, 'a band, not a hairline (panel pass 1)');
   // the course blocks are inside the line's length, the others outside it
@@ -149,15 +149,15 @@ test('the parade: blocks land one after another by the answer; then only the pas
   }
 });
 
-test('jets: only in 13.0–14.4, three in a vee, at least a quarter of the frame wide as they pass (review I2: no smoke)', () => {
+test('jets: only in 20.0–21.4, three in a vee, at least a quarter of the frame wide as they pass (review I2: no smoke)', () => {
   for (const t of frames) {
     const js = jetsAt(t);
-    if (t < 13.0 || t >= 14.4) assert.equal(js.length, 0, `t ${t.toFixed(2)}`);
+    if (t < 20.0 || t >= 21.4) assert.equal(js.length, 0, `t ${t.toFixed(2)}`);
     else assert.equal(js.length, 3);
   }
   assert.equal(JET.smoke, false);
   let best = 0;
-  for (const t of frames.filter(t => t >= 13.0 && t < 14.4)) {
+  for (const t of frames.filter(t => t >= 20.0 && t < 21.4)) {
     const cam = cameraAt(t), lead = jetsAt(t)[0];
     const at = (k: number) => lead.pos.map((v, i) => v + k * (JET.span / 2) * lead.side[i]) as [number, number, number];
     const l = project(at(-1), cam), r = project(at(1), cam);
@@ -167,22 +167,22 @@ test('jets: only in 13.0–14.4, three in a vee, at least a quarter of the frame
 });
 
 test('light: golden afternoon, then low and orange in the pull-back (the dome-lights beat was cut, panel pass 1)', () => {
-  assert.ok(lightAt(5).elevation > 25 && lightAt(15.6).elevation < 12);
-  assert.ok(lightAt(14.0).elevation - lightAt(15.4).elevation > 15, 'the light drops in the pull-back');
-  assert.ok(lightAt(15.6).warm > 0.95 && lightAt(5).warm === 0);
+  assert.ok(lightAt(5).elevation > 25 && lightAt(END_AT).elevation < 12);
+  assert.ok(lightAt(PULL - 0.4).elevation - lightAt(PULL + 1.0).elevation > 15, 'the light drops in the pull-back');
+  assert.ok(lightAt(END_AT).warm > 0.95 && lightAt(5).warm === 0);
   assert.ok(!SOUND.hits.some(h => h.kind === 'shimmer' && h.t >= END_AT), 'no sound for the dome beat that is gone');
 });
 
 test('pins (panel pass 1): one dark colour that stands out on grass and water; big coloured marks; each pin pops in turn in the opening', () => {
   for (const ground of [GRASS, WATER]) assert.ok(contrast(PIN_COLOR, ground) >= 4.5, `pin on ${ground}`);
   assert.ok(PINS.every(p => p.color === PIN_COLOR));
-  const right = pinAt(ANSWER, ANSWER_AT + 0.5), wrong = pinAt(0, 6);
+  const right = pinAt(ANSWER, ANSWER_AT + 0.5), wrong = pinAt(0, 7.5);
   assert.equal(right.mark, '✓'); assert.equal(wrong.mark, '✗');
   assert.ok(MARK.r >= PIN.r * 0.8, 'the mark is nearly pin-sized');
   assert.ok(distinguishable(MARK.right, MARK.wrong), 'tick and cross told apart by colour too');
-  assert.ok(pinAt(0, 5.15).pop > 1.2 && pinAt(2, 8.05).pop > 1.2 && pinAt(ANSWER, ANSWER_AT + 0.15).pop > 1.3, 'the pin pops with its mark');
+  assert.ok(pinAt(0, 7.05).pop > 1.2 && pinAt(2, 11.75).pop > 1.2 && pinAt(ANSWER, ANSWER_AT + 0.15).pop > 1.3, 'the pin pops with its mark');
   PINS.forEach((_, i) => assert.ok(pinAt(i, 0).alpha > 0.5, `pin ${i} on frame 0`));
-  for (const at of [0.3, 0.9, 1.5]) assert.ok(PINS.some((_, i) => pinAt(i, at + 0.12).pop > 1.15), `a pin pops at ${at}`);
+  for (const at of [0.4, 1.2, 2.0]) assert.ok(PINS.some((_, i) => pinAt(i, at + 0.12).pop > 1.15), `a pin pops at ${at}`);
   assert.ok(ringAt(ANSWER_AT + 0.2) > 0 && ringAt(ANSWER_AT - 0.1) === 0, 'a ring flashes out from B on the answer');
 });
 
@@ -196,7 +196,7 @@ test('boats keep their distance from the camera, so no sail fills the frame (pan
 
 test('jets (panel pass 1): as they pass, all three are in frame and apart', () => {
   let ok = 0;
-  for (const t of frames.filter(t => t >= 13.0 && t < 14.4)) {
+  for (const t of frames.filter(t => t >= 20.0 && t < 21.4)) {
     const cam = cameraAt(t), ps = jetsAt(t).map(j => project(j.pos, cam));
     const inside = ps.every(p => p.depth > 0 && p.x >= 60 && p.x <= 1020 && p.y >= BAND.top + 40 && p.y <= 1600);
     const apart = ps.every((a, i) => ps.every((b, j) => i === j || Math.hypot(a.x - b.x, a.y - b.y) >= 120));
@@ -209,14 +209,14 @@ test('sound: whooshes only on the fast glides (F15, review B5), a thud per cross
   const ws = SOUND.hits.filter(h => h.kind.startsWith('whoosh'));
   assert.deepEqual(ws.map(w => w.kind + '@' + w.t.toFixed(2)), whooshesFor(CAM.start, CAM.keys).map(w => w.kind + '@' + w.t.toFixed(2)));
   for (const k of CAM.keys) if (k.dur > 0.9) assert.ok(!ws.some(w => w.t > k.t && w.t < k.t + k.dur - 0.2), `a whoosh in the slow move at ${k.t}`);
-  assert.ok(ws.length >= 3);
+  assert.ok(ws.length >= 2, 'the punch-in on the ✓ and the jets (the slower glides have none, founder 2026-11-03)');
   for (const x of CROSSED) assert.ok(SOUND.hits.some(h => h.kind === 'whump' && Math.abs(h.t - x.at) < 0.02), `thud at ${x.at}`);
   assert.ok(SOUND.hits.some(h => h.kind === 'thunk' && Math.abs(h.t - ANSWER_AT) < 0.02));
   const taps = SOUND.hits.filter(h => h.kind === 'tap').map(h => h.t);
   for (const b of BLOCKS) assert.ok(taps.some(t => Math.abs(t - b.lands) < 0.02), `a tap as the block at ${b.x}, ${b.z} lands`);
   for (const c of crossingTimes()) assert.ok(taps.some(t => Math.abs(t - c) < 0.02), `a tap as a rank crosses at ${c.toFixed(2)}`);
   const roar = SOUND.beds.find(b => b.kind === 'roar')!;
-  assert.ok(roar && roar.t0 <= 13.0 && roar.t1 >= 14.2);
+  assert.ok(roar && roar.t0 <= 20.0 && roar.t1 >= 21.2);
   assert.ok(SOUND.hits.every(h => h.t >= 0 && h.t < DURATION));
 });
 
@@ -224,14 +224,15 @@ test('pass 2: a big ✓ bursts over the ground on the answer; labels switch when
   assert.equal(burstAt(ANSWER_AT - 0.05).alpha, 0);
   const b = burstAt(ANSWER_AT + 0.25);
   assert.ok(b.alpha > 0.9 && b.size >= 200, `the ✓ is ${b.size} px`);
-  assert.equal(burstAt(ANSWER_AT + 1.2).alpha, 0, 'it settles into the pin');
+  assert.ok(burstAt(ANSWER_AT + 1.0).size >= 150, 'the ✓ holds big for a second (founder 2026-11-03: too fast)');
+  assert.equal(burstAt(ANSWER_AT + 1.4).alpha, 0, 'it settles into the pin');
   const at = (txt: string) => PILLS.find(p => p.text.startsWith(txt))!.t0;
-  assert.ok(at('C') >= 6.25, 'C · Peacock Bay waits for the lake');
-  assert.ok(at('B · Khetarpal') >= 9.0, 'B · Khetarpal waits for the ground');
+  assert.ok(at('C') >= 9.2, 'C · Peacock Bay waits for the lake');
+  assert.ok(at('B · Khetarpal') >= 13.6, 'B · Khetarpal waits for the ground');
 });
 
 test('pass 2: sound — pins pop with a click; the ✓ is the loudest hit with a ring; no double taps; the roar fades out', () => {
-  for (const at of [0.3, 0.9, 1.5]) assert.ok(SOUND.hits.some(h => h.kind === 'click' && Math.abs(h.t - at) < 0.02), `a pop at ${at}`);
+  for (const at of [0.4, 1.2, 2.0]) assert.ok(SOUND.hits.some(h => h.kind === 'click' && Math.abs(h.t - at) < 0.02), `a pop at ${at}`);
   const thunk = SOUND.hits.find(h => h.kind === 'thunk' && Math.abs(h.t - ANSWER_AT) < 0.02)!;
   const whumps = SOUND.hits.filter(h => h.kind === 'whump');
   assert.ok(whumps.every(w => thunk.gain >= 1.6 * w.gain), 'the answer clearly louder than the ✗');
@@ -239,6 +240,24 @@ test('pass 2: sound — pins pop with a click; the ✓ is the loudest hit with a
   const taps = SOUND.hits.filter(h => h.kind === 'tap').map(h => h.t).sort((a, b) => a - b);
   for (let i = 1; i < taps.length; i++) assert.ok(taps[i] - taps[i - 1] >= 0.08 - 1e-9, `taps at ${taps[i - 1].toFixed(2)} and ${taps[i].toFixed(2)}`);
   const roar = SOUND.beds.find(b => b.kind === 'roar')!;
-  assert.ok(roar.t1 >= 15.0 && roar.level(14.9) > 0.05 && roar.level(14.9) < roar.level(14.2), 'the roar fades, not stops');
-  assert.ok(SOUND.music!(ANSWER_AT + 0.1) < 0.7 && SOUND.music!(13.9) < 0.8 && SOUND.music!(5) === 1, 'the music dips under the ✓ and the jets');
+  assert.ok(roar.t1 >= 22.0 && roar.level(21.9) > 0.05 && roar.level(21.9) < roar.level(21.2), 'the roar fades, not stops');
+  assert.ok(SOUND.music!(ANSWER_AT + 0.1) < 0.7 && SOUND.music!(20.9) < 0.8 && SOUND.music!(5) === 1, 'the music dips under the ✓ and the jets');
+});
+
+test('pacing (founder 2026-11-03, "seems fast"): a slower spin, glides you can follow, words you can read, a slower march', () => {
+  assert.ok(ORBIT_END >= 4, 'the opening turn takes at least 4 s');
+  const pops = [0.4, 1.2, 2.0];
+  for (const at of pops) assert.ok(PINS.some((_, i) => pinAt(i, at + 0.12).pop > 1.15), `a pin pops at ${at}`);
+  for (const c of CAPTIONS) assert.ok(c.t1 - c.t0 >= 1.4 - 1e-9, `"${c.text}" on screen ${(c.t1 - c.t0).toFixed(2)} s`);
+  // the glides from stop to stop (into each stop and on to the next) take at least 1.5 s
+  for (const s of STOPS) {
+    const into = CAM.keys.find(k => Math.abs(k.t + k.dur - s.settled) < 1e-9);
+    assert.ok(into && into.dur >= 1.5, `the glide into stop ${'ABC'[s.pin]} takes ${into?.dur} s`);
+  }
+  const times = crossingTimes();
+  assert.ok(times[times.length - 1] - times[0] >= 1.6, `the ranks cross over ${(times[times.length - 1] - times[0]).toFixed(2)} s`);
+  const antim = CAPTIONS.find(c => /Antim Pag/.test(c.text))!;
+  assert.ok(times.every(c => c >= antim.t0 && c <= antim.t1), 'every rank crosses under "The last step: Antim Pag."');
+  assert.ok(MARCH_GO > ANSWER_AT + 0.8, 'the course steps off after the ✓ has landed');
+  assert.ok(DURATION <= 25);
 });
