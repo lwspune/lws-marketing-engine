@@ -1,4 +1,4 @@
-# @lws.pune reel framework (v1.14, 2026-11-02)
+# @lws.pune reel framework (v1.15, 2026-11-03)
 
 How every new @lws.pune reel is made, one numbered point at a time. Same standard as @pyqvault_'s
 (`pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or dropped
@@ -69,8 +69,10 @@ numbers. · *Check:* the tool passes (`tests/topic-scores.test.js` also checks t
 
 **F2 · Vivid first.** The whole screen moves and changes: curves drawing, many strips or points at once, colour that
 follows the numbers, something new every second. · *Why:* constant motion holds people even at 60 s; still moments lose
-them (@ubilumapp, L13; our own exit at 5–7 s, L3); @pyqvault_'s 3 busiest reels were its top 3 (L30). · *Check:* the frame
-strip: something new every second, across the frame. · 🧪 L38
+them (@ubilumapp, L13; our own exit at 5–7 s, L3); @pyqvault_'s 3 busiest reels were its top 3 (L30). **New, not rushed
+(v1.15):** every caption stays on screen ≥ 1.4 s, every camera glide from place to place takes ≥ 1.5 s, and a 3D opening turn
+takes ≥ 4 s; the newness comes from things moving inside the shot, not from cutting faster. · *Check:* the frame
+strip: something new every second, across the frame; the reel's tests check the caption and glide floors. · 🧪 L38, L80
 
 **F3 · The concept shown live.** A moving picture + numbers that change with it + a graph that draws itself (a tangent
 sliding while f′ plots below; strips filling an area while the sum counts up). · *Why:* one formula + one moving picture
@@ -278,6 +280,7 @@ counting dice outcomes; cards never overlap or crop while explained; the hold �
 | Version | Date | Change | Why |
 |---|---|---|---|
 | v1.14 | 2026-11-02 | F13: music from the Pixabay shelf (`reels/music-shelf.json`, patriotic for NDA life and defence) instead of music made in code. | Founder, 2026-11-02: "you can use pixabay patriotic music for background … going forward start using pixabay music". |
+| v1.15 | 2026-11-03 | F2: a pacing floor: captions ≥ 1.4 s on screen, glides ≥ 1.5 s, a 3D opening turn ≥ 4 s. | Founder, 2026-11-03, on NDA Life #1's first cut (17.6 s, glides 0.8–1.2 s, two captions under 1 s): "seems fast". Re-cut at 24.6 s. L80. |
 | v1.13 | 2026-11-02 | F41 added: NDA life first (4 a week), then defence knowledge (2) and SSB / syllabus (1); maths reels paused, with F1, F21, F28, F32 and F33 (⏸, kept as written). F42 added: every fact sourced, our own faceless 3D. F43 added: one line back to the written exam. Ideas move to `lwspune-ideas.md`. This also sets aside L6's "keep maths as the core of the mix" for now. | Founder, 2026-11-02: "we can pause maths for now. lets focus more on nda life", after the two defence reels beat the maths reels on views, watch time and likes (One Day 2,103 at 48 h; Army ranks 1,876 in 13 h) while maths sat under ~1,950 (L74). Measured by L79. |
 | v1.12 | 2026-10-26 | F38's pass rule, as @pyqvault_ v1.32: no defect left; scores logged, not a gate; at most two passes. | Founder, after Chemistry #11's three passes (5, 5, 6 → 6, 6, 6) and critics contradicting each other. |
 | v1.11 | 2026-10-26 | F38 added: the review panel, the same point and number as @pyqvault_'s (v1.31): four critics read every new reel before it's queued (`reels/review-panel.md`). F31's storyboard review stays first. | Founder, 2026-10-26: "there should be agents to review dramatic effect, colors, motions, sound effects" (after @pyqvault_ Chemistry #11 passed every check and was still bland). Measured by L73. |
