@@ -172,18 +172,19 @@ export function PredictHeader({ t, label, lines, options, answer, at, size = 58,
 }
 
 /** A showcase header (F4 v1.17: show, don't quiz): the label, the promise, and numbered dots that count through the reel
- *  (green = being shown, ink = shown, outlined = still to come). `starts[i]` is when item i begins (its dot pulses then). */
-export function TourHeader({ t, label, lines, states, starts, size = 54 }:
-  { t: number; label: string; lines: string[]; states: ('next' | 'now' | 'done')[]; starts: number[]; size?: number }) {
+ *  (green = being shown, ink = shown, outlined = still to come). `starts[i]` is when item i begins (its dot pulses then).
+ *  `colors[i]`, if given, replaces the green for item i (NDA Life #2: each road's own colour, matching its pill). */
+export function TourHeader({ t, label, lines, states, starts, size = 54, colors }:
+  { t: number; label: string; lines: string[]; states: ('next' | 'now' | 'done')[]; starts: number[]; size?: number; colors?: string[] }) {
   const P = usePalette(), D = 62, GAP = 20, n = states.length, top = 150 + lines.length * size * 1.2 + 34, x0 = 540 - (n * D + (n - 1) * GAP) / 2;
   return <>
     <div style={{ position: 'absolute', left: 0, width: 1080, top: 96, textAlign: 'center', font: `700 34px ${SOFT_UI}`, color: P.muted, whiteSpace: 'pre' }}>{label}</div>
     {lines.map((l, i) => <div key={l} style={{ position: 'absolute', left: 0, width: 1080, top: 150 + i * size * 1.2, textAlign: 'center', ...hand(size), color: P.ink }}>{l}</div>)}
     {states.map((st, i) => {
-      const u = t - starts[i], k = st === 'now' ? 1.15 + 0.18 * Math.sin(Math.min(1, Math.max(0, u / 0.35)) * Math.PI) : 1;
+      const u = t - starts[i], k = st === 'now' ? 1.15 + 0.18 * Math.sin(Math.min(1, Math.max(0, u / 0.35)) * Math.PI) : 1, now = colors?.[i] ?? P.green;
       return <div key={i} style={{ position: 'absolute', left: x0 + i * (D + GAP), top, width: D, height: D, borderRadius: '50%', transform: `scale(${k})`,
-        background: st === 'now' ? P.green : st === 'done' ? P.ink : '#fff', border: `4px solid ${st === 'next' ? P.ink : '#fff'}`, boxSizing: 'border-box',
-        boxShadow: `${st === 'now' ? `0 0 0 4px ${P.green}, ` : ''}0 6px 16px ${tint(P.ink, 0.18)}`,
+        background: st === 'now' ? now : st === 'done' ? P.ink : '#fff', border: `4px solid ${st === 'next' ? P.ink : '#fff'}`, boxSizing: 'border-box',
+        boxShadow: `${st === 'now' ? `0 0 0 4px ${now}, ` : ''}0 6px 16px ${tint(P.ink, 0.18)}`,
         display: 'flex', alignItems: 'center', justifyContent: 'center', font: `800 30px ${SOFT_UI}`, color: st === 'next' ? P.ink : '#fff' }}>{i + 1}</div>;
     })}
   </>;
