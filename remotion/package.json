@@ -305,7 +305,11 @@
     "music:l001": "node ../reels/tools/music.mjs music/nda-life-001-campus.json public/nda-life-001-campus.wav",
     "mix:l001": "node tools/mix.ts l001 --headroom=0.5",
     "render:l001": "remotion render Life001 ../reels/nda-life-001-campus.mp4",
-    "cover:l001": "remotion still Life001Cover ../reels/nda-life-001-campus-cover.png"
+    "cover:l001": "remotion still Life001Cover ../reels/nda-life-001-campus-cover.png",
+    "music:l002": "node ../reels/tools/music.mjs music/nda-life-002-roads.json public/nda-life-002-roads.wav",
+    "mix:l002": "node tools/mix.ts l002 --headroom=0.5",
+    "render:l002": "remotion render Life002 ../reels/nda-life-002-roads.mp4",
+    "cover:l002": "remotion still Life002Cover ../reels/nda-life-002-roads-cover.png"
   },
   "dependencies": {
     "@dimforge/rapier3d-compat": "0.21.0",
