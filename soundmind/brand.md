@@ -63,7 +63,7 @@ peace" reel (45.6K likes on a 4.6K account), studied frame by frame. We rebuild 
    Name feelings and pressures, not "negative people": the conflict stays, the tone stays kind.
 3. **Close-up** on calm ME (no text), then a **second wave with a second line**.
 4. **Happy ending:** the threat leaves, ME smiles, something grows.
-5. 20–30 s, something moves every 1–2 s, text inside Instagram's safe band, calm piano made in code.
+5. 20–30 s, something moves every 1–2 s, text inside Instagram's safe band, calm music from the Pixabay shelf (framework S14 v1.9).
 
 These rules are tests (`remotion/tests/sm00N.test.ts`). Made in Remotion: shared pieces (sky, ME, plant, labels, text,
 fonts) in `remotion/src/MeStory.tsx` + `src/lib/meStory.ts`; each reel adds its metaphor in `src/SoundMind00N.tsx` with its
@@ -129,7 +129,7 @@ into each other with no hard cuts, the hook inside a dark circle on frame 0, mus
 3. **The scenes:** 4–5 painted scenes (S21), each its own drawing with layers at their own depth, 0.8 s dissolves, the
    camera always drifting; something always alive (stars, diyas, a lantern, clouds); in season.
 4. **The end** sinks dark (the last 2.5 s) while the last line stays bright, so the loop back to frame 0 is soft.
-5. Silent-first: calm piano made in code plus a few soft effects. If Shivani records the lines herself, add a voiced
+5. Silent-first: calm Pixabay shelf music (S14) plus a few soft effects. If Shivani records the lines herself, add a voiced
    version beside the silent one; never an AI voice on her account (it would pass as hers).
 
 Rules are tests (`remotion/tests/sm014.test.ts`); timeline in `src/lib/sm014.ts`, drawing in `src/SoundMind014.tsx`.
