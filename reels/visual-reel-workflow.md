@@ -199,7 +199,11 @@ they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm ru
 2. **Timeline in tests:** `src/lib/<reel>.ts` holds the timings and geometry as pure functions of t;
    `tests/<reel>.test.ts` checks them first (`npm test`). For 3D, test that every label **and every row's
    "keep in frame" object** stays inside the 3D band on every frame (`project()`), and that the key figure **faces the
-   camera** while it's being explained, answered and trapped (never edge-on).
+   camera** while it's being explained, answered and trapped (never edge-on). **Every event** (a flag runs up, a horn
+   with steam, a take-off) gets its own test over its whole window, from start to end: the object that makes it is
+   whole in frame, big enough to read (≥ ~100 px), not hidden behind a building or tree (keep that sight line clear),
+   and the camera has stopped moving before it starts (L81: in NDA Life #2 the review panel found the mist, the ship,
+   the flag and the take-off off frame or tiny, across both passes).
 3. **Caption times:** set each caption's slot in the timeline. No voiceover: @pyqvault_ dropped it in framework v1.33
    (L43: 5 voiced reels, no clear gain), so there is one silent render.
 4. **Scene:** the 3D figure in a `ThreeCanvas` band; the question card, captions, working and end card are

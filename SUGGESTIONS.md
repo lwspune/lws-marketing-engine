@@ -182,6 +182,12 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### Earlier 3D reels have no per-event in-frame tests (logged 2026-11-03; not decided)
+Learning L81 (NDA Life #2): every event gets a test over its whole window (whole in frame, ≥ ~100 px, a clear sight line,
+the camera settled first). NDA Life #1 (the jets' fly-past, the PT) and Defence #2 (the fly-over, the roll) were checked by
+the panel's two passes and the founder, so they likely pass; adding the tests to shipped reels finds out but changes nothing
+on screen unless one fails. **Needs a 360 and the founder's OK**; low value unless one of them is re-cut.
+
 ### NDA Life #1 keeps its own copy of the numbered-dots header (logged 2026-11-03; not decided)
 `board.tsx` now has a shared `TourHeader` (made for Defence #2). `Life001.tsx` still has its local copy (same look). Moving
 it onto the shared one removes the duplicate but touches a finished, scheduled reel and would need a re-render to prove
