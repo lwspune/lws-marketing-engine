@@ -182,6 +182,16 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### NDA Life #1 keeps its own copy of the numbered-dots header (logged 2026-11-03; not decided)
+`board.tsx` now has a shared `TourHeader` (made for Defence #2). `Life001.tsx` still has its local copy (same look). Moving
+it onto the shared one removes the duplicate but touches a finished, scheduled reel and would need a re-render to prove
+nothing changed. **Needs a 360 and the founder's OK**; low value until a third showcase reel uses the header.
+
+### @lws.pune's earlier reels and ideas are quizzes (logged 2026-11-03; not decided)
+Learning (F4 v1.17, founder 2026-11-03): show, don't quiz. Shipped quiz reels (Army ranks, the maths reels) stay as they
+are; `lwspune-ideas.md`'s cards still carry a "Question" column, now read as the hook. Rewording every card is cosmetic;
+do it per card as each idea is picked up.
+
 ### @pyqvault_'s open ideas were made for the old rules (logged 2026-10-28; not decided)
 Learning (framework F40, founder 2026-10-28): imitate proven reels as closely as possible. The idea list has 84 open ideas;
 many are notes or founder concepts with no proof, and remakes were scored on rules (the A/B/C guess, F4) a copied reel may
