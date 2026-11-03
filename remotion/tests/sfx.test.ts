@@ -73,8 +73,30 @@ test('the same score always renders the same sound', () => {
   assert.deepEqual(renderSfx(score), renderSfx(score));
 });
 
-test('a bed (burner roar, friction scrape, rain, dawn) sounds only while it runs and follows its level', () => {
-  for (const kind of ['roar', 'scrape', 'rain', 'dawn'] as const) {
+// NDA Life #2 (3 roads after NDA, 2026-11-03): the ship at the Naval Academy sounds its horn. A low, steady chord with
+// enough upper harmonics (up to ~1 kHz) for a phone speaker, swelling in, holding about a second, then gone.
+test('horn: a low steady chord a phone can still play, held about a second', () => {
+  const out = renderSfx({ duration: 3, hits: [{ kind: 'horn', t: 0.5, gain: 1 }], beds: [] });
+  const b = brightness(out, 0.7, 1.4);
+  assert.ok(b > 150 && b < 900, `horn should sit low: ${b.toFixed(0)} Hz`);
+  assert.ok(rms(out, 0.5, 0.55) < rms(out, 0.8, 1.0), 'horn should swell in, not start at full');
+  assert.ok(rms(out, 1.2, 1.4) > 0.5 * rms(out, 0.8, 1.0) && rms(out, 0.8, 1.0) > 0.05, 'horn should hold');
+  assert.ok(rms(out, 2.2, 3) < 1e-3, 'horn still sounding after 1.7 s');
+});
+
+// The same reel's coast: surf as a bed, a wash of low noise that swells and falls every few seconds, the room the music
+// plays in (no dip, like rain and dawn).
+test('waves: a wash that swells and falls every few seconds, and the music stays put under it', () => {
+  const score: Score = { duration: 9, hits: [], beds: [{ kind: 'waves', t0: 0, t1: 9, level: () => 1 }] };
+  const out = renderSfx(score), w = Array.from({ length: 17 }, (_, k) => rms(out, 0.3 + 0.5 * k, 0.8 + 0.5 * k));
+  assert.ok(Math.min(...w) > 0.003 && Math.max(...w) < 0.08, `waves level ${w.map(x => x.toFixed(3))}`);
+  assert.ok(Math.max(...w) > 2 * Math.min(...w), 'waves should swell and fall');
+  assert.ok(brightness(out, 0.3, 8.8) < 2500, 'waves should be a soft wash, not a hiss');
+  assert.ok(duckGain(score).every(g => g === 1), 'the music dips under the waves');
+});
+
+test('a bed (burner roar, friction scrape, rain, dawn, waves) sounds only while it runs and follows its level', () => {
+  for (const kind of ['roar', 'scrape', 'rain', 'dawn', 'waves'] as const) {
     const out = renderSfx({ duration: 4, hits: [], beds: [{ kind, t0: 1, t1: 2, level: t => (t < 1.5 ? 1 : 0) }] });
     assert.equal(rms(out, 0, 0.99), 0, `${kind} before it starts`);
     assert.ok(rms(out, 1.1, 1.4) > 0.01, `${kind} silent while on`);

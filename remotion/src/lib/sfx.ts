@@ -5,13 +5,13 @@
 import type { Key } from './motion.ts';
 
 export const SR = 48000;
-export const HIT_KINDS = ['click', 'crack', 'thunk', 'whump', 'tap', 'boom', 'whoosh-in', 'whoosh-out', 'snap', 'shimmer', 'clang'] as const;
+export const HIT_KINDS = ['click', 'crack', 'thunk', 'whump', 'tap', 'boom', 'whoosh-in', 'whoosh-out', 'snap', 'shimmer', 'clang', 'horn'] as const;
 export type HitKind = (typeof HIT_KINDS)[number];
 /** A one-off sound at time t. `pitch` scales the click / tap tone (1 = its normal pitch). */
 export type Hit = { kind: HitKind; t: number; gain: number; pitch?: number };
 /** A sound that runs from t0 to t1, as loud as level(t) (0…1): a burner's roar, a friction scrape, rain, a dawn
- *  (wind and birds). */
-export type Bed = { kind: 'roar' | 'scrape' | 'rain' | 'dawn'; t0: number; t1: number; level: (t: number) => number };
+ *  (wind and birds), waves on a beach. */
+export type Bed = { kind: 'roar' | 'scrape' | 'rain' | 'dawn' | 'waves'; t0: number; t1: number; level: (t: number) => number };
 /** `music`: an optional level curve for the music over time (1 = as made), on top of the dips under each effect: a riser
  *  into a reveal, a hole for a burst to play alone (the review panel's sound critic, F38). */
 export type Score = { duration: number; hits: Hit[]; beds: Bed[]; music?: (t: number) => number };
@@ -139,6 +139,18 @@ const HIT: Record<HitKind, (r: () => number, pitch: number) => Float32Array> = {
     }
     return out;
   },
+  // A ship's horn: a low two-note chord (a fifth, 110 and 165 Hz) with upper harmonics to ~1 kHz so a phone plays it,
+  // swelling in over 0.15 s, held, gone by 1.6 s.
+  horn(r, pitch) {
+    const out = len(1.6), lp = new Biquad().set('low', 1100, 0.7), notes = [110 * pitch, 165 * pitch];
+    for (let i = 0; i < out.length; i++) {
+      const t = i / SR, env = Math.min(1, t / 0.15) * Math.min(1, (1.6 - t) / 0.35), wob = 1 + 0.004 * Math.sin(TAU * 5 * t);
+      let v = 0;
+      for (const f of notes) for (let k = 1; k <= 8; k++) v += Math.sin(TAU * f * k * wob * t) / k;
+      out[i] = env * lp.run(0.16 * v + 0.02 * white(r));
+    }
+    return out;
+  },
   'whoosh-in': (r) => whoosh(r, 350, 3200),
   'whoosh-out': (r) => whoosh(r, 3000, 300),
 };
@@ -164,6 +176,7 @@ function bed(b: Bed, out: Float32Array, r: () => number) {
   if (b.kind === 'roar') { f1.set('low', 700, 0.7); f2.set('band', 180, 0.8); }
   if (b.kind === 'rain') { f1.set('band', 2400, 0.5); f2.set('low', 500, 0.7); f3.set('band', 6500, 0.9); }
   if (b.kind === 'dawn') f1.set('low', 400, 0.7);
+  if (b.kind === 'waves') { f1.set('low', 900, 0.7); f2.set('band', 2600, 0.6); }
   for (let i = i0; i < i1; i++) {
     const t = i / SR, target = t < b.t1 ? Math.max(0, Math.min(1, b.level(t))) : 0;
     lev += (target - lev) * k;
@@ -193,6 +206,11 @@ function bed(b: Bed, out: Float32Array, r: () => number) {
         if (chirpLen) { const u = 1 - chirpLeft / chirpLen; dropPh += (TAU * chirpF * Math.pow(chirpTo / chirpF, u)) / SR; bird = Math.sin(Math.PI * u) ** 2 * Math.sin(dropPh); }
       }
       out[i] += lev * (0.12 * gust * f1.run(brown) + 0.16 * bird);
+    } else if (b.kind === 'waves') {
+      // Surf on a beach: a low wash that swells as each wave breaks (every ~4.5 s) and falls back, a little hiss on top.
+      brown = 0.98 * brown + 0.07 * n;
+      const ph = (t / 4.5) % 1, swell = 0.15 + 0.85 * Math.sin(Math.PI * Math.min(1, ph / 0.75)) ** 2;
+      out[i] += lev * swell * (0.22 * f1.run(brown) + 0.05 * f2.run(n));
     } else {
       // Kinetic friction: gritty noise whose pitch and stick-slip grain rate rise with speed.
       f1.set('band', 500 + 900 * lev, 1.5);
@@ -234,8 +252,9 @@ const DUCK_HIT: Record<HitKind, { depth: number; hold: number }> = {
   crack: { depth: 0.35, hold: 0.3 }, thunk: { depth: 0.35, hold: 0.35 }, whump: { depth: 0.4, hold: 0.6 },
   boom: { depth: 0.4, hold: 1.2 }, 'whoosh-in': { depth: 0.25, hold: 0.55 }, 'whoosh-out': { depth: 0.2, hold: 0.55 },
   snap: { depth: 0.2, hold: 0.25 }, shimmer: { depth: 0.15, hold: 1.2 }, clang: { depth: 0.25, hold: 0.4 },
+  horn: { depth: 0.35, hold: 1.3 },
 };
-const DUCK_BED = { roar: 0.25, scrape: 0.45, rain: 0, dawn: 0 }, FLOOR = 0.5;   // rain and dawn are the room the music plays in: no dip
+const DUCK_BED = { roar: 0.25, scrape: 0.45, rain: 0, dawn: 0, waves: 0 }, FLOOR = 0.5;   // rain, dawn and waves are the room the music plays in: no dip
 
 // Under a voiceover (L43) the music drops to 0.4 (−8 dB), from just before each line until just after it.
 const VOICE_DUCK = 0.4, VOICE_LEAD = 0.12, VOICE_HOLD = 0.15;
