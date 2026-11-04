@@ -182,6 +182,12 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### Earlier @lws.pune 3D reels without the miniature look (logged 2026-11-04; waiting on the founder's before/after verdict)
+`src/miniature.tsx` (contact shadows, tilt-shift focus, glow, Neutral tone mapping; swaying trees, grass patches, a moving
+sea, cloth flags) is on trial in NDA Life #2. NDA Life #1 (campus tour) and Defence #2 (jets) are posted and keep their look.
+If the founder picks the new look, only new reels use it by default; re-rendering a posted reel changes nothing on Instagram.
+**Needs a 360 and the founder's OK**; worth it only if a posted reel is re-cut or reused (e.g. a YouTube version).
+
 ### Earlier 3D reels have no per-event in-frame tests (logged 2026-11-03; not decided)
 Learning L81 (NDA Life #2): every event gets a test over its whole window (whole in frame, ≥ ~100 px, a clear sight line,
 the camera settled first). NDA Life #1 (the jets' fly-past, the PT) and Defence #2 (the fly-over, the roll) were checked by
