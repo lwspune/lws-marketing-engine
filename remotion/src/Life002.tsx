@@ -14,11 +14,12 @@ import { WHITE as P, SOFT_UI, tint } from './lib/palette.ts';
 import { captionAt, prog } from './lib/motion.ts';
 import {
   DURATION, COVER_T, END_AT, LABEL, HEADER, ROADS, VISITS, SLAB, NDA, GATE, SEA, BEACH, RUNWAY, GRASS, PEAKS, HILLS, PILL, PILLS,
-  CAPTIONS, END_LINES, END_PANEL, COVER_CAPTION, BAND, TAG, FIG, PLANE, cameraAt, drawnAt, cadetsAt, flagAt3, FLAG, FORECOURT, forecourtAt, UNIFORM, puffAt, shipAt, planeAt, SHIP, HORN_AT, ROLL_AT,
+  CAPTIONS, END_LINES, END_PANEL, COVER_CAPTION, BAND, TAG, FIG, PLANE, cameraAt, drawnAt, cadetsAt, focusAt, flagAt3, FLAG, FORECOURT, forecourtAt, UNIFORM, puffAt, shipAt, planeAt, SHIP, HORN_AT, ROLL_AT,
   tagAt, pillAt, dotState, skyAt, WHEELS_UP, type V3,
 } from './lib/life002.ts';
 import { Board, Caption, Theme, TourHeader, useFonts } from './board.tsx';
 import { RoundBox, softEdges } from './shapes.tsx';
+import { ClothFlag, GrassField, MiniatureFinish, Sea, Tree } from './miniature.tsx';
 import { COL, rng, SudanBlock } from './sudanBlock.tsx';
 
 const C = { soil: '#7b5a3e', soilDark: '#5e432d', grass: GRASS, hill: '#6f9550', peak: '#7d8a7a', snow: '#fbfbf8', road: '#d8c9a6',
@@ -93,7 +94,7 @@ function nearRoad(x: number, z: number, r: number) {
   }));
 }
 const inBox = (x: number, z: number, cx: number, cz: number, hw: number, hd: number) => Math.abs(x - cx) < hw && Math.abs(z - cz) < hd;
-function Trees() {
+function Trees({ t }: { t: number }) {
   const trees = useMemo(() => {
     // no tree between a close camera and what it looks at (stills: one hid the Air Force column, others crowded the shots)
     const sights = [...VISITS.flatMap(v => [v.settled + 0.5, v.arrive + 1.2]), WHEELS_UP + 0.5].map(s => cameraAt(s)).map(c => [c.position, c.target]);
@@ -116,24 +117,27 @@ function Trees() {
     }
     return out;
   }, []);
-  return <>{trees.map((tr, i) => tr.pine
-    ? <mesh key={i} position={[tr.p[0], tr.s * 1.6, tr.p[2]]} castShadow receiveShadow><coneGeometry args={[tr.s, tr.s * 3.4, 8]} /><meshStandardMaterial color={tr.c} roughness={0.9} /></mesh>
-    : <group key={i} position={tr.p}>
-      <mesh position={[0, 1.6, 0]}><cylinderGeometry args={[0.35, 0.45, 3.2, 6]} /><meshStandardMaterial color={C.trunk} roughness={1} /></mesh>
-      <mesh position={[0, 3.2 + tr.s * 0.7, 0]} scale={[tr.s, tr.s * 0.9, tr.s]} castShadow receiveShadow><sphereGeometry args={[1, 12, 9]} /><meshStandardMaterial color={tr.c} roughness={0.9} /></mesh>
-    </group>)}</>;
+  return <>{trees.map((tr, i) => <Tree key={i} {...tr} seed={i} t={t} />)}</>;
 }
 /** A generic academy block: walls, rows of windows, a roof, a porch facing its road, and a mast with a plain flag in the
  *  road's colour. Not a copy of any real building. */
 function Academy({ k, t }: { k: number; t: number }) {
   const rd = ROADS[k], [w, h, d] = rd.size, wall = [C.brick, C.white, C.wall][k], roof = [COL.roof, '#3b5d8a', '#6d7682'][k];
+  const frame = ['#efe2cf', '#c3ccd8', '#c9c0ac'][k];
   const glow = prog(t, VISITS[k].arrive, 0.6);
   return <group position={rd.at}>
     <mesh position={[0, h / 2, 0]} castShadow receiveShadow><RoundBox size={[w, h, d]} radius={0.6} /><meshStandardMaterial color={wall} roughness={0.85} /></mesh>
     <mesh position={[0, h + 0.6, 0]} castShadow><RoundBox size={[w + 1.4, 1.2, d + 1.4]} radius={0.4} /><meshStandardMaterial color={roof} roughness={0.8} /></mesh>
     {[h * 0.3, h * 0.68].flatMap(y => Array.from({ length: 7 }, (_, i) => <mesh key={`${y}-${i}`} position={[-w / 2 + 2.2 + i * ((w - 4.4) / 6), y, d / 2 + 0.05]}>
       <boxGeometry args={[1.5, 1.7, 0.3]} /><meshStandardMaterial color={C.window} emissive="#ffc77a" emissiveIntensity={0.6 * glow} roughness={0.4} /></mesh>))}
+    {/* the miniature look: a plinth, framed windows, a door and steps (founder 2026-11-04: keep improving quality) */}
+    <mesh position={[0, 0.45, 0]} receiveShadow><RoundBox size={[w + 0.5, 0.9, d + 0.5]} radius={0.2} /><meshStandardMaterial color={frame} roughness={0.9} /></mesh>
+    {[h * 0.3, h * 0.68].flatMap(y => Array.from({ length: 7 }, (_, i) => <mesh key={`f${y}-${i}`} position={[-w / 2 + 2.2 + i * ((w - 4.4) / 6), y, d / 2 + 0.02]}>
+      <boxGeometry args={[2.0, 2.2, 0.2]} /><meshStandardMaterial color={frame} roughness={0.8} /></mesh>))}
     <mesh position={[0, 2.4, d / 2 + 1.4]} castShadow><RoundBox size={[6, 4.8, 2.8]} radius={0.3} /><meshStandardMaterial color={wall} roughness={0.85} /></mesh>
+    <mesh position={[0, 1.7, d / 2 + 2.82]}><boxGeometry args={[2.4, 3.2, 0.12]} /><meshStandardMaterial color="#39404c" roughness={0.6} /></mesh>
+    {[[6.4, 0.18, 1.3], [5.2, 0.5, 0.65]].map(([sw, y, dz], i) => <mesh key={`s${i}`} position={[0, y, d / 2 + 2.8 + dz]} castShadow receiveShadow>
+      <boxGeometry args={[sw, 0.36, 1.3 - 0.65 * i]} /><meshStandardMaterial color={frame} roughness={0.9} /></mesh>)}
     <mesh position={[0, 5.0, d / 2 + 1.4]}><RoundBox size={[6.8, 0.5, 3.4]} radius={0.2} /><meshStandardMaterial color={roof} roughness={0.8} /></mesh>
   </group>;
 }
@@ -142,7 +146,7 @@ function Flag({ k, t }: { k: number; t: number }) {
   const { mast, y } = flagAt3(k, t), z = FLAG.alongZ[k];
   return <group position={mast} rotation={[0, z ? -Math.PI / 2 : FLAG.sign[k] < 0 ? Math.PI : 0, 0]}>
     <mesh position={[0, FLAG.mast / 2, 0]} castShadow><cylinderGeometry args={[0.2, 0.26, FLAG.mast, 8]} /><meshStandardMaterial color="#e6e3dc" metalness={0.4} roughness={0.4} /></mesh>
-    <mesh position={[FLAG.w / 2 + 0.1, y, 0]} rotation={[0, 0.15 * Math.sin(2.4 * t + k), 0]}><boxGeometry args={[FLAG.w, FLAG.h, 0.1]} /><meshStandardMaterial color={ROADS[k].color} roughness={0.7} side={THREE.DoubleSide} /></mesh>
+    <group position={[0, y, 0]}><ClothFlag w={FLAG.w} h={FLAG.h} color={ROADS[k].color} t={t + k} /></group>
   </group>;
 }
 function Gate() {
@@ -174,10 +178,10 @@ function Diorama({ t }: { t: number }) {
   return <group>
     <mesh position={[cx, -SLAB.h / 2 - 0.05, cz]} castShadow receiveShadow><RoundBox size={[W, SLAB.h, D]} radius={4} /><meshStandardMaterial color={C.soil} roughness={1} /></mesh>
     <mesh position={[cx, -SLAB.h + 1, cz]}><RoundBox size={[W + 0.6, 2, D + 0.6]} radius={1} /><meshStandardMaterial color={C.soilDark} roughness={1} /></mesh>
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[cx, 0.02, cz]} receiveShadow><planeGeometry args={[W - 4, D - 4]} /><meshStandardMaterial color={C.grass} roughness={1} /></mesh>
+    <GrassField x0={SLAB.x0 + 2} x1={SLAB.x1 - 2} z0={SLAB.z0 + 2} z1={SLAB.z1 - 2} y={0.02} color={C.grass} />
     {/* the sea along the back, its beach; the airfield's plain on the right */}
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[cx, 0.06, (BEACH.z0 + BEACH.z1) / 2]} receiveShadow><planeGeometry args={[W - 4, BEACH.z1 - BEACH.z0 + 4]} /><meshStandardMaterial color={C.sand} roughness={1} /></mesh>
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[cx, 0.14, (SEA.z0 + 2 + SEA.z1) / 2]} receiveShadow><planeGeometry args={[W - 4, SEA.z1 - SEA.z0 - 2]} /><meshStandardMaterial color={C.sea} roughness={0.12} metalness={0.25} /></mesh>
+    <Sea x0={SLAB.x0 + 2} x1={SLAB.x1 - 2} z0={SEA.z0 + 2} z1={SEA.z1} y={0.3} color={C.sea} t={t} />
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[(RUNWAY.x - 28 + SLAB.x1 - 2) / 2, 0.05, (BEACH.z1 + SLAB.z1 - 2) / 2]} receiveShadow>
       <planeGeometry args={[SLAB.x1 - 2 - (RUNWAY.x - 28), SLAB.z1 - 2 - BEACH.z1]} /><meshStandardMaterial color={C.plain} roughness={1} /></mesh>
     {roads.map((g, i) => <mesh key={i} geometry={g} position={[0, 0.2, 0]} receiveShadow><meshStandardMaterial color={C.road} roughness={1} /></mesh>)}
@@ -187,7 +191,7 @@ function Diorama({ t }: { t: number }) {
     })}
     {PEAKS.map((p, i) => <Mound key={`p${i}`} {...p} color={C.peak} snow={0.35} />)}
     {HILLS.map((h, i) => <Mound key={`h${i}`} {...h} color={C.hill} />)}
-    <Trees />
+    <Trees t={t} />
     <Runway t={t} />
     <group position={[NDA.x, 0, NDA.z]} rotation={[0, Math.PI, 0]} scale={NDA.scale}><SudanBlock glow={0.15} /></group>
     <Gate />
@@ -217,6 +221,8 @@ function Ship({ t }: { t: number }) {
 }
 /** A small prop trainer: white with a red stripe, a dark canopy, a spinning propeller disc. */
 function Plane({ t }: { t: number }) {
+  // gone once the end card is up: by then it is a blurred speck off the model's edge (miniature look, 2026-11-04)
+  if (t >= END_AT) return null;
   const p = planeAt(t), L = PLANE.len, span = PLANE.span;
   return <group position={[p.pos[0], p.pos[1] + 1.6, p.pos[2]]} rotation={[p.pitch, Math.PI, 0]}>
     <mesh rotation={[Math.PI / 2, 0, 0]} castShadow><capsuleGeometry args={[0.9, L - 2, 6, 12]} /><meshStandardMaterial color={C.plane} roughness={0.4} /></mesh>
@@ -239,7 +245,10 @@ function Cadets({ t }: { t: number }) {
     return { torso: mk(new THREE.CapsuleGeometry(0.42 * FIG, 0.75 * FIG, 4, 10), C.navy), legs: mk(new THREE.CapsuleGeometry(0.17 * FIG, 0.8 * FIG, 4, 8), C.navy, 2 * max),
       arms: mk(new THREE.CapsuleGeometry(0.13 * FIG, 0.7 * FIG, 4, 8), C.navy, 2 * max),
       belt: mk(new THREE.CylinderGeometry(0.47 * FIG, 0.47 * FIG, 0.28 * FIG, 12), C.belt), head: mk(new THREE.SphereGeometry(0.3 * FIG, 10, 8), C.skin),
-      cap: mk(new THREE.CylinderGeometry(0.37 * FIG, 0.37 * FIG, 0.27 * FIG, 10), '#ffffff') };
+      cap: mk(new THREE.CylinderGeometry(0.37 * FIG, 0.37 * FIG, 0.27 * FIG, 10), '#ffffff'),
+      // the miniature look: a cap brim, hands, boots (founder 2026-11-04)
+      brim: mk(new THREE.CylinderGeometry(0.44 * FIG, 0.44 * FIG, 0.05 * FIG, 14), '#1a2133'), hands: mk(new THREE.SphereGeometry(0.12 * FIG, 8, 6), C.skin, 2 * max),
+      boots: mk(new THREE.BoxGeometry(0.3 * FIG, 0.2 * FIG, 0.44 * FIG), '#14171e', 2 * max) };
   }, []);
   // each column's caps in its road's colour: a colour code, not a uniform (panel pass 1: all navy read as the Navy)
   useMemo(() => { const c = new THREE.Color(); for (let i = 0; i < max; i++) parts.cap.setColorAt(i, c.set(ROADS[Math.floor(i / 9)].color)); parts.cap.instanceColor!.needsUpdate = true; }, [parts]);
@@ -255,10 +264,12 @@ function Cadets({ t }: { t: number }) {
     [-1, 1].forEach((side, k) => { const a = 0.45 * side * f.step; put(parts.legs, 2 * i + k, f, side * 0.2 * FIG, hip - 0.5 * FIG * Math.cos(a), 0.5 * FIG * Math.sin(a), a); });
     [-1, 1].forEach((side, k) => { const L = 0.45 * FIG, b = -0.5 * side * f.step; put(parts.arms, 2 * i + k, f, side * 0.58 * FIG, hip + 1.0 * FIG - L * Math.cos(b), L * Math.sin(b), b); });
     put(parts.torso, i, f, 0, hip + 0.55 * FIG, 0); put(parts.belt, i, f, 0, hip + 0.2 * FIG, 0);
-    put(parts.head, i, f, 0, hip + 1.38 * FIG, 0); put(parts.cap, i, f, 0, hip + 1.66 * FIG, 0);
+    put(parts.head, i, f, 0, hip + 1.38 * FIG, 0); put(parts.cap, i, f, 0, hip + 1.66 * FIG, 0); put(parts.brim, i, f, 0, hip + 1.54 * FIG, 0);
+    [-1, 1].forEach((side, k) => { const a = 0.45 * side * f.step; put(parts.boots, 2 * i + k, f, side * 0.2 * FIG, hip - 1.02 * FIG * Math.cos(a), 0.08 * FIG - 0.07 * FIG * Math.sin(a)); });
+    [-1, 1].forEach((side, k) => { const b = -0.5 * side * f.step; put(parts.hands, 2 * i + k, f, side * 0.58 * FIG, hip + 1.0 * FIG - 0.95 * FIG * Math.cos(b), -0.03 * FIG * Math.sin(b)); });
   });
-  for (const m of [parts.torso, parts.belt, parts.head, parts.cap]) { m.count = fs.length; m.instanceMatrix.needsUpdate = true; }
-  for (const m of [parts.legs, parts.arms]) { m.count = 2 * fs.length; m.instanceMatrix.needsUpdate = true; }
+  for (const m of [parts.torso, parts.belt, parts.head, parts.cap, parts.brim]) { m.count = fs.length; m.instanceMatrix.needsUpdate = true; }
+  for (const m of [parts.legs, parts.arms, parts.hands, parts.boots]) { m.count = 2 * fs.length; m.instanceMatrix.needsUpdate = true; }
   return <>{Object.values(parts).map((m, i) => <primitive key={i} object={m} />)}</>;
 }
 
@@ -283,6 +294,7 @@ function Scene({ t }: { t: number }) {
     <Ship t={t} />
     <Plane t={t} />
     <Cadets t={t} />
+    <MiniatureFinish {...focusAt(t)} />
   </>;
 }
 
@@ -323,13 +335,6 @@ function EndPanel({ t }: { t: number }) {
     })}
   </>;
 }
-/** Tilt-shift: the top and bottom of the picture soften, so the diorama reads as a model on a table. */
-function TiltShift() {
-  const band = (top: number, dir: 'to bottom' | 'to top') => <div style={{ position: 'absolute', left: 0, top, width: BAND.width, height: 200, backdropFilter: 'blur(5px)',
-    WebkitMaskImage: `linear-gradient(${dir}, #000, transparent)`, maskImage: `linear-gradient(${dir}, #000, transparent)` }} />;
-  return <>{band(BAND.top, 'to bottom')}{band(BAND.top + BAND.height - 200, 'to top')}</>;
-}
-
 export function Life002({ cover = false }: { cover?: boolean }) {
   useFonts();
   const frame = useCurrentFrame(), { fps } = useVideoConfig();
@@ -341,11 +346,10 @@ export function Life002({ cover = false }: { cover?: boolean }) {
         {!cover && <TourHeader t={t} label={LABEL} lines={HEADER} states={ROADS.map((_, i) => dotState(i, t))} starts={PILLS.map(p => p.t0)} colors={ROADS.map(r => r.color)} />}
         <div style={{ position: 'absolute', left: 0, top: BAND.top, width: BAND.width, height: BAND.height, ...softEdges({ top: 0.1, bottom: 0.1 }) }}>
           {sky > 0 && <div style={{ position: 'absolute', inset: 0, opacity: sky, background: 'linear-gradient(to bottom, #4f8fd0, #a9cdee 65%, #d9e9f6)' }} />}
-          <ThreeCanvas width={BAND.width} height={BAND.height} shadows gl={{ antialias: true, alpha: true }}>
+          <ThreeCanvas width={BAND.width} height={BAND.height} shadows gl={{ antialias: true, alpha: true, premultipliedAlpha: false }}>
             <Scene t={t} />
           </ThreeCanvas>
         </div>
-        <TiltShift />
         <Tags t={t} />
         {!cover && <Pill t={t} />}
         {cover

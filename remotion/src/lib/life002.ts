@@ -225,6 +225,11 @@ export function project(p: V3, cam: Camera) {
 
 /** A blue sky behind the picture only while the camera is low enough to see past the diorama's edge (the peaks, the
  *  take-off): a white plane and snow on the cream board would read as cut-outs (Defence #2's panel). */
+/** The miniature look's focus (src/miniature.tsx): the band runs through what the camera looks at. */
+export function focusAt(t: number) {
+  const c = cameraAt(t), p = project(c.target, c);
+  return { focusY: 1 - (p.y - BAND.top) / BAND.height, distance: Math.hypot(...(c.position.map((v, i) => v - c.target[i]) as V3)) };
+}
 export const skyAt = (t: number) => { const el = tween(t, CAM.start, CAM.keys)[4]; return Math.min(1, Math.max(0, (18 - el) / 4)); };
 
 // ---- tags over the academies in the opening ---------------------------------------------------------------------------
