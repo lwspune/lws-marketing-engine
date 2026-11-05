@@ -1,4 +1,4 @@
-# @lws.pune reel framework (v1.17, 2026-11-03)
+# @lws.pune reel framework (v1.18, 2026-11-05)
 
 How every new @lws.pune reel is made, one numbered point at a time. Same standard as @pyqvault_'s
 (`pyqvault-framework.md`, founder 2026-10-20): **every point has a reason**, and **no point is added, changed or dropped
@@ -52,6 +52,14 @@ for every fact before the review (F31). · 📌 founder
 that leads to the written exam ("It starts with the written exam: maths is 300 of 900 marks"), never a sales pitch on
 screen. · *Why:* reach that never meets the exam brings followers, not leads; the reels are here to fill the Leads page.
 · *Check:* the line is in the caption kit. · 🧪 L79 (leads and DMs in the week after each reel)
+
+**F44 · The miniature look.** Every 3D diorama reel uses the shared kit `remotion/src/miniature.tsx`: contact shadows, a
+tilt-shift focus band through the subject, a glow on lit things, Khronos Neutral tone mapping, and living scenery (swaying
+trees, grass patches, a moving sea, cloth flags), with detailed pieces (framed windows, doors, steps; cadets with brims,
+hands and boots). How to use it: `visual-reel-workflow.md` → Miniature look. · *Why:* the founder, 2026-11-04: "we need
+to keep improving the quality of reels"; NDA Life #2 made both ways, and on 2026-11-05 the founder chose the new look.
+Plain flat colours, frozen scenery and pasted-on objects read as cheap toys. · *Check:* the reel imports `MiniatureFinish`
+and the kit's pieces; stills show no black board, no white halo and road or accent colours as vivid as before. · 📌
 
 **F1 · NDA maths concepts first, from proven ideas.** ⏸ paused 2026-11-02 (F41). The reel explains one NDA maths idea; a real NDA PYQ is named in the
 caption when one fits, but a good concept isn't blocked for lack of one. Ideas come from the @lws.pune list in
@@ -286,6 +294,7 @@ counting dice outcomes; cards never overlap or crop while explained; the hold �
 
 | Version | Date | Change | Why |
 |---|---|---|---|
+| v1.18 | 2026-11-05 | F44 added: the miniature look (`remotion/src/miniature.tsx`) on every 3D diorama reel. | Founder, 2026-11-04: "we need to keep improving the quality of reels"; on 2026-11-05 chose NDA Life #2's new look over the old one (before/after pair). |
 | v1.14 | 2026-11-02 | F13: music from the Pixabay shelf (`reels/music-shelf.json`, patriotic for NDA life and defence) instead of music made in code. | Founder, 2026-11-02: "you can use pixabay patriotic music for background … going forward start using pixabay music". |
 | v1.15 | 2026-11-03 | F2: a pacing floor: captions ≥ 1.4 s on screen, glides ≥ 1.5 s, a 3D opening turn ≥ 4 s. | Founder, 2026-11-03, on NDA Life #1's first cut (17.6 s, glides 0.8–1.2 s, two captions under 1 s): "seems fast". Re-cut at 24.6 s. L80. |
 | v1.17 | 2026-11-03 | F4: show, don't quiz: NDA life, defence and SSB reels are showcases with a promise and a count on frame 0, no A/B/C or ✗/✓; the old predict-first rule kept for maths reels. | Founder, 2026-11-03, on Defence #2 built as "Which one is the Rafale?": "Why are we making it as a quiz question. It can be as a different fighter jets of Indian Air Force edutainment reel. We need to move out of quiz mindset". |

@@ -234,7 +234,7 @@ they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm ru
    ~290 px at 34 px (about 18 Cambria characters) is cut off at its edge on the full map: give that node a smaller `size`
    (017's Bayes card: 31) or split the line. Check the full-map frame at full size, not only the stills sheet.
 
-### Miniature look for @lws.pune dioramas (2026-11-04, on trial: the founder judges NDA Life #2 before vs after)
+### Miniature look for @lws.pune dioramas (founder-approved 2026-11-05, framework F44)
 Founder: "we need to keep improving the quality of reels." `src/miniature.tsx` (rules in `src/lib/miniature.ts`, tested):
 - **`<MiniatureFinish {...focusAt(t)} />`** inside the `ThreeCanvas`: contact shadows (N8AO), a tilt-shift focus band through
   what the camera looks at (stronger when wide, gentle when close), a glow on lit things, Khronos Neutral tone mapping (ACES

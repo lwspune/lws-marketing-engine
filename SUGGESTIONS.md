@@ -182,7 +182,7 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
-### Earlier @lws.pune 3D reels without the miniature look (logged 2026-11-04; waiting on the founder's before/after verdict)
+### Earlier @lws.pune 3D reels without the miniature look (logged 2026-11-04; founder chose the new look 2026-11-05; posted reels not decided)
 `src/miniature.tsx` (contact shadows, tilt-shift focus, glow, Neutral tone mapping; swaying trees, grass patches, a moving
 sea, cloth flags) is on trial in NDA Life #2. NDA Life #1 (campus tour) and Defence #2 (jets) are posted and keep their look.
 If the founder picks the new look, only new reels use it by default; re-rendering a posted reel changes nothing on Instagram.
