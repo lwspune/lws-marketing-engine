@@ -219,6 +219,10 @@
     "mix:d001": "node tools/mix.ts d001",
     "render:d001": "remotion render Defence001 ../reels/nda-defence-001-army-ranks.mp4",
     "cover:d001": "remotion still Defence001Cover ../reels/nda-defence-001-army-ranks-cover.png",
+    "music:d002": "node ../reels/tools/music.mjs music/nda-defence-002-jets.json public/nda-defence-002-jets.wav",
+    "mix:d002": "node tools/mix.ts d002 --headroom=0.5",
+    "render:d002": "remotion render Defence002 ../reels/nda-defence-002-jets.mp4",
+    "cover:d002": "remotion still Defence002Cover ../reels/nda-defence-002-jets-cover.png",
     "music:018": "node ../reels/tools/music.mjs music/nda-maths-018-secant-tangent.json public/nda-maths-018-secant-tangent.wav",
     "mix:018": "node tools/mix.ts 018",
     "render:018": "remotion render Reel018 ../reels/nda-maths-018-secant-tangent.mp4",
@@ -297,7 +301,15 @@
     "music:s001": "node ../reels/tools/music.mjs music/nda-story-001-one-day.json public/nda-story-001-one-day.wav",
     "mix:s001": "node tools/mix.ts s001",
     "render:s001": "remotion render Story001 ../reels/nda-story-001-one-day.mp4",
-    "cover:s001": "remotion still Story001Cover ../reels/nda-story-001-one-day-cover.png"
+    "cover:s001": "remotion still Story001Cover ../reels/nda-story-001-one-day-cover.png",
+    "music:l001": "node ../reels/tools/music.mjs music/nda-life-001-campus.json public/nda-life-001-campus.wav",
+    "mix:l001": "node tools/mix.ts l001 --headroom=0.5",
+    "render:l001": "remotion render Life001 ../reels/nda-life-001-campus.mp4",
+    "cover:l001": "remotion still Life001Cover ../reels/nda-life-001-campus-cover.png",
+    "music:l002": "node ../reels/tools/music.mjs music/nda-life-002-roads.json public/nda-life-002-roads.wav",
+    "mix:l002": "node tools/mix.ts l002 --headroom=0.5",
+    "render:l002": "remotion render Life002 ../reels/nda-life-002-roads.mp4",
+    "cover:l002": "remotion still Life002Cover ../reels/nda-life-002-roads-cover.png"
   },
   "dependencies": {
     "@dimforge/rapier3d-compat": "0.21.0",

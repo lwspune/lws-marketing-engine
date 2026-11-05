@@ -182,6 +182,28 @@ skill point to the framework; the one-question rule is unchanged. First reel mad
 
 ## Backfill ledger
 
+### Earlier @lws.pune 3D reels without the miniature look (logged 2026-11-04; founder chose the new look 2026-11-05; posted reels not decided)
+`src/miniature.tsx` (contact shadows, tilt-shift focus, glow, Neutral tone mapping; swaying trees, grass patches, a moving
+sea, cloth flags) is on trial in NDA Life #2. NDA Life #1 (campus tour) and Defence #2 (jets) are posted and keep their look.
+If the founder picks the new look, only new reels use it by default; re-rendering a posted reel changes nothing on Instagram.
+**Needs a 360 and the founder's OK**; worth it only if a posted reel is re-cut or reused (e.g. a YouTube version).
+
+### Earlier 3D reels have no per-event in-frame tests (logged 2026-11-03; not decided)
+Learning L81 (NDA Life #2): every event gets a test over its whole window (whole in frame, ≥ ~100 px, a clear sight line,
+the camera settled first). NDA Life #1 (the jets' fly-past, the PT) and Defence #2 (the fly-over, the roll) were checked by
+the panel's two passes and the founder, so they likely pass; adding the tests to shipped reels finds out but changes nothing
+on screen unless one fails. **Needs a 360 and the founder's OK**; low value unless one of them is re-cut.
+
+### NDA Life #1 keeps its own copy of the numbered-dots header (logged 2026-11-03; not decided)
+`board.tsx` now has a shared `TourHeader` (made for Defence #2). `Life001.tsx` still has its local copy (same look). Moving
+it onto the shared one removes the duplicate but touches a finished, scheduled reel and would need a re-render to prove
+nothing changed. **Needs a 360 and the founder's OK**; low value until a third showcase reel uses the header.
+
+### @lws.pune's earlier reels and ideas are quizzes (logged 2026-11-03; not decided)
+Learning (F4 v1.17, founder 2026-11-03): show, don't quiz. Shipped quiz reels (Army ranks, the maths reels) stay as they
+are; `lwspune-ideas.md`'s cards still carry a "Question" column, now read as the hook. Rewording every card is cosmetic;
+do it per card as each idea is picked up.
+
 ### @pyqvault_'s open ideas were made for the old rules (logged 2026-10-28; not decided)
 Learning (framework F40, founder 2026-10-28): imitate proven reels as closely as possible. The idea list has 84 open ideas;
 many are notes or founder concepts with no proof, and remakes were scored on rules (the A/B/C guess, F4) a copied reel may

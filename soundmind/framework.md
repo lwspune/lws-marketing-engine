@@ -1,4 +1,4 @@
-# @soundmindwithshivani post framework (v1.8, 2026-10-27)
+# @soundmindwithshivani post framework (v1.9, 2026-11-03)
 
 How every Sound Mind post is made, one numbered point at a time, in three parts: **both formats**, **carousels** and
 **reels**. Carousels and reels do different jobs (founder, 2026-10-21: "different fundamentally"): a carousel mostly
@@ -134,8 +134,11 @@ bloom; text in the green-grey ink, WCAG AA on every background. · *Why:* the fo
 (2026-10-20: "flat 2D only") and asked for more vibrant colours. · *Check:* `remotion/tests/smPalette.test.ts`. · 📌
 founder; vivid vs muted measured by L54
 
-**S14 · Calm piano, made in code.** · *Why:* no licence risk, and the mood is calm, not energetic. · *Check:*
-`remotion/music/sm00N.json`. · 📌 house standard
+**S14 · Calm music from the Pixabay shelf (since 2026-11-03).** A calm licensed track from `reels/music-shelf.json`
+(`soothing-*`, `emotional-piano*`, `motivational-classical`; `{ "music": { "track": "<id>", "from": s } }`), never the
+same track twice in a row. · *Why:* the founder, 2026-11-03: Pixabay music on every account; the mood stays calm, not
+energetic. · *Check:* `remotion/music/sm00N.json` names a shelf track. · 📌 founder. *The rule it replaces, kept for the
+record:* Calm piano, made in code (no licence risk).
 
 **S15 · Made in Remotion, tested.** Shared pieces in `remotion/src/MeStory.tsx`, each reel's timeline in
 `src/lib/sm00N.ts`, tests first. · *Why:* frame-exact video (the founder judged Remotion "far better", 2026-10-18), and
@@ -224,6 +227,7 @@ breath matching its words, painted palette, AA, no health claims). · 🧪 L76
 | v1 | 2026-10-21 | Framework created from `brand.md`'s rules (S1–S15), each with a reason, a check and a status; "winning" set to shares per 1,000 reached at 7 days. Lessons L52–L55 measure the four points on test. | Founder: a framework like @pyqvault_'s, for Sound Mind. Nothing in it is new: it numbers what Sound Mind already does, so changes from here on have a trail. |
 | v1.1 | 2026-10-21 | S6: never "comment KEYWORD" on a post meant to spread. S16 added: captions of a few lines, opening on "you" (replaces the one-line caption); on test, L56. | Founder chose both from run 2 of the element analysis (`reels/analysis-framework.md`): keyword asks went with ordinary posts in 3 accounts; long captions with hits in 5, a "you" first line in 3. Week 43's posts keep their one-line captions and are L56's comparison (SUGGESTIONS.md → Backfill ledger). |
 | v1.8 | 2026-10-27 | S23 added: racing-mind reels, a fourth kind of reel (thoughts pile up over a quickening pulse, a hard cut to silence, a calm second part with one slow breath). On test, L76; first: sm-r015 "the 1 a.m. thoughts". | Founder, after the study of a "racing thoughts" reel: "this one too". |
+| v1.9 | 2026-11-03 | S14: calm music from the Pixabay shelf (`reels/music-shelf.json`) instead of piano made in code. | Founder, 2026-11-03: Pixabay music on @pyqvault_ and Sound Mind too ("both ok"), after @lws.pune moved to it. |
 | v1.7 | 2026-10-27 | S22 added: reminder reels, a third kind of reel (one short line at a time over drifting painted scenes, 25–32 s, ending dark). On test, L75; first: sm-r014 "a reminder under the stars" (Diwali night, in season). | Founder, after the study of a "let me remind you" reel: "analyse and create similar reel for soundmind"; silent-first (AI voice declined: it would pass as Shivani's). |
 | v1.6 | 2026-10-24 | S20: a pause reel's scene is in season (rain only June–September); sm-r013 "window seat" is the first indoor one, and its test refuses a rain bed. | Founder, 2026-10-24: "since it is not monsoon, we need to have different setup like chai in cozy room besides window with book in hand". |
 | v1.5 | 2026-10-24 | S21 added: Painted 2D, the look of every new reel (no black outlines, light and shadow sides, mood light, reflections, depth and soft focus); checked by `paint.ts`. S18's vivid palette still sets the colours of ME reels. L67 measures painted vs flat. | Founder, comparing pause reel #2 (painted) with #1 (flat, outlined): "this looks much better ... lets save it". |

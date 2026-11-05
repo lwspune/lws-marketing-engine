@@ -199,7 +199,11 @@ they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm ru
 2. **Timeline in tests:** `src/lib/<reel>.ts` holds the timings and geometry as pure functions of t;
    `tests/<reel>.test.ts` checks them first (`npm test`). For 3D, test that every label **and every row's
    "keep in frame" object** stays inside the 3D band on every frame (`project()`), and that the key figure **faces the
-   camera** while it's being explained, answered and trapped (never edge-on).
+   camera** while it's being explained, answered and trapped (never edge-on). **Every event** (a flag runs up, a horn
+   with steam, a take-off) gets its own test over its whole window, from start to end: the object that makes it is
+   whole in frame, big enough to read (≥ ~100 px), not hidden behind a building or tree (keep that sight line clear),
+   and the camera has stopped moving before it starts (L81: in NDA Life #2 the review panel found the mist, the ship,
+   the flag and the take-off off frame or tiny, across both passes).
 3. **Caption times:** set each caption's slot in the timeline. No voiceover: @pyqvault_ dropped it in framework v1.33
    (L43: 5 voiced reels, no clear gain), so there is one silent render.
 4. **Scene:** the 3D figure in a `ThreeCanvas` band; the question card, captions, working and end card are
@@ -229,6 +233,16 @@ they start (`remotion/tools/tempDir.ts`, wired in `remotion.config.ts`); `npm ru
 8. **Map reels (F28):** start from `Reel017.tsx` + `src/lib/reel017.ts`. A card is 330 px wide, so a formula line over
    ~290 px at 34 px (about 18 Cambria characters) is cut off at its edge on the full map: give that node a smaller `size`
    (017's Bayes card: 31) or split the line. Check the full-map frame at full size, not only the stills sheet.
+
+### Miniature look for @lws.pune dioramas (founder-approved 2026-11-05, framework F44)
+Founder: "we need to keep improving the quality of reels." `src/miniature.tsx` (rules in `src/lib/miniature.ts`, tested):
+- **`<MiniatureFinish {...focusAt(t)} />`** inside the `ThreeCanvas`: contact shadows (N8AO), a tilt-shift focus band through
+  what the camera looks at (stronger when wide, gentle when close), a glow on lit things, Khronos Neutral tone mapping (ACES
+  washed out the roads' colours). The canvas needs `gl={{ antialias: true, alpha: true, premultipliedAlpha: false }}`, or
+  blurred edges get a white halo. Don't use the depth-of-field effect: it drops the canvas's transparency (the board goes black).
+- **`<Tree>`** (round trees as three clumps, pines as three cones, swaying), **`<GrassField>`** (soft colour patches),
+  **`<Sea>`** (a moving swell), **`<ClothFlag>`** (rippling cloth): use them instead of plain cones, spheres and planes.
+- Anything far off the model gets blurred into a smudge: hide it once it has left (the trainer on NDA Life #2's end card).
 
 ### Reel toolkit (2026-10-20, founder-approved): reach for these before hand-rolling
 

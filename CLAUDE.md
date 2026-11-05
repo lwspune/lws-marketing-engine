@@ -194,6 +194,12 @@ Human gate sits between drafting and publishing. Enforcement point for the no-sl
   default. Another creator's audio (their voice, their song) is never put in our file: that goes on in the Instagram app
   ("Use audio"), posted by hand from the phone (GoPost's Download button).
 
+- **@lws.pune reels: NDA life first, maths paused (2026-11-02, founder).** After the two defence reels beat every maths
+  reel on views, watch time and likes (One Day 2,103 at 48 h; Army ranks 1,876 in 13 h; maths stuck under ~1,950, L74),
+  the founder paused maths reels: each week 4 NDA life (the academy as cadets live it), 2 defence knowledge, 1 SSB /
+  syllabus, every fact sourced, our own faceless 3D, one line back to the written exam (framework F41–F43, lesson L79;
+  ideas in `reels/lwspune-ideas.md`). The daily NDA maths question stories carry on.
+
 ## File structure
 
 ```
@@ -226,6 +232,7 @@ reels/                   # ready-to-post reels/posts: MP4/PNG + caption kit per 
   pyqvault-ideas.md      #   @pyqvault_ IDEA LIST (founder 2026-10-21): every future reel comes from here. The test (F29 no
                          #   words, Views ≥ 100k: proven only…), the score (weights × points /100, frozen since v1.33), Ideas table, one
                          #   card per open idea (frame 0, beats without words), Hook queue, Concept sweep, Archive
+  lwspune-ideas.md       #   @lws.pune IDEA LIST since 2026-11-02 (F41): NDA life, defence, SSB; week plan + one row per idea
   remake-backlog.md      #   @lws.pune ideas (score /10) + the remake rules; @pyqvault_ moved to pyqvault-ideas.md
   tools/topic-scores.js  #   next topic by score, per handle (framework F21); `node reels/tools/topic-scores.js
                          #   [pyqvault|lwspune]`; `pyqvault --calibrate` = the weight tuning (48 h results from

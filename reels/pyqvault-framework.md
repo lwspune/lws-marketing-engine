@@ -1,4 +1,4 @@
-# @pyqvault_ reel framework (v1.37, 2026-10-31)
+# @pyqvault_ reel framework (v1.38, 2026-11-03)
 
 How every @pyqvault_ reel is made, one numbered point at a time. The founder's standard (2026-10-20): **every point has a
 reason**, and **no point is added, changed or dropped without one**. We keep tuning it with real numbers until it wins.
@@ -228,7 +228,13 @@ judged Remotion "far better". · *Check:* rendered by `npm run render:<reel>`. �
 
 ## Sound
 
-**F13 · Music made in code, picked by mood.** Any style in `music/` that fits the reel's mood (simulations and motion →
+**F13 · Music from the Pixabay shelf, picked by mood (since 2026-11-03).** A licensed track from `reels/music-shelf.json`
+(`{ "music": { "track": "<id>", "from": s } }`), not music made in code: simulations and motion → `upbeat-*`; build-up
+reveals → `epic-*`; dark or dramatic → `suspense-*`; calm → `lofi-*`; never the same track twice in a row. No voice: reels
+are silent apart from music and effects (v1.33). · *Why:* the founder, 2026-11-03: Pixabay music on every account, as on
+@lws.pune ("going forward start using pixabay music"). The style itself made no difference (L34). · *Check:*
+`music/<reel>.json` names a shelf track. · 📌 founder. *The rule it replaces, kept for the record:* Music made in code,
+picked by mood. Any style in `music/` that fits the reel's mood (simulations and motion →
 `drive` or `synthwave`; build-up reveals → `cinematic`; dark or dramatic → `trap`; calm → `lofi`), with 1–3
 `music.hits` on the picture's big beats. No voice: reels are silent apart from music and effects (v1.33). · *Why:* no
 licence risk, and a hit on the big beat makes it land; Claude picks, the founder judges the finished reel. The style
@@ -339,3 +345,4 @@ frame; its contrast); the stills sheet. · 🧪 L51
 | v1.35 | 2026-10-28 | **F40 imitate a proven reel** added (🧪 L77): copy a ≥ 3× reel's topic, picture, hook, shot order, timing and length; keep our brand (studio look, our words, series + tag, music made in code, silent-first, real result, loop, V mascot); the source wins over F2–F5, F9, F18, F25, F29, F35, F37, F39 where it decides. F1: proven reels first. F19: maths back, P → C → M; NDA maths and defence stay on @lws.pune. F21, F28: maths added. `hook-rotation.js`: `Copied` hook and opening. First: M10, @learnara.math's chain rule as gears (86k, 7.1×). | Founder: "defence related reels will go to lwspune. maths, physics, chem will go to pyqvault. for pyqvault we will imitate top performing reels (let's not reinvent wheel)", "as closely as possible while maintaining our unique brand identity". 27 framework reels sit at ~1,300–1,600 views whatever the rules (L64). |
 | v1.36 | 2026-10-30 | **Proven ideas only, ≥ 100k views** (founder): F1 rewritten (no more notes or founder concepts; their rows stay parked), F40's source bar from "≥ 3× its account's typical reel" to **≥ 100k views**, the multiple now only ranks. **Dropped:** F28 (it only screened notes and founder concepts), F37 the aftershock and its check (L72), F38 the review panel (L73: on @pyqvault_ only; @lws.pune keeps it), F39 made to send (L64: it can no longer pass). **F35/F36** studio look: from 🧪 to 📌 house look (L71: no gain measured, no extra cost). The winning bar updated to the 48 h median. Still on notice: F4, F21, F25, decided once F40's first 3 copies are read (L77). Next candidates: F21 and F25, which F40's copied topic and hook now override. New lesson L78: one reel a day cut daily views by ~2/3 with no gain per reel. | 30 Oct review, 22 framework reels at 48 h (median 1,465 views · 8.9 s): studio 1,556 · 8.9 s vs 1,453 · 8.8 s (+7%, all from the ice reel); F37/F38 reels 1,454 · 9.0 s vs 1,475 · 8.8 s; Shock openings 1,377 · 7.8 s vs 1,475 · 9.0 s; F39 shares per 1,000 reach 0.8, 2.7 and 0 at 29 h (bar ≥ 5 on 2 of 3). The first posted copy (Maths #4 trig lines) at 5 h: 14.3 s watched (record), 14 saves, 6 shares. Founder: "we should make reels only on proven ideas and should have 100k as min criteria". |
 | v1.37 | 2026-10-31 | F40's **How**: the idea's card is checked against the study copy before building, and Claude saves the study copy through snapinsta.to. **One-off exception to F21's no-repeat rule**: P7 (Physics #17, forces on a slope) repeats Physics #4's topic. | P7's card ("tilt the rope", a drone towing a box) was written from the caption; the reel is a crate on a slope with four force characters, and P76's card was wrong the same way. Meta's API gave the video for 1 of 6 sources. Founder: "download using snapinsta"; the repeat: the proof (1.45M, 83×) outweighs the rule. |
+| v1.38 | 2026-11-03 | F13: music from the Pixabay shelf (`reels/music-shelf.json`), picked by mood, instead of music made in code. | Founder, 2026-11-03: Pixabay music on @pyqvault_ and Sound Mind too ("both ok"), after @lws.pune moved to it (F13 v1.14 there). |

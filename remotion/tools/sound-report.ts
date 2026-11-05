@@ -16,7 +16,8 @@ const mix = mono(`${file}-mix.wav`), fx = renderSfx(SOUND);
 // The raw music file would mislead: a swell the curve takes out still shows in it (Chemistry #11, the sound critic's pass 2).
 const music = mix.map((v, i) => v - (fx[i] ?? 0));
 const spec = `music/${basename(file)}.json`;
-const cues = existsSync(spec) ? (JSON.parse(readFileSync(spec, 'utf8')).music.hits as number[]) : [];
+// a Pixabay shelf track ({ "track": … }) has no accents of our own: none to list
+const cues = existsSync(spec) ? ((JSON.parse(readFileSync(spec, 'utf8')).music.hits ?? []) as number[]) : [];
 
 const STEP = 0.25, M = rmsDbWindows(music, SR, STEP), E = rmsDbWindows(fx, SR, STEP), X = rmsDbWindows(mix, SR, STEP);
 const f1 = (n: number) => (n <= -119 ? '   –' : n.toFixed(1).padStart(5));
